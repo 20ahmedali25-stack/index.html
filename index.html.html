@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="google-site-verification" content="8ac531e38153099b">
+<meta name="description" content="الحلحلي - لعبة تعليمية تنافسية للمعلمين والطلاب. معلم يصنع أثراً.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحلحلي - معلم يصنع الأثر</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Tajawal","Cairo",sans-serif;background:#fff;color:#111;min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+#screen-board.active{justify-content:flex-start;padding:70px 10px 30px;overflow-y:auto;}
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:#fff;border-bottom:2px solid #6d2b3d;}
+.logo-title{font-size:clamp(2.8rem,8vw,5rem);font-weight:900;text-align:center;line-height:1;color:#6d2b3d;}
+.logo-sub{font-size:.9rem;color:#555;margin-top:6px;letter-spacing:2px;text-align:center;}
+.logo-wrap{margin-bottom:24px;}
+.card{background:#fff;border:2px solid #6d2b3d;border-radius:16px;padding:24px 28px;width:100%;max-width:480px;box-shadow:6px 6px 0 #6d2b3d;}
+.card-title{font-size:1.3rem;font-weight:900;text-align:center;margin-bottom:16px;border-bottom:2px solid #6d2b3d;padding-bottom:10px;}
+.ig{margin-bottom:12px;}
+.ig label{display:block;font-size:.85rem;color:#333;margin-bottom:4px;font-weight:700;}
+.ig input{width:100%;padding:10px 14px;background:#fff;border:2px solid #6d2b3d;border-radius:8px;color:#6d2b3d;font-family:"Tajawal",sans-serif;font-size:1rem;direction:rtl;outline:none;}
+.ig input:focus{box-shadow:3px 3px 0 #6d2b3d;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 22px;border:2px solid #6d2b3d;border-radius:10px;font-family:"Cairo",sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;transition:all .15s;width:100%;margin-top:5px;background:#6d2b3d;color:#fff;}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 #555;}
+.btn-outline{background:#fff;color:#6d2b3d;}
+.btn-outline:hover{background:#f5f5f5;}
+.btn-sm{padding:6px 12px;font-size:.82rem;width:auto;}
+.err-msg{color:#c00;font-size:.82rem;text-align:center;margin-top:7px;min-height:16px;}
+.link-row{text-align:center;margin-top:10px;font-size:.85rem;color:#555;}
+.link-row a{color:#6d2b3d;cursor:pointer;font-weight:700;text-decoration:underline;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}
+.cat-btn{padding:10px 6px;border-radius:10px;text-align:center;border:2px solid #6d2b3d;background:#fff;cursor:pointer;transition:all .15s;font-size:.75rem;font-weight:700;color:#6d2b3d;user-select:none;}
+.cat-btn.active{background:#6d2b3d;color:#fff;}
+.cat-btn .ci{font-size:1.3rem;display:block;margin-bottom:3px;}
+.teams-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.team-box{padding:10px;border-radius:10px;text-align:center;border:2px solid #6d2b3d;}
+.team-box label{font-size:.75rem;color:#555;display:block;margin-bottom:4px;font-weight:700;}
+.team-box input{width:100%;background:#fff;border:2px solid #ddd;border-radius:6px;padding:7px;color:#6d2b3d;font-family:"Tajawal",sans-serif;font-size:.88rem;text-align:center;outline:none;}
+.team-box input:focus{border-color:#6d2b3d;}
+.scores-row{display:flex;align-items:center;gap:8px;}
+.sbox{padding:7px 16px;border-radius:10px;text-align:center;border:2px solid #6d2b3d;background:#fff;transition:all .3s;min-width:88px;}
+.sbox.active-t{background:#6d2b3d;color:#fff;}
+.sbox .sn{font-size:.65rem;opacity:.7;}
+.sbox .sp{font-size:1.7rem;font-weight:900;line-height:1.1;}
+.vs-d{font-weight:900;font-size:.85rem;}
+.turn-badge{padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:700;background:#f0f0f0;border:2px solid #6d2b3d;}
+.board-grid{display:flex;flex-direction:column;gap:8px;width:100%;max-width:1100px;margin:0 auto;padding:0 6px 20px;}
+.cat-row{display:grid;grid-template-columns:repeat(3,1fr) 140px repeat(3,1fr);gap:5px;align-items:center;}
+.cat-center{border-radius:12px;border:2px solid #6d2b3d;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#6d2b3d;color:#fff;}
+.cat-center .cc-e{font-size:1.8rem;}
+.cat-center .cc-l{font-size:.7rem;font-weight:900;text-align:center;padding:0 4px;line-height:1.3;}
+.qcell{border-radius:10px;border:2px solid #6d2b3d;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:#fff;gap:3px;}
+.qcell:hover:not(.used){background:#f5f5f5;transform:translateY(-2px);box-shadow:4px 4px 0 #6d2b3d;}
+.qcell.used{opacity:.2;cursor:not-allowed;transform:none!important;}
+.qcell .qpts{font-size:1.4rem;font-weight:900;}
+.qcell.easy .qpts{color:#1a7a4a;}
+.qcell.med .qpts{color:#d46b00;}
+.qcell.hard .qpts{color:#c0392b;}
+.qlvl{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:6px;}
+.easy .qlvl{background:#e8f5ee;color:#1a7a4a;}
+.med .qlvl{background:#fff3e0;color:#d46b00;}
+.hard .qlvl{background:#fde8e8;color:#c0392b;}
+.powerups-bar{width:100%;max-width:1100px;margin:0 auto 8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.pu-btn{padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;border:2px solid #6d2b3d;transition:all .2s;background:#fff;font-family:"Cairo",sans-serif;}
+.pu-btn:hover:not(:disabled):not(.used-pu){transform:translate(-1px,-1px);box-shadow:3px 3px 0 #6d2b3d;}
+.pu-btn.armed{background:#6d2b3d;color:#fff;}
+.pu-btn:disabled,.pu-btn.used-pu{opacity:.25;cursor:not-allowed;text-decoration:line-through;}
+#q-modal{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:14px;}
+#q-modal.open{display:flex;}
+.qm-box{background:#fff;border:2px solid #6d2b3d;border-radius:16px;padding:24px;width:100%;max-width:560px;box-shadow:8px 8px 0 #6d2b3d;animation:modalIn .25s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(14px);}to{opacity:1;transform:none;}}
+.qm-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.qm-badge{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;border:2px solid;}
+.qm-badge.easy{background:#e8f5ee;color:#1a7a4a;border-color:#1a7a4a;}
+.qm-badge.med{background:#fff3e0;color:#d46b00;border-color:#d46b00;}
+.qm-badge.hard{background:#fde8e8;color:#c0392b;border-color:#c0392b;}
+.qm-cat{font-size:.78rem;color:#555;margin-right:auto;}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:12px;position:relative;width:fit-content;margin-left:auto;margin-right:auto;}
+.timer-wrap svg{transform:rotate(-90deg);}
+.t-track{fill:none;stroke:#eee;stroke-width:8;}
+.t-prog{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .5s;}
+.t-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.4rem;font-weight:900;font-family:"Cairo",sans-serif;}
+.qm-text{font-size:clamp(1rem,2.5vw,1.15rem);font-weight:700;line-height:1.8;text-align:right;margin-bottom:16px;background:#f9f9f9;border:2px solid #6d2b3d;border-radius:10px;padding:14px;}
+.answer-reveal-btn{width:100%;padding:14px;border:2px solid #6d2b3d;border-radius:10px;background:#fff;font-family:"Cairo",sans-serif;font-size:1rem;font-weight:900;cursor:pointer;transition:all .2s;margin-bottom:10px;}
+.answer-reveal-btn:hover:not(:disabled){background:#f5f5f5;transform:translate(-1px,-1px);box-shadow:3px 3px 0 #6d2b3d;}
+.answer-reveal-btn.revealed{background:#6d2b3d;color:#fff;cursor:default;transform:none;box-shadow:none;}
+.answer-box{display:none;background:#e8f5ee;border:2px solid #1a7a4a;border-radius:10px;padding:16px;margin-bottom:12px;font-size:1.05rem;font-weight:700;color:#1a7a4a;text-align:center;line-height:1.6;}
+.answer-box.show{display:block;}
+.team-ans-row{display:flex;gap:10px;margin-top:8px;}
+.team-ans-btn{flex:1;padding:12px;border:2px solid #6d2b3d;border-radius:10px;font-family:"Cairo",sans-serif;font-size:.9rem;font-weight:900;cursor:pointer;transition:all .2s;background:#fff;}
+.team-ans-btn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:3px 3px 0 #6d2b3d;}
+.team-ans-btn:disabled{cursor:default;opacity:.6;}
+.qm-pu-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+.qm-pub{padding:4px 10px;border-radius:12px;font-size:.74rem;font-weight:700;cursor:pointer;border:2px solid #6d2b3d;background:#fff;font-family:"Cairo",sans-serif;transition:all .2s;}
+.qm-pub.armed{background:#6d2b3d;color:#fff;}
+.qm-pub:disabled,.qm-pub.used-pu{opacity:.2;cursor:not-allowed;}
+.qm-actions{display:flex;gap:10px;margin-top:12px;justify-content:center;}
+.winner-text{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;text-align:center;margin-bottom:10px;}
+.trophy-big{font-size:5rem;text-align:center;margin-bottom:10px;}
+.final-scores{display:flex;gap:14px;margin:14px 0;flex-wrap:wrap;justify-content:center;}
+.final-team{flex:1;min-width:130px;text-align:center;border:2px solid #6d2b3d;border-radius:12px;padding:14px;box-shadow:4px 4px 0 #6d2b3d;}
+.final-team .fn{font-size:.95rem;font-weight:700;}
+.final-team .fp{font-size:2rem;font-weight:900;}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:2px solid #6d2b3d;margin-bottom:7px;box-shadow:3px 3px 0 #6d2b3d;}
+.lb-rank{font-size:1.1rem;font-weight:900;width:28px;}
+.lb-name{flex:1;font-weight:700;}
+.lb-pts{font-weight:700;}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#6d2b3d;color:#fff;border-radius:10px;padding:10px 22px;font-weight:700;font-size:.9rem;z-index:9999;transition:transform .3s;pointer-events:none;max-width:90vw;text-align:center;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.success{background:#1a7a4a;}
+#toast.error{background:#c0392b;}
+#toast.info{background:#1a5276;}
+.menu-card-item{border:2px solid #6d2b3d;border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#fff;}
+.menu-card-item:hover{background:#6d2b3d;color:#fff;transform:translate(-2px,-2px);box-shadow:4px 4px 0 #555;}
+@media(max-width:640px){
+  .cat-row{grid-template-columns:repeat(3,1fr) 80px repeat(3,1fr);gap:3px;}
+  .qcell,.cat-center{height:78px;}
+  .qcell .qpts{font-size:1rem;}
+  .qm-box{padding:14px;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .team-ans-row{flex-direction:column;}
+}
+
+/* NAV TABS */
+.nav-tabs{display:flex;gap:4px;border-bottom:2px solid #6d2b3d;margin-bottom:20px;width:100%;max-width:600px;}
+.nav-tab{padding:9px 16px;border:2px solid #6d2b3d;border-bottom:none;border-radius:8px 8px 0 0;background:#fff;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;font-size:.85rem;color:#6d2b3d;transition:all .15s;}
+.nav-tab.active{background:#6d2b3d;color:#fff;}
+.nav-tab:hover:not(.active){background:#f5f5f5;}
+
+/* MENU CARDS */
+.menu-grid{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:560px;margin-top:12px;}
+.menu-card-item{border:2px solid #6d2b3d;border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .2s;background:#fff;flex:1;min-width:110px;box-shadow:3px 3px 0 #6d2b3d;}
+.menu-card-item:hover{background:#6d2b3d;color:#fff;transform:translate(-2px,-2px);box-shadow:5px 5px 0 #4a1a28;}
+
+/* TEAMS SETUP - dynamic */
+.teams-container{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.team-entry{flex:1;min-width:140px;border:2px solid #6d2b3d;border-radius:10px;padding:10px;text-align:center;}
+.team-entry label{font-size:.75rem;color:#555;display:block;margin-bottom:4px;font-weight:700;}
+.team-entry input{width:100%;background:#fff;border:2px solid #ddd;border-radius:6px;padding:7px;color:#6d2b3d;font-family:'Tajawal',sans-serif;font-size:.88rem;text-align:center;outline:none;}
+.team-entry input:focus{border-color:#6d2b3d;}
+
+/* SCOREBOARD - dynamic */
+.scores-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+.sbox{padding:6px 12px;border-radius:10px;text-align:center;border:2px solid #6d2b3d;background:#fff;transition:all .3s;min-width:80px;}
+.sbox.active-t{background:#6d2b3d;color:#fff;}
+.sbox .sn{font-size:.6rem;opacity:.7;}
+.sbox .sp{font-size:1.5rem;font-weight:900;line-height:1.1;}
+
+/* JUDGE BUTTONS - dynamic */
+.judge-grid{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.judge-btn{flex:1;min-width:90px;padding:11px 8px;border:2px solid #6d2b3d;border-radius:10px;background:#fff;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:900;cursor:pointer;transition:all .15s;}
+.judge-btn:hover{background:#6d2b3d;color:#fff;}
+.judge-btn.correct-team{background:#1a7a4a;color:#fff;border-color:#1a7a4a;}
+
+/* FINAL SCORES - dynamic */
+.final-scores{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;justify-content:center;}
+.final-team{flex:1;min-width:100px;max-width:160px;text-align:center;background:#fff;border:2px solid #6d2b3d;border-radius:12px;padding:14px 8px;box-shadow:4px 4px 0 #6d2b3d;}
+.final-team.winner{background:#6d2b3d;color:#fff;}
+.final-team .fn{font-size:.88rem;font-weight:700;}
+.final-team .fp{font-size:2rem;font-weight:900;}
+
+/* MY GAMES */
+.game-history-item{border:2px solid #6d2b3d;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.game-history-item .gi-date{font-size:.75rem;color:#555;}
+.game-history-item .gi-cats{font-size:.78rem;color:#333;}
+.game-history-item .gi-result{font-weight:900;}
+
+/* ABOUT */
+.about-section{max-width:560px;width:100%;margin-top:70px;}
+.about-card{border:2px solid #6d2b3d;border-radius:14px;padding:24px;background:#fff;box-shadow:5px 5px 0 #6d2b3d;margin-bottom:16px;}
+.about-card h2{font-size:1.1rem;font-weight:900;margin-bottom:12px;border-bottom:2px solid #6d2b3d;padding-bottom:8px;}
+.about-card p{font-size:.9rem;line-height:1.9;color:#333;}
+.team-member{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px;border:1px solid #ddd;border-radius:8px;}
+.team-member .tm-icon{font-size:1.8rem;}
+.team-member .tm-info .tm-name{font-weight:900;font-size:.9rem;}
+.team-member .tm-info .tm-role{font-size:.78rem;color:#555;}
+
+/* PROFILE */
+.profile-btn{display:flex;align-items:center;gap:7px;background:#fff;border:2px solid #6d2b3d;border-radius:20px;padding:5px 12px 5px 6px;cursor:pointer;transition:all .15s;font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;}
+.profile-btn:hover{background:#f5f5f5;transform:translate(-1px,-1px);box-shadow:2px 2px 0 #4a1a28;}
+.profile-avatar{width:28px;height:28px;border-radius:50%;background:#6d2b3d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;overflow:hidden;flex-shrink:0;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+
+/* PROFILE MODAL */
+#profile-modal{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:flex-end;padding:64px 16px 16px;}
+#profile-modal.open{display:flex;}
+.profile-box{background:#fff;border:2px solid #6d2b3d;border-radius:16px;width:100%;max-width:340px;box-shadow:6px 6px 0 #6d2b3d;animation:slideDown .2s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.profile-header{padding:20px;border-bottom:2px solid #6d2b3d;display:flex;align-items:center;gap:14px;position:relative;}
+.profile-avatar-lg{width:60px;height:60px;border-radius:50%;background:#6d2b3d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;overflow:hidden;flex-shrink:0;border:2px solid #6d2b3d;cursor:pointer;position:relative;}
+.profile-avatar-lg:hover::after{content:'📷';position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:1.2rem;border-radius:50%;}
+.profile-avatar-lg img{width:100%;height:100%;object-fit:cover;}
+.profile-greeting{font-size:1rem;font-weight:900;}
+.profile-email-small{font-size:.75rem;color:#555;margin-top:2px;}
+.profile-close{position:absolute;top:10px;left:10px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#555;padding:4px;}
+.profile-body{padding:16px;}
+.profile-field{margin-bottom:14px;}
+.profile-field label{font-size:.75rem;font-weight:700;color:#555;display:block;margin-bottom:4px;}
+.profile-field .pf-val{font-size:.9rem;font-weight:700;color:#6d2b3d;display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:2px solid #ddd;border-radius:8px;background:#fafafa;}
+.profile-field .pf-val .edit-icon{cursor:pointer;font-size:1rem;color:#555;background:none;border:none;padding:0;}
+.profile-field .pf-val .edit-icon:hover{color:#6d2b3d;}
+.profile-edit-input{width:100%;padding:9px 12px;border:2px solid #6d2b3d;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:.9rem;color:#6d2b3d;outline:none;display:none;}
+.profile-edit-input.show{display:block;}
+.profile-save-btn{width:100%;padding:10px;background:#6d2b3d;color:#fff;border:2px solid #6d2b3d;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:900;cursor:pointer;margin-top:4px;display:none;}
+.profile-save-btn.show{display:block;}
+.profile-verify-badge{font-size:.72rem;padding:2px 8px;border-radius:10px;font-weight:700;}
+.verified{background:#e8f5ee;color:#1a7a4a;border:1px solid #1a7a4a;}
+.unverified{background:#fde8e8;color:#c0392b;border:1px solid #c0392b;cursor:pointer;}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div class="screen active" id="screen-login">
+  <div class="logo-wrap"><div class="logo-title">الحلحلي</div><div class="logo-sub">معلم يصنع أثراً</div></div>
+  <div class="card">
+    <div class="card-title">تسجيل الدخول</div>
+    <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="login-email" placeholder="example@email.com" style="direction:ltr;text-align:left"></div>
+    <div class="ig"><label>كلمة المرور</label><input type="password" id="login-pass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn" onclick="doLogin()">دخول</button>
+    <div class="err-msg" id="login-err"></div>
+    <div class="link-row">ليس لديك حساب؟ <a onclick="showScreen('screen-register')">سجّل الآن</a></div>
+    <div class="link-row"><a onclick="showScreen('screen-reset')">نسيت كلمة المرور؟</a></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-register">
+  <div class="logo-wrap"><div class="logo-title">الحلحلي</div></div>
+  <div class="card">
+    <div class="card-title">إنشاء حساب</div>
+    <div class="ig"><label>الاسم الكامل</label><input type="text" id="reg-name" placeholder="اكتب اسمك الكامل"></div>
+    <div class="ig"><label>رقم الجوال</label>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <div style="border:2px solid #6d2b3d;border-radius:8px;padding:10px 12px;background:#f5f5f5;font-weight:700;font-size:.9rem;white-space:nowrap;direction:ltr;">🇶🇦 +974</div>
+        <input type="tel" id="reg-phone" placeholder="5x xxx xxxx" style="direction:ltr;text-align:left;flex:1;" maxlength="8" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      </div>
+    </div>
+    <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="reg-email" placeholder="example@email.com" style="direction:ltr;text-align:left"></div>
+    <div class="ig"><label>كلمة المرور</label><input type="password" id="reg-pass" placeholder="6 أحرف على الأقل"></div>
+    <div class="ig"><label>تأكيد كلمة المرور</label><input type="password" id="reg-pass2" placeholder="أعد الكتابة"></div>
+    <button class="btn" onclick="doRegister()">إنشاء حساب</button>
+    <div class="err-msg" id="reg-err"></div>
+    <div class="link-row">لديك حساب؟ <a onclick="showScreen('screen-login')">سجّل دخول</a></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-menu">
+  <div class="top-bar">
+    <div style="font-weight:900;font-size:1rem;cursor:pointer;" onclick="showScreen('screen-menu')">الحلحلي</div>
+    <button class="profile-btn" onclick="toggleProfile()">
+      <div class="profile-avatar" id="nav-avatar">أ</div>
+      <span id="ub-name">مستخدم</span>
+    </button>
+  </div>
+  <div style="margin-top:70px;text-align:center;">
+    <div class="logo-title" style="color:#6d2b3d;">الحلحلي</div>
+    <div style="font-size:.82rem;color:#222;letter-spacing:1px;margin-top:6px;font-weight:700;">معلم يصنع أثراً</div>
+  </div>
+  <div class="menu-grid">
+    <div onclick="showScreen('screen-setup')" class="menu-card-item">
+      <div style="font-size:1.6rem;font-weight:900;color:#6d2b3d;font-family:serif;">▶</div><div style="font-weight:900;margin-top:6px">العب الآن</div>
+    </div>
+    <div onclick="showScreen('screen-lb');renderLB();" class="menu-card-item">
+      <div style="font-size:1.6rem;font-weight:900;color:#6d2b3d;">★</div><div style="font-weight:900;margin-top:6px">المتصدرون</div>
+    </div>
+    <div onclick="showScreen('screen-mygames');renderMyGames();" class="menu-card-item">
+      <div style="font-size:1.6rem;font-weight:900;color:#6d2b3d;">≡</div><div style="font-weight:900;margin-top:6px">ألعابي</div>
+    </div>
+    <div onclick="showScreen('screen-about')" class="menu-card-item">
+      <div style="font-size:1.6rem;font-weight:900;color:#6d2b3d;">!</div><div style="font-weight:900;margin-top:6px">من نحن</div>
+    </div>
+  </div>
+
+  <!-- خانة التواصل والمساعدة -->
+  <div style="display:flex;gap:12px;margin-top:18px;align-items:center;justify-content:center;">
+    <a href="https://www.instagram.com/aalhalhali" target="_blank"
+       style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border:none;cursor:pointer;text-decoration:none;box-shadow:2px 2px 0 #111;transition:transform .15s;"
+       onmouseover="this.style.transform='translate(-2px,-2px)'" onmouseout="this.style.transform=''">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    </a>
+    <a href="https://wa.me/0097471776644" target="_blank"
+       style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#25D366;border:none;cursor:pointer;text-decoration:none;box-shadow:2px 2px 0 #111;transition:transform .15s;"
+       onmouseover="this.style.transform='translate(-2px,-2px)'" onmouseout="this.style.transform=''">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+    <div style="font-size:.9rem;color:#111;font-weight:900;text-align:center;">تواصل معنا</div>
+  </div>
+</div>
+
+<div class="screen" id="screen-setup">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
+    <div style="font-weight:900;">إعداد اللعبة</div>
+    <div></div>
+  </div>
+  <div class="card" style="margin-top:70px;max-width:640px;">
+    <div class="card-title">⚙️ إعداد اللعبة</div>
+
+    <div style="font-size:.82rem;font-weight:700;margin-bottom:8px;">عدد الفرق:</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <button class="nav-tab active" id="nt-2" onclick="setTeamCount(2)">2 فرق</button>
+      <button class="nav-tab" id="nt-3" onclick="setTeamCount(3)">3 فرق</button>
+      <button class="nav-tab" id="nt-4" onclick="setTeamCount(4)">4 فرق</button>
+      <button class="nav-tab" id="nt-5" onclick="setTeamCount(5)">5 فرق</button>
+    </div>
+    <div class="teams-container" id="teams-container"></div>
+
+    <div style="font-size:.82rem;font-weight:700;margin-bottom:6px;color:#555;">اختر الفئات (4 إلى 6 فئات):</div>
+    <div style="font-size:.75rem;color:#888;margin-bottom:8px;" id="cat-count-hint">المختار: 0 فئات</div>
+    <div class="cat-grid" id="cat-select"></div>
+    <div class="ig" style="margin-top:14px;">
+      <label>🎮 اسم اللعبة</label>
+      <input type="text" id="game-name" placeholder="مثال: حصة الاجتماعيات - الفصل الأول" style="font-size:.95rem;">
+    </div>
+    <div class="err-msg" id="setup-err"></div>
+    <button class="btn" onclick="startGame()" style="margin-top:10px;">ابدأ اللعبة</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-board">
+  <div class="top-bar" style="flex-wrap:wrap;gap:6px;padding:8px 14px;">
+    <div class="scores-row" id="b-scores-row" style="flex:1;min-width:0;"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+      <div style="font-weight:900;font-size:.8rem;color:#555;" id="board-game-name"></div>
+      <div class="turn-badge" id="turn-badge">دور الفريق 1</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="confirmQuit()">إنهاء</button>
+  </div>
+  <div class="powerups-bar" id="powerups-bar" style="margin-top:65px;">
+    <button class="pu-btn" id="pu-hafra" onclick="armPU('hafra')">حفرة</button>
+    <button class="pu-btn" id="pu-dagf" onclick="armPU('dagf')">ضعّف</button>
+    <button class="pu-btn" id="pu-eskot" onclick="armPU('eskot')">اسكت</button>
+  </div>
+  <div class="board-grid" id="board-grid"></div>
+</div>
+
+<div id="q-modal">
+  <div class="qm-box">
+    <div class="qm-top">
+      <span class="qm-badge" id="qm-diff"></span>
+      <span class="qm-cat" id="qm-cat"></span>
+      <span style="font-weight:700;font-size:.82rem" id="qm-pts"></span>
+    </div>
+    <div class="qm-pu-row">
+      <span style="font-size:.72rem;color:#555;">مساعدة:</span>
+      <button class="qm-pub" id="qm-hafra" onclick="armPU('hafra')">حفرة</button>
+      <button class="qm-pub" id="qm-dagf" onclick="armPU('dagf')">ضعّف</button>
+      <button class="qm-pub" id="qm-eskot" onclick="armPU('eskot')">اسكت</button>
+    </div>
+    <div class="timer-wrap">
+      <svg width="68" height="68" viewBox="0 0 72 72">
+        <circle class="t-track" cx="36" cy="36" r="34"/>
+        <circle class="t-prog" id="t-prog" cx="36" cy="36" r="34" stroke-dasharray="213.6" stroke-dashoffset="0"/>
+      </svg>
+      <div class="t-num" id="t-num">30</div>
+    </div>
+    <div class="qm-text" id="qm-text"></div>
+    <button class="answer-reveal-btn" id="reveal-btn" onclick="revealAnswer()">الجواب</button>
+    <div class="answer-box" id="answer-box"></div>
+    <div id="team-judge" style="display:none;">
+      <div style="font-size:.82rem;font-weight:700;color:#555;margin-bottom:8px;text-align:center;">من أجاب بشكل صحيح؟</div>
+      <div class="judge-grid" id="judge-grid"></div>
+    </div>
+    <div class="qm-actions" id="qm-actions" style="display:none;">
+      <button class="btn btn-outline" style="max-width:160px" onclick="closeModal()">التالي</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-result">
+  <div class="trophy-big" id="result-trophy">🏆</div>
+  <div class="winner-text" id="result-winner"></div>
+  <div class="final-scores" id="final-scores-container"></div>
+  <button class="btn" style="max-width:240px;margin-top:10px" onclick="showScreen('screen-setup')">لعبة جديدة</button>
+  <button class="btn btn-outline" style="max-width:240px;margin-top:8px" onclick="showScreen('screen-menu')">القائمة</button>
+</div>
+
+<div class="screen" id="screen-lb">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
+    <div style="font-weight:900;">المتصدرون</div>
+    <div></div>
+  </div>
+  <div class="card" style="margin-top:70px;max-width:480px">
+    <div class="card-title">أفضل اللاعبين</div>
+    <div id="lb-list"></div>
+  </div>
+</div>
+
+
+<!-- PROFILE MODAL -->
+<div id="profile-modal" onclick="closeProfileOutside(event)">
+  <div class="profile-box">
+    <div class="profile-header">
+      <button class="profile-close" onclick="toggleProfile()">✕</button>
+      <div class="profile-avatar-lg" id="profile-avatar-lg" onclick="triggerAvatarUpload()">أ
+        <img id="profile-img" src="" style="display:none;">
+      </div>
+      <input type="file" id="avatar-input" accept="image/*" style="display:none;" onchange="handleAvatarChange(event)">
+      <div>
+        <div class="profile-greeting" id="profile-greeting">أهلاً، مستخدم</div>
+        <div class="profile-email-small" id="profile-email-small"></div>
+      </div>
+    </div>
+    <div class="profile-body">
+
+      <!-- الاسم -->
+      <div class="profile-field">
+        <label>الاسم الكامل</label>
+        <div class="pf-val">
+          <span id="pf-name-val">—</span>
+          <button class="edit-icon" onclick="editField('name')" title="تعديل">✏️</button>
+        </div>
+        <input class="profile-edit-input" id="pf-name-input" type="text" placeholder="الاسم الكامل">
+        <button class="profile-save-btn" id="pf-name-save" onclick="saveField('name')">حفظ</button>
+      </div>
+
+      <!-- رقم الجوال -->
+      <div class="profile-field">
+        <label>رقم الجوال</label>
+        <div class="pf-val">
+          <span id="pf-phone-val">—</span>
+          <button class="edit-icon" onclick="editField('phone')" title="تعديل">✏️</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <div style="border:2px solid #6d2b3d;border-radius:8px;padding:9px 10px;background:#f5f5f5;font-weight:700;font-size:.85rem;direction:ltr;display:none;" id="pf-phone-prefix">🇶🇦 +974</div>
+          <input class="profile-edit-input" id="pf-phone-input" type="tel" placeholder="5x xxx xxxx" maxlength="8" style="flex:1;direction:ltr;">
+        </div>
+        <button class="profile-save-btn" id="pf-phone-save" onclick="saveField('phone')">حفظ</button>
+      </div>
+
+      <!-- البريد -->
+      <div class="profile-field">
+        <label>البريد الإلكتروني</label>
+        <div class="pf-val">
+          <span id="pf-email-val">—</span>
+          <span class="profile-verify-badge" id="pf-email-badge"></span>
+        </div>
+      </div>
+
+      <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout();toggleProfile();">تسجيل الخروج</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-reset">
+  <div class="logo-wrap"><div class="logo-title" style="font-size:2.5rem;">⬤</div><div class="logo-sub">استرداد كلمة المرور</div></div>
+  <div class="card">
+    <div class="card-title">استرداد كلمة المرور</div>
+    <p style="font-size:.88rem;color:#555;text-align:center;margin-bottom:16px;line-height:1.7;">
+      أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور
+    </p>
+    <div class="ig">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="reset-email" placeholder="example@email.com" style="direction:ltr;text-align:left">
+    </div>
+    <button class="btn" onclick="doResetPass()">إرسال رابط الاسترداد</button>
+    <div class="err-msg" id="reset-err"></div>
+    <div id="reset-success" style="display:none;background:#e8f5ee;border:2px solid #1a7a4a;border-radius:10px;padding:14px;text-align:center;margin-top:12px;font-size:.88rem;color:#1a7a4a;font-weight:700;">
+      تم إرسال الرابط! تفقّد بريدك الإلكتروني وخانة الـ Spam
+    </div>
+    <div class="link-row"><a onclick="showScreen('screen-login')">← العودة لتسجيل الدخول</a></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-about">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
+    <div style="font-weight:900;">من نحن</div>
+    <div></div>
+  </div>
+  <div class="about-section">
+    <div class="about-card">
+      <h2>عن لعبة الحلحلي</h2>
+      <p>لعبة الحلحلي هي منصة تعليمية تنافسية مصممة لتحفيز الطلاب على التعلم من خلال المتعة. تضم مئات الأسئلة المُصنّفة حسب المستوى والمادة، مع نظام نقاط وتحديات تجعل كل جلسة تعليمية تجربة لا تُنسى.</p>
+    </div>
+    <div class="about-card">
+      <h2>فريق العمل</h2>
+      <div class="team-member" style="align-items:flex-start;gap:16px;">
+        <div style="flex-shrink:0;">
+          <img src="data:image/jpeg;base64,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" 
+               alt="أحمد الحلحلي"
+               style="width:90px;height:90px;object-fit:cover;border-radius:12px;border:3px solid #6d2b3d;box-shadow:3px 3px 0 #6d2b3d;">
+        </div>
+        <div class="tm-info">
+          <div class="tm-name" style="font-size:1rem;margin-bottom:6px;">أحمد الحلحلي — المؤسس</div>
+          <div class="tm-role" style="line-height:1.8;">معلم ومدرب تربوي، خريج جامعة قطر، ومدرّس مادة الدراسات الاجتماعية. يؤمن بأن التعليم رسالة قبل أن يكون مهنة، وأن لكل طالب شمعة تنتظر من يُشعلها. وُلدت فكرة الحلحلي من رغبة حقيقية في تحويل الحصة الدراسية إلى تجربة ممتعة لا تُنسى، وترك بصمة خالدة في حياة كل طالب مرّ من هذه القاعة.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-card">
+      <h2>رسالة إليك أيها المعلم الملهم</h2>
+      <p>
+        نحن نثق بك وبأثرك وبما تقوم به كل يوم خلف تلك الجدران الصامتة التي تشهد لك قبل غيرها.
+        <br><br>
+        هذه اللعبة هدية لك، لتُعينك على الطريق وتجعل من كل حصة تجربة تُضيء عقلاً وتُلهب همةً.
+        <br><br>
+        لأن المعلم الحقيقي لا ينتظر شكراً — لكنه يستحق كل الدعم.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <h2>المحتوى التعليمي</h2>
+      <p>أسئلة مُصنّفة حسب مستوى الصعوبة (سهل - متوسط - صعب) وتغطي مواد متنوعة تشمل الدراسات الاجتماعية للصفوف السابع والثامن وفق المنهج القطري 2025، إضافة إلى فئات ثقافية وتاريخية وإسلامية ورياضية متعددة.</p>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-mygames">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
+    <div style="font-weight:900;">ألعابي</div>
+    <div></div>
+  </div>
+  <div class="card" style="margin-top:70px;max-width:520px;">
+    <div class="card-title">سجل ألعابي</div>
+    <div id="my-games-list"><div style="text-align:center;padding:20px;color:#555;">⏳ جاري التحميل...</div></div>
+    <button class="btn btn-outline" style="margin-top:12px;" onclick="clearMyGames()">مسح السجل</button>
+  </div>
+</div>
+
+<script>
+const QDB = {
+'اجتماعيات':[
+{diff:'easy',q:'ما عاصمة دولة قطر؟',a:'الدوحة'},
+{diff:'easy',q:'في أي خليج تقع دولة قطر؟',a:'الخليج العربي'},
+{diff:'easy',q:'ما عملة دولة قطر؟',a:'الريال القطري'},
+{diff:'easy',q:'كم عدد قارات العالم؟',a:'سبع قارات'},
+{diff:'easy',q:'ما أكبر محيط في العالم؟',a:'المحيط الهادئ'},
+{diff:'easy',q:'ما أطول نهر في العالم؟',a:'نهر النيل'},
+{diff:'easy',q:'ما أكبر دولة في العالم مساحةً؟',a:'روسيا'},
+{diff:'easy',q:'ما عاصمة المملكة العربية السعودية؟',a:'الرياض'},
+{diff:'easy',q:'ما عاصمة مصر؟',a:'القاهرة'},
+{diff:'easy',q:'كم عدد دول مجلس التعاون الخليجي؟',a:'ست دول: السعودية والإمارات والكويت وقطر والبحرين وعُمان'},
+{diff:'med',q:'ما الخط الوهمي الذي يقسم الأرض إلى نصفين شمالي وجنوبي؟',a:'خط الاستواء'},
+{diff:'med',q:'ما أهم مورد اقتصادي لدولة قطر؟',a:'النفط والغاز الطبيعي'},
+{diff:'med',q:'ما اسم المنظمة التي تضم دول الخليج العربي؟',a:'مجلس التعاون لدول الخليج العربية'},
+{diff:'med',q:'ما الدولة التي تمتد على قارتي آسيا وأوروبا؟',a:'تركيا'},
+{diff:'med',q:'ما أعلى قمة جبلية في العالم؟',a:'قمة إيفرست في جبال الهيمالايا (8849 متراً)'},
+{diff:'med',q:'ما اسم الصحراء الكبرى في أفريقيا؟',a:'الصحراء الكبرى (Sahara)'},
+{diff:'med',q:'ما الدولة الأكثر سكاناً في العالم؟',a:'الهند (تجاوزت الصين عام 2023)'},
+{diff:'hard',q:'ما إسقاط ميركاتور المستخدم في الخرائط؟',a:'تمثيل سطح الأرض الكروي على مستوى مسطح مع الحفاظ على الزوايا للملاحة'},
+{diff:'hard',q:'ما الفرق بين المناخ والطقس؟',a:'الطقس حالة الجو اليومية، والمناخ متوسط الطقس على مدى سنوات طويلة'},
+{diff:'hard',q:'ما العوامل التي تؤثر في توزيع السكان على الأرض؟',a:'المناخ والتضاريس والموارد الطبيعية والفرص الاقتصادية'},
+],
+'علوم':[
+{diff:'easy',q:'ما الغاز الذي يتنفسه الإنسان؟',a:'الأكسجين (O2)'},
+{diff:'easy',q:'ما أكبر كوكب في المجموعة الشمسية؟',a:'كوكب المشتري'},
+{diff:'easy',q:'ما الكوكب الأقرب للشمس؟',a:'عطارد'},
+{diff:'easy',q:'كم يوماً تستغرق الأرض في دورتها حول الشمس؟',a:'365 يوماً (366 في السنة الكبيسة)'},
+{diff:'easy',q:'ما الحيوان الذي ينتج العسل؟',a:'النحل'},
+{diff:'easy',q:'ما أكبر حيوان في العالم؟',a:'الحوت الأزرق'},
+{diff:'easy',q:'ما العنصر الكيميائي رمزه O؟',a:'الأكسجين'},
+{diff:'easy',q:'كم عدد أسنان الإنسان البالغ؟',a:'32 سناً'},
+{diff:'easy',q:'ما أسرع حيوان بري؟',a:'الفهد (يصل لـ 120 كم/ساعة)'},
+{diff:'med',q:'ما وظيفة الميتوكوندريا في الخلية؟',a:'إنتاج الطاقة (ATP) لخلية - محطة طاقة الخلية'},
+{diff:'med',q:'ما الفرق بين الخلية النباتية والحيوانية؟',a:'النباتية لها جدار خلوي وبلاستيدات، والحيوانية لها مريكزات'},
+{diff:'med',q:'ما مراحل دورة حياة الفراشة؟',a:'بيضة ← يرقة ← شرنقة ← فراشة'},
+{diff:'med',q:'ما قانون نيوتن الأول للحركة؟',a:'الجسم يبقى ساكناً أو في حركة منتظمة إلا إذا أثرت عليه قوة خارجية'},
+{diff:'med',q:'ما الفرق بين المخلوط والمركب الكيميائي؟',a:'المخلوط يُفصل بطرق فيزيائية، والمركب بتفاعل كيميائي'},
+{diff:'med',q:'ما درجة غليان الماء؟',a:'100 درجة مئوية (212 فهرنهايت) عند ضغط جوي طبيعي'},
+{diff:'hard',q:'ما قانون حفظ الطاقة؟',a:'الطاقة لا تُخلق ولا تُفنى بل تتحول من صورة إلى أخرى'},
+{diff:'hard',q:'ما الفرق بين الانشطار والاندماج النووي؟',a:'الانشطار تقسيم نواة ثقيلة، والاندماج دمج نواتين خفيفتين، وكلاهما يُنتج طاقة هائلة'},
+{diff:'hard',q:'ما نظرية النسبية ولمن تُنسب؟',a:'نظرية ألبرت أينشتاين: الزمان والمكان نسبيان ويتأثران بالجاذبية والسرعة'},
+],
+'ثقافة':[
+{diff:'easy',q:'ما الكلمة التي نقولها عند العطس؟',a:'الحمد لله'},
+{diff:'easy',q:'من هو أول مؤذن في الإسلام؟',a:'بلال بن رباح رضي الله عنه'},
+{diff:'easy',q:'كم عدد سور القرآن الكريم؟',a:'114 سورة'},
+{diff:'easy',q:'ما اسم والدة النبي محمد صلى الله عليه وسلم؟',a:'آمنة بنت وهب'},
+{diff:'easy',q:'ما الشهر الذي نزل فيه القرآن؟',a:'شهر رمضان المبارك'},
+{diff:'easy',q:'كم عدد أجزاء القرآن الكريم؟',a:'30 جزءاً'},
+{diff:'med',q:'ما الشهر الذي وُلد فيه النبي محمد صلى الله عليه وسلم؟',a:'شهر ربيع الأول'},
+{diff:'med',q:'ما أول كلمة نزلت في القرآن الكريم؟',a:'اقرأ (أول آية من سورة العلق)'},
+{diff:'med',q:'ما اسم الصحابي الملقّب بسيف الله المسلول؟',a:'خالد بن الوليد رضي الله عنه'},
+{diff:'med',q:'ما اسم والد النبي محمد صلى الله عليه وسلم؟',a:'عبدالله بن عبدالمطلب'},
+{diff:'med',q:'في أي مدينة وُلد النبي محمد صلى الله عليه وسلم؟',a:'مكة المكرمة'},
+{diff:'hard',q:'ما الفرق بين الفرض والواجب في الفقه الإسلامي؟',a:'الفرض ثبت بدليل قطعي كالقرآن، والواجب بدليل ظني كأحاديث الآحاد'},
+{diff:'hard',q:'ما مصادر الشريعة الإسلامية بالترتيب؟',a:'القرآن الكريم، ثم السنة النبوية، ثم الإجماع، ثم القياس'},
+],
+'دين':[
+{diff:'easy',q:'كم عدد أركان الإسلام؟',a:'خمسة أركان: الشهادتان والصلاة والزكاة والصوم والحج'},
+{diff:'easy',q:'ما أول سورة في القرآن الكريم؟',a:'سورة الفاتحة'},
+{diff:'easy',q:'كم عدد أركان الإيمان؟',a:'ستة أركان: الإيمان بالله وملائكته وكتبه ورسله واليوم الآخر والقدر'},
+{diff:'easy',q:'كم عدد ركعات صلاة الفجر؟',a:'ركعتان'},
+{diff:'easy',q:'كم عدد ركعات صلاة الظهر؟',a:'أربع ركعات'},
+{diff:'easy',q:'كم عدد ركعات صلاة المغرب؟',a:'ثلاث ركعات'},
+{diff:'easy',q:'ما ركن الإسلام الخامس؟',a:'الحج إلى بيت الله الحرام لمن استطاع إليه سبيلاً'},
+{diff:'easy',q:'كم عدد ركعات صلاة العشاء؟',a:'أربع ركعات'},
+{diff:'med',q:'ما أطول سورة في القرآن الكريم؟',a:'سورة البقرة (286 آية)'},
+{diff:'med',q:'ما أقصر سورة في القرآن الكريم؟',a:'سورة الكوثر (ثلاث آيات)'},
+{diff:'med',q:'من هو النبي الذي بنى الكعبة مع ولده؟',a:'النبي إبراهيم عليه السلام مع ابنه إسماعيل عليه السلام'},
+{diff:'med',q:'ما اسم أول شهيدة في الإسلام؟',a:'سمية بنت خياط رضي الله عنها'},
+{diff:'hard',q:'ما حكم الصلاة في الإسلام؟',a:'فرض عين على كل مسلم ومسلمة بالغ عاقل'},
+{diff:'hard',q:'ما الفرق بين الزكاة والصدقة؟',a:'الزكاة فريضة محددة الشروط والمقدار، والصدقة تطوعية لا حد لها'},
+],
+'عامة':[
+{diff:'easy',q:'من اخترع الهاتف؟',a:'غراهام بيل عام 1876م'},
+{diff:'easy',q:'من اخترع المصباح الكهربائي؟',a:'توماس إديسون عام 1879م'},
+{diff:'easy',q:'كم عدد ألوان قوس قزح؟',a:'سبعة ألوان: أحمر وبرتقالي وأصفر وأخضر وأزرق ونيلي وبنفسجي'},
+{diff:'easy',q:'ما أسرع حيوان بري في العالم؟',a:'الفهد'},
+{diff:'easy',q:'ما ناتج خلط اللونين الأزرق والأصفر؟',a:'اللون الأخضر'},
+{diff:'easy',q:'كم عدد أيام السنة الكبيسة؟',a:'366 يوماً'},
+{diff:'easy',q:'من رسم لوحة الموناليزا؟',a:'ليوناردو دافنشي'},
+{diff:'easy',q:'ما أطول سور الصين؟',a:'سور الصين العظيم'},
+{diff:'easy',q:'كم عدد كواكب المجموعة الشمسية؟',a:'ثمانية كواكب'},
+{diff:'med',q:'من مؤسس شركة آبل؟',a:'ستيف جوبز وستيف وزنياك ورونالد واين عام 1976م'},
+{diff:'med',q:'ما أقدم لغة مكتوبة في التاريخ؟',a:'الكتابة السومرية (المسمارية) منذ 3400 ق.م تقريباً'},
+{diff:'med',q:'ما اسم أعمق بحيرة في العالم؟',a:'بحيرة بايكال في روسيا (1642 متراً)'},
+{diff:'med',q:'ما أقدم حضارة في التاريخ؟',a:'الحضارة السومرية في بلاد الرافدين (العراق حالياً)'},
+{diff:'hard',q:'ما نظرية التطور ومن وضعها؟',a:'نظرية الانتخاب الطبيعي للعالم البريطاني تشارلز داروين 1859م'},
+{diff:'hard',q:'ما المقصود بالذكاء الاصطناعي؟',a:'مجال في علوم الحاسوب يهدف لبناء أنظمة تحاكي الذكاء البشري'},
+],
+'الدوري الاسباني':[
+{diff:'easy',q:'ما الاسم الرسمي للدوري الإسباني؟',a:'لاليغا (LaLiga)'},
+{diff:'easy',q:'ما ملعب نادي ريال مدريد؟',a:'ملعب سانتياغو برنابيو'},
+{diff:'easy',q:'ما ملعب نادي برشلونة؟',a:'ملعب كامب نو'},
+{diff:'easy',q:'من هو أكثر هدافي الدوري الإسباني تاريخياً؟',a:'ليونيل ميسي'},
+{diff:'easy',q:'ما لقب ريال مدريد؟',a:'الميرنغي أو الملكي'},
+{diff:'easy',q:'ما لقب برشلونة؟',a:'البارسا أو بلوغرانا (الأزرق والأحمر)'},
+{diff:'med',q:'كم مرة فاز ريال مدريد بالدوري الإسباني حتى 2024؟',a:'36 مرة'},
+{diff:'med',q:'كم مرة فاز برشلونة بالدوري الإسباني؟',a:'27 مرة'},
+{diff:'med',q:'ما الكلاسيكو في الدوري الإسباني؟',a:'مباراة ريال مدريد وبرشلونة'},
+{diff:'med',q:'من قاد برشلونة للفوز بست بطولات عام 2009؟',a:'المدرب جوزيف غوارديولا'},
+{diff:'hard',q:'في أي موسم سجل ميسي 50 هدفاً في الليغا؟',a:'موسم 2011-2012'},
+{diff:'hard',q:'من هو أكثر لاعب فاز بلقب الدوري الإسباني في التاريخ؟',a:'فرانشيسكو خينتو من ريال مدريد بـ 12 لقباً'},
+],
+'قطر':[
+{diff:'easy',q:'ما عاصمة دولة قطر؟',a:'مدينة الدوحة'},
+{diff:'easy',q:'ما عملة دولة قطر؟',a:'الريال القطري'},
+{diff:'easy',q:'في أي عام استقلت قطر؟',a:'عام 1971م'},
+{diff:'easy',q:'ما رمز مونديال قطر 2022؟',a:'لاعيب'},
+{diff:'easy',q:'من هو الحاكم الحالي لدولة قطر؟',a:'الأمير تميم بن حمد آل ثاني'},
+{diff:'easy',q:'ما أكبر مطار في قطر؟',a:'مطار حمد الدولي'},
+{diff:'med',q:'في أي عام استضافت قطر كأس العالم؟',a:'عام 2022م، وكانت أول بطولة في الشرق الأوسط'},
+{diff:'med',q:'ما أكبر شركة نفط وغاز في قطر؟',a:'شركة قطر للطاقة (QatarEnergy)'},
+{diff:'med',q:'ما اسم أكبر جامعة في قطر؟',a:'جامعة قطر'},
+{diff:'med',q:'ما اسم النادي القطري الأكثر فوزاً بالدوري القطري؟',a:'نادي الدحيل'},
+{diff:'hard',q:'ما ترتيب قطر في احتياطيات الغاز الطبيعي عالمياً؟',a:'الثالثة عالمياً بعد روسيا وإيران'},
+{diff:'hard',q:'ما أهمية قطر في الغاز الطبيعي المسال LNG؟',a:'من أكبر مصدّري الغاز الطبيعي المسال في العالم'},
+],
+'الدولة العباسية':[
+{diff:'easy',q:'من هو مؤسس الدولة العباسية؟',a:'أبو العباس عبدالله السفاح'},
+{diff:'easy',q:'ما عاصمة الدولة العباسية؟',a:'مدينة بغداد (مدينة السلام)'},
+{diff:'easy',q:'في أي عام تأسست الدولة العباسية؟',a:'عام 132هـ / 750م'},
+{diff:'easy',q:'من أشهر خلفاء الدولة العباسية؟',a:'هارون الرشيد والمأمون'},
+{diff:'med',q:'من أسّس مدينة بغداد عاصمة للدولة العباسية؟',a:'الخليفة المنصور عام 762م'},
+{diff:'med',q:'ما اسم دار الترجمة والعلوم الشهيرة في العهد العباسي؟',a:'بيت الحكمة في بغداد'},
+{diff:'med',q:'من أسّس بيت الحكمة في بغداد؟',a:'أسّسه هارون الرشيد وطوّره المأمون'},
+{diff:'med',q:'حتى أين امتدت الدولة العباسية؟',a:'من المغرب غرباً حتى حدود الصين شرقاً'},
+{diff:'hard',q:'ما أسباب سقوط الدولة العباسية؟',a:'الغزو المغولي بقيادة هولاكو 1258م والصراعات الداخلية وضعف الخلفاء'},
+{diff:'hard',q:'من هو آخر خلفاء العباسيين في بغداد؟',a:'المستعصم بالله، قُتل على يد هولاكو عام 1258م'},
+{diff:'hard',q:'ما الإسهامات العلمية في العصر العباسي؟',a:'الجبر والطب والفلك والكيمياء والفلسفة وترجمة التراث اليوناني'},
+],
+'الدولة الاموية':[
+{diff:'easy',q:'من هو مؤسس الدولة الأموية؟',a:'معاوية بن أبي سفيان رضي الله عنه'},
+{diff:'easy',q:'ما عاصمة الدولة الأموية؟',a:'دمشق في بلاد الشام'},
+{diff:'easy',q:'في أي عام تأسست الدولة الأموية؟',a:'عام 41هـ / 661م'},
+{diff:'easy',q:'من قاد فتح الأندلس؟',a:'طارق بن زياد عام 711م'},
+{diff:'med',q:'ما أبرز إنجازات عمر بن عبدالعزيز؟',a:'العدل ورد المظالم وتوقف التوسع العسكري وإصلاح الاقتصاد'},
+{diff:'med',q:'ما أبرز إنجازات الدولة الأموية؟',a:'تعريب الديوان وسك العملة الإسلامية وتوسيع الفتوحات'},
+{diff:'med',q:'حتى أين امتدت فتوحات الأمويين غرباً؟',a:'حتى الأندلس (إسبانيا) وجنوب فرنسا'},
+{diff:'hard',q:'ما أسباب سقوط الدولة الأموية؟',a:'الثورة العباسية والصراعات القبلية والظلم الاجتماعي للموالي'},
+{diff:'hard',q:'من هو آخر الخلفاء الأمويين في المشرق؟',a:'مروان بن محمد (مروان الثاني)، هُزم وقُتل عام 750م'},
+],
+'النبي محمد':[
+{diff:'easy',q:'في أي مدينة وُلد النبي محمد صلى الله عليه وسلم؟',a:'مكة المكرمة'},
+{diff:'easy',q:'ما اسم والدة النبي صلى الله عليه وسلم؟',a:'آمنة بنت وهب'},
+{diff:'easy',q:'ما اسم أول زوجة للنبي صلى الله عليه وسلم؟',a:'خديجة بنت خويلد رضي الله عنها'},
+{diff:'easy',q:'في أي غار نزل الوحي أول مرة؟',a:'غار حراء'},
+{diff:'easy',q:'ما اسم جد النبي صلى الله عليه وسلم الذي ربّاه؟',a:'عبدالمطلب'},
+{diff:'easy',q:'كم عمر النبي صلى الله عليه وسلم حين بُعث رسولاً؟',a:'أربعون عاماً'},
+{diff:'med',q:'في أي عام هاجر النبي صلى الله عليه وسلم من مكة إلى المدينة؟',a:'عام 622م، وهو بداية التقويم الهجري'},
+{diff:'med',q:'ما اسم المدينة قبل أن تُسمى المدينة المنورة؟',a:'يثرب'},
+{diff:'med',q:'كم عدد الغزوات التي شارك فيها النبي صلى الله عليه وسلم؟',a:'سبع وعشرون غزوة'},
+{diff:'med',q:'في أي عام توفي النبي محمد صلى الله عليه وسلم؟',a:'عام 11هـ / 632م في المدينة المنورة'},
+{diff:'hard',q:'ما أهمية صلح الحديبية؟',a:'هدنة فتحت باب الدعوة سلمياً وأفضت إلى فتح مكة'},
+{diff:'hard',q:'ما المراحل الأولى لنزول الوحي على النبي صلى الله عليه وسلم؟',a:'بدأ برؤيا صادقة ثم نزول جبريل في غار حراء بأول سورة العلق'},
+],
+'الصحابة':[
+{diff:'easy',q:'من هو أول الخلفاء الراشدين؟',a:'أبو بكر الصديق رضي الله عنه'},
+{diff:'easy',q:'من لُقّب بالفاروق؟',a:'عمر بن الخطاب رضي الله عنه'},
+{diff:'easy',q:'من لُقّب بذي النورين؟',a:'عثمان بن عفان رضي الله عنه'},
+{diff:'easy',q:'من لُقّب بأسد الله؟',a:'حمزة بن عبدالمطلب رضي الله عنه'},
+{diff:'easy',q:'من هو أول من أسلم من الرجال؟',a:'أبو بكر الصديق رضي الله عنه'},
+{diff:'easy',q:'من هو الصحابي الملقب بسيف الله المسلول؟',a:'خالد بن الوليد رضي الله عنه'},
+{diff:'med',q:'من هو الصحابي الأكثر رواية للحديث النبوي؟',a:'أبو هريرة رضي الله عنه'},
+{diff:'med',q:'من هم العشرة المبشرون بالجنة؟',a:'أبو بكر وعمر وعثمان وعلي وطلحة والزبير وعبدالرحمن وسعد وسعيد وأبو عبيدة'},
+{diff:'med',q:'من هو الصحابي الذي أذّن في أول صلاة جمعة في المدينة؟',a:'بلال بن رباح رضي الله عنه'},
+{diff:'hard',q:'من جمع القرآن الكريم في مصحف واحد؟',a:'أمر بجمعه أبو بكر، ووحّده عثمان بن عفان في مصحف واحد'},
+{diff:'hard',q:'ما إسهامات عمر بن الخطاب في الإدارة الإسلامية؟',a:'وضع التقويم الهجري وأسّس الديوان وقسّم الأراضي ونظّم القضاء'},
+],
+'الغزوات':[
+{diff:'easy',q:'ما أول غزوة في الإسلام؟',a:'غزوة بدر الكبرى عام 2هـ / 624م'},
+{diff:'easy',q:'في أي عام وقعت غزوة أحد؟',a:'عام 3هـ / 625م'},
+{diff:'easy',q:'ما اسم الغزوة التي حُفر فيها خندق؟',a:'غزوة الخندق (الأحزاب) عام 5هـ'},
+{diff:'easy',q:'في أي عام كان فتح مكة المكرمة؟',a:'عام 8هـ / 630م'},
+{diff:'med',q:'كم عدد المسلمين في غزوة بدر؟',a:'نحو 313 مقاتلاً مقابل ألف من المشركين'},
+{diff:'med',q:'من كان قائد المشركين في غزوة بدر؟',a:'أبو جهل عمرو بن هشام'},
+{diff:'med',q:'ما الدرس المستفاد من غزوة أحد؟',a:'أهمية طاعة القيادة والثبات في المواقع المكلّف بها'},
+{diff:'med',q:'ما أهمية صلح الحديبية عام 6هـ؟',a:'هدنة عشر سنوات فتحت الباب للدعوة وأفضت لفتح مكة'},
+{diff:'hard',q:'ما الغزوة الأخيرة التي شارك فيها النبي صلى الله عليه وسلم؟',a:'غزوة تبوك عام 9هـ'},
+{diff:'hard',q:'ما السبب في تسمية غزوة الخندق بالأحزاب؟',a:'لتحالف أحزاب من قريش وغطفان ويهود ضد المسلمين'},
+],
+'علماء المسلمين':[
+{diff:'easy',q:'ما لقب ابن سينا في الطب؟',a:'الشيخ الرئيس وأبو الطب'},
+{diff:'easy',q:'من وضع أسس علم الجبر؟',a:'محمد بن موسى الخوارزمي'},
+{diff:'easy',q:'ما أشهر كتب ابن سينا في الطب؟',a:'كتاب القانون في الطب'},
+{diff:'med',q:'من هو ابن خلدون وما إسهامه؟',a:'أبو الاجتماع، صاحب المقدمة الشهيرة في فلسفة التاريخ'},
+{diff:'med',q:'ما مجالات البيروني العلمية؟',a:'الرياضيات والفلك والجغرافيا والتاريخ وعلم المعادن'},
+{diff:'med',q:'ما إسهام ابن الهيثم في العلوم؟',a:'رائد علم البصريات وقوانين الضوء، أثبت أن العين تستقبل الضوء ولا تُرسله'},
+{diff:'med',q:'ما إسهام الخوارزمي في الرياضيات؟',a:'أسّس علم الجبر وخوارزميات الحساب، واشتُق اسمه من كلمة Algorithm'},
+{diff:'hard',q:'من هو جابر بن حيان وما إسهاماته؟',a:'عالم مسلم في القرن الثامن الميلادي، رائد الكيمياء التجريبية'},
+{diff:'hard',q:'ما إسهام ابن رشد في الفلسفة الغربية؟',a:'شرح فلسفة أرسطو وأثّر في الفلسفة الأوروبية في العصور الوسطى'},
+],
+'المعارك الاسلامية':[
+{diff:'easy',q:'ما أول معركة انتصر فيها المسلمون؟',a:'معركة بدر الكبرى عام 2هـ / 624م'},
+{diff:'easy',q:'ما معركة فتح فارس؟',a:'معركة القادسية عام 636م'},
+{diff:'easy',q:'من قاد المسلمين في معركة اليرموك؟',a:'خالد بن الوليد رضي الله عنه'},
+{diff:'med',q:'متى وأين وقعت معركة اليرموك؟',a:'عام 636م على نهر اليرموك في بلاد الشام'},
+{diff:'med',q:'ما نتيجة معركة القادسية؟',a:'انتصار المسلمين وفتح فارس وسقوط الإمبراطورية الساسانية'},
+{diff:'med',q:'من فتح مصر وقادها؟',a:'عمرو بن العاص رضي الله عنه عام 641م'},
+{diff:'hard',q:'ما أهمية معركة بلاط الشهداء 732م؟',a:'وقفت التمدد الإسلامي في أوروبا الغربية أمام جيش شارل مارتل'},
+{diff:'hard',q:'ما معركة عين جالوت ونتيجتها؟',a:'1260م انتصر المماليك على المغول، وكانت نقطة تحول في التاريخ الإسلامي'},
+],
+'كرة قدم':[
+{diff:'easy',q:'كم عدد لاعبي كرة القدم في الفريق الواحد داخل الملعب؟',a:'أحد عشر لاعباً'},
+{diff:'easy',q:'كم مرة فازت البرازيل بكأس العالم؟',a:'خمس مرات: 1958 و1962 و1970 و1994 و2002'},
+{diff:'easy',q:'ما مدة مباراة كرة القدم؟',a:'90 دقيقة (شوطان 45 دقيقة)'},
+{diff:'easy',q:'من هو أكثر لاعب تسجيلاً على مستوى المنتخبات؟',a:'كريستيانو رونالدو'},
+{diff:'easy',q:'ما أبعاد مرمى كرة القدم؟',a:'7.32 متر عرضاً و2.44 متر ارتفاعاً'},
+{diff:'easy',q:'ما أشهر بطولة للأندية الأوروبية؟',a:'دوري أبطال أوروبا (UEFA Champions League)'},
+{diff:'med',q:'ما النادي الأكثر فوزاً بدوري أبطال أوروبا؟',a:'ريال مدريد الإسباني'},
+{diff:'med',q:'من أكثر الفائزين بالكرة الذهبية؟',a:'ليونيل ميسي (8 مرات حتى 2023)'},
+{diff:'med',q:'من فاز بكأس العالم 2018 وأين؟',a:'المنتخب الفرنسي في روسيا'},
+{diff:'med',q:'ما قاعدة التسلل في كرة القدم؟',a:'وجود اللاعب خلف آخر مدافع للخصم عند لحظة التمرير'},
+{diff:'hard',q:'ما أكبر فوز في تاريخ كأس العالم؟',a:'فاز المنتخب الألماني على البرازيل 7-1 في نصف نهائي 2014'},
+{diff:'hard',q:'من هو اللاعب الوحيد الذي فاز بكأس العالم لاعباً ومدرباً؟',a:'ديديه ديشان مع فرنسا لاعباً 1998 ومدرباً 2018'},
+],
+'اجتماعيات 7 - المناخ': [
+{diff:'easy',q:'ما الفرق بين الطقس والمناخ؟',a:'الطقس حالة الجو في وقت قصير والمناخ متوسط أحوال الجو على مدى طويل'},
+{diff:'easy',q:'ما عناصر المناخ؟',a:'الحرارة والضغط الجوي والرياح والرطوبة والتكاثف'},
+{diff:'easy',q:'ما مصدر حرارة الكرة الأرضية الرئيسي؟',a:'الإشعاع الشمسي'},
+{diff:'easy',q:'ما أنواع المناطق الحرارية على سطح الأرض؟',a:'المنطقة الحارة والمعتدلة والباردة'},
+{diff:'easy',q:'ما تعريف الإشعاع الشمسي؟',a:'مقدار الأشعة الشمسية الساقطة على مساحة معينة'},
+{diff:'easy',q:'ما تعريف الضغط الجوي؟',a:'ثقل عمود الهواء على وحدة المساحة'},
+{diff:'easy',q:'ما سبب هبوب الرياح؟',a:'التفاوت في الضغط الجوي بسبب اختلاف درجات الحرارة'},
+{diff:'easy',q:'ما الأقاليم المناخية الرئيسية؟',a:'الاستوائي والصحراوي والمتوسطي والمعتدل والقطبي'},
+{diff:'easy',q:'لماذا تختلف درجات الحرارة من منطقة لأخرى؟',a:'اختلاف زاوية سقوط أشعة الشمس وطول النهار'},
+{diff:'easy',q:'ما المنطقة الحرارية الأكبر امتداداً؟',a:'المنطقة الحارة'},
+{diff:'med',q:'ما العوامل المؤثرة في المناخ؟',a:'خط العرض والارتفاع والبُعد عن البحر والتيارات المائية والرياح'},
+{diff:'med',q:'كيف يؤثر خط العرض على المناخ؟',a:'كلما ابتعدنا عن خط الاستواء زاد البرد لأن زاوية سقوط أشعة الشمس تصغر'},
+{diff:'med',q:'كيف يؤثر الارتفاع على درجات الحرارة؟',a:'تنخفض درجة الحرارة بمعدل 6.5 درجة لكل 1000 متر ارتفاع'},
+{diff:'med',q:'ما خصائص إقليم المناخ الاستوائي؟',a:'حار ورطب طوال السنة وأمطاره غزيرة وتنمو فيه الغابات الكثيفة'},
+{diff:'med',q:'ما خصائص إقليم المناخ الصحراوي؟',a:'حار جاف صيفاً وبارد جاف شتاءً وأمطاره شحيحة جداً'},
+{diff:'med',q:'ما خصائص إقليم المناخ المتوسطي؟',a:'صيف حار جاف وشتاء معتدل ممطر يسود حول البحر المتوسط'},
+{diff:'med',q:'ما تأثير المسطحات المائية على المناخ؟',a:'تلطف المناخ في المناطق الساحلية فتقل الفوارق بين درجات الحرارة'},
+{diff:'med',q:'ما سبب هطول الأمطار؟',a:'يتبخر الماء ويرتفع فيبرد ويتكاثف ويتحول لسحب ثم تهطل أمطاراً'},
+{diff:'med',q:'لماذا تعتبر الحرارة أهم عناصر المناخ؟',a:'لأنها تؤثر في جميع العناصر المناخية الأخرى وفي نشاطات الإنسان'},
+{diff:'med',q:'ما الفرق بين التيارات المائية الدافئة والباردة؟',a:'الدافئة ترفع الحرارة وتزيد الأمطار والباردة تخفض الحرارة وتقلل الأمطار'},
+{diff:'hard',q:'ما أثر التغير المناخي على توزيع الأقاليم المناخية؟',a:'تمدد المناطق الجافة وذوبان الجليد وارتفاع منسوب البحار وتغير مواسم الأمطار'},
+{diff:'hard',q:'كيف تؤثر الجبال على توزيع الأمطار؟',a:'الجانب الرياحي يتلقى أمطاراً غزيرة والجانب المظلي جاف بسبب نزول الهواء الجاف'},
+{diff:'hard',q:'ما العلاقة بين الضغط الجوي والرياح؟',a:'الرياح تهب من مناطق الضغط المرتفع إلى مناطق الضغط المنخفض'},
+{diff:'hard',q:'لماذا تختلف كمية الأمطار بين المناطق الاستوائية والصحراوية؟',a:'الاستوائية حرارة ورطوبة عالية تسبب تبخراً وأمطاراً والصحراوية ضغط مرتفع وهواء جاف هابط'},
+{diff:'hard',q:'كيف يؤدي موقع الدولة من القارة دوراً في تحديد مناخها؟',a:'الدول الداخلية مناخها قاري والساحلية بحري معتدل'},
+{diff:'hard',q:'ما العوامل التي تجعل قطر ذات مناخ حار جاف؟',a:'موقعها في المنطقة الحارة الجافة وهيمنة الضغط المرتفع والحرارة الشديدة صيفاً'},
+],
+'اجتماعيات 7 - الرافدين': [
+{diff:'easy',q:'ما موقع بلاد الرافدين؟',a:'تقع بين نهري دجلة والفرات في العراق الحالي ضمن منطقة الهلال الخصيب'},
+{diff:'easy',q:'لماذا سميت بلاد الرافدين بهذا الاسم؟',a:'لوقوعها بين نهري دجلة والفرات'},
+{diff:'easy',q:'ما أهم حضارات بلاد الرافدين؟',a:'السومرية والأكادية والبابلية والآشورية'},
+{diff:'easy',q:'من اخترع الكتابة لأول مرة؟',a:'السومريون في بلاد الرافدين'},
+{diff:'easy',q:'ما أبرز إسهامات حضارة بلاد الرافدين؟',a:'اختراع الكتابة المسمارية وقانون حمورابي وتقسيم الساعة لستين دقيقة'},
+{diff:'easy',q:'ما أسباب قيام حضارات الرافدين؟',a:'خصوبة التربة بين النهرين ووفرة المياه وموقع جغرافي مناسب'},
+{diff:'easy',q:'ما قانون حمورابي؟',a:'أول مجموعة قوانين مكتوبة في التاريخ'},
+{diff:'easy',q:'ما الكتابة المسمارية؟',a:'أقدم نظام كتابة في التاريخ نُقشت على الطين'},
+{diff:'easy',q:'ما الزقورات؟',a:'معابد على شكل أبراج متدرجة كانت مراكز دينية وإدارية'},
+{diff:'easy',q:'في أي دولة حديثة تقع حضارة الرافدين؟',a:'جمهورية العراق'},
+{diff:'med',q:'ما أهم مظاهر الحضارة السومرية؟',a:'اختراع الكتابة المسمارية وتطوير الرياضيات وبناء الزقورات'},
+{diff:'med',q:'كيف أسهمت حضارة الرافدين في الرياضيات؟',a:'ابتكروا النظام الستيني فقسموا الساعة لستين دقيقة والدائرة لثلاثمئة وستين درجة'},
+{diff:'med',q:'ما أسباب سقوط حضارات الرافدين؟',a:'الصراعات الداخلية والغزوات الخارجية والتغيرات البيئية'},
+{diff:'med',q:'ما أسس قانون حمورابي؟',a:'مبدأ العدالة وتحديد العقوبات لكل جريمة وحماية الضعفاء'},
+{diff:'med',q:'ما إسهامات حضارة الرافدين في الفلك؟',a:'رصد النجوم والكواكب وتقسيم السنة لشهور والتنبؤ بالكسوف'},
+{diff:'med',q:'ما الفرق بين الحضارة الأكادية والسومرية؟',a:'السومرية أقدم وابتكرت الكتابة والأكادية أسست أول إمبراطورية موحدة'},
+{diff:'med',q:'لماذا يُعتبر نهرا دجلة والفرات شريان الحياة لحضارات الرافدين؟',a:'وفّرا المياه للزراعة وحملا الطمي الخصيب وشكّلا طريقاً للتجارة'},
+{diff:'med',q:'ما دور التجارة في ازدهار حضارة الرافدين؟',a:'ربطت بلاد الرافدين بالأناضول ومصر والهند ونشرت الفكر الحضاري'},
+{diff:'med',q:'ما حدائق بابل المعلقة؟',a:'إحدى عجائب الدنيا السبع القديمة بناها الملك نبوخذ نصر في بابل'},
+{diff:'med',q:'كيف أسهمت الكتابة المسمارية في الحفاظ على التراث؟',a:'سجّلت القوانين والمعاملات والأدب والعلوم مما حفظها لآلاف السنين'},
+{diff:'hard',q:'ما أثر حضارة الرافدين على الحضارات اللاحقة؟',a:'نقلت الكتابة والرياضيات والفلك والقانون لحضارات فارس واليونان وغيرها'},
+{diff:'hard',q:'لماذا تُعد بلاد الرافدين مهد الحضارة الإنسانية؟',a:'لأنها أنتجت أولى الاختراعات الحضارية الكتابة والقانون والمدن والزراعة المنظمة'},
+{diff:'hard',q:'ما العلاقة بين الجغرافيا والحضارة في بلاد الرافدين؟',a:'النهران والسهل الخصيب أتاحا الزراعة والتجارة والتواصل الحضاري'},
+{diff:'hard',q:'كيف ظهرت أولى المدن في بلاد الرافدين؟',a:'وفرة الغذاء بسبب الزراعة أتاحت التخصص في الحرف والإدارة وبناء المدن'},
+{diff:'hard',q:'ما مدى تأثير قانون حمورابي على القانون الإنساني؟',a:'يُعد أول نظام قانوني مكتوب ومنظم وأثّر على التشريعات اللاحقة'},
+{diff:'hard',q:'ما الأثر الحضاري لاختراع الكتابة المسمارية؟',a:'أتاحت تراكم المعرفة ونقلها عبر الأجيال وهو شرط أساسي لتطور الحضارة'},
+],
+'اجتماعيات 7 - السلطات': [
+{diff:'easy',q:'ما السلطات الدستورية الثلاث في دولة قطر؟',a:'السلطة التشريعية والتنفيذية والقضائية'},
+{diff:'easy',q:'ما وظيفة السلطة التشريعية في قطر؟',a:'سن القوانين ومراقبة الميزانية العامة للدولة'},
+{diff:'easy',q:'ما اسم السلطة التشريعية في قطر؟',a:'مجلس الشورى'},
+{diff:'easy',q:'كم عدد أعضاء مجلس الشورى في قطر؟',a:'45 عضواً 30 منتخبون و15 معينون بأمر أميري'},
+{diff:'easy',q:'من يرأس السلطة التنفيذية في قطر؟',a:'الأمير ومجلس الوزراء'},
+{diff:'easy',q:'ما وظيفة السلطة التنفيذية؟',a:'تنفيذ القوانين وإدارة شؤون الدولة'},
+{diff:'easy',q:'ما وظيفة السلطة القضائية؟',a:'الفصل في النزاعات وتطبيق القانون والعدالة'},
+{diff:'easy',q:'ما مبدأ الفصل بين السلطات؟',a:'توزيع السلطة بين ثلاث جهات مستقلة لمنع تمركزها بيد جهة واحدة'},
+{diff:'easy',q:'ما الدستور القطري الدائم؟',a:'دستور عام 2003'},
+{diff:'easy',q:'ما أعلى جهة قضائية في قطر؟',a:'المحكمة العليا'},
+{diff:'med',q:'ما اختصاصات مجلس الشورى في قطر؟',a:'مناقشة القوانين واعتمادها ومراجعة الميزانية ومناقشة السياسة العامة'},
+{diff:'med',q:'ما الفرق بين السلطة التشريعية والتنفيذية؟',a:'التشريعية تضع القوانين والتنفيذية تطبقها وتدير شؤون الدولة'},
+{diff:'med',q:'لماذا تتمتع السلطة القضائية بالاستقلالية؟',a:'لضمان العدالة وعدم تأثر أحكامها بالسلطتين الأخريين'},
+{diff:'med',q:'ما أنواع المحاكم في دولة قطر؟',a:'المحاكم الابتدائية ومحاكم الاستئناف والمحكمة العليا ومحكمة التمييز'},
+{diff:'med',q:'كيف تتعاون السلطات الثلاث؟',a:'التشريعية تضع القانون والتنفيذية تنفذه والقضائية تفصل في النزاعات مع رقابة متبادلة'},
+{diff:'med',q:'ما دور الأمير في النظام الدستوري القطري؟',a:'رئيس الدولة يُصادق على القوانين ويعين رئيس مجلس الوزراء وهو القائد الأعلى للقوات المسلحة'},
+{diff:'med',q:'ما مبدأ سيادة القانون في قطر؟',a:'الجميع متساوون أمام القانون بما فيهم المسؤولون'},
+{diff:'med',q:'لماذا يُعدّ الدستور الضامن لحقوق المواطنين؟',a:'لأنه يُحدد الحقوق والحريات ولا يمكن لأي قانون أن يخالفه'},
+{diff:'med',q:'ما الفرق بين الانتخاب والتعيين في مجلس الشورى؟',a:'المنتخبون يختارهم الشعب والمعينون يختارهم الأمير'},
+{diff:'med',q:'متى أُجريت أول انتخابات لمجلس الشورى القطري؟',a:'عام 2021م'},
+{diff:'hard',q:'ما أهمية الفصل بين السلطات في ضمان الديمقراطية؟',a:'يمنع احتكار السلطة ويحقق الرقابة المتبادلة ويضمن الحرية ويحمي الحقوق'},
+{diff:'hard',q:'كيف تضمن الرقابة المتبادلة بين السلطات حسن الإدارة؟',a:'التشريعية تراقب التنفيذية والقضائية تراجع دستورية القوانين مما يمنع الاستبداد'},
+{diff:'hard',q:'ما الفرق بين الملكية الدستورية والملكية المطلقة؟',a:'الدستورية محكومة بدستور يُحدد صلاحيات الحاكم والمطلقة لا قيود على الحاكم'},
+{diff:'hard',q:'كيف تطور النظام السياسي في قطر نحو المشاركة الشعبية؟',a:'من نظام معين بالكامل إلى مجلس شورى بثلاثين عضواً منتخباً وانتخابات بلدية'},
+{diff:'hard',q:'ما العلاقة بين سيادة القانون والتنمية الاقتصادية في قطر؟',a:'القانون المستقر يجلب الاستثمار الأجنبي ويحمي حقوق الملكية ويعزز التنمية'},
+{diff:'hard',q:'ما أثر استقلالية القضاء على ثقة المواطنين في الدولة؟',a:'يرفع ثقة المواطنين بأنهم سيُنصفون ويُطبَّق القانون بعدل دون محاباة'},
+],
+'اجتماعيات 7 - توزيع السكان': [
+{diff:'easy',q:'ما العوامل الطبيعية المؤثرة في التوزيع الجغرافي للسكان؟',a:'التضاريس والمناخ والتربة والموارد المائية والثروات الطبيعية'},
+{diff:'easy',q:'لماذا يتركز السكان في السهول؟',a:'لخصوبة التربة وسهولة الزراعة والبناء والتنقل'},
+{diff:'easy',q:'ما أكثر مناطق العالم اكتظاظاً بالسكان؟',a:'جنوب وشرق آسيا والهند والصين وغرب أوروبا وشرق أمريكا الشمالية'},
+{diff:'easy',q:'ما العوامل البشرية المؤثرة في توزيع السكان؟',a:'التصنيع والتجارة والحروب والهجرة والسياسات الحكومية'},
+{diff:'easy',q:'لماذا تقل كثافة السكان في الصحاري والجبال الشاهقة؟',a:'لقسوة المناخ وشح الموارد وصعوبة الحياة'},
+{diff:'easy',q:'ما تعريف الكثافة السكانية؟',a:'عدد السكان في وحدة المساحة'},
+{diff:'easy',q:'لماذا يتركز السكان قرب الأنهار؟',a:'لتوفر المياه للشرب والزراعة والنقل والصناعة'},
+{diff:'easy',q:'ما أسباب هجرة السكان من الريف للمدن؟',a:'البحث عن فرص عمل أفضل والخدمات المتطورة والتعليم والصحة'},
+{diff:'easy',q:'ما الفرق بين الهجرة الداخلية والخارجية؟',a:'الداخلية انتقال داخل الدولة والخارجية انتقال من دولة لأخرى'},
+{diff:'easy',q:'ما أثر الثروات الطبيعية في تركز السكان؟',a:'تجذب السكان للعمل في استخراجها وتصنيعها'},
+{diff:'med',q:'كيف أثرت الثورة الصناعية على توزيع السكان؟',a:'ركّزت السكان في المدن الصناعية بعد أن كانوا في الريف الزراعي'},
+{diff:'med',q:'ما العلاقة بين المناخ وتوزيع السكان؟',a:'المناخ المعتدل يجذب السكان والمتطرف يطردهم'},
+{diff:'med',q:'ما أسباب التوزيع غير المتساوي للسكان في العالم؟',a:'اختلاف المناخ والتضاريس والموارد والتطور الاقتصادي والتاريخ'},
+{diff:'med',q:'كيف تؤثر السياسات الحكومية على توزيع السكان؟',a:'بتشجيع الاستيطان في مناطق محددة أو تطويرها'},
+{diff:'med',q:'كيف تؤثر الحروب على التوزيع السكاني؟',a:'تُهجّر السكان قسراً وتُفرغ مناطق وتُكثّف أخرى'},
+{diff:'med',q:'ما أسباب تركز السكان في دلتا الأنهار؟',a:'خصوبة التربة العالية ووفرة المياه وسهولة الزراعة'},
+{diff:'med',q:'ما تأثير التقدم التقني على توزيع السكان؟',a:'أتاح السكن في مناطق كانت غير صالحة كالصحاري والمناطق الباردة'},
+{diff:'med',q:'لماذا تُعد الهند والصين الأكثر سكاناً؟',a:'مساحة زراعية كبيرة ومناخ ملائم وتاريخ حضاري طويل'},
+{diff:'med',q:'ما الفرق بين التوزيع السكاني في الدول النامية والمتقدمة؟',a:'المتقدمة تركز في المدن والنامية لا يزال كثيرون في الريف'},
+{diff:'med',q:'ما العلاقة بين التنمية الاقتصادية وتوزيع السكان؟',a:'التنمية تخلق فرص عمل فتجذب السكان وتركزهم حول المراكز الاقتصادية'},
+{diff:'hard',q:'كيف يؤثر التغير المناخي على الهجرة والتوزيع السكاني؟',a:'سيُهجّر ملايين من المناطق الساحلية المهددة بالغرق ومناطق الجفاف'},
+{diff:'hard',q:'ما التحديات التي تواجهها المناطق ذات الكثافة السكانية المرتفعة؟',a:'شح الموارد وازدحام المدن وتلوث البيئة والضغط على الخدمات'},
+{diff:'hard',q:'كيف يمكن لدولة أن تعيد توزيع سكانها بشكل أكثر توازناً؟',a:'بتطوير البنية التحتية في المناطق النائية وإنشاء مدن جديدة'},
+{diff:'hard',q:'ما العلاقة بين التحضر والتنمية الاقتصادية؟',a:'التحضر يرافق التنمية لكنه يخلق تحديات كضواحي فقيرة وتلوث'},
+{diff:'hard',q:'كيف أثرت موارد النفط على التوزيع السكاني في الخليج؟',a:'جذبت ملايين العمال الوافدين وأحدثت تحولاً ديموغرافياً ضخماً'},
+{diff:'hard',q:'ما الفرق بين الهجرة الطوعية والقسرية؟',a:'الطوعية بحثاً عن فرص أفضل والقسرية هرباً من الحروب والكوارث'},
+],
+'اجتماعيات 7 - العباسية': [
+{diff:'easy',q:'من مؤسس الدولة العباسية؟',a:'أبو العباس السفاح عام 750م'},
+{diff:'easy',q:'ما عاصمة الدولة العباسية؟',a:'بغداد التي بناها المنصور عام 762م'},
+{diff:'easy',q:'من بنى مدينة بغداد؟',a:'الخليفة المنصور'},
+{diff:'easy',q:'ما الخليفة العباسي الأشهر؟',a:'هارون الرشيد'},
+{diff:'easy',q:'من أسس بيت الحكمة؟',a:'الخليفة المأمون'},
+{diff:'easy',q:'من أسقط الدولة العباسية؟',a:'المغول بقيادة هولاكو خان عام 1258م'},
+{diff:'easy',q:'كم استمرت الدولة العباسية؟',a:'508 سنوات من 750م إلى 1258م'},
+{diff:'easy',q:'من اخترع الجبر من العلماء المسلمين؟',a:'الخوارزمي'},
+{diff:'easy',q:'لماذا يُعد العصر العباسي الأول عصراً ذهبياً؟',a:'لازدهار العلوم والفنون والترجمة ورعاية الخلفاء للعلماء'},
+{diff:'easy',q:'ما وظيفة بيت الحكمة؟',a:'ترجمة العلوم اليونانية والفارسية والهندية وتطويرها'},
+{diff:'med',q:'ما أسباب قيام الدولة العباسية؟',a:'السخط على الأمويين والحركة الدعوية في خراسان ودعم الموالي والفرس'},
+{diff:'med',q:'ما أسباب ضعف الدولة العباسية؟',a:'سيطرة الأتراك على الجيش والصراعات الداخلية وظهور دول مستقلة'},
+{diff:'med',q:'ما إسهامات الخوارزمي؟',a:'اخترع علم الجبر وطوّر نظام الأرقام العشرية وكتب في الفلك والجغرافيا'},
+{diff:'med',q:'من هو ابن سينا؟',a:'طبيب وفيلسوف مسلم وضع كتاب القانون في الطب الذي كان مرجعاً في أوروبا'},
+{diff:'med',q:'ما الفرق بين العصر العباسي الأول والثاني؟',a:'الأول ازدهار وقوة والثاني ضعف وسيطرة الأتراك وانهيار تدريجي'},
+{diff:'med',q:'كيف أثّرت حضارة العباسيين في أوروبا؟',a:'نقلت العلوم الإسلامية لأوروبا عبر الأندلس مما أشعل عصر النهضة الأوروبية'},
+{diff:'med',q:'ما أسباب سقوط بغداد على يد المغول؟',a:'ضعف الخلافة والانقسامات الداخلية وعدم الاستعداد لمواجهة المغول'},
+{diff:'med',q:'ما دور الموالي في قيام الدولة العباسية؟',a:'دعموا الثورة العباسية وشاركوا في قيادتها وكان الفرس من أبرزهم'},
+{diff:'med',q:'ما إسهامات ابن الهيثم؟',a:'وضع أسس علم البصريات وكتاب المناظر وأثّر في علماء أوروبا'},
+{diff:'med',q:'كيف استفادت الدولة العباسية من الحضارات المجاورة؟',a:'ترجمت علوم اليونان وفارس والهند وطوّرتها في بيت الحكمة'},
+{diff:'hard',q:'ما أثر الترجمة في العصر العباسي على الحضارة الإنسانية؟',a:'حفظت التراث اليوناني وطوّرته وأوصلته لأوروبا مما أسهم في نهضتها'},
+{diff:'hard',q:'لماذا يُعد العصر العباسي نقطة تحول في تاريخ الحضارة؟',a:'جمع حضارات الشرق والغرب وترجمها وطوّرها وأنتج علوماً أصيلة'},
+{diff:'hard',q:'ما الفرق بين سقوط الدولة العباسية والحضارة الإسلامية؟',a:'سقطت الدولة سياسياً لكن الحضارة استمرت عبر دول أخرى كالعثمانيين والمماليك'},
+{diff:'hard',q:'ما تداعيات سقوط بغداد على الحضارة الإسلامية؟',a:'تدمير المكتبات وضياع المخطوطات وتراجع العلوم لقرون'},
+{diff:'hard',q:'ما دور المماليك في حفظ الحضارة بعد سقوط العباسيين؟',a:'هزموا المغول في عين جالوت وحموا مصر والشام واحتضنوا العلماء'},
+{diff:'hard',q:'كيف يفسر المؤرخون الإنجاز الحضاري الضخم للعصر العباسي؟',a:'الاستقرار السياسي ورعاية الخلفاء للعلم والتنوع الثقافي والثروة الاقتصادية'},
+],
+'اجتماعيات 7 - الأمن الوطني': [
+{diff:'easy',q:'ما تعريف الأمن الوطني؟',a:'مجموعة الإجراءات التي تتخذها الدولة لحماية وجودها وسيادتها ومواطنيها'},
+{diff:'easy',q:'ما أبعاد الأمن الوطني؟',a:'الأمن العسكري والاقتصادي والاجتماعي والبيئي والإلكتروني'},
+{diff:'easy',q:'ما أهمية الأمن الوطني للدولة؟',a:'يضمن استقرار الدولة وحماية مواطنيها وصون سيادتها وتحقيق التنمية'},
+{diff:'easy',q:'ما المؤسسات المسؤولة عن الأمن الوطني في قطر؟',a:'القوات المسلحة والشرطة والحرس الأميري وأجهزة الاستخبارات'},
+{diff:'easy',q:'ما الفرق بين الأمن الداخلي والخارجي؟',a:'الداخلي حفظ النظام وسلامة المواطنين والخارجي الدفاع عن الحدود والسيادة'},
+{diff:'easy',q:'ما دور المواطن في تحقيق الأمن الوطني؟',a:'الإخلاص للوطن والإبلاغ عن التهديدات والالتزام بالقانون'},
+{diff:'easy',q:'ما التهديدات التي تواجه الأمن الوطني؟',a:'الإرهاب والتجسس والجرائم الإلكترونية والتطرف والأزمات الاقتصادية'},
+{diff:'easy',q:'ما مقومات الأمن الوطني في قطر؟',a:'القوات المسلحة والتحالفات الدولية والقوة الاقتصادية والدبلوماسية'},
+{diff:'easy',q:'ما دور التحالفات الدولية في تعزيز أمن قطر؟',a:'توفر الحماية المشتركة وتردع الأعداء وتعزز القوة التفاوضية'},
+{diff:'easy',q:'ما الفرق بين الأمن الوطني والأمن الإنساني؟',a:'الوطني يحمي الدولة وسيادتها والإنساني يحمي الفرد من الفقر والمرض'},
+{diff:'med',q:'كيف يُسهم الأمن الاقتصادي في تحقيق الأمن الوطني؟',a:'الاقتصاد القوي يموّل الجيش ويقلل البطالة ويحد من الجريمة'},
+{diff:'med',q:'ما دور التعليم في تعزيز الأمن الوطني؟',a:'يبني مواطنين واعين مخلصين للوطن ويُطوّر الكفاءات العلمية والتقنية'},
+{diff:'med',q:'ما دور الدبلوماسية في تحقيق الأمن القطري؟',a:'تحل النزاعات سلمياً وتبني التحالفات وتُجنّب الحروب'},
+{diff:'med',q:'ما أهمية التنوع الاقتصادي في تعزيز الأمن الوطني؟',a:'يقلل الاعتماد على مورد واحد كالنفط ويجعل الاقتصاد أكثر مقاومة للأزمات'},
+{diff:'med',q:'ما الفرق بين الأمن العسكري والأمن الناعم؟',a:'العسكري القوة المسلحة والردع والناعم الدبلوماسية والثقافة والاقتصاد'},
+{diff:'med',q:'ما دور وسائل الإعلام في تعزيز الأمن الوطني؟',a:'توعية المواطنين وتعزيز الانتماء ومواجهة الأخبار الكاذبة'},
+{diff:'med',q:'كيف يُسهم التطور التقني في تعزيز أمن قطر؟',a:'يُطوّر الدفاع ويُعزز المراقبة ويحمي البنية التحتية الرقمية'},
+{diff:'med',q:'ما دور المجتمع المدني في تحقيق الأمن الوطني؟',a:'يُعزز التماسك الاجتماعي ويُواجه التطرف ويُشارك في بناء الوعي'},
+{diff:'med',q:'ما أثر الاستقرار السياسي على الأمن الوطني؟',a:'يمنح الدولة القدرة على التخطيط والتطوير ويبني الثقة الداخلية والخارجية'},
+{diff:'med',q:'ما العلاقة بين رؤية قطر 2030 والأمن الوطني؟',a:'التنويع الاقتصادي وتطوير الكوادر البشرية يُعززان الأمن الشامل'},
+{diff:'hard',q:'كيف يمكن الموازنة بين الأمن الوطني وحقوق الإنسان؟',a:'بسن قوانين واضحة وتطبيقها تحت رقابة قضائية مستقلة'},
+{diff:'hard',q:'ما تأثير الإرهاب الإلكتروني على الأمن الوطني لقطر؟',a:'يهدد البنية التحتية الرقمية والاقتصادية لذا أنشأت قطر وكالة الأمن الإلكتروني'},
+{diff:'hard',q:'ما الاستراتيجية القطرية في تحقيق الأمن بالوساطة الدبلوماسية؟',a:'تلعب دور الوسيط في النزاعات الإقليمية مما يعزز أمنها ومكانتها الدولية'},
+{diff:'hard',q:'كيف يُسهم التنوع السكاني في تحديات الأمن الوطني بقطر؟',a:'الوافدون أكثر من المواطنين مما يتطلب سياسات تكامل وهوية وطنية محددة'},
+{diff:'hard',q:'كيف تتعامل قطر مع التهديدات الإقليمية؟',a:'بتعزيز التحالفات الاستراتيجية مع القوى الكبرى والحفاظ على علاقات متوازنة'},
+{diff:'hard',q:'ما أثر كأس العالم 2022 على الأمن الوطني القطري؟',a:'عزز صورة قطر دولياً وطوّر البنية الأمنية وأثبت قدرة قطر على إدارة الأحداث الكبرى'},
+],
+'اجتماعيات 8 - كوكب الأرض': [
+{diff:'easy',q:'ما طبقات الأرض الداخلية الثلاث؟',a:'القشرة الأرضية والوشاح واللب'},
+{diff:'easy',q:'ما أغلفة الكرة الأرضية الأربعة؟',a:'الغلاف الصخري والغازي والمائي والحيوي'},
+{diff:'easy',q:'ما الغلاف الجوي؟',a:'طبقة الهواء المحيطة بالأرض التي تحمي الحياة من الأشعة الضارة'},
+{diff:'easy',q:'ما الغلاف المائي؟',a:'يشمل كل المياه من محيطات وبحار وأنهار وجليد'},
+{diff:'easy',q:'ما الغلاف الحيوي؟',a:'المنطقة التي تعيش فيها الكائنات الحية على سطح الأرض وفي هوائها ومياهها'},
+{diff:'easy',q:'ما مكونات الغلاف الجوي؟',a:'النيتروجين 78% والأكسجين 21% وغازات أخرى'},
+{diff:'easy',q:'ما وظيفة الغلاف الجوي؟',a:'يحمي الأرض من الأشعة الكونية الضارة ويُنظّم الحرارة ويوفر الهواء'},
+{diff:'easy',q:'ما الفرق بين القشرة القارية والمحيطية؟',a:'القارية أثخن وأقل كثافة والمحيطية أرق وأكثر كثافة'},
+{diff:'easy',q:'ما تركيب باطن الأرض من الخارج للداخل؟',a:'القشرة ثم الوشاح ثم اللب الخارجي السائل ثم اللب الداخلي الصلب'},
+{diff:'easy',q:'ما أرق طبقات الأرض؟',a:'القشرة الأرضية'},
+{diff:'med',q:'ما نظرية الصفائح التكتونية وعلاقتها بالزلازل والبراكين؟',a:'قشرة الأرض مقسمة لصفائح تتحرك وعند تصادمها أو تباعدها تحدث الزلازل والبراكين'},
+{diff:'med',q:'كيف تتكون الجبال وفق نظرية الصفائح التكتونية؟',a:'عند تصادم صفيحتين قاريتين ترتفع الأرض لتكوّن جبالاً كجبال الهيمالايا'},
+{diff:'med',q:'ما وظيفة كل طبقة من طبقات الأرض الداخلية؟',a:'القشرة يعيش عليها البشر والوشاح يحمل الصفائح واللب يولد المجال المغناطيسي'},
+{diff:'med',q:'ما أهمية المجال المغناطيسي للأرض؟',a:'يحمي الأرض من الرياح الشمسية والأشعة الكونية الضارة'},
+{diff:'med',q:'كيف يؤثر الغلاف الجوي على درجات الحرارة؟',a:'يحتجز الحرارة ويمنع التطرف بين درجات الحرارة ليلاً ونهاراً'},
+{diff:'med',q:'ما أثر ثقب الأوزون على الحياة؟',a:'يُزيد من وصول الأشعة فوق البنفسجية الضارة مما يُسبب سرطان الجلد وأضراراً بيئية'},
+{diff:'med',q:'ما الفرق بين الزلزال والبركان؟',a:'الزلزال اهتزاز الأرض بسبب حركة الصفائح والبركان ثقوب تخرج منها الحمم'},
+{diff:'med',q:'ما العلاقة بين الغلاف الحيوي وبقية الأغلفة؟',a:'يعتمد على الغلاف الجوي للهواء والمائي للماء والصخري للتربة والمعادن'},
+{diff:'med',q:'كيف تؤدي الأنشطة البشرية إلى تغيير أغلفة الأرض؟',a:'التلوث يُضر بالغلاف الجوي والتصحر بالصخري وتلوث المياه بالمائي'},
+{diff:'med',q:'ما سبب حدوث الزلازل في مناطق بعينها؟',a:'وقوعها على حدود الصفائح التكتونية حيث تحدث الحركة'},
+{diff:'hard',q:'كيف أثبت العلماء وجود طبقات الأرض دون رؤيتها؟',a:'بدراسة موجات الزلازل وكيفية انتقالها وانكسارها عند المرور من طبقة لأخرى'},
+{diff:'hard',q:'لماذا يُعدّ الغلاف الحيوي أكثر الأغلفة تعقيداً؟',a:'لاحتوائه على ملايين الأنواع في تفاعل مستمر مع بقية الأغلفة'},
+{diff:'hard',q:'ما أثر ذوبان الجليد القطبي على الغلاف المائي؟',a:'يرفع مستوى البحار ويُغرق المناطق الساحلية ويُدمر الأنظمة البيئية البحرية'},
+{diff:'hard',q:'ما أهمية دراسة باطن الأرض للإنسان؟',a:'اكتشاف الثروات المعدنية والنفط وفهم الزلازل والبراكين وتطوير الحماية من الكوارث'},
+{diff:'hard',q:'كيف تؤثر الأنشطة البشرية على التوازن بين أغلفة الأرض؟',a:'التلوث واستنزاف الموارد يُخلان بالتوازن ويُسببان تغيرات مناخية وبيئية'},
+{diff:'hard',q:'ما العلاقة بين حركة الصفائح التكتونية وتوزيع الثروات المعدنية؟',a:'حركة الصفائح تُشكّل ترسبات معدنية وتوزع النفط في الأحواض الرسوبية'},
+],
+'اجتماعيات 8 - مصر القديمة': [
+{diff:'easy',q:'على ضفاف أي نهر قامت الحضارة المصرية؟',a:'نهر النيل'},
+{diff:'easy',q:'ما أبرز مظاهر الحضارة المصرية القديمة؟',a:'الأهرامات والمسلات والكتابة الهيروغليفية والتحنيط والتقويم الشمسي'},
+{diff:'easy',q:'ما الكتابة التي استخدمها المصريون القدماء؟',a:'الكتابة الهيروغليفية'},
+{diff:'easy',q:'ما أعظم إنجازات الفراعنة المعمارية؟',a:'الأهرامات وعلى رأسها هرم الجيزة الكبير والمعابد والمسلات'},
+{diff:'easy',q:'ما أسباب قيام الحضارة المصرية؟',a:'فيضان النيل السنوي الذي يُخصّب التربة والموقع الجغرافي المحمي'},
+{diff:'easy',q:'ما التحنيط وما هدفه؟',a:'حفظ جثة الميت لمنع تحللها اعتقاداً بأن الروح ستعود إليها'},
+{diff:'easy',q:'ما الحجر الروزيتا؟',a:'حجر كُتب عليه نص بثلاث لغات ساعد على فك رموز الهيروغليفية'},
+{diff:'easy',q:'ما أشهر فراعنة التاريخ؟',a:'رمسيس الثاني أطول الفراعنة حكماً وأكثرهم انجازاً'},
+{diff:'easy',q:'ما أهمية نهر النيل لمصر القديمة؟',a:'وفّر المياه للشرب والزراعة وطمي فيضانه أخصب الأرض'},
+{diff:'easy',q:'ما الدولة الحديثة التي قامت في مكان الحضارة المصرية القديمة؟',a:'جمهورية مصر العربية'},
+{diff:'med',q:'ما العلاقة بين فيضان النيل وازدهار الحضارة المصرية؟',a:'الفيضان يترك طمياً خصيباً يُمكّن الزراعة المكثفة التي دعمت الحضارة'},
+{diff:'med',q:'ما إسهامات المصريين القدماء في الطب؟',a:'أوائل من مارسوا الجراحة وعلم التشريح وتركوا برديات طبية قيّمة'},
+{diff:'med',q:'كيف أسهمت مصر في تطور التجارة القديمة؟',a:'كانت مركزاً للتجارة بين أفريقيا وآسيا وأوروبا'},
+{diff:'med',q:'ما النظام الاجتماعي في مصر القديمة؟',a:'هرمي الفرعون في القمة ثم الكهنة والنبلاء ثم الكتّاب ثم الحرفيون والفلاحون'},
+{diff:'med',q:'ما التقويم الشمسي المصري؟',a:'قسّم السنة لـ365 يوماً وـ12 شهراً وهو أساس التقويم الميلادي الحديث'},
+{diff:'med',q:'ما أسباب اندثار الحضارة الفرعونية؟',a:'الغزوات المتتالية كالفرس والإغريق والرومان وضعف الفراعنة الأواخر'},
+{diff:'med',q:'كيف أثّرت الحضارة المصرية على الحضارة اليونانية؟',a:'أخذ الإغريق عن مصر الرياضيات والطب والفلسفة والفنون'},
+{diff:'med',q:'ما دور الكهنة في المجتمع المصري القديم؟',a:'حراسة المعابد وتنظيم الطقوس الدينية والتعليم وحفظ المعرفة'},
+{diff:'med',q:'ما الفرق بين مفهوم الفرعون كحاكم سياسي وكإله؟',a:'سياسياً حاكم مطلق ودينياً ابن آلهة ووسيط بين الآلهة والبشر'},
+{diff:'med',q:'ما إسهامات الحضارة المصرية في الرياضيات؟',a:'حساب مساحات الأراضي بعد الفيضان وبناء الأهرامات بدقة هندسية مذهلة'},
+{diff:'hard',q:'لماذا تُعدّ الأهرامات معجزة معمارية؟',a:'دقتها الهندسية الهائلة وحجمها وضخامة أحجارها وطرق نقلها بلا معدات حديثة'},
+{diff:'hard',q:'ما الأثر الحضاري طويل الأمد للحضارة المصرية على البشرية؟',a:'التقويم والكتابة والطب والهندسة والفن التي أثّرت في الحضارات اللاحقة حتى اليوم'},
+{diff:'hard',q:'كيف أسهم فك رموز الهيروغليفية في فهم التاريخ؟',a:'كشف عن تاريخ حضارة كاملة ظل مبهماً لقرون'},
+{diff:'hard',q:'ما أثر الجغرافيا على طبيعة الحضارة المصرية مقارنة بالرافدين؟',a:'الصحراء حمت مصر فكانت أكثر استقراراً والرافدين مكشوف فتعرض لغزوات متكررة'},
+{diff:'hard',q:'كيف يُفسّر علماء الآثار نظرية بناء الأهرامات؟',a:'بالمنحدرات والزلاجات وآلاف العمال المنظمين والخبرة الهندسية المتراكمة'},
+{diff:'hard',q:'ما الفرق بين الهيروغليفية والهيراطيقية؟',a:'الهيروغليفية رسمية دينية والهيراطيقية مبسطة أسرع للاستخدام اليومي'},
+],
+'اجتماعيات 8 - المواطنة': [
+{diff:'easy',q:'ما تعريف المواطنة؟',a:'انتماء الفرد لدولة معينة تترتب عليه حقوق وواجبات متبادلة'},
+{diff:'easy',q:'ما مقومات المواطنة؟',a:'اللغة المشتركة والتاريخ المشترك والقيم المشتركة والانتماء الوطني'},
+{diff:'easy',q:'ما الفرق بين الحقوق والواجبات؟',a:'الحقوق ما تحصل عليه من الدولة والواجبات ما تقدمه أنت للدولة'},
+{diff:'easy',q:'ما أمثلة على واجبات المواطن في قطر؟',a:'الدفاع عن الوطن والمشاركة في الانتخابات واحترام القوانين'},
+{diff:'easy',q:'ما حقوق المواطن في قطر؟',a:'التعليم والصحة والعمل والسكن والأمن والمشاركة السياسية'},
+{diff:'easy',q:'ما المشاركة المدنية؟',a:'إسهام المواطن في الحياة العامة من خلال التصويت والتطوع وهيئات المجتمع المدني'},
+{diff:'easy',q:'ما هيئات المجتمع المدني؟',a:'منظمات غير حكومية كالجمعيات الخيرية والنقابات والأندية'},
+{diff:'easy',q:'ما أهمية المواطنة الفاعلة؟',a:'تُعزز التنمية والتماسك الاجتماعي وتحقيق المصلحة العامة'},
+{diff:'easy',q:'ما الهوية الوطنية؟',a:'مجموعة القيم والموروثات والخصائص التي تُميز مواطني دولة عن غيرهم'},
+{diff:'easy',q:'ما دور المواطن في الانتخابات؟',a:'اختيار ممثليه في المجالس المنتخبة والمشاركة في صنع القرار'},
+{diff:'med',q:'ما العلاقة بين المواطنة والانتماء الوطني؟',a:'المواطنة القانونية تستلزم انتماءً حقيقياً يجعل المواطن يُضحي ويُسهم في بناء وطنه'},
+{diff:'med',q:'ما دور المدرسة في تنمية المواطنة الفاعلة؟',a:'تُعلّم القيم الوطنية وحقوق الإنسان والمشاركة وتبني الهوية'},
+{diff:'med',q:'كيف تُسهم منظمات المجتمع المدني في تعزيز المواطنة؟',a:'تُشجع المشاركة وتنقل المطالب للحكومة وتُقدم الخدمات وتُعزز المساءلة'},
+{diff:'med',q:'ما الدور الذي تلعبه وسائل الإعلام في المواطنة؟',a:'الإيجابي نشر الوعي ومحاسبة المسؤولين والسلبي إثارة الفتن ونشر الأكاذيب'},
+{diff:'med',q:'كيف تُعزز رؤية قطر 2030 قيم المواطنة؟',a:'بتطوير المواطن القطري علمياً وأخلاقياً وتنمية انتمائه وتمكينه من قيادة التنمية'},
+{diff:'med',q:'ما دور الأسرة في تنمية المواطنة لدى الأبناء؟',a:'غرس القيم الوطنية والاحترام والمسؤولية منذ الصغر'},
+{diff:'med',q:'كيف يُسهم التطوع في بناء المواطنة الفاعلة؟',a:'يُعزز الانتماء ويُطوّر المهارات ويُسهم في المجتمع'},
+{diff:'med',q:'ما الفرق بين المواطنة الرسمية والفعلية؟',a:'الرسمية الجنسية القانونية والفعلية المشاركة النشطة في الحياة العامة'},
+{diff:'med',q:'ما أثر كأس العالم 2022 على مفهوم المواطنة القطرية؟',a:'عزز الشعور الوطني وأظهر للعالم قدرة قطر على الإنجاز وعمّق الفخر الوطني'},
+{diff:'med',q:'ما التحديات التي تواجه المواطنة في المجتمعات المتعددة الثقافات؟',a:'تعارض الانتماءات وصعوبة بناء هوية مشتركة مع التنوع'},
+{diff:'hard',q:'ما الفرق بين المواطنة والجنسية؟',a:'الجنسية صفة قانونية والمواطنة مفهوم أشمل يتضمن الانتماء والمشاركة والمسؤولية'},
+{diff:'hard',q:'كيف تؤثر العولمة على مفهوم المواطنة التقليدية؟',a:'تُنشئ ولاءات متعددة وتُضعف الحدود الوطنية وتطرح مفهوم المواطنة العالمية'},
+{diff:'hard',q:'ما المشكلات التي تواجه المواطنة في قطر بسبب نسبة الوافدين؟',a:'الوافدون يفوق عددهم المواطنين مما يُثير تساؤلات حول الهوية والمشاركة'},
+{diff:'hard',q:'كيف يمكن للمواطن القطري الموازنة بين هويته والانفتاح على العالم؟',a:'بتعزيز الأصالة والحفاظ على القيم مع الانفتاح العلمي والثقافي'},
+{diff:'hard',q:'ما أثر التعليم المدني على جودة المشاركة السياسية؟',a:'يُنتج مواطنين واعين قادرين على الاختيار الصحيح ومحاسبة المسؤولين'},
+{diff:'hard',q:'ما الفرق بين المواطنة في الأنظمة الديمقراطية والاستبدادية؟',a:'الديمقراطية مشاركة فعلية وحقوق مكفولة والاستبدادية واجبات دون حقوق فعلية'},
+],
+'اجتماعيات 8 - بيانات السكان': [
+{diff:'easy',q:'ما مصادر البيانات السكانية؟',a:'التعداد السكاني وسجلات الأحوال المدنية والمسوح السكانية'},
+{diff:'easy',q:'ما التعداد السكاني؟',a:'إحصاء شامل لجميع سكان الدولة في وقت محدد'},
+{diff:'easy',q:'ما سجلات الأحوال المدنية؟',a:'سجلات تُقيّد فيها الولادات والوفيات والزيجات والطلاق'},
+{diff:'easy',q:'ما أكثر مناطق العالم كثافة سكانية؟',a:'جنوب آسيا وشرقها والهند والصين وغرب أوروبا'},
+{diff:'easy',q:'ما أقل مناطق العالم كثافة سكانية؟',a:'الصحاري الكبرى والمناطق القطبية والغابات الاستوائية الكثيفة'},
+{diff:'easy',q:'ما أهمية البيانات السكانية؟',a:'تساعد الدولة على التخطيط وتوفير الخدمات وتوزيع الموارد'},
+{diff:'easy',q:'ما مفهوم النمو السكاني؟',a:'الزيادة في عدد السكان خلال فترة زمنية محددة'},
+{diff:'easy',q:'ما العوامل المؤثرة في النمو السكاني؟',a:'معدل المواليد ومعدل الوفيات والهجرة'},
+{diff:'easy',q:'ما الفرق بين التعداد والمسح السكاني؟',a:'التعداد يشمل الجميع والمسح عينة ممثلة للسكان'},
+{diff:'easy',q:'كيف تستفيد الحكومات من البيانات السكانية؟',a:'تخطيط التعليم والصحة والسكن والبنية التحتية وتوزيع الميزانيات'},
+{diff:'med',q:'ما مراكز الترُّكز السكاني الكبرى في العالم؟',a:'سهل الغانج في الهند وسهل الصين الكبير وسهل أوروبا الشمالية'},
+{diff:'med',q:'لماذا يتمركز السكان في السهول الكبرى دون الجبال؟',a:'السهول صالحة للزراعة وسهلة للبناء والتنقل وتوفر موارد أكثر'},
+{diff:'med',q:'ما تحديات النمو السكاني المتسارع في الدول النامية؟',a:'ضغط على الموارد والخدمات والبنية التحتية والوظائف والبيئة'},
+{diff:'med',q:'ما العلاقة بين معدل الخصوبة والتنمية؟',a:'الدول المتقدمة معدل خصوبة منخفض والنامية مرتفع والتنمية تُخفّضه'},
+{diff:'med',q:'كيف تستخدم قطر البيانات السكانية في التخطيط؟',a:'لتوفير الخدمات للمواطنين والوافدين وتخطيط السكن والمدارس والمستشفيات'},
+{diff:'med',q:'ما الفرق بين الهرم السكاني للدولة النامية والمتقدمة؟',a:'النامية قاعدة عريضة وشباب كثير والمتقدمة شيخوخة أكثر'},
+{diff:'med',q:'ما أثر التحضر على البيانات السكانية؟',a:'يُسهّل جمعها في المدن ويُغير توزيع السكان جغرافياً'},
+{diff:'med',q:'ما الدول التي تعاني من تراجع السكان؟',a:'اليابان وألمانيا وإيطاليا بسبب انخفاض معدل المواليد وشيخوخة السكان'},
+{diff:'med',q:'ما أهمية التوزيع السكاني المتوازن لقطر؟',a:'يضمن تغطية جغرافية للخدمات ويُقلل الضغط على العاصمة'},
+{diff:'med',q:'ما أثر وباء كورونا على البيانات السكانية العالمية؟',a:'رفع معدلات الوفيات وخفض معدلات المواليد والهجرة'},
+{diff:'hard',q:'كيف أثّرت سياسة الطفل الواحد الصينية على البيانات السكانية؟',a:'أدت لاختلال نسبة الجنسين وشيخوخة السكان وتراجع القوى العاملة'},
+{diff:'hard',q:'ما تحديات إحصاء السكان في الدول ذات المساحات الشاسعة؟',a:'صعوبة الوصول للمناطق النائية وتكلفة التعداد والبدو الرُّحّل'},
+{diff:'hard',q:'ما العلاقة بين البيانات السكانية والتنمية المستدامة؟',a:'البيانات الدقيقة تُمكّن من توزيع عادل للموارد وتخطيط بعيد المدى'},
+{diff:'hard',q:'ما مستقبل عدد سكان العالم وفق التوقعات؟',a:'يُتوقع أن يبلغ 10 مليارات بحلول 2050 مع تركز النمو في أفريقيا وآسيا'},
+{diff:'hard',q:'كيف يمكن استخدام التكنولوجيا لتحسين دقة البيانات السكانية؟',a:'بالسجلات الرقمية والذكاء الاصطناعي وصور الأقمار الصناعية'},
+{diff:'hard',q:'ما أثر عدم دقة البيانات السكانية على السياسات الحكومية؟',a:'يُؤدي لتوزيع خاطئ للموارد وخطط تنمية مبنية على معلومات مغلوطة'},
+],
+'اجتماعيات 8 - الدولة العثمانية': [
+{diff:'easy',q:'من مؤسس الدولة العثمانية؟',a:'عثمان بن أرطغرل'},
+{diff:'easy',q:'ما عاصمة الدولة العثمانية الأخيرة؟',a:'القسطنطينية إسطنبول بعد فتحها عام 1453م'},
+{diff:'easy',q:'من فتح القسطنطينية؟',a:'السلطان محمد الثاني محمد الفاتح عام 1453م'},
+{diff:'easy',q:'ما الفترة الزمنية للدولة العثمانية؟',a:'من 1299م إلى 1924م'},
+{diff:'easy',q:'ما الدول العربية التي ضمها العثمانيون؟',a:'مصر والشام والعراق والحجاز واليمن وشمال أفريقيا'},
+{diff:'easy',q:'ما الخليفة العثماني الأشهر؟',a:'سليمان القانوني'},
+{diff:'easy',q:'كيف انتهت الدولة العثمانية؟',a:'بعد الحرب العالمية الأولى تفككت وأُعلن إلغاء الخلافة عام 1924م'},
+{diff:'easy',q:'ما نظام الإنكشارية؟',a:'قوة عسكرية محترفة كانت العمود الفقري للجيش العثماني'},
+{diff:'easy',q:'ما نظام الملة في الدولة العثمانية؟',a:'نظام يُتيح للأقليات الدينية إدارة شؤونها الداخلية'},
+{diff:'easy',q:'ما معركة مرج دابق؟',a:'1516م انتصر فيها العثمانيون على المماليك وضموا الشام ومصر والحجاز'},
+{diff:'med',q:'ما أسباب نشأة وقوة الدولة العثمانية؟',a:'الموقع الاستراتيجي والجيش المنظم والتسامح النسبي وضعف الدول المجاورة'},
+{diff:'med',q:'ما أسباب توسع العثمانيين في البلاد العربية؟',a:'حماية الإسلام والحرمين والسيطرة على طرق التجارة وتوسيع رقعة الدولة'},
+{diff:'med',q:'ما الإسهامات العثمانية في العمارة والفنون؟',a:'المساجد الكبرى كمسجد السليمانية والمآذن الرشيقة والفنون الزخرفية'},
+{diff:'med',q:'ما أسباب ضعف الدولة العثمانية في القرن 19م؟',a:'تراجع الجيش والثورات الداخلية وتدخل القوى الأوروبية والتخلف التقني'},
+{diff:'med',q:'ما حركة التنظيمات العثمانية؟',a:'إصلاحات في القرن 19م لتحديث الجيش والقانون والتعليم'},
+{diff:'med',q:'ما دور الدولة العثمانية في خدمة الحرمين؟',a:'ترميم الكعبة والمسجد النبوي وحماية الحجاج وتنظيم الحج'},
+{diff:'med',q:'كيف أدار العثمانيون البلاد العربية؟',a:'بتعيين ولاة مع منح قدر من الحكم الذاتي واحترام الثقافة المحلية'},
+{diff:'med',q:'ما أثر الحرب العالمية الأولى على الدولة العثمانية؟',a:'انتهت بهزيمة العثمانيين وتفكك الدولة ونشأة دول جديدة من أراضيها'},
+{diff:'med',q:'كيف تم فتح القسطنطينية؟',a:'استخدم محمد الفاتح المدفعية الثقيلة وجرّ السفن براً وحاصر المدينة'},
+{diff:'med',q:'ما أهم الإصلاحات بعد فتح القسطنطينية؟',a:'أعاد إعمار المدينة وحوّلها لعاصمة وأقام المساجد والمدارس وتسامح مع أقلياتها'},
+{diff:'hard',q:'ما أثر سقوط الدولة العثمانية على الشرق الأوسط؟',a:'خلق دولاً جديدة برسمت حدودها قوى أوروبية مما ولّد نزاعات لا تزال قائمة'},
+{diff:'hard',q:'كيف نجح العثمانيون في الحكم لأكثر من 600 سنة؟',a:'المرونة في الإدارة والتسامح النسبي وقوة الجيش وشرعية الخلافة الإسلامية'},
+{diff:'hard',q:'كيف أثّر فتح القسطنطينية على موازين القوى في أوروبا؟',a:'أسقط الإمبراطورية البيزنطية وفتح باب التوسع العثماني في أوروبا'},
+{diff:'hard',q:'ما التراث العثماني الحاضر في المنطقة العربية؟',a:'الحدود الإدارية والمباني التاريخية وبعض القوانين والموروث الثقافي'},
+{diff:'hard',q:'ما الفرق بين سياسة العثمانيين في الأناضول والبلاد العربية؟',a:'الأناضول سياسة تتريك والبلاد العربية قدر من الحكم الذاتي'},
+{diff:'hard',q:'ما العوامل التي أخّرت سقوط الدولة العثمانية رغم ضعفها؟',a:'التوازن بين القوى الأوروبية المتنافسة على الإرث العثماني والإصلاحات الجزئية'},
+],
+'اجتماعيات 8 - الأمن الاجتماعي': [
+{diff:'easy',q:'ما تعريف الأمن الاجتماعي؟',a:'تحقيق الاستقرار في المجتمع وضمان احتياجات أفراده الأساسية من تعليم وصحة وعمل'},
+{diff:'easy',q:'ما تعريف التغيُّر الاجتماعي؟',a:'التحولات التي تطرأ على بنية المجتمع وقيمه وعلاقاته ونظمه عبر الزمن'},
+{diff:'easy',q:'ما أسباب التغيُّر الاجتماعي؟',a:'التطور التكنولوجي والتعليم والهجرة والاقتصاد والإعلام'},
+{diff:'easy',q:'ما الأمن الاقتصادي؟',a:'ضمان استقرار الاقتصاد وتوفير فرص العمل والحفاظ على مستوى معيشي لائق'},
+{diff:'easy',q:'ما أمثلة على التغيُّر الاجتماعي الإيجابي في قطر؟',a:'التطور في التعليم وتمكين المرأة وتطوير المدن والانفتاح الثقافي'},
+{diff:'easy',q:'ما مقومات الأمن الاجتماعي؟',a:'العدالة الاجتماعية والتماسك الأسري والتعليم الجيد والصحة والعمل'},
+{diff:'easy',q:'ما دور الدولة في تحقيق الأمن الاجتماعي؟',a:'توفير التعليم والصحة والعمل والسكن وشبكة الأمان للفئات الضعيفة'},
+{diff:'easy',q:'ما الهوية الوطنية وكيف تُعزَّز؟',a:'منظومة القيم والتراث المشترك وتُعزَّز بالتعليم والإعلام والاحتفالات الوطنية'},
+{diff:'easy',q:'ما أثر التكنولوجيا على التغيُّر الاجتماعي؟',a:'تُسرّع التغيير وتُغير أنماط التواصل والعمل والترفيه والتعليم'},
+{diff:'easy',q:'ما الفرق بين التغيُّر الاجتماعي التدريجي والمفاجئ؟',a:'التدريجي بطيء ومنظم والمفاجئ سريع قد يُسبب توترات اجتماعية'},
+{diff:'med',q:'ما التحديات الاجتماعية التي يواجهها المجتمع القطري؟',a:'الحفاظ على الهوية في ظل التنوع وتكامل الوافدين وتوازن التحديث مع القيم'},
+{diff:'med',q:'كيف يُسهم التعليم في تحقيق الأمن الاجتماعي؟',a:'يُنتج مواطنين مؤهلين ويُقلل البطالة ويُعزز الوعي والمشاركة'},
+{diff:'med',q:'ما أثر العولمة على التغيُّر الاجتماعي في قطر؟',a:'أدخلت قيماً وعادات جديدة وأتاحت التواصل العالمي وأثارت تساؤلات عن الهوية'},
+{diff:'med',q:'ما دور المرأة في تحقيق الأمن الاجتماعي في قطر؟',a:'تُسهم في التعليم والصحة والاقتصاد وبناء الأسرة وحمل القيم للأجيال'},
+{diff:'med',q:'ما مؤشرات الأمن الاجتماعي في دولة ما؟',a:'معدل الجريمة ومستوى التعليم ورضا السكان والتماسك المجتمعي ومعدل البطالة'},
+{diff:'med',q:'كيف تُسهم المؤسسات الدينية في الأمن الاجتماعي؟',a:'تُعزز القيم الأخلاقية وتُوحّد المجتمع وتُقدم خدمات للمحتاجين'},
+{diff:'med',q:'ما الأثر الاجتماعي لرؤية قطر 2030؟',a:'بناء مجتمع متماسك محافظ على هويته مع الانفتاح وتطوير الكوادر البشرية'},
+{diff:'med',q:'ما الفرق بين الأمن الاجتماعي والرعاية الاجتماعية؟',a:'الأمن الاجتماعي أشمل يتضمن الرعاية والعدالة والاستقرار والتماسك'},
+{diff:'med',q:'كيف يُعزّز الحوار بين الأجيال الأمن الاجتماعي؟',a:'ينقل التراث والقيم ويُقلل التوترات بين الجيل القديم والجديد'},
+{diff:'med',q:'ما أثر الهجرة على الأمن الاجتماعي؟',a:'تُثري المجتمع بالكفاءات لكن قد تُحدث توترات ثقافية وضغطاً على الخدمات'},
+{diff:'hard',q:'كيف يمكن الموازنة بين الحفاظ على التراث والتكيف مع التغيُّر الاجتماعي؟',a:'بتمييز الثوابت كالقيم والدين من المتغيرات كالأساليب والتقنيات والتكيف الواعي'},
+{diff:'hard',q:'ما العلاقة بين الأمن الاجتماعي والديمقراطية؟',a:'الديمقراطية تُتيح التعبير عن المظالم وتُقلل التوترات وتُحقق العدالة'},
+{diff:'hard',q:'كيف تؤثر الأزمات الاقتصادية على الأمن الاجتماعي؟',a:'ترفع البطالة وتزيد الفقر والجريمة وتُضعف الثقة بالحكومة'},
+{diff:'hard',q:'كيف تحافظ قطر على هويتها في ظل الوجود الكثيف للوافدين؟',a:'بسياسات تعليمية وإعلامية وثقافية تُعزز الهوية وتُقيّد الجنسية'},
+{diff:'hard',q:'ما التوازن المطلوب بين الأمن الاجتماعي والحرية الفردية؟',a:'الأمن لا يجب أن يأتي على حساب الحرية والحل في دولة القانون'},
+{diff:'hard',q:'ما الفرق بين التغيُّر الاجتماعي المُدار والعفوي؟',a:'المُدار تقوده الدولة بسياسات واعية والعفوي يحدث تلقائياً وقد يكون مُزعزِعاً'},
+],
+};
+
+const CAT_INFO = {
+'اجتماعيات':        {emoji:'🌐', label:'الاجتماعيات'},
+'علوم':              {emoji:'🔬', label:'العلوم'},
+'ثقافة':             {emoji:'📖', label:'الثقافة الدينية'},
+'دين':               {emoji:'☪', label:'التربية الإسلامية'},
+'عامة':              {emoji:'🌟', label:'معلومات عامة'},
+'الدوري الاسباني':  {emoji:'⚽', label:'الدوري الإسباني'},
+'قطر':               {emoji:'🏙', label:'دولة قطر'},
+'الدولة العباسية':  {emoji:'🏛', label:'الدولة العباسية'},
+'الدولة الاموية':   {emoji:'🌙', label:'الدولة الأموية'},
+'النبي محمد':        {emoji:'🕌', label:'النبي محمد ﷺ'},
+'الصحابة':          {emoji:'⭐', label:'الصحابة الكرام'},
+'الغزوات':           {emoji:'🗡', label:'الغزوات'},
+'علماء المسلمين':   {emoji:'📜', label:'علماء المسلمين'},
+'المعارك الاسلامية':{emoji:'🏹', label:'المعارك الإسلامية'},
+'كرة قدم':          {emoji:'🏆', label:'كرة القدم'},
+'اجتماعيات 7 - المناخ':            {emoji:'🌤', label:'اجتماعيات 7 - المناخ'},
+'اجتماعيات 7 - الرافدين':          {emoji:'🏺', label:'اجتماعيات 7 - الرافدين'},
+'اجتماعيات 7 - السلطات':           {emoji:'⚖', label:'اجتماعيات 7 - السلطات'},
+'اجتماعيات 7 - توزيع السكان':      {emoji:'👥', label:'اجتماعيات 7 - توزيع السكان'},
+'اجتماعيات 7 - العباسية':          {emoji:'🏛', label:'اجتماعيات 7 - العباسية'},
+'اجتماعيات 7 - الأمن الوطني':      {emoji:'🛡', label:'اجتماعيات 7 - الأمن الوطني'},
+'اجتماعيات 8 - كوكب الأرض':        {emoji:'🌍', label:'اجتماعيات 8 - كوكب الأرض'},
+'اجتماعيات 8 - مصر القديمة':       {emoji:'🏺', label:'اجتماعيات 8 - مصر القديمة'},
+'اجتماعيات 8 - المواطنة':          {emoji:'🤝', label:'اجتماعيات 8 - المواطنة'},
+'اجتماعيات 8 - بيانات السكان':     {emoji:'📊', label:'اجتماعيات 8 - بيانات السكان'},
+'اجتماعيات 8 - الدولة العثمانية':  {emoji:'🌙', label:'اجتماعيات 8 - الدولة العثمانية'},
+'اجتماعيات 8 - الأمن الاجتماعي':   {emoji:'🤲', label:'اجتماعيات 8 - الأمن الاجتماعي'},
+};
+
+const ALL_CATS = Object.keys(CAT_INFO);
+
+const DIFF_MAP = {
+easy:{pts:200,label:'سهل',  time:30,color:'#1a7a4a'},
+med: {pts:400,label:'متوسط',time:60,color:'#d46b00'},
+hard:{pts:600,label:'صعب', time:90,color:'#c0392b'},
+};
+const CIRC = 213.6;
+
+const FB_CONFIG = {
+apiKey:'AIzaSyDjQw02_46HJgkOTksByVx8lOSIky7oPpA',
+authDomain:'halhali-game.firebaseapp.com',
+projectId:'halhali-game',
+storageBucket:'halhali-game.firebasestorage.app',
+messagingSenderId:'27817657495',
+appId:'1:27817657495:web:bf78ba68f3446b26cf95d2',
+};
+
+let auth, db, currentUser=null, OFFLINE_MODE=false;
+
+try {
+  firebase.initializeApp(FB_CONFIG);
+  auth=firebase.auth();
+  db=firebase.firestore();
+  auth.onAuthStateChanged(async user=>{
+    currentUser=user;
+    if(user){
+      try{const doc=await db.collection('users').doc(user.uid).get();document.getElementById('ub-name').textContent=doc.exists?doc.data().name:(user.displayName||user.email.split('@')[0]);}catch(e){}
+      showScreen('screen-menu');
+    }else{showScreen('screen-login');}
+  });
+}catch(e){
+  OFFLINE_MODE=true;
+  const sess=localStorage.getItem('hh_sess');
+  if(sess){const u=JSON.parse(sess);currentUser=u;document.getElementById('ub-name').textContent=u.name;showScreen('screen-menu');}
+  else showScreen('screen-login');
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  if(!email||!pass){err.textContent='أدخل البريد وكلمة المرور';return;}
+  err.textContent='';
+  if(OFFLINE_MODE){offlineLogin(email,pass,err);return;}
+  try{await auth.signInWithEmailAndPassword(email,pass);}
+  catch(e){err.textContent='بيانات خاطئة أو حدث خطأ';}
+}
+
+async function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
+  const err=document.getElementById('reg-err');
+  if(!name||!phone||!email||!pass){err.textContent='⚠️ أكمل جميع الحقول';return;}
+  if(phone.length<8){err.textContent='⚠️ رقم الجوال يجب أن يكون 8 أرقام';return;}
+  if(!/^[5-7]/.test(phone)){err.textContent='⚠️ رقم الجوال يجب أن يبدأ بـ 5 أو 6 أو 7';return;}
+  if(pass!==pass2){err.textContent='⚠️ كلمتا المرور غير متطابقتين';return;}
+  if(pass.length<6){err.textContent='⚠️ كلمة المرور 6 أحرف على الأقل';return;}
+  err.textContent='';
+  if(OFFLINE_MODE){offlineRegister(name,email,pass,phone,err);return;}
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,pass);
+    await db.collection('users').doc(cred.user.uid).set({name,email,phone:'+974'+phone,points:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  }catch(e){err.textContent=e.code==='auth/email-already-in-use'?'⚠️ البريد مستخدم مسبقاً':e.code==='auth/invalid-email'?'⚠️ البريد غير صحيح':'⚠️ حدث خطأ';}
+}
+
+async function doLogout(){
+  if(OFFLINE_MODE){localStorage.removeItem('hh_sess');showScreen('screen-login');return;}
+  await auth.signOut();
+}
+
+async function doResetPass(){
+  const emailEl=document.getElementById('reset-email');
+  const errEl=document.getElementById('reset-err');
+  const succEl=document.getElementById('reset-success');
+  if(!emailEl)return;
+  const email=emailEl.value.trim();
+  if(!email){errEl.textContent='⚠️ أدخل بريدك الإلكتروني';return;}
+  errEl.textContent='';
+  if(OFFLINE_MODE){errEl.textContent='⚠️ غير متاح في الوضع المحلي - تواصل مع المسؤول';return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    succEl.style.display='block';
+    errEl.textContent='';
+    emailEl.value='';
+  }catch(e){
+    if(e.code==='auth/user-not-found')errEl.textContent='⚠️ البريد غير مسجل في النظام';
+    else if(e.code==='auth/invalid-email')errEl.textContent='⚠️ البريد غير صحيح';
+    else errEl.textContent='⚠️ حدث خطأ، حاول مجدداً';
+  }
+}
+
+function offlineLogin(email,pass,err){
+  const users=JSON.parse(localStorage.getItem('hh_users')||'{}');
+  const user=Object.values(users).find(u=>u.email===email&&u.pass===pass);
+  if(!user){err.textContent='بيانات خاطئة';return;}
+  localStorage.setItem('hh_sess',JSON.stringify(user));
+  currentUser=user;document.getElementById('ub-name').textContent=user.name;showScreen('screen-menu');
+}
+
+function offlineRegister(name,email,pass,phone,err){
+  const users=JSON.parse(localStorage.getItem('hh_users')||'{}');
+  if(Object.values(users).find(u=>u.email===email)){err.textContent='⚠️ البريد مستخدم مسبقاً';return;}
+  const id=Date.now().toString();
+  const user={id,name,email,pass,phone:'+974'+(phone||''),pts:0};
+  users[id]=user;localStorage.setItem('hh_users',JSON.stringify(users));
+  localStorage.setItem('hh_sess',JSON.stringify(user));
+  currentUser=user;document.getElementById('ub-name').textContent=name;showScreen('screen-menu');
+}
+
+async function addPts(pts){
+  if(!currentUser||pts<=0)return;
+  if(OFFLINE_MODE){const users=JSON.parse(localStorage.getItem('hh_users')||'{}');const uid=currentUser.id;if(users[uid]){users[uid].pts=(users[uid].pts||0)+pts;localStorage.setItem('hh_users',JSON.stringify(users));}return;}
+  try{await db.collection('users').doc(currentUser.uid).update({points:firebase.firestore.FieldValue.increment(pts)});}catch(e){}
+}
+
+function buildCatSelect(){
+  const g=document.getElementById('cat-select');
+  g.innerHTML='';
+  // تحميل الفئات المحفوظة
+  const saved=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]');
+  ALL_CATS.forEach(cat=>{
+    const ci=CAT_INFO[cat];
+    const d=document.createElement('div');
+    d.className='cat-btn'+(saved.includes(cat)?' active':'');
+    d.dataset.cat=cat;
+    d.innerHTML='<span class="ci">'+ci.emoji+'</span>'+ci.label;
+    d.onclick=()=>toggleCat(d);
+    g.appendChild(d);
+  });
+  updateCatHint();
+}
+
+function updateCatHint(){
+  const n=document.querySelectorAll('.cat-btn.active').length;
+  const el=document.getElementById('cat-count-hint');
+  if(el)el.textContent='المختار: '+n+' فئات (الحد الأدنى 4، الأقصى 6)';
+}
+
+function toggleCat(el){
+  const active=document.querySelectorAll('.cat-btn.active');
+  if(el.classList.contains('active')){
+    if(active.length<=4){toast('الحد الأدنى 4 فئات','error');return;}
+    el.classList.remove('active');
+  }else{
+    if(active.length>=6){toast('الحد الأقصى 6 فئات','info');return;}
+    el.classList.add('active');
+  }
+  // حفظ الاختيار تلقائياً
+  const cats=[...document.querySelectorAll('.cat-btn.active')].map(b=>b.dataset.cat);
+  localStorage.setItem('hh_saved_cats',JSON.stringify(cats));
+  updateCatHint();
+}
+
+let G={teams:[],scores:[],turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:[]};
+let teamCount=2;
+
+function setTeamCount(n){
+  teamCount=n;
+  // تحديث أزرار التبويب
+  [2,3,4,5].forEach(i=>{
+    const btn=document.getElementById('nt-'+i);
+    if(btn)btn.classList.toggle('active',i===n);
+  });
+  buildTeamsUI();
+}
+
+function buildTeamsUI(){
+  const names=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي'];
+  const saved=JSON.parse(localStorage.getItem('hh_team_names')||'[]');
+  const c=document.getElementById('teams-container');
+  if(!c)return;
+  c.innerHTML='';
+  for(let i=0;i<teamCount;i++){
+    const val=saved[i]||names[i];
+    const div=document.createElement('div');
+    div.className='team-entry';
+    div.innerHTML='<label>الفريق '+(i+1)+'</label><input type="text" id="tm-'+i+'" value="'+val+'" oninput="saveTeamNames()">';
+    c.appendChild(div);
+  }
+}
+
+function saveTeamNames(){
+  const names=[];
+  for(let i=0;i<teamCount;i++){
+    const el=document.getElementById('tm-'+i);
+    if(el)names.push(el.value||'الفريق '+(i+1));
+  }
+  localStorage.setItem('hh_team_names',JSON.stringify(names));
+}
+let PU={teams:[],armed:null};
+function resetPU(){
+  PU={teams:G.teams.map(()=>({hafra:1,dagf:1,eskot:1})),armed:null};
+}
+
+function startGame(){
+  const cats=[...document.querySelectorAll('.cat-btn.active')].map(b=>b.dataset.cat);
+  const err=document.getElementById('setup-err');
+  if(cats.length<4){err.textContent='⚠️ اختر 4 فئات على الأقل';return;}
+  if(cats.length>6){err.textContent='⚠️ الحد الأقصى 6 فئات';return;}
+  err.textContent='';
+  const gameNameEl=document.getElementById('game-name');
+  const gameName=gameNameEl?gameNameEl.value.trim():'';
+  if(!gameName){document.getElementById('setup-err').textContent='⚠️ أدخل اسماً للعبة';if(gameNameEl)gameNameEl.focus();return;}
+  const teams=[];
+  for(let i=0;i<teamCount;i++){
+    const el=document.getElementById('tm-'+i);
+    teams.push(el?el.value.trim()||('الفريق '+(i+1)):('الفريق '+(i+1)));
+  }
+  G={teams,scores:teams.map(()=>0),turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:cats,gameName};
+  resetPU();
+  cats.forEach(cat=>{
+    G.boardData[cat]={};
+    ['easy','med','hard'].forEach(diff=>{
+      const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
+      G.boardData[cat][diff]=pool.slice(0,2);
+    });
+  });
+  buildBoard();updateBoardUI();showScreen('screen-board');
+}
+
+function buildBoard(){
+  const wrap=document.getElementById('board-grid');
+  wrap.innerHTML='';
+  G.selectedCats.forEach(cat=>{
+    const ci=CAT_INFO[cat]||{emoji:'📚',label:cat};
+    const allCells=[];
+    ['easy','med','hard'].forEach(diff=>{(G.boardData[cat][diff]||[]).forEach((q,i)=>allCells.push({diff,q,key:cat+'__'+diff+'__'+i}));});
+    const left3=allCells.slice(0,3).reverse();
+    const right3=allCells.slice(3,6);
+    const row=document.createElement('div');row.className='cat-row';
+    for(let i=0;i<3;i++)row.appendChild(left3[i]?makeQCell(left3[i]):makePH());
+    const center=document.createElement('div');center.className='cat-center';
+    center.innerHTML='<div class="cc-e">'+ci.emoji+'</div><div class="cc-l">'+ci.label+'</div>';
+    row.appendChild(center);
+    for(let i=0;i<3;i++)row.appendChild(right3[i]?makeQCell(right3[i]):makePH());
+    wrap.appendChild(row);
+  });
+}
+
+function makeQCell({diff,q,key}){
+  const d=DIFF_MAP[diff];
+  const el=document.createElement('div');
+  el.id='cell_'+key;el.className='qcell '+diff;
+  el.innerHTML='<div class="qpts">'+d.pts+'</div><div class="qlvl">'+d.label+'</div>';
+  el.addEventListener('click',()=>{if(!el.classList.contains('used'))openQ(q,diff,key);});
+  return el;
+}
+
+function makePH(){const p=document.createElement('div');p.style.cssText='height:110px;border-radius:10px;border:1px dashed #ddd;';return p;}
+
+function updateBoardUI(){
+  // بناء أصناديق النقاط ديناميكياً
+  const row=document.getElementById('b-scores-row');
+  if(row){
+    row.innerHTML='';
+    G.teams.forEach((t,i)=>{
+      const box=document.createElement('div');
+      box.className='sbox'+(G.turn===i?' active-t':'');
+      box.innerHTML='<div class="sn">'+esc(t)+'</div><div class="sp">'+G.scores[i]+'</div>';
+      row.appendChild(box);
+      if(i<G.teams.length-1){const vs=document.createElement('div');vs.className='vs-d';vs.textContent='VS';row.appendChild(vs);}
+    });
+  }
+  document.getElementById('turn-badge').textContent='دور '+esc(G.teams[G.turn]||'');
+  const nameEl=document.getElementById('board-game-name');
+  if(nameEl)nameEl.textContent=G.gameName||'';
+  updatePUDisplay();
+}
+
+function updatePUDisplay(){
+  const teamPU=PU.teams[G.turn]||{hafra:1,dagf:1,eskot:1};
+  ['hafra','dagf','eskot'].forEach(type=>{
+    const used=teamPU[type]<=0;const armed=PU.armed===type;
+    ['pu-','qm-'].forEach(pre=>{const b=document.getElementById(pre+type);if(!b)return;b.disabled=used;b.classList.toggle('used-pu',used);b.classList.toggle('armed',armed);});
+  });
+}
+
+function armPU(type){
+  const teamPU=PU.teams[G.turn];
+  if(!teamPU||teamPU[type]<=0)return;
+  PU.armed=PU.armed===type?null:type;
+  updatePUDisplay();
+  if(PU.armed)toast({hafra:'💣 حفرة مُسلَّحة!',dagf:'⚡ ضعّف مُسلَّح!',eskot:'🤐 اسكت جاهز!'}[type],'info');
+}
+
+function openQ(q,diff,key){
+  G.curQ=q;G.curKey=key;G.answered=false;
+  const d=DIFF_MAP[diff];const ci=CAT_INFO[key.split('__')[0]]||{};
+  document.getElementById('qm-diff').textContent=d.label;
+  document.getElementById('qm-diff').className='qm-badge '+diff;
+  document.getElementById('qm-cat').textContent=(ci.emoji||'')+' '+(ci.label||'');
+  document.getElementById('qm-pts').textContent=d.pts+' نقطة';
+  document.getElementById('qm-text').textContent=q.q;
+  const revBtn=document.getElementById('reveal-btn');
+  const ansBox=document.getElementById('answer-box');
+  const judge=document.getElementById('team-judge');
+  revBtn.textContent='الجواب';revBtn.className='answer-reveal-btn';revBtn.disabled=false;
+  ansBox.textContent='';ansBox.className='answer-box';
+  judge.style.display='none';
+  // الأزرار تُبنى ديناميكياً في revealAnswer
+  document.getElementById('qm-actions').style.display='none';
+  updatePUDisplay();
+  document.getElementById('q-modal').classList.add('open');
+  startTimer(d.time,diff);
+}
+
+function revealAnswer(){
+  clearInterval(G.timer);
+  const revBtn=document.getElementById('reveal-btn');
+  const ansBox=document.getElementById('answer-box');
+  const judge=document.getElementById('team-judge');
+  revBtn.textContent='تم الكشف عن الجواب';revBtn.className='answer-reveal-btn revealed';revBtn.disabled=true;
+  ansBox.textContent=G.curQ.a;ansBox.className='answer-box show';
+  // بناء أزرار الفرق ديناميكياً
+  const judgeGrid=document.getElementById('judge-grid');
+  judgeGrid.innerHTML='';
+  G.teams.forEach((t,i)=>{
+    const btn=document.createElement('button');
+    btn.className='judge-btn';
+    btn.textContent='✅ '+t;
+    btn.onclick=()=>judgeAnswer(i);
+    judgeGrid.appendChild(btn);
+  });
+  const noneBtn=document.createElement('button');
+  noneBtn.className='judge-btn';
+  noneBtn.textContent='❌ لا أحد';
+  noneBtn.onclick=()=>judgeAnswer('none');
+  judgeGrid.appendChild(noneBtn);
+  judge.style.display='block';
+  if(PU.armed){const teamPU=PU.teams[G.turn];if(teamPU)teamPU[PU.armed]--;updatePUDisplay();}
+}
+
+function judgeAnswer(winner){
+  G.answered=true;
+  const diffKey=G.curKey.split('__')[1];
+  const realD=DIFF_MAP[diffKey]||{pts:200};
+  const pts=realD.pts;
+  const armed=PU.armed;PU.armed=null;
+  const finalPts=armed==='dagf'?pts*2:pts;
+  // تعطيل أزرار الحكم
+  document.querySelectorAll('.judge-btn').forEach(b=>b.disabled=true);
+  if(winner==='none'){
+    toast('❌ لا أحد أجاب صح!','error');
+  }else{
+    const wi=parseInt(winner);
+    G.scores[wi]=(G.scores[wi]||0)+finalPts;
+    if(armed==='hafra'){
+      // خصم من الجميع ما عدا الفائز
+      G.scores.forEach((_,i)=>{ if(i!==wi)G.scores[i]-=pts; });
+      toast('✅ '+esc(G.teams[wi])+' +'+finalPts+' 💣 خُصم '+pts+' من الجميع!','success');
+    }else{
+      toast('✅ '+esc(G.teams[wi])+' أجاب صح! +'+finalPts+(armed==='dagf'?' ⚡ مضاعف!':''),'success');
+    }
+  }
+  updateBoardUI();
+  document.getElementById('qm-actions').style.display='flex';
+}
+
+function closeModal(){
+  document.getElementById('q-modal').classList.remove('open');
+  clearInterval(G.timer);
+  const cell=document.getElementById('cell_'+G.curKey);
+  if(cell)cell.classList.add('used');
+  PU.armed=null;
+  G.turn=(G.turn+1)%G.teams.length;
+  updateBoardUI();checkDone();
+}
+
+function startTimer(sec,diff){
+  clearInterval(G.timer);
+  G.timerSec=sec;G.timerTotal=sec;
+  const prog=document.getElementById('t-prog');const num=document.getElementById('t-num');
+  prog.style.stroke=DIFF_MAP[diff].color;
+  const render=()=>{const pct=G.timerSec/G.timerTotal;prog.style.strokeDashoffset=CIRC*(1-pct);num.textContent=G.timerSec;if(pct<0.25)prog.style.stroke='#c0392b';else if(pct<0.5)prog.style.stroke='#d46b00';};
+  render();
+  G.timer=setInterval(()=>{
+    G.timerSec--;render();
+    if(G.timerSec<=0){clearInterval(G.timer);if(!G.answered){revealAnswer();toast('انتهى الوقت! قيّم الإجابة','info');}}
+  },1000);
+}
+
+function checkDone(){
+  const cells=document.querySelectorAll('.qcell');
+  if(cells.length>0&&[...cells].every(c=>c.classList.contains('used')))setTimeout(endGame,500);
+}
+
+function endGame(){
+  clearInterval(G.timer);
+  document.getElementById('res-t1-name').textContent=G.team1;
+  document.getElementById('res-t2-name').textContent=G.team2;
+  document.getElementById('res-t1-pts').textContent=G.score1;
+  document.getElementById('res-t2-pts').textContent=G.score2;
+  let w='';
+  if(G.score1>G.score2){w='الفائز: '+G.team1;document.getElementById('result-trophy').textContent='🏆';}
+  else if(G.score2>G.score1){w='الفائز: '+G.team2;document.getElementById('result-trophy').textContent='🏆';}
+  else{w='تعادل!';document.getElementById('result-trophy').textContent='🤝';}
+  document.getElementById('result-winner').textContent=w;
+  addPts(Math.max(G.score1,G.score2));showScreen('screen-result');
+}
+
+function confirmQuit(){
+  if(confirm('هل تريد إنهاء اللعبة؟')){clearInterval(G.timer);document.getElementById('q-modal').classList.remove('open');showScreen('screen-menu');}
+}
+
+async function renderLB(){
+  const el=document.getElementById('lb-list');
+  el.innerHTML='<div style="text-align:center;padding:20px;">جاري التحميل...</div>';
+  try{
+    let arr=[];
+    if(OFFLINE_MODE){const users=JSON.parse(localStorage.getItem('hh_users')||'{}');arr=Object.values(users).map(u=>({name:u.name,pts:u.pts||0})).sort((a,b)=>b.pts-a.pts);}
+    else{const snap=await db.collection('users').orderBy('points','desc').limit(20).get();arr=snap.docs.map(d=>({name:d.data().name,pts:d.data().points||0}));}
+    if(!arr.length){el.innerHTML='<p style="text-align:center;color:#555;padding:20px">لا يوجد لاعبون بعد</p>';return;}
+    const medals=['🥇','🥈','🥉'];
+    el.innerHTML=arr.map((p,i)=>'<div class="lb-row"><div class="lb-rank">'+(medals[i]||'#'+(i+1))+'</div><div class="lb-name">'+esc(p.name)+'</div><div class="lb-pts">'+p.pts+' نقطة</div></div>').join('');
+  }catch(e){el.innerHTML='<p style="color:#c00;text-align:center">تعذّر التحميل</p>';}
+}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function renderMyGames(){
+  const el=document.getElementById('my-games-list');
+  if(!el)return;
+  try{
+    const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
+    if(!hist.length){
+      el.innerHTML='<p style="text-align:center;color:#555;padding:20px">لا توجد ألعاب محفوظة بعد<br><small>العب لعبة أولاً وستظهر هنا تلقائياً</small></p>';
+      return;
+    }
+    el.innerHTML=hist.map((g)=>`
+      <div class="game-history-item">
+        <div style="flex:1;">
+          <div style="font-weight:900;font-size:.92rem;margin-bottom:2px;">${esc(g.name||'لعبة')}</div>
+          <div style="font-size:.75rem;color:#555;">${g.date||''}</div>
+          <div style="font-size:.78rem;color:#333;margin-top:2px;">${esc(g.cats||'')}</div>
+          <div style="font-size:.75rem;color:#555;margin-top:2px;">${esc(g.teams||'')}</div>
+        </div>
+        <div style="font-weight:900;font-size:.88rem;text-align:center;">🏆<br>${esc(g.winner||'')}</div>
+      </div>`).join('');
+  }catch(e){
+    el.innerHTML='<p style="text-align:center;color:#c00;padding:20px">حدث خطأ في التحميل</p>';
+  }
+}
+
+function saveGameHistory(sorted){
+  try{
+    const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
+    hist.unshift({
+      date:new Date().toLocaleDateString('ar-QA'),
+      name:G.gameName||'لعبة بدون اسم',
+      cats:G.selectedCats.slice(0,3).join('، ')+(G.selectedCats.length>3?'...':''),
+      teams:sorted.map(t=>t.name+': '+t.pts).join(' | '),
+      winner:sorted[0].name
+    });
+    if(hist.length>20)hist.pop();
+    localStorage.setItem('hh_game_history',JSON.stringify(hist));
+  }catch(e){}
+}
+
+function clearMyGames(){
+  if(confirm('هل تريد مسح سجل الألعاب؟')){
+    localStorage.removeItem('hh_game_history');
+    renderMyGames();
+    toast('تم مسح السجل','info');
+  }
+}
+
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+let tt;function toast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3200);}
+
+buildCatSelect();
+setTeamCount(2);
+
+// ════════════ PROFILE ════════════
+let profileOpen=false;
+
+function toggleProfile(){
+  profileOpen=!profileOpen;
+  const m=document.getElementById('profile-modal');
+  if(profileOpen){m.classList.add('open');loadProfileData();}
+  else m.classList.remove('open');
+}
+
+function closeProfileOutside(e){
+  if(e.target===document.getElementById('profile-modal'))toggleProfile();
+}
+
+async function loadProfileData(){
+  let name='مستخدم',email='',phone='',photoURL='',emailVerified=false;
+  if(OFFLINE_MODE){
+    const u=currentUser||{};
+    name=u.name||'مستخدم';email=u.email||'';phone=u.phone||'';
+  }else if(currentUser){
+    try{
+      const doc=await db.collection('users').doc(currentUser.uid).get();
+      const d=doc.exists?doc.data():{};
+      name=d.name||currentUser.displayName||'مستخدم';
+      email=currentUser.email||'';
+      phone=d.phone||'';
+      photoURL=currentUser.photoURL||d.photoURL||'';
+      emailVerified=currentUser.emailVerified||false;
+    }catch(e){}
+  }
+  // تعيين البيانات
+  document.getElementById('profile-greeting').textContent='أهلاً، '+name;
+  document.getElementById('profile-email-small').textContent=email;
+  document.getElementById('pf-name-val').textContent=name;
+  document.getElementById('pf-phone-val').textContent=phone||'لم يُضف بعد';
+  document.getElementById('pf-email-val').textContent=email||'—';
+  // شارة التحقق
+  const badge=document.getElementById('pf-email-badge');
+  if(email){
+    if(emailVerified){badge.textContent='موثّق ✓';badge.className='profile-verify-badge verified';}
+    else{badge.textContent='غير موثّق - أرسل رابط';badge.className='profile-verify-badge unverified';badge.onclick=sendVerification;}
+  }
+  // الصورة
+  const initials=(name||'م').charAt(0).toUpperCase();
+  setAvatarInitials(initials);
+  updateNavAvatar(name,photoURL);
+  if(photoURL)setAvatarPhoto(photoURL);
+}
+
+function setAvatarInitials(letter){
+  const lg=document.getElementById('profile-avatar-lg');
+  const img=document.getElementById('profile-img');
+  if(img)img.style.display='none';
+  if(lg)lg.childNodes[0].textContent=letter;
+}
+
+function setAvatarPhoto(url){
+  const img=document.getElementById('profile-img');
+  if(img){img.src=url;img.style.display='block';}
+}
+
+function updateNavAvatar(name,photoURL){
+  const av=document.getElementById('nav-avatar');
+  if(!av)return;
+  if(photoURL){av.innerHTML='<img src="'+photoURL+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';}
+  else{av.textContent=(name||'م').charAt(0).toUpperCase();}
+}
+
+function editField(field){
+  const input=document.getElementById('pf-'+field+'-input');
+  const save=document.getElementById('pf-'+field+'-save');
+  const val=document.getElementById('pf-'+field+'-val');
+  if(field==='phone'){
+    const prefix=document.getElementById('pf-phone-prefix');
+    if(prefix)prefix.style.display='flex';
+    const current=(val.textContent||'').replace('+974','').replace('لم يُضف بعد','').trim();
+    input.value=current;
+  }else{
+    input.value=val.textContent==='—'?'':val.textContent;
+  }
+  input.classList.add('show');
+  save.classList.add('show');
+  input.focus();
+}
+
+async function saveField(field){
+  const input=document.getElementById('pf-'+field+'-input');
+  const val=document.getElementById('pf-'+field+'-val');
+  const save=document.getElementById('pf-'+field+'-save');
+  let value=input.value.trim();
+  if(field==='phone'){
+    if(value&&(value.length!==8||!/^[5-7]/.test(value))){toast('⚠️ رقم غير صحيح - يجب 8 أرقام يبدأ بـ 5 أو 6 أو 7','error');return;}
+    value=value?'+974'+value:'';
+    document.getElementById('pf-phone-val').textContent=value||'لم يُضف بعد';
+    document.getElementById('pf-phone-prefix').style.display='none';
+  }else if(field==='name'){
+    if(!value){toast('⚠️ الاسم لا يمكن أن يكون فارغاً','error');return;}
+    document.getElementById('pf-name-val').textContent=value;
+    document.getElementById('profile-greeting').textContent='أهلاً، '+value;
+    document.getElementById('ub-name').textContent=value;
+    updateNavAvatar(value,'');
+  }
+  input.classList.remove('show');
+  save.classList.remove('show');
+  // حفظ في Firebase أو localStorage
+  if(!OFFLINE_MODE&&currentUser){
+    try{
+      const update={};
+      if(field==='name')update.name=value;
+      if(field==='phone')update.phone=value;
+      await db.collection('users').doc(currentUser.uid).update(update);
+      toast('تم الحفظ بنجاح','success');
+    }catch(e){toast('⚠️ لم يتم الحفظ','error');}
+  }else if(OFFLINE_MODE&&currentUser){
+    const users=JSON.parse(localStorage.getItem('hh_users')||'{}');
+    if(users[currentUser.id]){
+      if(field==='name')users[currentUser.id].name=value;
+      if(field==='phone')users[currentUser.id].phone=value;
+      localStorage.setItem('hh_users',JSON.stringify(users));
+      const sess=JSON.parse(localStorage.getItem('hh_sess')||'{}');
+      if(field==='name')sess.name=value;
+      if(field==='phone')sess.phone=value;
+      localStorage.setItem('hh_sess',JSON.stringify(sess));
+      currentUser=sess;
+    }
+    toast('تم الحفظ بنجاح','success');
+  }
+}
+
+async function sendVerification(){
+  if(OFFLINE_MODE){toast('⚠️ غير متاح في الوضع المحلي','error');return;}
+  try{
+    await auth.currentUser.sendEmailVerification();
+    toast('تم إرسال رابط التحقق على بريدك','success');
+    document.getElementById('pf-email-badge').textContent='تم الإرسال ✓';
+  }catch(e){toast('⚠️ حاول لاحقاً','error');}
+}
+
+// رفع الصورة
+function triggerAvatarUpload(){
+  document.getElementById('avatar-input').click();
+}
+
+async function handleAvatarChange(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>2*1024*1024){toast('⚠️ الصورة أكبر من 2MB','error');return;}
+  const reader=new FileReader();
+  reader.onload=async(ev)=>{
+    const dataUrl=ev.target.result;
+    setAvatarPhoto(dataUrl);
+    updateNavAvatar('',dataUrl);
+    // حفظ في localStorage (Firebase Storage يحتاج خطة مدفوعة)
+    try{
+      if(!OFFLINE_MODE&&currentUser){
+        await db.collection('users').doc(currentUser.uid).update({photoURL:dataUrl});
+      }else if(OFFLINE_MODE&&currentUser){
+        const users=JSON.parse(localStorage.getItem('hh_users')||'{}');
+        if(users[currentUser.id])users[currentUser.id].photoURL=dataUrl;
+        localStorage.setItem('hh_users',JSON.stringify(users));
+        const sess=JSON.parse(localStorage.getItem('hh_sess')||'{}');
+        sess.photoURL=dataUrl;localStorage.setItem('hh_sess',JSON.stringify(sess));
+      }
+      toast('تم تحديث الصورة','success');
+    }catch(ex){toast('⚠️ لم يُحفظ','error');}
+  };
+  reader.readAsDataURL(file);
+}
+// ════════════════════════════════
+</script>
+</body>
+</html>
