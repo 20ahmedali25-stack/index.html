@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الاختبارات — الحلحلي | لعبة قطرية تربوية</title>
+<!-- ═══ Meta Tags احترافية ═══ -->
+<meta name="description" content="الحلحلي — لعبة قطرية تربوية تعليمية | منصة تفاعلية لتعليم قطر. ألعاب تربوية للطلاب والمعلمين في جميع المواد: الدراسات الاجتماعية، العلوم، اللغة العربية. اختبارات تفاعلية وحصص حركية على مناهج قطر الوطنية. معلم يصنع أثراً.">
+<meta name="keywords" content="الحلحلي, لعبة الحلحلي, الحلحلي لعبة, alhalhali, لعبة قطرية, لعبة قطرية تعليمية, لعبة قطرية تربوية, ألعاب تربوية, ألعاب تربوية قطرية, ألعاب تعليمية, ألعاب تعليمية قطرية, تعليم قطر, تعليم تفاعلي, تعليم تفاعلي قطر, منصة تعليمية قطرية, منصة تعليمية قطر, تربوي, تربوي قطر, معلم قطر, معلمين قطر, طلاب قطر, مناهج قطر, منهج قطر, الدراسات الاجتماعية قطر, الصف السابع قطر, اختبارات تعليمية, اختبارات قطر, مسابقات تعليمية, حصة تفاعلية, دروس تفاعلية قطر, أحمد الحلحلي, معلم يصنع أثراً">
+<meta name="geo.region" content="QA">
+<meta name="geo.placename" content="الدوحة، قطر">
+<meta name="language" content="Arabic">
+<meta name="author" content="أحمد الحلحلي">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="robots" content="index, follow">
+
+<!-- ═══ Open Graph (Facebook/WhatsApp) ═══ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="الحلحلي">
+<meta property="og:title" content="اختبارات الحلحلي — تمرّن وقيّم مستواك">
+<meta property="og:description" content="منصة تعليمية تفاعلية لطلاب ومعلمي قطر. ألعاب تنافسية + اختبارات + حصص تفاعلية على مناهج قطر.">
+<meta property="og:url" content="https://alhalhali.com/quiz.html">
+<meta property="og:image" content="https://alhalhali.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_QA">
+
+<!-- ═══ Twitter Cards ═══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="اختبارات الحلحلي — تمرّن وقيّم مستواك">
+<meta name="twitter:description" content="منصة تعليمية تفاعلية لطلاب ومعلمي قطر. معلّم يصنع أثراً.">
+<meta name="twitter:image" content="https://alhalhali.com/og-image.png">
+
+<!-- ═══ Favicons ═══ -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- ═══ Canonical URL ═══ -->
+<link rel="canonical" href="https://alhalhali.com/quiz.html">
+
+<!-- ═══ Structured Data (JSON-LD) - مهم لـ Google ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "الحلحلي",
+  "alternateName": "Al-Halhali",
+  "description": "منصة تعليمية تفاعلية لطلاب ومعلمي دولة قطر",
+  "url": "https://alhalhali.com",
+  "logo": "https://alhalhali.com/favicon.svg",
+  "sameAs": [
+    "https://www.instagram.com/aalhalhali"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "QA",
+    "addressLocality": "الدوحة"
+  },
+  "areaServed": "QA",
+  "inLanguage": "ar"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "الحلحلي — لعبة قطرية تربوية تعليمية",
+  "url": "https://alhalhali.com",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "QAR"
+  },
+  "inLanguage": "ar",
+  "description": "منصة تعليمية تفاعلية لطلاب ومعلمي قطر. ألعاب تنافسية، اختبارات، وحصص تفاعلية تغطي مناهج قطر الوطنية."
+}
+</script>
+
+<meta name="theme-color" content="#1a3a5c">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Tajawal","Cairo",sans-serif;background:#f8f8fc;color:#1a1a2e;min-height:100vh;}
+
+/* ── شاشات ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+
+/* ── ألوان Pearl ── */
+:root{
+  --navy:#1a3a5c;
+  --gold:#d4ac00;
+  --pearl:#f8f8fc;
+  --border:#ddd8f0;
+}
+
+/* ── أزرار ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:2px solid var(--navy);border-radius:12px;font-family:"Cairo",sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;transition:all .15s;background:var(--navy);color:#fff;width:100%;margin-top:6px;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 0 #0a1f30;}
+.btn:active{transform:translateY(0);box-shadow:none;}
+.btn-outline{background:#fff;color:var(--navy);}
+.btn-outline:hover{background:#f0f0f8;}
+.btn-gold{background:var(--gold);border-color:#b8940a;color:#fff;}
+.btn-gold:hover{box-shadow:0 4px 0 #9e7700;}
+.btn-sm{padding:7px 14px;font-size:.82rem;width:auto;}
+.btn-danger{background:#c0392b;border-color:#922b21;color:#fff;}
+
+/* ── بطاقة ── */
+.card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:24px 28px;width:100%;max-width:520px;box-shadow:0 4px 0 var(--border);}
+.card-title{font-size:1.2rem;font-weight:900;color:var(--navy);text-align:center;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--border);font-family:"Cairo",sans-serif;}
+
+/* ── شاشة الدخول ── */
+.logo-wrap{text-align:center;margin-bottom:28px;}
+.logo-main{font-size:clamp(2.5rem,8vw,4rem);font-weight:900;color:var(--navy);font-family:"Cairo",sans-serif;line-height:1;}
+.logo-sub{font-size:.85rem;color:#888;margin-top:4px;letter-spacing:2px;}
+.logo-badge{display:inline-block;background:var(--gold);color:#fff;font-size:.7rem;font-weight:900;padding:2px 10px;border-radius:20px;margin-top:6px;font-family:"Cairo",sans-serif;}
+.ig{margin-bottom:14px;}
+.ig label{display:block;font-size:.82rem;color:#555;margin-bottom:5px;font-weight:700;}
+.ig input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:"Tajawal",sans-serif;font-size:1rem;direction:rtl;outline:none;background:#fff;}
+.ig input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,58,92,.08);}
+.err-msg{color:#c00;font-size:.82rem;text-align:center;margin-top:8px;min-height:18px;}
+.link-row{text-align:center;margin-top:10px;font-size:.85rem;color:#666;}
+.link-row a{color:var(--navy);cursor:pointer;font-weight:700;text-decoration:underline;}
+
+/* ── شاشة الاختيار ── */
+.quiz-header{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.quiz-user{font-size:.85rem;color:#666;font-weight:700;}
+
+/* بطاقات التصنيفات */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%;max-width:640px;}
+.group-card{border:1.5px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .18s;background:#fff;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.group-card:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:0 4px 12px rgba(26,58,92,.12);}
+.group-card.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+.group-card .gc-icon{font-size:1.8rem;line-height:1;}
+.group-card .gc-label{font-size:.82rem;font-weight:900;font-family:"Cairo",sans-serif;line-height:1.3;}
+.group-card.active .gc-label{color:#fff;}
+
+/* بطاقات الفئات */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;width:100%;max-width:640px;margin-top:14px;}
+.cat-card{border:1.5px solid var(--border);border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:all .15s;background:#fff;font-size:.82rem;font-weight:700;color:var(--navy);font-family:"Cairo",sans-serif;}
+.cat-card:hover{border-color:var(--navy);background:#f0f4ff;}
+.cat-card.selected{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* إعدادات الاختبار */
+.settings-row{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.settings-row label{font-size:.82rem;font-weight:700;color:#555;white-space:nowrap;}
+.settings-row input[type=number]{width:70px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:"Cairo",sans-serif;font-size:.9rem;text-align:center;outline:none;}
+.settings-row input[type=number]:focus{border-color:var(--navy);}
+.toggle-wrap{display:flex;align-items:center;gap:8px;}
+.toggle{position:relative;width:42px;height:24px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#ddd;border-radius:12px;cursor:pointer;transition:.2s;}
+.toggle-slider:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+.toggle input:checked+.toggle-slider{background:var(--navy);}
+.toggle input:checked+.toggle-slider:before{transform:translateX(18px);}
+
+/* ── شاشة الاختبار ── */
+#screen-quiz.active{justify-content:flex-start;padding:0;}
+.quiz-top{background:#fff;border-bottom:1.5px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;width:100%;}
+.quiz-progress{flex:1;margin:0 14px;}
+.q-counter{font-size:.8rem;font-weight:700;color:#888;margin-bottom:4px;font-family:"Cairo",sans-serif;}
+.progress-bar{height:8px;background:#e8e8f0;border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#1a3a5c 0%,#d4ac00 100%);border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.timer-display{display:flex;align-items:center;gap:5px;font-weight:900;font-size:1rem;font-family:"Cairo",sans-serif;color:var(--navy);min-width:60px;justify-content:center;}
+.timer-display.warning{color:#c0392b;}
+.timer-icon{font-size:.9rem;}
+
+.quiz-body{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 80px;}
+.q-text{font-size:clamp(1rem,2.5vw,1.1rem);font-weight:700;line-height:1.8;color:var(--navy);background:#fff;border:2px solid var(--navy);border-radius:14px;padding:16px;margin-bottom:14px;text-align:right;box-shadow:0 3px 0 var(--navy);}
+.q-img{width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1.5px solid var(--border);margin-bottom:14px;display:none;}
+
+/* خيارات الإجابة */
+.options-list{display:flex;flex-direction:column;gap:10px;}
+.opt-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:12px;background:#fff;cursor:pointer;font-family:"Tajawal",sans-serif;font-size:.95rem;font-weight:700;text-align:right;transition:all .15s;width:100%;color:var(--navy);}
+.opt-btn:hover:not(:disabled){border-color:var(--navy);background:#f0f4ff;transform:translateX(-2px);}
+.opt-btn .opt-label{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;flex-shrink:0;font-family:"Cairo",sans-serif;transition:all .15s;}
+.opt-btn:hover:not(:disabled) .opt-label{border-color:var(--navy);background:var(--navy);color:#fff;}
+.opt-btn:disabled{cursor:not-allowed;}
+.opt-btn.selected{border-color:#d4ac00;background:#fff8e8;box-shadow:0 2px 0 #d4ac00;}
+.opt-btn.selected .opt-label{background:#d4ac00;color:#fff;border-color:#d4ac00;}
+
+/* زر التالي ثابت */
+.quiz-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid var(--border);padding:12px 20px;display:flex;gap:10px;justify-content:center;z-index:100;}
+.quiz-footer .btn{max-width:300px;}
+
+/* ── شاشة النتيجة ── */
+.result-hero{text-align:center;margin-bottom:24px;}
+.result-score-wrap{width:130px;height:130px;border-radius:50%;border:5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;}
+.result-score-num{font-size:2.2rem;font-weight:900;font-family:"Cairo",sans-serif;line-height:1;}
+.result-score-label{font-size:.72rem;color:inherit;opacity:.8;}
+.result-grade{font-size:1.4rem;font-weight:900;font-family:"Cairo",sans-serif;margin-bottom:4px;}
+.result-sub{font-size:.88rem;color:#666;}
+
+/* بطاقات الإحصاء */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;}
+.stat-box{background:#f8f8fc;border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;}
+.stat-num{font-size:1.4rem;font-weight:900;color:var(--navy);font-family:"Cairo",sans-serif;}
+.stat-lbl{font-size:.7rem;color:#888;margin-top:2px;}
+
+/* مراجعة الأسئلة */
+.review-list{width:100%;max-width:560px;display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.review-item{border:1.5px solid var(--border);border-radius:12px;padding:14px;background:#fff;}
+.review-item.correct{border-color:#1a7a4a;background:#f0fdf6;}
+.review-item.wrong{border-color:#c0392b;background:#fff4f4;}
+.review-q{font-size:.88rem;font-weight:700;margin-bottom:8px;color:var(--navy);}
+.review-answer{font-size:.82rem;display:flex;align-items:center;gap:6px;}
+.review-answer.user-ans{color:#555;}
+.review-answer.correct-ans{color:#1a7a4a;font-weight:700;}
+
+/* ── شاشة المعلم ── */
+.teacher-section{width:100%;max-width:560px;}
+.section-title{font-size:.9rem;font-weight:900;color:var(--navy);margin:18px 0 10px;font-family:"Cairo",sans-serif;display:flex;align-items:center;gap:6px;border-bottom:2px solid var(--border);padding-bottom:8px;}
+.quiz-item{border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.quiz-item-info{flex:1;}
+.quiz-item-name{font-weight:700;font-size:.88rem;color:var(--navy);}
+.quiz-item-meta{font-size:.75rem;color:#888;margin-top:2px;}
+.quiz-link{font-size:.72rem;background:#eef4ff;border:1px solid #b0c4e8;border-radius:6px;padding:3px 8px;color:var(--navy);font-family:"Cairo",sans-serif;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* إضافة سؤال */
+.add-q-form{border:1.5px dashed var(--border);border-radius:12px;padding:16px;background:#fafafa;}
+.opts-inputs{display:flex;flex-direction:column;gap:6px;margin:8px 0;}
+.opt-input-row{display:flex;align-items:center;gap:8px;}
+.opt-input-row input{flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:"Tajawal",sans-serif;font-size:.88rem;outline:none;}
+.opt-input-row input:focus{border-color:var(--navy);}
+.correct-radio{width:18px;height:18px;accent-color:var(--navy);cursor:pointer;flex-shrink:0;}
+.correct-hint{font-size:.72rem;color:#888;margin-bottom:6px;}
+
+/* ── toast ── */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy);color:#fff;border-radius:10px;padding:10px 22px;font-weight:700;font-size:.88rem;z-index:9999;transition:transform .3s;pointer-events:none;max-width:90vw;text-align:center;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.success{background:#1a7a4a;}
+#toast.error{background:#c0392b;}
+
+/* ── لودر ── */
+#app-loader{position:fixed;inset:0;z-index:99999;background:#f8f8fc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .5s;}
+#app-loader.fade-out{opacity:0;pointer-events:none;}
+.loader-logo{font-size:3rem;font-weight:900;color:var(--navy);font-family:"Cairo",sans-serif;}
+.loader-badge{font-size:.8rem;color:var(--gold);font-weight:900;font-family:"Cairo",sans-serif;letter-spacing:2px;}
+.loader-bar-wrap{width:200px;height:4px;background:#e0e0e8;border-radius:2px;overflow:hidden;}
+.loader-bar{height:100%;background:var(--navy);border-radius:2px;width:0;transition:width .3s;}
+
+/* ── استجابة ── */
+@media(max-width:480px){
+  .card{padding:18px 16px;}
+  .groups-grid{grid-template-columns:repeat(2,1fr);}
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .quiz-body{padding:16px 12px 80px;}
+}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes popIn{0%{transform:scale(.82);opacity:0}70%{transform:scale(1.07)}100%{transform:scale(1);opacity:1}}
+@keyframes slideUp{0%{transform:translateY(14px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(60px) rotate(360deg);opacity:0}}
+.stars-row{display:flex;gap:4px;justify-content:center;margin-bottom:4px;}
+.star{font-size:15px;transition:all .3s;filter:grayscale(1);opacity:.3;}
+.star.lit{filter:none;opacity:1;animation:popIn .3s ease;}
+.badge-card{background:#fff8e8;border:2px solid #d4ac00;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin:10px 0;animation:popIn .4s ease;}
+.badge-icon{width:44px;height:44px;border-radius:50%;background:#d4ac00;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 3px 0 #b8940a;}
+.badge-title{font-size:.9rem;font-weight:900;color:#7a5c00;font-family:'Cairo',sans-serif;}
+.badge-sub{font-size:.75rem;color:#9e7700;margin-top:2px;}
+.wrong-highlight{background:#fff4f4;border:2px solid #f5c6c6;border-radius:12px;padding:12px;margin:8px 0;}
+.confetti-wrap{position:relative;overflow:hidden;pointer-events:none;}
+.confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:confettiFall .9s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- لودر -->
+<div id="app-loader">
+  <div class="loader-logo">★ الحلحلي</div>
+  <div class="loader-badge">اختبارات</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══ شاشة الدخول ══ -->
+<div class="screen" id="screen-login">
+  <div class="logo-wrap">
+    <div class="logo-main">★ الحلحلي</div>
+    <div class="logo-sub">ALHALHALI</div>
+    <div class="logo-badge">اختبارات</div>
+  </div>
+  <div class="card">
+    <div class="card-title">تسجيل الدخول</div>
+    <div class="ig"><label>البريد الإلكتروني</label>
+      <input type="email" id="login-email" placeholder="example@email.com" autocomplete="email"></div>
+    <div class="ig"><label>كلمة المرور</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
+    <div class="err-msg" id="login-err"></div>
+    <button class="btn" onclick="doLogin()">دخول</button>
+    <div class="link-row">ليس لديك حساب؟ <a onclick="showScreen('screen-register')">سجّل الآن</a></div>
+    <div class="link-row"><a onclick="showScreen('screen-reset')">نسيت كلمة المرور؟</a></div>
+    <div class="link-row" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+      <a onclick="window.location.href='index.html'">← العودة للعبة</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ شاشة التسجيل ══ -->
+<div class="screen" id="screen-register">
+  <div class="logo-wrap">
+    <div class="logo-main">★ الحلحلي</div>
+    <div class="logo-badge">اختبارات</div>
+  </div>
+  <div class="card">
+    <div class="card-title">حساب جديد</div>
+    <div class="ig"><label>الاسم</label><input type="text" id="reg-name" placeholder="اسمك الكامل"></div>
+    <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="reg-email" placeholder="example@email.com"></div>
+    <div class="ig"><label>رقم الهاتف</label>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input type="tel" id="reg-phone" placeholder="5XXXXXXXX" style="flex:1;">
+        <span style="font-size:.82rem;color:#888;white-space:nowrap;">974+</span>
+      </div>
+    </div>
+    <div class="ig"><label>كلمة المرور</label><input type="password" id="reg-pass" placeholder="8 أحرف على الأقل"></div>
+    <div class="err-msg" id="reg-err"></div>
+    <button class="btn" onclick="doRegister()">إنشاء الحساب</button>
+    <div class="link-row">لديك حساب؟ <a onclick="showScreen('screen-login')">سجّل الدخول</a></div>
+  </div>
+</div>
+
+<!-- ══ شاشة إعادة كلمة المرور ══ -->
+<div class="screen" id="screen-reset">
+  <div class="card">
+    <div class="card-title">إعادة تعيين كلمة المرور</div>
+    <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="reset-email" placeholder="example@email.com"></div>
+    <div class="err-msg" id="reset-msg"></div>
+    <button class="btn" onclick="doReset()">إرسال رابط الاستعادة</button>
+    <div class="link-row"><a onclick="showScreen('screen-login')">← العودة لتسجيل الدخول</a></div>
+  </div>
+</div>
+
+<!-- ══ شاشة اختيار الاختبار (الطالب) ══ -->
+<div class="screen" id="screen-pick">
+  <!-- هيدر -->
+  <div style="width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
+    <div style="font-size:1.1rem;font-weight:900;color:var(--navy);font-family:Cairo,sans-serif;">★ اختبارات الحلحلي</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="pick-username" style="font-size:.82rem;color:#888;font-weight:700;"></span>
+      <button class="btn btn-outline btn-sm" onclick="showTeacherPanel()">🎓 معلم</button>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">خروج</button>
+      <button class="btn btn-outline btn-sm" onclick="window.location.href='index.html'">← اللعبة</button>
+    </div>
+  </div>
+
+  <!-- تصنيفات -->
+  <div class="groups-grid" id="groups-grid"></div>
+
+  <!-- فئات التصنيف المختار -->
+  <div id="cats-section" style="display:none;width:100%;max-width:640px;margin-top:6px;">
+    <div style="font-size:.82rem;font-weight:700;color:#888;margin-bottom:8px;" id="cats-section-title"></div>
+    <div class="cats-grid" id="cats-grid"></div>
+  </div>
+
+  <!-- زر ابدأ الاختبار -->
+  <div id="start-section" style="display:none;width:100%;max-width:640px;margin-top:16px;">
+    <div class="card" style="padding:16px 20px;">
+      <div style="font-weight:900;color:var(--navy);font-family:Cairo,sans-serif;margin-bottom:12px;font-size:.95rem;">
+        إعدادات الاختبار
+      </div>
+      <!-- اسم الطالب -->
+      <div class="ig" style="margin-bottom:12px;">
+        <label style="font-size:.82rem;font-weight:700;color:#555;">اسمك (يظهر في الإحصائيات)</label>
+        <input type="text" id="student-name" placeholder="أدخل اسمك هنا..." style="font-size:.95rem;">
+      </div>
+      <div class="settings-row">
+        <label>عدد الأسئلة:</label>
+        <input type="number" id="q-count" value="10" min="1" max="50">
+        <span style="font-size:.78rem;color:#888;" id="q-available"></span>
+      </div>
+      <div class="settings-row">
+        <label>مؤقت لكل سؤال:</label>
+        <div class="toggle-wrap">
+          <label class="toggle">
+            <input type="checkbox" id="timer-toggle" onchange="toggleTimerInput()">
+            <span class="toggle-slider"></span>
+          </label>
+          <span style="font-size:.82rem;color:#666;" id="timer-label-txt">بدون مؤقت</span>
+        </div>
+        <input type="number" id="timer-secs" value="30" min="10" max="300" style="display:none;width:70px;">
+        <span id="timer-unit" style="display:none;font-size:.78rem;color:#888;">ثانية</span>
+      </div>
+      <button class="btn btn-gold" onclick="startQuiz()" style="margin-top:4px;">
+        ابدأ الاختبار ←
+      </button>
+    </div>
+  </div>
+
+  <!-- بطاقة ترحيب + إحصائيات -->
+  <div style="width:100%;max-width:640px;margin-top:16px;">
+    <div class="section-title">📊 إحصائياتي</div>
+    <div id="my-stats-container"></div>
+  </div>
+</div>
+
+<!-- ══ شاشة الاختبار ══ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-top">
+    <button class="btn btn-outline btn-sm" onclick="confirmQuitQuiz()" style="padding:5px 10px;font-size:.76rem;">إنهاء</button>
+    <div class="quiz-progress">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+        <div class="q-counter" id="q-counter">السؤال 1 من 10</div>
+        <div class="stars-row" id="stars-row"></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%;"></div></div>
+    </div>
+    <div class="timer-display" id="timer-display" style="display:none;">
+      <span class="timer-icon">⏱</span>
+      <span id="timer-num">30</span>
+    </div>
+  </div>
+
+  <div class="quiz-body">
+    <img id="q-img" class="q-img" src="" alt="">
+    <div class="q-text" id="q-text"></div>
+    <div class="options-list" id="options-list"></div>
+  </div>
+
+  <div class="quiz-footer">
+    <button class="btn btn-outline" id="prev-btn" onclick="prevQuestion()" style="display:none;">← السابق</button>
+    <button class="btn" id="next-btn" onclick="nextQuestion()">التالي →</button>
+    <button class="btn btn-gold" id="submit-btn" onclick="submitQuiz()" style="display:none;">إنهاء الاختبار ✓</button>
+  </div>
+</div>
+
+<!-- ══ شاشة النتيجة ══ -->
+<div class="screen" id="screen-result">
+  <div class="card" style="max-width:540px;">
+    <div class="result-hero">
+      <div class="result-score-wrap" id="result-score-wrap">
+        <div class="result-score-num" id="result-score-num"></div>
+        <div class="result-score-label">درجتك</div>
+      </div>
+      <div class="result-grade" id="result-grade"></div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+
+    <!-- شارة الإنجاز -->
+    <div id="result-badge"></div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num" id="stat-correct" style="color:#1a7a4a;"></div>
+        <div class="stat-lbl">إجابات صحيحة</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-wrong" style="color:#c0392b;"></div>
+        <div class="stat-lbl">إجابات خاطئة</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="stat-time"></div>
+        <div class="stat-lbl">الوقت الكلي</div>
+      </div>
+    </div>
+
+    <!-- الأسئلة الخاطئة مباشرة -->
+    <div id="result-wrong-list" style="width:100%;margin-top:4px;"></div>
+
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn btn-outline" onclick="toggleReview()" id="review-toggle-btn">المراجعة الكاملة ↓</button>
+      <button class="btn" onclick="goToPick()">اختبار آخر ←</button>
+    </div>
+  </div>
+
+  <!-- مراجعة الأسئلة -->
+  <div class="review-list" id="review-list" style="display:none;"></div>
+
+  <div style="margin-top:14px;">
+    <button class="btn btn-outline" style="max-width:200px;" onclick="window.location.href='index.html'">← العودة للعبة</button>
+  </div>
+</div>
+
+<!-- ══ شاشة المعلم ══ -->
+<div class="screen" id="screen-teacher">
+  <div class="teacher-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:1.1rem;font-weight:900;color:var(--navy);font-family:Cairo,sans-serif;">🎓 لوحة المعلم</div>
+      <button class="btn btn-outline btn-sm" onclick="showScreen('screen-pick')">رجوع</button>
+    </div>
+
+    <!-- اختبارات المعلم -->
+    <div class="section-title">📋 اختباراتي المنشأة</div>
+    <div id="teacher-quizzes-list">
+      <div style="color:#aaa;font-size:.82rem;text-align:center;padding:16px;">لا توجد اختبارات بعد</div>
+    </div>
+    <button class="btn btn-outline" onclick="showCreateQuiz()" style="margin-bottom:20px;">+ إنشاء اختبار جديد</button>
+
+    <!-- نموذج إنشاء اختبار -->
+    <div id="create-quiz-form" style="display:none;">
+      <div class="section-title">✏️ إنشاء اختبار جديد</div>
+      <div class="card" style="padding:16px;">
+        <div class="ig"><label>اسم الاختبار</label><input type="text" id="tq-name" placeholder="مثال: اختبار الدراسات الاجتماعية - الصف السابع"></div>
+
+        <!-- الصف -->
+        <div class="ig">
+          <label>الصف الدراسي</label>
+          <select id="tq-grade" onchange="loadTQCats()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.9rem;outline:none;">
+            <option value="">اختر الصف...</option>
+            <option value="g1">الصف الأول</option>
+            <option value="g2">الصف الثاني</option>
+            <option value="g3">الصف الثالث</option>
+            <option value="g4">الصف الرابع</option>
+            <option value="g5">الصف الخامس</option>
+            <option value="g6">الصف السادس</option>
+            <option value="g7" selected>الصف السابع</option>
+            <option value="g8">الصف الثامن</option>
+            <option value="g9">الصف التاسع</option>
+            <option value="g10">الصف العاشر</option>
+            <option value="g11">الصف الحادي عشر</option>
+            <option value="g12">الصف الثاني عشر</option>
+          </select>
+        </div>
+
+        <!-- الفئة -->
+        <div class="ig">
+          <label>الفئة / الوحدة</label>
+          <select id="tq-cat" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.9rem;outline:none;">
+            <option value="">اختر الصف أولاً...</option>
+          </select>
+        </div>
+
+        <!-- أو فئة مخصصة -->
+        <div id="tq-custom-cat-wrap" style="display:none;">
+          <div class="ig">
+            <label>أو أدخل اسم فئة مخصصة</label>
+            <input type="text" id="tq-custom-cat" placeholder="مثال: الفصل الثالث - الموارد الطبيعية">
+          </div>
+        </div>
+
+        <div class="settings-row" style="margin-bottom:14px;">
+          <label>عدد الأسئلة:</label>
+          <input type="number" id="tq-count" value="10" min="1" max="50">
+        </div>
+        <div class="settings-row" style="margin-bottom:14px;">
+          <label>مؤقت (ثانية/سؤال):</label>
+          <input type="number" id="tq-timer" value="0" min="0" max="300">
+          <span style="font-size:.75rem;color:#888;">0 = بدون</span>
+        </div>
+
+        <!-- الخصوصية -->
+        <div style="background:#f8f8fc;border:1.5px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;">🔒 خصوصية الاختبار</div>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+            <input type="radio" name="tq-privacy" value="public" checked style="margin-top:3px;accent-color:var(--navy);">
+            <div>
+              <div style="font-size:.85rem;font-weight:700;color:var(--navy);">عام — للجميع ⭐ موصى به</div>
+              <div style="font-size:.75rem;color:#888;">يظهر للطلاب في القائمة ويمكن لأي أحد الحل</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+            <input type="radio" name="tq-privacy" value="private" style="margin-top:3px;accent-color:var(--navy);">
+            <div>
+              <div style="font-size:.85rem;font-weight:700;color:#555;">خاص — برابط فقط</div>
+              <div style="font-size:.75rem;color:#888;">لا يظهر في القائمة، يُفتح برابط الاختبار فقط</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="err-msg" id="tq-err"></div>
+        <button class="btn btn-gold" onclick="createTeacherQuiz()">إنشاء الاختبار وإنشاء رابط ←</button>
+        <button class="btn btn-outline" onclick="document.getElementById('create-quiz-form').style.display='none'" style="margin-top:6px;">إلغاء</button>
+      </div>
+    </div>
+
+    <!-- إدارة الفئات المخصصة -->
+    <div class="section-title">🗂 فئاتي المخصصة</div>
+    <div class="add-q-form" style="margin-bottom:14px;">
+      <div style="font-size:.8rem;color:#888;margin-bottom:10px;">أضف فئة جديدة لأي صف — تظهر تلقائياً في الاختبارات</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="ig">
+          <label>الصف الدراسي</label>
+          <select id="new-cat-grade" style="width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.85rem;outline:none;">
+            <option value="">اختر الصف...</option>
+            <option value="g1">الصف الأول</option><option value="g2">الصف الثاني</option>
+            <option value="g3">الصف الثالث</option><option value="g4">الصف الرابع</option>
+            <option value="g5">الصف الخامس</option><option value="g6">الصف السادس</option>
+            <option value="g7">الصف السابع</option><option value="g8">الصف الثامن</option>
+            <option value="g9">الصف التاسع</option><option value="g10">الصف العاشر</option>
+            <option value="g11">الصف الحادي عشر</option><option value="g12">الصف الثاني عشر</option>
+          </select>
+        </div>
+        <div class="ig">
+          <label>الفصل الدراسي</label>
+          <select id="new-cat-semester" style="width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.85rem;outline:none;">
+            <option value="1">الفصل الأول</option>
+            <option value="2">الفصل الثاني</option>
+          </select>
+        </div>
+      </div>
+      <div class="ig">
+        <label>المادة الدراسية</label>
+        <select id="new-cat-subject" onchange="toggleOtherSubject()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.88rem;outline:none;">
+          <option value="">اختر المادة...</option>
+          <option value="اجتماعيات">اجتماعيات</option>
+          <option value="عربي">لغة عربية</option>
+          <option value="علوم">علوم</option>
+          <option value="إنجليزي">إنجليزي</option>
+          <option value="تربية إسلامية">تربية إسلامية</option>
+          <option value="حاسوب">حاسوب</option>
+          <option value="قرآن">قرآن كريم</option>
+          <option value="رياضيات">رياضيات</option>
+          <option value="أخرى">أخرى...</option>
+        </select>
+      </div>
+      <div class="ig" id="other-subject-wrap" style="display:none;">
+        <label>اسم المادة</label>
+        <input type="text" id="new-cat-subject-other" placeholder="أدخل اسم المادة...">
+      </div>
+      <div class="ig">
+        <label>اسم الوحدة / الفصل</label>
+        <input type="text" id="new-cat-name" placeholder="مثال: الفصل الثاني - البيئة والمجتمع">
+      </div>
+      <div style="background:#fff8e8;border:1.5px solid #d4ac00;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:.78rem;color:#7a5c00;">
+        💡 <strong>توصية:</strong> اجعل الفئة عامة حتى يستفيد منها جميع الطلاب وتُثري منصة الحلحلي
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:10px;">
+        <input type="checkbox" id="new-cat-public" checked style="width:16px;height:16px;accent-color:var(--navy);">
+        <span style="font-size:.85rem;font-weight:700;color:var(--navy);">عامة للجميع ⭐</span>
+        <span style="font-size:.75rem;color:#888;">(غير محدد = خاصة بك)</span>
+      </label>
+      <button class="btn btn-outline" onclick="addCustomGradeGroup()" style="margin-bottom:6px;">+ إضافة الفئة</button>
+      <div class="err-msg" id="group-cat-err" style="margin-top:4px;"></div>
+      <div id="custom-groups-list" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- أسئلة مخصصة -->
+    <div class="section-title">➕ إضافة سؤال مخصص</div>
+    <div class="add-q-form">
+
+      <!-- الصف — اختيار أو إضافة جديد -->
+      <div class="ig">
+        <label>الصف الدراسي</label>
+        <select id="cq-grade" onchange="loadCQGroupsForGrade()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.9rem;outline:none;">
+          <option value="">اختر الصف...</option>
+          <option value="g1">الصف الأول</option><option value="g2">الصف الثاني</option>
+          <option value="g3">الصف الثالث</option><option value="g4">الصف الرابع</option>
+          <option value="g5">الصف الخامس</option><option value="g6">الصف السادس</option>
+          <option value="g7">الصف السابع</option><option value="g8">الصف الثامن</option>
+          <option value="g9">الصف التاسع</option><option value="g10">الصف العاشر</option>
+          <option value="g11">الصف الحادي عشر</option><option value="g12">الصف الثاني عشر</option>
+        </select>
+      </div>
+
+      <!-- الفئة: الموجودة أو جديدة -->
+      <div class="ig" id="cq-cat-section" style="display:none;">
+        <label>الفئة / الوحدة</label>
+        <select id="cq-cat" onchange="handleCQCatChange()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.9rem;outline:none;">
+          <option value="">اختر فئة...</option>
+        </select>
+      </div>
+
+      <!-- فئة جديدة -->
+      <div class="ig" id="cq-newcat-section" style="display:none;">
+        <label>اسم الفئة الجديدة</label>
+        <input type="text" id="cq-newcat-name" placeholder="مثال: اجتماعيات - الوحدة الثالثة">
+      </div>
+
+      <!-- السؤال والخيارات -->
+      <div id="cq-question-section" style="display:none;">
+        <div class="ig"><label>نص السؤال</label>
+          <input type="text" id="cq-text" placeholder="اكتب السؤال هنا...">
+        </div>
+        <div class="correct-hint">✓ اضغط على الدائرة بجانب الإجابة الصحيحة</div>
+        <div class="opts-inputs" id="cq-opts-inputs"></div>
+        <div class="err-msg" id="cq-err"></div>
+
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn" onclick="addCustomQ(false)" style="flex:2;">
+            ✓ حفظ وإضافة آخر
+          </button>
+          <button class="btn btn-outline" onclick="addCustomQ(true)" style="flex:1;font-size:.82rem;">
+            حفظ وانتهاء
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- أسئلتي المخصصة — عرض + بحث -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:8px;">
+      <div class="section-title" style="margin:0;">📝 أسئلتي المخصصة</div>
+      <button class="btn btn-danger btn-sm" onclick="clearCustomQs()" style="width:auto;padding:5px 12px;font-size:.75rem;">🗑 مسح الكل</button>
+    </div>
+    <!-- فلتر الفئة -->
+    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;">
+      <select id="cq-filter-cat" onchange="renderCustomQList()" style="flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-family:Tajawal,sans-serif;font-size:.85rem;outline:none;">
+        <option value="">📋 جميع الأسئلة</option>
+      </select>
+      <span id="cq-total-badge" style="font-size:.75rem;color:#888;white-space:nowrap;"></span>
+    </div>
+    <div id="custom-q-list"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// إعداد Firebase
+// ══════════════════════════════════════════
+const FB_CONFIG = {
+  apiKey:'AIzaSyDjQw02_46HJgkOTksByVx8lOSIky7oPpA',
+  authDomain:'halhali-game.firebaseapp.com',
+  projectId:'halhali-game',
+  storageBucket:'halhali-game.firebasestorage.app',
+  messagingSenderId:'27817657495',
+  appId:'1:27817657495:web:bf78ba68f3446b26cf95d2',
+};
+const SUPER_ADMIN = '20ahmedali25@gmail.com';
+
+const GRADE_LABELS = {
+  g1:'الصف الأول',g2:'الصف الثاني',g3:'الصف الثالث',g4:'الصف الرابع',
+  g5:'الصف الخامس',g6:'الصف السادس',g7:'الصف السابع',g8:'الصف الثامن',
+  g9:'الصف التاسع',g10:'الصف العاشر',g11:'الصف الحادي عشر',g12:'الصف الثاني عشر',
+};
+
+// الفئات المدمجة مصنفة حسب الصف
+const BUILT_IN_CATS_BY_GRADE = {
+  g7: ['سابع ف2 - رياح التغيير','سابع ف2 - أخطار ومواجهات','سابع ف2 - البيئة والتلوث','سابع ف2 - المواطن والدستور','علوم ف2 - الخارقون','علوم ف2 - الأقوياء','علوم ف2 - العباقرة'],
+};
+
+let auth, db, currentUser = null, OFFLINE = false;
+
+// ══════════════════════════════════════════
+// قاعدة الأسئلة — اختيار من متعدد
+// ══════════════════════════════════════════
+const QUIZ_DB = {
+  'سابع ف2 - رياح التغيير': [
+    {q:'"التحول في الطريقة التي يعيش فيها أفراد المجتمع وأسلوب التفاعل بينهم" يشير إلى مفهوم:',opts:['التغير الاجتماعي','التطور الثقافي','الهوية الوطنية','التنمية الاقتصادية'],ans:0},
+    {q:'"التغيرات التي تطرأ على أعداد السكان من حيث الزيادة أو النقصان" يشير إلى:',opts:['العامل الديموغرافي','العامل الاقتصادي','العامل التكنولوجي','عامل التعليم'],ans:0},
+    {q:'"مؤسسة تعمل على حفظ وصون التراث القطري وتعزيز الهوية الوطنية" يشير إلى:',opts:['إدارة التراث','وزارة الثقافة','مجلس الشورى','وزارة التعليم'],ans:0},
+    {q:'ما عوامل التغير الاجتماعي في المجتمع القطري؟',opts:['الاقتصادي والسكاني والتكنولوجي والتعليم','الديني والسياسي والعسكري','الجغرافي والمناخي والبيئي','الثقافي والفني والرياضي'],ans:0},
+    {q:'ما مقومات الهوية الوطنية في دولة قطر؟',opts:['اللغة العربية والدين الإسلامي والتراث والانتماء','الاقتصاد والسياسة والجيش','العلم والتكنولوجيا والطب','الرياضة والفنون والإعلام'],ans:0},
+    {q:'ما دور إدارة التراث في الحفاظ على الهوية القطرية؟',opts:['إقامة الفعاليات التراثية ودعم التراث وتعزيز الهوية','تنظيم الانتخابات وسن القوانين','إدارة الميزانية العامة للدولة','الإشراف على التعليم والمدارس'],ans:0},
+    {q:'ما أثر العامل التكنولوجي في التغير الاجتماعي؟',opts:['سهّل التواصل وغيّر أنماط العمل والتعليم والترفيه','قلل عدد السكان وأثر على الزراعة','أدى إلى ضعف اللغة العربية فقط','لم يؤثر على المجتمع القطري'],ans:0},
+    {q:'ما أهمية التعليم كعامل من عوامل التغير الاجتماعي في قطر؟',opts:['يرفع الوعي ويُعدّ الكوادر ويُسهم في رؤية 2030','يزيد الإنتاج الزراعي والصناعي فقط','يُقلل من الهجرة الخارجية','يُعزز السياحة الداخلية فقط'],ans:0},
+    {q:'لماذا تهتم الدولة القطرية بالحفاظ على التراث الوطني؟',opts:['تعزيز الهوية والحفاظ على الموروث وإبراز المكانة الحضارية','زيادة الدخل الوطني من السياحة فقط','مواكبة متطلبات العولمة فقط','تقليص الاعتماد على النفط'],ans:0},
+    {q:'ما الهدف الرئيسي من رؤية قطر 2030؟',opts:['التنمية المستدامة وبناء مجتمع متقدم','زيادة إنتاج النفط والغاز','استقطاب السياح الأجانب فقط','توسيع الرقعة الجغرافية'],ans:0},
+    {q:'ما العامل الذي يؤثر على أعداد السكان في قطر؟',opts:['العامل الديموغرافي','العامل التكنولوجي','عامل التعليم','العامل الاقتصادي فقط'],ans:0},
+    {q:'من المؤسسة المسؤولة عن صون التراث القطري وتعزيز الهوية الوطنية؟',opts:['إدارة التراث','البلدية','وزارة الداخلية','مجلس الوزراء'],ans:0},
+  ],
+  'سابع ف2 - أخطار ومواجهات': [
+    {q:'"قبائل رعوية بدوية من أواسط آسيا اتسمت بالقسوة وكانوا وثنيين" يشير إلى:',opts:['المغول','الصليبيون','الفرس','الرومان'],ans:0},
+    {q:'"حملات شنتها أوروبا ضد المسلمين في الفترة من 1096-1250م" يشير إلى:',opts:['الحملات الصليبية','الغزو المغولي','حروب الردة','الفتوحات الإسلامية'],ans:0},
+    {q:'"المعركة التي انتصر فيها صلاح الدين الأيوبي على الصليبيين عام 1187م" هي:',opts:['معركة حطين','معركة عين جالوت','معركة الزلاقة','معركة المنصورة'],ans:0},
+    {q:'"الاتفاقية التي نجحت فيها الحملة الصليبية السادسة" هي:',opts:['اتفاقية يافا','صلح الرملة','معاهدة جدة','اتفاقية القدس'],ans:0},
+    {q:'ما أسباب الغزو المغولي للعالم الإسلامي؟',opts:['التوسع والسيطرة والعداء للإسلام والطمع في الثروات','الدفاع عن أراضيهم فقط','نشر الإسلام في العالم','مساعدة المسلمين ضد الصليبيين'],ans:0},
+    {q:'ما ترتيب أحداث الحملات الصليبية زمنياً؟',opts:['استعادة الرها ← صلح الرملة ← اتفاقية يافا','يافا ← صلح الرملة ← استعادة الرها','صلح الرملة ← يافا ← استعادة الرها','استعادة الرها ← يافا ← صلح الرملة'],ans:0},
+    {q:'ما نتيجة الحملة الصليبية الخامسة؟',opts:['فشلت بعد الهزيمة من الأيوبيين','نجحت في احتلال بيت المقدس','انتهت باتفاقية سلمية','لم تصل إلى الشرق'],ans:0},
+    {q:'ما نتيجة الحملة الصليبية السادسة؟',opts:['نجحت باتفاقية يافا','فشلت في تحقيق أهدافها','أدت إلى سقوط القدس','انتهت بمعركة حطين'],ans:0},
+    {q:'ما الذي ساعد سيف الدين قطز على التصدي للخطر المغولي؟',opts:['توحيد الصفوف واستغلال تضاريس عين جالوت','الاستعانة بالصليبيين','الانسحاب التكتيكي إلى مصر','التفاوض الدبلوماسي مع المغول'],ans:0},
+    {q:'في أي عام انتصر صلاح الدين في معركة حطين؟',opts:['1187م','1192م','1250م','1144م'],ans:0},
+    {q:'ما وصف المغول في المصادر التاريخية؟',opts:['قبائل وثنية رعوية شرسة من أواسط آسيا','فرسان مسيحيون من أوروبا','جيوش فارسية منظمة','تجار عرب من الجزيرة العربية'],ans:0},
+    {q:'من انتصر في معركة عين جالوت على المغول؟',opts:['المماليك بقيادة قطز','الأيوبيون بقيادة صلاح الدين','العباسيون','الأتراك السلاجقة'],ans:0},
+  ],
+  'سابع ف2 - البيئة والتلوث': [
+    {q:'"إدخال مواد ضارة إلى البيئة يؤدي إلى خلل يؤثر على الكائنات الحية" يشير إلى:',opts:['التلوث البيئي','الاحتباس الحراري','ثقب الأوزون','الجفاف'],ans:0},
+    {q:'"ارتفاع درجة حرارة الأرض نتيجة احتجاز الغازات للإشعاع الحراري" يشير إلى:',opts:['الاحتباس الحراري','التلوث البيئي','ثقب الأوزون','التصحر'],ans:0},
+    {q:'ما الأسباب الطبيعية لتلوث الهواء؟',opts:['حرائق الغابات والدخان البركاني وتسرب المواد المشعة','أدخنة المصانع والسيارات فقط','رمي النفايات في الهواء','مياه الصرف الصحي'],ans:0},
+    {q:'ما الأسباب البشرية لتلوث التربة؟',opts:['التوسع العمراني والنفايات النفطية وتسرب المواد المشعة','حرائق الغابات والبراكين','ارتفاع درجات الحرارة','الفيضانات والسيول'],ans:0},
+    {q:'ما خطورة تلوث البيئة؟',opts:['انتشار الأمراض وانقراض أنواع حية وتدمير الموارد','زيادة إنتاج المحاصيل الزراعية','ارتفاع درجات الحرارة فقط','تحسين جودة الهواء'],ans:0},
+    {q:'ما أسباب تلوث المياه؟',opts:['الصرف الصناعي والزراعي ومياه الصرف الصحي وتسرب النفط','حرائق الغابات فقط','الدخان البركاني','الأمطار الغزيرة'],ans:0},
+    {q:'ما الحلول المقترحة لمواجهة تلوث التربة؟',opts:['زراعة الأشجار والحد من المبيدات وإعادة التدوير','زيادة المصانع وتوسيع العمران','رمي النفايات في البحر','حرق المخلفات الصناعية'],ans:0},
+    {q:'ما الفرق بين أسباب التلوث الطبيعية والبشرية؟',opts:['الطبيعية كالبراكين والبشرية كالمصانع والسيارات','كلاهما ناتج عن الإنسان فقط','كلاهما ظاهرة طبيعية','لا فرق بينهما'],ans:0},
+    {q:'ما تأثير الاحتباس الحراري على البيئة؟',opts:['ارتفاع درجات الحرارة وذوبان الجليد وارتفاع منسوب البحار','تحسين الإنتاج الزراعي','تقليص مساحة الصحاري','زيادة تساقط الأمطار فقط'],ans:0},
+    {q:'ما نوع التلوث الناتج عن الدخان البركاني؟',opts:['تلوث هواء طبيعي','تلوث بشري صناعي','تلوث مائي','تلوث تربة بشري'],ans:0},
+    {q:'ما الغازات الرئيسية المسببة للاحتباس الحراري؟',opts:['ثاني أكسيد الكربون والميثان','الأكسجين والنيتروجين','الهيليوم والأرغون','البخار والأوزون فقط'],ans:0},
+    {q:'ما أهمية إعادة تدوير النفايات في مكافحة التلوث؟',opts:['تقليل النفايات وتوفير الموارد وحماية التربة','زيادة الإنتاج الصناعي فقط','رفع أسعار المواد الخام','لا فائدة منها'],ans:0},
+  ],
+  'سابع ف2 - المواطن والدستور': [
+    {q:'"حقوق يتمتع بها الفرد كمواطن في الدولة طبقاً لأحكام الدستور" يشير إلى:',opts:['الحريات المدنية','الواجبات الوطنية','الحقوق الدولية','المسؤوليات الاجتماعية'],ans:0},
+    {q:'"الوثيقة التي تنظم القواعد العليا للدولة وتحدد حقوق المواطنين" هي:',opts:['الدستور','القانون','اللائحة','النظام الداخلي'],ans:0},
+    {q:'"الانتماء الحقيقي للوطن والإحساس بالمسؤولية تجاهه" يشير إلى:',opts:['المواطنة','الوطنية المتطرفة','الانتماء القبلي','الهوية الثقافية'],ans:0},
+    {q:'ما الحريات الواردة في الدستور القطري؟',opts:['الشخصية وحرية الرأي والعبادة والاقتصادية','حرية التسليح والحرب فقط','التنقل الخارجي فقط','حرية إلغاء القوانين'],ans:0},
+    {q:'ما حقوق المواطن في الدستور القطري؟',opts:['الصحة والتعليم والمساواة والانتخاب','فقط المساواة أمام القانون','الحق في الثروة الطبيعية فقط','الحق في التصويت فقط'],ans:0},
+    {q:'ما واجبات المواطن تجاه الدستور والقانون؟',opts:['احترام الدستور والدفاع عن الوطن وحماية المال العام','فقط دفع الضرائب','التصويت في الانتخابات فقط','الالتحاق بالجيش فقط'],ans:0},
+    {q:'ما الفرق بين الدستور والقانون؟',opts:['الدستور فوق القانون وأي نص مخالف له يُعد لاغياً','القانون أعلى من الدستور','كلاهما متساويان في المرتبة','لا فرق بينهما'],ans:0},
+    {q:'ما أهمية الالتزام بالقوانين للفرد والمجتمع؟',opts:['تحقيق الاستقرار والعدالة وتكافؤ الفرص وحفظ الحقوق','زيادة الإنتاج الاقتصادي فقط','ضمان حصول المواطن على ثروة','تقليص دور الدولة'],ans:0},
+    {q:'ما أبرز الحقوق الفردية في الدستور القطري؟',opts:['التعليم والصحة والمساواة أمام القانون','الحق في الحرب والتسليح','الحق في فرض القوانين','الحق في إلغاء الانتخابات'],ans:0},
+    {q:'ما المقصود بالمواطنة؟',opts:['الانتماء للوطن والإحساس بالمسؤولية والدفاع عنه','امتلاك الجنسية الرسمية فقط','السكن داخل حدود الدولة فقط','دفع الضرائب للحكومة'],ans:0},
+    {q:'ما الذي يترتب على مخالفة الدستور؟',opts:['يُعد النص المخالف لاغياً وغير نافذ','يُطبق النص المخالف بشروط','يُعرض على الشعب للتصويت','لا يترتب عليه شيء'],ans:0},
+    {q:'من الذي يضمن حقوق المواطنين في دولة قطر؟',opts:['الدستور والقانون','الأسرة والقبيلة','المؤسسات الدولية فقط','الأحزاب السياسية'],ans:0},
+  ],
+  // ═══ علوم ف2 - الخارقون (20 سؤال) ═══
+'علوم ف2 - الخارقون': [
+  {q:'ماذا يحدث للشحنات المتشابهة؟',opts:['تتنافر','تتجاذب','تبقى ساكنة','تختفي'],ans:0},
+  {q:'ماذا يحدث للشحنات المختلفة؟',opts:['تتجاذب','تتنافر','تبقى ثابتة','تتلاشى'],ans:0},
+  {q:'اسم الظاهرة الناتجة من تفريغ كهربائي بين سحابة والأرض؟',opts:['الصاعقة','البرق','الرعد','الزلزال'],ans:0},
+  {q:'اسم الظاهرة الناتجة من تفريغ كهربائي بين سحابة وأخرى؟',opts:['البرق','الصاعقة','الرعد','العاصفة'],ans:0},
+  {q:'طريقة الشحن بتقريب جسم مشحون دون تلامس؟',opts:['الشحن بالحث','الشحن بالدلك','الشحن بالتلامس','الشحن بالضغط'],ans:0},
+  {q:'طريقة الشحن بتلامس جسمين مختلفي الشحنة؟',opts:['الشحن بالتلامس','الشحن بالحث','الشحن بالدلك','الشحن بالحرارة'],ans:0},
+  {q:'طريقة الشحن بدلك مادتين معاً؟',opts:['الشحن بالدلك','الشحن بالحث','الشحن بالتلامس','الشحن بالإشعاع'],ans:0},
+  {q:'اسم الجهاز الذي يكشف الشحنة الكهربائية بورقتين فلزيتين؟',opts:['الكشاف الكهربائي','الفولتميتر','الأميتر','الأوميتر'],ans:0},
+  {q:'اسم الجهاز الذي يحمي المباني من الصواعق؟',opts:['مانعة الصواعق','الكشاف الكهربائي','مولد فان دي غراف','المكثف'],ans:0},
+  {q:'اسم انتقال الشحنات الكهربائية المفاجئ بين جسمين؟',opts:['التفريغ الكهربائي','الشحن بالدلك','المقاومة الكهربائية','التأريض'],ans:0},
+  {q:'اسم الجهاز المولد لشحنات ساكنة بجهد عالٍ يُوقف الشعر؟',opts:['مولد فان دي غراف','الفولتميتر','الأميتر','الكشاف الكهربائي'],ans:0},
+  {q:'الطريقة التي تُنتج جسمين مشحونين بشحنتين مختلفتين؟',opts:['الدلك','الحث','التلامس','التأريض'],ans:0},
+  {q:'سبب تأريض مضخة البنزين؟',opts:['منع الشرارات التي تسبب الحرائق','زيادة الإنتاج','تبريد المحرك','رفع الكفاءة'],ans:0},
+  {q:'عدد طرائق الشحن الكهربائي؟',opts:['ثلاث','اثنان','أربع','خمس'],ans:0},
+  {q:'ما مكونات مانعة الصواعق؟',opts:['ساق رأس مدبب وسلك وساق تأريض','بطارية ومقاومة ومصباح','فولتميتر وأميتر ومفتاح','سلك وخلية وقاطع'],ans:0},
+  {q:'ما سبب انتقال الشحنات السالبة فقط عند الدلك؟',opts:['لأنها خارج النواة وحرة الحركة','لأنها أثقل من الموجبة','لأنها داخل النواة','لأنها متعادلة'],ans:0},
+  {q:'كيف تتشكل الشحنة السالبة في السحابة؟',opts:['بالاحتكاك مع حبيبات البرد','بتسخين الهواء','بالتأريض','بالضغط الجوي'],ans:0},
+  {q:'ما سبب حصول ساق زجاجية على شحنة موجبة عند دلكها بالحرير؟',opts:['انتقال الشحنات السالبة من الزجاج إلى الحرير','اكتساب الزجاج شحنات سالبة','تبادل الشحنات الموجبة فقط','لا يحدث انتقال'],ans:0},
+  {q:'لماذا توضع ورقة الذهب في الكشاف داخل صندوق مغلق؟',opts:['لمنع تيارات الهواء من تحريكها','لحمايتها من الغبار فقط','للزينة','لتبريدها'],ans:0},
+  {q:'ما المقصود بالتأريض؟',opts:['تفريغ الشحنات الكهربائية في الأرض','شحن الجسم بالأرض','عزل الجسم عن الأرض','توصيل التيار للأرض'],ans:0}
+],
+
+// ═══ علوم ف2 - الأقوياء (20 سؤال) ═══
+'علوم ف2 - الأقوياء': [
+  {q:'اسم المسار المغلق الذي تتحرك فيه الشحنات؟',opts:['الدائرة الكهربائية','المفتاح','البطارية','السلك'],ans:0},
+  {q:'اسم الدائرة ذات المسار الواحد للتيار؟',opts:['دائرة التوالي','دائرة التوازي','الدائرة المختلطة','الدائرة المفتوحة'],ans:0},
+  {q:'اسم الدائرة ذات أكثر من مسار للتيار؟',opts:['دائرة التوازي','دائرة التوالي','الدائرة المغلقة','الدائرة القصيرة'],ans:0},
+  {q:'وحدة قياس الجهد الكهربائي؟',opts:['الفولت','الأمبير','الأوم','الواط'],ans:0},
+  {q:'وحدة قياس المقاومة الكهربائية؟',opts:['الأوم','الفولت','الأمبير','الجول'],ans:0},
+  {q:'وحدة قياس التيار الكهربائي؟',opts:['الأمبير','الفولت','الأوم','الواط'],ans:0},
+  {q:'اسم الجهاز الذي يقيس الجهد الكهربائي؟',opts:['الفولتميتر','الأميتر','الأوميتر','الترمومتر'],ans:0},
+  {q:'اسم الجهاز الذي يقيس شدة التيار الكهربائي؟',opts:['الأميتر','الفولتميتر','الأوميتر','المتر'],ans:0},
+  {q:'اسم الجزء المسؤول عن فتح وغلق الدائرة؟',opts:['المفتاح الكهربائي','البطارية','المصباح','المقاومة'],ans:0},
+  {q:'اسم المكون الذي يحوّل الطاقة الكهربائية إلى ضوئية؟',opts:['المصباح الكهربائي','البطارية','المفتاح','المقاومة'],ans:0},
+  {q:'اسم مصدر الطاقة في الدائرة الكهربائية؟',opts:['الخلية الكهربائية','المصباح','المقاومة','المفتاح'],ans:0},
+  {q:'اسم مجموعة الخلايا الكهربائية؟',opts:['البطارية','المولد','الخلية الشمسية','المحوّل'],ans:0},
+  {q:'اسم مقدار صعوبة حركة الشحنات في الدائرة؟',opts:['المقاومة الكهربائية','الجهد الكهربائي','التيار الكهربائي','الطاقة'],ans:0},
+  {q:'اسم معدل سريان الشحنة الكهربائية؟',opts:['شدة التيار الكهربائي','فرق الجهد','المقاومة','الطاقة'],ans:0},
+  {q:'اسم الاختلاف بين قطبي الخلية السالب والموجب؟',opts:['فرق الجهد الكهربائي','شدة التيار','المقاومة','الطاقة الكامنة'],ans:0},
+  {q:'وظيفة الفولتميتر؟',opts:['قياس فرق الجهد الكهربائي','قياس شدة التيار','قياس المقاومة','قياس القدرة'],ans:0},
+  {q:'وظيفة الأميتر؟',opts:['قياس شدة التيار الكهربائي','قياس الجهد','قياس المقاومة','قياس الطاقة'],ans:0},
+  {q:'كيف يوصّل الأميتر في الدائرة؟',opts:['على التوالي','على التوازي','بأي طريقة','لا يوصل'],ans:0},
+  {q:'كيف يوصّل الفولتميتر في الدائرة؟',opts:['على التوازي','على التوالي','بأي طريقة','لا يوصل'],ans:0},
+  {q:'متى يكون الجسم متعادلاً؟',opts:['عند تساوي الشحنات السالبة والموجبة','عند زيادة السالبة','عند زيادة الموجبة','في الأرض فقط'],ans:0}
+],
+
+// ═══ علوم ف2 - العباقرة (20 سؤال) ═══
+'علوم ف2 - العباقرة': [
+  {q:'ماذا يحدث لدائرة التوالي عند تعطل مصباح؟',opts:['تتعطل جميع المكونات','يبقى الباقي يعمل','يزداد السطوع','لا يحدث شيء'],ans:0},
+  {q:'ماذا يحدث لدائرة التوازي عند تعطل مصباح؟',opts:['تبقى بقية المكونات تعمل','تتعطل كل الدائرة','ينقطع التيار كلياً','يزداد السطوع'],ans:0},
+  {q:'ماذا يحدث لورقتي الكشاف عند اقتراب جسم بنفس شحنته؟',opts:['تتباعدان','تتقاربان','تبقيان ثابتتين','تلتصقان'],ans:0},
+  {q:'نوع الشحنة التي تنتقل عند الدلك؟',opts:['السالبة','الموجبة','المتعادلة','كلاهما معاً'],ans:0},
+  {q:'نوع الشحنة التي تحملها الأرض؟',opts:['متعادلة','سالبة','موجبة','متغيرة'],ans:0},
+  {q:'ماذا يحدث لبالونين مشحونين بنفس الطريقة عند تقريبهما؟',opts:['يتنافران','يتجاذبان','يلتصقان','يتلاشيان'],ans:0},
+  {q:'ماذا يحدث لشدة إضاءة مصابيح التوالي عند إضافة مصباح ثالث؟',opts:['تقل','تزداد','تبقى ثابتة','تنطفئ'],ans:0},
+  {q:'الفرق بين البرق والصاعقة؟',opts:['البرق بين سحابتين والصاعقة بين سحابة والأرض','لا فرق بينهما','الصاعقة بين سحابتين والبرق للأرض','كلاهما بين سحابتين'],ans:0},
+  {q:'كيفية توزع التيار في دائرة التوازي؟',opts:['يتوزع على الفروع','يمر بمسار واحد','لا يتحرك','يتضاعف'],ans:0},
+  {q:'ماذا يحدث للجهد بين طرفي كل مسار في التوازي؟',opts:['يبقى ثابتاً','يتوزع','يتضاعف','يقل'],ans:0},
+  {q:'كيف يمكن تفريغ كشاف كهربائي مشحون؟',opts:['بلمسه باليد أو توصيله بالأرض','بتركه في الهواء','بتسخينه','بتبريده'],ans:0},
+  {q:'لماذا تُوصّل الأجهزة المنزلية على التوازي؟',opts:['ليبقى بقية الأجهزة تعمل عند تعطل أحدها','لتوفير الكهرباء','لتقليل التكلفة','لتبسيط التركيب'],ans:0},
+  {q:'قيمة الجهد في مصباح ضمن دائرة توازي جهدها 8 فولت؟',opts:['8 فولت','2 فولت','4 فولت','16 فولت'],ans:0},
+  {q:'سبب وقوف الشعر عند لمس مولد فان دي غراف؟',opts:['تنافر الشحنات المتشابهة على الشعر','تجاذب الشعر','تسخين فروة الرأس','تنفس الجلد'],ans:0},
+  {q:'نوع الشحنة التي تكتسبها قطعة الحرير عند دلكها بزجاج؟',opts:['سالبة','موجبة','متعادلة','متغيرة'],ans:0},
+  {q:'نوع الشحنة التي يكتسبها الزجاج عند دلكه بالحرير؟',opts:['موجبة','سالبة','متعادلة','متغيرة'],ans:0},
+  {q:'الطرائق المستخدمة في التصاق بالون مدلوك بالجدار؟',opts:['الدلك والحث','التلامس فقط','الحث فقط','التأريض'],ans:0},
+  {q:'سبب خطورة الوقوف تحت شجرة أثناء العواصف الرعدية؟',opts:['لأنها تعمل عمل الرأس المدبب الجاذب للصاعقة','لأنها عازلة كهربائياً','لأنها تولد الكهرباء','لأنها تعكس البرق'],ans:0},
+  {q:'هدف توصيل الخلايا الكهربائية على التوازي؟',opts:['زيادة شدة التيار وعمر البطارية','تقليل الجهد','تقليل التكلفة','زيادة المقاومة'],ans:0},
+  {q:'أحد الأضرار الناتجة عن وصول الصاعقة للأرض؟',opts:['الحرائق','خفض الحرارة','زيادة الإنتاج','تنقية الهواء'],ans:0}
+],
+};
+
+// ══════════════════════════════════════════
+// التصنيفات
+// ══════════════════════════════════════════
+const QUIZ_GROUPS = [
+  {id:'grade7', label:'الصف السابع', icon:'grade7', cats:['سابع ف2 - رياح التغيير','سابع ف2 - أخطار ومواجهات','سابع ف2 - البيئة والتلوث','سابع ف2 - المواطن والدستور']},
+  {id:'science7', label:'علوم سابع ف2', icon:'science7', cats:['علوم ف2 - الخارقون','علوم ف2 - الأقوياء','علوم ف2 - العباقرة']},
+];
+
+
+// ══════════════════════════════════════════
+// حالة الاختبار
+// ══════════════════════════════════════════
+let Q = {
+  questions:[], answers:[], currentIdx:0,
+  timerSecs:0, timerInterval:null, startTime:0,
+  selectedGroup:null, selectedCat:null,
+};
+
+// ══════════════════════════════════════════
+// الشاشات
+// ══════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// لودر
+// ══════════════════════════════════════════
+function hideLoader(){
+  const l=document.getElementById('app-loader');
+  if(l&&!l.classList.contains('fade-out')){
+    l.classList.add('fade-out');
+    setTimeout(()=>{if(l.parentNode)l.remove();},600);
+  }
+}
+
+// ══════════════════════════════════════════
+// Toast
+// ══════════════════════════════════════════
+let _toastTimer;
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='show'+(type?' '+type:'');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ── دالة تأمين النصوص من XSS ──
+function esc(s){
+  if(s==null) return '';
+  const d=document.createElement('div');
+  d.textContent=String(s);
+  return d.innerHTML;
+}
+
+// ══════════════════════════════════════════
+// مصادقة Firebase
+// ══════════════════════════════════════════
+let _barPct=0;
+const _barInt=setInterval(()=>{
+  _barPct=Math.min(_barPct+Math.random()*18,88);
+  const b=document.getElementById('loader-bar');
+  if(b)b.style.width=_barPct+'%';
+},250);
+
+const _loaderTO=setTimeout(()=>{
+  clearInterval(_barInt);
+  hideLoader();
+  if(!currentUser)showScreen('screen-login');
+},4500);
+
+try{
+  firebase.initializeApp(FB_CONFIG);
+  auth=firebase.auth();
+  db=firebase.firestore();
+  auth.onAuthStateChanged(user=>{
+    clearTimeout(_loaderTO);clearInterval(_barInt);
+    const b=document.getElementById('loader-bar');if(b)b.style.width='100%';
+    currentUser=user;
+    if(user){
+      initPickScreen();
+      showScreen('screen-pick');
+    }else{
+      // تحقق من جلسة offline
+      const sess=localStorage.getItem('hh_sess');
+      if(sess){currentUser=JSON.parse(sess);initPickScreen();showScreen('screen-pick');}
+      else showScreen('screen-login');
+    }
+    hideLoader();
+  });
+}catch(e){
+  clearTimeout(_loaderTO);clearInterval(_barInt);
+  OFFLINE=true;
+  const sess=localStorage.getItem('hh_sess');
+  if(sess){currentUser=JSON.parse(sess);initPickScreen();showScreen('screen-pick');}
+  else showScreen('screen-login');
+  hideLoader();
+}
+
+// ══════════════════════════════════════════
+// دخول / تسجيل / خروج
+// ══════════════════════════════════════════
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  if(!email||!pass){err.textContent='أدخل البريد وكلمة المرور';return;}
+  if(OFFLINE){
+    const users=JSON.parse(localStorage.getItem('hh_users')||'[]');
+    const u=users.find(x=>x.email===email&&x.pass===pass);
+    if(!u){err.textContent='⚠️ البيانات غير صحيحة';return;}
+    currentUser=u;localStorage.setItem('hh_sess',JSON.stringify(u));
+    initPickScreen();showScreen('screen-pick');return;
+  }
+  try{
+    await auth.signInWithEmailAndPassword(email,pass);
+  }catch(e){
+    err.textContent=e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'?'⚠️ البريد أو كلمة المرور غير صحيحة':'⚠️ حدث خطأ';
+  }
+}
+
+async function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const err=document.getElementById('reg-err');
+  if(!name||!email||!pass){err.textContent='أكمل الحقول المطلوبة';return;}
+  if(pass.length<8){err.textContent='كلمة المرور 8 أحرف على الأقل';return;}
+  if(OFFLINE){
+    const u={name,email,phone:'+974'+phone,uid:'offline_'+Date.now()};
+    const users=JSON.parse(localStorage.getItem('hh_users')||'[]');
+    users.push({...u,pass});
+    localStorage.setItem('hh_users',JSON.stringify(users));
+    localStorage.setItem('hh_sess',JSON.stringify(u));
+    currentUser=u;initPickScreen();showScreen('screen-pick');return;
+  }
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,pass);
+    await db.collection('users').doc(cred.user.uid).set({name,email,phone:'+974'+phone,points:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  }catch(e){err.textContent=e.code==='auth/email-already-in-use'?'⚠️ البريد مستخدم مسبقاً':'⚠️ '+e.message;}
+}
+
+async function doReset(){
+  const email=document.getElementById('reset-email').value.trim();
+  const msg=document.getElementById('reset-msg');
+  if(!email){msg.textContent='أدخل بريدك الإلكتروني';return;}
+  if(OFFLINE){msg.textContent='⚠️ غير متاح في الوضع المحلي';return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    msg.style.color='#1a7a4a';msg.textContent='✅ تم إرسال رابط الاستعادة';
+  }catch(e){msg.textContent='⚠️ تحقق من البريد الإلكتروني';}
+}
+
+function doLogout(){
+  if(OFFLINE){localStorage.removeItem('hh_sess');currentUser=null;showScreen('screen-login');return;}
+  auth.signOut();
+}
+
+// ══════════════════════════════════════════
+// شاشة الاختيار
+// ══════════════════════════════════════════
+function initPickScreen(){
+  const name=currentUser?.displayName||currentUser?.name||(currentUser?.email||'').split('@')[0];
+  const el=document.getElementById('pick-username');
+  if(el)el.textContent='أهلاً '+name+' 👋';
+  buildGroupsGrid();
+  renderMyStats();
+  // فحص رابط معلم
+  const url=new URLSearchParams(window.location.search);
+  const qid=url.get('quiz');
+  if(qid)loadTeacherQuizByLink(qid);
+}
+
+const GROUP_ICONS = {
+  grade7: `<svg viewBox="0 0 60 60" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="6" width="44" height="48" rx="6" fill="#e8f0f8" stroke="#1a3a5c" stroke-width="2"/>
+    <rect x="14" y="14" width="32" height="4" rx="2" fill="#1a3a5c"/>
+    <rect x="14" y="22" width="24" height="4" rx="2" fill="#1a3a5c" opacity=".6"/>
+    <rect x="14" y="30" width="28" height="4" rx="2" fill="#1a3a5c" opacity=".4"/>
+    <circle cx="44" cy="44" r="10" fill="#d4ac00"/>
+    <text x="44" y="49" text-anchor="middle" font-size="12" font-family="Cairo,Arial" fill="#fff" font-weight="900">7</text>
+  </svg>`,
+  science7: `<svg viewBox="0 0 60 60" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="qAtomG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#16a085"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="22" fill="url(#qAtomG)"/>
+    <ellipse cx="30" cy="30" rx="20" ry="7" fill="none" stroke="#fff" stroke-width="1.8" opacity=".85"/>
+    <ellipse cx="30" cy="30" rx="20" ry="7" fill="none" stroke="#fff" stroke-width="1.8" opacity=".85" transform="rotate(60 30 30)"/>
+    <ellipse cx="30" cy="30" rx="20" ry="7" fill="none" stroke="#fff" stroke-width="1.8" opacity=".85" transform="rotate(-60 30 30)"/>
+    <circle cx="30" cy="30" r="5" fill="#f1c40f" stroke="#fff" stroke-width="1"/>
+  </svg>`,
+};
+
+const GROUP_COLORS = {
+  grade7:   {bg:'#fff8e8', border:'#d4ac00', shadow:'#d4ac00', text:'#7a5c00'},
+  science7: {bg:'#f4ecf7', border:'#8e44ad', shadow:'#8e44ad', text:'#5b2c6f'},
+};
+
+function buildGroupsGrid(){
+  const grid=document.getElementById('groups-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  QUIZ_GROUPS.forEach(g=>{
+    const col=GROUP_COLORS[g.id]||{bg:'#fff',border:'var(--border)',shadow:'var(--border)',text:'var(--navy)'};
+    const div=document.createElement('div');
+    div.className='group-card';
+    div.dataset.gid=g.id;
+    div.style.cssText=`background:${col.bg};border-color:${col.border};box-shadow:0 3px 0 ${col.shadow};`;
+    div.innerHTML=`
+      <div class="gc-icon">${GROUP_ICONS[g.id]||g.icon}</div>
+      <div class="gc-label" style="color:${col.text}">${g.label}</div>
+    `;
+    div.onclick=()=>selectGroup(g.id);
+    grid.appendChild(div);
+  });
+}
+
+function selectGroup(gid){
+  Q.selectedGroup=gid;Q.selectedCat=null;
+  document.querySelectorAll('.group-card').forEach(c=>{
+    c.classList.toggle('active',c.dataset.gid===gid);
+  });
+  const g=QUIZ_GROUPS.find(x=>x.id===gid);
+  if(!g)return;
+  // دمج أسئلة مخصصة
+  const customCats=getCustomCatNames();
+  const allCats=[...g.cats,...customCats.filter(c=>!g.cats.includes(c)&&QUIZ_DB[c])];
+  const section=document.getElementById('cats-section');
+  const title=document.getElementById('cats-section-title');
+  const catsGrid=document.getElementById('cats-grid');
+  title.textContent=g.label+' — اختر الفئة:';
+  catsGrid.innerHTML='';
+  allCats.filter(c=>QUIZ_DB[c]&&QUIZ_DB[c].length>0).forEach(cat=>{
+    const d=document.createElement('div');
+    d.className='cat-card';
+    d.dataset.cat=cat;
+    const stats=getQuizStats().filter(s=>s.cat===cat);
+    const done=stats.length>0;
+    const lastPct=done?stats[0].pct:null;
+    const col=GROUP_COLORS[gid]||{bg:'#f0f4ff',text:'var(--navy)'};
+    d.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:6px;';
+    d.innerHTML=`
+      <span style="flex:1;text-align:right;">${esc(cat)}</span>
+      <span style="font-size:.7rem;background:${col.bg||'#f0f4ff'};color:${col.text||'var(--navy)'};border-radius:10px;padding:2px 8px;font-weight:900;font-family:Cairo,sans-serif;white-space:nowrap;">${QUIZ_DB[cat].length} سؤال</span>
+      ${done?`<span style="font-size:.7rem;color:#1a7a4a;font-weight:900;white-space:nowrap;">✓ ${lastPct}%</span>`:''}
+    `;
+    d.onclick=()=>selectCat(cat);
+    catsGrid.appendChild(d);
+  });
+  section.style.display='block';
+  document.getElementById('start-section').style.display='none';
+}
+
+function selectCat(cat){
+  Q.selectedCat=cat;
+  document.querySelectorAll('.cat-card').forEach(c=>{
+    c.classList.toggle('selected',c.dataset.cat===cat);
+  });
+  const count=QUIZ_DB[cat]?.length||0;
+  const section=document.getElementById('start-section');
+  const qCount=document.getElementById('q-count');
+  const avail=document.getElementById('q-available');
+  qCount.max=count;
+  qCount.value=Math.min(parseInt(qCount.value)||10,count);
+  avail.textContent='(متاح '+count+' سؤال)';
+  section.style.display='block';
+}
+
+function toggleTimerInput(){
+  const on=document.getElementById('timer-toggle').checked;
+  document.getElementById('timer-secs').style.display=on?'inline-block':'none';
+  document.getElementById('timer-unit').style.display=on?'inline':'none';
+  document.getElementById('timer-label-txt').textContent=on?'':' بدون مؤقت';
+}
+
+// ══════════════════════════════════════════
+// بدء الاختبار
+// ══════════════════════════════════════════
+function startQuiz(opts={}){
+  const cat=opts.cat||Q.selectedCat;
+  if(!cat){toast('اختر فئة أولاً','error');return;}
+  const studentName=document.getElementById('student-name')?.value.trim()||
+    currentUser?.displayName||currentUser?.name||'';
+  const count=opts.count||parseInt(document.getElementById('q-count').value)||10;
+  const useTimer=opts.timer!==undefined?opts.timer>0:document.getElementById('timer-toggle').checked;
+  const timerSecs=opts.timer||parseInt(document.getElementById('timer-secs').value)||30;
+  const pool=shuffle([...(QUIZ_DB[cat]||[])]);
+  const questions=pool.slice(0,Math.min(count,pool.length));
+  if(questions.length===0){toast('لا توجد أسئلة في هذه الفئة','error');return;}
+  Q={
+    questions, answers:new Array(questions.length).fill(null),
+    currentIdx:0, timerSecs:useTimer?timerSecs:0,
+    timerInterval:null, startTime:Date.now(),
+    selectedGroup:Q.selectedGroup, selectedCat:cat,
+    quizCat:cat, studentName:studentName
+  };
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+// ══════════════════════════════════════════
+// عرض السؤال
+// ══════════════════════════════════════════
+// رسائل تشجيع
+const CHEERS=[
+  '💪 ممتاز! واصل','🌟 رائع! استمر','✨ أحسنت!','🔥 قوي! كمّل',
+  '👏 برافو عليك!','⚡ مذهل!','🎯 دقيق جداً!','🚀 إلى الأمام!'
+];
+let _lastCorrect=0;
+
+function renderQuestion(){
+  const q=Q.questions[Q.currentIdx];
+  const total=Q.questions.length;
+  const idx=Q.currentIdx;
+  // counter + progress
+  document.getElementById('q-counter').textContent='السؤال '+(idx+1)+' من '+total;
+  document.getElementById('progress-fill').style.width=(((idx+1)/total)*100)+'%';
+  // نجوم التقدم (نجمة كل 20%)
+  const starsEl=document.getElementById('stars-row');
+  if(starsEl){
+    const totalStars=5;
+    const litCount=Math.floor(((idx+1)/total)*totalStars);
+    starsEl.innerHTML=Array.from({length:totalStars},(_,i)=>
+      `<span class="star${i<litCount?' lit':''}" style="transition-delay:${i*0.06}s">★</span>`
+    ).join('');
+  }
+  // نص السؤال مع animation
+  const qtEl=document.getElementById('q-text');
+  qtEl.style.animation='none';
+  qtEl.offsetHeight;
+  qtEl.style.animation='slideUp .22s ease';
+  qtEl.textContent=q.q;
+  // صورة
+  const img=document.getElementById('q-img');
+  if(q.img){img.src=q.img;img.style.display='block';}
+  else{img.style.display='none';img.src='';}
+  // الخيارات — خلط عشوائي مع حفظ الإجابة الصحيحة
+  if(!q._shuffled){
+    const correct=q.opts[q.ans];
+    const shuffled=[...q.opts];
+    for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+    q._shuffled=shuffled;
+    q._correctIdx=shuffled.indexOf(correct);
+  }
+  const opts=document.getElementById('options-list');
+  opts.innerHTML='';
+  const labels=['أ','ب','ج','د','هـ'];
+  q._shuffled.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn'+(Q.answers[idx]===i?' selected':'');
+    btn.innerHTML=`<span class="opt-label">${esc(labels[i]||i+1)}</span><span style="flex:1">${esc(opt)}</span>`;
+    btn.onclick=()=>selectAnswer(i);
+    opts.appendChild(btn);
+  });
+  // أزرار التنقل
+  document.getElementById('prev-btn').style.display=idx>0?'block':'none';
+  const isLast=idx===total-1;
+  document.getElementById('next-btn').style.display=isLast?'none':'block';
+  document.getElementById('submit-btn').style.display=isLast?'block':'none';
+  // مؤقت
+  clearInterval(Q.timerInterval);
+  if(Q.timerSecs>0){
+    const disp=document.getElementById('timer-display');
+    const num=document.getElementById('timer-num');
+    disp.style.display='flex';
+    let remaining=Q.timerSecs;
+    num.textContent=remaining;
+    disp.classList.remove('warning');
+    Q.timerInterval=setInterval(()=>{
+      remaining--;
+      num.textContent=remaining;
+      if(remaining<=5)disp.classList.add('warning');
+      if(remaining<=0){
+        clearInterval(Q.timerInterval);
+        // انتقل تلقائياً للسؤال التالي
+        if(Q.currentIdx<Q.questions.length-1)nextQuestion();
+        else submitQuiz();
+      }
+    },1000);
+  }else{
+    document.getElementById('timer-display').style.display='none';
+  }
+}
+
+function selectAnswer(i){
+  const prev=Q.answers[Q.currentIdx];
+  Q.answers[Q.currentIdx]=i;
+  document.querySelectorAll('.opt-btn').forEach((btn,idx)=>{
+    btn.classList.toggle('selected',idx===i);
+    if(idx===i&&prev===null){
+      // أول اختيار — تأثير نبض خفيف
+      btn.style.animation='popIn .2s ease';
+      setTimeout(()=>btn.style.animation='',250);
+    }
+  });
+}
+
+function nextQuestion(){
+  if(Q.answers[Q.currentIdx]===null){
+    toast('⚠️ يجب الإجابة على السؤال قبل الانتقال','error');
+    // رج الخيارات بصرياً
+    document.querySelectorAll('.opt-btn').forEach(b=>{
+      b.style.animation='shake .3s ease';
+      setTimeout(()=>b.style.animation='',350);
+    });
+    return;
+  }
+  if(Q.currentIdx<Q.questions.length-1){Q.currentIdx++;renderQuestion();}
+}
+
+function prevQuestion(){
+  if(Q.currentIdx>0){Q.currentIdx--;renderQuestion();}
+}
+
+function confirmQuitQuiz(){
+  if(confirm('هل تريد إنهاء الاختبار؟ ستضيع إجاباتك.'))goToPick();
+}
+
+function goToPick(){
+  clearInterval(Q.timerInterval);
+  showScreen('screen-pick');
+}
+
+// ══════════════════════════════════════════
+// إنهاء الاختبار
+// ══════════════════════════════════════════
+function submitQuiz(){
+  // تحقق إذا آخر سؤال لم يُجب عليه
+  if(Q.answers[Q.currentIdx]===null){
+    if(!confirm('لم تجب على هذا السؤال. هل تريد إنهاء الاختبار؟'))return;
+  }
+  clearInterval(Q.timerInterval);
+  const total=Q.questions.length;
+  let correct=0;
+  Q.questions.forEach((q,i)=>{
+    if(Q.answers[i]===q._correctIdx)correct++;
+  });
+  const wrong=total-correct;
+  const pct=Math.round((correct/total)*100);
+  const elapsed=Math.round((Date.now()-Q.startTime)/1000);
+  // النتيجة
+  const wrap=document.getElementById('result-score-wrap');
+  const num=document.getElementById('result-score-num');
+  const grade=document.getElementById('result-grade');
+  const sub=document.getElementById('result-sub');
+  num.textContent=pct+'%';
+  // ── تقدير + ألوان + شارة ──
+  // SVG للشارات
+  const BADGE_SVGS={
+    gold:`<svg viewBox="0 0 44 44" width="28" height="28"><polygon points="22,4 27,16 40,16 30,24 34,37 22,30 10,37 14,24 4,16 17,16" fill="#fff" stroke="#b8940a" stroke-width="1.5"/></svg>`,
+    silver:`<svg viewBox="0 0 44 44" width="28" height="28"><circle cx="22" cy="22" r="16" fill="#fff" stroke="#b8940a" stroke-width="1.5"/><path d="M16 22 L22 14 L28 22 L22 30 Z" fill="#d4ac00"/></svg>`,
+    book:`<svg viewBox="0 0 44 44" width="28" height="28"><rect x="10" y="8" width="24" height="28" rx="4" fill="#fff" stroke="#b8940a" stroke-width="1.5"/><line x1="16" y1="16" x2="28" y2="16" stroke="#d4ac00" stroke-width="2"/><line x1="16" y1="22" x2="28" y2="22" stroke="#d4ac00" stroke-width="2"/><line x1="16" y1="28" x2="24" y2="28" stroke="#d4ac00" stroke-width="2"/></svg>`,
+    muscle:`<svg viewBox="0 0 44 44" width="28" height="28"><path d="M12 28 Q10 20 16 16 Q20 14 22 18 Q24 14 28 16 Q34 20 32 28 Q30 34 22 36 Q14 34 12 28Z" fill="#fff" stroke="#b8940a" stroke-width="1.5"/><path d="M18 24 L22 20 L26 24" fill="none" stroke="#d4ac00" stroke-width="2" stroke-linecap="round"/></svg>`,
+    retry:`<svg viewBox="0 0 44 44" width="28" height="28"><circle cx="22" cy="22" r="14" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M22 12 A10 10 0 0 1 32 22" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><polygon points="32,18 36,22 32,26" fill="#fff"/></svg>`,
+  };
+  let badgeSvg, badgeBg, badgeName, badgeSub, confettiColors;
+  let badgeIcon='';
+  if(pct>=90){
+    wrap.style.borderColor='#1a7a4a';num.style.color='#1a7a4a';
+    grade.textContent='ممتاز';wrap.style.background='#f0fdf6';
+    badgeSvg=BADGE_SVGS.gold;badgeBg='#1a7a4a';
+    badgeName='الطالب المتفوق';badgeSub='90% أو أكثر — إنجاز رائع!';
+    confettiColors=['#d4ac00','#1a7a4a','#fff','#f1c40f'];
+  }else if(pct>=75){
+    wrap.style.borderColor='#2471a3';num.style.color='#2471a3';
+    grade.textContent='جيد جداً';wrap.style.background='#f0f8ff';
+    badgeSvg=BADGE_SVGS.silver;badgeBg='#2471a3';
+    badgeName='متفوق';badgeSub='أداء ممتاز، واصل!';
+    confettiColors=['#2471a3','#85b7eb','#fff'];
+  }else if(pct>=60){
+    wrap.style.borderColor='#d4ac00';num.style.color='#9e7700';
+    grade.textContent='جيد';wrap.style.background='#fffce8';
+    badgeSvg=BADGE_SVGS.book;badgeBg='#d4ac00';
+    badgeName='في الطريق الصحيح';badgeSub='جيد، راجع وستصل للقمة';
+    confettiColors=['#d4ac00','#fde98a'];
+  }else if(pct>=50){
+    wrap.style.borderColor='#e67e22';num.style.color='#a04000';
+    grade.textContent='مقبول';wrap.style.background='#fff6f0';
+    badgeSvg=BADGE_SVGS.muscle;badgeBg='#e67e22';
+    badgeName='مثابر';badgeSub='أنت تستحق أكثر — حاول!';
+    confettiColors=['#e67e22'];
+  }else{
+    wrap.style.borderColor='#c0392b';num.style.color='#c0392b';
+    grade.textContent='حاول مجدداً';wrap.style.background='#fff4f4';
+    badgeSvg=BADGE_SVGS.retry;badgeBg='#c0392b';
+    badgeName='حاول مجدداً';badgeSub='المراجعة + الاختبار = النجاح!';
+    confettiColors=['#c0392b'];
+  }
+  sub.textContent='أجبت على '+correct+' من '+total+' سؤال بشكل صحيح';
+  document.getElementById('stat-correct').textContent=correct;
+  document.getElementById('stat-wrong').textContent=wrong;
+  const m=Math.floor(elapsed/60), s=elapsed%60;
+  document.getElementById('stat-time').textContent=m+':'+(s<10?'0':'')+s;
+
+  // ── شارة الإنجاز ──
+  const badgeEl=document.getElementById('result-badge');
+  if(badgeEl){
+    badgeEl.innerHTML=`
+      <div class="badge-card">
+        <div class="badge-icon" style="background:${badgeBg};">${badgeSvg}</div>
+        <div>
+          <div class="badge-title">${badgeName}</div>
+          <div class="badge-sub">${badgeSub}</div>
+        </div>
+      </div>`;
+  }
+
+  // ── الأسئلة الخاطئة بارزة مباشرة ──
+  const wrongEl=document.getElementById('result-wrong-list');
+  if(wrongEl){
+    const wrongQs=Q.questions.filter((_,i)=>Q.answers[i]!==Q.questions[i]._correctIdx);
+    wrongEl.innerHTML=wrongQs.length===0?
+      `<div style="text-align:center;color:#1a7a4a;font-weight:700;font-size:.9rem;padding:10px;">🎉 أجبت على جميع الأسئلة بشكل صحيح!</div>`:
+      wrongQs.slice(0,3).map(q=>`
+        <div class="wrong-highlight">
+          <div class="wh-q">❌ ${q.q}</div>
+          <div class="wh-ans">✓ الصحيح: ${q._shuffled[q._correctIdx]}</div>
+        </div>`).join('');
+  }
+
+  // ── confetti إذا 75%+ ──
+  if(pct>=75) launchConfetti(confettiColors);
+
+  saveQuizStat({cat:Q.quizCat,correct,total,pct,elapsed,
+    studentName:Q.studentName||'',
+    date:new Date().toLocaleDateString('ar-QA')});
+  buildReview();
+  showScreen('screen-result');
+}
+
+function launchConfetti(colors){
+  const wrap=document.querySelector('.card');
+  if(!wrap)return;
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}%;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;
+      animation-delay:${Math.random()*.5}s;animation-duration:${.7+Math.random()*.6}s;`;
+    wrap.style.position='relative';wrap.style.overflow='hidden';
+    wrap.appendChild(el);
+    setTimeout(()=>el.remove(),1400);
+  }
+}
+
+function buildReview(){
+  const list=document.getElementById('review-list');
+  list.innerHTML='';
+  Q.questions.forEach((q,i)=>{
+    const userAns=Q.answers[i];
+    const isCorrect=userAns===q._correctIdx;
+    const div=document.createElement('div');
+    div.className='review-item '+(isCorrect?'correct':'wrong');
+    div.innerHTML=`
+      <div class="review-q">${i+1}. ${esc(q.q)}</div>
+      <div class="review-answer user-ans">${userAns!==null?'إجابتك: '+esc(q._shuffled[userAns]):'لم تجب'} ${isCorrect?'✅':'❌'}</div>
+      ${!isCorrect?`<div class="review-answer correct-ans">✓ الصحيح: ${esc(q._shuffled[q._correctIdx])}</div>`:''}
+    `;
+    list.appendChild(div);
+  });
+}
+
+let _reviewVisible=false;
+function toggleReview(){
+  _reviewVisible=!_reviewVisible;
+  document.getElementById('review-list').style.display=_reviewVisible?'flex':'none';
+  document.getElementById('review-toggle-btn').textContent=_reviewVisible?'إخفاء المراجعة ↑':'عرض المراجعة ↓';
+}
+
+// ══════════════════════════════════════════
+// الإحصائيات
+// ══════════════════════════════════════════
+function saveQuizStat(data){
+  try{
+    const uid=currentUser?.uid||currentUser?.email||'guest';
+    const key='hh_quiz_stats_'+uid;
+    const stats=JSON.parse(localStorage.getItem(key)||'[]');
+    stats.unshift(data);
+    if(stats.length>100)stats.splice(100);
+    localStorage.setItem(key,JSON.stringify(stats));
+    // Firestore
+    if(db&&currentUser?.uid){
+      db.collection('quiz_stats').add({
+        uid:currentUser.uid,
+        ...data,
+        ts:firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(()=>{});
+    }
+  }catch(e){}
+}
+
+function getQuizStats(){
+  try{
+    const uid=currentUser?.uid||currentUser?.email||'guest';
+    return JSON.parse(localStorage.getItem('hh_quiz_stats_'+uid)||'[]');
+  }catch(e){return [];}
+}
+
+function renderMyStats(){
+  const container=document.getElementById('my-stats-container');
+  if(!container)return;
+  const stats=getQuizStats();
+  if(stats.length===0){
+    container.innerHTML=`
+      <div style="text-align:center;padding:20px;background:#fff;border:1.5px dashed var(--border);border-radius:14px;color:#aaa;">
+        <div style="font-size:2rem;margin-bottom:6px;">📝</div>
+        <div style="font-size:.85rem;font-weight:700;">لم تجرِ اختباراً بعد</div>
+        <div style="font-size:.78rem;margin-top:4px;">اختر تصنيفاً وابدأ أول اختبار!</div>
+      </div>`;
+    return;
+  }
+  const total=stats.length;
+  const avgPct=Math.round(stats.reduce((s,x)=>s+x.pct,0)/total);
+  const best=Math.max(...stats.map(x=>x.pct));
+  const lastCat=stats[0]?.cat||'';
+  const trend=stats.length>=2?(stats[0].pct>=stats[1].pct?'📈 تحسّن':'📉 راجع'):null;
+  container.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+      <div class="stat-box" style="border-color:#d4ac00;border-width:2px;">
+        <div class="stat-num" style="color:var(--navy);">${total}</div>
+        <div class="stat-lbl">اختبار أجريته</div>
+      </div>
+      <div class="stat-box" style="border-color:#2471a3;border-width:2px;">
+        <div class="stat-num" style="color:#2471a3;">${avgPct}%</div>
+        <div class="stat-lbl">متوسط درجاتك</div>
+      </div>
+      <div class="stat-box" style="border-color:#1a7a4a;border-width:2px;">
+        <div class="stat-num" style="color:#1a7a4a;">${best}%</div>
+        <div class="stat-lbl">أفضل درجة</div>
+      </div>
+    </div>
+    ${trend?`<div style="text-align:center;font-size:.8rem;color:#888;margin-bottom:8px;">${trend} مقارنة بالاختبار السابق</div>`:''}
+    <div style="font-size:.78rem;font-weight:700;color:#aaa;margin-bottom:6px;">آخر الاختبارات:</div>
+    ${stats.slice(0,4).map(s=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#fff;border:1.5px solid var(--border);border-radius:10px;margin-bottom:5px;gap:8px;">
+        <div style="flex:1;">
+          <div style="font-size:.82rem;color:var(--navy);font-weight:700;">${esc(s.cat)}</div>
+          <div style="font-size:.72rem;color:#aaa;">${esc(s.date)} · ${esc(s.total)} سؤال</div>
+        </div>
+        <div style="text-align:center;min-width:52px;">
+          <div style="font-weight:900;font-size:1rem;color:${s.pct>=90?'#1a7a4a':s.pct>=60?'#2471a3':'#c0392b'};">${esc(s.pct)}%</div>
+          <div style="font-size:.65rem;color:#aaa;">${esc(s.correct)}/${esc(s.total)} ✓</div>
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+// ══════════════════════════════════════════
+// لوحة المعلم
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// إدارة التصنيفات والفئات المخصصة
+// ══════════════════════════════════════════
+function getCustomGroups(){
+  try{ return JSON.parse(localStorage.getItem('hh_quiz_custom_groups')||'[]'); }
+  catch(e){ return []; }
+}
+
+function saveCustomGroups(groups){
+  localStorage.setItem('hh_quiz_custom_groups', JSON.stringify(groups));
+  // دمجها في QUIZ_GROUPS
+  syncCustomGroupsToApp();
+}
+
+function syncCustomGroupsToApp(){
+  const custom = getCustomGroups();
+  // أزل التصنيفات المخصصة القديمة ثم أضف الجديدة
+  const base = QUIZ_GROUPS.filter(g => !g._custom);
+  custom.forEach(g => {
+    // تأكد من وجود الفئات في QUIZ_DB
+    g.cats.forEach(cat => { if(!QUIZ_DB[cat]) QUIZ_DB[cat]=[]; });
+    base.push({...g, _custom:true});
+  });
+  QUIZ_GROUPS.length = 0;
+  base.forEach(g => QUIZ_GROUPS.push(g));
+}
+
+function addCustomGroup(){
+  const name = document.getElementById('new-group-name').value.trim();
+  const err = document.getElementById('group-cat-err');
+  if(!name){ err.textContent='أدخل اسم التصنيف'; return; }
+  const groups = getCustomGroups();
+  if(groups.find(g=>g.label===name)||QUIZ_GROUPS.find(g=>g.label===name)){
+    err.textContent='هذا التصنيف موجود مسبقاً'; return;
+  }
+  const id = 'custom_'+Date.now();
+  groups.push({ id, label:name, icon:'custom', cats:[], _custom:true });
+  saveCustomGroups(groups);
+  document.getElementById('new-group-name').value='';
+  err.textContent='';
+  renderCustomGroupsList();
+  loadGroupsSelects();
+  toast('✅ تم إضافة التصنيف: '+name, 'success');
+}
+
+function addCustomCat(){
+  const gid = document.getElementById('new-cat-group').value;
+  const catName = document.getElementById('new-cat-name').value.trim();
+  const err = document.getElementById('group-cat-err');
+  if(!gid){ err.textContent='اختر تصنيفاً'; return; }
+  if(!catName){ err.textContent='أدخل اسم الفئة'; return; }
+  // أضف للتصنيف المناسب
+  const groups = getCustomGroups();
+  const g = groups.find(x=>x.id===gid);
+  if(!g){ err.textContent='التصنيف غير موجود'; return; }
+  if(g.cats.includes(catName)){ err.textContent='هذه الفئة موجودة مسبقاً'; return; }
+  g.cats.push(catName);
+  if(!QUIZ_DB[catName]) QUIZ_DB[catName]=[];
+  saveCustomGroups(groups);
+  document.getElementById('new-cat-name').value='';
+  err.textContent='';
+  renderCustomGroupsList();
+  loadGroupsSelects();
+  buildGroupsGrid();
+  toast('✅ تم إضافة الفئة: '+catName, 'success');
+}
+
+function deleteCustomGroup(id){
+  if(!confirm('حذف هذا التصنيف وكل فئاته؟')) return;
+  const groups = getCustomGroups().filter(g=>g.id!==id);
+  saveCustomGroups(groups);
+  renderCustomGroupsList();
+  loadGroupsSelects();
+  buildGroupsGrid();
+  toast('تم حذف التصنيف','info');
+}
+
+function deleteCustomCat(gid, cat){
+  const groups = getCustomGroups();
+  const g = groups.find(x=>x.id===gid);
+  if(g){ g.cats = g.cats.filter(c=>c!==cat); }
+  saveCustomGroups(groups);
+  renderCustomGroupsList();
+  loadGroupsSelects();
+  buildGroupsGrid();
+  toast('تم حذف الفئة','info');
+}
+
+function renderCustomGroupsList(){
+  const el = document.getElementById('custom-groups-list');
+  if(!el) return;
+  const groups = getCustomGroups();
+  if(groups.length===0){
+    el.innerHTML='<div style="font-size:.78rem;color:#aaa;text-align:center;padding:8px;">لا توجد تصنيفات مخصصة بعد</div>';
+    return;
+  }
+  el.innerHTML = groups.map(g=>`
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:6px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-weight:900;font-size:.88rem;color:var(--navy);font-family:Cairo,sans-serif;">📁 ${esc(g.label)}</span>
+        <button data-gid="${esc(g.id)}" onclick="deleteCustomGroup(this.dataset.gid)" style="border:none;background:none;color:#c0392b;cursor:pointer;font-size:.78rem;padding:2px 6px;">حذف التصنيف</button>
+      </div>
+      ${g.cats.length===0
+        ? '<div style="font-size:.75rem;color:#aaa;">لا توجد فئات</div>'
+        : g.cats.map(cat=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:#f8f8fc;border-radius:6px;margin-bottom:3px;">
+            <span style="font-size:.78rem;color:#555;">▸ ${esc(cat)} (${QUIZ_DB[cat]?.length||0} سؤال)</span>
+            <button data-gid="${esc(g.id)}" data-cat="${esc(cat)}" onclick="deleteCustomCat(this.dataset.gid,this.dataset.cat)" style="border:none;background:none;color:#c0392b;cursor:pointer;font-size:.72rem;">✕</button>
+          </div>`).join('')
+      }
+    </div>
+  `).join('');
+
+  // تحديث select الفئة
+  const sel = document.getElementById('new-cat-group');
+  if(sel){
+    sel.innerHTML='<option value="">اختر تصنيف...</option>';
+    groups.forEach(g=>{
+      sel.innerHTML+=`<option value="${esc(g.id)}">${esc(g.label)}</option>`;
+    });
+  }
+}
+
+function showTeacherPanel(){
+  syncCustomGroupsToApp();
+  loadGroupsSelects();
+  renderTeacherQuizzes();
+  renderCustomQList();
+  updateCQFilterOptions();
+  renderCustomGroupsList();
+  initCQOpts();
+  showScreen('screen-teacher');
+}
+
+function loadGroupsSelects(){
+  ['tq-group','cq-group','new-cat-group'].forEach(id=>{
+    const sel=document.getElementById(id);
+    if(!sel)return;
+    sel.innerHTML='<option value="">اختر تصنيفاً...</option>';
+    QUIZ_GROUPS.forEach(g=>{sel.innerHTML+=`<option value="${esc(g.id)}">${esc(g.label)}</option>`;});
+  });
+}
+
+function loadTQCats(){
+  const grade=document.getElementById('tq-grade')?.value||'';
+  const sel=document.getElementById('tq-cat');
+  sel.innerHTML='<option value="">اختر الفئة...</option>';
+  if(!grade)return;
+  const builtIn=(BUILT_IN_CATS_BY_GRADE[grade]||[]).filter(c=>QUIZ_DB[c]&&QUIZ_DB[c].length>0);
+  const customCats=getCustomGradeGroups().filter(g=>g.grade===grade);
+  builtIn.forEach(c=>{
+    sel.innerHTML+=`<option value="${esc(c)}">${esc(c)} (${QUIZ_DB[c].length} سؤال)</option>`;
+  });
+  customCats.forEach(g=>{
+    (g.cats||[]).filter(c=>QUIZ_DB[c]&&QUIZ_DB[c].length>0).forEach(c=>{
+      sel.innerHTML+=`<option value="${esc(c)}">${esc(c)} (${QUIZ_DB[c].length} سؤال)</option>`;
+    });
+  });
+  sel.innerHTML+=`<option value="__custom__">✏️ فئة مخصصة بالاسم...</option>`;
+  const wrap=document.getElementById('tq-custom-cat-wrap');
+  if(wrap)wrap.style.display='none';
+  sel.onchange=()=>{
+    const v=sel.value;
+    if(wrap)wrap.style.display=(v==='__custom__'?'block':'none');
+  };
+}
+
+function loadCQGroupsForGrade(){
+  const grade=document.getElementById('cq-grade').value;
+  const catSel=document.getElementById('cq-cat');
+  const catSection=document.getElementById('cq-cat-section');
+  const newCatSection=document.getElementById('cq-newcat-section');
+  const qSection=document.getElementById('cq-question-section');
+  if(!grade){catSection.style.display='none';newCatSection.style.display='none';qSection.style.display='none';return;}
+
+  // جمع كل الفئات المتاحة لهذا الصف
+  const builtIn=(BUILT_IN_CATS_BY_GRADE[grade]||[]);
+  const customGroups=getCustomGradeGroups().filter(g=>g.grade===grade);
+  const customCatNames=customGroups.flatMap(g=>g.cats||[]);
+  const allCats=[...new Set([...builtIn,...customCatNames])].filter(c=>QUIZ_DB[c]!==undefined||true);
+
+  catSel.innerHTML='<option value="">اختر فئة موجودة...</option>';
+  allCats.forEach(c=>{
+    catSel.innerHTML+=`<option value="${esc(c)}">${esc(c)}${QUIZ_DB[c]?' ('+QUIZ_DB[c].length+')':' (جديدة)'}</option>`;
+  });
+  catSel.innerHTML+=`<option value="__new__">➕ إضافة فئة جديدة...</option>`;
+
+  catSection.style.display='block';
+  newCatSection.style.display='none';
+  qSection.style.display='none';
+}
+
+function handleCQCatChange(){
+  const val=document.getElementById('cq-cat').value;
+  const newCatSection=document.getElementById('cq-newcat-section');
+  const qSection=document.getElementById('cq-question-section');
+  if(!val){newCatSection.style.display='none';qSection.style.display='none';return;}
+  newCatSection.style.display=(val==='__new__'?'block':'none');
+  qSection.style.display='block';
+  // إعادة تهيئة الخيارات
+  initCQOpts();
+  document.getElementById('cq-text').value='';
+  document.getElementById('cq-err').textContent='';
+}
+
+function loadCQCats(){} // متوافق مع الكود القديم
+
+// ══════════════════════════════════════════
+// اختبارات المعلم (روابط)
+// ══════════════════════════════════════════
+function createTeacherQuiz(){
+  const name=document.getElementById('tq-name').value.trim();
+  const grade=document.getElementById('tq-grade').value;
+  const catSel=document.getElementById('tq-cat').value;
+  const catCustom=document.getElementById('tq-custom-cat')?.value.trim()||'';
+  const cat=catSel==='__custom__'?catCustom:catSel;
+  const count=parseInt(document.getElementById('tq-count').value)||10;
+  const timer=parseInt(document.getElementById('tq-timer').value)||0;
+  const privacy=document.querySelector('input[name="tq-privacy"]:checked')?.value||'public';
+  const err=document.getElementById('tq-err');
+  if(!name){err.textContent='أدخل اسم الاختبار';return;}
+  if(!grade){err.textContent='اختر الصف الدراسي';return;}
+  if(!cat){err.textContent='اختر الفئة أو أدخل اسماً مخصصاً';return;}
+  const id='tq_'+Date.now();
+  const gradeLabel=GRADE_LABELS[grade]||grade;
+  const quiz={id,name,cat,grade,gradeLabel,count,timer,privacy,
+    createdBy:currentUser?.uid||'offline',
+    createdAt:new Date().toLocaleDateString('ar-QA')};
+  const key='hh_teacher_quizzes_'+(currentUser?.uid||currentUser?.email||'guest');
+  const list=JSON.parse(localStorage.getItem(key)||'[]');
+  list.unshift(quiz);
+  localStorage.setItem(key,JSON.stringify(list));
+  err.textContent='';
+  toast('✅ تم إنشاء الاختبار','success');
+  renderTeacherQuizzes();
+  document.getElementById('create-quiz-form').style.display='none';
+  document.getElementById('tq-name').value='';
+}
+
+function getTeacherQuizzes(){
+  const key='hh_teacher_quizzes_'+(currentUser?.uid||currentUser?.email||'guest');
+  return JSON.parse(localStorage.getItem(key)||'[]');
+}
+
+function renderTeacherQuizzes(){
+  const list=document.getElementById('teacher-quizzes-list');
+  if(!list)return;
+  const quizzes=getTeacherQuizzes();
+  if(quizzes.length===0){
+    list.innerHTML='<div style="color:#aaa;font-size:.82rem;text-align:center;padding:12px;">لا توجد اختبارات بعد</div>';
+    return;
+  }
+  list.innerHTML=quizzes.map(q=>{
+    const link=window.location.origin+window.location.pathname+'?quiz='+encodeURIComponent(q.id)+'&cat='+encodeURIComponent(q.cat)+'&count='+encodeURIComponent(q.count)+'&timer='+encodeURIComponent(q.timer);
+    return `<div class="quiz-item">
+      <div class="quiz-item-info">
+        <div class="quiz-item-name">${esc(q.name)}</div>
+        <div class="quiz-item-meta">${esc(q.gradeLabel?q.gradeLabel+' · ':'')} ${esc(q.cat)} · ${esc(q.count)} سؤال · ${q.timer?esc(q.timer)+'ث/سؤال':'بدون مؤقت'} · <span style="color:${q.privacy==='public'?'#1a7a4a':'#888'};font-weight:700;">${q.privacy==='public'?'عام':'خاص'}</span> · ${esc(q.createdAt)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <button class="quiz-link" data-link="${esc(link)}" onclick="copyQuizLink(this.dataset.link)">📋 نسخ الرابط</button>
+        <button class="quiz-link" data-qid="${esc(q.id)}" style="background:#fff4f4;border-color:#f5c6c6;color:#c0392b;" onclick="deleteTeacherQuiz(this.dataset.qid)">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyQuizLink(link){
+  navigator.clipboard.writeText(link).then(()=>toast('✅ تم نسخ الرابط','success')).catch(()=>{
+    prompt('انسخ هذا الرابط:',link);
+  });
+}
+
+function deleteTeacherQuiz(id){
+  if(!confirm('حذف هذا الاختبار؟'))return;
+  const key='hh_teacher_quizzes_'+(currentUser?.uid||currentUser?.email||'guest');
+  const list=JSON.parse(localStorage.getItem(key)||'[]').filter(q=>q.id!==id);
+  localStorage.setItem(key,JSON.stringify(list));
+  renderTeacherQuizzes();toast('تم الحذف','info');
+}
+
+function getCustomGradeGroups(){
+  try{
+    const uid=currentUser?.uid||currentUser?.email||'guest';
+    return JSON.parse(localStorage.getItem('hh_grade_groups_'+uid)||'[]');
+  }catch(e){return [];}
+}
+
+function toggleOtherSubject(){
+  const sel=document.getElementById('new-cat-subject')?.value;
+  const wrap=document.getElementById('other-subject-wrap');
+  if(wrap)wrap.style.display=(sel==='أخرى'?'block':'none');
+}
+
+function addCustomGradeGroup(){
+  const grade=document.getElementById('new-cat-grade').value;
+  const semester=document.getElementById('new-cat-semester')?.value||'1';
+  const subjectSel=document.getElementById('new-cat-subject')?.value||'';
+  const subjectOther=document.getElementById('new-cat-subject-other')?.value.trim()||'';
+  const subject=subjectSel==='أخرى'?subjectOther:subjectSel;
+  const name=document.getElementById('new-cat-name').value.trim();
+  const isPublic=document.getElementById('new-cat-public')?.checked!==false;
+  const err=document.getElementById('group-cat-err');
+  if(!grade){err.textContent='اختر الصف الدراسي';return;}
+  if(!subject){err.textContent='اختر المادة الدراسية';return;}
+  if(!name){err.textContent='أدخل اسم الوحدة أو الفئة';return;}
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  const key='hh_grade_groups_'+uid;
+  const list=JSON.parse(localStorage.getItem(key)||'[]');
+  if(list.find(g=>g.name===name&&g.grade===grade)){err.textContent='هذه الفئة موجودة مسبقاً';return;}
+  const catFullName=`${subject} - ${name}`;
+  const semLabel=semester==='1'?'فصل أول':'فصل ثاني';
+  const grp={id:'cg_'+Date.now(),name:catFullName,grade,gradeLabel:GRADE_LABELS[grade]||grade,
+    subject,semester,semLabel,isPublic,cats:[catFullName],
+    createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA')};
+  if(!QUIZ_DB[catFullName])QUIZ_DB[catFullName]=[];
+  list.unshift(grp);
+  localStorage.setItem(key,JSON.stringify(list));
+  err.style.color='#1a7a4a';
+  err.textContent='✅ تمت إضافة الفئة '+(isPublic?'(عامة)':'(خاصة)');
+  document.getElementById('new-cat-name').value='';
+  renderCustomGroupsList();
+  toast('✅ تمت إضافة الفئة','success');
+}
+
+function renderCustomGroupsList(){
+  const container=document.getElementById('custom-groups-list');
+  if(!container)return;
+  const list=getCustomGradeGroups();
+  if(list.length===0){container.innerHTML='';return;}
+  container.innerHTML=list.map(g=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:4px;gap:8px;">
+      <div style="flex:1;">
+        <span style="font-size:.82rem;font-weight:700;color:var(--navy);">${esc(g.name)}</span>
+        <span style="font-size:.72rem;color:#aaa;margin-right:6px;">${esc(g.gradeLabel)}</span>
+        <span style="font-size:.68rem;padding:1px 6px;border-radius:8px;background:${g.isPublic?'#f0fdf6':'#f4f4f4'};color:${g.isPublic?'#1a7a4a':'#888'};">${g.isPublic?'عامة':'خاصة'}</span>
+      </div>
+      <button data-gid="${esc(g.id)}" onclick="deleteCustomGroup(this.dataset.gid)" style="border:none;background:none;color:#c0392b;cursor:pointer;font-size:.78rem;">✕</button>
+    </div>`).join('');
+}
+
+function deleteCustomGroup(id){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  const key='hh_grade_groups_'+uid;
+  let list=[];
+  try{ list=JSON.parse(localStorage.getItem(key)||'[]').filter(g=>g.id!==id); }catch(e){ list=[]; }
+  try{ localStorage.setItem(key,JSON.stringify(list)); }catch(e){}
+  renderCustomGroupsList();
+  toast('تم الحذف','info');
+}
+
+function showCreateQuiz(){
+  document.getElementById('create-quiz-form').style.display='block';
+  loadGroupsSelects();
+}
+
+function loadTeacherQuizByLink(qid){
+  // ابحث عن الاختبار في params
+  const url=new URLSearchParams(window.location.search);
+  const cat=url.get('cat');
+  const count=parseInt(url.get('count'))||10;
+  const timer=parseInt(url.get('timer'))||0;
+  if(cat&&QUIZ_DB[cat]){
+    Q.selectedCat=cat;
+    startQuiz({cat,count,timer});
+  }
+}
+
+// ══════════════════════════════════════════
+// أسئلة مخصصة
+// ══════════════════════════════════════════
+function initCQOpts(){
+  const container=document.getElementById('cq-opts-inputs');
+  if(!container)return;
+  container.innerHTML='';
+  const labels=['أ','ب','ج','د'];
+  labels.forEach((lbl,i)=>{
+    const row=document.createElement('div');
+    row.className='opt-input-row';
+    row.innerHTML=`
+      <input type="radio" name="cq-correct" value="${i}" class="correct-radio" ${i===0?'checked':''}>
+      <span style="font-size:.78rem;font-weight:700;color:#888;min-width:16px;">${lbl}</span>
+      <input type="text" placeholder="الخيار ${lbl}" id="cq-opt-${i}">
+    `;
+    container.appendChild(row);
+  });
+}
+
+function addCustomQ(finish=false){
+  const qSection=document.getElementById('cq-question-section');
+  const editCat=qSection?.dataset.editCat||'';
+  const editIdx=parseInt(qSection?.dataset.editIdx??-1);
+  const isEdit=editCat&&editIdx>=0;
+
+  const grade=document.getElementById('cq-grade').value;
+  const catSel=document.getElementById('cq-cat').value;
+  const newCatName=document.getElementById('cq-newcat-name')?.value.trim()||'';
+  const cat=isEdit?editCat:(catSel==='__new__'?newCatName:catSel);
+  const text=document.getElementById('cq-text').value.trim();
+  const err=document.getElementById('cq-err');
+  if(!grade&&!isEdit){err.textContent='اختر الصف الدراسي';return;}
+  if(!cat){err.textContent='اختر فئة أو أدخل اسم فئة جديدة';return;}
+  if(!text){err.textContent='أدخل نص السؤال';return;}
+  const opts=['أ','ب','ج','د'].map((_,i)=>document.getElementById('cq-opt-'+i)?.value.trim()||'');
+  if(opts.filter(Boolean).length<2){err.textContent='أدخل خيارين على الأقل';return;}
+  const correct=parseInt(document.querySelector('input[name="cq-correct"]:checked')?.value??0);
+  err.textContent='';
+
+  // وضع التعديل — استبدل السؤال القديم
+  if(isEdit){
+    const uid=currentUser?.uid||currentUser?.email||'guest';
+    const key='hh_quiz_custom_'+uid;
+    const custom=JSON.parse(localStorage.getItem(key)||'{}');
+    if(custom[cat]&&custom[cat][editIdx]){
+      custom[cat][editIdx]={q:text,opts,ans:correct,_custom:true};
+      localStorage.setItem(key,JSON.stringify(custom));
+      // تحديث QUIZ_DB
+      const realIdx=QUIZ_DB[cat]?.findIndex((q,i)=>q._custom&&
+        QUIZ_DB[cat].filter((x,j)=>x._custom&&j<i).length===editIdx);
+      if(realIdx!==-1&&QUIZ_DB[cat])QUIZ_DB[cat][realIdx]={q:text,opts,ans:correct,_custom:true};
+    }
+    // مسح وضع التعديل
+    if(qSection){delete qSection.dataset.editCat;delete qSection.dataset.editIdx;}
+    qSection?.querySelector('.edit-banner')?.remove();
+    renderCustomQList();updateCQFilterOptions();
+    document.getElementById('cq-text').value='';
+    ['أ','ب','ج','د'].forEach((_,i)=>{const el=document.getElementById('cq-opt-'+i);if(el)el.value='';});
+    document.getElementById('cq-question-section').style.display='none';
+    document.getElementById('cq-cat-section').style.display='none';
+    document.getElementById('cq-grade').value='';
+    toast('✅ تم تعديل السؤال','success');
+    return;
+  }
+  // إضافة الفئة للصف إذا كانت جديدة
+  if(catSel==='__new__'&&newCatName){
+    const uid=currentUser?.uid||currentUser?.email||'guest';
+    const grpKey='hh_grade_groups_'+uid;
+    const grpList=JSON.parse(localStorage.getItem(grpKey)||'[]');
+    const exists=grpList.find(g=>g.grade===grade&&g.cats.includes(newCatName));
+    if(!exists){
+      grpList.unshift({id:'cg_'+Date.now(),name:newCatName,grade,gradeLabel:GRADE_LABELS[grade]||grade,
+        isPublic:false,cats:[newCatName],createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA')});
+      localStorage.setItem(grpKey,JSON.stringify(grpList));
+      syncCustomGroupsToApp();
+    }
+    // تحديث القائمة المنسدلة
+    document.getElementById('cq-newcat-name').value='';
+  }
+  const q={q:text,opts,ans:correct,_custom:true};
+  if(!QUIZ_DB[cat])QUIZ_DB[cat]=[];
+  QUIZ_DB[cat].push(q);
+  saveCustomQs();
+  renderCustomQList();
+  updateCQFilterOptions();
+  // مسح الحقول للسؤال التالي
+  document.getElementById('cq-text').value='';
+  ['أ','ب','ج','د'].forEach((_,i)=>{const el=document.getElementById('cq-opt-'+i);if(el)el.value='';});
+  document.querySelectorAll('input[name="cq-correct"]').forEach((r,i)=>{r.checked=(i===0);});
+  err.textContent='';
+  toast('✅ تم إضافة السؤال '+(finish?'':'— أضف السؤال التالي'),'success');
+  if(finish){
+    // أغلق قسم السؤال
+    document.getElementById('cq-question-section').style.display='none';
+    document.getElementById('cq-cat-section').style.display='none';
+    document.getElementById('cq-newcat-section').style.display='none';
+    document.getElementById('cq-grade').value='';
+  }
+}
+
+function saveCustomQs(){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  const custom={};
+  Object.keys(QUIZ_DB).forEach(cat=>{
+    const qs=QUIZ_DB[cat].filter(q=>q._custom);
+    if(qs.length>0)custom[cat]=qs;
+  });
+  localStorage.setItem('hh_quiz_custom_'+uid,JSON.stringify(custom));
+}
+
+function loadCustomQs(){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  try{
+    const custom=JSON.parse(localStorage.getItem('hh_quiz_custom_'+uid)||'{}');
+    Object.keys(custom).forEach(cat=>{
+      if(!QUIZ_DB[cat])QUIZ_DB[cat]=[];
+      custom[cat].forEach(q=>{
+        if(!QUIZ_DB[cat].find(x=>x.q===q.q))QUIZ_DB[cat].push(q);
+      });
+    });
+  }catch(e){}
+}
+
+function getCustomCatNames(){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  try{
+    return Object.keys(JSON.parse(localStorage.getItem('hh_quiz_custom_'+uid)||'{}'));
+  }catch(e){return [];}
+}
+
+function updateCQFilterOptions(){
+  const sel=document.getElementById('cq-filter-cat');
+  if(!sel)return;
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  let custom={};
+  try{ custom=JSON.parse(localStorage.getItem('hh_quiz_custom_'+uid)||'{}'); }catch(e){ custom={}; }
+  const current=sel.value;
+  sel.innerHTML='<option value="">📋 جميع الأسئلة</option>';
+  Object.keys(custom).forEach(cat=>{
+    sel.innerHTML+=`<option value="${esc(cat)}" ${cat===current?'selected':''}>${esc(cat)} (${custom[cat].length})</option>`;
+  });
+}
+
+function renderCustomQList(){
+  const list=document.getElementById('custom-q-list');
+  if(!list)return;
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  let custom={};
+  try{ custom=JSON.parse(localStorage.getItem('hh_quiz_custom_'+uid)||'{}'); }catch(e){ custom={}; }
+  const total=Object.values(custom).reduce((s,a)=>s+a.length,0);
+  const badge=document.getElementById('cq-total-badge');
+  if(badge)badge.textContent=total>0?total+' سؤال مخصص':'';
+  updateCQFilterOptions();
+  if(total===0){
+    list.innerHTML='<div style="color:#aaa;font-size:.82rem;text-align:center;padding:16px;">لا توجد أسئلة مخصصة بعد</div>';
+    return;
+  }
+  // فلتر الفئة
+  const filterCat=document.getElementById('cq-filter-cat')?.value||'';
+  const filtered=filterCat?{[filterCat]:custom[filterCat]||[]}:custom;
+  list.innerHTML=Object.keys(filtered).map(cat=>`
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <div style="font-weight:700;font-size:.82rem;color:var(--navy);">${esc(cat)}</div>
+        <span style="font-size:.7rem;background:#eef2ff;color:var(--navy);padding:1px 8px;border-radius:8px;">${filtered[cat].length} سؤال</span>
+      </div>
+      ${filtered[cat].map((q,i)=>`
+        <div data-cat="${esc(cat)}" data-idx="${i}" style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:#fff;border:1.5px solid var(--border);border-radius:10px;margin-bottom:4px;cursor:pointer;transition:border-color .15s;"
+          onmouseover="this.style.borderColor='#d4ac00'"
+          onmouseout="this.style.borderColor='var(--border-color,#ddd8f0)'"
+          onclick="editCustomQ(this.dataset.cat,+this.dataset.idx)">
+          <div style="flex:1;">
+            <div style="font-size:.8rem;color:var(--navy);font-weight:700;margin-bottom:3px;">${i+1}. ${esc(q.q)}</div>
+            <div style="font-size:.72rem;color:#1a7a4a;">✓ ${esc(q.opts[q.ans]||'')}</div>
+          </div>
+          <div style="display:flex;gap:4px;flex-shrink:0;">
+            <button data-cat="${esc(cat)}" data-idx="${i}" onclick="event.stopPropagation();editCustomQ(this.dataset.cat,+this.dataset.idx)" style="border:1px solid #d4ac00;background:#fff8e8;color:#7a5c00;cursor:pointer;font-size:.72rem;padding:3px 8px;border-radius:6px;" title="تعديل">✏️</button>
+            <button data-cat="${esc(cat)}" data-idx="${i}" onclick="event.stopPropagation();deleteCustomQ(this.dataset.cat,+this.dataset.idx)" style="border:none;background:none;color:#c0392b;cursor:pointer;font-size:.75rem;padding:4px 6px;" title="حذف">✕</button>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function editCustomQ(cat,idx){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  const custom=JSON.parse(localStorage.getItem('hh_quiz_custom_'+uid)||'{}');
+  const q=custom[cat]?.[idx];
+  if(!q)return;
+
+  // افتح نموذج الإضافة وحشوه بالبيانات القديمة
+  // ١. حدد الصف من اسم الفئة أو الفئات المخصصة
+  const gradeGroups=getCustomGradeGroups();
+  const grp=gradeGroups.find(g=>g.cats.includes(cat));
+  const gradeVal=grp?.grade||'g7';
+
+  // ٢. اضبط الصف
+  const gradeEl=document.getElementById('cq-grade');
+  if(gradeEl){gradeEl.value=gradeVal;loadCQGroupsForGrade();}
+
+  // ٣. اضبط الفئة
+  setTimeout(()=>{
+    const catEl=document.getElementById('cq-cat');
+    if(catEl){catEl.value=cat;handleCQCatChange();}
+
+    // ٤. حشو السؤال والخيارات بعد ظهور النموذج
+    setTimeout(()=>{
+      const textEl=document.getElementById('cq-text');
+      if(textEl)textEl.value=q.q;
+      q.opts.forEach((opt,i)=>{
+        const el=document.getElementById('cq-opt-'+i);
+        if(el)el.value=opt;
+      });
+      const radios=document.querySelectorAll('input[name="cq-correct"]');
+      radios.forEach((r,i)=>{r.checked=(i===q.ans);});
+
+      // ٥. بدّل زر الحفظ لوضع التعديل
+      const qSection=document.getElementById('cq-question-section');
+      if(qSection){
+        // أضف مؤشر "وضع التعديل"
+        let editBanner=qSection.querySelector('.edit-banner');
+        if(!editBanner){
+          editBanner=document.createElement('div');
+          editBanner.className='edit-banner';
+          editBanner.style.cssText='background:#fff8e8;border:1.5px solid #d4ac00;border-radius:8px;padding:7px 12px;margin-bottom:8px;font-size:.78rem;color:#7a5c00;font-weight:700;display:flex;align-items:center;gap:6px;';
+          editBanner.innerHTML='✏️ وضع التعديل — ستُستبدل الإجابة القديمة';
+          qSection.insertBefore(editBanner,qSection.firstChild);
+        }
+        // تغيير زر الحفظ
+        const saveBtn=qSection.querySelector('.btn.btn-gold,button:not(.btn-outline)');
+        qSection.dataset.editCat=cat;
+        qSection.dataset.editIdx=idx;
+      }
+      // اسكرول للنموذج
+      document.getElementById('cq-question-section')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+      toast('✏️ عدّل السؤال واضغط حفظ','info');
+    },80);
+  },80);
+}
+
+function deleteCustomQ(cat,idx){
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  const key='hh_quiz_custom_'+uid;
+  const custom=JSON.parse(localStorage.getItem(key)||'{}');
+  if(custom[cat]){custom[cat].splice(idx,1);if(custom[cat].length===0)delete custom[cat];}
+  localStorage.setItem(key,JSON.stringify(custom));
+  // إزالة من QUIZ_DB
+  if(QUIZ_DB[cat]){
+    const ci=QUIZ_DB[cat].filter(q=>q._custom).findIndex((_,i)=>i===idx);
+    const realIdx=QUIZ_DB[cat].findIndex((q,i)=>q._custom&&QUIZ_DB[cat].filter((x,j)=>x._custom&&j<i).length===idx);
+    if(realIdx!==-1)QUIZ_DB[cat].splice(realIdx,1);
+  }
+  renderCustomQList();toast('تم الحذف','info');
+}
+
+function clearCustomQs(){
+  if(!confirm('مسح كل أسئلتك المخصصة؟'))return;
+  const uid=currentUser?.uid||currentUser?.email||'guest';
+  localStorage.removeItem('hh_quiz_custom_'+uid);
+  Object.keys(QUIZ_DB).forEach(cat=>{QUIZ_DB[cat]=QUIZ_DB[cat].filter(q=>!q._custom);});
+  renderCustomQList();toast('تم المسح','info');
+}
+
+// ══════════════════════════════════════════
+// تشغيل عند البدء
+// ══════════════════════════════════════════
+// تحميل التصنيفات المخصصة عند البدء
+syncCustomGroupsToApp();
+
+document.addEventListener('keydown',e=>{
+  const active=document.querySelector('.screen.active');
+  if(!active)return;
+  if(active.id==='screen-login'&&e.key==='Enter')doLogin();
+  if(active.id==='screen-quiz'){
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+      if(e.key==='ArrowRight')prevQuestion();
+      else nextQuestion();
+    }
+    ['1','2','3','4'].forEach((k,i)=>{if(e.key===k)selectAnswer(i);});
+  }
+});
+</script>
+</body>
+</html>
