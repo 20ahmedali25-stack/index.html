@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الحصة التفاعلية — الحلحلي | لعبة قطرية تربوية</title>
+<!-- ═══ Meta Tags احترافية ═══ -->
+<meta name="description" content="الحلحلي — لعبة قطرية تربوية تعليمية | منصة تفاعلية لتعليم قطر. ألعاب تربوية للطلاب والمعلمين في جميع المواد: الدراسات الاجتماعية، العلوم، اللغة العربية. اختبارات تفاعلية وحصص حركية على مناهج قطر الوطنية. معلم يصنع أثراً.">
+<meta name="keywords" content="الحلحلي, لعبة الحلحلي, الحلحلي لعبة, alhalhali, لعبة قطرية, لعبة قطرية تعليمية, لعبة قطرية تربوية, ألعاب تربوية, ألعاب تربوية قطرية, ألعاب تعليمية, ألعاب تعليمية قطرية, تعليم قطر, تعليم تفاعلي, تعليم تفاعلي قطر, منصة تعليمية قطرية, منصة تعليمية قطر, تربوي, تربوي قطر, معلم قطر, معلمين قطر, طلاب قطر, مناهج قطر, منهج قطر, الدراسات الاجتماعية قطر, الصف السابع قطر, اختبارات تعليمية, اختبارات قطر, مسابقات تعليمية, حصة تفاعلية, دروس تفاعلية قطر, أحمد الحلحلي, معلم يصنع أثراً">
+<meta name="geo.region" content="QA">
+<meta name="geo.placename" content="الدوحة، قطر">
+<meta name="language" content="Arabic">
+<meta name="author" content="أحمد الحلحلي">
+<meta name="theme-color" content="#1a3a5c">
+<meta name="robots" content="index, follow">
+
+<!-- ═══ Open Graph (Facebook/WhatsApp) ═══ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="الحلحلي">
+<meta property="og:title" content="الحصة التفاعلية — دروس بصرية وحركية">
+<meta property="og:description" content="منصة تعليمية تفاعلية لطلاب ومعلمي قطر. ألعاب تنافسية + اختبارات + حصص تفاعلية على مناهج قطر.">
+<meta property="og:url" content="https://alhalhali.com/lesson.html">
+<meta property="og:image" content="https://alhalhali.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_QA">
+
+<!-- ═══ Twitter Cards ═══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="الحصة التفاعلية — دروس بصرية وحركية">
+<meta name="twitter:description" content="منصة تعليمية تفاعلية لطلاب ومعلمي قطر. معلّم يصنع أثراً.">
+<meta name="twitter:image" content="https://alhalhali.com/og-image.png">
+
+<!-- ═══ Favicons ═══ -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- ═══ Canonical URL ═══ -->
+<link rel="canonical" href="https://alhalhali.com/lesson.html">
+
+<!-- ═══ Structured Data (JSON-LD) - مهم لـ Google ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "الحلحلي",
+  "alternateName": "Al-Halhali",
+  "description": "منصة تعليمية تفاعلية لطلاب ومعلمي دولة قطر",
+  "url": "https://alhalhali.com",
+  "logo": "https://alhalhali.com/favicon.svg",
+  "sameAs": [
+    "https://www.instagram.com/aalhalhali"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "QA",
+    "addressLocality": "الدوحة"
+  },
+  "areaServed": "QA",
+  "inLanguage": "ar"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "الحلحلي — لعبة قطرية تربوية تعليمية",
+  "url": "https://alhalhali.com",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "QAR"
+  },
+  "inLanguage": "ar",
+  "description": "منصة تعليمية تفاعلية لطلاب ومعلمي قطر. ألعاب تنافسية، اختبارات، وحصص تفاعلية تغطي مناهج قطر الوطنية."
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Tajawal","Cairo",sans-serif;background:#fff;color:#1a1a2e;min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;}
+
+/* Top bar */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#f8f8fc;border-bottom:1.5px solid #ddd8f0;}
+
+/* زر القائمة الرئيسية — كحلي بإطار ذهبي */
+.btn-home-lux{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  gap:7px;padding:7px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:10px;
+  font-family:Cairo,sans-serif;font-weight:800;font-size:.78rem;cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease;
+  box-shadow:inset 0 0 0 1.5px rgba(212,172,0,.9), 0 4px 10px rgba(26,58,92,.3);
+  white-space:nowrap;
+}
+.btn-home-lux:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1.5px #d4ac00, 0 6px 14px rgba(26,58,92,.45);}
+.btn-home-lux:active{transform:translateY(0) scale(.97);}
+.btn-home-lux svg{width:14px;height:14px;color:#d4ac00;flex-shrink:0;}
+.btn-home-lux-label{line-height:1;}
+@media (max-width:420px){
+  .btn-home-lux{padding:7px 10px;}
+  .btn-home-lux-label{display:none;}
+}
+
+/* زر رجوع/خروج */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:7px 14px;border:2px solid #1a3a5c;border-radius:10px;font-family:"Cairo",sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .15s;background:#1a3a5c;color:#fff;}
+.btn-outline{background:#fff;color:#1a3a5c;}
+.btn-outline:hover{background:#1a3a5c;color:#fff;}
+.btn-sm{padding:6px 12px;font-size:.78rem;}
+
+/* Toast */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a3a5c;color:#fff;padding:12px 22px;border-radius:12px;font-family:Cairo,sans-serif;font-weight:800;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .3s;font-size:.88rem;}
+#toast.show{opacity:1;}
+#toast.info{background:#1a3a5c;}
+#toast.success{background:#1a7a4a;}
+#toast.error{background:#c0392b;}
+#toast.warn{background:#d4ac00;color:#0f2544;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+
+/* ═════════════════════════════════════════════════════════
+   الحصة التفاعلية — Interactive Lesson System
+   ═════════════════════════════════════════════════════════ */
+
+/* === بطاقة "الحصة التفاعلية" (بنفس حجم زر "العب الآن") === */
+.ilc-hero-card{
+  position:relative;
+  background:linear-gradient(135deg,#8e44ad 0%,#4a148c 50%,#1a3a5c 100%);
+  border:2px solid #d4ac00;
+  border-radius:18px;
+  padding:18px 24px;
+  margin:0;
+  cursor:pointer;
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(78,19,120,.35), inset 0 1px 0 rgba(255,255,255,.15);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.ilc-hero-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(78,19,120,.5), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.ilc-hero-card:active{ transform:translateY(1px); }
+.ilc-hero-card::before{
+  content:"";
+  position:absolute;top:0;right:0;width:100%;height:100%;
+  background:radial-gradient(circle at 85% 20%, rgba(212,172,0,.35), transparent 55%);
+  pointer-events:none;
+}
+.ilc-hero-card::after{
+  content:"";
+  position:absolute;inset:-2px;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.2) 50%,transparent 70%);
+  transform:translateX(-120%);
+  animation:ilcShine 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes ilcShine{
+  0%,100%{transform:translateX(-120%);}
+  50%{transform:translateX(120%);}
+}
+.ilc-hero-content{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:14px;}
+.ilc-hero-icon{
+  width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(135deg,#f1c40f,#d4ac00);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 3px 10px rgba(212,172,0,.5);
+  animation:ilcIconBounce 2.2s ease-in-out infinite;
+}
+@keyframes ilcIconBounce{
+  0%,100%{transform:translateY(0) rotate(-3deg);}
+  50%{transform:translateY(-2px) rotate(3deg);}
+}
+.ilc-hero-text{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
+.ilc-hero-title{
+  font-family:'Cairo',sans-serif;font-weight:900;
+  font-size:1.2rem;color:#fff;
+}
+.ilc-hero-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  background:#d4ac00;color:#1a3a5c;
+  font-size:.62rem;font-weight:900;padding:2px 9px;
+  border-radius:999px;letter-spacing:.3px;
+  box-shadow:0 2px 6px rgba(212,172,0,.4);
+  animation:ilcBadgePulse 1.8s ease-in-out infinite;
+}
+@keyframes ilcBadgePulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+.ilc-hero-sub{
+  font-family:'Cairo',sans-serif;font-size:.74rem;color:#e0d0ff;font-weight:600;
+}
+.ilc-hero-arrow{
+  color:#d4ac00;font-size:1.6rem;flex-shrink:0;font-weight:900;
+  filter:drop-shadow(0 2px 4px rgba(212,172,0,.5));
+}
+
+/* === شاشات الحصة التفاعلية === */
+.ilc-screen{
+  width:100%;max-width:720px;margin:70px auto 0;padding:0 14px 40px;
+  font-family:'Cairo',sans-serif;
+}
+.ilc-breadcrumb{
+  display:flex;align-items:center;gap:6px;
+  font-size:.78rem;color:#888;margin-bottom:14px;flex-wrap:wrap;
+}
+.ilc-breadcrumb-item{color:#888;}
+.ilc-breadcrumb-item.active{color:#1a3a5c;font-weight:900;}
+.ilc-breadcrumb-sep{color:#bbb;}
+
+.ilc-grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+.ilc-option-card{
+  position:relative;
+  background:#fff;border:2.5px solid #1a3a5c;border-radius:16px;
+  padding:20px 16px;cursor:pointer;text-align:center;
+  transition:all .2s ease;
+  box-shadow:4px 4px 0 #1a3a5c;
+}
+.ilc-option-card:hover{
+  transform:translate(-2px,-2px);
+  box-shadow:6px 6px 0 #1a3a5c;
+  background:#f8faff;
+}
+.ilc-option-card:active{transform:translate(0,0);box-shadow:2px 2px 0 #1a3a5c;}
+.ilc-option-card.disabled{
+  opacity:.55;cursor:not-allowed;
+  background:#f3f3f3;border-color:#aaa;box-shadow:3px 3px 0 #aaa;
+}
+.ilc-option-card.disabled:hover{transform:none;box-shadow:3px 3px 0 #aaa;background:#f3f3f3;}
+.ilc-option-icon{
+  width:56px;height:56px;margin:0 auto 10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+}
+.ilc-option-title{font-weight:900;font-size:1rem;color:#1a3a5c;margin-bottom:4px;}
+.ilc-option-sub{font-size:.72rem;color:#777;font-weight:600;}
+.ilc-option-soon{
+  position:absolute;top:8px;left:8px;
+  background:#d4ac00;color:#1a3a5c;
+  font-size:.58rem;font-weight:900;padding:2px 7px;border-radius:999px;
+}
+
+/* === شاشة الدرس (Lesson Player) === */
+.ilc-lesson-header{
+  background:linear-gradient(135deg,#1a3a5c,#2c5282);
+  color:#fff;border-radius:16px;padding:14px 16px;margin-bottom:14px;
+  box-shadow:0 6px 20px rgba(26,58,92,.3);
+}
+.ilc-lesson-title-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ilc-lesson-title{font-weight:900;font-size:1.05rem;flex:1;}
+.ilc-lesson-activity-num{
+  background:rgba(212,172,0,.2);border:1px solid #d4ac00;color:#d4ac00;
+  padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:900;
+  font-variant-numeric:tabular-nums;
+}
+.ilc-progress-bar{
+  background:rgba(255,255,255,.12);border-radius:999px;height:8px;overflow:hidden;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.2);
+}
+.ilc-progress-fill{
+  height:100%;background:linear-gradient(90deg,#f5d76e,#d4ac00);
+  border-radius:999px;transition:width .5s ease;
+  box-shadow:0 0 10px rgba(212,172,0,.5);
+}
+
+.ilc-activity-card{
+  background:#fff;border:2px solid #1a3a5c;border-radius:18px;
+  padding:20px 18px;margin-bottom:14px;
+  box-shadow:5px 5px 0 #1a3a5c;
+  min-height:200px;
+}
+.ilc-activity-type-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#e8f0f8;color:#1a3a5c;border:1.5px solid #1a3a5c;
+  padding:3px 10px;border-radius:999px;
+  font-size:.68rem;font-weight:900;margin-bottom:10px;
+}
+.ilc-activity-prompt{
+  font-size:1.02rem;font-weight:800;color:#1a3a5c;
+  margin-bottom:14px;line-height:1.6;
+}
+.ilc-activity-hint{
+  font-size:.75rem;color:#777;font-weight:600;
+  background:#fff8e8;border:1.5px dashed #d4ac00;
+  padding:7px 10px;border-radius:8px;margin-bottom:14px;
+}
+.ilc-activity-hint::before{content:"💡 ";}
+
+/* === أزرار الاختيار === */
+.ilc-choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.ilc-choice-btn{
+  background:#fff;border:2px solid #1a3a5c;border-radius:10px;
+  padding:12px 10px;cursor:pointer;font-family:'Cairo',sans-serif;
+  font-weight:700;font-size:.88rem;color:#1a3a5c;
+  transition:all .15s ease;text-align:center;line-height:1.5;
+}
+.ilc-choice-btn:hover{background:#e8f0f8;transform:translateY(-1px);}
+.ilc-choice-btn.correct{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;animation:choicePopCorrect .4s;}
+.ilc-choice-btn.wrong{background:#fde8e8;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
+.ilc-choice-btn:disabled{cursor:default;}
+@keyframes choicePopCorrect{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
+@keyframes choicePopWrong{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+/* === Match Pairs === */
+.ilc-match-container{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ilc-match-col{display:flex;flex-direction:column;gap:8px;}
+.ilc-match-col-header{font-size:.78rem;font-weight:900;color:#1a3a5c;text-align:center;padding:4px;}
+.ilc-match-item{
+  background:#f8faff;border:2px solid #1a3a5c;border-radius:10px;
+  padding:10px;cursor:pointer;font-weight:700;font-size:.82rem;
+  color:#1a3a5c;text-align:center;transition:all .15s;
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+}
+.ilc-match-item:hover{background:#e8f0f8;}
+.ilc-match-item.selected{background:#d4ac00;color:#1a3a5c;border-color:#d4ac00;}
+.ilc-match-item.matched{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;cursor:default;opacity:.9;}
+.ilc-match-item.wrong-flash{animation:wrongMatchFlash .5s;}
+@keyframes wrongMatchFlash{0%,100%{background:#fff;}50%{background:#fde8e8;}}
+
+/* === Timeline Order === */
+.ilc-timeline-bank{
+  display:flex;flex-direction:column;gap:8px;margin-bottom:12px;
+  min-height:60px;
+}
+.ilc-timeline-slot{
+  background:#f5f5f5;border:2px dashed #aaa;border-radius:10px;
+  padding:12px;min-height:54px;
+  display:flex;align-items:center;gap:10px;
+  transition:all .15s;
+}
+.ilc-timeline-slot.filled{background:#fff;border-style:solid;border-color:#1a3a5c;}
+.ilc-timeline-slot.drop-target{background:#fff8e8;border-color:#d4ac00;}
+.ilc-timeline-num{
+  width:28px;height:28px;border-radius:50%;
+  background:#1a3a5c;color:#fff;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.82rem;
+}
+.ilc-timeline-slot.filled .ilc-timeline-num{background:#d4ac00;color:#1a3a5c;}
+.ilc-timeline-content{flex:1;font-weight:700;font-size:.85rem;color:#1a3a5c;}
+.ilc-draggable-chips{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#f0f4ff;border-radius:10px;border:2px solid #1a3a5c;}
+.ilc-chip{
+  background:#fff;border:2px solid #1a3a5c;border-radius:999px;
+  padding:8px 14px;cursor:grab;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;color:#1a3a5c;
+  user-select:none;touch-action:none;
+  transition:transform .1s, box-shadow .1s;
+  box-shadow:2px 2px 0 #1a3a5c;
+}
+.ilc-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 #1a3a5c;}
+.ilc-chip:active{cursor:grabbing;}
+.ilc-chip.dragging{opacity:.4;transform:scale(1.05);}
+.ilc-chip.placed{display:none;}
+
+/* === Categorize (Drag to buckets) === */
+.ilc-bucket-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ilc-bucket{
+  background:#f0f4ff;border:2.5px dashed #1a3a5c;border-radius:14px;
+  padding:12px 10px;min-height:140px;
+  transition:all .2s;
+}
+.ilc-bucket-title{font-weight:900;font-size:.88rem;color:#1a3a5c;margin-bottom:8px;text-align:center;padding-bottom:6px;border-bottom:1.5px solid rgba(26,58,92,.2);}
+.ilc-bucket.drop-target{background:#fff8e8;border-color:#d4ac00;border-style:solid;}
+.ilc-bucket-items{display:flex;flex-wrap:wrap;gap:6px;}
+.ilc-bucket .ilc-chip{font-size:.72rem;padding:5px 10px;}
+
+/* === Map Hotspot === */
+.ilc-map-container{position:relative;margin-bottom:10px;border-radius:14px;overflow:hidden;border:2px solid #1a3a5c;background:#f4e9d3;}
+.ilc-map-svg{display:block;width:100%;height:auto;}
+.ilc-hotspot{
+  cursor:pointer;transition:all .2s;
+}
+.ilc-hotspot circle{transition:all .2s;}
+.ilc-hotspot:hover circle{r:14;filter:brightness(1.15);}
+.ilc-hotspot.correct circle{fill:#1a7a4a;r:16;}
+.ilc-hotspot.wrong circle{fill:#c0392b;}
+.ilc-hotspot.found circle{fill:#d4ac00;animation:hotspotPulse 1.5s infinite;}
+@keyframes hotspotPulse{0%,100%{r:14;}50%{r:18;}}
+
+/* === Fill-in-blank drag === */
+.ilc-fill-sentence{
+  font-size:1rem;font-weight:700;line-height:2.2;
+  color:#1a3a5c;padding:14px;background:#f8faff;border:2px solid #1a3a5c;border-radius:10px;
+  margin-bottom:12px;
+}
+.ilc-fill-slot{
+  display:inline-block;min-width:90px;min-height:28px;
+  background:#fff;border:2px dashed #1a3a5c;border-radius:8px;
+  padding:3px 10px;margin:0 4px;vertical-align:middle;
+  font-weight:900;color:#1a3a5c;
+  text-align:center;
+}
+.ilc-fill-slot.filled{background:#d4ac00;color:#1a3a5c;border-style:solid;border-color:#d4ac00;}
+.ilc-fill-slot.drop-target{background:#fff8e8;border-color:#d4ac00;}
+.ilc-fill-slot.correct{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;}
+.ilc-fill-slot.wrong{background:#fde8e8;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
+
+/* === زر التحقق والنتيجة === */
+.ilc-check-btn{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#d4ac00,#b8941a);color:#1a3a5c;
+  border:none;border-radius:12px;cursor:pointer;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:1rem;
+  box-shadow:0 4px 0 #8a6f12;transition:all .15s;margin-top:12px;
+}
+.ilc-check-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 0 #8a6f12;}
+.ilc-check-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 #8a6f12;}
+.ilc-check-btn:disabled{background:#ccc;color:#888;cursor:not-allowed;box-shadow:0 4px 0 #aaa;}
+.ilc-next-btn{
+  width:100%;padding:13px;
+  background:#1a3a5c;color:#fff;
+  border:none;border-radius:12px;cursor:pointer;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:1rem;
+  box-shadow:0 4px 0 #0e2339;transition:all .15s;margin-top:10px;
+}
+.ilc-next-btn:hover{transform:translateY(-1px);box-shadow:0 5px 0 #0e2339;}
+
+/* === زر "حاول مرة أخرى" - بارز برتقالي === */
+.ilc-retry-btn{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#e67e22,#d35400);color:#fff;
+  border:none;border-radius:12px;cursor:pointer;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:1rem;
+  box-shadow:0 4px 0 #a04000;transition:all .15s;margin-top:10px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.ilc-retry-btn:hover{transform:translateY(-1px);box-shadow:0 5px 0 #a04000;}
+.ilc-retry-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #a04000;}
+
+/* === زر "تخطّي" - هادئ رمادي === */
+.ilc-skip-btn{
+  width:100%;padding:9px;
+  background:transparent;color:#888;
+  border:1.5px dashed #aaa;border-radius:10px;cursor:pointer;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:.82rem;
+  transition:all .15s;margin-top:8px;
+}
+.ilc-skip-btn:hover{background:#f5f5f5;color:#555;border-color:#888;}
+body.dark-mode .ilc-skip-btn{color:#aaa;border-color:#555;}
+body.dark-mode .ilc-skip-btn:hover{background:#223348;color:#ccc;}
+
+.ilc-feedback{
+  padding:12px 14px;border-radius:10px;font-weight:800;
+  margin-top:12px;font-size:.92rem;line-height:1.5;
+  animation:feedbackPop .3s ease;
+}
+@keyframes feedbackPop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+.ilc-feedback.success{background:#d4f5e0;border:2px solid #1a7a4a;color:#0e5530;}
+.ilc-feedback.error{background:#fde8e8;border:2px solid #c0392b;color:#7a1f14;}
+.ilc-feedback-explain{font-size:.8rem;font-weight:600;margin-top:5px;opacity:.85;}
+
+/* === شاشة النجاح === */
+.ilc-complete-screen{
+  background:linear-gradient(135deg,#1a3a5c 0%,#2c5282 50%,#4a148c 100%);
+  border-radius:20px;padding:30px 20px;text-align:center;color:#fff;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+  position:relative;overflow:hidden;
+}
+.ilc-complete-screen::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%, rgba(212,172,0,.3), transparent 60%);
+}
+.ilc-complete-icon{
+  width:80px;height:80px;margin:0 auto 14px;
+  background:linear-gradient(135deg,#f1c40f,#d4ac00);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;
+  box-shadow:0 6px 20px rgba(212,172,0,.6);
+  animation:completeBounce .8s ease infinite alternate;
+  position:relative;z-index:1;
+}
+@keyframes completeBounce{from{transform:scale(1) rotate(-3deg);}to{transform:scale(1.08) rotate(3deg);}}
+.ilc-complete-title{font-weight:900;font-size:1.5rem;margin-bottom:8px;position:relative;z-index:1;}
+.ilc-complete-score{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(212,172,0,.2);border:1.5px solid #d4ac00;
+  padding:8px 18px;border-radius:999px;font-weight:900;
+  margin-top:10px;position:relative;z-index:1;
+}
+.ilc-complete-sub{font-size:.88rem;opacity:.9;margin:10px 0;position:relative;z-index:1;}
+
+/* === Dark mode === */
+body.dark-mode .ilc-option-card{background:#1a2535;border-color:#2d4a6b;color:#e8edf2;box-shadow:4px 4px 0 #0a1520;}
+body.dark-mode .ilc-option-card:hover{background:#223348;}
+body.dark-mode .ilc-option-title{color:#e8edf2;}
+body.dark-mode .ilc-activity-card{background:#1a2535;border-color:#2d4a6b;box-shadow:5px 5px 0 #0a1520;}
+body.dark-mode .ilc-activity-prompt{color:#e8edf2;}
+body.dark-mode .ilc-choice-btn{background:#1a2535;border-color:#2d4a6b;color:#e8edf2;}
+body.dark-mode .ilc-choice-btn:hover{background:#223348;}
+body.dark-mode .ilc-match-item{background:#223348;border-color:#2d4a6b;color:#e8edf2;}
+body.dark-mode .ilc-fill-sentence{background:#223348;border-color:#2d4a6b;color:#e8edf2;}
+body.dark-mode .ilc-fill-slot{background:#1a2535;color:#e8edf2;}
+
+@media (max-width:480px){
+  .ilc-choice-grid{grid-template-columns:1fr;}
+  .ilc-bucket-row{grid-template-columns:1fr;}
+  .ilc-hero-icon{width:48px;height:48px;}
+  .ilc-hero-title{font-size:1rem;}
+  .ilc-hero-sub{font-size:.72rem;}
+}
+
+
+/* Dark mode base */
+body.dark-mode{background:#0f1626;color:#e8edf2;}
+body.dark-mode .top-bar{background:#15243b;border-bottom-color:#2d4a6b;}
+body.dark-mode .btn-outline{background:#1a2535;color:#e8edf2;border-color:#2d4a6b;}
+
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div class="screen" id="screen-ilc-grades">
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="window.location.href='index.html'">رجوع</button>
+      <button class="btn-home-lux" onclick="window.location.href='index.html'" title="القائمة الرئيسية" aria-label="القائمة الرئيسية">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+        <span class="btn-home-lux-label">القائمة الرئيسية</span>
+      </button>
+    </div>
+    <div style="font-weight:900;">⚡ الحصة التفاعلية</div>
+    <div></div>
+  </div>
+  <div class="ilc-screen">
+    <div class="ilc-breadcrumb">
+      <span class="ilc-breadcrumb-item active">اختر الصف</span>
+    </div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:1.1rem;font-weight:900;color:#1a3a5c;margin-bottom:4px;">أي صف تريد أن تبدأ به؟</div>
+      <div style="font-size:.8rem;color:#777;">اختر صفك وابدأ رحلة التعلم التفاعلي</div>
+    </div>
+    <div class="ilc-grid-cards">
+      <div class="ilc-option-card" onclick="ilcSelectGrade('g7')">
+        <div class="ilc-option-icon" style="background:linear-gradient(135deg,#e8f0f8,#d0e0f0);border-radius:12px;">
+          <span style="font-weight:900;color:#1a3a5c;font-size:1.6rem;">٧</span>
+        </div>
+        <div class="ilc-option-title">الصف السابع</div>
+        <div class="ilc-option-sub">منهج قطر 2025</div>
+      </div>
+      <div class="ilc-option-card disabled">
+        <div class="ilc-option-soon">قريباً</div>
+        <div class="ilc-option-icon" style="background:#f3f3f3;border-radius:12px;"><span style="font-weight:900;color:#888;font-size:1.6rem;">٨</span></div>
+        <div class="ilc-option-title" style="color:#888;">الصف الثامن</div>
+        <div class="ilc-option-sub">قيد الإعداد</div>
+      </div>
+      <div class="ilc-option-card disabled">
+        <div class="ilc-option-soon">قريباً</div>
+        <div class="ilc-option-icon" style="background:#f3f3f3;border-radius:12px;"><span style="font-weight:900;color:#888;font-size:1.6rem;">٩</span></div>
+        <div class="ilc-option-title" style="color:#888;">الصف التاسع</div>
+        <div class="ilc-option-sub">قيد الإعداد</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- شاشة 2: اختيار المادة -->
+<div class="screen" id="screen-ilc-subjects">
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="showScreen('screen-ilc-grades')">رجوع</button>
+      <button class="btn-home-lux" onclick="window.location.href='index.html'" title="القائمة الرئيسية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg><span class="btn-home-lux-label">القائمة الرئيسية</span></button>
+    </div>
+    <div style="font-weight:900;" id="ilc-subj-title">المواد الدراسية</div>
+    <div></div>
+  </div>
+  <div class="ilc-screen">
+    <div class="ilc-breadcrumb">
+      <span class="ilc-breadcrumb-item" onclick="showScreen('screen-ilc-grades')" style="cursor:pointer;">الصف السابع</span>
+      <span class="ilc-breadcrumb-sep">›</span>
+      <span class="ilc-breadcrumb-item active">المواد</span>
+    </div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:1.1rem;font-weight:900;color:#1a3a5c;margin-bottom:4px;">اختر المادة</div>
+      <div style="font-size:.8rem;color:#777;">ابدأ بالمادة التي تريد إتقانها</div>
+    </div>
+    <div class="ilc-grid-cards" id="ilc-subjects-grid"></div>
+  </div>
+</div>
+
+<!-- شاشة 3: اختيار الدرس -->
+<div class="screen" id="screen-ilc-lessons">
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="showScreen('screen-ilc-subjects')">رجوع</button>
+      <button class="btn-home-lux" onclick="window.location.href='index.html'" title="القائمة الرئيسية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg><span class="btn-home-lux-label">القائمة الرئيسية</span></button>
+    </div>
+    <div style="font-weight:900;" id="ilc-lsn-title">الدروس</div>
+    <div></div>
+  </div>
+  <div class="ilc-screen">
+    <div class="ilc-breadcrumb" id="ilc-lessons-breadcrumb"></div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:1.1rem;font-weight:900;color:#1a3a5c;margin-bottom:4px;">اختر الدرس</div>
+      <div style="font-size:.8rem;color:#777;">10 أنشطة تفاعلية في كل درس · تدرّج من السهل للمتقدم</div>
+    </div>
+    <div class="ilc-grid-cards" id="ilc-lessons-grid"></div>
+  </div>
+</div>
+
+<!-- شاشة 4: عرض الدرس (Lesson Player) -->
+<div class="screen" id="screen-ilc-player">
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="ilcExitLesson()">خروج</button>
+      <button class="btn-home-lux" onclick="ilcExitToMenu()" title="القائمة الرئيسية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg><span class="btn-home-lux-label">القائمة الرئيسية</span></button>
+    </div>
+    <div style="font-weight:900;" id="ilc-player-title">الدرس</div>
+    <div></div>
+  </div>
+  <div class="ilc-screen">
+    <div class="ilc-lesson-header">
+      <div class="ilc-lesson-title-row">
+        <div class="ilc-lesson-title" id="ilc-player-lesson-name">...</div>
+        <div class="ilc-lesson-activity-num" id="ilc-player-progress-text">1 / 10</div>
+      </div>
+      <div class="ilc-progress-bar">
+        <div class="ilc-progress-fill" id="ilc-player-progress-fill" style="width:10%;"></div>
+      </div>
+    </div>
+    <div id="ilc-activity-container"></div>
+  </div>
+</div>
+
+
+<script>
+// Utility functions
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+function esc(s){
+  if(s==null) return '';
+  const d=document.createElement('div');
+  d.textContent=String(s);
+  return d.innerHTML;
+}
+
+let _toastTimer;
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  if(!t) return;
+  t.textContent=msg;t.className='show'+(type?' '+type:'');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Stub sound player (لا حاجة للصوت في هذه الصفحة)
+function playSound(name){}
+
+// Dark mode support (قراءة من localStorage للاتساق مع index)
+try{
+  if(localStorage.getItem('hh_dark')==='1'){
+    document.body.classList.add('dark-mode');
+  }
+}catch(e){}
+
+// ═════════════════════════════════════════════════════════
+// الحصة التفاعلية — Interactive Lesson System
+// مبني على مبادئ: ماير (متعدد الوسائط) + هاتي (وضوح الأهداف) + جي (اللعب)
+// ═════════════════════════════════════════════════════════
+
+// بيانات الصفوف والمواد والدروس
+const ILC_DATA = {
+  g7: {
+    label: 'الصف السابع',
+    subjects: {
+      social: {
+        label: 'الدراسات الاجتماعية',
+        icon: '🌍',
+        color: '#1a3a5c',
+        lessons: {
+          crusades: {
+            label: 'الحملات الصليبية والمغول',
+            sub: 'أخطار ومواجهات - ف2',
+            icon: '⚔️',
+            duration: '10-15 دقيقة',
+            ready: true
+          },
+          change: { label: 'رياح التغيير', sub: 'التغير الاجتماعي والهوية', icon: '🌀', duration: '10-15 دقيقة', ready: true },
+          env: { label: 'البيئة والتلوث', sub: 'الظواهر البيئية', icon: '🌱', ready: false },
+          const: { label: 'المواطن والدستور', sub: 'الحقوق والواجبات', icon: '📜', duration: '10-15 دقيقة', ready: true }
+        }
+      }
+    }
+  }
+};
+
+// ═══ بيانات الدرس الأول: الحملات الصليبية والمغول ═══
+const ILC_LESSON_CRUSADES = {
+  title: 'الحملات الصليبية والمغول',
+  activities: [
+
+    // 1 — إحماء: صورة مع اختيار (المعركة)
+    {
+      type: 'image-choice',
+      prompt: 'هذه معركة انتصر فيها المسلمون على الصليبيين عام 1187م. ما اسمها؟',
+      hint: 'قادها صلاح الدين الأيوبي',
+      svg: `<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="180" fill="#f4e9d3"/>
+        <ellipse cx="150" cy="160" rx="150" ry="20" fill="#c9ad6e"/>
+        <!-- جبلان قرنان -->
+        <path d="M60 130 L110 60 L160 130 Z" fill="#8b6f47" stroke="#5d4a30" stroke-width="2"/>
+        <path d="M140 130 L190 70 L240 130 Z" fill="#8b6f47" stroke="#5d4a30" stroke-width="2"/>
+        <!-- سيوف متقاطعة -->
+        <g transform="translate(150,110)">
+          <line x1="-30" y1="-20" x2="30" y2="20" stroke="#2c3e50" stroke-width="4"/>
+          <line x1="-30" y1="20" x2="30" y2="-20" stroke="#2c3e50" stroke-width="4"/>
+          <circle cx="0" cy="0" r="5" fill="#d4ac00"/>
+        </g>
+        <text x="150" y="25" text-anchor="middle" font-family="Cairo,Arial" font-size="14" fill="#5d4a30" font-weight="bold">١١٨٧م</text>
+      </svg>`,
+      choices: ['معركة حطين', 'معركة عين جالوت', 'معركة بدر', 'معركة اليرموك'],
+      correct: 0,
+      explain: 'معركة حطين (1187م) — انتصار صلاح الدين الأيوبي على الصليبيين وتحرير القدس'
+    },
+
+    // 2 — هوية شخصية
+    {
+      type: 'image-choice',
+      prompt: 'من هو القائد المسلم الذي حرّر بيت المقدس من الصليبيين؟',
+      hint: 'كردي الأصل، أسس الدولة الأيوبية',
+      svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="glow"><stop offset="0%" stop-color="#fff8e8"/><stop offset="100%" stop-color="#d4ac00"/></radialGradient></defs>
+        <circle cx="100" cy="100" r="90" fill="url(#glow)" opacity=".5"/>
+        <!-- العمامة -->
+        <ellipse cx="100" cy="55" rx="55" ry="28" fill="#fff" stroke="#c9ad6e" stroke-width="2"/>
+        <path d="M50 60 Q100 40 150 60" stroke="#8b6f47" stroke-width="2" fill="none"/>
+        <!-- الوجه -->
+        <ellipse cx="100" cy="95" rx="38" ry="42" fill="#e8c88a"/>
+        <!-- العيون -->
+        <ellipse cx="85" cy="93" rx="3.5" ry="4" fill="#3d2817"/>
+        <ellipse cx="115" cy="93" rx="3.5" ry="4" fill="#3d2817"/>
+        <!-- الأنف -->
+        <path d="M100 100 L98 112 L102 112 Z" fill="#c9a877"/>
+        <!-- اللحية -->
+        <path d="M75 115 Q100 155 125 115 Q125 140 100 145 Q75 140 75 115" fill="#3d2817"/>
+        <!-- الشارب -->
+        <path d="M85 108 Q100 112 115 108" stroke="#3d2817" stroke-width="3" fill="none"/>
+        <!-- الجسم / الدرع -->
+        <path d="M50 145 L150 145 L145 195 L55 195 Z" fill="#8B1538"/>
+        <circle cx="100" cy="170" r="10" fill="#d4ac00"/>
+        <text x="100" y="175" text-anchor="middle" font-size="12" font-family="Cairo" fill="#8B1538" font-weight="bold">س</text>
+      </svg>`,
+      choices: ['قطز', 'صلاح الدين الأيوبي', 'هولاكو', 'نور الدين زنكي'],
+      correct: 1,
+      explain: 'صلاح الدين الأيوبي — القائد الذي وحّد الصفوف وانتصر في حطين وحرّر القدس عام 1187م'
+    },
+
+    // 3 — Match Pairs (معركة - سنة)
+    {
+      type: 'match-pairs',
+      prompt: 'طابق كل معركة مع سنة وقوعها',
+      hint: 'اضغط عنصراً من اليمين ثم عنصراً من اليسار للربط',
+      pairs: [
+        {left: 'معركة حطين', right: '1187م'},
+        {left: 'معركة عين جالوت', right: '1260م'},
+        {left: 'سقوط بغداد', right: '1258م'},
+        {left: 'اتفاقية يافا', right: '1229م'}
+      ]
+    },
+
+    // 4 — Timeline order
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب هذه الأحداث التاريخية من الأقدم إلى الأحدث',
+      hint: 'اسحب الأحداث أو اضغط عليها لترتيبها في الخط الزمني',
+      events: [
+        {text: 'بداية الحملات الصليبية', year: 1096},
+        {text: 'معركة حطين', year: 1187},
+        {text: 'اتفاقية يافا', year: 1229},
+        {text: 'سقوط بغداد على يد المغول', year: 1258},
+        {text: 'معركة عين جالوت', year: 1260}
+      ]
+    },
+
+    // 5 — Categorize (سحب إلى صناديق)
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل عنصر حسب الطرف الذي ينتمي إليه',
+      hint: 'اسحب العناصر إلى الصندوق المناسب',
+      buckets: [
+        {id:'muslims', label:'المسلمون', color:'#1a7a4a'},
+        {id:'enemies', label:'الصليبيون والمغول', color:'#c0392b'}
+      ],
+      items: [
+        {text:'صلاح الدين', bucket:'muslims'},
+        {text:'قطز', bucket:'muslims'},
+        {text:'هولاكو', bucket:'enemies'},
+        {text:'ريتشارد قلب الأسد', bucket:'enemies'},
+        {text:'معركة حطين', bucket:'muslims'},
+        {text:'سقوط بغداد', bucket:'enemies'},
+        {text:'عين جالوت', bucket:'muslims'},
+        {text:'اتفاقية يافا', bucket:'enemies'}
+      ]
+    },
+
+    // 6 — Map Hotspot
+    {
+      type: 'map-hotspot',
+      prompt: 'حدّد على الخريطة موقع معركة حطين (بالقرب من طبرية في فلسطين)',
+      hint: 'انقر على النقطة الصحيحة على الخريطة',
+      // خريطة بلاد الشام المبسطة مع عدة نقاط
+      mapSvg: `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="ilc-map-svg">
+        <rect width="400" height="300" fill="#b8d4e8"/>
+        <!-- شكل بلاد الشام -->
+        <path d="M120 50 Q180 40 240 60 Q280 100 270 150 Q280 200 260 240 Q220 270 180 265 Q140 250 130 210 Q115 170 110 130 Q105 90 120 50 Z" fill="#f4e9d3" stroke="#8b6f47" stroke-width="2"/>
+        <!-- جبل -->
+        <path d="M180 80 L200 60 L220 80 L215 90 L185 90 Z" fill="#8b6f47" opacity=".6"/>
+        <!-- بحر -->
+        <rect x="0" y="0" width="110" height="300" fill="#87ceeb" opacity=".8"/>
+        <text x="55" y="150" font-family="Cairo" font-size="12" fill="#1a3a5c" font-weight="bold">البحر</text>
+        <text x="45" y="165" font-family="Cairo" font-size="12" fill="#1a3a5c" font-weight="bold">المتوسط</text>
+      </svg>`,
+      hotspots: [
+        {cx:180, cy:165, r:11, label:'حطين', correct:true},
+        {cx:240, cy:95, r:11, label:'دمشق', correct:false},
+        {cx:205, cy:215, r:11, label:'القدس', correct:false},
+        {cx:225, cy:265, r:11, label:'غزة', correct:false}
+      ],
+      explain: 'معركة حطين وقعت بالقرب من طبرية على شاطئ بحيرة طبرية في فلسطين'
+    },
+
+    // 7 — Sequence people (ترتيب القادة زمنياً)
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب هؤلاء القادة حسب ظهورهم التاريخي (من الأقدم للأحدث)',
+      hint: 'اسحبهم لترتيبهم على الخط الزمني',
+      events: [
+        {text: 'صلاح الدين الأيوبي', year: 1170},
+        {text: 'ريتشارد قلب الأسد', year: 1190},
+        {text: 'الملك الكامل الأيوبي', year: 1229},
+        {text: 'هولاكو المغولي', year: 1258},
+        {text: 'سيف الدين قطز', year: 1260}
+      ]
+    },
+
+    // 8 — Fill-in-blank (سحب وإفلات)
+    {
+      type: 'fill-blanks',
+      prompt: 'أكمل الجملة بسحب الكلمات المناسبة إلى الفراغات',
+      hint: 'اسحب كل كلمة إلى مكانها الصحيح',
+      sentence: 'انتصر [0] في معركة عين جالوت على [1] عام [2] وأنقذ بذلك [3] من الاحتلال.',
+      slots: ['قطز', 'المغول', '1260م', 'العالم الإسلامي'],
+      distractors: ['صلاح الدين', 'الصليبيين', '1187م', 'الأندلس']
+    },
+
+    // 9 — Map with multiple correct points
+    {
+      type: 'map-hotspot',
+      prompt: 'حدّد المدن التي تعرّضت للغزو المغولي. (هناك نقطة صحيحة)',
+      hint: 'انقر على المدينة التي سقطت بأيدي المغول',
+      mapSvg: `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="ilc-map-svg">
+        <rect width="400" height="300" fill="#d9c99c"/>
+        <!-- نهر دجلة -->
+        <path d="M100 40 Q130 100 150 160 Q170 220 185 280" stroke="#3a7aa8" stroke-width="4" fill="none"/>
+        <!-- نهر الفرات -->
+        <path d="M60 40 Q90 100 130 180 Q155 230 185 280" stroke="#3a7aa8" stroke-width="4" fill="none"/>
+        <!-- الخليج العربي -->
+        <path d="M185 280 L230 285 L280 275 L350 260 L400 240 L400 300 L180 300 Z" fill="#87ceeb"/>
+        <!-- صحراء -->
+        <ellipse cx="300" cy="120" rx="90" ry="50" fill="#f0d888" opacity=".6"/>
+        <!-- تسمية الأنهار -->
+        <text x="80" y="60" font-family="Cairo" font-size="9" fill="#1a3a5c" font-weight="bold" transform="rotate(45 80 60)">الفرات</text>
+        <text x="125" y="60" font-family="Cairo" font-size="9" fill="#1a3a5c" font-weight="bold" transform="rotate(45 125 60)">دجلة</text>
+      </svg>`,
+      hotspots: [
+        {cx:150, cy:155, r:11, label:'بغداد', correct:true},
+        {cx:85, cy:90, r:11, label:'الموصل', correct:false},
+        {cx:305, cy:200, r:11, label:'البصرة', correct:false},
+        {cx:340, cy:95, r:11, label:'حلب', correct:false}
+      ],
+      explain: 'بغداد عاصمة الخلافة العباسية سقطت بيد هولاكو عام 1258م وهي من أكبر كوارث التاريخ الإسلامي'
+    },
+
+    // 10 — تصنيف حركي: حملات فشلت / نجحت
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل حملة صليبية حسب نتيجتها',
+      hint: 'اسحب كل حملة إلى الصندوق المناسب',
+      buckets: [
+        {id:'success', label:'✅ نجحت', color:'#1a7a4a'},
+        {id:'fail', label:'❌ فشلت', color:'#c0392b'}
+      ],
+      items: [
+        {text:'الحملة الأولى (احتلال القدس)', bucket:'success'},
+        {text:'الحملة الثانية (فشلت بسبب نور الدين)', bucket:'fail'},
+        {text:'الحملة الثالثة (اتفاقية الرملة)', bucket:'success'},
+        {text:'الحملة الخامسة (هزيمة في دمياط)', bucket:'fail'},
+        {text:'الحملة السادسة (اتفاقية يافا)', bucket:'success'},
+        {text:'الحملة السابعة (أسر لويس التاسع)', bucket:'fail'}
+      ]
+    },
+
+    // 11 — ترتيب: أسباب الغزو المغولي
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب مراحل الغزو المغولي من البداية إلى النهاية',
+      hint: 'اسحب كل مرحلة إلى مكانها على الخط الزمني',
+      events: [
+        {text: 'توحيد قبائل المغول تحت جنكيز خان', year: 1206},
+        {text: 'بداية الزحف نحو العالم الإسلامي', year: 1219},
+        {text: 'سقوط بغداد بقيادة هولاكو', year: 1258},
+        {text: 'معركة عين جالوت وهزيمة المغول', year: 1260}
+      ]
+    },
+
+    // 12 — مطابقة حركية: قائد ↔ معركته
+    {
+      type: 'match-pairs',
+      prompt: 'اربط كل قائد بالمعركة التي اشتهر بها',
+      hint: 'اضغط القائد ثم المعركة المناسبة',
+      pairs: [
+        {left: 'صلاح الدين', right: 'معركة حطين'},
+        {left: 'سيف الدين قطز', right: 'معركة عين جالوت'},
+        {left: 'هولاكو', right: 'سقوط بغداد'},
+        {left: 'ريتشارد قلب الأسد', right: 'الحملة الثالثة'},
+        {left: 'نور الدين زنكي', right: 'توحيد الصفوف ضد الصليبيين'}
+      ]
+    },
+
+    // 13 — توزيع حركي: من أي طرف هذه الصفة؟
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل صفة إلى الطرف الذي تصفه',
+      hint: 'اسحب كل صفة للصندوق الصحيح',
+      buckets: [
+        {id:'muslims', label:'صفات المسلمين', color:'#1a7a4a'},
+        {id:'mongols', label:'صفات المغول', color:'#c0392b'}
+      ],
+      items: [
+        {text:'قبائل رعوية بدوية', bucket:'mongols'},
+        {text:'وحدة تحت راية الإسلام', bucket:'muslims'},
+        {text:'الدفاع عن الأرض والمقدسات', bucket:'muslims'},
+        {text:'القسوة والتدمير الشامل', bucket:'mongols'},
+        {text:'حماية الحضارة الإسلامية', bucket:'muslims'},
+        {text:'الطمع في الثروات', bucket:'mongols'},
+        {text:'روح القيادة العسكرية المنظمة', bucket:'muslims'},
+        {text:'التوسع الوحشي في الأراضي', bucket:'mongols'}
+      ]
+    },
+
+    // 14 — ترتيب حركي: القادة المسلمون من الأكبر للأصغر عمراً حسب تاريخ الوفاة
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب هؤلاء القادة المسلمين حسب وفاتهم (من الأقدم للأحدث)',
+      hint: 'اسحب كل قائد إلى مكانه الصحيح على الخط الزمني',
+      events: [
+        {text: 'نور الدين زنكي', year: 1174},
+        {text: 'صلاح الدين الأيوبي', year: 1193},
+        {text: 'الملك الكامل الأيوبي', year: 1238},
+        {text: 'سيف الدين قطز', year: 1260},
+        {text: 'الظاهر بيبرس', year: 1277}
+      ]
+    },
+
+    // 15 — تحدي نهائي مركّب (الأخير)
+    {
+      type: 'image-choice',
+      prompt: 'بعد سقوط بغداد عام 1258م، من القائد المسلم الذي أوقف الزحف المغولي نحو مصر؟',
+      hint: 'معركته الشهيرة في عين جالوت عام 1260م',
+      svg: `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ff9966"/>
+            <stop offset="100%" stop-color="#ffcc66"/>
+          </linearGradient>
+        </defs>
+        <rect width="300" height="200" fill="url(#sky)"/>
+        <!-- شمس -->
+        <circle cx="240" cy="60" r="25" fill="#ffeb3b" opacity=".9"/>
+        <!-- جبال في الخلفية -->
+        <path d="M0 130 L60 90 L120 120 L200 85 L260 110 L300 100 L300 200 L0 200 Z" fill="#8b6f47"/>
+        <!-- رماح مرفوعة (رمز النصر) -->
+        <g stroke="#2c3e50" stroke-width="3">
+          <line x1="80" y1="160" x2="70" y2="100"/>
+          <line x1="110" y1="160" x2="105" y2="95"/>
+          <line x1="140" y1="160" x2="140" y2="90"/>
+          <line x1="170" y1="160" x2="175" y2="95"/>
+          <line x1="200" y1="160" x2="210" y2="100"/>
+        </g>
+        <!-- رايات -->
+        <path d="M70 100 L80 105 L70 110 Z" fill="#d4ac00"/>
+        <path d="M140 90 L155 95 L140 100 Z" fill="#d4ac00"/>
+        <path d="M210 100 L220 105 L210 110 Z" fill="#d4ac00"/>
+        <!-- أرض -->
+        <rect y="160" width="300" height="40" fill="#c9a877"/>
+        <text x="150" y="190" text-anchor="middle" font-family="Cairo" font-size="14" fill="#5d4a30" font-weight="bold">عين جالوت ١٢٦٠م</text>
+      </svg>`,
+      choices: ['صلاح الدين', 'سيف الدين قطز', 'هولاكو', 'ريتشارد'],
+      correct: 1,
+      explain: 'سيف الدين قطز قائد المماليك، وحّد الصفوف وانتصر في عين جالوت فأوقف المدّ المغولي وأنقذ العالم الإسلامي'
+    },
+
+    // 11 — رتّب الحملات الصليبية حسب ترتيبها (حركي)
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب الحملات الصليبية الأربع حسب ترتيبها التاريخي (من الأولى إلى الرابعة)',
+      hint: 'اسحب كل حملة إلى موقعها الصحيح في الخط الزمني',
+      events: [
+        {text: 'الحملة الأولى (استعادة بيت المقدس)', year: 1096},
+        {text: 'الحملة الثانية (بعد سقوط الرها)', year: 1147},
+        {text: 'الحملة الثالثة (بعد معركة حطين)', year: 1189},
+        {text: 'الحملة الرابعة (احتلال القسطنطينية)', year: 1202}
+      ]
+    },
+
+    // 12 — توزيع الشخصيات على أدوارها (حركي - drag & drop)
+    {
+      type: 'categorize',
+      prompt: 'وزّع كل شخصية على دورها التاريخي',
+      hint: 'اسحب كل اسم إلى الصندوق المناسب',
+      buckets: [
+        {id:'muslim_leaders', label:'👑 قادة مسلمون', color:'#1a7a4a'},
+        {id:'crusader_leaders', label:'⚔️ قادة صليبيون', color:'#8B1538'},
+        {id:'mongol_leaders', label:'🐎 قادة مغول', color:'#c0392b'}
+      ],
+      items: [
+        {text:'صلاح الدين الأيوبي', bucket:'muslim_leaders'},
+        {text:'نور الدين زنكي', bucket:'muslim_leaders'},
+        {text:'سيف الدين قطز', bucket:'muslim_leaders'},
+        {text:'الظاهر بيبرس', bucket:'muslim_leaders'},
+        {text:'ريتشارد قلب الأسد', bucket:'crusader_leaders'},
+        {text:'فريدريك الثاني', bucket:'crusader_leaders'},
+        {text:'هولاكو', bucket:'mongol_leaders'},
+        {text:'جنكيز خان', bucket:'mongol_leaders'}
+      ]
+    },
+
+    // 13 — خريطة تفاعلية: من أين بدأت الحملة الصليبية الأولى؟
+    {
+      type: 'map-hotspot',
+      prompt: 'من أي منطقة انطلقت الحملات الصليبية نحو بلاد الشام؟',
+      hint: 'انقر على المنطقة الصحيحة',
+      mapSvg: `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="ilc-map-svg">
+        <rect width="400" height="300" fill="#b8d4e8"/>
+        <!-- أوروبا -->
+        <path d="M40 30 L180 30 L200 80 L180 130 L100 140 L50 100 Z" fill="#a8d8a8" stroke="#5d4a30" stroke-width="1.5"/>
+        <!-- بلاد الشام -->
+        <path d="M240 80 Q300 70 340 110 Q340 170 310 200 Q260 210 240 180 Q220 130 240 80 Z" fill="#f4e9d3" stroke="#8b6f47" stroke-width="1.5"/>
+        <!-- شمال أفريقيا -->
+        <path d="M90 200 L340 240 L340 290 L60 290 Z" fill="#f0d888" opacity=".8" stroke="#8b6f47" stroke-width="1.5"/>
+        <!-- بحر متوسط -->
+        <text x="160" y="190" font-family="Cairo" font-size="11" fill="#1a3a5c" font-weight="bold">البحر المتوسط</text>
+      </svg>`,
+      hotspots: [
+        {cx:110, cy:85, r:11, label:'أوروبا', correct:true},
+        {cx:290, cy:140, r:11, label:'بلاد الشام', correct:false},
+        {cx:200, cy:260, r:11, label:'شمال أفريقيا', correct:false},
+        {cx:50, cy:240, r:11, label:'الأندلس', correct:false}
+      ],
+      explain: 'انطلقت الحملات الصليبية من أوروبا بدعم من البابا أوربان الثاني عام 1095م بهدف السيطرة على الأراضي المقدسة'
+    },
+
+    // 14 — طابق الشخصية بإنجازها (match-pairs حركي)
+    {
+      type: 'match-pairs',
+      prompt: 'طابق كل قائد مع إنجازه التاريخي الأبرز',
+      hint: 'اضغط على القائد ثم على إنجازه لتربطهما',
+      pairs: [
+        {left: 'صلاح الدين', right: 'تحرير بيت المقدس'},
+        {left: 'قطز', right: 'وقف المد المغولي'},
+        {left: 'نور الدين زنكي', right: 'توحيد بلاد الشام'},
+        {left: 'هولاكو', right: 'إسقاط بغداد'},
+        {left: 'الظاهر بيبرس', right: 'طرد آخر الصليبيين'}
+      ]
+    },
+
+    // 15 — تحدي ختامي: رتّب النتائج التاريخية (timeline متقدم)
+    {
+      type: 'timeline-order',
+      prompt: 'تحدي نهائي: رتّب هذه الأحداث الفاصلة في التاريخ الإسلامي',
+      hint: 'هذه أكبر الأحداث في تاريخ الصراع مع الصليبيين والمغول',
+      events: [
+        {text: 'الحملة الصليبية الأولى تحتل بيت المقدس', year: 1099},
+        {text: 'صلاح الدين يحرّر بيت المقدس', year: 1187},
+        {text: 'الملك الكامل يوقّع اتفاقية يافا', year: 1229},
+        {text: 'هولاكو يُسقط بغداد ويقتل الخليفة', year: 1258},
+        {text: 'قطز ينتصر في عين جالوت', year: 1260},
+        {text: 'بيبرس يطرد آخر الصليبيين من الشام', year: 1291}
+      ]
+    }
+  ]
+};
+
+// ═══ درس: رياح التغيير ═══
+const ILC_LESSON_CHANGE = {
+  title: 'رياح التغيير',
+  activities: [
+
+    // 1 — إحماء: تعريف المفهوم
+    {
+      type: 'image-choice',
+      prompt: 'ما المقصود بـ "التغير الاجتماعي"؟',
+      hint: 'يتعلق بطريقة حياة الناس وتفاعلهم',
+      svg: `<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="180" fill="#e8f0f8"/>
+        <!-- مجتمع قديم -->
+        <g transform="translate(40,60)">
+          <rect x="0" y="30" width="60" height="40" fill="#c9a877" stroke="#8b6f47" stroke-width="2"/>
+          <polygon points="0,30 30,10 60,30" fill="#8b6f47"/>
+          <circle cx="15" cy="90" r="6" fill="#1a3a5c"/>
+          <circle cx="45" cy="90" r="6" fill="#1a3a5c"/>
+        </g>
+        <!-- سهم التغير -->
+        <g transform="translate(150,90)">
+          <path d="M-15 0 L15 0 M10 -8 L15 0 L10 8" stroke="#d4ac00" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="0" y="-15" text-anchor="middle" font-family="Cairo" font-size="12" fill="#d4ac00" font-weight="bold">تغيّر</text>
+        </g>
+        <!-- مجتمع حديث -->
+        <g transform="translate(200,40)">
+          <rect x="0" y="10" width="30" height="60" fill="#4a90c2"/>
+          <rect x="40" y="25" width="30" height="45" fill="#5ba0d2"/>
+          <rect x="5" y="20" width="6" height="6" fill="#fff"/>
+          <rect x="17" y="20" width="6" height="6" fill="#fff"/>
+          <rect x="5" y="35" width="6" height="6" fill="#fff"/>
+          <rect x="17" y="35" width="6" height="6" fill="#fff"/>
+          <rect x="45" y="35" width="6" height="6" fill="#fff"/>
+          <rect x="57" y="35" width="6" height="6" fill="#fff"/>
+          <circle cx="20" cy="100" r="6" fill="#1a3a5c"/>
+          <circle cx="50" cy="100" r="6" fill="#1a3a5c"/>
+        </g>
+      </svg>`,
+      choices: [
+        'التحول في طريقة حياة المجتمع وتفاعل أفراده',
+        'زيادة عدد السكان فقط',
+        'تطور الأسلحة والحروب',
+        'انتقال السكان من مكان لآخر'
+      ],
+      correct: 0,
+      explain: 'التغير الاجتماعي = التحول في طريقة حياة المجتمع وأسلوب التفاعل بين أفراده'
+    },
+
+    // 2 — مطابقة: عامل ↔ تعريفه
+    {
+      type: 'match-pairs',
+      prompt: 'اربط كل عامل بتعريفه الصحيح',
+      hint: 'اضغط عاملاً ثم تعريفه',
+      pairs: [
+        {left: 'العامل الديموغرافي', right: 'التغير في أعداد السكان'},
+        {left: 'العامل التكنولوجي', right: 'تطور وسائل التواصل والعمل'},
+        {left: 'العامل الاقتصادي', right: 'التحولات في الدخل والإنتاج'},
+        {left: 'عامل التعليم', right: 'رفع الوعي وإعداد الكوادر'}
+      ]
+    },
+
+    // 3 — ترتيب: مراحل التعليم في قطر
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب هذه المحطات في تطور التعليم في قطر (من الأقدم للأحدث)',
+      hint: 'اسحب كل محطة إلى مكانها على الخط الزمني',
+      events: [
+        {text: 'افتتاح أول مدرسة نظامية', year: 1952},
+        {text: 'تأسيس وزارة التربية والتعليم', year: 1957},
+        {text: 'افتتاح جامعة قطر', year: 1977},
+        {text: 'إطلاق المدينة التعليمية', year: 1995},
+        {text: 'إطلاق رؤية قطر 2030', year: 2008}
+      ]
+    },
+
+    // 4 — تصنيف حركي: مقومات الهوية القطرية
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل عنصر: هل هو من مقومات الهوية القطرية أم لا؟',
+      hint: 'اسحب كل عنصر إلى الصندوق المناسب',
+      buckets: [
+        {id:'yes', label:'✅ من المقومات', color:'#1a7a4a'},
+        {id:'no', label:'❌ ليست من المقومات', color:'#c0392b'}
+      ],
+      items: [
+        {text:'اللغة العربية', bucket:'yes'},
+        {text:'الدين الإسلامي', bucket:'yes'},
+        {text:'التراث الوطني', bucket:'yes'},
+        {text:'الانتماء والولاء', bucket:'yes'},
+        {text:'الموضة الغربية', bucket:'no'},
+        {text:'العادات الأجنبية', bucket:'no'},
+        {text:'العادات والتقاليد الأصيلة', bucket:'yes'},
+        {text:'الألعاب الإلكترونية', bucket:'no'}
+      ]
+    },
+
+    // 5 — خريطة تفاعلية: دولة قطر
+    {
+      type: 'map-hotspot',
+      prompt: 'حدّد موقع العاصمة الدوحة على خريطة قطر',
+      hint: 'العاصمة تقع على الساحل الشرقي لقطر',
+      mapSvg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="ilc-map-svg">
+        <rect width="400" height="400" fill="#b8d4e8"/>
+        <!-- شكل قطر المبسط -->
+        <path d="M150 60 Q220 50 250 90 Q280 130 285 180 Q290 240 280 290 Q270 340 230 350 Q190 360 160 340 Q130 320 125 260 Q120 200 130 140 Q135 90 150 60 Z" fill="#f4e9d3" stroke="#8b6f47" stroke-width="2"/>
+        <!-- علم قطر الصغير -->
+        <g transform="translate(20,20)">
+          <rect x="0" y="0" width="40" height="25" fill="#fff" stroke="#8D1B3D"/>
+          <rect x="0" y="0" width="14" height="25" fill="#8D1B3D"/>
+          <path d="M14,0 L40,0 L40,25 L14,25 L16,22 L14,19 L16,16 L14,13 L16,10 L14,7 L16,4 L14,0 Z" fill="#fff"/>
+          <text x="25" y="16" text-anchor="middle" font-size="5" fill="#8D1B3D" font-weight="bold">قطر</text>
+        </g>
+      </svg>`,
+      hotspots: [
+        {cx:260, cy:220, r:11, label:'الدوحة', correct:true},
+        {cx:170, cy:130, r:11, label:'مدينة الشمال', correct:false},
+        {cx:180, cy:310, r:11, label:'مسيعيد', correct:false},
+        {cx:160, cy:200, r:11, label:'الريان', correct:false}
+      ],
+      explain: 'الدوحة هي عاصمة قطر وتقع على الساحل الشرقي'
+    },
+
+    // 6 — تصنيف: ما أثر العامل التكنولوجي؟
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل أثر: هل هو إيجابي أم سلبي للتكنولوجيا؟',
+      hint: 'اسحب كل أثر للصندوق المناسب',
+      buckets: [
+        {id:'pos', label:'✅ أثر إيجابي', color:'#1a7a4a'},
+        {id:'neg', label:'⚠️ أثر سلبي', color:'#c0392b'}
+      ],
+      items: [
+        {text:'سهولة التواصل مع الأقارب', bucket:'pos'},
+        {text:'تطوير التعليم عن بُعد', bucket:'pos'},
+        {text:'تحسين جودة الخدمات', bucket:'pos'},
+        {text:'الإدمان على وسائل التواصل', bucket:'neg'},
+        {text:'ضعف التواصل الأسري المباشر', bucket:'neg'},
+        {text:'رفع الكفاءة في العمل', bucket:'pos'},
+        {text:'انتشار الأخبار المضلّلة', bucket:'neg'}
+      ]
+    },
+
+    // 7 — ترتيب: رؤية قطر 2030
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب ركائز رؤية قطر 2030 الأربع حسب ظهورها في الرؤية (الترتيب الرسمي)',
+      hint: 'تبدأ بتنمية الإنسان ثم الاجتماع ثم الاقتصاد ثم البيئة',
+      events: [
+        {text: 'التنمية البشرية', year: 1},
+        {text: 'التنمية الاجتماعية', year: 2},
+        {text: 'التنمية الاقتصادية', year: 3},
+        {text: 'التنمية البيئية', year: 4}
+      ]
+    },
+
+    // 8 — أكمل الفراغات
+    {
+      type: 'fill-blanks',
+      prompt: 'أكمل الجملة بسحب الكلمات الصحيحة',
+      hint: 'اسحب كل كلمة إلى مكانها',
+      sentence: 'تعمل [0] على حفظ وصون [1] القطري وتعزيز [2] الوطنية، وذلك ضمن إطار رؤية قطر [3].',
+      slots: ['إدارة التراث', 'التراث', 'الهوية', '2030'],
+      distractors: ['وزارة التعليم', 'الموضة', 'اللغة الأجنبية', '2022']
+    },
+
+    // 9 — مطابقة: تحدٍّ ↔ حلّ
+    {
+      type: 'match-pairs',
+      prompt: 'اربط كل تحدٍّ بالحل المناسب له',
+      hint: 'اضغط التحدي ثم الحل',
+      pairs: [
+        {left: 'تراجع استخدام اللغة العربية', right: 'تعزيز تعليم اللغة في المدارس'},
+        {left: 'ضعف الوعي بالتراث', right: 'إقامة الفعاليات التراثية'},
+        {left: 'تأثير الثقافات الأجنبية', right: 'تعزيز مقومات الهوية الوطنية'},
+        {left: 'الاعتماد على النفط', right: 'التنوع الاقتصادي في رؤية 2030'}
+      ]
+    },
+
+    // 10 — تحدي نهائي
+    {
+      type: 'categorize',
+      prompt: 'صنّف كل إنجاز: هل يعود لقطر قبل 2000 أم بعد 2000؟',
+      hint: 'فكّر في تاريخ كل إنجاز',
+      buckets: [
+        {id:'before', label:'📜 قبل 2000م', color:'#8b6f47'},
+        {id:'after', label:'✨ بعد 2000م', color:'#16a085'}
+      ],
+      items: [
+        {text:'تأسيس جامعة قطر', bucket:'before'},
+        {text:'افتتاح قناة الجزيرة', bucket:'before'},
+        {text:'إطلاق رؤية قطر 2030', bucket:'after'},
+        {text:'استضافة كأس العالم 2022', bucket:'after'},
+        {text:'دخول الأمم المتحدة', bucket:'before'},
+        {text:'افتتاح متحف قطر الوطني', bucket:'after'},
+        {text:'استقلال قطر', bucket:'before'}
+      ]
+    }
+  ]
+};
+
+// ═══ درس: المواطن والدستور (10 أنشطة حركية) ═══
+const ILC_LESSON_CONST = {
+  title: 'المواطن والدستور',
+  activities: [
+
+    // 1 — إحماء: صورة الدستور
+    {
+      type: 'image-choice',
+      prompt: 'ما اسم الوثيقة التي تنظّم القواعد العليا للدولة وتحدّد حقوق المواطنين؟',
+      hint: 'هي الأعلى مرتبة في التشريع',
+      svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="220" fill="#f4e9d3"/>
+        <!-- الوثيقة -->
+        <rect x="70" y="30" width="160" height="170" rx="6" fill="#fff" stroke="#8B1538" stroke-width="3"/>
+        <!-- شريط علوي ذهبي -->
+        <rect x="70" y="30" width="160" height="25" fill="#d4ac00"/>
+        <text x="150" y="48" text-anchor="middle" font-family="Cairo,serif" font-size="13" fill="#8B1538" font-weight="bold">دولة قطر</text>
+        <!-- خطوط نص -->
+        <line x1="85" y1="75" x2="215" y2="75" stroke="#1a3a5c" stroke-width="2"/>
+        <line x1="85" y1="95" x2="200" y2="95" stroke="#1a3a5c" stroke-width="1.5"/>
+        <line x1="85" y1="108" x2="215" y2="108" stroke="#1a3a5c" stroke-width="1.5"/>
+        <line x1="85" y1="121" x2="190" y2="121" stroke="#1a3a5c" stroke-width="1.5"/>
+        <line x1="85" y1="134" x2="210" y2="134" stroke="#1a3a5c" stroke-width="1.5"/>
+        <line x1="85" y1="147" x2="205" y2="147" stroke="#1a3a5c" stroke-width="1.5"/>
+        <!-- ختم وتوقيع -->
+        <circle cx="120" cy="180" r="14" fill="none" stroke="#c0392b" stroke-width="2"/>
+        <text x="120" y="184" text-anchor="middle" font-family="Cairo" font-size="8" fill="#c0392b" font-weight="bold">ختم</text>
+        <path d="M160 175 Q180 165 200 180" stroke="#1a3a5c" stroke-width="2" fill="none"/>
+      </svg>`,
+      choices: ['الدستور', 'القانون', 'اللائحة', 'المرسوم'],
+      correct: 0,
+      explain: 'الدستور هو القانون الأعلى في الدولة، يحدّد نظام الحكم وحقوق المواطنين وواجباتهم ولا يجوز لأي قانون مخالفته'
+    },
+
+    // 2 — إحماء: علم قطر
+    {
+      type: 'image-choice',
+      prompt: 'ما الذي يرمز إليه هذا العلم في المواطنة؟',
+      hint: 'الانتماء للدولة والإحساس بالمسؤولية تجاهها',
+      svg: `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="200" fill="#e8f0f8"/>
+        <!-- علم قطر -->
+        <g transform="translate(60,30)">
+          <rect x="0" y="0" width="60" height="140" fill="#8B1538"/>
+          <path d="M60 0 L180 0 L180 140 L60 140 L70 127 L60 120 L70 113 L60 106 L70 99 L60 92 L70 85 L60 78 L70 71 L60 64 L70 57 L60 50 L70 43 L60 36 L70 29 L60 22 L70 15 L60 8 Z" fill="#fff"/>
+        </g>
+        <!-- سارية -->
+        <rect x="55" y="25" width="5" height="160" fill="#8b6f47"/>
+      </svg>`,
+      choices: ['المواطنة والانتماء', 'الحرب', 'التجارة', 'العولمة'],
+      correct: 0,
+      explain: 'العلم رمز للمواطنة والانتماء الحقيقي للوطن والإحساس بالمسؤولية تجاهه'
+    },
+
+    // 3 — حركي: طابق الحق بتعريفه
+    {
+      type: 'match-pairs',
+      prompt: 'طابق كل حق دستوري مع تعريفه',
+      hint: 'اضغط الحق ثم تعريفه لتربطهما',
+      pairs: [
+        {left: 'حق التعليم', right: 'مجاني وإلزامي'},
+        {left: 'حق الصحة', right: 'رعاية صحية شاملة'},
+        {left: 'حق الانتخاب', right: 'المشاركة في الحكم'},
+        {left: 'حرية العبادة', right: 'ممارسة الشعائر الدينية'},
+        {left: 'المساواة', right: 'أمام القانون دون تمييز'}
+      ]
+    },
+
+    // 4 — حركي: ترتيب مراحل الدستور القطري
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب مراحل تطور النظام السياسي في قطر تاريخياً',
+      hint: 'من التأسيس إلى الدستور الدائم',
+      events: [
+        {text: 'تأسيس دولة قطر الحديثة', year: 1971},
+        {text: 'إعلان النظام الأساسي المؤقت', year: 1972},
+        {text: 'انطلاق رؤية قطر الوطنية', year: 2008},
+        {text: 'إقرار الدستور الدائم', year: 2003},
+        {text: 'أول انتخابات لمجلس الشورى', year: 2021}
+      ]
+    },
+
+    // 5 — حركي: وزّع الحقوق والواجبات (3 صناديق)
+    {
+      type: 'categorize',
+      prompt: 'وزّع كل عنصر حسب ما إذا كان حقاً للمواطن، أم واجباً عليه، أم حرية يتمتع بها',
+      hint: 'اسحب كل عنصر إلى الصندوق المناسب',
+      buckets: [
+        {id:'rights', label:'✅ حقوق', color:'#1a7a4a'},
+        {id:'duties', label:'📋 واجبات', color:'#8B1538'},
+        {id:'freedoms', label:'🕊️ حريات', color:'#16a085'}
+      ],
+      items: [
+        {text:'التعليم المجاني', bucket:'rights'},
+        {text:'الرعاية الصحية', bucket:'rights'},
+        {text:'المساواة أمام القانون', bucket:'rights'},
+        {text:'احترام الدستور', bucket:'duties'},
+        {text:'الدفاع عن الوطن', bucket:'duties'},
+        {text:'حماية المال العام', bucket:'duties'},
+        {text:'حرية الرأي', bucket:'freedoms'},
+        {text:'حرية العبادة', bucket:'freedoms'},
+        {text:'حرية التنقل', bucket:'freedoms'}
+      ]
+    },
+
+    // 6 — خريطة قطر: حدد موقع العاصمة
+    {
+      type: 'map-hotspot',
+      prompt: 'حدّد على خريطة قطر موقع العاصمة الدوحة',
+      hint: 'هي المدينة الأكبر ومقر الحكومة',
+      mapSvg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="ilc-map-svg">
+        <rect width="400" height="400" fill="#b8d4e8"/>
+        <!-- شبه جزيرة قطر مبسطة -->
+        <path d="M180 50 Q230 55 260 100 Q280 150 275 210 Q270 270 250 320 Q220 360 190 350 Q160 340 150 300 Q145 250 150 200 Q155 140 170 90 Q175 65 180 50 Z" fill="#f4e9d3" stroke="#8b6f47" stroke-width="2"/>
+        <!-- بحر -->
+        <text x="60" y="200" font-family="Cairo" font-size="14" fill="#1a3a5c" font-weight="bold">الخليج</text>
+        <text x="60" y="220" font-family="Cairo" font-size="14" fill="#1a3a5c" font-weight="bold">العربي</text>
+        <!-- حدود شمالية -->
+        <text x="200" y="30" font-family="Cairo" font-size="10" fill="#5d4a30">(من الشمال)</text>
+      </svg>`,
+      hotspots: [
+        {cx:245, cy:220, r:11, label:'الدوحة', correct:true},
+        {cx:195, cy:90, r:11, label:'الرويس', correct:false},
+        {cx:175, cy:310, r:11, label:'الوكرة', correct:false},
+        {cx:200, cy:160, r:11, label:'الخور', correct:false}
+      ],
+      explain: 'الدوحة عاصمة دولة قطر، تقع على الساحل الشرقي وتضم المؤسسات الحكومية الرئيسية والدستورية'
+    },
+
+    // 7 — حركي: ترتيب السلطات في الدولة
+    {
+      type: 'categorize',
+      prompt: 'وزّع كل مؤسسة على السلطة التي تنتمي إليها في الدولة',
+      hint: 'ثلاث سلطات رئيسية في الدولة',
+      buckets: [
+        {id:'legislative', label:'📜 السلطة التشريعية', color:'#1a3a5c'},
+        {id:'executive', label:'👔 السلطة التنفيذية', color:'#8B1538'},
+        {id:'judicial', label:'⚖️ السلطة القضائية', color:'#16a085'}
+      ],
+      items: [
+        {text:'مجلس الشورى', bucket:'legislative'},
+        {text:'سن القوانين', bucket:'legislative'},
+        {text:'إقرار الميزانية', bucket:'legislative'},
+        {text:'مجلس الوزراء', bucket:'executive'},
+        {text:'تنفيذ القوانين', bucket:'executive'},
+        {text:'إدارة شؤون الدولة', bucket:'executive'},
+        {text:'المحاكم', bucket:'judicial'},
+        {text:'الفصل في النزاعات', bucket:'judicial'},
+        {text:'تطبيق العدالة', bucket:'judicial'}
+      ]
+    },
+
+    // 8 — أكمل الفراغات بالسحب
+    {
+      type: 'fill-blanks',
+      prompt: 'أكمل هذه الجملة عن الدستور القطري بسحب الكلمات المناسبة',
+      hint: 'اسحب كل كلمة إلى مكانها الصحيح',
+      sentence: 'يضمن [0] حقوق المواطنين في دولة قطر، ومنها حق [1] و [2]، ومن أهم واجبات المواطن [3] والدفاع عنه.',
+      slots: ['الدستور', 'التعليم', 'الصحة', 'احترام القانون'],
+      distractors: ['القبيلة', 'التجارة', 'السفر', 'كسب المال']
+    },
+
+    // 9 — رتّب خطوات سن القانون
+    {
+      type: 'timeline-order',
+      prompt: 'رتّب خطوات سنّ القانون في دولة قطر (من البداية حتى التطبيق)',
+      hint: 'من الاقتراح إلى التنفيذ',
+      events: [
+        {text: 'اقتراح مشروع القانون', year: 1},
+        {text: 'مناقشة المشروع في مجلس الشورى', year: 2},
+        {text: 'إقرار المشروع بالتصويت', year: 3},
+        {text: 'رفعه للأمير للتصديق', year: 4},
+        {text: 'نشره في الجريدة الرسمية', year: 5},
+        {text: 'دخوله حيّز التنفيذ', year: 6}
+      ]
+    },
+
+    // 10 — تحدي نهائي: حل مواقف دستورية
+    {
+      type: 'image-choice',
+      prompt: 'مواطن قطري رأى أحداً يخرّب ممتلكات عامة. ما الواجب الدستوري المطلوب منه؟',
+      hint: 'هذا من واجبات المواطن لحماية المال العام',
+      svg: `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="300" height="200" fill="#f4e9d3"/>
+        <!-- مبنى عام -->
+        <rect x="80" y="60" width="140" height="100" fill="#b8d4e8" stroke="#1a3a5c" stroke-width="2"/>
+        <path d="M70 60 L150 30 L230 60 Z" fill="#8B1538"/>
+        <rect x="140" y="100" width="20" height="60" fill="#8b6f47"/>
+        <rect x="95" y="80" width="18" height="18" fill="#fff" stroke="#1a3a5c"/>
+        <rect x="125" y="80" width="18" height="18" fill="#fff" stroke="#1a3a5c"/>
+        <rect x="185" y="80" width="18" height="18" fill="#fff" stroke="#1a3a5c"/>
+        <!-- رمز تحذير -->
+        <g transform="translate(240,45)">
+          <polygon points="0,-15 13,10 -13,10" fill="#d4ac00" stroke="#8B1538" stroke-width="2"/>
+          <text x="0" y="6" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B1538">!</text>
+        </g>
+        <text x="150" y="185" text-anchor="middle" font-family="Cairo" font-size="11" fill="#5d4a30" font-weight="bold">مبنى حكومي</text>
+      </svg>`,
+      choices: [
+        'إبلاغ الجهات المختصة فوراً',
+        'المشاركة في التخريب',
+        'تجاهل الموقف تماماً',
+        'التقاط صور ونشرها فقط'
+      ],
+      correct: 0,
+      explain: 'الإبلاغ عن التخريب واجب وطني لحماية المال العام، وهو من الواجبات الدستورية التي يلتزم بها المواطن القطري'
+    }
+  ]
+};
+
+// ═══ حالة الحصة التفاعلية ═══
+let ILC = {
+  currentGrade: null,
+  currentSubject: null,
+  currentLesson: null,
+  activityIdx: 0,
+  score: 0,
+  attempts: 0,
+  correctCount: 0,
+  lessonData: null
+};
+
+// ═══ التنقل بين الشاشات ═══
+function ilcSelectGrade(gradeId){
+  ILC.currentGrade = gradeId;
+  const grade = ILC_DATA[gradeId];
+  if(!grade) return;
+  document.getElementById('ilc-subj-title').textContent = grade.label;
+  const grid = document.getElementById('ilc-subjects-grid');
+  grid.innerHTML = '';
+  Object.entries(grade.subjects).forEach(([subjId, subj])=>{
+    const card = document.createElement('div');
+    card.className = 'ilc-option-card';
+    card.onclick = ()=>ilcSelectSubject(subjId);
+    card.innerHTML = `
+      <div class="ilc-option-icon" style="background:${subj.color||'#1a3a5c'}22;border-radius:12px;font-size:2rem;">${subj.icon}</div>
+      <div class="ilc-option-title">${esc(subj.label)}</div>
+      <div class="ilc-option-sub">${Object.keys(subj.lessons).length} دروس</div>
+    `;
+    grid.appendChild(card);
+  });
+  // أضف بطاقات "قريباً" للمواد الأخرى
+  const soonSubjects = [
+    {icon:'🔬', title:'العلوم', sub:'قيد الإعداد'},
+    {icon:'📐', title:'الرياضيات', sub:'قيد الإعداد'},
+    {icon:'📖', title:'اللغة العربية', sub:'قيد الإعداد'}
+  ];
+  soonSubjects.forEach(s=>{
+    const card = document.createElement('div');
+    card.className = 'ilc-option-card disabled';
+    card.innerHTML = `
+      <div class="ilc-option-soon">قريباً</div>
+      <div class="ilc-option-icon" style="background:#f3f3f3;border-radius:12px;font-size:2rem;opacity:.4;">${s.icon}</div>
+      <div class="ilc-option-title" style="color:#888;">${s.title}</div>
+      <div class="ilc-option-sub">${s.sub}</div>
+    `;
+    grid.appendChild(card);
+  });
+  showScreen('screen-ilc-subjects');
+}
+
+function ilcSelectSubject(subjId){
+  ILC.currentSubject = subjId;
+  const subj = ILC_DATA[ILC.currentGrade].subjects[subjId];
+  document.getElementById('ilc-lsn-title').textContent = subj.label;
+  // breadcrumb
+  const bc = document.getElementById('ilc-lessons-breadcrumb');
+  bc.innerHTML = `
+    <span class="ilc-breadcrumb-item" onclick="showScreen('screen-ilc-grades')" style="cursor:pointer;">${esc(ILC_DATA[ILC.currentGrade].label)}</span>
+    <span class="ilc-breadcrumb-sep">›</span>
+    <span class="ilc-breadcrumb-item" onclick="showScreen('screen-ilc-subjects')" style="cursor:pointer;">${esc(subj.label)}</span>
+    <span class="ilc-breadcrumb-sep">›</span>
+    <span class="ilc-breadcrumb-item active">الدروس</span>
+  `;
+  // lessons grid
+  const grid = document.getElementById('ilc-lessons-grid');
+  grid.innerHTML = '';
+  Object.entries(subj.lessons).forEach(([lsnId, lsn])=>{
+    const card = document.createElement('div');
+    card.className = 'ilc-option-card' + (lsn.ready?'':' disabled');
+    if(lsn.ready){
+      card.onclick = ()=>ilcStartLesson(lsnId);
+    }
+    card.innerHTML = `
+      ${!lsn.ready ? '<div class="ilc-option-soon">قريباً</div>' : '<div class="ilc-option-soon" style="background:#1a7a4a;color:#fff;">جاهز ✓</div>'}
+      <div class="ilc-option-icon" style="background:${lsn.ready?'#fff8e8':'#f3f3f3'};border-radius:12px;font-size:2rem;${lsn.ready?'':'opacity:.4;'}">${lsn.icon||'📚'}</div>
+      <div class="ilc-option-title" ${lsn.ready?'':'style="color:#888;"'}>${esc(lsn.label)}</div>
+      <div class="ilc-option-sub">${esc(lsn.sub||'')}${lsn.duration?' · '+lsn.duration:''}</div>
+    `;
+    grid.appendChild(card);
+  });
+  showScreen('screen-ilc-lessons');
+}
+
+function ilcStartLesson(lessonId){
+  ILC.currentLesson = lessonId;
+  ILC.activityIdx = 0;
+  ILC.score = 0;
+  ILC.attempts = 0;
+  ILC.correctCount = 0;
+  // اختر بيانات الدرس
+  if(lessonId === 'crusades'){
+    ILC.lessonData = ILC_LESSON_CRUSADES;
+  } else if(lessonId === 'change'){
+    ILC.lessonData = ILC_LESSON_CHANGE;
+  } else if(lessonId === 'const'){
+    ILC.lessonData = ILC_LESSON_CONST;
+  } else {
+    toast('هذا الدرس قيد الإعداد','info');
+    return;
+  }
+  document.getElementById('ilc-player-lesson-name').textContent = ILC.lessonData.title;
+  showScreen('screen-ilc-player');
+  ilcRenderActivity();
+}
+
+function ilcExitLesson(){
+  if(!confirm('هل تريد الخروج؟ ستفقد تقدمك في هذه الحصة.')) return;
+  showScreen('screen-ilc-lessons');
+}
+
+function ilcExitToMenu(){
+  if(ILC.activityIdx > 0 && ILC.activityIdx < 10){
+    if(!confirm('هل تريد الخروج للقائمة الرئيسية؟ ستفقد تقدمك.')) return;
+  }
+  window.location.href='index.html';
+}
+
+// ═══ عرض النشاط الحالي ═══
+function ilcRenderActivity(){
+  const container = document.getElementById('ilc-activity-container');
+  const total = ILC.lessonData.activities.length;
+  const idx = ILC.activityIdx;
+  // تحديث شريط التقدم
+  document.getElementById('ilc-player-progress-text').textContent = `${idx+1} / ${total}`;
+  document.getElementById('ilc-player-progress-fill').style.width = `${(idx/total)*100}%`;
+
+  if(idx >= total){
+    ilcShowComplete();
+    return;
+  }
+  const activity = ILC.lessonData.activities[idx];
+  // Router حسب النوع
+  container.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'ilc-activity-card';
+  card.id = 'ilc-current-activity';
+
+  // شارة نوع النشاط
+  const typeLabels = {
+    'image-choice': '🖼️ صورة وسؤال',
+    'match-pairs': '🔗 مطابقة أزواج',
+    'timeline-order': '⏳ ترتيب زمني',
+    'categorize': '📦 تصنيف',
+    'map-hotspot': '🗺️ خريطة تفاعلية',
+    'fill-blanks': '✏️ أكمل الفراغات'
+  };
+  card.innerHTML = `
+    <span class="ilc-activity-type-badge">${typeLabels[activity.type]||'نشاط'}</span>
+    <div class="ilc-activity-prompt">${esc(activity.prompt)}</div>
+    ${activity.hint ? `<div class="ilc-activity-hint">${esc(activity.hint)}</div>` : ''}
+    <div id="ilc-activity-body"></div>
+    <div id="ilc-activity-actions"></div>
+  `;
+  container.appendChild(card);
+
+  // Render by type
+  const body = document.getElementById('ilc-activity-body');
+  switch(activity.type){
+    case 'image-choice':   ilcRenderImageChoice(body, activity); break;
+    case 'match-pairs':    ilcRenderMatchPairs(body, activity); break;
+    case 'timeline-order': ilcRenderTimelineOrder(body, activity); break;
+    case 'categorize':     ilcRenderCategorize(body, activity); break;
+    case 'map-hotspot':    ilcRenderMapHotspot(body, activity); break;
+    case 'fill-blanks':    ilcRenderFillBlanks(body, activity); break;
+  }
+}
+
+// ═══ 1. Image Choice ═══
+function ilcRenderImageChoice(container, act){
+  container.innerHTML = `
+    ${act.svg ? `<div style="margin-bottom:14px;text-align:center;background:#f8faff;border-radius:10px;padding:6px;">${act.svg}</div>` : ''}
+    <div class="ilc-choice-grid" id="ilc-choices"></div>
+  `;
+  const grid = container.querySelector('#ilc-choices');
+  act.choices.forEach((ch, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'ilc-choice-btn';
+    btn.textContent = ch;
+    btn.onclick = ()=>{
+      const all = grid.querySelectorAll('.ilc-choice-btn');
+      if(i === act.correct){
+        // إجابة صحيحة: عطّل الكل واحتفل
+        all.forEach(b=>b.disabled=true);
+        btn.classList.add('correct');
+        ilcShowFeedback(true, act.explain);
+      } else {
+        // خطأ: عطّل الخاطئ فقط واحتفظ ببقية الخيارات للمحاولة
+        btn.classList.add('wrong');
+        btn.disabled = true;
+        ilcShowFeedback(false, act.explain);
+      }
+    };
+    grid.appendChild(btn);
+  });
+}
+
+// ═══ 2. Match Pairs ═══
+function ilcRenderMatchPairs(container, act){
+  // shuffle
+  const leftItems = act.pairs.map((p,i)=>({text:p.left, pairIdx:i}));
+  const rightItems = act.pairs.map((p,i)=>({text:p.right, pairIdx:i}));
+  const shuffled = [...rightItems].sort(()=>Math.random()-0.5);
+
+  container.innerHTML = `
+    <div class="ilc-match-container">
+      <div class="ilc-match-col">
+        <div class="ilc-match-col-header">العمود الأول</div>
+        <div id="ilc-match-left"></div>
+      </div>
+      <div class="ilc-match-col">
+        <div class="ilc-match-col-header">العمود الثاني</div>
+        <div id="ilc-match-right"></div>
+      </div>
+    </div>
+  `;
+  const leftCol = container.querySelector('#ilc-match-left');
+  const rightCol = container.querySelector('#ilc-match-right');
+  leftItems.forEach((item, i)=>{
+    const el = document.createElement('div');
+    el.className = 'ilc-match-item';
+    el.textContent = item.text;
+    el.dataset.pairIdx = item.pairIdx;
+    el.dataset.side = 'left';
+    el.onclick = ()=>ilcHandleMatchClick(el, act);
+    // wrap in a column container for flex
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom = '6px';
+    wrap.appendChild(el);
+    leftCol.appendChild(wrap);
+  });
+  shuffled.forEach(item=>{
+    const el = document.createElement('div');
+    el.className = 'ilc-match-item';
+    el.textContent = item.text;
+    el.dataset.pairIdx = item.pairIdx;
+    el.dataset.side = 'right';
+    el.onclick = ()=>ilcHandleMatchClick(el, act);
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom = '6px';
+    wrap.appendChild(el);
+    rightCol.appendChild(wrap);
+  });
+  // state for match
+  container._matchState = {selectedLeft:null, selectedRight:null, matchedCount:0, total:act.pairs.length};
+}
+
+function ilcHandleMatchClick(el, act){
+  if(el.classList.contains('matched')) return;
+  const container = el.closest('#ilc-activity-body');
+  const state = container._matchState;
+  const side = el.dataset.side;
+
+  // deselect same side
+  container.querySelectorAll(`.ilc-match-item[data-side="${side}"].selected`).forEach(s=>{
+    if(s!==el) s.classList.remove('selected');
+  });
+  if(el.classList.contains('selected')){
+    el.classList.remove('selected');
+    state['selected'+(side==='left'?'Left':'Right')] = null;
+  } else {
+    el.classList.add('selected');
+    state['selected'+(side==='left'?'Left':'Right')] = el;
+  }
+  // إذا اخترنا من الجانبين → افحص
+  if(state.selectedLeft && state.selectedRight){
+    const leftIdx = parseInt(state.selectedLeft.dataset.pairIdx);
+    const rightIdx = parseInt(state.selectedRight.dataset.pairIdx);
+    if(leftIdx === rightIdx){
+      // صح
+      state.selectedLeft.classList.remove('selected');
+      state.selectedRight.classList.remove('selected');
+      state.selectedLeft.classList.add('matched');
+      state.selectedRight.classList.add('matched');
+      state.matchedCount++;
+      state.selectedLeft = null;
+      state.selectedRight = null;
+      if(state.matchedCount === state.total){
+        ilcShowFeedback(true, 'ممتاز! أكملت كل الأزواج');
+      }
+    } else {
+      // خطأ
+      const l = state.selectedLeft, r = state.selectedRight;
+      l.classList.add('wrong-flash');
+      r.classList.add('wrong-flash');
+      setTimeout(()=>{
+        l.classList.remove('selected','wrong-flash');
+        r.classList.remove('selected','wrong-flash');
+      }, 500);
+      state.selectedLeft = null;
+      state.selectedRight = null;
+    }
+  }
+}
+
+// ═══ 3. Timeline Order ═══
+function ilcRenderTimelineOrder(container, act){
+  // shuffle events
+  const shuffled = [...act.events].map((e,i)=>({...e, origIdx:i})).sort(()=>Math.random()-0.5);
+  const sortedByYear = [...act.events].map((e,i)=>({...e, origIdx:i})).sort((a,b)=>a.year-b.year);
+  container._tlState = {sortedByYear, placements: new Array(act.events.length).fill(null)};
+
+  container.innerHTML = `
+    <div class="ilc-draggable-chips" id="ilc-tl-bank" style="margin-bottom:14px;"></div>
+    <div style="font-size:.78rem;font-weight:900;color:#1a3a5c;margin-bottom:8px;text-align:center;">⏳ الخط الزمني (من الأقدم إلى الأحدث)</div>
+    <div id="ilc-tl-slots"></div>
+  `;
+  const bank = container.querySelector('#ilc-tl-bank');
+  const slots = container.querySelector('#ilc-tl-slots');
+  shuffled.forEach(ev=>{
+    const chip = document.createElement('div');
+    chip.className = 'ilc-chip';
+    chip.textContent = ev.text;
+    chip.dataset.origIdx = ev.origIdx;
+    chip.dataset.year = ev.year;
+    ilcMakeDraggable(chip);
+    bank.appendChild(chip);
+  });
+  // إنشاء المنصات
+  for(let i=0;i<act.events.length;i++){
+    const slot = document.createElement('div');
+    slot.className = 'ilc-timeline-slot';
+    slot.dataset.slotIdx = i;
+    slot.innerHTML = `<div class="ilc-timeline-num">${i+1}</div><div class="ilc-timeline-content"></div>`;
+    ilcMakeDropTarget(slot, (chip)=>ilcPlaceInSlot(slot, chip, act, container));
+    slots.appendChild(slot);
+  }
+  // زر تحقق
+  ilcAddCheckButton(()=>ilcCheckTimeline(container, act));
+}
+
+function ilcPlaceInSlot(slot, chip, act, container){
+  // إذا كانت المنصة ممتلئة، أعد القديم للبنك
+  const existingText = slot.querySelector('.ilc-timeline-content');
+  if(existingText.dataset.origIdx !== undefined){
+    // إعادة القديم
+    const oldIdx = existingText.dataset.origIdx;
+    const bank = container.querySelector('#ilc-tl-bank');
+    const oldChip = document.createElement('div');
+    oldChip.className = 'ilc-chip';
+    oldChip.textContent = existingText.textContent;
+    oldChip.dataset.origIdx = oldIdx;
+    oldChip.dataset.year = existingText.dataset.year;
+    ilcMakeDraggable(oldChip);
+    bank.appendChild(oldChip);
+  }
+  existingText.textContent = chip.textContent;
+  existingText.dataset.origIdx = chip.dataset.origIdx;
+  existingText.dataset.year = chip.dataset.year;
+  slot.classList.add('filled');
+  chip.remove();
+  const state = container._tlState;
+  state.placements[parseInt(slot.dataset.slotIdx)] = parseInt(chip.dataset.origIdx);
+  // تحقق إذا اكتمل
+  if(state.placements.every(p=>p!==null)){
+    // لا نتحقق تلقائياً، ننتظر زر check
+  }
+}
+
+function ilcCheckTimeline(container, act){
+  const state = container._tlState;
+  if(state.placements.some(p=>p===null)){
+    toast('املأ كل الفراغات أولاً', 'warn');
+    return;
+  }
+  // الترتيب الصحيح
+  const sortedOrigIdxs = state.sortedByYear.map(e=>e.origIdx);
+  const correct = state.placements.every((placedIdx, i)=>placedIdx === sortedOrigIdxs[i]);
+  const slots = container.querySelectorAll('.ilc-timeline-slot');
+  slots.forEach((slot, i)=>{
+    if(state.placements[i] === sortedOrigIdxs[i]){
+      slot.style.borderColor = '#1a7a4a';
+      slot.style.background = '#d4f5e0';
+    } else {
+      slot.style.borderColor = '#c0392b';
+      slot.style.background = '#fde8e8';
+    }
+  });
+  if(correct){
+    ilcShowFeedback(true, 'أحسنت! ترتيب صحيح 🎯');
+  } else {
+    // أظهر الترتيب الصحيح
+    const correctOrder = state.sortedByYear.map(e=>`${e.year} · ${e.text}`).join('<br>');
+    ilcShowFeedback(false, `الترتيب الصحيح:<br>${correctOrder}`);
+  }
+}
+
+// ═══ 4. Categorize ═══
+function ilcRenderCategorize(container, act){
+  const shuffled = [...act.items].map((item,i)=>({...item, origIdx:i})).sort(()=>Math.random()-0.5);
+  container._catState = {placements: {}}; // origIdx -> bucketId
+
+  container.innerHTML = `
+    <div class="ilc-draggable-chips" id="ilc-cat-bank"></div>
+    <div style="margin:12px 0;font-size:.75rem;text-align:center;color:#888;">👇 اسحب إلى المكان المناسب</div>
+    <div class="ilc-bucket-row" id="ilc-cat-buckets"></div>
+  `;
+  const bank = container.querySelector('#ilc-cat-bank');
+  const buckets = container.querySelector('#ilc-cat-buckets');
+  shuffled.forEach(item=>{
+    const chip = document.createElement('div');
+    chip.className = 'ilc-chip';
+    chip.textContent = item.text;
+    chip.dataset.origIdx = item.origIdx;
+    chip.dataset.correctBucket = item.bucket;
+    ilcMakeDraggable(chip);
+    bank.appendChild(chip);
+  });
+  act.buckets.forEach(bucket=>{
+    const b = document.createElement('div');
+    b.className = 'ilc-bucket';
+    b.dataset.bucketId = bucket.id;
+    b.style.borderColor = bucket.color;
+    b.innerHTML = `
+      <div class="ilc-bucket-title" style="color:${bucket.color};">${esc(bucket.label)}</div>
+      <div class="ilc-bucket-items"></div>
+    `;
+    ilcMakeDropTarget(b, (chip)=>{
+      const itemsDiv = b.querySelector('.ilc-bucket-items');
+      const newChip = chip.cloneNode(true);
+      newChip.classList.remove('dragging');
+      ilcMakeDraggable(newChip);
+      itemsDiv.appendChild(newChip);
+      chip.remove();
+      container._catState.placements[chip.dataset.origIdx] = bucket.id;
+    });
+    buckets.appendChild(b);
+  });
+  ilcAddCheckButton(()=>ilcCheckCategorize(container, act));
+}
+
+function ilcCheckCategorize(container, act){
+  const state = container._catState;
+  const placed = Object.keys(state.placements).length;
+  if(placed < act.items.length){
+    toast(`لم تصنّف ${act.items.length - placed} عنصر بعد`, 'warn');
+    return;
+  }
+  let correctCount = 0;
+  act.items.forEach((item, idx)=>{
+    if(state.placements[idx] === item.bucket) correctCount++;
+  });
+  const allCorrect = correctCount === act.items.length;
+  if(allCorrect){
+    ilcShowFeedback(true, `ممتاز! صنّفت كل العناصر بشكل صحيح (${correctCount}/${act.items.length})`);
+  } else {
+    ilcShowFeedback(false, `أصبت في ${correctCount} من ${act.items.length}. حاول في النشاط القادم!`);
+  }
+}
+
+// ═══ 5. Map Hotspot ═══
+function ilcRenderMapHotspot(container, act){
+  container.innerHTML = `
+    <div class="ilc-map-container">
+      ${act.mapSvg}
+    </div>
+  `;
+  const svg = container.querySelector('svg');
+  // تتبّع النقاط التي أُخطئ فيها لتعطيلها
+  if(!container._mapState) container._mapState = {wrongIndices: new Set()};
+  act.hotspots.forEach((hs, i)=>{
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'ilc-hotspot');
+    g.setAttribute('data-idx', i);
+    // نقاط أُخطئ فيها سابقاً تظهر مُعطّلة
+    const wasWrong = container._mapState.wrongIndices.has(i);
+    g.innerHTML = `
+      <circle cx="${hs.cx}" cy="${hs.cy}" r="11" fill="${wasWrong?'#95a5a6':'#c0392b'}" opacity="${wasWrong?'.5':'.85'}" stroke="#fff" stroke-width="2.5"/>
+      <circle cx="${hs.cx}" cy="${hs.cy}" r="4" fill="#fff"/>
+      ${wasWrong ? `<text x="${hs.cx}" y="${hs.cy+3}" text-anchor="middle" font-size="12" font-weight="900" fill="#c0392b" pointer-events="none">✕</text>` : ''}
+    `;
+    if(wasWrong){
+      g.style.pointerEvents = 'none';
+    } else {
+      g.onclick = ()=>{
+        if(hs.correct){
+          // إجابة صحيحة: عطّل الكل واكشف الأسماء واحتفل
+          container.querySelectorAll('.ilc-hotspot').forEach(h=>h.onclick=null);
+          ilcRevealMapLabels(container, act);
+          g.classList.add('correct');
+          g.querySelector('circle').setAttribute('fill','#1a7a4a');
+          ilcShowFeedback(true, act.explain || `أحسنت! الإجابة الصحيحة: ${hs.label}`);
+        } else {
+          // خطأ: عطّل هذه النقطة فقط واحتفظ ببقية النقاط
+          container._mapState.wrongIndices.add(i);
+          g.classList.add('wrong');
+          g.querySelector('circle').setAttribute('fill','#95a5a6');
+          g.querySelector('circle').setAttribute('opacity','.5');
+          // أضف X على النقطة الخاطئة
+          const xMark = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          xMark.setAttribute('x', hs.cx);
+          xMark.setAttribute('y', hs.cy + 3);
+          xMark.setAttribute('text-anchor', 'middle');
+          xMark.setAttribute('font-size', '12');
+          xMark.setAttribute('font-weight', '900');
+          xMark.setAttribute('fill', '#c0392b');
+          xMark.setAttribute('pointer-events', 'none');
+          xMark.textContent = '✕';
+          g.appendChild(xMark);
+          g.style.pointerEvents = 'none';
+          // feedback بدون كشف الإجابة الصحيحة
+          ilcShowFeedback(false, 'حاول نقطة أخرى على الخريطة');
+        }
+      };
+    }
+    svg.appendChild(g);
+  });
+}
+
+// يكشف الأسماء بعد النقر
+function ilcRevealMapLabels(container, act){
+  const svg = container.querySelector('svg');
+  act.hotspots.forEach(hs=>{
+    const labelText = hs.label;
+    const labelWidth = labelText.length * 7 + 10;
+    const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    labelBg.setAttribute('x', hs.cx - labelWidth/2);
+    labelBg.setAttribute('y', hs.cy - 28);
+    labelBg.setAttribute('width', labelWidth);
+    labelBg.setAttribute('height', 16);
+    labelBg.setAttribute('rx', 8);
+    labelBg.setAttribute('fill', 'rgba(255,255,255,.95)');
+    labelBg.setAttribute('stroke', '#1a3a5c');
+    labelBg.setAttribute('stroke-width', '1');
+    labelBg.setAttribute('pointer-events', 'none');
+    labelBg.setAttribute('class', 'ilc-map-label-reveal');
+    svg.appendChild(labelBg);
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', hs.cx);
+    label.setAttribute('y', hs.cy - 16);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-family', 'Cairo,Arial');
+    label.setAttribute('font-size', '11');
+    label.setAttribute('font-weight', 'bold');
+    label.setAttribute('fill', '#1a3a5c');
+    label.setAttribute('pointer-events', 'none');
+    label.setAttribute('class', 'ilc-map-label-reveal');
+    label.textContent = labelText;
+    svg.appendChild(label);
+  });
+}
+
+// ═══ 6. Fill Blanks ═══
+function ilcRenderFillBlanks(container, act){
+  const allWords = [...act.slots, ...(act.distractors||[])].sort(()=>Math.random()-0.5);
+  container._fbState = {placements: new Array(act.slots.length).fill(null)};
+
+  // build sentence HTML
+  let html = act.sentence;
+  for(let i=0;i<act.slots.length;i++){
+    html = html.replace(`[${i}]`, `<span class="ilc-fill-slot" data-slot-idx="${i}"></span>`);
+  }
+  container.innerHTML = `
+    <div class="ilc-fill-sentence">${html}</div>
+    <div style="font-size:.75rem;text-align:center;color:#888;margin-bottom:8px;">👇 اسحب الكلمات للفراغات</div>
+    <div class="ilc-draggable-chips" id="ilc-fb-bank"></div>
+  `;
+  const bank = container.querySelector('#ilc-fb-bank');
+  allWords.forEach(word=>{
+    const chip = document.createElement('div');
+    chip.className = 'ilc-chip';
+    chip.textContent = word;
+    chip.dataset.word = word;
+    ilcMakeDraggable(chip);
+    bank.appendChild(chip);
+  });
+  container.querySelectorAll('.ilc-fill-slot').forEach(slot=>{
+    ilcMakeDropTarget(slot, (chip)=>{
+      // إذا كانت المنصة ممتلئة، أعد الكلمة للبنك
+      if(slot.dataset.word){
+        const oldChip = document.createElement('div');
+        oldChip.className = 'ilc-chip';
+        oldChip.textContent = slot.dataset.word;
+        oldChip.dataset.word = slot.dataset.word;
+        ilcMakeDraggable(oldChip);
+        bank.appendChild(oldChip);
+      }
+      slot.textContent = chip.dataset.word;
+      slot.dataset.word = chip.dataset.word;
+      slot.classList.add('filled');
+      chip.remove();
+      const idx = parseInt(slot.dataset.slotIdx);
+      container._fbState.placements[idx] = chip.dataset.word;
+    });
+  });
+  ilcAddCheckButton(()=>ilcCheckFillBlanks(container, act));
+}
+
+function ilcCheckFillBlanks(container, act){
+  const state = container._fbState;
+  if(state.placements.some(p=>p===null)){
+    toast('املأ كل الفراغات أولاً', 'warn');
+    return;
+  }
+  let allCorrect = true;
+  container.querySelectorAll('.ilc-fill-slot').forEach((slot, i)=>{
+    if(state.placements[i] === act.slots[i]){
+      slot.classList.add('correct');
+    } else {
+      slot.classList.add('wrong');
+      allCorrect = false;
+    }
+  });
+  if(allCorrect){
+    ilcShowFeedback(true, 'ممتاز! إجابة مثالية 🎯');
+  } else {
+    const correctSent = act.sentence.replace(/\[(\d+)\]/g, (_,i)=>`<b>${act.slots[parseInt(i)]}</b>`);
+    ilcShowFeedback(false, `الإجابة الصحيحة:<br>${correctSent}`);
+  }
+}
+
+// ═══ Drag & Drop helpers (يدعم اللمس والفأرة) ═══
+let _ilcDragState = {chip:null, ghost:null, offsetX:0, offsetY:0};
+
+function ilcMakeDraggable(chip){
+  const startDrag = (e)=>{
+    e.preventDefault();
+    const rect = chip.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    _ilcDragState.chip = chip;
+    _ilcDragState.offsetX = clientX - rect.left;
+    _ilcDragState.offsetY = clientY - rect.top;
+    // ghost
+    const ghost = chip.cloneNode(true);
+    ghost.style.position = 'fixed';
+    ghost.style.left = (clientX - _ilcDragState.offsetX) + 'px';
+    ghost.style.top = (clientY - _ilcDragState.offsetY) + 'px';
+    ghost.style.zIndex = '99999';
+    ghost.style.pointerEvents = 'none';
+    ghost.style.opacity = '.9';
+    ghost.style.transform = 'scale(1.05)';
+    document.body.appendChild(ghost);
+    _ilcDragState.ghost = ghost;
+    chip.classList.add('dragging');
+  };
+  chip.addEventListener('mousedown', startDrag);
+  chip.addEventListener('touchstart', startDrag, {passive:false});
+}
+
+document.addEventListener('mousemove', ilcHandleDragMove);
+document.addEventListener('touchmove', ilcHandleDragMove, {passive:false});
+document.addEventListener('mouseup', ilcHandleDragEnd);
+document.addEventListener('touchend', ilcHandleDragEnd);
+
+function ilcHandleDragMove(e){
+  if(!_ilcDragState.ghost) return;
+  e.preventDefault && e.preventDefault();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  _ilcDragState.ghost.style.left = (clientX - _ilcDragState.offsetX) + 'px';
+  _ilcDragState.ghost.style.top = (clientY - _ilcDragState.offsetY) + 'px';
+  // highlight drop target
+  document.querySelectorAll('.drop-target').forEach(d=>d.classList.remove('drop-target'));
+  const elAtPoint = document.elementFromPoint(clientX, clientY);
+  if(elAtPoint){
+    const target = elAtPoint.closest('[data-drop-target="1"]');
+    if(target) target.classList.add('drop-target');
+  }
+}
+
+function ilcHandleDragEnd(e){
+  if(!_ilcDragState.ghost) return;
+  const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+  const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+  document.querySelectorAll('.drop-target').forEach(d=>d.classList.remove('drop-target'));
+  const elAtPoint = document.elementFromPoint(clientX, clientY);
+  const target = elAtPoint ? elAtPoint.closest('[data-drop-target="1"]') : null;
+  if(target && target._onDrop){
+    target._onDrop(_ilcDragState.chip);
+  }
+  _ilcDragState.chip.classList.remove('dragging');
+  _ilcDragState.ghost.remove();
+  _ilcDragState.ghost = null;
+  _ilcDragState.chip = null;
+}
+
+function ilcMakeDropTarget(el, onDrop){
+  el.dataset.dropTarget = '1';
+  el._onDrop = onDrop;
+}
+
+// ═══ زر التحقق والنتيجة ═══
+function ilcAddCheckButton(onCheck){
+  const actions = document.getElementById('ilc-activity-actions');
+  const btn = document.createElement('button');
+  btn.className = 'ilc-check-btn';
+  btn.id = 'ilc-check-btn';
+  btn.innerHTML = '✓ تحقق من الإجابة';
+  btn.onclick = onCheck;
+  actions.appendChild(btn);
+}
+
+function ilcShowFeedback(correct, explain){
+  const actions = document.getElementById('ilc-activity-actions');
+  // أخفِ زر تحقق
+  const checkBtn = document.getElementById('ilc-check-btn');
+  if(checkBtn) checkBtn.style.display = 'none';
+  // عداد المحاولات
+  ILC.attempts++;
+  if(correct){
+    // احتسب الإجابة الصحيحة مرة واحدة فقط لكل نشاط (إن كان أول محاولة فالعلامة كاملة)
+    if(!ILC._currentActivityCounted){
+      ILC.correctCount++;
+      ILC._currentActivityCounted = true;
+    }
+    ILC.score += 10;
+    if(typeof playSound === 'function') try{playSound('correct');}catch(e){}
+  } else {
+    if(typeof playSound === 'function') try{playSound('wrong');}catch(e){}
+  }
+  // رسالة
+  const fb = document.createElement('div');
+  fb.className = 'ilc-feedback ' + (correct?'success':'error');
+  fb.innerHTML = `
+    <div>${correct?'✅ أحسنت!':'❌ إجابة خاطئة'}</div>
+    ${explain ? `<div class="ilc-feedback-explain">${explain}</div>` : ''}
+  `;
+  actions.appendChild(fb);
+  // الأزرار حسب النتيجة
+  if(correct){
+    // زر التالي (أخضر/كحلي)
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'ilc-next-btn';
+    const isLast = ILC.activityIdx >= ILC.lessonData.activities.length - 1;
+    nextBtn.innerHTML = isLast ? '🎉 إنهاء الدرس' : 'النشاط التالي ←';
+    nextBtn.onclick = ()=>{
+      ILC._currentActivityCounted = false;
+      ILC.activityIdx++;
+      ilcRenderActivity();
+    };
+    actions.appendChild(nextBtn);
+  } else {
+    // زر "حاول مرة أخرى" (بارز)
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'ilc-retry-btn';
+    retryBtn.innerHTML = '🔄 حاول مرة أخرى';
+    retryBtn.onclick = ()=>{
+      // أعد عرض نفس النشاط (بدون إعادة احتساب كنشاط جديد)
+      ilcRenderActivity();
+    };
+    actions.appendChild(retryBtn);
+    // زر "تخطّي" (رمادي صغير، متاح بعد محاولتين خاطئتين)
+    if(ILC.attempts >= 2){
+      const skipBtn = document.createElement('button');
+      skipBtn.className = 'ilc-skip-btn';
+      skipBtn.innerHTML = 'تخطّي هذا النشاط';
+      skipBtn.onclick = ()=>{
+        ILC._currentActivityCounted = false;
+        ILC.activityIdx++;
+        ilcRenderActivity();
+      };
+      actions.appendChild(skipBtn);
+    }
+  }
+}
+
+// ═══ شاشة الإكمال ═══
+function ilcShowComplete(){
+  const container = document.getElementById('ilc-activity-container');
+  const pct = Math.round((ILC.correctCount / ILC.lessonData.activities.length) * 100);
+  let rating, ratingMsg;
+  if(pct >= 90){ rating = '🏆'; ratingMsg = 'ممتاز! أنت عبقري تاريخ'; }
+  else if(pct >= 70){ rating = '⭐'; ratingMsg = 'أحسنت! أداء رائع'; }
+  else if(pct >= 50){ rating = '👍'; ratingMsg = 'جيد، راجع الدرس ستتحسن'; }
+  else { rating = '💪'; ratingMsg = 'لا بأس، حاول مرة أخرى'; }
+  container.innerHTML = `
+    <div class="ilc-complete-screen">
+      <div class="ilc-complete-icon">${rating}</div>
+      <div class="ilc-complete-title">أنهيت الدرس!</div>
+      <div class="ilc-complete-sub">${esc(ratingMsg)}</div>
+      <div class="ilc-complete-score">
+        <span style="color:#d4ac00;">⭐</span>
+        <span>${ILC.correctCount} / ${ILC.lessonData.activities.length} إجابات صحيحة</span>
+      </div>
+      <div style="margin-top:14px;font-size:.8rem;opacity:.85;position:relative;z-index:1;">النسبة: ${pct}%</div>
+      <div style="display:flex;gap:10px;margin-top:18px;position:relative;z-index:1;">
+        <button class="ilc-next-btn" style="background:#d4ac00;color:#1a3a5c;box-shadow:0 4px 0 #8a6f12;" onclick="ilcStartLesson('${ILC.currentLesson}')">🔄 إعادة</button>
+        <button class="ilc-next-btn" onclick="showScreen('screen-ilc-lessons')">📚 دروس أخرى</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('ilc-player-progress-fill').style.width = '100%';
+  document.getElementById('ilc-player-progress-text').textContent = `✓ مكتمل`;
+}
+
+
+
+// بدء افتراضي: شاشة اختيار الصف
+window.addEventListener('DOMContentLoaded', ()=>{
+  showScreen('screen-ilc-grades');
+});
+</script>
+</body>
+</html>
