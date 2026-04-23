@@ -2828,6 +2828,28 @@ function openInfoModal(role){
   document.getElementById('info-grade').value = '';
   document.getElementById('info-school').value = '';
   document.querySelectorAll('#info-overlay .valid, #info-overlay .invalid').forEach(el=>el.classList.remove('valid','invalid'));
+
+  // ✨ اقتراح تلقائي من الحساب المسجّل
+  try{
+    const user = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : null;
+    if(user){
+      const fullName = user.displayName || user.name || '';
+      if(fullName && /[\u0600-\u06FF]/.test(fullName)){
+        document.getElementById('info-name').value = fullName.trim();
+      }
+      // لو لدينا localStorage سابق للمدرسة نستخدمه
+      try{
+        const savedSchool = localStorage.getItem('hh_last_school') || '';
+        const savedGrade = localStorage.getItem('hh_last_grade') || '';
+        if(savedSchool && role === 'teacher'){
+          document.getElementById('info-school').value = savedSchool;
+        }
+        if(savedGrade && role === 'student'){
+          document.getElementById('info-grade').value = savedGrade;
+        }
+      }catch(e){}
+    }
+  }catch(e){}
   document.querySelectorAll('#info-overlay .info-error').forEach(el=>el.classList.remove('show'));
 
   document.getElementById('info-overlay').classList.add('active');
@@ -2862,6 +2884,13 @@ function submitInfoModal(){
   }
   _ilcUserName = nameResult.name;
   _ilcUserSchool = document.getElementById('info-school').value.trim();
+
+  // ✨ حفظ البيانات للاستخدام التلقائي في المرات القادمة
+  try{
+    if(_ilcUserSchool) localStorage.setItem('hh_last_school', _ilcUserSchool);
+    if(_ilcUserGrade) localStorage.setItem('hh_last_grade', _ilcUserGrade);
+  }catch(e){}
+
   // إغلاق المودال والبدء الفعلي
   document.getElementById('info-overlay').classList.remove('active');
   document.body.style.overflow = '';

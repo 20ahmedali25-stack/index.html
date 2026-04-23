@@ -1571,6 +1571,21 @@ function initPickScreen(){
   const name=currentUser?.displayName||currentUser?.name||(currentUser?.email||'').split('@')[0];
   const el=document.getElementById('pick-username');
   if(el)el.textContent='أهلاً '+name+' 👋';
+
+  // ✨ اقتراح تلقائي لاسم الطالب في حقل الاختبار
+  try{
+    const nameInput = document.getElementById('student-name');
+    if(nameInput && !nameInput.value.trim() && name){
+      // نأخذ الاسم الكامل إن كان عربياً وصالحاً
+      const fullName = currentUser?.displayName || currentUser?.name || '';
+      if(fullName && /[\u0600-\u06FF]/.test(fullName)){
+        nameInput.value = fullName.trim();
+        // تشغيل التحقق
+        try{ validateStudentName(); }catch(e){}
+      }
+    }
+  }catch(e){}
+
   buildGroupsGrid();
   renderMyStats();
   // فحص رابط معلم
@@ -2551,6 +2566,24 @@ function showTeacherPanel(){
   updateCQFilterOptions();
   renderCustomGroupsList();
   initCQOpts();
+  // ✨ اقتراح تلقائي لاسم الاختبار
+  try{
+    const tqName = document.getElementById('tq-name');
+    if(tqName && !tqName.value.trim()){
+      const weekdays=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      const today = new Date();
+      const dayName = weekdays[today.getDay()];
+      const dayNum = today.getDate();
+      let teacherFirstName = '';
+      try{
+        const full = currentUser?.displayName || currentUser?.name || '';
+        if(full){ teacherFirstName = full.trim().split(/\s+/)[0]; }
+      }catch(e){}
+      tqName.value = teacherFirstName 
+        ? ('اختبار '+teacherFirstName+' — '+dayName+' '+dayNum)
+        : ('اختبار '+dayName+' '+dayNum);
+    }
+  }catch(e){}
   showScreen('screen-teacher');
 }
 

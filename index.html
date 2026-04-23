@@ -317,7 +317,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;min-height:100vh;}
+body{
+  font-family:"Tajawal","Cairo",sans-serif;
+  color:#2c3e50;
+  min-height:100vh;
+  background-color:#fbf9f2;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(26,77,58,.035) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(141,27,61,.03) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(201,162,39,.025) 0%, transparent 60%),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 60px,
+      rgba(201,162,39,.012) 60px,
+      rgba(201,162,39,.012) 61px
+    );
+  background-attachment:fixed;
+}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
 #screen-board.active{position:fixed;inset:0;overflow:hidden;touch-action:manipulation;display:flex;flex-direction:column;z-index:1;}
@@ -403,49 +420,153 @@ body.dark-mode .btn-home-lux:hover{
 .err-msg{color:#c00;font-size:.82rem;text-align:center;margin-top:7px;min-height:16px;}
 .link-row{text-align:center;margin-top:10px;font-size:.85rem;color:#555;}
 .link-row a{color:#1a4d3a;cursor:pointer;font-weight:700;text-decoration:underline;}
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}
-.cat-btn{padding:8px 6px;border-radius:12px;text-align:center;border:2px solid #1a4d3a;background:#fff;cursor:pointer;transition:all .15s;font-size:.75rem;font-weight:700;color:#1a4d3a;user-select:none;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:85px;position:relative;}
-.cat-btn.active{background:#1a4d3a;color:#fff;}
-.cat-btn.active .ci-svg svg path,.cat-btn.active .ci-svg svg rect,.cat-btn.active .ci-svg svg circle,.cat-btn.active .ci-svg svg polygon{stroke:#fff!important;opacity:.9;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0;}
+/* ═══ بطاقات الفئات - تصميم احترافي ═══ */
+.cat-btn{
+  position:relative;
+  padding:0;
+  border-radius:16px;
+  border:1.5px solid #e8f2ec;
+  background:linear-gradient(135deg,#1a4d3a 0%,#0f3028 100%);
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.34,1.2,.64,1);
+  color:#fff;
+  user-select:none;
+  width:100%;
+  aspect-ratio:1;
+  overflow:hidden;
+  display:block;
+  box-shadow:0 3px 10px rgba(26,77,58,.15);
+}
+.cat-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(26,77,58,.25);
+  border-color:#c9a227;
+}
+.cat-btn.active{
+  border-color:#c9a227;
+  border-width:2.5px;
+  transform:translateY(-2px);
+  box-shadow:0 0 0 3px rgba(201,162,39,.2),0 10px 22px rgba(201,162,39,.35);
+}
+
+/* علامة ✓ فقط عند التحديد */
+.cat-btn.active::before{
+  content:"";position:absolute;top:8px;left:8px;z-index:5;
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,#c9a227,#a68820);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/></svg>");
+  background-size:16px 16px;background-repeat:no-repeat;background-position:center;
+  box-shadow:0 3px 10px rgba(201,162,39,.6);
+  border:2px solid #fff;
+}
+
+/* الصورة المرفوعة تغطي المربع */
+.cat-btn .ci-img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.cat-btn .ci-img img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* الأيقونة SVG الافتراضية (لما مافي صورة) — بالوسط مع خلفية جميلة */
+.cat-btn .ci-svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,rgba(201,162,39,.25) 0%,transparent 55%);
+}
+.cat-btn .ci-svg svg{
+  width:48%;height:48%;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));
+  margin-bottom:14px;
+  opacity:.95;
+}
+/* تلوين أي SVG داخل الخلفية الداكنة */
+.cat-btn .ci-svg svg path,
+.cat-btn .ci-svg svg rect,
+.cat-btn .ci-svg svg circle,
+.cat-btn .ci-svg svg polygon,
+.cat-btn .ci-svg svg ellipse{
+  stroke:#e8c968 !important;
+  fill:rgba(232,201,104,.15) !important;
+  opacity:1 !important;
+}
+
+/* اسم الفئة — شريط علوي واضح وأنيق */
+.cat-btn .ci-lbl{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:8px 6px 7px;
+  background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.72) 50%,rgba(0,0,0,0) 100%);
+  color:#fff;
+  font-size:.72rem;font-weight:900;line-height:1.2;
+  text-align:center;
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+  z-index:3;
+  letter-spacing:-.1px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  word-break:break-word;
+  min-height:32px;
+}
+
+/* زر تعديل الصورة (يظهر فقط للأدمن في وضع التعديل) */
+.cat-btn .cat-edit-btn{
+  position:absolute;top:8px;right:8px;z-index:4;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(26,77,58,.92);color:#fff;
+  display:none;
+  align-items:center;justify-content:center;
+  cursor:pointer;border:2px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+  transition:all .15s;
+  padding:0;
+}
+.cat-btn .cat-edit-btn:hover{background:#c9a227;transform:scale(1.1);}
+.cat-btn .cat-edit-btn svg{width:13px;height:13px;fill:currentColor;}
+body.admin-edit-mode .cat-btn .cat-edit-btn{display:flex;}
 
 /* الفئات الخاصة المقفلة */
 .cat-btn.locked{
-  background:linear-gradient(135deg,#f5f5f5 0%,#eeeeee 100%);
-  border-color:#bdbdbd;
-  color:#9e9e9e;
+  border-color:#c9a227;
   cursor:not-allowed;
-  position:relative;
-  overflow:hidden;
+  background:linear-gradient(135deg,#1a1a1a 0%,#0a2820 60%,#1a1a1a 100%);
+  opacity:.88;
 }
-.cat-btn.locked .ci-svg{opacity:.35;filter:grayscale(.7);}
-.cat-btn.locked .ci-lbl{opacity:.6;}
-.cat-btn.locked::before{
-  content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 6px,
-    rgba(0,0,0,.04) 6px,
-    rgba(0,0,0,.04) 7px
-  );
-  pointer-events:none;
+.cat-btn.locked:hover{
+  transform:none;
+  opacity:1;
+  box-shadow:0 6px 18px rgba(201,162,39,.25);
 }
+.cat-btn.locked .ci-svg,
+.cat-btn.locked .ci-img{
+  opacity:.45;
+  filter:grayscale(.5) brightness(.85);
+}
+.cat-btn.locked .ci-lbl{
+  color:#e8c968;
+  background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.85) 50%,rgba(0,0,0,0) 100%);
+}
+.cat-btn.locked::before{display:none;}
 .cat-btn.locked::after{
-  content:"";position:absolute;top:4px;left:4px;
-  width:20px;height:20px;border-radius:50%;
+  content:"";position:absolute;top:8px;right:8px;
+  width:28px;height:28px;border-radius:50%;
   background:linear-gradient(135deg,#c9a227,#a68820);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z'/></svg>");
-  background-size:12px 12px;background-repeat:no-repeat;background-position:center;
-  box-shadow:0 2px 6px rgba(201,162,39,.4);
-  border:1.5px solid #fff;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z'/></svg>");
+  background-size:16px;background-repeat:no-repeat;background-position:center;
+  box-shadow:0 3px 10px rgba(201,162,39,.7);
+  border:2px solid #fff;z-index:3;
 }
 
-.cat-btn.active{background:#1a4d3a;color:#fff;}
-.cat-btn.active .ci-svg svg path,.cat-btn.active .ci-svg svg rect,.cat-btn.active .ci-svg svg circle,.cat-btn.active .ci-svg svg polygon{stroke:#fff!important;opacity:.9;}
-.cat-btn .ci{font-size:1.3rem;display:block;}
-.cat-btn .ci-svg{width:38px;height:38px;display:flex;align-items:center;justify-content:center;}
-.cat-btn .ci-svg svg{width:38px;height:38px;}
-.cat-btn .ci-lbl{font-size:.68rem;font-weight:700;line-height:1.3;text-align:center;max-width:80px;white-space:normal;word-break:break-word;overflow:visible;}
+.cat-btn .ci{display:none;}
 .teams-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .team-box{padding:10px;border-radius:10px;text-align:center;border:2px solid #1a4d3a;}
 .team-box label{font-size:.75rem;color:#555;display:block;margin-bottom:4px;font-weight:700;}
@@ -462,19 +583,66 @@ body.dark-mode .btn-home-lux:hover{
 .cat-row{display:grid;align-items:stretch;}
 .cat-col{display:flex;flex-direction:column;}
 /* بطاقة الفئة المركزية — صورة + شريط الاسم */
-.cat-center{border-radius:14px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;background:#e8f2ec;}
-.cat-center .cc-img-wrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:3px 3px 0;}
-.cat-center .cc-img-wrap img,.cat-center .cc-img-wrap svg{width:100%;height:100%;object-fit:contain;}
-.cat-center .cc-img-wrap .cc-emoji{font-size:2rem;line-height:1;}
-.cat-center .cc-label-bar{padding:3px 6px;margin:0 auto 3px;text-align:center;font-weight:900;color:#fff;font-family:'Cairo',sans-serif;line-height:1.2;word-break:break-word;white-space:normal;letter-spacing:0px;display:flex;align-items:center;justify-content:center;border-radius:16px;width:calc(100% - 4px);align-self:center;overflow:hidden;}
-/* خلية السؤال — pill/capsule */
-.qcell{border-radius:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;background:#e0e6ee;box-shadow:0 2px 5px rgba(0,0,0,.07);}
-.qcell:hover:not(.used){transform:scale(1.05);box-shadow:0 4px 12px rgba(0,0,0,.18);}
-.qcell.used{opacity:.15;cursor:not-allowed;transform:none!important;box-shadow:none;}
-.qcell:active:not(.used){transform:scale(.93)!important;transition:transform .08s;}
+.cat-center{
+  border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  position:relative;background:#e8f2ec;
+  box-shadow:0 3px 12px rgba(0,0,0,.12);
+  border:1.5px solid rgba(201,162,39,.2);
+}
+.cat-center .cc-img-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  padding:6px;
+  width:100%;
+}
+.cat-center .cc-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  border-radius:10px;
+}
+.cat-center .cc-img-wrap svg{width:72%;height:72%;object-fit:contain;}
+.cat-center .cc-img-wrap .cc-emoji{font-size:2.5rem;line-height:1;}
+.cat-center .cc-label-bar{
+  padding:6px 8px;margin:0;
+  text-align:center;font-weight:900;color:#fff;
+  font-family:'Cairo',sans-serif;line-height:1.25;
+  word-break:break-word;white-space:normal;letter-spacing:-.1px;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;
+  overflow:hidden;
+  border-radius:0;
+  text-shadow:0 1px 3px rgba(0,0,0,.4);
+  min-height:32px;
+}
+/* خلية السؤال — تصميم أنيق ومتوازن */
+.qcell{
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s cubic-bezier(.34,1.2,.64,1);
+  background:#e0e6ee;
+  box-shadow:0 2px 5px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.4);
+  border:1.5px solid rgba(0,0,0,.04);
+  position:relative;
+  overflow:hidden;
+}
+.qcell::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,transparent 50%);
+  pointer-events:none;
+}
+.qcell:hover:not(.used){
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  z-index:2;
+}
+.qcell.used{opacity:.18;cursor:not-allowed;transform:none!important;box-shadow:none;}
+.qcell:active:not(.used){transform:translateY(0) scale(.95)!important;transition:transform .08s;}
 @keyframes cellPop{0%{transform:scale(1);}40%{transform:scale(.88);}70%{transform:scale(1.06);}100%{transform:scale(1);}}
 .qcell.popping{animation:cellPop .3s ease forwards;}
-.qcell .qpts{font-weight:900;line-height:1;}
+.qcell .qpts{
+  font-weight:900;line-height:1;
+  position:relative;z-index:2;
+  letter-spacing:-.5px;
+}
 /* ألوان الخلايا تُحدَّد inline من makeQCell حسب لون الفئة */
 .qcell.easy{}
 .qcell.easy .qpts{}
@@ -856,26 +1024,45 @@ input,textarea{-webkit-user-select:text;user-select:text;}
   font-family:'Cairo',sans-serif;
 }
 
-/* === الهيدر الترحيبي === */
+/* === الهيدر الترحيبي المحسّن === */
 .royal-greeting{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;margin-bottom:18px;
-  background:linear-gradient(135deg,#fff 0%,#f8faff 100%);
-  border:1.5px solid rgba(26,77,58,.08);
-  border-radius:18px;
-  box-shadow:0 4px 16px rgba(26,77,58,.06);
+  padding:16px 20px;margin-bottom:18px;
+  background:
+    linear-gradient(135deg,#fff 0%,#fdfaf0 100%);
+  border:1.5px solid rgba(201,162,39,.25);
+  border-radius:20px;
+  box-shadow:
+    0 2px 6px rgba(26,77,58,.04),
+    0 8px 24px rgba(26,77,58,.08);
   position:relative;overflow:hidden;
 }
 .royal-greeting::before{
   content:"";position:absolute;top:0;right:0;bottom:0;
-  width:4px;background:linear-gradient(180deg,#c9a227,#e8c968,#c9a227);
-  border-radius:0 18px 18px 0;
+  width:5px;background:linear-gradient(180deg,#c9a227,#e8c968,#c9a227);
+  border-radius:0 20px 20px 0;
+}
+.royal-greeting::after{
+  content:"";position:absolute;top:-50%;left:-15%;
+  width:45%;height:200%;opacity:.06;
+  background:radial-gradient(ellipse,#c9a227 0%,transparent 60%);
+  filter:blur(30px);pointer-events:none;
 }
 .royal-hello{
-  font-size:.72rem;color:#888;font-weight:700;margin-bottom:2px;letter-spacing:.5px;
+  font-size:.7rem;color:#7a6418;font-weight:800;
+  margin-bottom:4px;letter-spacing:1.2px;
+  display:flex;align-items:center;gap:5px;
+  text-transform:uppercase;
+}
+.royal-hello::before{
+  content:"";width:14px;height:1.5px;background:#c9a227;display:inline-block;
 }
 .royal-username{
-  font-size:1.05rem;font-weight:900;color:#1a4d3a;
+  font-size:1.15rem;font-weight:900;color:#0f3028;
+  line-height:1.2;letter-spacing:-.3px;
+  direction:rtl;text-align:right;
+  max-width:180px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .royal-username .wave{
   display:inline-block;animation:royalWave 2.5s ease-in-out infinite;transform-origin:70% 70%;
@@ -889,54 +1076,109 @@ input,textarea{-webkit-user-select:text;user-select:text;}
   70%{transform:rotate(0);}
 }
 .royal-brand-mini{
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;gap:10px;
+  position:relative;z-index:2;
 }
 .royal-brand-mini-icon{
-  width:42px;height:42px;
+  width:46px;height:46px;
   display:flex;align-items:center;justify-content:center;
-  filter:drop-shadow(0 3px 6px rgba(26,77,58,.25));
+  filter:drop-shadow(0 4px 8px rgba(26,77,58,.3));
   position:relative;
+  transition:transform .3s;
 }
+.royal-brand-mini-icon:hover{transform:scale(1.05) rotate(-3deg);}
 .royal-brand-mini-icon svg{width:100%;height:100%;}
-.royal-brand-name{font-weight:900;font-size:1.15rem;color:#1a4d3a;letter-spacing:-.5px;}
+.royal-brand-name-wrap{
+  display:flex;flex-direction:column;gap:1px;
+}
+.royal-brand-name{
+  font-weight:900;font-size:1.2rem;color:#1a4d3a;letter-spacing:-.5px;
+  line-height:1;
+}
+.royal-brand-tag{
+  font-size:.62rem;color:#7a6418;font-weight:700;
+  letter-spacing:.3px;
+}
 
 /* ═══════════════════════════════════════════
    الواجهة المبسطة — مسارا المعلم/الطالب
    ═══════════════════════════════════════════ */
 .path-intro{
-  text-align:center;padding:14px 16px 18px;
+  text-align:center;padding:4px 16px 14px;
+  position:relative;
+}
+.path-intro::before{
+  content:"";
+  display:block;
+  width:50px;height:3px;
+  background:linear-gradient(90deg,transparent,#c9a227,transparent);
+  margin:0 auto 14px;
+  border-radius:2px;
 }
 .path-intro-label{
   display:inline-block;font-size:.7rem;font-weight:800;
-  color:#c9a227;letter-spacing:2px;margin-bottom:4px;
+  color:#c9a227;letter-spacing:2px;margin-bottom:6px;
   text-transform:uppercase;font-family:Cairo,sans-serif;
 }
 .path-intro-title{
   font-family:Cairo,sans-serif;font-weight:900;color:#0f3028;
-  font-size:1.35rem;letter-spacing:-.4px;line-height:1.3;
+  font-size:1.4rem;letter-spacing:-.4px;line-height:1.3;
 }
 
 .paths-container{
-  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
   margin-bottom:18px;padding:6px 0 14px;
 }
+@media(max-width:480px){
+  .paths-container{grid-template-columns:1fr 1fr;gap:10px;}
+  .path-visitor{grid-column:1/-1;min-height:220px !important;aspect-ratio:auto;}
+}
 .path-card{
-  position:relative;border-radius:24px;overflow:hidden;
+  position:relative;border-radius:22px;overflow:hidden;
   cursor:pointer;transition:all .35s cubic-bezier(.34,1.2,.64,1);
-  min-height:440px;
+  min-height:400px;
   box-shadow:
-    0 4px 12px rgba(15,48,40,.08),
-    0 12px 32px rgba(15,48,40,.15),
-    0 24px 48px rgba(15,48,40,.1);
+    0 4px 12px rgba(15,48,40,.1),
+    0 12px 32px rgba(15,48,40,.18),
+    0 24px 48px rgba(15,48,40,.12);
 }
 .path-card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-6px) scale(1.01);
   box-shadow:
-    0 6px 16px rgba(15,48,40,.1),
-    0 20px 48px rgba(15,48,40,.22),
-    0 32px 64px rgba(15,48,40,.18);
+    0 6px 16px rgba(15,48,40,.12),
+    0 20px 48px rgba(15,48,40,.26),
+    0 32px 64px rgba(15,48,40,.2);
 }
 .path-card:active{transform:translateY(-3px);}
+
+/* مسار الزائر — شكل مختلف (عريض أفقياً على الموبايل) */
+.path-visitor{
+  min-height:160px !important;
+}
+.path-visitor .path-card-inner{
+  padding:20px 16px !important;
+}
+@media(max-width:480px){
+  .path-visitor{min-height:140px !important;}
+  .path-visitor .path-card-inner{
+    flex-direction:row !important;
+    align-items:center !important;
+    padding:16px !important;
+    gap:14px;
+  }
+  .path-visitor .path-icon{margin-bottom:0 !important;flex-shrink:0;}
+  .path-visitor .path-title::after{display:none;}
+  .path-visitor .path-features{display:none;}
+  .path-visitor .path-badge{position:absolute;top:12px;left:12px;margin-bottom:0;}
+  .path-visitor .path-title{font-size:1.15rem !important;margin-bottom:3px !important;}
+  .path-visitor .path-desc{margin-bottom:0 !important;font-size:.78rem !important;}
+  .path-visitor .path-cta{
+    position:absolute;bottom:12px;left:12px;right:auto;width:auto;
+    padding:7px 14px !important;font-size:.76rem !important;
+    display:none !important;
+  }
+  .path-visitor-content{flex:1;min-width:0;}
+}
 .path-card-inner{
   position:relative;z-index:2;
   height:100%;padding:16px 12px 14px;
@@ -977,23 +1219,43 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 .path-student .path-cta{background:#c9a227;color:#0a2820;}
 .path-student .path-feature svg{color:#e8c968;}
 
+/* مسار الزائر — رمادي أنيق مع لمسات ذهبية (الترحيب والفضول) */
+.path-visitor{
+  background:
+    radial-gradient(circle at 50% 0%, rgba(201,162,39,.12) 0%, transparent 55%),
+    linear-gradient(135deg,#2d3748 0%,#3a4556 50%,#4a5668 100%);
+  border:2px solid rgba(201,162,39,.4);
+}
+.path-visitor .path-badge{background:#c9a227;color:#2d3748;}
+.path-visitor .path-icon{background:rgba(201,162,39,.18);color:#e8c968;border-color:rgba(201,162,39,.45);}
+.path-visitor .path-cta{background:#c9a227;color:#2d3748;}
+.path-visitor .path-feature svg{color:#e8c968;}
+
 .path-badge{
   display:inline-block;align-self:flex-start;
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.62rem;
-  padding:3px 9px;border-radius:999px;letter-spacing:.5px;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.58rem;
+  padding:3px 10px;border-radius:999px;letter-spacing:1px;
   margin-bottom:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+  text-transform:uppercase;
 }
 .path-icon{
-  width:44px;height:44px;border-radius:12px;
+  width:42px;height:42px;border-radius:11px;
   border:1.5px solid;
   display:flex;align-items:center;justify-content:center;
   margin-bottom:8px;
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  transition:transform .3s ease;
 }
-.path-icon svg{width:24px;height:24px;}
+.path-card:hover .path-icon{transform:scale(1.08) rotate(-3deg);}
+.path-icon svg{width:22px;height:22px;}
 .path-title{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:1.3rem;
-  margin:0 0 5px;letter-spacing:-.4px;
-  position:relative;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:1.18rem;
+  margin:0 0 4px;letter-spacing:-.4px;
+  position:relative;line-height:1.15;
+  text-shadow:0 1px 8px rgba(0,0,0,.25);
 }
 .path-title::after{
   content:"";display:block;width:28px;height:2.5px;
@@ -1001,55 +1263,60 @@ input,textarea{-webkit-user-select:text;user-select:text;}
   margin-top:4px;border-radius:2px;
 }
 .path-desc{
-  font-size:.74rem;line-height:1.55;color:rgba(255,255,255,.85);
-  margin:0 0 12px;font-weight:600;
+  font-size:.7rem;line-height:1.55;color:rgba(255,255,255,.88);
+  margin:0 0 10px;font-weight:600;
 }
 .path-features{
-  display:flex;flex-direction:column;gap:6px;
-  margin-bottom:12px;flex:1;
-  padding:8px;
-  background:rgba(0,0,0,.18);
-  backdrop-filter:blur(8px);
-  border-radius:12px;
+  display:flex;flex-direction:column;gap:5px;
+  margin-bottom:10px;flex:1;
+  padding:7px;
+  background:rgba(0,0,0,.22);
+  backdrop-filter:blur(10px);
+  border-radius:11px;
   border:1px solid rgba(255,255,255,.08);
 }
 .path-feature{
-  display:flex;align-items:center;gap:7px;
-  font-size:.7rem;font-weight:800;color:rgba(255,255,255,.92);
-  padding:6px 8px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:8px;
+  display:flex;align-items:center;gap:6px;
+  font-size:.66rem;font-weight:800;color:rgba(255,255,255,.95);
+  padding:5px 7px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:7px;
   transition:all .2s ease;
   line-height:1.3;
 }
 .path-card:hover .path-feature{
-  background:rgba(255,255,255,.1);
-  border-color:rgba(201,162,39,.3);
-  transform:translateX(-2px);
+  background:rgba(255,255,255,.13);
+  border-color:rgba(201,162,39,.4);
+  transform:translateX(-3px);
 }
 .path-feature svg{
   color:#c9a227;flex-shrink:0;
-  background:rgba(201,162,39,.2);
-  padding:3px;border-radius:5px;
-  width:18px !important;height:18px !important;
+  background:rgba(201,162,39,.25);
+  padding:2.5px;border-radius:5px;
+  width:15px !important;height:15px !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 .path-cta{
   display:flex;align-items:center;justify-content:space-between;
-  padding:9px 14px;border-radius:12px;
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.82rem;
+  padding:10px 14px;border-radius:12px;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.78rem;
   transition:all .25s ease;
-  box-shadow:0 4px 14px rgba(0,0,0,.2);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.25);
   position:relative;overflow:hidden;
 }
 .path-cta::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
   transform:translateX(-100%);transition:transform .6s ease;
 }
 .path-card:hover .path-cta{
   transform:scale(1.03);
-  box-shadow:0 8px 20px rgba(0,0,0,.3);
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.3);
 }
 .path-card:hover .path-cta::after{transform:translateX(100%);}
 
@@ -1361,10 +1628,213 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 }
 .unlock-close-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,162,39,.5);}
 
-/* ═══ زر الإنجازات في الأدوات السريعة ══ */
+/* ═══ الأدوات السريعة — نظام ألوان متناغم مع هوية المنصة ═══ */
+
+/* 1. المتصدرون — ذهبي ملكي (البطولة والإنجاز) */
+.qt-leaderboard{background:linear-gradient(135deg,#fef4d4 0%,#fff 100%);color:#7a6418;}
+.qt-leaderboard::before{background:#c9a227;}
+.qt-leaderboard .quick-tool-icon-wrap{background:linear-gradient(135deg,#e8c968,#c9a227);color:#fff;}
+
+/* 2. سجل ألعابي — أخضر زيتي (الهوية الأساسية) */
+.qt-mygames{background:linear-gradient(135deg,#e4ede7 0%,#fff 100%);color:#0a2820;}
+.qt-mygames::before{background:#1a4d3a;}
+.qt-mygames .quick-tool-icon-wrap{background:linear-gradient(135deg,#2d6e54,#1a4d3a);color:#fff;}
+
+/* 3. القوانين — عنابي قطري (الرسمية والوقار) */
+.qt-rules{background:linear-gradient(135deg,#f5e1e7 0%,#fff 100%);color:#4a0e1f;}
+.qt-rules::before{background:#8D1B3D;}
+.qt-rules .quick-tool-icon-wrap{background:linear-gradient(135deg,#a83a5e,#8D1B3D);color:#fff;}
+
+/* 4. تقييم اللعبة — كهرماني دافئ (الحماس والتفاعل) */
+.qt-reviews{background:linear-gradient(135deg,#faead3 0%,#fff 100%);color:#7a4a0c;}
+.qt-reviews::before{background:#b88420;}
+.qt-reviews .quick-tool-icon-wrap{background:linear-gradient(135deg,#d19840,#b88420);color:#fff;}
+
+/* 5. الرعاة — زيتي داكن مع لمسة ذهبية (النبل والشراكة) */
+.qt-sponsors{background:linear-gradient(135deg,#d8e2dc 0%,#fff 100%);color:#0f3028;}
+.qt-sponsors::before{background:#2d5544;}
+.qt-sponsors .quick-tool-icon-wrap{background:linear-gradient(135deg,#4a7a65,#2d5544);color:#fff;}
+
+/* 6. من نحن — عنابي فاتح (قيمة أصيلة) */
+.qt-about{background:linear-gradient(135deg,#f0dde3 0%,#fff 100%);color:#6b1530;}
+.qt-about::before{background:#a83a5e;}
+.qt-about .quick-tool-icon-wrap{background:linear-gradient(135deg,#c55578,#a83a5e);color:#fff;}
+
+/* 7. الإنجازات — ذهبي عتيق (فخر التحصيل) */
 .qt-achievements{background:linear-gradient(135deg,#faf2d6 0%,#fff 100%);color:#7a6418;}
 .qt-achievements::before{background:#c9a227;}
-.qt-achievements .quick-tool-icon-wrap{background:linear-gradient(135deg,#e8c968,#c9a227);color:#fff;}
+.qt-achievements .quick-tool-icon-wrap{background:linear-gradient(135deg,#d4b740,#a68820);color:#fff;}
+
+/* 8. دليل الاستخدام — فيروزي نبيل (المعرفة والإرشاد) */
+.qt-guide{background:linear-gradient(135deg,#dfeeed 0%,#fff 100%);color:#0f4a47;}
+.qt-guide::before{background:#166e6a;}
+.qt-guide .quick-tool-icon-wrap{background:linear-gradient(135deg,#2a8a85,#166e6a);color:#fff;}
+
+/* ═══════════════════════════════════════════
+   شاشة دليل الاستخدام
+   ═══════════════════════════════════════════ */
+.guide-hero{
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(201,162,39,.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(22,110,106,.25) 0%, transparent 50%),
+    linear-gradient(135deg,#0a2820 0%,#0f3028 50%,#166e6a 100%);
+  border-radius:22px;padding:24px 22px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+  border:1.5px solid rgba(201,162,39,.35);
+  color:#fff;
+}
+.guide-hero::before{
+  content:"";position:absolute;top:-30%;right:-15%;
+  width:60%;height:80%;opacity:.15;
+  background:radial-gradient(circle,#c9a227 0%,transparent 65%);
+  filter:blur(40px);pointer-events:none;
+}
+.gh-label{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(201,162,39,.18);border:1px solid #c9a227;
+  padding:4px 12px;border-radius:999px;
+  font-family:Cairo;font-weight:900;font-size:.66rem;
+  letter-spacing:1.5px;color:#e8c968;
+  margin-bottom:10px;position:relative;z-index:2;
+}
+.gh-label svg{width:11px;height:11px;fill:currentColor;}
+.gh-title{
+  font-family:Cairo;font-weight:900;font-size:1.4rem;color:#fff;
+  margin-bottom:5px;line-height:1.2;
+  text-shadow:0 2px 12px rgba(0,0,0,.3);
+  position:relative;z-index:2;
+}
+.gh-sub{
+  font-size:.85rem;color:rgba(255,255,255,.82);font-weight:600;
+  line-height:1.6;position:relative;z-index:2;
+}
+
+/* تبديل المستخدم (معلم/طالب) */
+.guide-switcher{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-bottom:20px;padding:6px;
+  background:#fff;border:1.5px solid #e0e8eb;
+  border-radius:14px;
+  box-shadow:0 2px 6px rgba(0,0,0,.04);
+}
+.guide-tab{
+  padding:12px;border-radius:10px;cursor:pointer;
+  background:transparent;border:none;
+  font-family:Cairo;font-weight:900;font-size:.92rem;color:#6b7c8e;
+  transition:all .25s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.guide-tab svg{width:18px;height:18px;fill:currentColor;}
+.guide-tab:hover{background:#f5faf7;color:#0f3028;}
+.guide-tab.active{
+  background:linear-gradient(135deg,#1a4d3a,#0f3028);color:#fff;
+  box-shadow:0 4px 12px rgba(26,77,58,.25);
+}
+.guide-tab.active svg{fill:#e8c968;}
+
+/* بطاقات الخطوات */
+.guide-content{display:none;}
+.guide-content.active{display:block;animation:guideFadeIn .35s ease;}
+@keyframes guideFadeIn{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.guide-step{
+  background:#fff;border:1.5px solid #e8f2ec;border-radius:16px;
+  padding:16px;margin-bottom:12px;
+  position:relative;
+  transition:all .2s;
+}
+.guide-step:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(15,48,40,.1);
+  border-color:#c9a227;
+}
+.gs-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:10px;
+}
+.gs-number{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#c9a227,#a68820);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Cairo;font-weight:900;font-size:1rem;
+  box-shadow:0 3px 8px rgba(201,162,39,.3);
+}
+.gs-info{flex:1;min-width:0;}
+.gs-title{
+  font-family:Cairo;font-weight:900;font-size:1rem;color:#0f3028;
+  line-height:1.25;margin-bottom:2px;
+}
+.gs-subtitle{
+  font-size:.74rem;color:#6b7c8e;font-weight:700;
+}
+.gs-desc{
+  font-size:.84rem;line-height:1.7;color:#3d4e60;font-weight:500;
+  margin:8px 0 10px;padding-right:4px;
+}
+.gs-desc strong{color:#0f3028;font-weight:900;}
+.gs-action{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#166e6a,#0f4a47);color:#fff;
+  padding:8px 14px;border-radius:10px;cursor:pointer;
+  font-family:Cairo;font-weight:900;font-size:.78rem;border:none;
+  transition:all .2s;
+  text-decoration:none;
+  box-shadow:0 3px 10px rgba(22,110,106,.25);
+}
+.gs-action:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(22,110,106,.4);}
+.gs-action svg{width:13px;height:13px;fill:currentColor;}
+
+/* نصيحة ملوّنة */
+.gs-tip{
+  background:linear-gradient(135deg,#fdfaf0,#fff);
+  border:1px solid #c9a227;border-right:4px solid #c9a227;
+  border-radius:10px;padding:10px 12px;margin-top:10px;
+  font-size:.78rem;line-height:1.6;color:#7a6418;font-weight:600;
+  display:flex;gap:8px;
+}
+.gs-tip svg{width:16px;height:16px;fill:#c9a227;flex-shrink:0;margin-top:1px;}
+.gs-tip strong{color:#0f3028;font-weight:900;}
+
+/* قسم الميزات */
+.guide-features{
+  background:linear-gradient(135deg,#f5faf7,#fff);
+  border:1.5px solid #dbe8df;border-radius:16px;
+  padding:16px;margin:20px 0;
+}
+.gf-title{
+  font-family:Cairo;font-weight:900;font-size:.92rem;color:#0f3028;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.gf-title svg{width:18px;height:18px;fill:#c9a227;}
+.gf-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.gf-item{
+  background:#fff;border:1px solid #e8f2ec;border-radius:10px;
+  padding:10px;display:flex;align-items:center;gap:8px;
+  font-size:.76rem;color:#3d4e60;font-weight:700;
+}
+.gf-item svg{width:14px;height:14px;fill:#166e6a;flex-shrink:0;}
+
+/* خاتمة */
+.guide-closing{
+  background:linear-gradient(135deg,#0a2820,#166e6a);color:#fff;
+  border-radius:16px;padding:20px;margin-top:20px;text-align:center;
+}
+.guide-closing h3{
+  font-family:Cairo;font-weight:900;font-size:1.05rem;margin-bottom:6px;color:#e8c968;
+}
+.guide-closing p{font-size:.85rem;line-height:1.7;opacity:.9;font-weight:600;}
+
+@media(max-width:400px){
+  .gf-grid{grid-template-columns:1fr;}
+  .guide-switcher{grid-template-columns:1fr;}
+}
+
+/* ═══════════════════════════════════════════
+   شاشة دليل الاستخدام — نهاية
+   ═══════════════════════════════════════════ */
 
 /* ═══ الأدوات السريعة - تصميم حيّ ومتنوع ═══ */
 .quick-tools{margin:24px 0 16px;}
@@ -1385,61 +1855,64 @@ input,textarea{-webkit-user-select:text;user-select:text;}
 
 .quick-tool-btn{
   position:relative;
-  border:none;border-radius:16px;
+  border:1.5px solid rgba(0,0,0,.04);
+  border-radius:18px;
   padding:18px 10px 14px;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
   font-family:Cairo,sans-serif;font-weight:900;font-size:.78rem;
   transition:all .3s cubic-bezier(.34,1.2,.64,1);
-  min-height:98px;justify-content:center;
+  min-height:104px;justify-content:center;
   overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.04),
+    0 4px 12px rgba(0,0,0,.06);
 }
 .quick-tool-btn::before{
   content:"";position:absolute;top:-30%;left:-30%;
   width:80%;height:80%;border-radius:50%;
-  opacity:.15;filter:blur(20px);
+  opacity:.12;filter:blur(22px);
   transition:all .4s ease;
+}
+.quick-tool-btn::after{
+  content:"";position:absolute;inset:0;border-radius:18px;
+  background:linear-gradient(135deg,rgba(201,162,39,0) 0%,rgba(201,162,39,0) 100%);
+  pointer-events:none;transition:background .3s ease;
 }
 .quick-tool-btn:hover{
   transform:translateY(-4px) scale(1.02);
-  box-shadow:0 12px 28px rgba(0,0,0,.15);
+  box-shadow:
+    0 6px 12px rgba(0,0,0,.08),
+    0 14px 32px rgba(0,0,0,.15);
+  border-color:rgba(201,162,39,.25);
 }
-.quick-tool-btn:hover::before{transform:scale(1.5);opacity:.25;}
+.quick-tool-btn:hover::before{transform:scale(1.6);opacity:.22;}
+.quick-tool-btn:hover::after{
+  background:linear-gradient(135deg,rgba(201,162,39,.04) 0%,rgba(201,162,39,0) 60%);
+}
 .quick-tool-btn:active{transform:translateY(-2px) scale(1);}
 
 .quick-tool-icon-wrap{
-  width:44px;height:44px;border-radius:12px;
+  width:46px;height:46px;border-radius:13px;
   display:flex;align-items:center;justify-content:center;
   position:relative;z-index:2;
-  box-shadow:0 4px 10px rgba(0,0,0,.12);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.08),
+    0 6px 14px rgba(0,0,0,.15),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  transition:all .3s ease;
 }
-.quick-tool-icon-wrap svg{width:22px;height:22px;}
+.quick-tool-btn:hover .quick-tool-icon-wrap{
+  transform:translateY(-1px) scale(1.04);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,.1),
+    0 10px 22px rgba(0,0,0,.2),
+    inset 0 1px 0 rgba(255,255,255,.3);
+}
+.quick-tool-icon-wrap svg{width:23px;height:23px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));}
 .quick-tool-btn span{position:relative;z-index:2;}
 
 /* ألوان متنوعة — كل أداة بشخصية */
-.qt-leaderboard{background:linear-gradient(135deg,#fef9e6 0%,#fff 100%);color:#7a5c10;}
-.qt-leaderboard::before{background:#c9a227;}
-.qt-leaderboard .quick-tool-icon-wrap{background:linear-gradient(135deg,#c9a227,#a68820);color:#fff;}
-
-.qt-mygames{background:linear-gradient(135deg,#e8f2ec 0%,#fff 100%);color:#0a2820;}
-.qt-mygames::before{background:#1a4d3a;}
-.qt-mygames .quick-tool-icon-wrap{background:linear-gradient(135deg,#2d6e54,#1a4d3a);color:#fff;}
-
-.qt-rules{background:linear-gradient(135deg,#fce8ee 0%,#fff 100%);color:#4a0e1f;}
-.qt-rules::before{background:#8D1B3D;}
-.qt-rules .quick-tool-icon-wrap{background:linear-gradient(135deg,#a1234d,#8D1B3D);color:#fff;}
-
-.qt-reviews{background:linear-gradient(135deg,#e5eef6 0%,#fff 100%);color:#1a3555;}
-.qt-reviews::before{background:#2c5282;}
-.qt-reviews .quick-tool-icon-wrap{background:linear-gradient(135deg,#3a6ba3,#2c5282);color:#fff;}
-
-.qt-sponsors{background:linear-gradient(135deg,#f3eaf7 0%,#fff 100%);color:#4a2766;}
-.qt-sponsors::before{background:#6b3a8a;}
-.qt-sponsors .quick-tool-icon-wrap{background:linear-gradient(135deg,#8250a8,#6b3a8a);color:#fff;}
-
-.qt-about{background:linear-gradient(135deg,#fdeee4 0%,#fff 100%);color:#6b3518;}
-.qt-about::before{background:#a85e29;}
-.qt-about .quick-tool-icon-wrap{background:linear-gradient(135deg,#c97640,#a85e29);color:#fff;}
+/* الألوان الرئيسية موجودة أدناه في قسم "نظام ألوان متناغم" */
 
 /* مودال اختيار المسار */
 .path-modal-overlay{
@@ -2341,51 +2814,8 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
 }
 
 /* ═══════════════════════════════════════════
-   بطاقة المؤسس + شارة رؤية 2030
+   شارة رؤية 2030
    ═══════════════════════════════════════════ */
-.founder-strip{
-  margin:20px 0;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.founder-card{
-  background:linear-gradient(135deg,#fff 0%,#fdfaf0 100%);
-  border:1.5px solid #dbe8df;
-  border-radius:14px;
-  padding:12px;
-  display:flex;align-items:center;gap:10px;
-  transition:all .2s;
-}
-.founder-card:hover{
-  border-color:#c9a227;
-  box-shadow:0 4px 14px rgba(201,162,39,.12);
-}
-.founder-avatar{
-  width:46px;height:46px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#1a4d3a,#0f3028);
-  display:flex;align-items:center;justify-content:center;
-  border:2px solid #c9a227;
-  box-shadow:0 3px 10px rgba(26,77,58,.2);
-  position:relative;
-  overflow:hidden;
-}
-.founder-avatar svg{width:26px;height:26px;fill:#e8c968;}
-.founder-avatar img{
-  width:100%;height:100%;object-fit:cover;
-}
-.founder-info{flex:1;min-width:0;}
-.founder-label{
-  font-size:.62rem;font-weight:800;color:#7a6418;
-  letter-spacing:1px;margin-bottom:2px;
-}
-.founder-name{
-  font-family:Cairo;font-weight:900;font-size:.86rem;color:#0f3028;
-  line-height:1.2;margin-bottom:2px;
-}
-.founder-title{
-  font-size:.66rem;color:#6b7c8e;font-weight:700;line-height:1.3;
-}
 
 /* شارة رؤية قطر 2030 */
 .vision-badge{
@@ -2400,6 +2830,80 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
   position:relative;overflow:hidden;
   transition:all .2s;
 }
+
+/* النسخة العريضة من شارة الرؤية */
+/* ═══ شارة رؤية 2030 الصغيرة (في من نحن) ═══ */
+.vision-badge-small{
+  background:linear-gradient(135deg,#fdfaf0 0%,#fff 100%);
+  border:1.5px solid #c9a227;
+  border-radius:12px;
+  padding:10px 14px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 2px 8px rgba(201,162,39,.08);
+}
+.vision-badge-small:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(201,162,39,.2);
+}
+.vbs-icon{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,#c9a227,#a68820);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 6px rgba(201,162,39,.25);
+}
+.vbs-icon svg{width:18px;height:18px;fill:#fff;}
+.vbs-text{flex:1;min-width:0;}
+.vbs-label{font-size:.64rem;font-weight:800;color:#7a6418;letter-spacing:.5px;}
+.vbs-title{font-family:Cairo;font-weight:900;font-size:.88rem;color:#0f3028;line-height:1.1;margin-top:1px;}
+.vbs-arrow{width:14px;height:14px;color:#c9a227;flex-shrink:0;}
+
+.vision-badge-wide{
+  margin:20px 0;
+  padding:16px 18px;
+  border-radius:18px;
+  border-width:2px;
+  gap:14px;
+  cursor:pointer;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(201,162,39,.28) 0%, transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(201,162,39,.15) 0%, transparent 50%),
+    linear-gradient(135deg,#8D1B3D 0%,#6b1530 50%,#4a0e1f 100%);
+  box-shadow:
+    0 4px 12px rgba(141,27,61,.15),
+    0 14px 32px rgba(141,27,61,.18);
+}
+.vision-badge-wide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(201,162,39,.03) 30px,rgba(201,162,39,.03) 31px);
+}
+.vision-badge-wide:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(141,27,61,.2),
+    0 20px 40px rgba(141,27,61,.25);
+}
+.vision-badge-wide .vision-icon{
+  width:54px;height:54px;border-radius:14px;
+  box-shadow:
+    0 4px 12px rgba(201,162,39,.35),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+.vision-badge-wide .vision-icon svg{width:28px;height:28px;}
+.vision-badge-wide .vision-label{font-size:.68rem;letter-spacing:1.5px;}
+.vision-badge-wide .vision-title{font-size:1.1rem;margin-top:1px;}
+.vision-badge-wide .vision-sub{font-size:.72rem;margin-top:3px;line-height:1.5;}
+.vision-arrow{
+  flex-shrink:0;width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:2;
+  opacity:.6;transition:all .2s;
+}
+.vision-badge-wide:hover .vision-arrow{
+  opacity:1;transform:translateX(-3px);
+}
+.vision-arrow svg{width:20px;height:20px;}
 .vision-badge:hover{
   transform:translateY(-1px);
   box-shadow:0 6px 18px rgba(141,27,61,.3);
@@ -2483,7 +2987,6 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
   .live-stats-bar{grid-template-columns:repeat(2,1fr);gap:10px;}
   .live-stat{border-left:none;border-bottom:1px solid rgba(201,162,39,.2);padding-bottom:8px;}
   .live-stat:nth-last-child(-n+2){border-bottom:none;padding-bottom:0;}
-  .founder-strip{grid-template-columns:1fr;}
 }
 
 /* ═══════════════════════════════════════════
@@ -2579,6 +3082,209 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
 }
 .cc-meta-item{display:flex;align-items:center;gap:4px;}
 .cc-meta-item svg{width:13px;height:13px;fill:currentColor;}
+
+/* زر إدارة الطلاب */
+.cc-manage-btn{
+  width:100%;margin-top:12px;padding:10px;
+  background:linear-gradient(135deg,#1a4d3a,#0f3028);color:#fff;
+  border:none;border-radius:10px;cursor:pointer;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.84rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;box-shadow:0 2px 8px rgba(26,77,58,.2);
+}
+.cc-manage-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(26,77,58,.35);}
+.cc-manage-btn svg{width:16px;height:16px;fill:currentColor;}
+
+/* ═══════════════════════════════════════════
+   شاشة إدارة طلاب الفصل
+   ═══════════════════════════════════════════ */
+.students-hero{
+  background:linear-gradient(135deg,#0f3028 0%,#1a4d3a 100%);
+  border-radius:18px;padding:20px;margin-bottom:18px;
+  position:relative;overflow:hidden;
+  border:1.5px solid rgba(201,162,39,.4);
+  color:#fff;
+}
+.students-hero::before{
+  content:"";position:absolute;top:-30%;right:-15%;
+  width:60%;height:80%;opacity:.12;
+  background:radial-gradient(circle,#c9a227 0%,transparent 65%);
+  filter:blur(40px);pointer-events:none;
+}
+.sh-label{
+  font-size:.68rem;font-weight:800;color:#e8c968;
+  letter-spacing:1px;margin-bottom:3px;
+}
+.sh-class-name{
+  font-family:Cairo;font-weight:900;font-size:1.3rem;margin-bottom:3px;
+  position:relative;z-index:2;
+}
+.sh-school{font-size:.82rem;opacity:.82;margin-bottom:14px;position:relative;z-index:2;}
+.sh-code-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(201,162,39,.2);border:1px solid #c9a227;
+  padding:5px 12px;border-radius:999px;
+  font-family:'Courier New',monospace;font-weight:900;
+  letter-spacing:2px;color:#e8c968;font-size:.82rem;
+  position:relative;z-index:2;
+}
+.sh-code-pill svg{width:12px;height:12px;fill:currentColor;cursor:pointer;}
+
+.students-actions{
+  display:flex;gap:8px;margin-bottom:16px;
+}
+.add-student-btn{
+  flex:1;padding:12px;
+  background:linear-gradient(135deg,#c9a227,#a68820);color:#0a2820;
+  border:none;border-radius:12px;cursor:pointer;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.88rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 4px 12px rgba(201,162,39,.3);transition:all .2s;
+}
+.add-student-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,162,39,.45);}
+.add-student-btn svg{width:16px;height:16px;fill:currentColor;}
+
+.students-count-bar{
+  background:#fff;border:1.5px solid #e8f2ec;border-radius:12px;
+  padding:10px 14px;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:Cairo;font-weight:900;font-size:.88rem;color:#0f3028;
+}
+.students-count-bar .sc-num{color:#c9a227;}
+
+.students-list{display:flex;flex-direction:column;gap:8px;}
+.student-item{
+  background:#fff;border:1.5px solid #e8f2ec;border-radius:12px;
+  padding:10px 12px;
+  display:flex;align-items:center;gap:10px;
+  transition:all .2s;
+}
+.student-item:hover{border-color:#c9a227;box-shadow:0 4px 12px rgba(201,162,39,.1);}
+.student-avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#2d6e54,#1a4d3a);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Cairo;font-weight:900;font-size:.9rem;
+  box-shadow:0 2px 6px rgba(26,77,58,.2);
+}
+.student-info{flex:1;min-width:0;}
+.student-name{
+  font-family:Cairo;font-weight:900;font-size:.92rem;color:#0f3028;
+  line-height:1.2;
+}
+.student-meta{
+  font-size:.7rem;color:#6b7c8e;font-weight:700;margin-top:2px;
+  display:flex;align-items:center;gap:8px;
+}
+.student-badge{
+  font-size:.6rem;font-weight:900;padding:2px 8px;border-radius:999px;
+}
+.student-badge.joined{background:#e8f5ee;color:#1a7a4a;}
+.student-badge.pending{background:#fff3c4;color:#7a5c10;}
+.student-delete{
+  background:none;border:none;cursor:pointer;
+  color:#c0392b;padding:6px;border-radius:8px;
+  transition:all .2s;opacity:.6;
+}
+.student-delete:hover{background:#fce8ee;opacity:1;}
+.student-delete svg{width:16px;height:16px;fill:currentColor;}
+
+.students-empty{
+  text-align:center;padding:40px 20px;color:#6b7c8e;
+  background:#fff;border-radius:14px;border:1.5px dashed #dbe8df;
+}
+.students-empty svg{width:56px;height:56px;fill:#dbe8df;margin-bottom:10px;}
+.students-empty-text{font-family:Cairo;font-weight:800;font-size:.9rem;color:#0f3028;margin-bottom:4px;}
+.students-empty-sub{font-size:.76rem;}
+
+/* مودال إضافة طالب */
+.add-student-modal{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(10,20,40,.82);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:16px;
+}
+.add-student-modal.active{display:flex;}
+.add-student-content{
+  background:#fff;max-width:400px;width:100%;
+  border-radius:18px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  animation:badgePop .4s cubic-bezier(.34,1.5,.64,1);
+}
+.asm-header{
+  background:linear-gradient(135deg,#1a4d3a,#0f3028);color:#fff;
+  padding:18px 20px;text-align:center;
+}
+.asm-header svg{width:36px;height:36px;fill:#e8c968;margin-bottom:4px;}
+.asm-header h3{font-family:Cairo;font-weight:900;font-size:1.1rem;}
+.asm-body{padding:20px;}
+.asm-hint{
+  background:#faf2d6;border:1px solid #c9a227;border-radius:10px;
+  padding:10px 12px;margin-bottom:14px;
+  font-size:.78rem;color:#7a6418;font-weight:600;line-height:1.5;
+  display:flex;gap:8px;
+}
+.asm-hint svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;margin-top:1px;}
+
+/* ═══════════════════════════════════════════
+   مودال الانضمام لفصل (للطالب)
+   ═══════════════════════════════════════════ */
+.join-class-modal{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(10,20,40,.82);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:16px;
+}
+.join-class-modal.active{display:flex;}
+.join-class-content{
+  background:#fff;max-width:400px;width:100%;
+  border-radius:18px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  animation:badgePop .4s cubic-bezier(.34,1.5,.64,1);
+}
+.jcm-header{
+  background:linear-gradient(135deg,#c9a227,#a68820);color:#0a2820;
+  padding:20px;text-align:center;
+}
+.jcm-header svg{width:40px;height:40px;fill:#0a2820;margin-bottom:6px;}
+.jcm-header h3{font-family:Cairo;font-weight:900;font-size:1.15rem;}
+.jcm-header p{font-size:.82rem;margin-top:3px;opacity:.85;}
+.jcm-body{padding:20px;}
+.jcm-code-input{
+  width:100%;padding:14px;text-align:center;
+  font-family:'Courier New',monospace;font-weight:900;font-size:1.3rem;
+  letter-spacing:4px;color:#0f3028;
+  border:2px solid #dbe8df;border-radius:12px;
+  text-transform:uppercase;
+  transition:all .2s;
+}
+.jcm-code-input:focus{outline:none;border-color:#c9a227;box-shadow:0 0 0 3px rgba(201,162,39,.15);}
+
+/* بطاقة "فصلي الحالي" للطالب */
+.my-class-card{
+  background:linear-gradient(135deg,#fdfaf0 0%,#fff 100%);
+  border:1.5px solid #c9a227;
+  border-radius:14px;padding:14px;margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .2s;
+}
+.my-class-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,162,39,.2);}
+.mcc-icon{
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,#c9a227,#a68820);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(201,162,39,.3);
+}
+.mcc-icon svg{width:26px;height:26px;fill:currentColor;}
+.mcc-info{flex:1;min-width:0;}
+.mcc-label{font-size:.66rem;font-weight:800;color:#7a6418;letter-spacing:1px;}
+.mcc-name{font-family:Cairo;font-weight:900;font-size:1rem;color:#0f3028;margin-top:1px;line-height:1.2;}
+.mcc-teacher{font-size:.72rem;color:#6b7c8e;font-weight:700;margin-top:2px;}
+.mcc-leave{
+  background:none;border:none;cursor:pointer;
+  color:#c0392b;padding:6px;border-radius:8px;
+  opacity:.5;transition:all .2s;
+}
+.mcc-leave:hover{background:#fce8ee;opacity:1;}
+.mcc-leave svg{width:16px;height:16px;fill:currentColor;}
 
 /* نموذج إنشاء فصل */
 .create-classroom-modal{
@@ -2902,12 +3608,12 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
             <text x="100" y="145" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="105" fill="url(#brandGoldGrad)">ح</text>
           </svg>
         </div>
-        <div>
+        <div class="royal-brand-name-wrap">
           <div class="royal-brand-name">الحلحلي</div>
-          <div style="font-size:.68rem;color:#888;font-weight:700;margin-top:-2px;">لعبة قطرية تعليمية</div>
+          <div class="royal-brand-tag">منصة تعليمية قطرية</div>
         </div>
       </div>
-      <div style="text-align:left;">
+      <div style="text-align:left;position:relative;z-index:2;">
         <div class="royal-hello" id="royal-greeting-time">مرحباً بعودتك</div>
         <div class="royal-username"><span id="royal-username-text">أهلاً</span></div>
       </div>
@@ -2919,30 +3625,6 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
     <div class="path-intro">
       <div class="path-intro-label">ابدأ رحلتك التعليمية</div>
       <div class="path-intro-title">كيف تحب تستخدم الحلحلي اليوم؟</div>
-    </div>
-
-    <!-- ═════════════ شريط الإحصائيات الحيّة ═════════════ -->
-    <div class="live-stats-bar" id="live-stats-bar">
-      <div class="live-stat">
-        <svg class="live-stat-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <div class="live-stat-num" id="live-stat-users" data-target="0">—</div>
-        <div class="live-stat-lbl">مستخدم</div>
-      </div>
-      <div class="live-stat">
-        <svg class="live-stat-icon" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-        <div class="live-stat-num" id="live-stat-classes" data-target="0">—</div>
-        <div class="live-stat-lbl">فصل</div>
-      </div>
-      <div class="live-stat">
-        <svg class="live-stat-icon" viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
-        <div class="live-stat-num" id="live-stat-games" data-target="0">—</div>
-        <div class="live-stat-lbl">جلسة</div>
-      </div>
-      <div class="live-stat">
-        <svg class="live-stat-icon" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
-        <div class="live-stat-num" id="live-stat-certs" data-target="0">—</div>
-        <div class="live-stat-lbl">شهادة</div>
-      </div>
     </div>
 
     <div class="paths-container">
@@ -3015,30 +3697,43 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
         </div>
       </div>
 
-    </div>
+      <!-- مسار الزائر -->
+      <div class="path-card path-student path-visitor" onclick="openVisitorPath()">
+        <div class="path-card-inner">
+          <div class="path-visitor-content">
+            <div class="path-badge">زائر</div>
+            <div class="path-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="11" y1="8" x2="11" y2="14"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </div>
+            <h3 class="path-title">استكشف</h3>
+            <p class="path-desc">جرّب اللعبة بدون تسجيل</p>
+            <div class="path-features">
+              <div class="path-feature">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                اللعبة التنافسية
+              </div>
+              <div class="path-feature">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                بطاقات المراجعة
+              </div>
+              <div class="path-feature">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                خرائط الزمن
+              </div>
+            </div>
+          </div>
+          <div class="path-cta">
+            <span>ابدأ فوراً</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </div>
+        </div>
+      </div>
 
-    <!-- ═════════════ بطاقة المؤسس + شارة الرؤية ═════════════ -->
-    <div class="founder-strip">
-      <div class="founder-card" onclick="showScreen('screen-about')">
-        <div class="founder-avatar">
-          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/><path d="M12 7c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14c-2.03 0-3.8-1.11-4.75-2.75.03-1.89 3.17-2.93 4.75-2.93 1.58 0 4.72 1.04 4.75 2.93C15.8 19.89 14.03 21 12 21z" fill="#0f3028" opacity=".3"/></svg>
-        </div>
-        <div class="founder-info">
-          <div class="founder-label">المؤسس</div>
-          <div class="founder-name">أحمد الحلحلي</div>
-          <div class="founder-title">معلم دراسات اجتماعية ومدرب تربوي</div>
-        </div>
-      </div>
-      <div class="vision-badge" onclick="window.open('https://www.gco.gov.qa/ar/about-qatar/national-vision2030/','_blank')">
-        <div class="vision-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 3.5l7 3.5v6l-7 3.5L5 15V9l7-3.5z"/></svg>
-        </div>
-        <div class="vision-text">
-          <div class="vision-label">داعم لـ</div>
-          <div class="vision-title">رؤية قطر 2030</div>
-          <div class="vision-sub">التنمية البشرية والاجتماعية</div>
-        </div>
-      </div>
     </div>
 
     <!-- ═════════════ شريط شركاء النجاح ═════════════ -->
@@ -3086,9 +3781,9 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
         </button>
         <button class="quick-tool-btn qt-reviews" onclick="showScreen('screen-reviews')">
           <div class="quick-tool-icon-wrap">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </div>
-          <span>التقييمات</span>
+          <span>تقييم اللعبة</span>
         </button>
         <button class="quick-tool-btn qt-sponsors" onclick="showScreen('screen-sponsors')">
           <div class="quick-tool-icon-wrap">
@@ -3101,6 +3796,12 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
           </div>
           <span>من نحن</span>
+        </button>
+        <button class="quick-tool-btn qt-guide" onclick="showScreen('screen-guide')">
+          <div class="quick-tool-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v18l4-2 4 2 4-2 4 2V4c0-1.1-.9-2-2-2zm-5 14H7v-2h6v2zm4-4H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+          </div>
+          <span>دليل الاستخدام</span>
         </button>
       </div>
     </div>
@@ -3326,6 +4027,10 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
     <div style="font-size:.82rem;font-weight:900;margin:18px 0 8px;color:#1a4d3a;display:flex;align-items:center;gap:6px;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a4d3a" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       اختر الفئات (2 إلى 6 فئات):
+      <button type="button" id="cat-edit-mode-btn" onclick="toggleCatEditMode()" style="margin-right:auto;display:none;border:1.5px solid #c9a227;background:#fff8e8;color:#7a5c00;padding:3px 10px;border-radius:8px;font-family:Cairo,sans-serif;font-size:.7rem;font-weight:900;cursor:pointer;align-items:center;gap:4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        تحرير الصور
+      </button>
     </div>
     <div id="cat-select"></div>
 
@@ -4342,6 +5047,336 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
   </div>
 </div>
 
+<!-- ═════════════════════════════════════════════════════
+     شاشة إدارة طلاب الفصل (للمعلم)
+     ═════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-students">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-classrooms')">رجوع</button>
+    <div style="font-weight:900;">طلاب الفصل</div>
+    <div></div>
+  </div>
+
+  <div class="students-hero">
+    <div class="sh-label">فصل</div>
+    <div class="sh-class-name" id="sh-class-name">—</div>
+    <div class="sh-school" id="sh-school-name">—</div>
+    <div class="sh-code-pill" onclick="copyCurrentClassCode()">
+      <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+      <span id="sh-class-code">—</span>
+    </div>
+  </div>
+
+  <div class="students-actions">
+    <button class="add-student-btn" onclick="openAddStudentModal()">
+      <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      إضافة طالب
+    </button>
+  </div>
+
+  <div class="students-count-bar">
+    <span>إجمالي الطلاب المضافين</span>
+    <span class="sc-num" id="students-total-count">0</span>
+  </div>
+
+  <div id="students-list-container">
+    <div class="students-empty">
+      <div class="students-empty-text">جاري التحميل...</div>
+    </div>
+  </div>
+</div>
+
+<!-- مودال إضافة طالب -->
+<div id="add-student-modal" class="add-student-modal" onclick="if(event.target===this)closeAddStudentModal()">
+  <div class="add-student-content">
+    <div class="asm-header">
+      <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <h3>إضافة طالب جديد</h3>
+    </div>
+    <div class="asm-body">
+      <div class="asm-hint">
+        <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        <div>اكتب اسم الطالب الثلاثي. سيكون الطالب في قائمتك، وعند دخوله برمز الفصل سيُربط تلقائياً.</div>
+      </div>
+      <div class="cc-form-field">
+        <label for="new-student-name">اسم الطالب الثلاثي</label>
+        <input type="text" id="new-student-name" placeholder="مثال: أحمد محمد علي" maxlength="60">
+      </div>
+      <div class="cc-form-actions">
+        <button class="cc-form-btn outline" onclick="closeAddStudentModal()">إلغاء</button>
+        <button class="cc-form-btn primary" onclick="addStudentToClass()">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════
+     مودال الانضمام لفصل (للطالب)
+     ═════════════════════════════════════════════════════ -->
+<div id="join-class-modal" class="join-class-modal" onclick="if(event.target===this)closeJoinClassModal()">
+  <div class="join-class-content">
+    <div class="jcm-header">
+      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <h3>الانضمام لفصل</h3>
+      <p>أدخل رمز الفصل الذي أعطاك إياه معلمك</p>
+    </div>
+    <div class="jcm-body">
+      <input type="text" class="jcm-code-input" id="join-class-code" placeholder="HH-XXXXXX" maxlength="10">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;">
+        <button class="cc-form-btn outline" onclick="closeJoinClassModal()">إلغاء</button>
+        <button class="cc-form-btn primary" onclick="joinClassroom()">انضمام</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════
+     شاشة دليل الاستخدام — Usage Guide
+     ═════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-guide">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
+    <div style="font-weight:900;">دليل الاستخدام</div>
+    <div></div>
+  </div>
+
+  <!-- Hero -->
+  <div class="guide-hero">
+    <div class="gh-label">
+      <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v18l4-2 4 2 4-2 4 2V4c0-1.1-.9-2-2-2z"/></svg>
+      <span>كيف تستفيد من المنصة</span>
+    </div>
+    <h2 class="gh-title">دليل الحلحلي التعليمي</h2>
+    <p class="gh-sub">خطوات بسيطة تحوّل تجربتك إلى رحلة تعليمية ممتعة ومثمرة</p>
+  </div>
+
+  <!-- تبديل المستخدم -->
+  <div class="guide-switcher">
+    <button class="guide-tab active" data-guide="teacher" onclick="switchGuideTab('teacher')">
+      <svg viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 2.5L4.21 12.37 3 13l9 5 9-5-1.21-.63L12 16.5z"/></svg>
+      <span>للمعلم</span>
+    </button>
+    <button class="guide-tab" data-guide="student" onclick="switchGuideTab('student')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>للطالب</span>
+    </button>
+  </div>
+
+  <!-- ═══ دليل المعلم ═══ -->
+  <div class="guide-content active" id="guide-teacher">
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">1</div>
+        <div class="gs-info">
+          <div class="gs-title">أنشئ فصلك الدراسي</div>
+          <div class="gs-subtitle">الخطوة الأهم — تبدأ من هنا</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        من <strong>مسار المعلم → إدارة فصولي الدراسية</strong>، أنشئ فصلاً جديداً باسم معبّر (مثل "السابع-أ"). ستحصل على <strong>رمز فريد</strong> (مثل HH-MKRQ37) تشاركه مع طلابك عبر واتساب أو تكتبه على السبورة.
+      </div>
+      <button class="gs-action" onclick="showScreen('screen-menu');setTimeout(()=>openTeacherPath(),300);">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        ابدأ إنشاء فصل
+      </button>
+      <div class="gs-tip">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <div><strong>نصيحة:</strong> بعد ما يدخل طلابك الرمز، ستشاهدهم في قائمة الفصل تلقائياً — لا حاجة لتسجيلهم يدوياً.</div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">2</div>
+        <div class="gs-info">
+          <div class="gs-title">اختر نشاطك التعليمي</div>
+          <div class="gs-subtitle">أربع خدمات متكاملة لتدريس غني</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        المنصة تقدّم لك <strong>4 أدوات تعليمية</strong> مكمّلة: اللعبة التنافسية لتحفيز الفرق، الاختبارات مع شهادات تفوق، الحصة التفاعلية بأنشطة حركية، وبطاقات المراجعة الذكية.
+      </div>
+      <div class="guide-features" style="margin:10px 0;">
+        <div class="gf-grid">
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>لعبة فرق تنافسية</span>
+          </div>
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>اختبارات + شهادات</span>
+          </div>
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>حصص تفاعلية</span>
+          </div>
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>بطاقات مراجعة</span>
+          </div>
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>خرائط الزمن</span>
+          </div>
+          <div class="gf-item">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+            <span>نظام شارات</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">3</div>
+        <div class="gs-info">
+          <div class="gs-title">شغّل اللعبة في الحصة</div>
+          <div class="gs-subtitle">حماس + تعلّم في جلسة واحدة</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        قسّم الطلاب <strong>فرقاً (2-6)</strong>، اختر <strong>الفئات</strong> التي تدرسها، واتركهم يتنافسون على لوحة الأسئلة. <strong>اسم اللعبة يُقترح تلقائياً</strong> بناءً على اليوم واسم الفصل — اضغط ابدأ مباشرة.
+      </div>
+      <button class="gs-action" onclick="localStorage.removeItem('hh_saved_cats');showScreen('screen-setup');">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        جرّب اللعبة
+      </button>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">4</div>
+        <div class="gs-info">
+          <div class="gs-title">أنشئ اختباراً لطلابك</div>
+          <div class="gs-subtitle">مع شهادات رسمية تلقائية</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        من <strong>الاختبارات → لوحة المعلم</strong>، أضف أسئلتك وشارك الرابط مع طلابك. <strong>الطالب الذي يحصل على 80%+ يحصل على شهادة تفوق</strong> قابلة للطباعة باسمه.
+      </div>
+      <a class="gs-action" href="quiz.html">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+        افتح الاختبارات
+      </a>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">5</div>
+        <div class="gs-info">
+          <div class="gs-title">أضف أسئلتك الخاصة</div>
+          <div class="gs-subtitle">تحكّم كامل في المحتوى</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        كمعلم معتمد، تستطيع <strong>إضافة فئات وأسئلة مخصصة</strong> تناسب منهجك ومستوى طلابك. المنصة تدعمك بلوحة تحكم سهلة لإدارة بنك أسئلتك.
+      </div>
+      <div class="gs-tip">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <div><strong>للحصول على صلاحية التعديل:</strong> تواصل مع مدير المنصة عبر صفحة "من نحن".</div>
+      </div>
+    </div>
+
+    <div class="guide-closing">
+      <h3>جاهز لتنطلق؟</h3>
+      <p>منصتك الآن أداة تدريس متكاملة. ابدأ بإنشاء فصلك الأول وستكتشف المزيد أثناء الاستخدام.</p>
+    </div>
+  </div>
+
+  <!-- ═══ دليل الطالب ═══ -->
+  <div class="guide-content" id="guide-student">
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">1</div>
+        <div class="gs-info">
+          <div class="gs-title">انضم لفصل معلمك</div>
+          <div class="gs-subtitle">لتُتابع تقدمك معه</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        اسأل معلمك عن <strong>رمز الفصل</strong> (مثل HH-MKRQ37). من مسار الطالب، اضغط <strong>"الانضمام لفصل معلمي"</strong> وأدخل الرمز. ستظهر إنجازاتك لمعلمك تلقائياً.
+      </div>
+      <button class="gs-action" onclick="showScreen('screen-menu');setTimeout(()=>openStudentPath(),300);">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        انضم لفصل
+      </button>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">2</div>
+        <div class="gs-info">
+          <div class="gs-title">تعلّم بطرق ممتعة</div>
+          <div class="gs-subtitle">أربع طرق للتعلم — اختر ما يناسبك</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        <strong>اللعبة</strong> للتنافس مع أصدقائك، <strong>الاختبارات</strong> لتحصل على شهادة تفوق، <strong>البطاقات</strong> للمراجعة السريعة، و<strong>خرائط الزمن</strong> لترتيب الأحداث التاريخية.
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">3</div>
+        <div class="gs-info">
+          <div class="gs-title">احصل على شهادات وشارات</div>
+          <div class="gs-subtitle">كل إنجاز يستحق الاحتفاء</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        حين تحصل على <strong>80%+ في اختبار</strong>، تحصل على <strong>شهادة تفوق رسمية باسمك</strong> قابلة للطباعة. كما تفتح <strong>شارات إنجاز</strong> كلما تقدمت: أول اختبار، 5 اختبارات متقنة، وأسطورة الحلحلي.
+      </div>
+      <button class="gs-action" onclick="openAchievements()">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
+        شاهد إنجازاتي
+      </button>
+      <div class="gs-tip">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <div><strong>الشهادة تستحق الاحتفاء:</strong> اطبعها وعلّقها في غرفتك، أو شاركها مع أهلك لتحتفوا بتفوقك.</div>
+      </div>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">4</div>
+        <div class="gs-info">
+          <div class="gs-title">تنافس على لوحة المتصدرين</div>
+          <div class="gs-subtitle">مكانك بين الأبطال</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        كل نتيجة تحسّن ترتيبك في <strong>لوحة المتصدرين</strong>. تنافس مع طلاب قطر كلّها واحصل على مكانك بين الأبطال. <strong>الاسم الذي تدخله يظهر للجميع</strong>، فاكتبه بفخر.
+      </div>
+      <button class="gs-action" onclick="showScreen('screen-lb');">
+        <svg viewBox="0 0 24 24"><path d="M7 4h10v2c0 3-2 5-4 5s-4-2-4-5V4zm-4 3V5h2c0 2-1 3-2 2m16-2h2v2c0 1-1 2-2 2M10 11h4v4h-4z"/></svg>
+        لوحة المتصدرين
+      </button>
+    </div>
+
+    <div class="guide-step">
+      <div class="gs-header">
+        <div class="gs-number">5</div>
+        <div class="gs-info">
+          <div class="gs-title">راجع يومياً بالبطاقات</div>
+          <div class="gs-subtitle">التعلّم المتقطّع أقوى</div>
+        </div>
+      </div>
+      <div class="gs-desc">
+        أقوى طرق الحفظ هي <strong>المراجعة المنتظمة</strong>. خصّص 10 دقائق يومياً للبطاقات التعليمية — ستلاحظ الفرق في نتائجك خلال أسبوع واحد فقط.
+      </div>
+      <a class="gs-action" href="flashcards.html">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        افتح البطاقات
+      </a>
+    </div>
+
+    <div class="guide-closing">
+      <h3>رحلتك تبدأ من هنا</h3>
+      <p>كل بطل كان يوماً مبتدئاً. ابدأ بنشاط واحد اليوم، وواصل غداً، وستجد نفسك أحد أبطال الحلحلي.</p>
+    </div>
+  </div>
+</div>
+
 <div class="screen" id="screen-about">
   <div class="top-bar">
     <button class="btn btn-outline btn-sm" onclick="showScreen('screen-menu')">رجوع</button>
@@ -4349,6 +5384,18 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
     <div></div>
   </div>
   <div class="about-section" style="padding-bottom:30px;">
+
+    <!-- شارة رؤية قطر 2030 (صغيرة) -->
+    <div class="vision-badge-small" onclick="window.open('https://www.gco.gov.qa/ar/about-qatar/national-vision2030/','_blank')">
+      <div class="vbs-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 3.5l7 3.5v6l-7 3.5L5 15V9l7-3.5z"/></svg>
+      </div>
+      <div class="vbs-text">
+        <div class="vbs-label">داعم لـ</div>
+        <div class="vbs-title">رؤية قطر 2030</div>
+      </div>
+      <svg class="vbs-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
 
     <!-- نبذة عن اللعبة -->
     <div style="background:linear-gradient(135deg,#1a4d3a,#1a5fa8);border-radius:18px;padding:24px 22px;margin-bottom:18px;text-align:center;color:#fff;position:relative;overflow:hidden;">
@@ -5694,13 +6741,25 @@ try {
     if(_st) _st.textContent = user ? 'مرحباً '+((user.displayName||user.email||'').split('@')[0]) + ' 👋' : 'جاري التحضير...';
     currentUser=user;
     if(user){
-      try{const doc=await db.collection('users').doc(user.uid).get();document.getElementById('ub-name').textContent=doc.exists?doc.data().name:(user.displayName||user.email.split('@')[0]);}catch(e){}
+      try{
+        const doc=await db.collection('users').doc(user.uid).get();
+        // نفضّل: اسم Firestore (عادة عربي) > displayName > إيميل (أحرف عربية فقط)
+        let displayName = 'أيها المُلهَم';
+        if(doc.exists && doc.data().name){
+          displayName = doc.data().name;
+        } else if(user.displayName && /[\u0600-\u06FF]/.test(user.displayName)){
+          displayName = user.displayName;
+        } else if(user.displayName){
+          // displayName إنجليزي — نستخدم لقباً عربياً أنيقاً
+          displayName = 'أيها المُلهَم';
+        }
+        document.getElementById('ub-name').textContent = displayName;
+      }catch(e){}
       showScreen('screen-menu');
       showAdminBtn(user);
       checkAndShowEditorBtn();
       updatePartnersVisibility(user);
       refreshExclusiveAccess(user);
-      updateLiveStats();
       loadHomePartnersStrip();
       const imgBtn=document.getElementById('nav-img-btn');
       if(imgBtn) imgBtn.style.display=isAdminUser(user)?'flex':'none';
@@ -6073,6 +7132,12 @@ const CAT_GROUPS = [
     cats:['الرياضة','كرة قدم','كأس العالم']
   },
   {
+    id:'legends',
+    label:'الأساطير',
+    icon:`<svg viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="legG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f5d76e"/><stop offset="50%" stop-color="#c9a227"/><stop offset="100%" stop-color="#7a6418"/></radialGradient></defs><rect width="36" height="36" rx="6" fill="#0a2820"/><polygon points="18,6 21,14 29,14 23,19 25,27 18,22 11,27 13,19 7,14 15,14" fill="url(#legG)" stroke="#c9a227" stroke-width="1.2"/><circle cx="18" cy="18" r="2.5" fill="#faf2d6"/></svg>`,
+    cats:['الأساطير']
+  },
+  {
     id:'custom',
     label:'أسئلتي',
     icon:`<svg viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="6" width="28" height="24" rx="3" fill="#9b59b6"/><rect x="6" y="8" width="24" height="20" rx="2" fill="#fff"/><line x1="9" y1="13" x2="27" y2="13" stroke="#9b59b6" stroke-width="1.5"/><line x1="9" y1="17" x2="27" y2="17" stroke="#9b59b6" stroke-width="1.5"/><line x1="9" y1="21" x2="20" y2="21" stroke="#9b59b6" stroke-width="1.5"/><circle cx="28" cy="8" r="4" fill="#d4b740"/><text x="28" y="10.5" text-anchor="middle" font-size="5" font-family="Cairo,Arial" fill="#fff" font-weight="900">+</text></svg>`,
@@ -6084,6 +7149,15 @@ function buildCatSelect(){
   // نمسح الفئات المحفوظة لنبدأ نظيف في كل جلسة إعداد
   localStorage.removeItem('hh_saved_cats');
   const saved=[];
+
+  // إظهار زر تحرير الصور للأدمن فقط
+  try{
+    const editBtn = document.getElementById('cat-edit-mode-btn');
+    if(editBtn){
+      editBtn.style.display = isAdminUser(currentUser) ? 'inline-flex' : 'none';
+    }
+  }catch(e){}
+
   // تحديث فئة الأسئلة المخصصة في CAT_GROUPS
   const customGroup=CAT_GROUPS.find(g=>g.id==='custom');
   if(customGroup){
@@ -6125,17 +7199,27 @@ function buildCatSelect(){
       d.className='cat-btn'+(saved.includes(cat)?' active':'')+(isLocked?' locked':'');
       d.dataset.cat=cat;
       if(isLocked) d.dataset.locked='1';
-      // استخدم SVG إن وُجد، وإلا الإيموجي
+
+      // بناء الصورة (تملأ المربع بالكامل)
       const savedCatImg=localStorage.getItem('cat_img_'+cat);
       var iconHtml;
       if(savedCatImg){
-        iconHtml='<img src="'+savedCatImg+'" style="width:36px;height:36px;object-fit:contain;display:block;margin:0 auto 4px;" loading="lazy">';
+        // الصورة التي رفعها الأدمن (أولوية مطلقة)
+        iconHtml='<div class="ci-img"><img src="'+savedCatImg+'" alt="'+ci.label+'" loading="lazy"></div>';
       } else if(CAT_SVG&&CAT_SVG[cat]){
+        // أيقونة SVG تعريفية أنيقة (تظهر بالوسط على خلفية خضراء داكنة)
         iconHtml='<div class="ci-svg">'+CAT_SVG[cat]+'</div>';
       } else {
-        iconHtml='<span class="ci">'+ci.emoji+'</span>';
+        // خلفية ملونة بسيطة مع حرف أول من اسم الفئة
+        const firstChar = (ci.label || cat).trim().charAt(0);
+        const bgColor = ci.color || '#1a4d3a';
+        iconHtml='<div class="ci-svg" style="background:linear-gradient(135deg,'+bgColor+' 0%,#0f3028 100%);"><div style="font-family:Cairo;font-weight:900;font-size:2.5rem;color:#e8c968;margin-bottom:14px;">'+firstChar+'</div></div>';
       }
-      d.innerHTML=iconHtml+'<div class="ci-lbl">'+ci.label+'</div>';
+
+      // زر تعديل الصورة (للأدمن فقط — يظهر في admin-edit-mode)
+      const editBtn = '<button class="cat-edit-btn" onclick="event.stopPropagation();openCatImageEditor(\''+cat.replace(/'/g,"\\'")+'\')" title="تغيير الصورة"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>';
+
+      d.innerHTML = iconHtml + editBtn + '<div class="ci-lbl">'+ci.label+'</div>';
       d.onclick=()=>toggleCat(d);
       grid.appendChild(d);
     });
@@ -6211,6 +7295,142 @@ function removeCat(cat){
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// محرر صور الفئات (للأدمن فقط)
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * فتح محرر صورة فئة — يسمح برفع صورة جديدة أو حذف الصورة الحالية
+ */
+function openCatImageEditor(catName){
+  if(!isAdminUser(currentUser)){
+    toast('فقط المدير يستطيع تعديل صور الفئات','error');
+    return;
+  }
+  const currentImg = localStorage.getItem('cat_img_'+catName);
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/png,image/jpeg,image/webp,image/svg+xml';
+
+  // قائمة الخيارات: رفع/حذف/إلغاء
+  const modal = document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,20,40,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;';
+  modal.innerHTML = `
+    <div style="background:#fff;max-width:360px;width:100%;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+      <div style="background:linear-gradient(135deg,#1a4d3a,#0f3028);color:#fff;padding:18px 20px;text-align:center;">
+        <div style="font-family:Cairo;font-weight:900;font-size:1.05rem;">صورة فئة "${catName}"</div>
+        <div style="font-size:.76rem;opacity:.8;margin-top:3px;">أي حجم — سنقصّها ونضبطها تلقائياً</div>
+      </div>
+      <div style="padding:18px 20px;">
+        ${currentImg ? '<div style="text-align:center;margin-bottom:14px;"><img src="'+currentImg+'" style="width:100px;height:100px;object-fit:cover;border-radius:12px;border:2px solid #c9a227;box-shadow:0 4px 12px rgba(0,0,0,.15);"></div>' : ''}
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button id="ci-upload-btn" style="padding:11px;background:linear-gradient(135deg,#1a4d3a,#0f3028);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.88rem;cursor:pointer;">رفع صورة جديدة</button>
+          ${currentImg ? '<button id="ci-delete-btn" style="padding:11px;background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">حذف الصورة الحالية</button>' : ''}
+          <button id="ci-cancel-btn" style="padding:11px;background:#fff;color:#0f3028;border:1.5px solid #dbe8df;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+
+  function close(){
+    if(modal.parentNode) modal.parentNode.removeChild(modal);
+    document.body.style.overflow = '';
+  }
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  modal.querySelector('#ci-cancel-btn')?.addEventListener('click',close);
+  modal.querySelector('#ci-upload-btn')?.addEventListener('click',()=>input.click());
+  modal.querySelector('#ci-delete-btn')?.addEventListener('click',()=>{
+    if(confirm('هل تريد حذف الصورة والرجوع للافتراضية؟')){
+      localStorage.removeItem('cat_img_'+catName);
+      toast('تم حذف الصورة','success');
+      close();
+      buildCatSelect();
+    }
+  });
+
+  input.addEventListener('change',e=>{
+    const file = e.target.files?.[0];
+    if(!file) return;
+    // لا يوجد حد للحجم — نقبل أي صورة ونقصّها/نضغطها تلقائياً
+    toast('جاري معالجة الصورة...','info');
+
+    const reader = new FileReader();
+    reader.onload = evt=>{
+      const img = new Image();
+      img.onload = ()=>{
+        try{
+          // الحجم المستهدف: مربع 400×400 (مناسب لبطاقات الفئات)
+          const TARGET_SIZE = 400;
+          const canvas = document.createElement('canvas');
+          canvas.width = TARGET_SIZE;
+          canvas.height = TARGET_SIZE;
+          const ctx = canvas.getContext('2d');
+
+          // قص الصورة إلى مربع (crop from center)
+          const sourceSize = Math.min(img.width, img.height);
+          const sx = (img.width - sourceSize) / 2;
+          const sy = (img.height - sourceSize) / 2;
+
+          // رسم الصورة المقصوصة على الـ canvas بحجم مستهدف
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, sx, sy, sourceSize, sourceSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
+
+          // ضغط تدريجي (ابدأ بجودة 0.85 ونزّل حتى يكون أقل من 80KB)
+          let quality = 0.85;
+          let dataUrl = canvas.toDataURL('image/jpeg', quality);
+          // نجرّب تقليل الجودة إذا الحجم كبير
+          while(dataUrl.length > 80 * 1024 && quality > 0.3){
+            quality -= 0.1;
+            dataUrl = canvas.toDataURL('image/jpeg', quality);
+          }
+
+          // لو مازال كبير، نجرّب حجم أصغر
+          if(dataUrl.length > 100 * 1024){
+            canvas.width = 300;
+            canvas.height = 300;
+            ctx.drawImage(img, sx, sy, sourceSize, sourceSize, 0, 0, 300, 300);
+            dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          }
+
+          // حفظ
+          try{
+            localStorage.setItem('cat_img_'+catName, dataUrl);
+            toast('تم حفظ الصورة وضبطها تلقائياً','success');
+            close();
+            buildCatSelect();
+          }catch(err){
+            toast('تعذّر الحفظ — مساحة التخزين ممتلئة','error');
+          }
+        }catch(err){
+          console.error(err);
+          toast('تعذّر معالجة الصورة','error');
+        }
+      };
+      img.onerror = ()=>toast('الملف ليس صورة صالحة','error');
+      img.src = evt.target.result;
+    };
+    reader.onerror = ()=>toast('تعذّر قراءة الملف','error');
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * تفعيل/تعطيل وضع تحرير صور الفئات (للأدمن)
+ */
+function toggleCatEditMode(){
+  if(!isAdminUser(currentUser)){
+    toast('فقط المدير','error');
+    return;
+  }
+  document.body.classList.toggle('admin-edit-mode');
+  const on = document.body.classList.contains('admin-edit-mode');
+  toast(on?'وضع التحرير مفعّل — اضغط قلم التعديل على أي فئة':'وضع التحرير معطّل','info');
+}
+// ═══════════════════════════════════════════════════════════════════
+
 function toggleCat(el){
   // منع النقر على الفئات المقفلة
   if(el.dataset.locked === '1' || el.classList.contains('locked')){
@@ -6266,40 +7486,64 @@ function autoGameName(){
   // بيانات ذكية للاسم
   const today=new Date();
   const weekdays=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
   const dayName=weekdays[today.getDay()];
   const dayNum=today.getDate();
-  const monthName=months[today.getMonth()];
+
+  // اسم المعلم من الحساب
+  let teacherName='';
+  try{
+    const displayName = currentUser?.displayName || '';
+    if(displayName){
+      // أخذ أول كلمتين (عادة الاسم الأول + الأب)
+      const parts = displayName.trim().split(/\s+/);
+      teacherName = parts.slice(0,2).join(' ');
+    }
+  }catch(e){}
+
+  // اسم الفصل من الفصل المنشأ للمعلم (إن وُجد)
+  let className='';
+  try{
+    // نحاول أولاً من localStorage (آخر فصل استخدمه)
+    className = localStorage.getItem('hh_last_class_name') || '';
+  }catch(e){}
+
   // الفئات المختارة حالياً (إن وُجدت)
   const activeCats=[...document.querySelectorAll('.cat-btn.active')].map(b=>{
     const k=b.dataset.cat;
     return CAT_INFO[k]?.label||k;
   });
-  // آخر اسم لعبة مستخدم (لاقتراح مشابه)
-  let lastName='';
-  try{
-    const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
-    if(hist.length>0)lastName=hist[0].name||'';
-  }catch(e){}
-  // توليد خيارات متعددة واختيار الأنسب
+
+  // بناء الاقتراح الذكي حسب الأولوية
   let suggestion='';
-  if(activeCats.length>0){
-    // الأسم: أول فئة + اليوم
-    suggestion=activeCats[0]+' — '+dayName+' '+dayNum+' '+monthName;
-  } else if(lastName){
-    // لو مافي فئات مختارة لكن فيه تاريخ سابق، اقترح من التاريخ
-    suggestion='حصة '+dayName+' '+dayNum+' '+monthName;
+  if(className && teacherName){
+    // أفضل صيغة: "فصل السابع-أ — الأحد 23"
+    suggestion = 'فصل '+className+' — '+dayName+' '+dayNum;
+  } else if(teacherName){
+    suggestion = 'حصة '+teacherName+' — '+dayName+' '+dayNum;
+  } else if(activeCats.length>0){
+    suggestion = activeCats[0]+' — '+dayName+' '+dayNum;
   } else {
-    suggestion='حصة '+dayName+' '+dayNum+' '+monthName;
+    suggestion = 'حصة '+dayName+' '+dayNum;
   }
   input.value=suggestion;
-  input.focus();
-  input.select();
-  toast('تم توليد اسم — عدّله إذا رغبت','success');
 }
 
 // ────────────────────────────────────────────────
-// تعبئة أسماء الفرق الافتراضية (الألوان)
+// اقتراح تلقائي لأسماء الفرق (ذكي)
+// ────────────────────────────────────────────────
+function autoSuggestTeamNames(){
+  // يعمل فقط إذا الحقول فارغة (ما نكتب فوق شي كتبه المستخدم)
+  for(let i=0;i<teamCount;i++){
+    const el=document.getElementById('tm-'+i);
+    if(el && !el.value.trim()){
+      const defaults=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي','الفريق البرتقالي'];
+      el.value=defaults[i]||('الفريق '+(i+1));
+    }
+  }
+}
+
+// ────────────────────────────────────────────────
+// تعبئة أسماء الفرق الافتراضية (الألوان) — زر يدوي
 // ────────────────────────────────────────────────
 function autoTeamNames(){
   const defaults=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي','الفريق البرتقالي'];
@@ -6488,11 +7732,13 @@ function buildBoard(){
   const cellH    = Math.max(16, Math.floor(usableH / 3));
 
   const catW     = Math.floor((vw - pad*2 - catGap*(perRow-1)) / perRow);
-  const centerW  = Math.max(44, Math.min(85, Math.floor(catW * 0.21)));
+  // عمود الفئة أعرض ليعطي الصورة مساحة حقيقية (55% تقريباً)
+  const centerW  = Math.max(100, Math.min(200, Math.floor(catW * 0.55)));
 
-  const ptsSize  = Math.max(0.38, Math.min(0.80, cellH / 34));
-  const lblSize  = Math.max(0.38, Math.min(0.58, centerW / 120));
-  const emojiS   = Math.max(0.5,  Math.min(1.3,  cellH  * 0.036));
+  // الأرقام: خط أكبر بكثير ليكون واضحاً
+  const ptsSize  = Math.max(0.80, Math.min(1.35, cellH / 24));
+  const lblSize  = Math.max(0.58, Math.min(0.88, centerW / 200));
+  const emojiS   = Math.max(0.9,  Math.min(2.6,  cellH  * 0.07));
 
   // ── CSS ديناميكي ──
   let style = document.getElementById('board-dynamic-style');
@@ -6524,22 +7770,29 @@ function buildBoard(){
     }
     .qcell{ height:${cellH}px; flex-shrink:0; }
     .qcell .qpts{ font-size:${ptsSize}rem; }
-    .cat-center{ height:${rowH}px; }
-    .cat-center .cc-img-wrap{ flex:1; overflow:hidden; }
+    /* الفئة: الصورة + الاسم = بالضبط مجموع ارتفاع الأرقام الثلاثة */
+    .cat-center{ height:${cellH * 3 + cellGap * 2}px; align-self:start; }
+    .cat-center .cc-img-wrap{
+      height:${cellH * 3 + cellGap * 2 - labelBarH}px;
+      max-height:${cellH * 3 + cellGap * 2 - labelBarH}px;
+      flex:none;
+      overflow:hidden;
+    }
     .cat-center .cc-label-bar{
       font-size:${lblSize}rem !important;
       white-space:normal !important;
       word-break:break-word !important;
-      line-height:1.2 !important;
+      line-height:1.15 !important;
       padding:2px 3px !important;
-      height:auto !important;
-      min-height:${labelBarH * 0.6}px;
-      max-height:${labelBarH * 1.8}px;
+      height:${labelBarH}px !important;
+      max-height:${labelBarH}px !important;
+      flex:none !important;
       display:flex !important;
       align-items:center !important;
       justify-content:center !important;
       text-align:center !important;
       border-radius:0 0 12px 12px !important;
+      overflow:hidden !important;
     }
     .cat-center .cc-img-wrap .cc-emoji{ font-size:${emojiS}rem; }
   `;
@@ -7691,6 +8944,63 @@ function openTeacherPath(){
 }
 
 /**
+ * فتح مودال مسار الزائر (بدون تسجيل)
+ */
+function openVisitorPath(){
+  const header = document.getElementById('path-modal-header');
+  const icon = document.getElementById('path-modal-icon');
+  const title = document.getElementById('path-modal-title');
+  const sub = document.getElementById('path-modal-sub');
+  const options = document.getElementById('path-modal-options');
+
+  // استخدم نفس تصميم الطالب لكن بعنوان مختلف
+  header.className = 'path-modal-header student';
+  icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
+  title.textContent = 'مسار الزائر';
+  sub.textContent = 'استكشف المنصة — بدون تسجيل';
+
+  options.innerHTML = `
+    <button class="path-modal-option" onclick="closePathModal();localStorage.removeItem('hh_saved_cats');showScreen('screen-setup');">
+      <div class="path-modal-option-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      </div>
+      <div class="path-modal-option-info">
+        <div class="path-modal-option-title">اللعبة التنافسية</div>
+        <div class="path-modal-option-desc">مسابقة بين فريقين على أكثر من 300 سؤال</div>
+      </div>
+      <svg class="path-modal-option-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button class="path-modal-option" onclick="closePathModal();window.location.href='flashcards.html';">
+      <div class="path-modal-option-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+      </div>
+      <div class="path-modal-option-info">
+        <div class="path-modal-option-title">بطاقات المراجعة</div>
+        <div class="path-modal-option-desc">اقلب، تذكّر، أتقِن</div>
+      </div>
+      <svg class="path-modal-option-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button class="path-modal-option" onclick="closePathModal();window.location.href='timeline.html';">
+      <div class="path-modal-option-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="path-modal-option-info">
+        <div class="path-modal-option-title">خرائط الزمن</div>
+        <div class="path-modal-option-desc">رتّب الأحداث التاريخية بالسحب</div>
+      </div>
+      <svg class="path-modal-option-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <div style="background:linear-gradient(135deg,#fdfaf0,#faf2d6);border:1.5px dashed #c9a227;border-radius:10px;padding:10px 12px;margin-top:8px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:#7a6418;font-weight:700;line-height:1.5;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a227" style="flex-shrink:0;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      <span><strong>فئة الأساطير</strong> تتطلب تسجيلاً — سجّل الدخول للاستمتاع بها</span>
+    </div>
+  `;
+
+  document.getElementById('path-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+/**
  * فتح مودال مسار الطالب
  */
 function openStudentPath(){
@@ -7706,6 +9016,16 @@ function openStudentPath(){
   sub.textContent = 'اختر النشاط الذي تريد البدء به';
 
   options.innerHTML = `
+    <button class="path-modal-option" style="background:linear-gradient(135deg,#fdfaf0,#fff);border:1.5px solid #c9a227;" onclick="closePathModal();openJoinClassModal();">
+      <div class="path-modal-option-icon" style="background:linear-gradient(135deg,#c9a227,#a68820);color:#fff;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      </div>
+      <div class="path-modal-option-info">
+        <div class="path-modal-option-title" style="color:#7a6418;">الانضمام لفصل معلمي</div>
+        <div class="path-modal-option-desc">أدخل رمز الفصل لتنضم لمعلمك</div>
+      </div>
+      <svg class="path-modal-option-arrow" width="20" height="20" viewBox="0 0 24 24" fill="#c9a227"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
     <button class="path-modal-option" onclick="closePathModal();window.location.href='quiz.html';">
       <div class="path-modal-option-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -7789,6 +9109,24 @@ document.addEventListener('keydown', function(e){
 // ═══════════════════════════════════════════════════════════════════
 
 let _currentBadgeFilter = 'all';
+
+// ═══════════════════════════════════════════════════════════════════
+// تبديل علامة تبويب الدليل (معلم / طالب)
+// ═══════════════════════════════════════════════════════════════════
+function switchGuideTab(role){
+  // تحديث الأزرار
+  document.querySelectorAll('.guide-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.guide === role);
+  });
+  // تحديث المحتوى
+  document.querySelectorAll('.guide-content').forEach(c=>{
+    c.classList.remove('active');
+  });
+  const target = document.getElementById('guide-'+role);
+  if(target) target.classList.add('active');
+  // التمرير لأعلى الدليل
+  try{ window.scrollTo({top:150, behavior:'smooth'}); }catch(e){}
+}
 
 function openAchievements(){
   showScreen('screen-achievements');
@@ -8079,7 +9417,18 @@ function showScreen(id){
   if(id==='screen-reviews') loadHomeReviews();
   // إيقاف real-time listeners عند مغادرة المتصدرين
   if(id!=='screen-lb') stopLBListeners();
-  if(id==='screen-setup') buildCatSelect();
+  if(id==='screen-setup'){
+    buildCatSelect();
+    // ✨ اقتراح تلقائي لاسم اللعبة إذا فارغ
+    try{
+      const gn = document.getElementById('game-name');
+      if(gn && !gn.value.trim()){
+        setTimeout(()=>autoGameName(), 150);
+      }
+    }catch(e){}
+    // ✨ اقتراح تلقائي لأسماء الفرق
+    try{ autoSuggestTeamNames(); }catch(e){}
+  }
   if(id==='screen-custom-q'){
     if(!isAllowedEditor()){
       showScreen('screen-menu');
@@ -8088,7 +9437,6 @@ function showScreen(id){
     }
     renderCustomQList();
   }
-  if(id==='screen-setup') buildCatSelect();
   // تحديث التصميم الملكي عند الدخول للقائمة
   if(id==='screen-menu') updateRoyalGreeting();
 }
@@ -8109,8 +9457,24 @@ function updateRoyalGreeting(){
     }
     if(nameEl){
       const userNameEl=document.getElementById('ub-name');
-      const name=userNameEl ? userNameEl.textContent : 'مستخدم';
-      nameEl.textContent=(name && name!=='مستخدم') ? name : 'صديقي';
+      let name=userNameEl ? userNameEl.textContent.trim() : '';
+      
+      // إذا الاسم إنجليزي، نستخدم لقب عربي أنيق
+      const hasArabic = /[\u0600-\u06FF]/.test(name);
+      if(!name || name==='مستخدم' || !hasArabic){
+        // نحاول استخراج الاسم العربي من displayName
+        const display = currentUser?.displayName || '';
+        if(/[\u0600-\u06FF]/.test(display)){
+          name = display.trim().split(/\s+/)[0];
+        } else {
+          name = 'أيها المُلهَم';
+        }
+      } else {
+        // نأخذ الاسم الأول فقط لو كان كاملاً
+        const parts = name.split(/\s+/);
+        if(parts.length > 1) name = parts[0];
+      }
+      nameEl.textContent = name;
     }
   }catch(e){}
 }
@@ -9163,6 +10527,10 @@ function _renderClassroomCard(c){
           <span>${created}</span>
         </div>
       </div>
+      <button class="cc-manage-btn" onclick="openManageStudents('${safeCode}', '${safeName.replace(/'/g,"\\'")}')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        إدارة الطلاب
+      </button>
     </div>
   `;
 }
@@ -9218,8 +10586,340 @@ async function deleteClassroom(code, name){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// صلاحية الوصول للفئات الخاصة (نظام قابل للتوسع)
+// نظام إدارة طلاب الفصل — Students Management
 // ═══════════════════════════════════════════════════════════════════
+
+// الفصل النشط حالياً في شاشة الطلاب
+let _currentManagedClass = null;
+
+/**
+ * فتح شاشة إدارة طلاب فصل معيّن
+ */
+async function openManageStudents(classCode, className){
+  if(!currentUser || !db){
+    toast('تعذّر الاتصال','error');
+    return;
+  }
+  try{
+    const doc = await db.collection('classrooms').doc(classCode).get();
+    if(!doc.exists){
+      toast('الفصل غير موجود','error');
+      return;
+    }
+    const data = doc.data();
+    if(data.teacherId !== currentUser.uid && !isAdminUser(currentUser)){
+      toast('لا تملك صلاحية إدارة هذا الفصل','error');
+      return;
+    }
+    _currentManagedClass = {code:classCode, ...data};
+    // حفظ اسم الفصل لاستخدامه في اقتراح اسم اللعبة
+    try{ localStorage.setItem('hh_last_class_name', data.className || ''); }catch(e){}
+    document.getElementById('sh-class-name').textContent = data.className;
+    document.getElementById('sh-school-name').textContent = data.schoolName;
+    document.getElementById('sh-class-code').textContent = classCode;
+    showScreen('screen-students');
+    await loadClassStudents();
+  }catch(e){
+    console.error(e);
+    toast('تعذّر فتح الفصل','error');
+  }
+}
+
+/**
+ * تحميل قائمة طلاب الفصل الحالي
+ */
+async function loadClassStudents(){
+  const container = document.getElementById('students-list-container');
+  const countEl = document.getElementById('students-total-count');
+  if(!container || !_currentManagedClass) return;
+
+  container.innerHTML = '<div class="students-empty"><div class="students-empty-text">جاري التحميل...</div></div>';
+
+  try{
+    const snap = await db.collection('classroom_students')
+      .where('classCode','==',_currentManagedClass.code)
+      .where('active','==',true)
+      .get();
+
+    const students = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    // ترتيب حسب تاريخ الإضافة (الأحدث أولاً)
+    students.sort((a,b)=>{
+      const aT = a.addedAt?.toMillis?.() || 0;
+      const bT = b.addedAt?.toMillis?.() || 0;
+      return bT - aT;
+    });
+
+    if(countEl) countEl.textContent = students.length;
+
+    if(students.length === 0){
+      container.innerHTML = `
+        <div class="students-empty">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <div class="students-empty-text">لا يوجد طلاب في هذا الفصل</div>
+          <div class="students-empty-sub">اضغط "إضافة طالب" لبدء تكوين القائمة</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = '<div class="students-list">' + students.map(s => {
+      const safeName = esc(s.studentName || 'بدون اسم');
+      const firstLetter = (s.studentName || '?').trim().charAt(0);
+      const joined = !!s.userId;
+      const added = s.addedAt?.toDate?.()
+        ? s.addedAt.toDate().toLocaleDateString('ar-QA',{month:'short',day:'numeric'})
+        : '';
+      return `
+        <div class="student-item" data-id="${esc(s.id)}">
+          <div class="student-avatar">${esc(firstLetter)}</div>
+          <div class="student-info">
+            <div class="student-name">${safeName}</div>
+            <div class="student-meta">
+              <span class="student-badge ${joined?'joined':'pending'}">${joined?'منضم':'بانتظار الانضمام'}</span>
+              ${added?'<span>أُضيف '+added+'</span>':''}
+            </div>
+          </div>
+          <button class="student-delete" onclick="removeStudentFromClass('${esc(s.id)}','${safeName.replace(/'/g,"\\'")}')" title="حذف">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+      `;
+    }).join('') + '</div>';
+  }catch(e){
+    console.error('Load students error:',e);
+    container.innerHTML = '<div class="students-empty"><div class="students-empty-text" style="color:#c0392b;">تعذّر تحميل القائمة</div></div>';
+  }
+}
+
+/**
+ * فتح مودال إضافة طالب
+ */
+function openAddStudentModal(){
+  if(!_currentManagedClass){ toast('اختر فصلاً أولاً','error'); return; }
+  document.getElementById('new-student-name').value = '';
+  document.getElementById('add-student-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>document.getElementById('new-student-name').focus(), 100);
+}
+
+function closeAddStudentModal(){
+  document.getElementById('add-student-modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/**
+ * إضافة طالب للفصل الحالي
+ */
+async function addStudentToClass(){
+  if(!_currentManagedClass || !db) return;
+  const name = document.getElementById('new-student-name').value.trim();
+  if(!name){ toast('اكتب اسم الطالب','error'); return; }
+  if(name.length < 5){ toast('الاسم قصير — أدخل الاسم الثلاثي','error'); return; }
+
+  try{
+    await db.collection('classroom_students').add({
+      classCode: _currentManagedClass.code,
+      className: _currentManagedClass.className,
+      schoolName: _currentManagedClass.schoolName || '',
+      teacherId: _currentManagedClass.teacherId,
+      studentName: name,
+      userId: null, // يُملأ عند انضمام الطالب فعلياً
+      active: true,
+      addedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // تحديث عدد الطلاب في الفصل
+    try{
+      await db.collection('classrooms').doc(_currentManagedClass.code).update({
+        studentCount: firebase.firestore.FieldValue.increment(1)
+      });
+    }catch(e){}
+    closeAddStudentModal();
+    toast('تمت إضافة الطالب','success');
+    await loadClassStudents();
+  }catch(e){
+    console.error(e);
+    toast('تعذّر الإضافة','error');
+  }
+}
+
+/**
+ * حذف طالب من الفصل
+ */
+async function removeStudentFromClass(studentDocId, name){
+  if(!confirm('هل تريد حذف "'+name+'" من الفصل؟')) return;
+  try{
+    await db.collection('classroom_students').doc(studentDocId).update({
+      active:false,
+      removedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // تقليل العدد
+    try{
+      await db.collection('classrooms').doc(_currentManagedClass.code).update({
+        studentCount: firebase.firestore.FieldValue.increment(-1)
+      });
+    }catch(e){}
+    toast('تم الحذف','success');
+    await loadClassStudents();
+  }catch(e){
+    console.error(e);
+    toast('تعذّر الحذف','error');
+  }
+}
+
+/**
+ * نسخ رمز الفصل الحالي للحافظة (من داخل شاشة إدارة الطلاب)
+ */
+function copyCurrentClassCode(){
+  if(!_currentManagedClass) return;
+  const code = _currentManagedClass.code;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(code).then(()=>{
+      toast('تم نسخ الرمز: '+code,'success');
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// الطالب ينضم لفصل
+// ═══════════════════════════════════════════════════════════════════
+
+function openJoinClassModal(){
+  if(!currentUser){
+    toast('سجّل الدخول أولاً','error');
+    return;
+  }
+  document.getElementById('join-class-code').value = '';
+  document.getElementById('join-class-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>document.getElementById('join-class-code').focus(), 100);
+}
+
+function closeJoinClassModal(){
+  document.getElementById('join-class-modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/**
+ * الطالب يدخل رمز الفصل ويرتبط به
+ */
+async function joinClassroom(){
+  if(!currentUser || !db) return;
+  const codeInput = document.getElementById('join-class-code').value.trim().toUpperCase();
+  if(!codeInput){ toast('أدخل رمز الفصل','error'); return; }
+
+  try{
+    const classDoc = await db.collection('classrooms').doc(codeInput).get();
+    if(!classDoc.exists || !classDoc.data().active){
+      toast('رمز الفصل غير صحيح','error');
+      return;
+    }
+    const classData = classDoc.data();
+
+    // هل الطالب مُسجل سابقاً من قبل المعلم (بالاسم)؟
+    // نربط userId بسجله إن وُجد
+    const studentName = currentUser.displayName || (await _getUserName(currentUser.uid)) || '';
+    
+    // البحث عن سجل قائم بنفس userId
+    const existing = await db.collection('classroom_students')
+      .where('classCode','==',codeInput)
+      .where('userId','==',currentUser.uid)
+      .where('active','==',true)
+      .limit(1).get();
+    
+    if(!existing.empty){
+      toast('أنت بالفعل في هذا الفصل','info');
+      closeJoinClassModal();
+      return;
+    }
+
+    // إنشاء سجل انضمام جديد
+    await db.collection('classroom_students').add({
+      classCode: codeInput,
+      className: classData.className,
+      schoolName: classData.schoolName || '',
+      teacherId: classData.teacherId,
+      teacherName: classData.teacherName || '',
+      studentName: studentName || 'طالب',
+      userId: currentUser.uid,
+      userEmail: currentUser.email || '',
+      active: true,
+      joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      addedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // تحديث حقل الطالب بأنه انضم لفصل
+    try{
+      await db.collection('users').doc(currentUser.uid).update({
+        currentClassCode: codeInput,
+        currentClassName: classData.className
+      });
+    }catch(e){}
+
+    closeJoinClassModal();
+    toast('تم الانضمام لفصل "'+classData.className+'" بنجاح!','success');
+    await loadMyClass();
+  }catch(e){
+    console.error('Join class error:',e);
+    toast('تعذّر الانضمام','error');
+  }
+}
+
+async function _getUserName(uid){
+  try{
+    const d = await db.collection('users').doc(uid).get();
+    return d.exists ? (d.data().name || '') : '';
+  }catch(e){ return ''; }
+}
+
+/**
+ * تحميل معلومات فصل الطالب الحالي (إن وُجد)
+ */
+async function loadMyClass(){
+  if(!currentUser || !db) return null;
+  try{
+    const snap = await db.collection('classroom_students')
+      .where('userId','==',currentUser.uid)
+      .where('active','==',true)
+      .limit(1).get();
+    if(snap.empty) return null;
+    const data = snap.docs[0].data();
+    return {docId:snap.docs[0].id, ...data};
+  }catch(e){
+    console.warn('loadMyClass error:',e);
+    return null;
+  }
+}
+
+/**
+ * مغادرة الفصل (للطالب)
+ */
+async function leaveMyClass(){
+  if(!confirm('هل تريد مغادرة فصلك الحالي؟')) return;
+  const myClass = await loadMyClass();
+  if(!myClass) return;
+  try{
+    await db.collection('classroom_students').doc(myClass.docId).update({
+      active:false,
+      leftAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    try{
+      await db.collection('users').doc(currentUser.uid).update({
+        currentClassCode: firebase.firestore.FieldValue.delete(),
+        currentClassName: firebase.firestore.FieldValue.delete()
+      });
+    }catch(e){}
+    toast('تمت المغادرة','success');
+    // إعادة تحميل واجهة الطالب إن كانت مفتوحة
+    const card = document.getElementById('my-class-card-wrap');
+    if(card) card.innerHTML = '';
+  }catch(e){
+    console.error(e);
+    toast('تعذّر المغادرة','error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+
 async function canAccessExclusive(u){
   if(isAdminUser(u)) return true; // المدير دائماً لديه الصلاحية
   const user = u || currentUser;
