@@ -1,0 +1,35 @@
+# منصة الحلحلي التعليمية — robots.txt
+# https://alhalhali.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /private/
+
+# خريطة الموقع
+Sitemap: https://alhalhali.com/sitemap.xml
+
+# محركات البحث الرئيسية
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+
+# منع الزواحف السيئة
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
