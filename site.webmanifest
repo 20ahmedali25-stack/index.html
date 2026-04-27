@@ -1,39 +1,37 @@
 {
-  "name": "منصة الحلحلي التعليمية",
-  "short_name": "الحلحلي",
-  "description": "لعبة قطرية تعليمية تفاعلية للطلاب والمعلمين على مناهج قطر الوطنية",
-  "lang": "ar",
-  "dir": "rtl",
+  "name": "منصة المُلْهِم التعليمية",
+  "short_name": "المُلْهِم",
+  "description": "منصة قطرية تربوية تفاعلية - حيث يبدأ الإلهام",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#1a3a5c",
-  "background_color": "#ffffff",
-  "categories": ["education", "games", "kids"],
+  "orientation": "portrait",
+  "background_color": "#1a4d3a",
+  "theme_color": "#1a4d3a",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["education", "books", "kids"],
   "icons": [
     {
-      "src": "favicon-32.png",
+      "src": "/favicon-32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "apple-touch-icon.png",
-      "sizes": "180x180",
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
+    },
     {
-      "src": "og-image.png",
-      "sizes": "1200x630",
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
       "type": "image/png"
     }
   ]

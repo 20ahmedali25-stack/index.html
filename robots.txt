@@ -1,35 +1,38 @@
-# منصة الحلحلي التعليمية — robots.txt
+# ════════════════════════════════════════════
+# منصة المُلْهِم التعليمية — robots.txt
 # https://alhalhali.com
+# حيث يبدأ الإلهام — أحمد الحلحلي
+# ════════════════════════════════════════════
 
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /private/
 
-# خريطة الموقع
-Sitemap: https://alhalhali.com/sitemap.xml
-
-# محركات البحث الرئيسية
+# السماحُ الكاملُ لزواحفِ Google
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
+Crawl-delay: 0
 
+# السماحُ الكاملُ لزواحفِ Bing
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 2
+Crawl-delay: 0
 
+# السماحُ لزواحفِ مُحرِّكاتِ البحثِ العربيةِ والعالمية
 User-agent: YandexBot
 Allow: /
 
-# منع الزواحف السيئة
-User-agent: AhrefsBot
-Disallow: /
+User-agent: DuckDuckBot
+Allow: /
 
-User-agent: SemrushBot
-Disallow: /
+User-agent: Slurp
+Allow: /
 
-User-agent: MJ12bot
-Disallow: /
+# منعُ الوصولِ إلى الملفاتِ التقنيةِ الخاصة
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /backup/
+Disallow: /*.json$
+Disallow: /admin/
 
-User-agent: DotBot
-Disallow: /
+# خريطةُ الموقع
+Sitemap: https://alhalhali.com/sitemap.xml
