@@ -1,0 +1,38 @@
+{
+  "name": "منصة المُلْهِم التعليمية",
+  "short_name": "المُلْهِم",
+  "description": "منصة قطرية تربوية تفاعلية - حيث يبدأ الإلهام",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#5C3A1E",
+  "theme_color": "#5C3A1E",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["education", "books", "kids"],
+  "icons": [
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
