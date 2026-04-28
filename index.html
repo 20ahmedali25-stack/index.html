@@ -1640,6 +1640,240 @@ body.dark-mode .ae-pillar-hint{ color:#9ab0a4; }
 /* ════════════════════════════════════════════════════════════════
    📖  بطاقاتُ شاشةِ "قصَّتُنا" — قابلة للطي
    ════════════════════════════════════════════════════════════════ */
+
+/* ══════ شبكة المربعات الجديدة ══════ */
+.about-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:14px;
+  margin-bottom:18px;
+}
+@media (max-width:520px){
+  .about-grid{ grid-template-columns:1fr; gap:10px; }
+}
+
+/* المربع الواحد */
+.about-square{
+  position:relative;
+  background:#fff;
+  border:1.5px solid #e6dec9;
+  border-radius:16px;
+  padding:18px 16px;
+  cursor:pointer;
+  transition:all .25s ease;
+  user-select:none;
+  font-family:Cairo,sans-serif;
+  text-align:center;
+  box-shadow:0 4px 14px rgba(92,58,30,.08);
+  overflow:hidden;
+}
+.about-square:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px rgba(92,58,30,.18);
+  border-color:var(--asq-color, #c9a227);
+}
+.about-square::before{
+  content:'';
+  position:absolute;top:0;right:0;left:0;
+  height:4px;
+  background:var(--asq-bg, linear-gradient(90deg,#5C3A1E,#c9a227));
+}
+.about-square.open{
+  border-color:var(--asq-color, #c9a227);
+  background:linear-gradient(180deg,#fff 0%,#fdfaf2 100%);
+  box-shadow:0 12px 30px rgba(92,58,30,.18);
+}
+
+/* أيقونة المربع */
+.asq-icon{
+  width:54px;height:54px;
+  margin:0 auto 12px;
+  background:var(--asq-bg, linear-gradient(135deg,#5C3A1E,#c9a227));
+  color:#f5d76e;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px var(--asq-glow, rgba(92,58,30,.32)), inset 0 -2px 0 rgba(0,0,0,.15);
+  transition:transform .25s ease;
+}
+.about-square:hover .asq-icon{
+  transform:scale(1.06) rotate(-3deg);
+}
+
+/* عنوان وعنوان فرعي */
+.asq-title{
+  font-family:Cairo,sans-serif;
+  font-weight:900;
+  font-size:1.02rem;
+  color:#2a1a0c;
+  margin-bottom:4px;
+  letter-spacing:-.2px;
+}
+.asq-hint{
+  font-family:Tajawal,sans-serif;
+  font-weight:500;
+  font-size:.78rem;
+  color:#7a5c00;
+  margin-bottom:10px;
+}
+
+/* مؤشّر الفتح */
+.asq-toggle{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 14px;
+  background:var(--asq-soft, rgba(201,162,39,.12));
+  color:var(--asq-color, #7a5c00);
+  border-radius:14px;
+  font-family:Cairo,sans-serif;
+  font-weight:900;
+  font-size:.7rem;
+  transition:all .22s ease;
+}
+.about-square:hover .asq-toggle{
+  background:var(--asq-color, #c9a227);
+  color:#fff;
+}
+.asq-toggle svg{
+  width:11px;height:11px;
+  transition:transform .3s ease;
+}
+.about-square.open .asq-toggle svg{
+  transform:rotate(180deg);
+}
+
+/* محتوى المربع (يفتح للأسفل داخل المربع) */
+.asq-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .4s ease, opacity .3s ease, margin-top .3s ease;
+  opacity:0;
+  text-align:right;
+}
+.about-square.open .asq-body{
+  max-height:3000px;
+  opacity:1;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1.5px dashed var(--asq-color, #c9a227);
+}
+.asq-body-text{
+  font-family:Tajawal,sans-serif;
+  font-size:.88rem;
+  line-height:1.85;
+  color:#3d2614;
+  text-align:right;
+}
+
+/* ألوان المواضيع للمربعات */
+.about-square[data-asq="why"]{
+  --asq-color:#7a5c00;
+  --asq-bg:linear-gradient(135deg,#3d2614 0%,#5C3A1E 50%,#7a5c00 100%);
+  --asq-soft:rgba(201,162,39,.14);
+  --asq-glow:rgba(201,162,39,.32);
+}
+.about-square[data-asq="essence"]{
+  --asq-color:#c9a227;
+  --asq-bg:linear-gradient(135deg,#c9a227,#7a6418);
+  --asq-soft:rgba(201,162,39,.12);
+  --asq-glow:rgba(201,162,39,.30);
+}
+.about-square[data-asq="vision"]{
+  --asq-color:#5C3A1E;
+  --asq-bg:linear-gradient(135deg,#5C3A1E,#3d2614);
+  --asq-soft:rgba(92,58,30,.10);
+  --asq-glow:rgba(92,58,30,.28);
+}
+.about-square[data-asq="goals"]{
+  --asq-color:#c9a227;
+  --asq-bg:linear-gradient(135deg,#c9a227,#7a6418);
+  --asq-soft:rgba(201,162,39,.12);
+  --asq-glow:rgba(201,162,39,.30);
+}
+.about-square[data-asq="founder"]{
+  --asq-color:#5C3A1E;
+  --asq-bg:linear-gradient(135deg,#5C3A1E,#2a1a0c);
+  --asq-soft:rgba(92,58,30,.10);
+  --asq-glow:rgba(92,58,30,.30);
+}
+.about-square[data-asq="teacher"]{
+  --asq-color:#8D1B3D;
+  --asq-bg:linear-gradient(135deg,#8D1B3D,#5c0e25);
+  --asq-soft:rgba(141,27,61,.10);
+  --asq-glow:rgba(141,27,61,.28);
+}
+.about-square[data-asq="values"]{
+  --asq-color:#7a6418;
+  --asq-bg:linear-gradient(135deg,#c9a227,#7a6418);
+  --asq-soft:rgba(201,162,39,.14);
+  --asq-glow:rgba(201,162,39,.32);
+}
+.about-square[data-asq="values"] .asq-icon{
+  background:radial-gradient(circle at 50% 40%, #fff3a0 0%, #c9a227 60%, #7a6418 100%);
+  color:#5C3A1E;
+}
+
+/* عناصر القيم داخل مربع القيم */
+.asq-vals-list{
+  display:flex; flex-direction:column; gap:10px;
+}
+.asq-val-row{
+  display:flex; align-items:flex-start; gap:10px;
+  background:#fdfaf2;
+  border:1px solid #e6dec9;
+  border-right:3px solid var(--vrow-color, #c9a227);
+  border-radius:10px;
+  padding:10px 12px;
+  text-align:right;
+}
+.asq-val-row:nth-child(1){ --vrow-color:#5C3A1E; }
+.asq-val-row:nth-child(2){ --vrow-color:#c9a227; }
+.asq-val-row:nth-child(3){ --vrow-color:#8D1B3D; }
+.asq-val-row:nth-child(4){ --vrow-color:#185fa5; }
+.asq-val-row:nth-child(5){ --vrow-color:#5C3A1E; }
+.asq-val-num{
+  flex-shrink:0;
+  width:28px;height:28px;
+  background:var(--vrow-color, #c9a227);
+  color:#fff;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.8rem;
+}
+.asq-val-info{ flex:1; }
+.asq-val-name{
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
+  color:#2a1a0c; margin-bottom:3px;
+}
+.asq-val-desc{
+  font-family:Tajawal,sans-serif;font-size:.78rem;line-height:1.7;
+  color:#5c4a3a;
+}
+
+.asq-vals-quote{
+  margin-top:14px; padding:12px;
+  background:linear-gradient(135deg,#fdfaf2,#fff8e8);
+  border:1.5px dashed #c9a227;
+  border-radius:12px;
+  text-align:center;
+}
+.asq-vals-quote-text{
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.95rem;
+  color:#5C3A1E;
+}
+.asq-vals-quote-sub{
+  font-family:Tajawal,sans-serif;font-size:.72rem;color:#7a5c00;
+  margin-top:4px;
+}
+
+/* dark mode للمربعات */
+body.dark-mode .about-square{
+  background:#1a1410; border-color:#3d2614;
+}
+body.dark-mode .about-square.open{
+  background:linear-gradient(180deg,#1a1410 0%,#2a1a0c 100%);
+}
+body.dark-mode .asq-title{ color:#f5d76e; }
+body.dark-mode .asq-body-text{ color:#e8dcc8; }
+
 .about-toggle-card{
   position:relative;
   display:flex; align-items:center; gap:12px;
@@ -3524,82 +3758,82 @@ body.dark-mode .mobile-menu-link:hover{ background:#3d2614; border-color:#c9a227
 /*  بطاقة مقولة اليوم */
 .daily-quote-card{
   position:relative;
-  margin:0 0 18px;
-  padding:22px 22px 18px;
+  margin:0 0 14px;
+  padding:14px 16px 12px;
   background:linear-gradient(135deg,#fdfaf0 0%,#fff8e8 50%,#fdf2d4 100%);
-  border:2px solid #c9a227;
-  border-radius:18px;
-  box-shadow:0 8px 24px rgba(201,162,39,.15), inset 0 1px 0 rgba(255,255,255,.6);
+  border:1.5px solid #c9a227;
+  border-radius:14px;
+  box-shadow:0 4px 14px rgba(201,162,39,.12), inset 0 1px 0 rgba(255,255,255,.6);
   overflow:hidden;
   transition:transform .25s ease;
   text-align:center;
 }
 .daily-quote-card::before{
-  content:'';position:absolute;top:-30px;right:-30px;
-  width:140px;height:140px;
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:80px;height:80px;
   background:radial-gradient(circle,rgba(201,162,39,.18),transparent 65%);
   border-radius:50%;pointer-events:none;
 }
 .daily-quote-card::after{
-  content:'';position:absolute;bottom:-30px;left:-30px;
-  width:120px;height:120px;
+  content:'';position:absolute;bottom:-20px;left:-20px;
+  width:70px;height:70px;
   background:radial-gradient(circle,rgba(141,27,61,.12),transparent 65%);
   border-radius:50%;pointer-events:none;
 }
 .dq-pattern{
-  position:absolute;inset:6px;
-  border:1px dashed rgba(201,162,39,.3);
-  border-radius:14px;
+  position:absolute;inset:4px;
+  border:1px dashed rgba(201,162,39,.25);
+  border-radius:11px;
   pointer-events:none;
 }
 .dq-icon{
   position:relative;z-index:2;
-  width:36px;height:36px;margin:0 auto 10px;
+  width:26px;height:26px;margin:0 auto 6px;
   background:linear-gradient(135deg,#c9a227,#7a5c00);
   color:#fff;
-  border-radius:10px;
+  border-radius:7px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(201,162,39,.4);
+  box-shadow:0 2px 8px rgba(201,162,39,.35);
 }
-.dq-icon svg{width:18px;height:18px;}
+.dq-icon svg{width:13px;height:13px;}
 .dq-label{
   position:relative;z-index:2;
   display:inline-block;
-  font-family:'Cairo',sans-serif;font-weight:900;font-size:.7rem;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:.6rem;
   color:#7a5c00;
   background:rgba(201,162,39,.15);
-  padding:4px 14px;border-radius:14px;
+  padding:2px 10px;border-radius:11px;
   border:1px solid rgba(201,162,39,.4);
-  letter-spacing:.5px;
-  margin-bottom:14px;
+  letter-spacing:.4px;
+  margin-bottom:8px;
 }
 .dq-text{
   position:relative;z-index:2;
-  font-family:'Cairo',sans-serif;font-weight:800;font-size:1.05rem;
-  line-height:1.85;color:#2a1a0c;
-  max-width:540px;margin:0 auto 10px;
-  letter-spacing:-.2px;
+  font-family:'Cairo',sans-serif;font-weight:800;font-size:.85rem;
+  line-height:1.7;color:#2a1a0c;
+  max-width:520px;margin:0 auto 6px;
+  letter-spacing:-.1px;
 }
 .dq-author{
   position:relative;z-index:2;
-  font-family:'Tajawal',sans-serif;font-weight:700;font-size:.78rem;
+  font-family:'Tajawal',sans-serif;font-weight:700;font-size:.68rem;
   color:#7a5c00;
-  margin-bottom:14px;
+  margin-bottom:8px;
 }
 .dq-divider{
   position:relative;z-index:2;
-  width:60px;height:2px;margin:0 auto 12px;
+  width:40px;height:1.5px;margin:0 auto 8px;
   background:linear-gradient(90deg,transparent,#c9a227,transparent);
 }
 .dq-refresh{
   position:relative;z-index:2;
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 14px;
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 11px;
   background:transparent;
   color:#7a5c00;
   border:1px solid rgba(201,162,39,.5);
-  border-radius:18px;
-  font-family:'Cairo',sans-serif;font-weight:800;font-size:.72rem;
+  border-radius:14px;
+  font-family:'Cairo',sans-serif;font-weight:800;font-size:.65rem;
   cursor:pointer;
   transition:all .2s ease;
 }
@@ -6755,6 +6989,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
           <span>ابدأ رحلتك</span>
         </button></li>
+        <li><button class="nav-link nav-link-play" data-section="play" onclick="hhNavigate('screen-setup')" title="العب لعبة جديدة الآن" style="background:linear-gradient(135deg,#5C3A1E,#2a1a0c);color:#f5d76e;border:1.5px solid #c9a227;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span>العب الآن</span>
+        </button></li>
         <li><button class="nav-link" data-section="influencers" onclick="hhNavigate('screen-influencers')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>
           <span>شخصيات مؤثرة</span>
@@ -6766,10 +7004,6 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <li><button class="nav-link" data-section="story" onclick="hhNavigate('screen-about')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           <span>قصَّتُنا</span>
-        </button></li>
-        <li><button class="nav-link" data-section="about" onclick="hhNavigate('screen-values')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <span>عن المُلْهِم</span>
         </button></li>
       </ul>
 
@@ -6815,6 +7049,14 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
         <span>ابدأ رحلتك</span>
       </button>
+      <button class="mobile-menu-link" data-section="home" onclick="hhNavigate('screen-menu');closeMobileMenu();">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
+        <span>ابدأ رحلتك</span>
+      </button>
+      <button class="mobile-menu-link mobile-menu-link-play" data-section="play" onclick="hhNavigate('screen-setup');closeMobileMenu();" style="background:linear-gradient(135deg,#5C3A1E,#2a1a0c);color:#f5d76e;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <span>العب الآن</span>
+      </button>
       <button class="mobile-menu-link" data-section="influencers" onclick="hhNavigate('screen-influencers');closeMobileMenu();">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>
         <span>شخصيات مؤثرة</span>
@@ -6826,10 +7068,6 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <button class="mobile-menu-link" data-section="story" onclick="hhNavigate('screen-about');closeMobileMenu();">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         <span>قصَّتُنا</span>
-      </button>
-      <button class="mobile-menu-link" data-section="about" onclick="hhNavigate('screen-values');closeMobileMenu();">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        <span>عن المُلْهِم</span>
       </button>
     </div>
   </nav>
@@ -7959,6 +8197,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <svg class="tab-icon" viewBox="0 0 24 24"><path d="M19 13.5V19c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h5.5l-2 2H5v12h12v-3.5l2-2zM17.5 3l-1.41 1.41L19.17 7.5H10v2h9.17l-3.08 3.09L17.5 14l5.5-5.5L17.5 3z"/></svg>
         <span>ماذا الجديد</span>
       </button>
+      <button class="admin-tab" onclick="adminTab('reports')">
+        <svg class="tab-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <span>البلاغات</span>
+      </button>
     </div>
 
     <!-- المستخدمون -->
@@ -7974,7 +8216,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             <span>المستخدمون</span>
             <span id="users-filter-count" style="background:#c9a227;color:#fff;padding:3px 11px;border-radius:12px;font-size:.72rem;font-weight:900;">0 / 0</span>
           </div>
-          <input type="text" id="users-search-input" placeholder="<span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg></span> بحث بالاسم أو الإيميل..." oninput="searchUsers(this.value)" style="flex:1;min-width:200px;padding:8px 12px;border:1.5px solid #c9a227;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;background:#fff;">
+          <input type="text" id="users-search-input" placeholder="بحث بالاسم أو الإيميل..." oninput="searchUsers(this.value)" style="flex:1;min-width:200px;padding:8px 12px;border:1.5px solid #c9a227;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;background:#fff;">
         </div>
 
         <!-- فلتر النوع -->
@@ -8304,7 +8546,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 
       <!-- شريط بحث -->
       <div style="margin-bottom:12px;">
-        <input type="text" id="aq-cat-mgmt-search" placeholder="<span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg></span> ابحث عن فئة..." oninput="renderAdminCategoriesList()" style="width:100%;padding:10px;border:1.5px solid #5C3A1E;border-radius:8px;font-family:Tajawal;font-size:.88rem;outline:none;box-sizing:border-box;">
+        <input type="text" id="aq-cat-mgmt-search" placeholder="ابحث عن فئة..." oninput="renderAdminCategoriesList()" style="width:100%;padding:10px;border:1.5px solid #5C3A1E;border-radius:8px;font-family:Tajawal;font-size:.88rem;outline:none;box-sizing:border-box;">
       </div>
 
       <!-- قائمة الفئات -->
@@ -8441,6 +8683,29 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <button onclick="previewWhatsNewModal()" type="button" style="padding:5px 12px;background:#fef9ec;color:#7a5c00;border:1.5px solid #c9a227;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 3H3c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.11-.9-2-2-2zm0 14H3V5h18v12z"/></svg></span> معاينة</button>
       </div>
       <div id="wn-list"></div>
+    </div>
+
+    <!-- 🐛 البلاغات (Problem Reports) -->
+    <div id="admin-reports-panel" class="admin-section" style="display:none;">
+      <div style="background:linear-gradient(135deg,#fdfaf0,#fff8e8);border:2px solid #c9a227;border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#7a5c00"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <div style="font-family:Cairo;font-weight:900;color:#5C3A1E;font-size:1rem;">بلاغات المستخدمين</div>
+        </div>
+        <div style="font-size:.82rem;color:#7a5c00;line-height:1.7;">
+          البلاغات التي يُرسلها المستخدمون من زر «أرسل ملاحظتك» في صفحة التواصل.
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button onclick="renderProblemReports('all')" id="pr-filter-all" class="pr-filter-btn pr-filter-active" style="padding:6px 14px;border:1.5px solid #5C3A1E;background:#5C3A1E;color:#f5d76e;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.75rem;cursor:pointer;">الكل</button>
+        <button onclick="renderProblemReports('new')" id="pr-filter-new" class="pr-filter-btn" style="padding:6px 14px;border:1.5px solid #c0392b;background:#fff;color:#c0392b;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.75rem;cursor:pointer;">جديد</button>
+        <button onclick="renderProblemReports('viewed')" id="pr-filter-viewed" class="pr-filter-btn" style="padding:6px 14px;border:1.5px solid #c9a227;background:#fff;color:#7a5c00;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.75rem;cursor:pointer;">معروض</button>
+        <button onclick="renderProblemReports('resolved')" id="pr-filter-resolved" class="pr-filter-btn" style="padding:6px 14px;border:1.5px solid #1a7a4a;background:#fff;color:#1a7a4a;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.75rem;cursor:pointer;">محلول</button>
+        <button onclick="renderProblemReports()" type="button" style="margin-right:auto;padding:6px 12px;background:#fff;color:#5C3A1E;border:1.5px solid #5C3A1E;border-radius:14px;font-family:Cairo;font-weight:900;font-size:.75rem;cursor:pointer;">🔄 تحديث</button>
+      </div>
+      <div id="pr-list">
+        <div style="text-align:center;padding:40px;color:#888;font-size:.85rem;">جارٍ التحميل...</div>
+      </div>
     </div>
 
   </div>
@@ -8997,27 +9262,28 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <svg class="vbs-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
     </div>
 
-    <!-- <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> لماذا «المُلْهِم»؟ — بطاقةٌ قابلةٌ للطي بهويةٍ قوية -->
-    <div class="about-toggle-card" data-theme="why" onclick="toggleAbout('about-why-inspiration')">
-      <div class="atc-icon-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-          <path d="M14 4l6 6-11 11H3v-6L14 4z"/>
-          <path d="M13 5l6 6"/>
-        </svg>
-      </div>
-      <div class="atc-text">
-        <div class="atc-title">لماذا «المُلْهِم»؟</div>
-        <div class="atc-hint">سرُّ الاسم وروحُ المنصة</div>
-      </div>
-      <div class="atc-chevron" id="arr-about-why-inspiration">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
 
-    <!-- محتوى لماذا المُلْهِم - يَظهر عند الفتح -->
-    <div class="about-detail" id="about-why-inspiration">
-      <div class="why-content-inner">
-        <!-- العنوان الكبير -->
+    <!-- ═══════════════════════════════════════════════════════════
+         🟫 شبكة قصتنا — مربعات يفتح المحتوى داخلها (مع قيمنا مدمجة)
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="about-grid">
+
+      <!-- ① لماذا «المُلْهِم»؟ -->
+      <div class="about-square" data-asq="why" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+            <path d="M14 4l6 6-11 11H3v-6L14 4z"/>
+            <path d="M13 5l6 6"/>
+          </svg>
+        </div>
+        <div class="asq-title">لماذا «المُلْهِم»؟</div>
+        <div class="asq-hint">سرُّ الاسم وروحُ المنصة</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="asq-body">
+          <div class="asq-body-text"><!-- العنوان الكبير -->
         <div class="why-content-title">
           المعلِّمُ لا يُعلِّمُ فقط...<br>
           <span>بل يُلْهِم.</span>
@@ -9043,29 +9309,25 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <!-- الجسر -->
         <div class="why-content-bridge">
           ولهذا سُمِّيَتْ <span class="why-bridge-name">«المُلْهِم»</span> — لِتكونَ منصةً تُعينُكَ أن تكونَ <span class="why-bridge-name">المعلِّمَ المُلْهِم</span>
+        </div></div>
         </div>
       </div>
-    </div>
 
-    <!-- <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l9 7-9 13L3 9l9-7zm0 3.27L5.5 9l6.5 9 6.5-9L12 5.27z"/></svg> منصتنا في كلمات — بطاقةٌ قابلةٌ للطي -->
-    <div class="about-toggle-card" data-theme="essence" onclick="toggleAbout('about-essence-content')">
-      <div class="atc-icon-wrap">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/>
-        </svg>
-      </div>
-      <div class="atc-text">
-        <div class="atc-title">منصتُنا في كلمات</div>
-        <div class="atc-hint">ثلاثُ ركائزَ في جوهرنا</div>
-      </div>
-      <div class="atc-chevron" id="arr-about-essence-content">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
-
-    <!-- محتوى منصتنا في كلمات -->
-    <div class="about-detail" id="about-essence-content">
-      <div class="ae-header" style="margin-bottom:16px;">
+      <!-- ② منصتُنا في كلمات -->
+      <div class="about-square" data-asq="essence" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/>
+          </svg>
+        </div>
+        <div class="asq-title">منصتُنا في كلمات</div>
+        <div class="asq-hint">ثلاثُ ركائزَ في جوهرنا</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="asq-body">
+          <div class="asq-body-text"><div class="ae-header" style="margin-bottom:16px;">
         <div class="ae-subtitle">
           فكرةٌ وُلدتْ من قلبِ الميدانِ التربوي،<br>
           لتختصرَ وقتَ المعلِّم، وتُكبِّرَ أثرَه في الطالب.
@@ -9115,101 +9377,67 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             <div class="ae-pillar-hint">أدواتٌ تُطلِقُ خيالك</div>
           </div>
         </div>
+      </div></div>
+        </div>
       </div>
-    </div>
 
-    <!-- مربعات قابلة للفتح -->
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
-
-      <!-- رؤيتنا — أخضر زيتي (الجوهر) -->
-      <div class="about-toggle-card" data-theme="vision" onclick="toggleAbout('about-vision')">
-        <div class="atc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+      <!-- ③ رؤيتنا -->
+      <div class="about-square" data-asq="vision" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
             <circle cx="12" cy="12" r="3"/>
             <path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"/>
           </svg>
         </div>
-        <div class="atc-text">
-          <div class="atc-title">رؤيتنا</div>
-          <div class="atc-hint">إلى أين نَتَّجِه</div>
+        <div class="asq-title">رؤيتنا</div>
+        <div class="asq-hint">إلى أين نَتَّجِه</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="atc-chevron" id="arr-about-vision">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="asq-body">
+          <div class="asq-body-text">مساعدة المعلم في دولة قطر ليترك أثراً حقيقياً في نفوس طلابه، ويُسهم في تحقيق رؤية قطر الوطنية 2030 من خلال تعليم تفاعلي ممتع ومؤثر.</div>
         </div>
       </div>
 
-      <!-- أهدافنا — ذهبي (الطموح) -->
-      <div class="about-toggle-card" data-theme="goals" onclick="toggleAbout('about-goals')">
-        <div class="atc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+      <!-- ④ أهدافنا -->
+      <div class="about-square" data-asq="goals" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
             <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/>
           </svg>
         </div>
-        <div class="atc-text">
-          <div class="atc-title">أهدافنا</div>
-          <div class="atc-hint">ما نَسعى إليه</div>
+        <div class="asq-title">أهدافنا</div>
+        <div class="asq-hint">ما نَسعى إليه</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="atc-chevron" id="arr-about-goals">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-
-      <!-- كلمة المؤسس — بنّي أرضي (الجذور) -->
-      <div class="about-toggle-card" data-theme="founder" onclick="toggleAbout('about-founder')">
-        <div class="atc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-            <path d="M9 11.5c-3.04 0-5.5 2.46-5.5 5.5h11c0-3.04-2.46-5.5-5.5-5.5zm0-1c1.93 0 3.5-1.57 3.5-3.5S10.93 3.5 9 3.5 5.5 5.07 5.5 7s1.57 3.5 3.5 3.5z"/>
-            <path d="M16.5 12.5c-.83 0-1.62.18-2.34.5.83.92 1.34 2.13 1.34 3.5h5c0-2.21-1.79-4-4-4zm0-1c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>
-          </svg>
-        </div>
-        <div class="atc-text">
-          <div class="atc-title">كلمة المؤسس</div>
-          <div class="atc-hint">من قلبِ التجربة</div>
-        </div>
-        <div class="atc-chevron" id="arr-about-founder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-
-      <!-- رسالة للمعلم — عنابي (الشغف) -->
-      <div class="about-toggle-card" data-theme="teacher" onclick="toggleAbout('about-teacher')">
-        <div class="atc-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <div class="atc-text">
-          <div class="atc-title">رسالة للمعلِّم</div>
-          <div class="atc-hint">من معلِّمٍ لمعلِّم</div>
-        </div>
-        <div class="atc-chevron" id="arr-about-teacher">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- تفاصيل رؤيتنا -->
-    <div class="about-detail" id="about-vision">
-      <div class="about-detail-title" style="display:flex;align-items:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="2" fill="#5C3A1E"/></svg> رؤيتنا</div>
-      <p class="about-detail-text">مساعدة المعلم في دولة قطر ليترك أثراً حقيقياً في نفوس طلابه، ويُسهم في تحقيق رؤية قطر الوطنية 2030 من خلال تعليم تفاعلي ممتع ومؤثر.</p>
-    </div>
-
-    <!-- تفاصيل أهدافنا -->
-    <div class="about-detail" id="about-goals">
-      <div class="about-detail-title" style="display:flex;align-items:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg> أهدافنا</div>
-      <div class="about-detail-text">
-        <div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>تحفيز الطلاب بالتنافس الإيجابي والمتعة</span></div>
+        <div class="asq-body">
+          <div class="asq-body-text"><div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>تحفيز الطلاب بالتنافس الإيجابي والمتعة</span></div>
         <div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>تزويد المعلمين بأداة تفاعلية سهلة الاستخدام</span></div>
         <div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>تغطية المناهج القطرية بأسئلة دقيقة ومصنّفة</span></div>
         <div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>بناء مجتمع معلمين مبدعين يصنعون الأثر</span></div>
         <div class="about-goal-item" style="display:flex;align-items:flex-start;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2.5" style="flex-shrink:0;margin-top:4px;"><polyline points="20,6 9,17 4,12"/></svg><span>الوصول لكل فصل في قطر والعالم العربي</span></div>
+        </div></div>
       </div>
-    </div>
 
-    <!-- تفاصيل كلمة المؤسس -->
-    <div class="about-detail" id="about-founder">
-      <div class="about-detail-title" style="display:flex;align-items:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M13 21c3 0 7-1 7-8V5a2 2 0 00-2-2h-3a2 2 0 00-2 2v6a2 2 0 002 2h2"/></svg> كلمة المؤسس</div>
+      <!-- ⑤ كلمة المؤسس -->
+      <div class="about-square" data-asq="founder" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+            <path d="M9 11.5c-3.04 0-5.5 2.46-5.5 5.5h11c0-3.04-2.46-5.5-5.5-5.5zm0-1c1.93 0 3.5-1.57 3.5-3.5S10.93 3.5 9 3.5 5.5 5.07 5.5 7s1.57 3.5 3.5 3.5z"/>
+            <path d="M16.5 12.5c-.83 0-1.62.18-2.34.5.83.92 1.34 2.13 1.34 3.5h5c0-2.21-1.79-4-4-4zm0-1c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>
+          </svg>
+        </div>
+        <div class="asq-title">كلمة المؤسس</div>
+        <div class="asq-hint">من قلبِ التجربة</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="asq-body">
+          <div class="asq-body-text"><div class="about-detail-title" style="display:flex;align-items:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M13 21c3 0 7-1 7-8V5a2 2 0 00-2-2h-3a2 2 0 00-2 2v6a2 2 0 002 2h2"/></svg> كلمة المؤسس</div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
         <img src="data:image/jpeg;base64,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" style="width:80px;height:96px;border-radius:10px;border:2px solid #5C3A1E;object-fit:cover;object-position:center top;flex-shrink:0;">
         <div>
@@ -9217,66 +9445,97 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <div style="font-size:.78rem;color:#777;">المؤسس والمعلم</div>
         </div>
       </div>
-      <p class="about-detail-text">معلم ومدرب تربوي، خريج جامعة قطر، ومعلم دراسات اجتماعية. يؤمن بأن التعليم رسالة قبل أن يكون مهنة، وأن لكل طالب شمعة تنتظر من يُشعلها.</p>
-    </div>
+      <p class="about-detail-text">معلم ومدرب تربوي، خريج جامعة قطر، ومعلم دراسات اجتماعية. يؤمن بأن التعليم رسالة قبل أن يكون مهنة، وأن لكل طالب شمعة تنتظر من يُشعلها.</p></div>
+        </div>
+      </div>
 
-    <!-- تفاصيل رسالة المعلم -->
-    <div class="about-detail" id="about-teacher">
-      <div class="about-detail-title" style="display:flex;align-items:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5C3A1E" stroke-width="2"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z"/><polyline points="22,6 12,13 2,6"/></svg> رسالة للمعلم المُلْهِم</div>
-      <p class="about-detail-text">
-        أيُّها المعلِّمُ المُلْهِم...<br><br>
+      <!-- ⑥ رسالة للمعلم -->
+      <div class="about-square" data-asq="teacher" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z"/>
+            <polyline points="22,6 12,13 2,6" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="asq-title">رسالة للمعلِّم</div>
+        <div class="asq-hint">من معلِّمٍ لمعلِّم</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="asq-body">
+          <div class="asq-body-text">أيُّها المعلِّمُ المُلْهِم...<br><br>
         لستَ مُجرَّدَ ناقلٍ للمعلومة، بل صانعُ أثرٍ، ومُوقِدُ هِمَم.<br><br>
         خلف تلك الجُدرانِ الصامتة، أنتَ تُغيِّرُ مصائرَ، وتُشعِلُ قلوبًا، وتزرعُ بذورًا تُثمرُ بعد سنواتٍ من غيابك.<br><br>
         هذه المنصَّةُ هديةٌ لك — تَختصرُ عليك الوقت، وتمنحُك أدواتٍ تُعينك على التفرُّغ لأهمِّ ما تفعل: <strong>إلهامِ طلابك</strong>.<br><br>
         <div style="display:inline-flex;align-items:center;gap:8px;background:#f0f4f8;border:1.5px solid #5C3A1E;border-radius:12px;padding:8px 16px;margin-top:8px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#5C3A1E"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>
           <strong style="color:#5C3A1E;font-size:.95rem;">معلِّمٌ يصنع أثراً</strong>
+        </div></div>
         </div>
-      </p>
-    </div>
+      </div>
 
-    <!-- ═══ بطاقة شخصيات مؤثرة (الأيادي البيضاء) ═══ -->
-    <div onclick="hhNavigate('screen-influencers')" style="cursor:pointer;background:linear-gradient(135deg,#2a1a0c 0%,#4a2e18 50%,#5C3A1E 100%);border:2px solid #c9a227;border-radius:18px;padding:24px 22px;margin:24px 0 16px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(42,26,12,.25), 0 0 0 1px rgba(245,215,110,.2);transition:all .25s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 14px 32px rgba(42,26,12,.35), 0 0 0 1px rgba(245,215,110,.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 24px rgba(42,26,12,.25), 0 0 0 1px rgba(245,215,110,.2)'">
-      <!-- توهج ذهبي زخرفي -->
-      <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(245,215,110,.22),transparent 65%);border-radius:50%;pointer-events:none;"></div>
-      <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(201,162,39,.18),transparent 65%);border-radius:50%;pointer-events:none;"></div>
-
-      <!-- المحتوى -->
-      <div style="display:flex;align-items:center;gap:16px;position:relative;z-index:2;">
-        <!-- أيقونة قلب ذهبية -->
-        <div style="width:60px;height:60px;background:linear-gradient(135deg,#f5d76e,#c9a227);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(201,162,39,.4), inset 0 -2px 0 rgba(122,100,24,.3);">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      <!-- ⑦ قِيَمُنا (مدمجة كمربع طبيعي) -->
+      <div class="about-square" data-asq="values" onclick="toggleAboutSquare(this)">
+        <div class="asq-icon">
+          <svg viewBox="0 0 100 100" width="32" height="32">
+            <polygon points="50,12 60,40 90,40 65,58 75,86 50,68 25,86 35,58 10,40 40,40" fill="currentColor" stroke="#5C3A1E" stroke-width="1.5"/>
+            <circle cx="50" cy="50" r="6" fill="#fdfaf2"/>
           </svg>
         </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Cairo',sans-serif;font-weight:900;font-size:1.15rem;color:#f5d76e;margin-bottom:4px;letter-spacing:.3px;line-height:1.4;">
-            <span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2zm7 9l.7 2.1L22 14l-2.3.9L19 17l-.7-2.1L16 14l2.3-.9L19 11zM5 14l.7 2.1L8 17l-2.3.9L5 20l-.7-2.1L2 17l2.3-.9L5 14z"/></svg></span> شخصياتٌ مؤثِّرة
+        <div class="asq-title">قِيَمُنا</div>
+        <div class="asq-hint">المبادئُ التي نُؤمنُ بها</div>
+        <div class="asq-toggle">
+          <span>اقرأ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="asq-body">
+          <div class="asq-vals-list">
+            <div class="asq-val-row">
+              <div class="asq-val-num">١</div>
+              <div class="asq-val-info">
+                <div class="asq-val-name">الإلهامُ قبلَ التلقين</div>
+                <div class="asq-val-desc">نُؤمنُ أنَّ المعلمَ الحقَّ يُوقدُ شعلةً، لا يَملأُ إناءً. كلُّ أداةٍ في المنصةِ مُصمَّمةٌ لتَخدمَ هذا المبدأ.</div>
+              </div>
+            </div>
+            <div class="asq-val-row">
+              <div class="asq-val-num">٢</div>
+              <div class="asq-val-info">
+                <div class="asq-val-name">الإتقانُ في كلِّ تفصيل</div>
+                <div class="asq-val-desc">من التشكيلِ الصحيحِ على الحرف، إلى تفاصيلِ التصميم — نَعملُ كأنَّ اللهَ يَرانا، لأنَّه يَرانا.</div>
+              </div>
+            </div>
+            <div class="asq-val-row">
+              <div class="asq-val-num">٣</div>
+              <div class="asq-val-info">
+                <div class="asq-val-name">قطريَّةُ الجَوهر</div>
+                <div class="asq-val-desc">منصةٌ صُنعت في قطر، لمعلِّمي قطر، وتخدمُ رؤيةَ قطرَ الوطنيةَ ٢٠٣٠. هويتُنا ليست شعاراً، بل روحاً تَسري في كلِّ شيء.</div>
+              </div>
+            </div>
+            <div class="asq-val-row">
+              <div class="asq-val-num">٤</div>
+              <div class="asq-val-info">
+                <div class="asq-val-name">المعلمُ شريكٌ، لا مُستخدِم</div>
+                <div class="asq-val-desc">آراؤكم تُوجِّهنا، تجاربُكم تُحسِّنُنا، وأفكارُكم تَصنعُ مستقبلَ المنصة. أنتم الجزءُ الأهمُّ من الرحلة.</div>
+              </div>
+            </div>
+            <div class="asq-val-row">
+              <div class="asq-val-num">٥</div>
+              <div class="asq-val-info">
+                <div class="asq-val-name">الأثرُ قبلَ العَدَد</div>
+                <div class="asq-val-desc">لسنا نَسعى لأن تَستخدمَنا الجموع، بل لأن نَترُكَ في كلِّ مَن استخدَمنا أثراً يَدومُ بعدَ إغلاقِ الشاشة.</div>
+              </div>
+            </div>
           </div>
-          <div style="font-size:.82rem;color:#faf2d6;font-weight:600;line-height:1.6;">
-            الأيادي البيضاء التي أضاءت طريق المنصة
+          <div class="asq-vals-quote">
+            <div class="asq-vals-quote-text">«معلِّمٌ يَصنعُ أثراً»</div>
+            <div class="asq-vals-quote-sub">— شعارُنا الذي نَحيا به</div>
           </div>
         </div>
-        <!-- سهم -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="#f5d76e" style="flex-shrink:0;">
-          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
-        </svg>
       </div>
 
-      <!-- شارة فخمة -->
-      <div style="margin-top:14px;padding-top:14px;border-top:1px dashed rgba(245,215,110,.3);text-align:center;font-size:.72rem;color:#d4cdb0;font-weight:700;letter-spacing:.5px;font-family:'Cairo',sans-serif;position:relative;z-index:2;">
-        ⭐ بصماتُهم في كلِّ إنجاز
-      </div>
     </div>
 
-    <!-- حقوق الملكية -->
-    <div style="text-align:center;padding:16px 16px 8px;border-top:1.5px solid #dbe8df;margin-top:8px;">
-      <div class="logo-title" style="font-size:1.6rem;color:#5C3A1E;margin-bottom:4px;">المُلْهِم</div>
-      <div style="font-size:.72rem;color:#888;line-height:1.9;">
-        © 2026 جميع الحقوق محفوظة<br>
-        يُمنع النسخ أو التعديل أو إعادة التوزيع دون إذن
-      </div>
-    </div>
 
   </div>
 </div>
@@ -10139,12 +10398,12 @@ function trackActivity(type, data = {}){
 
 const CAT_INFO = {
 'الأساطير':          {exclusive:true, label:'الأساطير — المعيار الذهبي',color:'#c9a227',bg:'#faf2d6',img:'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><radialGradient id=\"lg\" cx=\"50%25\" cy=\"50%25\" r=\"50%25\"><stop offset=\"0%25\" stop-color=\"%23f5d76e\"/><stop offset=\"50%25\" stop-color=\"%23c9a227\"/><stop offset=\"100%25\" stop-color=\"%237a6418\"/></radialGradient></defs><rect width=\"100\" height=\"100\" fill=\"%230a2820\"/><circle cx=\"50\" cy=\"50\" r=\"38\" fill=\"none\" stroke=\"url(%23lg)\" stroke-width=\"2\" opacity=\".6\"/><polygon points=\"50,18 57,38 78,38 61,51 68,72 50,60 32,72 39,51 22,38 43,38\" fill=\"url(%23lg)\" stroke=\"%237a6418\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"6\" fill=\"%23faf2d6\"/><text x=\"50\" y=\"88\" text-anchor=\"middle\" font-size=\"8\" font-family=\"Cairo\" font-weight=\"900\" fill=\"%23c9a227\">LEGENDS</text></svg>'},
-'أساطير السيرة':     {exclusive:true, label:'أساطير السيرة والصحابة',color:'#5C3A1E',bg:'#e8f2ec'},
-'أساطير الحضارة':    {exclusive:true, label:'أساطير الحضارة والأندلس',color:'#1e4d8c',bg:'#e6edf7'},
-'أساطير القادة':     {exclusive:true, label:'أساطير القادة والدول',color:'#8D1B3D',bg:'#f7e6ec'},
-'أساطير النساء':     {exclusive:true, label:'أساطير النساء في الإسلام',color:'#a0407a',bg:'#f5e6ee'},
-'أساطير الأمثال':    {exclusive:true, label:'أساطير الأمثال والحكم',color:'#7a5c2e',bg:'#f5ede0'},
-'أساطير الطب':       {exclusive:true, label:'أساطير الطب والعلوم',color:'#5a3a8e',bg:'#ece6f5'},
+'أساطير السيرة':     {exclusive:true, label:'أساطير السيرة والصحابة',color:'#c9a227',bg:'#faf2d6'},
+'أساطير الحضارة':    {exclusive:true, label:'أساطير الحضارة والأندلس',color:'#c9a227',bg:'#faf2d6'},
+'أساطير القادة':     {exclusive:true, label:'أساطير القادة والدول',color:'#c9a227',bg:'#faf2d6'},
+'أساطير النساء':     {exclusive:true, label:'أساطير النساء في الإسلام',color:'#c9a227',bg:'#faf2d6'},
+'أساطير الأمثال':    {exclusive:true, label:'أساطير الأمثال والحكم',color:'#c9a227',bg:'#faf2d6'},
+'أساطير الطب':       {exclusive:true, label:'أساطير الطب والعلوم',color:'#c9a227',bg:'#faf2d6'},
 'دين':               {emoji:'☪', label:'التربية الإسلامية',color:'#1a7a4a',bg:'#e8f5ee'},
 'قطر':               {emoji:'🏙', label:'دولة قطر',color:'#8D1B3D',bg:'#fbe8ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="5" y="15" width="90" height="70" rx="4" fill="%23fff" stroke="%23ddd" stroke-width="1"/><rect x="5" y="15" width="28" height="70" rx="4" fill="%238D1B3D"/><path d="M33,15 L90,15 L90,85 L33,85 L38,77 L33,69 L38,61 L33,53 L38,45 L33,37 L38,29 L33,21 Z" fill="%23fff"/><text x="55" y="58" text-anchor="middle" font-size="11" font-family="serif" fill="%238D1B3D" font-weight="bold">قطر</text></svg>'},
 'النبي محمد':        {emoji:'🕌', label:'النبي محمد ﷺ',color:'#5C3A1E',bg:'#e8f2ec',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="70" rx="38" ry="22" fill="%231a3a5c" opacity=".15"/><rect x="30" y="35" width="40" height="35" rx="8" fill="%231a3a5c"/><ellipse cx="50" cy="35" rx="18" ry="18" fill="%23e8c88a"/><path d="M32 38 Q50 50 68 38" fill="%231a3a5c" opacity=".3"/><circle cx="43" cy="33" r="2.5" fill="%23333"/><circle cx="57" cy="33" r="2.5" fill="%23333"/><path d="M44 40 Q50 44 56 40" stroke="%23c97" stroke-width="1.5" fill="none"/><path d="M14 70 Q30 50 50 55 Q70 50 86 70" fill="%231a3a5c" opacity=".7"/></svg>'},
@@ -10721,6 +10980,32 @@ const CAT_PALETTES = [
   ["#fdf0f0","#c0392b","#8b0000","#fdd5c8","#e07060","#6b1800","#c0392b","#922b21","#fff4f4","#c0392b","#922b21"],
   ["#fff6f0","#e67e22","#a04000","#fad5b0","#d35400","#7a2e00","#c0531a","#9e3d10","#fff6f0","#e67e22","#c0531a"],
 ];
+
+// 🟡 Palette ذهبية موحّدة للفئات الأسطورية (تطابق الأيقونات الذهبية)
+// كل الأرقام مُختارة بدقة لتُحقق التناسق البصري الكامل في منطقة النخبة
+const CAT_PALETTE_LEGENDARY = [
+  "#fff8e8",  // 0: easy bg (كريمي ذهبي خفيف)
+  "#c9a227",  // 1: easy border (ذهبي)
+  "#7a5c00",  // 2: easy text (ذهبي داكن)
+  "#fde98a",  // 3: med bg (أصفر ذهبي)
+  "#b8860b",  // 4: med border
+  "#4a3600",  // 5: med text (بنّي ذهبي عميق)
+  "#7a6418",  // 6: hard bg (ذهبي أرضي)
+  "#3d2614",  // 7: hard border (بنّي داكن)
+  "#fff8e8",  // 8: cat-center bg
+  "#c9a227",  // 9: cat-center border
+  "#7a5c00"   // 10: cat-center shadow
+];
+
+// قائمة الفئات الأسطورية (للاستخدام في dالة getCatPalette)
+const _LEGENDARY_CATS_SET = new Set(['الأساطير','أساطير السيرة','أساطير الحضارة','أساطير القادة','أساطير النساء','أساطير الأمثال','أساطير الطب']);
+
+// دالة اختيار الـ palette الصحيحة (الفئات الأسطورية تأخذ palette موحّدة)
+function getCatPalette(cat, fallbackIdx){
+  if(_LEGENDARY_CATS_SET.has(cat)) return CAT_PALETTE_LEGENDARY;
+  return CAT_PALETTES[fallbackIdx % CAT_PALETTES.length];
+}
+
 const CAT_COLORS_PEARL = {};
 
 // ════ تصنيفات الفئات ════
@@ -11707,22 +11992,15 @@ function startGame(overrideTeams, overrideCats, overrideName){
     el.textContent='⏱ '+Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;
   },1000);
   resetPU();
-  // قائمة الفئات الأسطورية (كل واحدة لها 20 easy + 20 med + 20 hard)
-  const LEGEND_CATS = ['أساطير السيرة','أساطير الحضارة','أساطير القادة','أساطير النساء','أساطير الأمثال','أساطير الطب'];
+  // قائمة الفئات الأسطورية — تستخدم المجموعة العالمية المعرّفة قرب CAT_PALETTES
   cats.forEach(cat=>{
     G.boardData[cat]={};
-    if(LEGEND_CATS.includes(cat)){
-      // الأساطير: نأخذ سؤالين من كل مستوى (easy=600, med=800, hard=1000)
-      ['easy','med','hard'].forEach(diff=>{
-        const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
-        G.boardData[cat][diff]=pool.slice(0,2);
-      });
-    } else {
-      ['easy','med','hard'].forEach(diff=>{
-        const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
-        G.boardData[cat][diff]=pool.slice(0,2);
-      });
-    }
+    // الأساطير: نأخذ سؤالين من كل مستوى (easy=600, med=800, hard=1000)
+    // الفئات العادية: نفس المنطق
+    ['easy','med','hard'].forEach(diff=>{
+      const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
+      G.boardData[cat][diff]=pool.slice(0,2);
+    });
   });
   showScreen('screen-board');
   window.scrollTo(0,0);
@@ -11927,8 +12205,9 @@ function buildBoard(){
       const ci       = CAT_INFO[cat] || {emoji:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>', label:cat, color:'#5C3A1E', bg:'#e8f2ec'};
       const globalIdx= G.selectedCats.indexOf(cat);
 
-      const LEGEND_CATS_BUILD = ['أساطير السيرة','أساطير الحضارة','أساطير القادة','أساطير النساء','أساطير الأمثال','أساطير الطب'];
-      const isLegendCat = LEGEND_CATS_BUILD.includes(cat);
+      const isLegendCat = (typeof _LEGENDARY_CATS_SET !== 'undefined')
+        ? _LEGENDARY_CATS_SET.has(cat)
+        : (cat === 'الأساطير' || cat.startsWith('أساطير'));
       const left3=[], right3=[];
       ['easy','med','hard'].forEach(diff=>{
         const qs = G.boardData[cat]?.[diff] || [];
@@ -11944,7 +12223,11 @@ function buildBoard(){
       for(let i=0;i<3;i++) leftCol.appendChild(left3[i] ? makeQCell({...left3[i],side:'left'}) : makePH(cellH));
       row.appendChild(leftCol);
 
-      const _cp = CAT_PALETTES[globalIdx % CAT_PALETTES.length];
+      // 🌟 الأساطير: palette ذهبية ثابتة موحّدة لطابع راقٍ متناسق
+      // الفئات العادية: palette حسب الترتيب
+      const _cp = isLegendCat
+        ? CAT_PALETTE_LEGENDARY   // الذهبي الفخم — ثابت لكل فئات الأساطير
+        : CAT_PALETTES[globalIdx % CAT_PALETTES.length];
       const center = document.createElement('div');
       center.className = 'cat-center';
       center.style.cssText = `background:${_cp[8]};border:2.5px solid ${_cp[9]};box-shadow:0 4px 0 ${_cp[10]};`;
@@ -11953,9 +12236,10 @@ function buildBoard(){
       imgWrap.className = 'cc-img-wrap';
       //  حقن خلفية متدرّجة بلون الفئة في الأيقونات الأسطورية لإزالة التنافر البنّي الموحّد
       if(isLegendCat){
-        imgWrap.style.background = `radial-gradient(circle at 50% 35%,${_cp[5]} 0%,${_cp[6]} 70%,${_cp[7]} 100%)`;
+        // خلفية متدرّجة بنّية داكنة + توهج ذهبي حول الأيقونة (المعيار الذهبي)
+        imgWrap.style.background = 'radial-gradient(circle at 50% 35%, #3d2614 0%, #2a1a0c 70%, #1a0e05 100%)';
         imgWrap.style.borderRadius = '12px';
-        imgWrap.style.boxShadow = `inset 0 0 0 1.5px rgba(201,162,39,.35)`;
+        imgWrap.style.boxShadow = 'inset 0 0 0 2px rgba(245,215,110,.55), 0 0 16px rgba(201,162,39,.25)';
       }
       const savedImg = localStorage.getItem('cat_img_'+cat);
       if(savedImg){
@@ -11989,7 +12273,10 @@ function buildBoard(){
 }
 function makeQCell({diff,q,key,catIdx=0,side='left',isLegend=false}){
   const d=DIFF_MAP[diff];
-  const p=CAT_PALETTES[catIdx % CAT_PALETTES.length];
+  // 🌟 الأساطير: palette ذهبية ثابتة موحّدة — متناسقة مع الأيقونة
+  const p = isLegend
+    ? CAT_PALETTE_LEGENDARY
+    : CAT_PALETTES[catIdx % CAT_PALETTES.length];
   const el=document.createElement('div');
   el.id='cell_'+key;
   // في الأساطير: التفاوت المتدرج 600/800/1000
@@ -12396,7 +12683,13 @@ function endGame(){
 
   // تتبع نشاط اللعبة للإنجازات
   try{
-    const hasLegend = (G.selectedCats||[]).includes('الأساطير');
+    // فحص: أي فئة أسطورية معروفة (الأساطير + 6 فئات فرعية)
+    const hasLegend = (G.selectedCats||[]).some(c => {
+      if(typeof c !== 'string') return false;
+      // نستخدم _LEGENDARY_CATS_SET (المعرّفة عالمياً) لو متوفرة، وإلا fallback نصّي
+      if(typeof _LEGENDARY_CATS_SET !== 'undefined' && _LEGENDARY_CATS_SET.has(c)) return true;
+      return c === 'الأساطير' || c.startsWith('أساطير');
+    });
     trackActivity('game', {isLegend: hasLegend});
   }catch(e){}
 
@@ -14421,16 +14714,10 @@ function loadRoleQuickStart(){
         action:"showScreen('screen-lb');currentLBTab='solo';switchLBTab('solo');" }
     ];
   } else {
-    title = 'مرحبًا بك في المُلْهِم';
-    subtitle = 'منصة قطرية تربوية — حيث يبدأ الإلهام';
-    buttons = [
-      { label:'جرِّب لعبة', hint:'اختبر المنصة الآن', color:'gold',
-        icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>',
-        action:"showScreen('screen-setup')" },
-      { label:'تعرَّف على المُلْهِم', hint:'اقرأ نبذتنا', color:'green',
-        icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
-        action:"showScreen('screen-about')" }
-    ];
+    // المستخدم لم يُسجِّل دخول — لا نعرض بطاقات في هذا الموضع
+    // (زر "العب الآن" متوفر في القائمة العلوية بالفعل)
+    if(container) container.style.display = 'none';
+    return;
   }
 
   // تطبيق المحتوى
@@ -16827,7 +17114,7 @@ async function toggleUserPermission(uid, currentVal, name){
 // ════════════════════════════════════
 
 function adminTab(tab){
-  const tabs = ['users','questions','permissions','reviews','backup','paths','categories','announcements','stats','whatsnew'];
+  const tabs = ['users','questions','permissions','reviews','backup','paths','categories','announcements','stats','whatsnew','reports'];
   document.querySelectorAll('.admin-tab').forEach((b,i)=>b.classList.toggle('active', tabs[i]===tab));
   tabs.forEach(t=>{
     const p = document.getElementById('admin-'+t+'-panel');
@@ -16841,7 +17128,135 @@ function adminTab(tab){
   if(tab==='announcements') loadAnnouncementForm();
   if(tab==='stats') refreshAdminStats();
   if(tab==='whatsnew') renderWhatsNewAdmin();
+  if(tab==='reports') renderProblemReports();
 }
+
+// ════════════════════════════════════════════════════════════════════
+// 🐛 إدارة البلاغات (للأدمن)
+// ════════════════════════════════════════════════════════════════════
+let _hh_pr_filter = 'all';
+
+async function renderProblemReports(filter){
+  if(filter) _hh_pr_filter = filter;
+  // تحديث أزرار الفلترة
+  ['all','new','viewed','resolved'].forEach(f => {
+    const btn = document.getElementById('pr-filter-'+f);
+    if(btn){
+      const isActive = f === _hh_pr_filter;
+      btn.classList.toggle('pr-filter-active', isActive);
+      if(isActive){
+        btn.style.background = (f==='new'?'#c0392b':f==='resolved'?'#1a7a4a':f==='viewed'?'#c9a227':'#5C3A1E');
+        btn.style.color = '#fff';
+      } else {
+        btn.style.background = '#fff';
+        btn.style.color = (f==='new'?'#c0392b':f==='resolved'?'#1a7a4a':f==='viewed'?'#7a5c00':'#5C3A1E');
+      }
+    }
+  });
+
+  const list = document.getElementById('pr-list');
+  if(!list) return;
+  list.innerHTML = '<div style="text-align:center;padding:40px;color:#888;font-size:.85rem;">جارٍ التحميل...</div>';
+
+  try{
+    let reports = [];
+    if(typeof firebase !== 'undefined' && firebase.firestore){
+      let q = firebase.firestore().collection('problem_reports').orderBy('createdAt','desc').limit(100);
+      const snap = await q.get();
+      snap.forEach(doc => reports.push({id: doc.id, ...doc.data()}));
+    }
+    // ضم البلاغات المحلية (لو وُجدت)
+    try{
+      const local = JSON.parse(localStorage.getItem('hh_problem_reports')||'[]');
+      reports = reports.concat(local.map(r => ({...r, id: '_local_'+r._localId, _isLocal: true})));
+    }catch(e){}
+
+    // فلترة
+    if(_hh_pr_filter !== 'all'){
+      reports = reports.filter(r => (r.status||'new') === _hh_pr_filter);
+    }
+
+    if(reports.length === 0){
+      list.innerHTML = '<div style="background:#fff;border-radius:12px;padding:30px;text-align:center;color:#888;border:1.5px dashed #dce5ea;"><div style="font-family:Cairo;font-weight:900;color:#5C3A1E;font-size:.95rem;">لا توجد بلاغات</div><div style="font-size:.78rem;margin-top:6px;">' + (_hh_pr_filter==='all'?'لم يُرسل أحد بلاغاً بعد':'لا توجد بلاغات في هذه الفئة') + '</div></div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    reports.forEach(r => {
+      const status = r.status || 'new';
+      const statusColor = status==='new'?'#c0392b':status==='resolved'?'#1a7a4a':'#c9a227';
+      const statusLabel = status==='new'?'جديد':status==='resolved'?'محلول':'معروض';
+      const date = r.createdAt
+        ? (r.createdAt.toDate ? r.createdAt.toDate().toLocaleString('ar-EG') : new Date(r.createdAt).toLocaleString('ar-EG'))
+        : '';
+      const userText = r.user
+        ? (r.user.displayName || r.user.email || (r.user.anonymous ? 'مجهول' : 'غير معروف'))
+        : 'غير معروف';
+
+      const card = document.createElement('div');
+      card.style.cssText = 'background:#fff;border:1.5px solid #ecf0f1;border-right:4px solid '+statusColor+';border-radius:10px;padding:12px 14px;margin-bottom:10px;';
+      card.innerHTML = ''
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px;">'
+        +   '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+        +     '<span style="background:'+statusColor+';color:#fff;padding:2px 10px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.65rem;">'+statusLabel+'</span>'
+        +     '<span style="font-size:.75rem;color:#666;">'+esc(userText)+'</span>'
+        +     (r._isLocal ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.62rem;">محلي</span>' : '')
+        +   '</div>'
+        +   '<span style="font-size:.7rem;color:#888;">'+esc(date)+'</span>'
+        + '</div>'
+        + '<div style="font-size:.88rem;color:#2a1a0c;line-height:1.7;margin-bottom:10px;white-space:pre-wrap;">'+esc(r.description||'')+'</div>'
+        + (r.imageData ? '<div style="margin-bottom:10px;"><img src="'+r.imageData+'" alt="مرفق" style="max-width:100%;max-height:300px;border-radius:8px;border:1px solid #ecf0f1;cursor:pointer;" onclick="window.open(this.src,\'_blank\')"></div>' : '')
+        + (r.url ? '<div style="font-size:.7rem;color:#888;margin-bottom:8px;">📍 '+esc(r.url)+'</div>' : '')
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;">'
+        +   (status==='new' ? '<button onclick="updateProblemReport(\''+r.id+'\',\'viewed\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#7a5c00;border:1.5px solid #c9a227;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">تحديد كمعروض</button>' : '')
+        +   (status!=='resolved' ? '<button onclick="updateProblemReport(\''+r.id+'\',\'resolved\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#1a7a4a;border:1.5px solid #1a7a4a;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">تحديد كمحلول</button>' : '')
+        +   '<button onclick="deleteProblemReport(\''+r.id+'\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>'
+        + '</div>';
+      list.appendChild(card);
+    });
+  }catch(e){
+    console.error('renderProblemReports:', e);
+    list.innerHTML = '<div style="background:#fff;border-radius:12px;padding:30px;text-align:center;color:#c0392b;border:1.5px dashed #c0392b;font-family:Cairo;font-weight:900;">حدث خطأ أثناء التحميل</div>';
+  }
+}
+
+async function updateProblemReport(id, newStatus, isLocal){
+  if(typeof isAdminUser==='function' && !isAdminUser(currentUser)){ toast('فقط المدير','error'); return; }
+  try{
+    if(isLocal){
+      const local = JSON.parse(localStorage.getItem('hh_problem_reports')||'[]');
+      const updated = local.map(r => '_local_'+r._localId === id ? {...r, status: newStatus} : r);
+      localStorage.setItem('hh_problem_reports', JSON.stringify(updated));
+    } else {
+      await firebase.firestore().collection('problem_reports').doc(id).update({status: newStatus});
+    }
+    toast('تم التحديث','success');
+    renderProblemReports();
+  }catch(e){
+    console.error(e);
+    toast('فشل التحديث','error');
+  }
+}
+
+async function deleteProblemReport(id, isLocal){
+  if(typeof isAdminUser==='function' && !isAdminUser(currentUser)){ toast('فقط المدير','error'); return; }
+  if(!confirm('حذف هذا البلاغ نهائياً؟')) return;
+  try{
+    if(isLocal){
+      const local = JSON.parse(localStorage.getItem('hh_problem_reports')||'[]');
+      const filtered = local.filter(r => '_local_'+r._localId !== id);
+      localStorage.setItem('hh_problem_reports', JSON.stringify(filtered));
+    } else {
+      await firebase.firestore().collection('problem_reports').doc(id).delete();
+    }
+    toast('تم الحذف','info');
+    renderProblemReports();
+  }catch(e){
+    console.error(e);
+    toast('فشل الحذف','error');
+  }
+}
+// ════════════════════════════════════════════════════════════════════
 
 // ════════════════════════════════════════════════════════════════════
 //  تبويب: إدارة الفئات (Admin Categories Tab)
@@ -18594,23 +19009,30 @@ document.addEventListener('keydown', function(e){
 
 // ════ من نحن — مربعات قابلة للفتح ════
 function toggleAbout(id){
+  // ════ التوافقية: للروابط القديمة، توجّه للمربع الجديد إن وجد ════
+  const oldToNew = {
+    'about-why-inspiration':'why',
+    'about-essence-content':'essence',
+    'about-vision':'vision',
+    'about-goals':'goals',
+    'about-founder':'founder',
+    'about-teacher':'teacher'
+  };
+  if(oldToNew[id]){
+    const sq = document.querySelector('.about-square[data-asq="'+oldToNew[id]+'"]');
+    if(sq){
+      window.toggleAboutSquare(sq);
+      return;
+    }
+  }
+  // ════ النظام القديم (إن وُجد) ════
   const detail = document.getElementById(id);
-  const cardMap = {'about-vision':'رؤيتنا','about-goals':'أهدافنا','about-founder':'كلمة المؤسس','about-teacher':'رسالة المعلم'};
-  // إيجاد الكارد المقابل
-  const cards = document.querySelectorAll('.about-toggle-card');
-  cards.forEach(card=>{
-    const title = card.querySelector('.atc-title').textContent.trim();
-    const isThis = Object.values(cardMap)[Object.keys(cardMap).indexOf(id)] === title || card.onclick.toString().includes(id);
-    // إغلاق الكل
-  });
-  const isOpen = detail && detail.classList.contains('open');
-  // إغلاق كل التفاصيل
+  if(!detail) return;
+  const isOpen = detail.classList.contains('open');
   document.querySelectorAll('.about-detail').forEach(d=>d.classList.remove('open'));
   document.querySelectorAll('.about-toggle-card').forEach(c=>c.classList.remove('open'));
-  // فتح المطلوب إذا كان مغلقاً
   if(!isOpen && detail){
     detail.classList.add('open');
-    // تحديد الكارد المقابل
     document.querySelectorAll('.about-toggle-card').forEach(c=>{
       if(c.getAttribute('onclick') && c.getAttribute('onclick').includes(id)){
         c.classList.add('open');
@@ -18619,6 +19041,22 @@ function toggleAbout(id){
     detail.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🟫 toggleAboutSquare — فتح/إغلاق مربعات قصتنا
+// المربع الواحد يفتح محتواه داخله؛ يُغلق الباقي تلقائياً
+// ═══════════════════════════════════════════════════════════
+window.toggleAboutSquare = function(sq){
+  if(!sq) return;
+  const wasOpen = sq.classList.contains('open');
+  // إغلاق الكل
+  document.querySelectorAll('.about-square.open').forEach(s => s.classList.remove('open'));
+  // فتح المطلوب
+  if(!wasOpen){
+    sq.classList.add('open');
+    setTimeout(() => sq.scrollIntoView({behavior:'smooth', block:'nearest'}), 200);
+  }
+};
 
 // ════ إعادة اللعب مع تعديل أسماء الفرق ════
 function toggleReplayTeams(){
@@ -18993,16 +19431,16 @@ function renderActivityDetailsForm(template){
       <!-- نوع الشهادة -->
       <label style="font-size:.78rem;font-weight:700;color:#5C3A1E;display:block;margin-bottom:6px;">نوع الشهادة:</label>
       <select id="ag-cert-type" onchange="onCertTypeChange()" style="width:100%;padding:10px;border:1.5px solid #dce5ea;border-radius:8px;font-family:Tajawal;font-size:.85rem;margin-bottom:10px;outline:none;background:#fff;box-sizing:border-box;">
-        <option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1A5.01 5.01 0 0016.61 12.94C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>|شهادة تفوق|التفوق الدراسي والالتزام المتميز"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1A5.01 5.01 0 0016.61 12.94C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg> شهادة تفوق</option>
+        <option value="🏆|شهادة تفوق|التفوق الدراسي والالتزام المتميز">🏆 شهادة تفوق</option>
         <option value="⭐|شهادة تميّز|التميّز الأكاديمي والاجتهاد المستمر">⭐ شهادة تميّز</option>
-        <option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8zm0-6a2 2 0 100 4 2 2 0 000-4z"/></svg>|شهادة إنجاز|تحقيق إنجاز متميز"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8zm0-6a2 2 0 100 4 2 2 0 000-4z"/></svg> شهادة إنجاز</option>
+        <option value="🎯|شهادة إنجاز|تحقيق إنجاز متميز">🎯 شهادة إنجاز</option>
         <option value="👏|شهادة تشجيع|الجهد المبذول والتطور الملحوظ">👏 شهادة تشجيع</option>
-        <option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>|شهادة مشاركة|المشاركة الفاعلة في الأنشطة"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg> شهادة مشاركة</option>
+        <option value="🤝|شهادة مشاركة|المشاركة الفاعلة في الأنشطة">🤝 شهادة مشاركة</option>
         <option value="💯|شهادة سلوك مثالي|السلوك المثالي وحسن الأخلاق">💯 شهادة سلوك مثالي</option>
-        <option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>|شهادة قائد فصل|روح القيادة وحسن إدارة الفصل"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> شهادة قائد فصل</option>
+        <option value="👑|شهادة قائد فصل|روح القيادة وحسن إدارة الفصل">👑 شهادة قائد فصل</option>
         <option value="🔬|شهادة باحث متميز|البحث والاستكشاف والإبداع">🔬 شهادة باحث متميز</option>
         <option value="📖|شهادة قارئ نهم|الشغف بالقراءة والمعرفة">📖 شهادة قارئ نهم</option>
-        <option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 3a9 9 0 000 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>|شهادة موهوب|الموهبة والإبداع المتميز"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 3a9 9 0 000 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg> شهادة موهوب</option>
+        <option value="🎨|شهادة موهوب|الموهبة والإبداع المتميز">🎨 شهادة موهوب</option>
       </select>
 
       <!-- اسم الطالب + الصف -->
@@ -19557,7 +19995,7 @@ function rebuildAnswerKey(){
         optionsHTML += `<option value="${opt}">${opt}</option>`;
       });
     } else {
-      optionsHTML = `<option value="✓">صح</option><option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>">خطأ</option>`;
+      optionsHTML = `<option value="✓">صح</option><option value="✗">خطأ</option>`;
     }
     wrap.innerHTML = `
       <div style="font-family:Cairo;font-size:.7rem;font-weight:800;color:#0f5a33;margin-bottom:4px;">س${i}</div>
@@ -19594,7 +20032,7 @@ function rebuildStudentAnswers(row, name){
   if(GRADER_MODE === 'mcq'){
     optionsAttr = `<option value="">-</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option>`;
   } else {
-    optionsAttr = `<option value="">-</option><option value="✓">صح</option><option value="<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>">خطأ</option>`;
+    optionsAttr = `<option value="">-</option><option value="✓">صح</option><option value="✗">خطأ</option>`;
   }
   let answersHTML = '';
   for(let i = 1; i <= num; i++){
@@ -21061,7 +21499,7 @@ window.formatMinutesArabic = formatMinutesArabic;
 const HH_NAV = {
   // الشاشاتُ التي يَظهرُ فيها الشريطُ السفلي
   visibleScreens: ['screen-menu','screen-mygames','screen-toolbox','screen-about',
-                   'screen-references','screen-values','screen-contact',
+                   'screen-references','screen-contact',
                    'screen-setup','screen-lb','screen-rate','screen-rules',
                    'screen-guide','screen-reviews','screen-sponsors',
                    'screen-influencers','screen-achievements','screen-custom-q',
@@ -21108,7 +21546,6 @@ const HH_NAV = {
     'screen-about':      'story',
     'screen-sponsors':   'sponsors',
     'screen-influencers':'influencers',
-    'screen-values':     'about'
   },
   newBadgeKey: 'hh_mihbara_first_seen',
   newBadgeDays: 7
@@ -21232,7 +21669,7 @@ const HH_SEARCH_INDEX = [
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' },
   { title:'شخصيات مؤثرة', desc:'النخبةُ الذين أسهموا في رحلتنا', kw:'influencers شخصيات مؤثرة نخبة influences', screen:'screen-influencers',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>' },
-  { title:'قِيَمُنا', desc:'المبادئ التي نُؤمنُ بها', kw:'values قيم مبادئ', screen:'screen-values',
+  { title:'قِيَمُنا', desc:'المبادئ التي نُؤمنُ بها', kw:'values قيم مبادئ', screen:'screen-about',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>' },
 
   // ─── أدوات ───
@@ -21752,7 +22189,7 @@ window.saveContactEdits = saveContactEdits;
     <!-- شريط البحث والفلترة -->
     <div style="background:#fff;padding:14px;border-radius:12px;margin-bottom:14px;border:1.5px solid #e0e8f0;">
       <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <input id="bag-search" placeholder="<span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg></span> ابحث في حقيبتك..." oninput="filterBagItems()" style="flex:1;padding:10px;border:1.5px solid #dce5ea;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;">
+        <input id="bag-search" placeholder="ابحث في حقيبتك..." oninput="filterBagItems()" style="flex:1;padding:10px;border:1.5px solid #dce5ea;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;">
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <button class="bag-filter-btn bag-filter-active" data-filter="all" onclick="setBagFilter('all')" style="padding:6px 14px;background:#5C3A1E;color:#fff;border:none;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">الكل</button>
@@ -21958,7 +22395,7 @@ window.saveContactEdits = saveContactEdits;
 
     <!-- شريط البحث -->
     <div style="margin-bottom:12px;">
-      <input id="students-search" placeholder="<span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg></span> ابحث عن طالب..." oninput="filterStudents()" style="width:100%;padding:10px;border:1.5px solid #dce5ea;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;box-sizing:border-box;">
+      <input id="students-search" placeholder="ابحث عن طالب..." oninput="filterStudents()" style="width:100%;padding:10px;border:1.5px solid #dce5ea;border-radius:8px;font-family:Tajawal;font-size:.85rem;outline:none;box-sizing:border-box;">
     </div>
 
     <!-- قائمة الطلاب -->
@@ -22303,140 +22740,6 @@ window.saveContactEdits = saveContactEdits;
      ║   <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg>  شاشةُ قيمنا — منصةُ المُلْهِم                                  ║
      ║      المبادئُ التي نَؤمنُ بها ونَعملُ من خلالها                     ║
      ╚════════════════════════════════════════════════════════════════╝ -->
-<div class="screen" id="screen-values">
-  <div class="top-bar">
-    <button class="btn btn-outline btn-sm" onclick="goBack()">رجوع</button>
-    <div style="font-weight:900;display:flex;align-items:center;gap:8px;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="#c9a227">
-        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/>
-      </svg>
-      <span>قيمنا</span>
-    </div>
-    <div></div>
-  </div>
-
-  <div style="margin-top:70px;width:100%;max-width:560px;padding:0 14px 30px;">
-
-    <!-- <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> رأس الشاشة الفخم -->
-    <div class="vals-hero">
-      <div class="vals-hero-pattern"></div>
-      <div class="vals-hero-content">
-        <div class="vals-hero-emblem">
-          <svg viewBox="0 0 100 100" width="56" height="56" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="vh-grad" cx="50%" cy="40%" r="60%">
-                <stop offset="0%" stop-color="#fff3a0"/>
-                <stop offset="60%" stop-color="#c9a227"/>
-                <stop offset="100%" stop-color="#7a6418"/>
-              </radialGradient>
-            </defs>
-            <polygon points="50,10 60,38 90,38 65,56 75,86 50,68 25,86 35,56 10,38 40,38" fill="url(#vh-grad)" stroke="#7a6418" stroke-width="1.5"/>
-            <circle cx="50" cy="48" r="6" fill="#fdfaf2"/>
-          </svg>
-        </div>
-        <div class="vals-hero-label">قِيَمُنَا</div>
-        <div class="vals-hero-title">المبادئُ التي نُؤمنُ بها</div>
-        <div class="vals-hero-sub">خمسُ قِيَمٍ تَحكمُ كلَّ ما نَصنعُه في «المُلْهِم»</div>
-      </div>
-    </div>
-
-    <!-- شجرة القيم -->
-    <div class="vals-list">
-
-      <!-- القيمة 1 -->
-      <div class="val-item" style="--val-color:#5C3A1E;--val-accent:#1a7a4a;">
-        <div class="val-num">١</div>
-        <div class="val-content">
-          <div class="val-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-              <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 3.5l7 3.5v6l-7 3.5L5 15V9l7-3.5z"/>
-              <circle cx="12" cy="12" r="2.5" fill="#fff"/>
-            </svg>
-          </div>
-          <div class="val-text">
-            <div class="val-title">الإلهامُ قبلَ التلقين</div>
-            <div class="val-desc">نُؤمنُ أنَّ المعلمَ الحقَّ يُوقدُ شعلةً، لا يَملأُ إناءً. كلُّ أداةٍ في المنصةِ مُصمَّمةٌ لتَخدمَ هذا المبدأ.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- القيمة 2 -->
-      <div class="val-item" style="--val-color:#c9a227;--val-accent:#e6ac00;">
-        <div class="val-num">٢</div>
-        <div class="val-content">
-          <div class="val-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-          </div>
-          <div class="val-text">
-            <div class="val-title">الإتقانُ في كلِّ تفصيل</div>
-            <div class="val-desc">من التشكيلِ الصحيحِ على الحرف، إلى تفاصيلِ التصميم — نَعملُ كأنَّ اللهَ يَرانا، لأنَّه يَرانا.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- القيمة 3 -->
-      <div class="val-item" style="--val-color:#8D1B3D;--val-accent:#a82550;">
-        <div class="val-num">٣</div>
-        <div class="val-content">
-          <div class="val-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-          </div>
-          <div class="val-text">
-            <div class="val-title">قطريَّةُ الجَوهر</div>
-            <div class="val-desc">منصةٌ صُنعت في قطر، لمعلِّمي قطر، وتخدمُ رؤيةَ قطرَ الوطنيةَ ٢٠٣٠. هويتُنا ليست شعاراً، بل روحاً تَسري في كلِّ شيء.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- القيمة 4 -->
-      <div class="val-item" style="--val-color:#185fa5;--val-accent:#2471a3;">
-        <div class="val-num">٤</div>
-        <div class="val-content">
-          <div class="val-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-              <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.99 2.99 0 0 0 17.13 6.5h-1.26c-.4 0-.78.08-1.13.21l-1.4 2.6L9.5 7.5 4 13l1.5 1.5L9 11l4 4-4 8h2l3-6 4 4v3h2zm-7.5-10.5c.83 0 1.5-.67 1.5-1.5S13.33 8.5 12.5 8.5 11 9.17 11 10s.67 1.5 1.5 1.5zM5.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm-1.5 16v-7H2v7h2z"/>
-            </svg>
-          </div>
-          <div class="val-text">
-            <div class="val-title">المعلمُ شريكٌ، لا مُستخدِم</div>
-            <div class="val-desc">آراؤكم تُوجِّهنا، تجاربُكم تُحسِّنُنا، وأفكارُكم تَصنعُ مستقبلَ المنصة. أنتم الجزءُ الأهمُّ من الرحلة.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- القيمة 5 -->
-      <div class="val-item" style="--val-color:#5C3A1E;--val-accent:#7a4f2c;">
-        <div class="val-num">٥</div>
-        <div class="val-content">
-          <div class="val-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-            </svg>
-          </div>
-          <div class="val-text">
-            <div class="val-title">الأثرُ قبلَ العَدَد</div>
-            <div class="val-desc">لسنا نَسعى لأن تَستخدمَنا الجموع، بل لأن نَترُكَ في كلِّ مَن استخدَمنا أثراً يَدومُ بعدَ إغلاقِ الشاشة.</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg> تذييل بِشِعار -->
-    <div class="vals-quote">
-      <svg viewBox="0 0 24 24" fill="#c9a227" width="20" height="20" style="margin-bottom:8px;">
-        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-      </svg>
-      <div class="vals-quote-text">معلِّمٌ يَصنعُ أثراً</div>
-      <div class="vals-quote-sub">— شعارُنا الذي نَحيا به</div>
-    </div>
-
-  </div>
-</div>
 
 
 <!-- ╔════════════════════════════════════════════════════════════════╗
@@ -22499,7 +22802,7 @@ window.saveContactEdits = saveContactEdits;
       <div class="contact-feedback-text">
         <div class="contact-feedback-title">هل واجهتَ مشكلةً؟</div>
         <div class="contact-feedback-desc">شاركنا الملاحظةَ ليَصلنا صوتُك ونعملَ على تحسين تجربتك</div>
-        <button class="contact-feedback-btn" onclick="hhNavigate('screen-reviews')">
+        <button class="contact-feedback-btn" onclick="openProblemReportModal()">
           <span>أَرسِل ملاحظتك</span>
           <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
         </button>
@@ -22516,6 +22819,168 @@ window.saveContactEdits = saveContactEdits;
 
   </div>
 </div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  مودال البلاغ عن مشكلة (مع صورة اختيارية)              ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div id="problem-report-modal" style="display:none;position:fixed;inset:0;background:rgba(42,26,12,.7);z-index:10001;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);direction:rtl;font-family:Tajawal,sans-serif;">
+  <div style="background:#fdfaf2;border-radius:18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.4);">
+    <!-- رأس المودال -->
+    <div style="background:linear-gradient(135deg,#5C3A1E,#2a1a0c);color:#f5d76e;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21 6h-3.17L16 4h-6v2h5.12l1.83 2H21v12H5v-9H3v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM8 14c0 2.76 2.24 5 5 5s5-2.24 5-5-2.24-5-5-5-5 2.24-5 5zm5-3c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3z"/></svg>
+        <div style="font-family:Cairo;font-weight:900;font-size:1.05rem;">بلِّغ عن مشكلة</div>
+      </div>
+      <button onclick="closeProblemReportModal()" type="button" aria-label="إغلاق" style="background:rgba(245,215,110,.18);border:none;color:#f5d76e;width:30px;height:30px;border-radius:50%;cursor:pointer;font-weight:900;font-size:1.1rem;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+
+    <!-- جسم المودال -->
+    <div style="padding:18px 22px;">
+      <div style="font-size:.82rem;color:#5C3A1E;line-height:1.7;margin-bottom:14px;background:#fef9ec;border:1px solid #c9a227;border-radius:10px;padding:10px 12px;">
+        ملاحظاتك ستصلنا مباشرة لتحسين المنصة. يمكنك إرفاق صورة (اختياري) لتوضيح المشكلة.
+      </div>
+
+      <label style="font-size:.78rem;font-weight:900;color:#5C3A1E;display:block;margin-bottom:5px;">وصف المشكلة <span style="color:#c0392b;">*</span></label>
+      <textarea id="pr-description" rows="5" maxlength="800" placeholder="اشرح المشكلة بالتفصيل..." style="width:100%;padding:10px 12px;border:1.5px solid #c9a227;border-radius:10px;font-family:Tajawal,sans-serif;font-size:.88rem;outline:none;resize:vertical;box-sizing:border-box;background:#fff;"></textarea>
+      <div id="pr-desc-counter" style="font-size:.7rem;color:#888;text-align:left;margin-top:3px;">0 / 800</div>
+
+      <label style="font-size:.78rem;font-weight:900;color:#5C3A1E;display:block;margin:12px 0 5px;">صورة توضيحية <span style="color:#888;font-weight:700;">(اختياري — حتى 3 ميغابايت)</span></label>
+      <div style="position:relative;">
+        <input type="file" id="pr-image" accept="image/*" onchange="onProblemImageChange(this)" style="display:none;">
+        <button type="button" onclick="document.getElementById('pr-image').click()" style="width:100%;padding:14px;border:1.5px dashed #c9a227;background:#fff8e8;color:#7a5c00;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm9-3h-3.17L16 4h-8L6.17 6H3a2 2 0 00-2 2v12a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zm-9 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+          <span>اختر صورة</span>
+        </button>
+        <div id="pr-image-preview" style="display:none;margin-top:8px;position:relative;">
+          <img id="pr-image-thumb" src="" alt="معاينة" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1.5px solid #c9a227;background:#fff;">
+          <button type="button" onclick="removeProblemImage()" style="position:absolute;top:6px;left:6px;width:28px;height:28px;border-radius:50%;background:#c0392b;color:#fff;border:none;cursor:pointer;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;font-size:1rem;">×</button>
+        </div>
+      </div>
+
+      <div id="pr-error" style="color:#c0392b;font-size:.78rem;min-height:18px;margin-top:8px;font-weight:900;"></div>
+
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button onclick="submitProblemReport()" id="pr-submit-btn" type="button" style="flex:1;padding:11px;background:linear-gradient(135deg,#5C3A1E,#3d2614);color:#f5d76e;border:1.5px solid #c9a227;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.92rem;cursor:pointer;">
+          إرسال البلاغ
+        </button>
+        <button onclick="closeProblemReportModal()" type="button" style="padding:11px 18px;background:#fff;color:#5C3A1E;border:1.5px solid #5C3A1E;border-radius:10px;font-family:Cairo;font-weight:700;font-size:.85rem;cursor:pointer;">
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// 🐛 نظام البلاغات (Problem Reports) — يُحفظ في Firestore
+// ═══════════════════════════════════════════════════════════
+let _hh_pr_image_data = null;
+
+window.openProblemReportModal = function(){
+  const m = document.getElementById('problem-report-modal');
+  if(!m) return;
+  document.getElementById('pr-description').value = '';
+  document.getElementById('pr-error').textContent = '';
+  document.getElementById('pr-desc-counter').textContent = '0 / 800';
+  removeProblemImage();
+  m.style.display = 'flex';
+};
+window.closeProblemReportModal = function(){
+  const m = document.getElementById('problem-report-modal');
+  if(m) m.style.display = 'none';
+};
+
+// عداد الأحرف
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'pr-description'){
+    const len = e.target.value.length;
+    const cnt = document.getElementById('pr-desc-counter');
+    if(cnt) cnt.textContent = len + ' / 800';
+  }
+});
+
+window.onProblemImageChange = function(input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  if(file.size > 3 * 1024 * 1024){
+    document.getElementById('pr-error').textContent = 'حجم الصورة كبير جداً (الحد الأقصى 3 ميغابايت)';
+    input.value = '';
+    return;
+  }
+  if(!file.type.startsWith('image/')){
+    document.getElementById('pr-error').textContent = 'الملف ليس صورة';
+    input.value = '';
+    return;
+  }
+  document.getElementById('pr-error').textContent = '';
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    _hh_pr_image_data = ev.target.result;
+    document.getElementById('pr-image-thumb').src = _hh_pr_image_data;
+    document.getElementById('pr-image-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removeProblemImage = function(){
+  _hh_pr_image_data = null;
+  document.getElementById('pr-image-preview').style.display = 'none';
+  const inp = document.getElementById('pr-image');
+  if(inp) inp.value = '';
+};
+
+window.submitProblemReport = async function(){
+  const desc = (document.getElementById('pr-description').value || '').trim();
+  const errEl = document.getElementById('pr-error');
+  errEl.textContent = '';
+  if(desc.length < 10){
+    errEl.textContent = 'الرجاء كتابة وصف للمشكلة (10 أحرف على الأقل)';
+    return;
+  }
+  const btn = document.getElementById('pr-submit-btn');
+  if(btn){ btn.disabled = true; btn.textContent = 'جارٍ الإرسال...'; }
+  try{
+    const userInfo = (typeof currentUser !== 'undefined' && currentUser) ? {
+      uid: currentUser.uid || null,
+      email: currentUser.email || null,
+      displayName: currentUser.displayName || null
+    } : { anonymous: true };
+
+    const reportData = {
+      description: desc,
+      hasImage: !!_hh_pr_image_data,
+      imageData: _hh_pr_image_data || null,
+      userAgent: navigator.userAgent.substring(0, 200),
+      url: window.location.pathname,
+      user: userInfo,
+      createdAt: (typeof firebase !== 'undefined' && firebase.firestore)
+        ? firebase.firestore.FieldValue.serverTimestamp()
+        : new Date().toISOString(),
+      status: 'new', // new | viewed | resolved
+      type: 'problem_report'
+    };
+
+    // محاولة الحفظ في Firestore (collection: problem_reports)
+    if(typeof firebase !== 'undefined' && firebase.firestore){
+      await firebase.firestore().collection('problem_reports').add(reportData);
+      if(typeof toast === 'function') toast('شكراً! تم استلام بلاغك بنجاح','success');
+    } else {
+      // Fallback: حفظ محلي
+      const local = JSON.parse(localStorage.getItem('hh_problem_reports')||'[]');
+      local.push({...reportData, _localId: Date.now()});
+      localStorage.setItem('hh_problem_reports', JSON.stringify(local));
+      if(typeof toast === 'function') toast('تم الحفظ محلياً (لا يوجد اتصال)','info');
+    }
+    closeProblemReportModal();
+  }catch(e){
+    console.error('Problem report error:', e);
+    errEl.textContent = 'حدث خطأ أثناء الإرسال — حاول مرة أخرى';
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = 'إرسال البلاغ'; }
+  }
+};
+</script>
 
 
 <!-- ╔════════════════════════════════════════════════════════════════╗
