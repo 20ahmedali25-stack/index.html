@@ -2862,7 +2862,7 @@ function openInfoModal(role){
   document.getElementById('info-school').value = '';
   document.querySelectorAll('#info-overlay .valid, #info-overlay .invalid').forEach(el=>el.classList.remove('valid','invalid'));
 
-  // <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg> اقتراح تلقائي من الحساب المسجّل
+  //  اقتراح تلقائي من الحساب المسجّل
   try{
     const user = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : null;
     if(user){
@@ -2918,7 +2918,7 @@ function submitInfoModal(){
   _ilcUserName = nameResult.name;
   _ilcUserSchool = document.getElementById('info-school').value.trim();
 
-  // <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg> حفظ البيانات للاستخدام التلقائي في المرات القادمة
+  //  حفظ البيانات للاستخدام التلقائي في المرات القادمة
   try{
     if(_ilcUserSchool) localStorage.setItem('hh_last_school', _ilcUserSchool);
     if(_ilcUserGrade) localStorage.setItem('hh_last_grade', _ilcUserGrade);

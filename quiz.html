@@ -1582,14 +1582,14 @@ async function doLogin(){
   if(OFFLINE){
     const users=JSON.parse(localStorage.getItem('hh_users')||'[]');
     const u=users.find(x=>x.email===email&&x.pass===pass);
-    if(!u){err.textContent='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البيانات غير صحيحة';return;}
+    if(!u){err.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البيانات غير صحيحة';return;}
     currentUser=u;localStorage.setItem('hh_sess',JSON.stringify(u));
     initPickScreen();showScreen('screen-pick');return;
   }
   try{
     await auth.signInWithEmailAndPassword(email,pass);
   }catch(e){
-    err.textContent=e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'?'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البريد أو كلمة المرور غير صحيحة':'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ حدث خطأ';
+    err.innerHTML=e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'?'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البريد أو كلمة المرور غير صحيحة':'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ حدث خطأ';
   }
 }
 
@@ -1612,18 +1612,18 @@ async function doRegister(){
   try{
     const cred=await auth.createUserWithEmailAndPassword(email,pass);
     await db.collection('users').doc(cred.user.uid).set({name,email,phone:'+974'+phone,points:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  }catch(e){err.textContent=e.code==='auth/email-already-in-use'?'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البريد مستخدم مسبقاً':'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ '+e.message;}
+  }catch(e){err.innerHTML=e.code==='auth/email-already-in-use'?'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ البريد مستخدم مسبقاً':'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ '+e.message;}
 }
 
 async function doReset(){
   const email=document.getElementById('reset-email').value.trim();
   const msg=document.getElementById('reset-msg');
   if(!email){msg.textContent='أدخل بريدك الإلكتروني';return;}
-  if(OFFLINE){msg.textContent='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ غير متاح في الوضع المحلي';return;}
+  if(OFFLINE){msg.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ غير متاح في الوضع المحلي';return;}
   try{
     await auth.sendPasswordResetEmail(email);
-    msg.style.color='#1a7a4a';msg.textContent='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> تم إرسال رابط الاستعادة';
-  }catch(e){msg.textContent='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ تحقق من البريد الإلكتروني';}
+    msg.style.color='#1a7a4a';msg.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> تم إرسال رابط الاستعادة';
+  }catch(e){msg.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>️ تحقق من البريد الإلكتروني';}
 }
 
 function doLogout(){
@@ -1639,7 +1639,7 @@ function initPickScreen(){
   const el=document.getElementById('pick-username');
   if(el)el.textContent='أهلاً '+name+' 👋';
 
-  // <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg> اقتراح تلقائي لاسم الطالب في حقل الاختبار
+  //  اقتراح تلقائي لاسم الطالب في حقل الاختبار
   try{
     const nameInput = document.getElementById('student-name');
     if(nameInput && !nameInput.value.trim() && name){
@@ -2633,7 +2633,7 @@ function showTeacherPanel(){
   updateCQFilterOptions();
   renderCustomGroupsList();
   initCQOpts();
-  // <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/></svg> اقتراح تلقائي لاسم الاختبار
+  //  اقتراح تلقائي لاسم الاختبار
   try{
     const tqName = document.getElementById('tq-name');
     if(tqName && !tqName.value.trim()){
@@ -2839,7 +2839,7 @@ function addCustomGradeGroup(){
   list.unshift(grp);
   localStorage.setItem(key,JSON.stringify(list));
   err.style.color='#1a7a4a';
-  err.textContent='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> تمت إضافة الفئة '+(isPublic?'(عامة)':'(خاصة)');
+  err.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> تمت إضافة الفئة '+(isPublic?'(عامة)':'(خاصة)');
   document.getElementById('new-cat-name').value='';
   renderCustomGroupsList();
   toast('<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> تمت إضافة الفئة','success');
