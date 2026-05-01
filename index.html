@@ -9946,11 +9946,21 @@ function _loadQDB(){
  */
 function _saveQDB(){
   try{
-    localStorage.setItem('hh_qdb_override', JSON.stringify(QDB));
+    // نستثني فئات الخرائط (تأتي من ملفات .js منفصلة) لتجنّب تجاوز حد localStorage
+    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط']);
+    const slim = {};
+    for(const cat in QDB){
+      if(_HH_EXTERNAL_CATS.has(cat)) continue; // نتخطّى الفئات الكبيرة
+      slim[cat] = QDB[cat];
+    }
+    localStorage.setItem('hh_qdb_override', JSON.stringify(slim));
     localStorage.setItem('hh_qdb_modified_at', Date.now().toString());
     return true;
   }catch(e){
     console.error('QDB save error:', e);
+    if(e && e.name === 'QuotaExceededError'){
+      try{ toast('مساحة المتصفح ممتلئة. حاول حذف بعض البيانات','error'); }catch(_){}
+    }
     return false;
   }
 }
@@ -16978,15 +16988,38 @@ function showAQAddForm(){
 }
 
 function editAdminQuestion(idx){
-  if(!_aqCurrentCat) return;
-  const q = QDB[_aqCurrentCat][idx];
-  if(!q) return;
+  if(!_aqCurrentCat){ toast('اختر فئة أولاً','warn'); return; }
+  const q = QDB[_aqCurrentCat] && QDB[_aqCurrentCat][idx];
+  if(!q){ toast('السؤال غير موجود','error'); return; }
+  
+  // ملء النموذج
   document.getElementById('aq-edit-idx').value = idx;
-  document.getElementById('aq-question-text').value = q.q;
-  document.getElementById('aq-answer-text').value = q.a;
+  document.getElementById('aq-question-text').value = q.q || '';
+  document.getElementById('aq-answer-text').value = q.a || '';
   setAQDiff(q.diff);
-  document.getElementById('aq-add-form').style.display = 'block';
-  document.getElementById('aq-question-text').focus();
+  
+  // إظهار النموذج + scroll إليه + تمييز بصري
+  const form = document.getElementById('aq-add-form');
+  if(form){
+    form.style.display = 'block';
+    // scroll smooth إلى النموذج
+    setTimeout(()=>{
+      form.scrollIntoView({behavior:'smooth', block:'center'});
+      // تأثير تمييز برتقالي مؤقت
+      form.style.transition = 'box-shadow .3s ease, background .3s ease';
+      form.style.boxShadow = '0 0 0 3px #c9a227, 0 8px 22px rgba(201,162,39,.4)';
+      form.style.background = '#fef9ec';
+      setTimeout(()=>{
+        form.style.boxShadow = '';
+        form.style.background = '';
+        // focus على حقل السؤال
+        const qInput = document.getElementById('aq-question-text');
+        if(qInput){ qInput.focus(); qInput.select(); }
+      }, 1000);
+    }, 80);
+  }
+  
+  toast('عدّل السؤال ثم اضغط حفظ','info');
 }
 
 function deleteAdminQuestion(idx){
