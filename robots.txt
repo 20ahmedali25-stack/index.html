@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════
+# منصة المُلْهِم التعليمية - robots.txt
+# almulhimedu.org
+# ═══════════════════════════════════════════════════════
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Apple Search
+User-agent: Applebot
+Allow: /
+
+# Facebook (للـ Open Graph)
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter / X
+User-agent: Twitterbot
+Allow: /
+
+# WhatsApp Preview
+User-agent: WhatsApp
+Allow: /
+
+# Telegram Preview
+User-agent: TelegramBot
+Allow: /
+
+# جميع البوتات الأخرى
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /*?*sessionid=
+Disallow: /*?*PHPSESSID=
+
+# ═══════════════════════════════════════════════════════
+# Sitemap - الأهم للفهرسة السريعة
+# ═══════════════════════════════════════════════════════
+Sitemap: https://almulhimedu.org/sitemap.xml
+
+# Host preferred
+Host: almulhimedu.org

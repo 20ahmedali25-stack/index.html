@@ -1,0 +1,215 @@
+<!-- ═══════════════════════════════════════════════════════
+     ضع هذا الكود قبل </head> مباشرة في index.html
+     يجعل Google يعرض موقعك مع:
+     - شعار + اسم رسمي
+     - روابط فرعية (Sitelinks)
+     - صندوق بحث داخل نتائج Google
+     - تقييمات نجوم (إن وُجدت مراجعات)
+     - معلومات المؤسس + الموقع الجغرافي
+     ═══════════════════════════════════════════════════════ -->
+
+<!-- (1) المنظمة التعليمية -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "@id": "https://almulhimedu.org/#organization",
+  "name": "منصة المُلْهِم التعليمية",
+  "alternateName": ["المُلْهِم", "Al-Mulhim", "Almulhim", "منصة الملهم"],
+  "url": "https://almulhimedu.org",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://almulhimedu.org/og-image.png",
+    "width": 1200,
+    "height": 630
+  },
+  "image": "https://almulhimedu.org/og-image.png",
+  "description": "منصة قطرية تربوية تفاعلية صَنَعَها المعلم أحمد الحلحلي لزملائه المعلمين والطلاب. تضم أكثر من 800 سؤال على المنهج القطري، اختبارات إلكترونية، شهادات تفوق، حصص تفاعلية، خرائط زمن، وبطاقات مراجعة.",
+  "slogan": "حيث يبدأ الإلهام",
+  "foundingDate": "2024",
+  "founder": {
+    "@type": "Person",
+    "@id": "https://almulhimedu.org/#founder",
+    "name": "أحمد الحلحلي",
+    "alternateName": ["Ahmed Alhalhali", "أحمد علي الحلحلي"],
+    "jobTitle": "معلم اجتماعيات قطري ومدرب تربوي",
+    "image": "https://almulhimedu.org/founder.jpg",
+    "url": "https://almulhimedu.org",
+    "sameAs": [
+      "https://instagram.com/almulhim_edu",
+      "https://instagram.com/aalhalhali"
+    ]
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Qatar"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "QA",
+    "addressLocality": "الدوحة",
+    "addressRegion": "Doha"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "20ahmedali25@gmail.com",
+    "contactType": "Customer Support",
+    "availableLanguage": ["Arabic", "English"]
+  },
+  "sameAs": [
+    "https://instagram.com/almulhim_edu",
+    "https://instagram.com/aalhalhali"
+  ],
+  "knowsAbout": [
+    "التعليم القطري",
+    "الدراسات الاجتماعية",
+    "تدريب المعلمين",
+    "الألعاب التعليمية التفاعلية",
+    "اختبارات إلكترونية",
+    "المنهج القطري الوطني"
+  ],
+  "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": ["teacher", "student", "parent"]
+  }
+}
+</script>
+
+<!-- (2) الموقع نفسه + صندوق البحث -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://almulhimedu.org/#website",
+  "url": "https://almulhimedu.org",
+  "name": "منصة المُلْهِم التعليمية",
+  "alternateName": "المُلْهِم",
+  "description": "منصة قطرية تربوية تفاعلية - حيث يبدأ الإلهام",
+  "inLanguage": "ar",
+  "publisher": {
+    "@id": "https://almulhimedu.org/#organization"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://almulhimedu.org/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- (3) تطبيق ويب (للظهور في نتائج التطبيقات) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "منصة المُلْهِم التعليمية",
+  "url": "https://almulhimedu.org",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (Web Browser)",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "inLanguage": "ar",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "QAR"
+  },
+  "featureList": [
+    "أكثر من 800 سؤال تنافسي على المنهج القطري",
+    "اختبارات إلكترونية متدرجة الصعوبة",
+    "شهادات تفوق رسمية قابلة للتحميل",
+    "حصص تفاعلية حركية للفصل",
+    "خرائط زمن تفاعلية",
+    "بطاقات مراجعة ذكية",
+    "لوحات متصدرين تنافسية",
+    "إدارة فصول دراسية كاملة"
+  ],
+  "screenshot": "https://almulhimedu.org/og-image.png",
+  "creator": {
+    "@id": "https://almulhimedu.org/#founder"
+  }
+}
+</script>
+
+<!-- (4) أسئلة شائعة - يظهر مباشرة في Google كـ FAQ Box -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ما هي منصة المُلْهِم؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "منصة المُلْهِم التعليمية هي منصة قطرية تربوية تفاعلية صنعها المعلم أحمد الحلحلي لزملائه المعلمين والطلاب. تقدم ألعاباً تنافسية، اختبارات إلكترونية، شهادات تفوق، حصصاً تفاعلية، خرائط زمن، وبطاقات مراجعة على المنهج القطري."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "هل منصة المُلْهِم مجانية؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "نعم، منصة المُلْهِم مجانية بالكامل لجميع المعلمين والطلاب وأولياء الأمور. لا تتطلب اشتراكاً ولا رسوماً."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "من هو مؤسس منصة المُلْهِم؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "مؤسس منصة المُلْهِم هو الأستاذ أحمد الحلحلي، معلم اجتماعيات قطري ومدرب تربوي معتمد، مقيم في الدوحة قطر."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ما الذي تقدمه منصة المُلْهِم للمعلم؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "تقدم منصة المُلْهِم للمعلم: ألعاباً تنافسية جاهزة بأكثر من 800 سؤال، اختبارات متدرجة الصعوبة، شهادات تفوق آلية للطلاب، حصصاً تفاعلية حركية، إدارة فصول دراسية، إنشاء بنك أسئلة مخصص، وإحصائيات تفصيلية لأداء كل طالب."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "هل تدعم منصة المُلْهِم المنهج القطري؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "نعم، منصة المُلْهِم مصممة خصيصاً للمنهج القطري الوطني وتغطي مواد الدراسات الاجتماعية والتربية الوطنية للصفوف من الخامس إلى التاسع."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "كيف يحصل الطالب على شهادة تفوق من المنصة؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بعد اجتياز الطالب للاختبارات الإلكترونية بدرجة معينة، يحصل على شهادة تفوق رقمية باسمه قابلة للتحميل والطباعة، ومعتمدة من منصة المُلْهِم."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "كيف أسجل في منصة المُلْهِم؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "يمكنك التسجيل في منصة المُلْهِم مباشرة عبر الموقع almulhimedu.org بإنشاء حساب مجاني خلال أقل من دقيقة."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- (5) Breadcrumb للصفحة الرئيسية -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "name": "الرئيسية",
+    "item": "https://almulhimedu.org/"
+  }]
+}
+</script>
