@@ -13641,7 +13641,7 @@ function _loadQDB(){
 function _saveQDB(){
   try{
     // نستثني فئات الخرائط (تأتي من ملفات .js منفصلة) لتجنب تجاوز حد localStorage
-    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط']);
+    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول']);
     const slim = {};
     for(const cat in QDB){
       if(_HH_EXTERNAL_CATS.has(cat)) continue; // نتخطى الفئات الكبيرة
@@ -21467,7 +21467,7 @@ async function saveQDBToCloud(){
   
   try{
     // نستثني فئات الخرائط الكبيرة (تأتي من ملفات .js منفصلة)
-    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط']);
+    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول']);
     const slim = {};
     for(const cat in QDB){
       if(_HH_EXTERNAL_CATS.has(cat)) continue;
