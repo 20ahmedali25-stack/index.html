@@ -7897,27 +7897,12 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 }
 
 /* صف اسم اللعبة */
-/* صف اسم اللعبة — إطار بنّي ملكي مع شريط ذهبي */
 .ms-name-row{
-  background:linear-gradient(180deg,#fff 0%,#fdf6e3 100%);
-  border-radius:11px;
-  padding:11px 13px;
+  background:#fef9ec;border-radius:11px;
+  padding:10px 12px;
   display:flex;align-items:center;gap:10px;
-  margin-bottom:12px;
-  border:1.5px solid #5C3A1E;
-  position:relative;
-  box-shadow:
-    0 2px 8px rgba(92,58,30,.08),
-    inset 0 1px 0 rgba(255,255,255,.6);
-  overflow:hidden;
-}
-.ms-name-row::before{
-  content:'';
-  position:absolute;
-  top:-1px;left:0;right:0;
-  height:2.5px;
-  background:linear-gradient(90deg,transparent,#c9a227 20%,#f5d76e 50%,#c9a227 80%,transparent);
-  pointer-events:none;
+  margin-bottom:10px;
+  border:1px solid rgba(201,162,39,.25);
 }
 .ms-name-row svg.ms-name-icon{width:18px;height:18px;color:#5C3A1E;flex-shrink:0;}
 .ms-name-input{
@@ -7938,50 +7923,19 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 .ms-name-refresh:hover{background:#c9a227;color:#fff;}
 .ms-name-refresh svg{width:11px;height:11px;}
 
-/* صف ميتا (عدد فرق + مؤقت) — إطار ملوّن لكل كتلة */
+/* صف ميتا (عدد فرق + مؤقت) */
 .ms-meta-row{
   display:grid;grid-template-columns:1fr 1fr;gap:10px;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 .ms-meta-box{
-  background:linear-gradient(180deg,#fff 0%,#fdf6e3 100%);
-  border-radius:11px;
-  padding:9px 12px;
-  border:1.5px solid var(--mb-c,#c9a227);
-  position:relative;
-  box-shadow:
-    0 2px 8px rgba(60,38,20,.06),
-    inset 0 1px 0 rgba(255,255,255,.6);
-  overflow:hidden;
+  background:#fef9ec;border-radius:11px;
+  padding:8px 11px;
+  border:1px solid rgba(201,162,39,.25);
 }
-.ms-meta-box::before{
-  content:'';
-  position:absolute;
-  top:-1px;left:0;right:0;
-  height:2.5px;
-  background:linear-gradient(90deg,transparent,#c9a227 20%,#f5d76e 50%,#c9a227 80%,transparent);
-  pointer-events:none;
-}
-/* عدد الفرق — إطار أزرق ملكي */
-.ms-meta-box.mb-teams{--mb-c:#185fa5;}
-.ms-meta-box.mb-teams .ms-meta-label{color:#0c447c;}
-/* المؤقت — إطار أخضر هادئ */
-.ms-meta-box.mb-timer{--mb-c:#1a7a4a;}
-.ms-meta-box.mb-timer .ms-meta-label{color:#0a4525;}
-
 .ms-meta-label{
-  font-family:'Cairo',sans-serif;font-size:.74rem;color:#7a5c00;font-weight:900;
-  margin-bottom:7px;
-  display:flex;align-items:center;gap:5px;
-  letter-spacing:-.1px;
-}
-.ms-meta-label::before{
-  content:'';
-  display:inline-block;
-  width:6px;height:6px;
-  border-radius:50%;
-  background:var(--mb-c,#c9a227);
-  box-shadow:0 0 0 2px rgba(255,255,255,.8),0 0 6px var(--mb-c,#c9a227);
+  font-family:'Cairo',sans-serif;font-size:.7rem;color:#7a5c00;font-weight:700;
+  margin-bottom:6px;
 }
 .ms-meta-options{display:flex;gap:3px;}
 .ms-meta-opt{
@@ -8483,6 +8437,7 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
   padding:13px 22px 13px 14px;
   background:transparent;
   border:none;
+  border-right:1px solid rgba(201,162,39,.15);
   color:#5C3A1E;
   font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:600;
   cursor:pointer;white-space:nowrap;
@@ -8491,29 +8446,7 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
   user-select:none;
   letter-spacing:-.1px;
 }
-
-/* الخط الفاصل العمودي بين التابات - مريح للعين */
-.ms-tab + .ms-tab::before{
-  content:'';
-  position:absolute;
-  right:-1px;
-  top:25%;bottom:25%;
-  width:1.5px;
-  background:linear-gradient(180deg,
-    transparent 0%,
-    rgba(201,162,39,.35) 30%,
-    rgba(201,162,39,.5) 50%,
-    rgba(201,162,39,.35) 70%,
-    transparent 100%);
-  pointer-events:none;
-  border-radius:1px;
-}
-/* لا يظهر الفاصل بجانب التاب النشط */
-.ms-tab.active + .ms-tab::before,
-.ms-tab.active::before{
-  opacity:0;
-}
-
+.ms-tab:last-child{border-right:none;}
 .ms-tab:hover{
   background:var(--cbg,#fef9ec);
   opacity:.9;
@@ -8663,121 +8596,6 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
   grid-column:1/-1;
   text-align:center;padding:22px 12px;
   color:#aaa;font-family:'Cairo',sans-serif;font-size:.84rem;font-weight:700;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   🎴 شبكة بطاقات الأقسام — تاب "الكل"
-   ════════════════════════════════════════════════════════════════ */
-.ms-sections-grid{
-  display:grid !important;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:14px;
-  padding:6px 4px;
-}
-@media (max-width:600px){
-  .ms-sections-grid{
-    grid-template-columns:1fr;
-    gap:10px;
-  }
-}
-
-.ms-section-card{
-  display:flex;align-items:center;gap:12px;
-  background:linear-gradient(180deg,#fff 0%,#fdf6e3 100%);
-  border:1.5px solid rgba(201,162,39,.3);
-  border-radius:14px;
-  padding:14px 14px 14px 12px;
-  cursor:pointer;
-  position:relative;
-  overflow:hidden;
-  font-family:'Cairo','Tajawal',sans-serif;
-  transition:all .25s cubic-bezier(.34,1.2,.64,1);
-  box-shadow:
-    0 3px 10px rgba(60,38,20,.06),
-    inset 0 1px 0 rgba(255,255,255,.6);
-  animation:msSectionCardIn .4s cubic-bezier(.34,1.56,.64,1) backwards;
-}
-@keyframes msSectionCardIn{
-  from{opacity:0;transform:translateY(8px) scale(.96);}
-  to{opacity:1;transform:none;}
-}
-.ms-section-card:hover{
-  border-color:var(--sc-accent,#c9a227);
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(60,38,20,.12);
-}
-.ms-section-card:active{transform:translateY(0) scale(.99);}
-
-.ms-section-card-bar{
-  position:absolute;
-  top:0;right:0;bottom:0;
-  width:5px;
-  background:var(--sc-accent,#c9a227);
-  border-radius:0 14px 14px 0;
-}
-
-.ms-section-card-icon{
-  width:54px;height:54px;
-  border-radius:11px;
-  background:var(--sc-accent,#c9a227);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  box-shadow:
-    0 4px 10px rgba(0,0,0,.12),
-    inset 0 -2px 4px rgba(0,0,0,.18),
-    inset 0 1px 2px rgba(255,255,255,.3);
-}
-.ms-section-card-icon svg{width:32px;height:32px;display:block;}
-
-.ms-section-card-body{
-  flex:1;min-width:0;
-  display:flex;flex-direction:column;gap:3px;
-}
-.ms-section-card-title{
-  font-weight:900;font-size:.95rem;
-  color:#3d2614;
-  letter-spacing:-.3px;
-  line-height:1.3;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.ms-section-card-meta{
-  display:flex;align-items:center;gap:5px;
-  font-size:.7rem;
-  color:var(--sc-accent,#7a5c00);
-  font-weight:800;
-}
-.ms-sc-meta-item{
-  background:rgba(255,255,255,.85);
-  padding:2px 8px;border-radius:8px;
-  border:1px solid var(--sc-accent,#c9a227);
-  font-variant-numeric:tabular-nums;
-}
-.ms-sc-meta-dot{display:none;}
-
-.ms-section-card-arrow{
-  flex-shrink:0;
-  width:28px;height:28px;border-radius:50%;
-  background:rgba(255,255,255,.8);
-  border:1.2px solid var(--sc-accent,#c9a227);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--sc-accent,#7a5c00);
-  transition:all .2s ease;
-}
-.ms-section-card:hover .ms-section-card-arrow{
-  transform:translateX(-3px);
-  background:var(--sc-accent,#c9a227);
-  color:#fff;
-}
-.ms-section-card-arrow svg{width:14px;height:14px;}
-
-@media (max-width:520px){
-  .ms-section-card{padding:12px 12px 12px 10px;gap:10px;}
-  .ms-section-card-icon{width:46px;height:46px;border-radius:10px;}
-  .ms-section-card-icon svg{width:26px;height:26px;}
-  .ms-section-card-title{font-size:.86rem;}
-  .ms-section-card-meta{font-size:.65rem;}
-  .ms-section-card-arrow{width:24px;height:24px;}
-  .ms-section-card-arrow svg{width:12px;height:12px;}
 }
 
 /* ─── عنوان فاصل بين المجموعات داخل التاب الواحد ─── */
@@ -8980,13 +8798,13 @@ body.dark-mode .ms-footer-text-main{color:#f5d76e;}
 .cats-fab{
   position:fixed;
   top:50%;
-  right:2px;
+  right:12px;
   transform:translateY(-50%);
   z-index:9400;
   font-family:'Cairo','Tajawal',sans-serif;
   display:none;
-  width:180px;
-  max-width:calc(100vw - 8px);
+  width:220px;
+  max-width:calc(100vw - 24px);
   max-height:calc(100vh - 200px);
 }
 .cats-fab.show{display:block;}
@@ -9183,16 +9001,16 @@ body.dark-mode .ms-footer-text-main{color:#f5d76e;}
 /* تابلت وحجم متوسط */
 @media (max-width:900px){
   .cats-fab{
-    width:165px;
-    right:2px;
+    width:200px;
+    right:10px;
   }
 }
 
 /* جوال — أصغر وأقرب للحافة */
 @media (max-width:600px){
   .cats-fab{
-    width:150px;
-    right:1px;
+    width:170px;
+    right:6px;
     max-height:calc(100vh - 180px);
   }
   .cats-fab-header{padding:7px 9px 6px;}
@@ -9203,6 +9021,7 @@ body.dark-mode .ms-footer-text-main{color:#f5d76e;}
   .cats-fab-item{padding:5px 7px;gap:6px;margin-bottom:3px;}
   .cats-fab-item-icon{width:22px;height:22px;font-size:.68rem;border-radius:5px;}
   .cats-fab-item-name{font-size:.66rem;}
+  .cats-fab-item-meta{font-size:.55rem;}
   .cats-fab-item-remove{width:20px;height:20px;}
   .cats-fab-item-remove svg{width:10px;height:10px;}
   .cats-fab-foot{padding:5px 8px 7px;font-size:.6rem;}
@@ -9211,8 +9030,8 @@ body.dark-mode .ms-footer-text-main{color:#f5d76e;}
 /* شاشات ضيقة جدا (< 380px) */
 @media (max-width:380px){
   .cats-fab{
-    width:130px;
-    right:0;
+    width:150px;
+    right:4px;
   }
   .cats-fab-title span{display:none;}
 }
@@ -11038,7 +10857,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 
       <!-- صف ميتا — عدد الفرق + المؤقت في عمودين -->
       <div class="ms-meta-row">
-        <div class="ms-meta-box mb-teams">
+        <div class="ms-meta-box">
           <div class="ms-meta-label">عدد الفرق</div>
           <div class="ms-meta-options">
             <button class="ms-meta-opt active nav-tab" id="nt-2" onclick="setTeamCount(2)" type="button">2</button>
@@ -11048,7 +10867,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             <button class="ms-meta-opt nav-tab" id="nt-6" onclick="setTeamCount(6)" type="button">6</button>
           </div>
         </div>
-        <div class="ms-meta-box mb-timer">
+        <div class="ms-meta-box">
           <div class="ms-meta-label">المؤقت</div>
           <div class="ms-meta-options" id="timer-options">
             <button class="ms-meta-opt nav-tab" id="topt-half" onclick="setTimerMult(0.5)" type="button">سريع</button>
@@ -13659,6 +13478,8 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 <!-- ═══ تحميل قاعدة الأسئلة من ملف خارجي (تحسين الأداء + cache) ═══ -->
 <script src="questions.js"></script>
 <script src="maps-questions.js" defer></script>
+<script src="flags-questions.js" defer></script>
+<script src="capitals-questions.js" defer></script>
 <script src="legend-maps-questions.js" defer></script>
 
 <script>
@@ -14275,6 +14096,8 @@ const CAT_INFO = {
 'اجتماعيات 8 - نحن والبيئة':{emoji:'🌱', label:'نحن والبيئة — ف2',color:'#1a7a4a',bg:'#e8f5ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="14" fill="%231a7a4a"/><path d="M50 18 Q60 30 60 42 Q60 50 50 50 Q40 50 40 42 Q40 30 50 18 Z" fill="%23faf2d6" stroke="%23c9a227" stroke-width="2"/><path d="M50 50 L50 65" stroke="%237a6418" stroke-width="3" stroke-linecap="round"/><path d="M30 60 Q40 55 50 60" fill="none" stroke="%2397c459" stroke-width="2"/><path d="M50 60 Q60 55 70 60" fill="none" stroke="%2397c459" stroke-width="2"/><circle cx="30" cy="62" r="3" fill="%2397c459"/><circle cx="70" cy="62" r="3" fill="%2397c459"/><path d="M22 78 L78 78" stroke="%23d4b740" stroke-width="2.5" stroke-linecap="round"/><path d="M22 84 L78 84" stroke="%23d4b740" stroke-width="2" stroke-linecap="round" opacity=".7"/><circle cx="85" cy="15" r="11" fill="%23c97640" stroke="%237a6418" stroke-width="1.5"/><text x="85" y="19.5" text-anchor="middle" font-size="12" font-family="Cairo,Arial" fill="%23fff" font-weight="900">8</text></svg>'},
 'اجتماعيات 8 - تاريخ أوروبا':{emoji:'🏛️', label:'تاريخ أوروبا — ف2',color:'#8D1B3D',bg:'#f7e6ec',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="14" fill="%238D1B3D"/><path d="M30 65 L70 65 L70 70 L30 70 Z" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1.5"/><rect x="33" y="35" width="6" height="30" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1"/><rect x="44" y="35" width="6" height="30" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1"/><rect x="55" y="35" width="6" height="30" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1"/><rect x="66" y="35" width="6" height="30" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1"/><path d="M28 35 L72 35 L70 30 L30 30 Z" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M30 30 L42 18 L58 18 L70 30 Z" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1.5"/><circle cx="50" cy="24" r="2.5" fill="%238D1B3D"/><path d="M22 78 L78 78" stroke="%23d4b740" stroke-width="2.5" stroke-linecap="round"/><circle cx="85" cy="15" r="11" fill="%23c97640" stroke="%237a6418" stroke-width="1.5"/><text x="85" y="19.5" text-anchor="middle" font-size="12" font-family="Cairo,Arial" fill="%23fff" font-weight="900">8</text></svg>'},
 'خرائط الدول':       {emoji:'🗺️', label:'خرائط الدول — جغرافيا',color:'#1e4d8c',bg:'#e6edf7',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="50%25" cy="40%25" r="60%25"><stop offset="0%25" stop-color="%23cfe1f0"/><stop offset="100%25" stop-color="%23185fa5"/></radialGradient></defs><rect width="100" height="100" rx="14" fill="url(%23g)"/><circle cx="50" cy="50" r="32" fill="%23fdfaf2" stroke="%235C3A1E" stroke-width="2"/><path d="M50 18 Q72 30 72 50 Q72 70 50 82 Q28 70 28 50 Q28 30 50 18 Z" fill="none" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><line x1="28" y1="50" x2="72" y2="50" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><line x1="50" y1="18" x2="50" y2="82" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><path d="M40 35 Q48 32 56 38 Q60 45 55 52 Q48 56 42 50 Q38 42 40 35 Z" fill="%233d2614" stroke="%232a1a0c" stroke-width="1"/><circle cx="80" cy="20" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M75 18 L78 23 L82 18 L85 23 L82 25 L78 25 Z" fill="%23fff"/></svg>'},
+'أعلام الدول':       {emoji:'🚩', label:'أعلام الدول — جغرافيا',color:'#c0392b',bg:'#fde8e8',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="fg" x1="0%25" y1="0%25" x2="0%25" y2="100%25"><stop offset="0%25" stop-color="%23c0392b"/><stop offset="100%25" stop-color="%23700e0e"/></linearGradient></defs><rect width="100" height="100" rx="14" fill="url(%23fg)"/><rect x="20" y="22" width="3" height="60" fill="%237a5818"/><path d="M23 22 Q35 25 50 22 Q65 19 78 24 L78 52 Q65 49 50 52 Q35 55 23 52 Z" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1.5"/><path d="M28 28 L40 28 L40 36 L28 36 Z" fill="%231a7a4a"/><path d="M44 30 L72 30 L72 34 L44 34 Z" fill="%238D1B3D"/><path d="M28 40 L72 40 L72 44 L28 44 Z" fill="%23c9a227"/><circle cx="85" cy="15" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M82 13 L85 16 L88 13 L86 18 L84 18 Z" fill="%23fff"/></svg>'},
+'عواصم الدول':       {emoji:'🏛️', label:'عواصم الدول — جغرافيا',color:'#5C3A1E',bg:'#faf2d6',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="cg" cx="50%25" cy="40%25" r="60%25"><stop offset="0%25" stop-color="%23faf2d6"/><stop offset="100%25" stop-color="%235C3A1E"/></radialGradient></defs><rect width="100" height="100" rx="14" fill="url(%23cg)"/><rect x="20" y="55" width="60" height="30" fill="%23faf2d6" stroke="%237a5818" stroke-width="1.5"/><path d="M25 55 L50 28 L75 55 Z" fill="%23c9a227" stroke="%237a5818" stroke-width="1.5"/><rect x="28" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="36" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="47" y="60" width="6" height="25" fill="%235C3A1E"/><rect x="59" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="67" y="60" width="5" height="25" fill="%235C3A1E"/><circle cx="50" cy="40" r="3" fill="%23faf2d6"/><polygon points="50,32 51,35 54,35 52,37 53,40 50,38 47,40 48,37 46,35 49,35" fill="%23faf2d6"/><circle cx="85" cy="15" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M82 13 L85 16 L88 13 L86 18 L84 18 Z" fill="%23fff"/></svg>'},
 'كأس العالم':        {emoji:'🌍', label:'كأس العالم',color:'#c0392b',bg:'#fde8e8'},
 'الرياضة':           {emoji:'🏅', label:'الرياضة العامة',color:'#e67e22',bg:'#fff3e0'},
 'حروف':              {emoji:'🔤', label:'حروف (تلميح)',color:'#e67e22',bg:'#fff3e0',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="15" y="15" width="70" height="70" rx="12" fill="%23e67e22"/><text x="50" y="45" text-anchor="middle" font-size="22" font-family="Cairo,Arial" fill="%23fff" font-weight="bold">أ</text><text x="30" y="70" text-anchor="middle" font-size="16" font-family="Cairo,Arial" fill="%23fff" opacity=".8">ب</text><text x="70" y="70" text-anchor="middle" font-size="16" font-family="Cairo,Arial" fill="%23fff" opacity=".8">ت</text></svg>'},
@@ -15058,7 +14881,7 @@ const CAT_GROUPS = [
     id:'geography',
     label:'الجغرافيا',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#1e4d8c"/><circle cx="50" cy="50" r="32" fill="#cfe1f0" stroke="#fdfaf2" stroke-width="2"/><path d="M50 18 Q72 30 72 50 Q72 70 50 82 Q28 70 28 50 Q28 30 50 18 Z" fill="none" stroke="#fdfaf2" stroke-width="1" opacity=".7"/><line x1="28" y1="50" x2="72" y2="50" stroke="#fdfaf2" stroke-width="1" opacity=".7"/><path d="M30 30 Q40 25 50 28 Q60 32 70 30 Q72 38 68 45 Q62 50 56 48 L52 55 Q48 60 42 58 Q36 55 32 48 Q28 40 30 30 Z" fill="#3d2614" stroke="#2a1a0c" stroke-width="1.2"/><circle cx="80" cy="20" r="9" fill="#c9a227" stroke="#7a6418" stroke-width="1.5"/><path d="M76 18 L80 22 L84 18 L82 24 L78 24 Z" fill="#fff"/></svg>`,
-    cats:['خرائط الدول']
+    cats:['خرائط الدول','أعلام الدول','عواصم الدول']
   },
   {
     id:'custom',
@@ -15100,15 +14923,6 @@ let _msActiveSubTab = (function(){
 function buildCatSelect(){
   // نمسح الفئات المحفوظة لنبدأ نظيف في كل جلسة إعداد
   localStorage.removeItem('hh_saved_cats');
-
-  // نمسح أيضاً اختيارات الصفوف الفرعية حتى يبدأ المعلم نظيفاً
-  // (يبقى التاب الرئيسي محفوظاً، لكن "الصف" يُعاد للحياد)
-  try{
-    Object.keys(localStorage).forEach(k => {
-      if(k.indexOf('ms_active_subtab_') === 0) localStorage.removeItem(k);
-    });
-  }catch(e){}
-  _msActiveSubTab = null;
 
   // إظهار زر تحرير الصور للأدمن فقط
   try{
@@ -15444,13 +15258,6 @@ function msRenderTabContent(tabId){
 
     // إن لم يُحدد صف بعد → أظهر رسالة "اختر صفاً"
     if(!activeSubTab){
-      // قائمة الصفوف المتاحة (غير "قريباً")
-      const availableLabels = currentLevel.subTabs
-        .filter(st => st.status !== 'soon')
-        .map(st => st.label);
-      const subText = availableLabels.length > 0
-        ? 'حدد الصف من الأعلى لعرض فئاته (' + availableLabels.join(' أو ') + ')'
-        : 'حدد الصف من الأعلى لعرض فئاته';
       grid.innerHTML = `
         <div class="ms-prep-prompt">
           <div class="ms-prep-prompt-icon">
@@ -15460,7 +15267,7 @@ function msRenderTabContent(tabId){
             </svg>
           </div>
           <div class="ms-prep-prompt-title">اختر صفاً للبدء</div>
-          <div class="ms-prep-prompt-sub">${subText}</div>
+          <div class="ms-prep-prompt-sub">حدد الصف من الأعلى لعرض فئاته (السابع أو الثامن أو التاسع)</div>
         </div>
       `;
       return;
@@ -15484,91 +15291,6 @@ function msRenderTabContent(tabId){
     }
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // 🎴 شبكة بطاقات الأقسام — خاصة بتاب "الكل" فقط
-  // كل بطاقة تمثل قسماً، الضغط عليها ينتقل لتابه الكامل
-  // ═══════════════════════════════════════════════════════════════
-  if(tabId === 'all'){
-    // ألوان الأقسام (مطابقة لـ groupAccents)
-    const sectionAccents = {
-      social6: '#8D1B3D',
-      social7: '#5C3A1E',
-      science7: '#185fa5',
-      social8: '#c97640',
-      legends: '#7a6418',
-      islamic: '#1a7a4a',
-      lang: '#993556',
-      qatar: '#8D1B3D',
-      sport: '#0f6e56',
-      geography: '#185fa5',
-      custom: '#534AB7'
-    };
-
-    // بناء قائمة الأقسام مع معرفة التاب الأم لكل قسم
-    const sections = [];
-    CAT_LEVELS.forEach(level => {
-      if(level.status === 'soon') return;
-      level.groupIds.forEach(gid => {
-        const g = CAT_GROUPS.find(x => x.id === gid);
-        if(!g || g.soonNote) return; // نتجاهل "قريباً"
-        if(!g.cats || !g.cats.length) return;
-        // عد الأسئلة في القسم
-        let qCount = 0;
-        g.cats.forEach(c => { qCount += (QDB[c]||[]).length; });
-        // التاب الأم + التاب الفرعي إن وجد
-        let parentTabId = level.id;
-        let subTabId = null;
-        if(level.subTabs && level.subTabs.length){
-          const st = level.subTabs.find(s => s.groupIds.indexOf(gid) !== -1);
-          if(st) subTabId = st.id;
-        }
-        sections.push({
-          group: g,
-          parentTabId, subTabId,
-          qCount,
-          catsCount: g.cats.length,
-          accent: sectionAccents[g.id] || '#c9a227'
-        });
-      });
-    });
-
-    // عرض الشبكة
-    grid.innerHTML = '';
-    grid.classList.add('ms-sections-grid');
-    sections.forEach((sec, idx) => {
-      const card = document.createElement('div');
-      card.className = 'ms-section-card';
-      card.style.setProperty('--sc-accent', sec.accent);
-      card.style.animationDelay = (idx * 40) + 'ms';
-      const safeParent = sec.parentTabId.replace(/'/g,"\\'");
-      const safeSub = sec.subTabId ? sec.subTabId.replace(/'/g,"\\'") : '';
-      const clickHandler = safeSub
-        ? `msSwitchTab('${safeParent}');setTimeout(()=>msSelectSubTab('${safeParent}','${safeSub}'),50);`
-        : `msSwitchTab('${safeParent}');`;
-      card.setAttribute('onclick', clickHandler);
-      card.innerHTML =
-        '<div class="ms-section-card-bar"></div>'+
-        '<div class="ms-section-card-icon">'+ (sec.group.icon || '') +'</div>'+
-        '<div class="ms-section-card-body">'+
-          '<div class="ms-section-card-title">'+ sec.group.label +'</div>'+
-          '<div class="ms-section-card-meta">'+
-            '<span class="ms-sc-meta-item">'+ sec.catsCount +' فئات</span>'+
-            '<span class="ms-sc-meta-dot">·</span>'+
-            '<span class="ms-sc-meta-item">'+ sec.qCount +' سؤال</span>'+
-          '</div>'+
-        '</div>'+
-        '<div class="ms-section-card-arrow">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>'+
-        '</div>';
-      grid.appendChild(card);
-    });
-
-    if(sections.length === 0){
-      grid.innerHTML = '<div class="ms-empty-tab">لا توجد أقسام متاحة</div>';
-    }
-    return;
-  }
-
   // ─── جمع الفئات مع تذكر مجموعتها (للفصل بعناوين داخل التاب) ───
   // البنية: [{groupId, group, cats:[...]}]
   const groupedSections = [];
@@ -15587,9 +15309,6 @@ function msRenderTabContent(tabId){
       isSoon: !!g.soonNote
     });
   }
-
-  // إزالة class شبكة الأقسام (لو كان موجوداً من تاب سابق)
-  grid.classList.remove('ms-sections-grid');
 
   if(tabId === 'all'){
     CAT_LEVELS.forEach(level => {
@@ -20096,19 +19815,7 @@ async function submitRating(){
 async function loadHomeReviews(){
   let reviews=[];
   let userCount=0;
-  // ═════════════════════════════════════════════════════════
-  // 📜 شهادات راقية ثابتة من معلمين ومدربين
-  // ═════════════════════════════════════════════════════════
-  const STATIC_TESTIMONIALS = [
-    {id:'tst_001',name:'مستخدم',stars:5,comment:'صراحة جربتها مع طلابي يوم الأحد وفاجأوني بحماسهم.. الحصة طارت من غير ما أحس',date:'20/4/2026',ts:1745175600000,role:'معلم اجتماعيات'},
-    {id:'tst_002',name:'مستخدم',stars:5,comment:'الفكرة جميلة ومختلفة عن باقي البرامج. بس ودي لو فيه أسئلة أكثر للصف الثامن',date:'15/3/2026',ts:1742022000000,role:'معلمة'},
-    {id:'tst_003',name:'مستخدم',stars:5,comment:'استخدمته أمس مرة، الطلاب طلبوا نعيدها اليوم 😄 شكرا لكم',date:'8/3/2026',ts:1741417200000,role:'معلم'},
-    {id:'tst_004',name:'مستخدم',stars:5,comment:'الواجهة حلوة والألوان مريحة، الموقع سريع وما فيه مشاكل. أتمنى تضيفون مادة العلوم قريب',date:'1/3/2026',ts:1740812400000,role:'معلمة'},
-    {id:'tst_005',name:'مستخدم',stars:5,comment:'اللي عجبني إنه قطري ١٠٠٪، الأسئلة مرتبطة بمنهجنا مو منقولة من برا',date:'22/2/2026',ts:1740175200000,role:'مشرف'},
-    {id:'tst_006',name:'مستخدم',stars:5,comment:'أنصح فيه بشدة، وفر علي وقت كبير في تحضير الأنشطة. الله يجزاكم خير',date:'12/2/2026',ts:1739311200000,role:'معلم'},
-    {id:'tst_007',name:'مستخدم',stars:5,comment:'فعلتها مع طلاب الإعدادي، التفاعل كان فوق المتوقع. حتى الطلاب الهادئين شاركوا',date:'5/2/2026',ts:1738706400000,role:'معلمة'},
-    {id:'tst_008',name:'مستخدم',stars:5,comment:'منصة محترمة. لو فيه شرح بسيط للمعلم الجديد كيف يبدأ بيكون أحسن',date:'28/1/2026',ts:1738015200000,role:'معلم'}
-  ];
+  const defaultReview={id:'founder',name:'أحمد',stars:5,comment:'منصة رائعة جدا بارك الله جهدك',date:'20/4/2026',ts:0};
   try{
     if(!OFFLINE_MODE&&db){
       const snapR = await db.collection('reviews').orderBy('ts','desc').limit(50).get();
@@ -20120,8 +19827,7 @@ async function loadHomeReviews(){
       userCount=Object.keys(JSON.parse(localStorage.getItem('hh_users')||'{}')).length;
     }
   }catch(e){reviews=[];}
-  // دمج شهادات المعلمين الراقية + التقييمات الحقيقية
-  reviews=[...STATIC_TESTIMONIALS, ...reviews];
+  reviews=[...reviews, defaultReview];
 
   const statEl=document.getElementById('home-reviews-stats');
   const listEl=document.getElementById('home-reviews-list');
@@ -20178,39 +19884,32 @@ async function loadHomeReviews(){
     const starsGray = '<span style="color:#e0e0e0;">★</span>'.repeat(5-r.stars);
     // توحيد التاريخ
     const dateStr = r.date ? String(r.date).replace(/[0-9]/g, d => '0123456789'.indexOf(d)) : '';
-    // ✨ شهادات ثابتة (معرفها يبدأ بـ tst_): محقونة في الكود
-    const isStaticTestimonial = r.id && String(r.id).indexOf('tst_') === 0;
     // خصوصية:
-    // - الأدمن (أحمد): يرى اسم المستخدم الحقيقي + الإيميل
-    // - المستخدم العادي: يرى "مستخدم" + شارة "شخص مميز ومبدع" (يشمل الشهادات الثابتة)
+    // - الأدمن (أحمد): يرى اسم المستخدم الحقيقي في اللعبة + الإيميل
+    // - المستخدم العادي: يرى "مستخدم" + شارة "شخص مميز ومبدع" بلا بيانات
     const displayName = isAdmin ? (r.name || 'مجهول') : 'مستخدم';
-    // شارة الدور للشهادات الثابتة (لن تظهر للجمهور العادي - فقط للأدمن)
-    const sparkIcon2 = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;flex-shrink:0;"><path d="M12 2l1.5 5L19 8.5 14 10l-1 5-2-4-5 1 4-2.5L10 5l2 2z"/></svg>';
-    const testimonialRoleBadge = (isAdmin && isStaticTestimonial && r.role)
-      ? `<div style="display:inline-flex;align-items:center;gap:5px;font-size:.68rem;color:#7a6418;font-weight:800;background:linear-gradient(135deg,#fef9ec,#f3e8c4);border:1px solid rgba(201,162,39,.5);padding:3px 10px;border-radius:999px;margin-top:5px;box-shadow:0 2px 6px rgba(201,162,39,.12);"><span style="color:#c9a227;">${sparkIcon2}</span>${esc(r.role)}</div>`
-      : '';
     // شارة تظهر للأدمن فقط: إيميل المستخدم (إن وجد)
     const mailIcon = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;flex-shrink:0;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>';
     const userIcon = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;flex-shrink:0;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
     const sparkIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;flex-shrink:0;"><path d="M12 2l1.5 5L19 8.5 14 10l-1 5-2-4-5 1 4-2.5L10 5l2 2z"/></svg>';
-    const adminEmailBadge = (isAdmin && !isStaticTestimonial && r.email) 
+    const adminEmailBadge = (isAdmin && r.email) 
       ? `<div style="display:inline-flex;align-items:center;gap:5px;font-size:.68rem;color:#5C3A1E;font-weight:700;background:#e8f2ec;border:1px solid #c5dbcb;padding:2px 8px;border-radius:999px;margin-top:4px;direction:ltr;">${mailIcon}${esc(r.email)}</div>` 
       : '';
     // شارة "زائر بدون حساب" للأدمن فقط (إذا المستخدم ما عنده إيميل)
-    const adminGuestBadge = (isAdmin && !isStaticTestimonial && !r.email)
+    const adminGuestBadge = (isAdmin && !r.email)
       ? `<div style="display:inline-flex;align-items:center;gap:5px;font-size:.65rem;color:#888;font-weight:600;background:#f5f5f5;border:1px dashed #ccc;padding:2px 8px;border-radius:999px;margin-top:4px;font-style:italic;">${userIcon}زائر (بدون حساب)</div>`
       : '';
-    // شارة "شخص مميز ومبدع" تظهر للجمهور العادي (للجميع، يشمل الشهادات الثابتة)
+    // شارة "شخص مميز ومبدع" تظهر للجمهور العادي فقط
     const publicSpecialBadge = (!isAdmin)
       ? `<div style="display:inline-flex;align-items:center;gap:5px;font-size:.68rem;color:#7a6418;font-weight:800;background:linear-gradient(135deg,#f3e8c4,#f0e5b8);border:1px solid rgba(201,162,39,.5);padding:3px 10px;border-radius:999px;margin-top:5px;box-shadow:0 2px 6px rgba(201,162,39,.12);"><span style="color:#c9a227;">${sparkIcon}</span>شخص مميز ومبدع</div>`
       : '';
     return `<div class="review-card">
-      ${isAdmin && !isStaticTestimonial?`<button class="rc-delete" onclick="deleteReview('${r.id}')" title="حذف">حذف</button>`:''}
+      ${isAdmin?`<button class="rc-delete" onclick="deleteReview('${r.id}')" title="حذف">حذف</button>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <div>
           <div class="rc-name">${esc(displayName)}</div>
           <div class="rc-stars">${starsGold}${starsGray}</div>
-          ${testimonialRoleBadge}${adminEmailBadge}${adminGuestBadge}${publicSpecialBadge}
+          ${adminEmailBadge}${adminGuestBadge}${publicSpecialBadge}
         </div>
         <div class="rc-date" style="text-align:left;">${dateStr}</div>
       </div>
@@ -22659,16 +22358,6 @@ function _hh_getWhatsNew(){
   // ⚡ التحديثات الافتراضية المحقنة (تظهر إن لم يكن هناك مثلها)
   const defaults = [
     {
-      id:'wn_default_grade6_social',
-      title:'🎉 منهج الصف السادس — متاح الآن!',
-      desc:'أضفنا 63 سؤالا متدرج الصعوبة للصف السادس: التاريخ (28 سؤالا)، المواطنة (28 سؤالا)، الجغرافيا (7 أسئلة). اختر من المرحلة الابتدائية → السادس وابدأ التحدي!',
-      category:'content',
-      link:'',
-      published:true,
-      createdAt: 1731340000000,
-      updatedAt: 1731340000000
-    },
-    {
       id:'wn_default_grade8_unit345',
       title:'منهج الصف الثامن — الفصل الثاني متاح الآن!',
       desc:'تمت إضافة 3 فئات جديدة (36 سؤالا): حقوق الإنسان، نحن والبيئة، تاريخ أوروبا. متاحة لجميع الطلاب والمعلمين والزوار. استمتع بالألعاب التنافسية الآن!',
@@ -22996,9 +22685,12 @@ window.refreshWhatsNewBadge = function(){
 
 // تشغيل تلقائي عند تحميل الصفحة (للزوار)
 function _hh_autoShowWhatsNew(){
-  // ✅ نكتفي بإظهار الشارة "جديد" فقط — لا نفتح المودال تلقائياً
-  // المستخدم يضغط على زر "جديدنا" بنفسه عند رغبته
-  setTimeout(function(){ try{ refreshWhatsNewBadge(); }catch(e){} }, 800);
+  // تحديث الشارة فورا
+  setTimeout(function(){ try{ refreshWhatsNewBadge(); }catch(e){} }, 500);
+  // افتح المودال بعد 4 ثوان (لما المستخدم يستوعب الصفحة)
+  setTimeout(function(){
+    try{ showWhatsNewModal({}); refreshWhatsNewBadge(); }catch(e){}
+  }, 4000);
 }
 if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', _hh_autoShowWhatsNew);
@@ -24477,12 +24169,6 @@ const QUOTES_BANK = [
 
   // 🍇 الشيخ الوالد حمد بن خليفة
   { text: 'إن أهم ما نملكه هو الإنسان القطري المتعلم القادر على بناء مستقبله ومستقبل وطنه.', author: 'الشيخ حمد بن خليفة آل ثاني', category: 'قطر' },
-
-  // 👩 سعادة وزيرة التربية والتعليم — لولوة الخاطر
-  { text: 'الإنسان هو محور أي نهضة معرفية حقيقية.', author: 'سعادة لولوة بنت راشد الخاطر', category: 'قطر' },
-  { text: 'القيم الإنسانية تمثل البوصلة التي تحفظ مسار التقدم في عالم تتسارع فيه التقنيات.', author: 'سعادة لولوة بنت راشد الخاطر', category: 'قطر' },
-  { text: 'قدرة الأمم على التقدم رهينة بقدرتها على وضع الإنسان في صميم رؤيتها وقراراتها.', author: 'سعادة لولوة بنت راشد الخاطر', category: 'قطر' },
-  { text: 'تمكين المتعلم من بناء رأي مستقل وصياغة قراره بوصفه فاعلا في محيطه، لا مجرد تابع لتطورات العالم.', author: 'سعادة لولوة بنت راشد الخاطر', category: 'قطر' },
 
   // 👨‍🏫 المعلم
   { text: 'المعلم لا يعلم فقط... يلهم. يشعل العقول، ويزرع البذور التي تثمر بعد سنوات.', author: 'حكمة تربوية', category: 'المعلم' },
@@ -29533,383 +29219,148 @@ function _hh_attrEsc(s){
 <style>
 .sp-page{ padding:18px 16px; max-width:780px; margin:0 auto; }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ Sponsors / Partners — Royal Premium Edition
-   ═══════════════════════════════════════════════════════════ */
-
-/* ▓▓▓ HERO ▓▓▓ */
 .sp-hero{
   position:relative;
-  background:
-    radial-gradient(ellipse at 80% 20%,rgba(245,215,110,.18) 0%,transparent 50%),
-    radial-gradient(ellipse at 20% 80%,rgba(201,162,39,.12) 0%,transparent 50%),
-    linear-gradient(135deg,#2a1a0c 0%,#5C3A1E 50%,#2a1a0c 100%);
-  border:2px solid transparent;
-  border-radius:18px;
-  padding:22px 24px;
+  background:linear-gradient(135deg,#2a1a0c 0%,#5C3A1E 50%,#2a1a0c 100%);
+  border:1.5px solid #c9a227;
+  border-radius:14px;
+  padding:18px 20px;
   text-align:center;
   overflow:hidden;
-  margin-bottom:16px;
-  background-clip:padding-box;
-  box-shadow:
-    0 14px 38px rgba(60,38,20,.32),
-    0 6px 14px rgba(201,162,39,.18),
-    inset 0 1px 0 rgba(245,215,110,.25);
-  animation:sp-hero-glow 4s ease-in-out infinite alternate;
+  margin-bottom:14px;
 }
 .sp-hero::before{
-  content:'';position:absolute;inset:0;
-  padding:2px;
-  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 25%,#c9a227 50%,#7a5818 75%,#f5d76e 100%);
-  border-radius:18px;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
+  content:'';position:absolute;top:-50%;right:-10%;
+  width:220px;height:220px;
+  background:radial-gradient(circle,rgba(245,215,110,.18),transparent 70%);
   pointer-events:none;
-  background-size:200% 200%;
-  animation:sp-border-shimmer 6s linear infinite;
 }
-.sp-hero::after{
-  content:'';position:absolute;top:-40%;right:-15%;
-  width:280px;height:280px;
-  background:radial-gradient(circle,rgba(245,215,110,.25) 0%,rgba(245,215,110,.08) 40%,transparent 70%);
-  pointer-events:none;
-  animation:sp-orb-pulse 5s ease-in-out infinite;
-}
-@keyframes sp-hero-glow{
-  0%{box-shadow:0 14px 38px rgba(60,38,20,.32),0 6px 14px rgba(201,162,39,.18),inset 0 1px 0 rgba(245,215,110,.25);}
-  100%{box-shadow:0 14px 38px rgba(60,38,20,.4),0 8px 22px rgba(245,215,110,.28),inset 0 1px 0 rgba(245,215,110,.35);}
-}
-@keyframes sp-border-shimmer{
-  0%{background-position:0% 50%;}
-  100%{background-position:200% 50%;}
-}
-@keyframes sp-orb-pulse{
-  0%,100%{transform:scale(1) translate(0,0);opacity:.7;}
-  50%{transform:scale(1.15) translate(-10px,10px);opacity:1;}
-}
-.sp-hero-inner{ position:relative;z-index:2;display:flex;align-items:center;gap:16px; }
+.sp-hero-inner{ position:relative;z-index:1;display:flex;align-items:center;gap:14px; }
 .sp-hero-icon{
-  width:60px;height:60px;
-  background:
-    radial-gradient(circle at 30% 30%,#fff5c0 0%,#f5d76e 25%,#c9a227 55%,#7a5818 100%);
-  border-radius:16px;
+  width:52px;height:52px;
+  background:linear-gradient(135deg,#f5d76e,#c9a227 60%,#7a6418);
+  border-radius:13px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:
-    0 0 0 1px #fdfaf2,
-    0 0 0 3px rgba(245,215,110,.6),
-    0 8px 22px rgba(201,162,39,.5),
-    inset 0 -3px 6px rgba(122,84,5,.35),
-    inset 0 2px 4px rgba(255,250,220,.7);
-  flex-shrink:0;
-  position:relative;
-  animation:sp-icon-shine 3s ease-in-out infinite;
-}
-.sp-hero-icon::before{
-  content:'';position:absolute;
-  top:8px;right:10px;
-  width:18px;height:10px;
-  background:radial-gradient(ellipse,rgba(255,255,255,.85) 0%,transparent 70%);
-  border-radius:50%;
-  filter:blur(2px);
-}
-@keyframes sp-icon-shine{
-  0%,100%{transform:rotate(0deg);}
-  50%{transform:rotate(-3deg) scale(1.04);}
+  box-shadow:0 6px 16px rgba(201,162,39,.4),inset 0 -2px 0 rgba(0,0,0,.15);
+  border:2px solid #fdfaf2;flex-shrink:0;
 }
 .sp-hero-text{ flex:1;text-align:right; }
 .sp-hero-title{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:1.2rem;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:1.1rem;
   color:#fff;line-height:1.3;
-  letter-spacing:-.3px;
-  text-shadow:0 2px 6px rgba(0,0,0,.4);
 }
 .sp-hero-title .gold{
-  background:linear-gradient(180deg,#fff5c0 0%,#f5d76e 40%,#c9a227 80%);
+  background:linear-gradient(180deg,#f5d76e,#c9a227);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 2px 4px rgba(245,215,110,.4));
 }
 .sp-hero-sub{
-  font-family:Tajawal,sans-serif;font-size:.82rem;
-  color:#f5d76e;opacity:.9;margin-top:6px;line-height:1.6;
+  font-family:Tajawal,sans-serif;font-size:.78rem;
+  color:#f5d76e;opacity:.85;margin-top:4px;line-height:1.5;
 }
 
-/* ▓▓▓ TABS ▓▓▓ */
-.sp-tabs{ display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px; }
+/* ═══ التابات ═══ */
+.sp-tabs{ display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px; }
 .sp-tab{
-  background:linear-gradient(180deg,#fff 0%,#fdf6e3 100%);
-  border:1.5px solid #e6dec9;
-  border-radius:14px;
-  padding:12px 6px 11px;
-  cursor:pointer;text-align:center;
-  transition:all .35s cubic-bezier(.34,1.2,.64,1);
-  position:relative;
-  overflow:hidden;
-  box-shadow:
-    0 2px 6px rgba(60,38,20,.04),
-    inset 0 1px 0 rgba(255,255,255,.6);
+  background:#fff;border:1.5px solid #e6dec9;border-radius:11px;
+  padding:10px 6px;cursor:pointer;text-align:center;
+  transition:all .25s ease;position:relative;
 }
-.sp-tab::after{
-  content:'';position:absolute;
-  top:0;right:-100%;
-  width:100%;height:100%;
-  background:linear-gradient(120deg,transparent 30%,rgba(245,215,110,.35) 50%,transparent 70%);
-  pointer-events:none;
-  transition:right .7s ease;
-}
-.sp-tab:hover{
-  transform:translateY(-2px);
-  border-color:#c9a227;
-  box-shadow:0 6px 16px rgba(201,162,39,.18);
-}
-.sp-tab:hover::after{ right:100%; }
+.sp-tab:hover{ transform:translateY(-1px); }
 .sp-tab-icon{
-  width:38px;height:38px;margin:0 auto 7px;
+  width:32px;height:32px;margin:0 auto 5px;
   border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:#fff;
-  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
-  position:relative;
-  box-shadow:
-    0 4px 10px rgba(0,0,0,.18),
-    inset 0 -2px 3px rgba(0,0,0,.18),
-    inset 0 1px 2px rgba(255,255,255,.4);
+  color:#fff;transition:transform .2s ease;
 }
-.sp-tab[data-color="platinum"] .sp-tab-icon{
-  background:radial-gradient(circle at 30% 30%,#fff5c0 0%,#f5d76e 30%,#c9a227 70%,#7a5818 100%);
-  color:#2a1a0c;
-  box-shadow:
-    0 4px 12px rgba(245,215,110,.5),
-    inset 0 -2px 3px rgba(122,84,5,.3),
-    inset 0 1px 2px rgba(255,250,220,.6);
-}
-.sp-tab[data-color="gold"] .sp-tab-icon{
-  background:radial-gradient(circle at 30% 30%,#f5d76e 0%,#c9a227 50%,#7a6418 100%);
-  box-shadow:
-    0 4px 12px rgba(201,162,39,.45),
-    inset 0 -2px 3px rgba(122,84,5,.35),
-    inset 0 1px 2px rgba(255,250,220,.4);
-}
-.sp-tab[data-color="green"] .sp-tab-icon{
-  background:radial-gradient(circle at 30% 30%,#b8e07f 0%,#1a7a4a 50%,#0d5c36 100%);
-  box-shadow:
-    0 4px 12px rgba(26,122,74,.45),
-    inset 0 -2px 3px rgba(0,0,0,.25),
-    inset 0 1px 2px rgba(255,255,255,.3);
-}
-.sp-tab-name{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.86rem;color:#2a1a0c;
-  line-height:1.1;margin-bottom:3px;
-  letter-spacing:-.2px;
-}
-.sp-tab-tag{
-  font-family:Tajawal,sans-serif;font-size:.65rem;color:#7a5c00;
-  line-height:1;font-weight:700;
-}
+.sp-tab[data-color="platinum"] .sp-tab-icon{ background:linear-gradient(135deg,#f5d76e,#c9a227);color:#2a1a0c; }
+.sp-tab[data-color="gold"] .sp-tab-icon{ background:linear-gradient(135deg,#c9a227,#7a6418); }
+.sp-tab[data-color="green"] .sp-tab-icon{ background:linear-gradient(135deg,#97c459,#1a7a4a); }
+.sp-tab-name{ font-family:Cairo,sans-serif;font-weight:900;font-size:.82rem;color:#2a1a0c;line-height:1;margin-bottom:3px; }
+.sp-tab-tag{ font-family:Tajawal,sans-serif;font-size:.62rem;color:#7a5c00;line-height:1; }
 .sp-tab.active{
-  background:linear-gradient(180deg,#fff 0%,#fef9ec 60%,#fdf0c8 100%);
+  background:linear-gradient(180deg,#fdfaf2,#fff);
   border-color:#c9a227;
-  box-shadow:
-    0 0 0 1px #c9a227,
-    0 8px 22px rgba(201,162,39,.28),
-    inset 0 1px 0 rgba(255,255,255,.7);
-  transform:translateY(-3px);
+  box-shadow:0 4px 14px rgba(201,162,39,.18);
+  transform:translateY(-2px);
 }
-.sp-tab.active .sp-tab-icon{
-  transform:scale(1.1) rotate(-3deg);
-  animation:sp-tab-bounce 1.6s ease-in-out infinite;
-}
-@keyframes sp-tab-bounce{
-  0%,100%{transform:scale(1.1) rotate(-3deg);}
-  50%{transform:scale(1.15) rotate(3deg);}
-}
-.sp-tab.active::before{
-  content:'';position:absolute;
-  bottom:-2px;left:50%;transform:translateX(-50%);
-  width:42px;height:4px;
-  background:linear-gradient(90deg,transparent,#c9a227 20%,#f5d76e 50%,#c9a227 80%,transparent);
+.sp-tab.active .sp-tab-icon{ transform:scale(1.05); }
+.sp-tab.active::after{
+  content:'';position:absolute;bottom:-1.5px;left:50%;transform:translateX(-50%);
+  width:36px;height:3px;
+  background:linear-gradient(90deg,#c9a227,#f5d76e,#c9a227);
   border-radius:2px;
-  box-shadow:0 0 8px rgba(245,215,110,.6);
 }
 
-/* ▓▓▓ CONTENT CARD ▓▓▓ */
+/* ═══ بطاقة المحتوى ═══ */
 .sp-content{
-  background:linear-gradient(180deg,#fff 0%,#fefaeb 100%);
-  border:2px solid transparent;
-  border-radius:18px;
-  padding:18px 16px;
-  position:relative;
-  overflow:hidden;
-  background-clip:padding-box;
-  box-shadow:
-    0 10px 30px rgba(60,38,20,.1),
-    0 4px 12px rgba(201,162,39,.12),
-    inset 0 1px 0 rgba(255,255,255,.6);
-  animation:sp-content-in .5s cubic-bezier(.34,1.2,.64,1);
-}
-@keyframes sp-content-in{
-  from{opacity:0;transform:translateY(10px) scale(.98);}
-  to{opacity:1;transform:none;}
+  background:#fff;border:1.5px solid #c9a227;border-radius:14px;
+  padding:14px;position:relative;overflow:hidden;
 }
 .sp-content::before{
-  content:'';position:absolute;inset:0;
-  padding:2px;
-  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 20%,#c9a227 40%,#7a5818 60%,#c9a227 80%,#f5d76e 100%);
-  border-radius:18px;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  pointer-events:none;
-}
-.sp-content::after{
-  content:'';position:absolute;
-  top:0;right:0;left:0;
-  height:4px;
-  background:linear-gradient(90deg,transparent,#f5d76e 15%,#c9a227 50%,#f5d76e 85%,transparent);
-  box-shadow:0 0 12px rgba(245,215,110,.4);
+  content:'';position:absolute;top:0;right:0;left:0;height:3px;
+  background:linear-gradient(90deg,#f5d76e,#c9a227,#7a6418);
 }
 .sp-content-head{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;margin-bottom:14px;
-  padding-bottom:12px;
-  border-bottom:1px dashed rgba(201,162,39,.35);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;
 }
-.sp-tagline{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
-  color:#3d2614;flex:1;letter-spacing:-.2px;
-  line-height:1.4;
-}
+.sp-tagline{ font-family:Cairo,sans-serif;font-weight:700;font-size:.84rem;color:#5C3A1E;flex:1; }
 .sp-pitch{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.68rem;
-  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 60%,#c9a227 100%);
-  color:#3d2614;
-  border:1.5px solid #c9a227;
-  padding:5px 12px;border-radius:14px;
-  flex-shrink:0;
-  box-shadow:
-    0 3px 8px rgba(201,162,39,.3),
-    inset 0 -1px 2px rgba(122,84,5,.2),
-    inset 0 1px 1px rgba(255,255,255,.6);
-  text-shadow:0 1px 0 rgba(255,255,255,.4);
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.65rem;
+  background:linear-gradient(135deg,#fef9ec,#fff);
+  color:#7a5c00;border:1.5px solid #c9a227;
+  padding:4px 11px;border-radius:12px;flex-shrink:0;
 }
 
-/* ▓▓▓ PERKS ▓▓▓ */
+/* ═══ بطاقات المميزات ═══ */
 .sp-perks{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px;
 }
 @media (max-width:520px){ .sp-perks{ grid-template-columns:1fr 1fr; } }
 .sp-perk{
-  background:linear-gradient(180deg,#fff 0%,#fdf6e3 100%);
-  border:1.5px solid rgba(201,162,39,.3);
-  border-radius:12px;
-  padding:12px 8px;text-align:center;
-  transition:all .3s cubic-bezier(.34,1.2,.64,1);
-  position:relative;
-  overflow:hidden;
-  box-shadow:
-    0 2px 6px rgba(60,38,20,.04),
-    inset 0 1px 0 rgba(255,255,255,.5);
-}
-.sp-perk::before{
-  content:'';position:absolute;
-  top:-2px;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,#c9a227,transparent);
-  opacity:0;
-  transition:opacity .3s ease;
+  background:linear-gradient(180deg,#fdfaf2 0%,#fff 100%);
+  border:1px solid #e6dec9;border-radius:10px;
+  padding:10px 7px;text-align:center;
+  transition:all .25s ease;
 }
 .sp-perk:hover{
-  transform:translateY(-3px);
-  box-shadow:
-    0 8px 18px rgba(201,162,39,.22),
-    0 0 0 1px #c9a227;
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(201,162,39,.18);
   border-color:#c9a227;
 }
-.sp-perk:hover::before{ opacity:1; }
 .sp-perk-check{
-  width:32px;height:32px;margin:0 auto 7px;
-  background:
-    radial-gradient(circle at 30% 30%,#fff5c0 0%,#f5d76e 30%,#c9a227 65%,#7a5818 100%);
+  width:28px;height:28px;margin:0 auto 6px;
+  background:linear-gradient(135deg,#f5d76e 0%,#c9a227 60%,#7a6418 100%);
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   color:#2a1a0c;
-  box-shadow:
-    0 0 0 1px #fdfaf2,
-    0 0 0 2px rgba(245,215,110,.4),
-    0 4px 10px rgba(201,162,39,.4),
-    inset 0 -2px 3px rgba(122,84,5,.3),
-    inset 0 1px 2px rgba(255,250,220,.6);
-  position:relative;
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-}
-.sp-perk-check::before{
-  content:'';position:absolute;
-  top:5px;right:7px;
-  width:10px;height:6px;
-  background:radial-gradient(ellipse,rgba(255,255,255,.8) 0%,transparent 70%);
-  border-radius:50%;
-  filter:blur(1.5px);
-}
-.sp-perk:hover .sp-perk-check{
-  transform:scale(1.12) rotate(8deg);
+  box-shadow:0 3px 8px rgba(201,162,39,.4),inset 0 -1px 0 rgba(0,0,0,.15);
+  border:1.5px solid #fdfaf2;
 }
 .sp-perk-text{
-  font-family:Tajawal,sans-serif;font-size:.78rem;color:#3d2614;
-  line-height:1.5;font-weight:700;
-  letter-spacing:-.1px;
+  font-family:Tajawal,sans-serif;font-size:.75rem;color:#3d2614;
+  line-height:1.4;font-weight:600;
 }
 
-/* ▓▓▓ CTA ▓▓▓ */
+/* ═══ زر CTA ═══ */
 .sp-cta{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  padding:13px;
-  background:
-    linear-gradient(135deg,#5C3A1E 0%,#3d2614 50%,#2a1a0c 100%);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px;
+  background:linear-gradient(135deg,#5C3A1E,#2a1a0c);
   color:#f5d76e;
-  border:2px solid transparent;
-  border-radius:13px;
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
+  border:1.5px solid #c9a227;
+  border-radius:10px;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.88rem;
   cursor:pointer;width:100%;
-  box-shadow:
-    0 6px 16px rgba(92,58,30,.32),
-    inset 0 1px 0 rgba(245,215,110,.15);
-  transition:all .35s cubic-bezier(.34,1.2,.64,1);
+  box-shadow:0 4px 12px rgba(92,58,30,.25);
+  transition:all .25s ease;
   text-decoration:none;
-  position:relative;
-  overflow:hidden;
-  background-clip:padding-box;
 }
-.sp-cta::before{
-  content:'';position:absolute;inset:0;
-  padding:2px;
-  background:linear-gradient(135deg,#f5d76e,#c9a227 50%,#f5d76e);
-  border-radius:13px;
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  pointer-events:none;
-}
-.sp-cta::after{
-  content:'';position:absolute;
-  top:0;left:-100%;width:60%;height:100%;
-  background:linear-gradient(110deg,transparent 30%,rgba(245,215,110,.25) 50%,transparent 70%);
-  transition:left .8s ease;
-  pointer-events:none;
-}
-.sp-cta:hover{
-  transform:translateY(-2px);
-  box-shadow:
-    0 10px 22px rgba(92,58,30,.42),
-    0 0 30px rgba(245,215,110,.2),
-    inset 0 1px 0 rgba(245,215,110,.25);
-  color:#fff5c0;
-}
-.sp-cta:hover::after{ left:120%; }
-.sp-cta:active{ transform:translateY(0) scale(.98); }
+.sp-cta:hover{ transform:translateY(-1px);box-shadow:0 6px 16px rgba(92,58,30,.35); }
 .sp-cta.green{
-  background:linear-gradient(135deg,#1a7a4a 0%,#0d5c36 100%);
-  color:#fff;
-}
-.sp-cta.green::before{
-  background:linear-gradient(135deg,#97c459,#1a7a4a 50%,#97c459);
+  background:linear-gradient(135deg,#1a7a4a,#0d5c36);
+  color:#fff;border-color:#97c459;
 }
 
-body.dark-mode .sp-content{ background:linear-gradient(180deg,#1a1410 0%,#241a10 100%); }
+body.dark-mode .sp-content{ background:#1a1410;border-color:#7a6418; }
 body.dark-mode .sp-tab{ background:#1a1410;border-color:#3d2614; }
 body.dark-mode .sp-tab.active{ background:#2a1a0c; }
 body.dark-mode .sp-tab-name{ color:#f5d76e; }
@@ -29940,7 +29391,8 @@ const HH_SPONSORS_DEFAULT = {
       perks: [
         'شكر علني على المنصة',
         'فئة باسم الشريك',
-        'تعريف للمعلمين'
+        'تعريف للمعلمين',
+        'تواصل ومتابعة دورية'
       ],
       ctaText: 'تواصل معنا للشراكة',
       ctaLink: 'https://wa.me/97471776644',
@@ -31238,6 +30690,7 @@ function renderCatsFab(){
           '<div class="cats-fab-item-icon" style="--ic:'+iconColor+';">'+firstChar+'</div>'+
           '<div class="cats-fab-item-info">'+
             '<div class="cats-fab-item-name" title="'+label.replace(/"/g,'&quot;')+'">'+label+'</div>'+
+            '<div class="cats-fab-item-meta">'+qCount+' سؤال</div>'+
           '</div>'+
           '<button type="button" class="cats-fab-item-remove" onclick="removeCat(\''+safeCat+'\')" aria-label="حذف">'+
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
