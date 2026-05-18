@@ -1954,72 +1954,128 @@ body.dark-mode .ae-pillar-hint{ color:#9ab0a4; }
 }
 .an-card{
   position:relative;overflow:hidden;
-  background:#fff;
-  border:1px solid rgba(201,162,39,.3);
-  border-radius:14px;
-  padding:18px 18px 16px;
+  background:linear-gradient(180deg,#fffef9 0%,#fdfaef 100%);
+  border:1.5px solid rgba(201,162,39,.4);
+  border-radius:18px;
+  padding:20px 20px 18px;
   cursor:pointer;
-  transition:all .25s ease;
+  transition:all .35s cubic-bezier(.34,1.2,.64,1);
   font-family:'Tajawal','Cairo',sans-serif;
-  box-shadow:0 3px 10px rgba(60,38,20,.06);
+  box-shadow:
+    0 2px 8px rgba(92,58,30,.05),
+    0 0 0 1px rgba(255,255,255,.6) inset;
 }
+/* الشريط العلوي الذهبي - متدرج فاخر */
 .an-card::before{
-  content:'';position:absolute;top:0;right:0;left:0;height:3px;
-  background:var(--an-accent,#c9a227);
-  opacity:.85;
+  content:'';position:absolute;top:0;right:0;left:0;height:4px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    var(--an-accent,#c9a227) 15%,
+    var(--an-accent,#c9a227) 85%,
+    transparent 100%);
+  opacity:.9;
+  border-radius:18px 18px 0 0;
+}
+/* لمعة ذهبية ناعمة في الزاوية */
+.an-card::after{
+  content:'';position:absolute;top:-20px;left:-20px;
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle,rgba(252,223,101,.25) 0%,transparent 70%);
+  pointer-events:none;
+  transition:all .5s ease;
+  opacity:0;
 }
 .an-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 22px rgba(60,38,20,.12);
+  transform:translateY(-4px);
+  box-shadow:
+    0 18px 38px rgba(60,38,20,.16),
+    0 0 0 2px var(--an-accent,#c9a227) inset,
+    0 0 30px rgba(201,162,39,.2);
   border-color:var(--an-accent,#c9a227);
+}
+.an-card:hover::after{
+  opacity:1;
+  transform:scale(1.5);
 }
 .an-card.open{
   border-color:var(--an-accent,#c9a227);
-  box-shadow:0 8px 22px rgba(60,38,20,.14);
+  border-width:2px;
+  box-shadow:
+    0 14px 36px rgba(60,38,20,.18),
+    0 0 50px rgba(201,162,39,.15);
   grid-column:1/-1;
+  background:linear-gradient(180deg,#fffef9 0%,#fdf7e3 100%);
 }
+.an-card.open::after{opacity:.8;transform:scale(1.8);}
 
-.an-card-head{display:flex;align-items:flex-start;gap:12px;}
+.an-card-head{display:flex;align-items:center;gap:14px;}
 .an-card-icon{
-  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  width:46px;height:46px;border-radius:12px;flex-shrink:0;
   background:var(--an-accent-soft,rgba(201,162,39,.15));
   color:var(--an-accent,#7a5c00);
   display:flex;align-items:center;justify-content:center;
-  transition:all .25s ease;
+  transition:all .35s cubic-bezier(.34,1.2,.64,1);
+  box-shadow:
+    0 3px 10px rgba(60,38,20,.1),
+    0 0 0 3px rgba(255,255,255,.5);
+  position:relative;
+}
+/* حلقة ذهبية حول الأيقونة */
+.an-card-icon::after{
+  content:'';position:absolute;inset:-4px;border-radius:14px;
+  border:1.5px solid transparent;
+  transition:all .3s ease;
 }
 .an-card:hover .an-card-icon{
   background:var(--an-accent,#c9a227);
   color:#fff;
+  transform:scale(1.08) rotate(-3deg);
+  box-shadow:
+    0 8px 20px rgba(60,38,20,.2),
+    0 0 0 3px rgba(201,162,39,.25);
+}
+.an-card:hover .an-card-icon::after{
+  border-color:var(--an-accent,#c9a227);
+  inset:-6px;
+}
+.an-card.open .an-card-icon{
+  background:var(--an-accent,#c9a227);
+  color:#fff;
   transform:scale(1.05);
 }
-.an-card-icon svg{width:20px;height:20px;}
+.an-card-icon svg{width:22px;height:22px;}
+
 .an-card-info{flex:1;min-width:0;}
 .an-card-title{
   font-family:'Cairo',sans-serif;font-weight:900;
-  font-size:1rem;color:#3d2614;
-  line-height:1.3;letter-spacing:-.2px;
+  font-size:1.05rem;color:#2a1a0c;
+  line-height:1.3;letter-spacing:-.3px;
 }
 .an-card-hint{
-  font-size:.74rem;color:#7a5c00;font-weight:600;
-  margin-top:2px;line-height:1.4;
+  font-size:.76rem;color:#8a6c1c;font-weight:700;
+  margin-top:3px;line-height:1.4;
+  opacity:.9;
 }
 .an-card-chev{
   color:var(--an-accent,#c9a227);
   width:14px;height:14px;flex-shrink:0;
-  margin-top:14px;
-  transition:transform .3s;
+  margin-top:18px;
+  transition:transform .4s cubic-bezier(.34,1.2,.64,1);
+  opacity:.7;
 }
-.an-card.open .an-card-chev{transform:rotate(180deg);}
+.an-card:hover .an-card-chev{opacity:1;transform:translateY(2px);}
+.an-card.open .an-card-chev{transform:rotate(180deg);opacity:1;}
 
 .an-card-body{
   max-height:0;overflow:hidden;
-  transition:max-height .45s ease, opacity .3s ease;
+  transition:max-height .5s ease, opacity .35s ease;
   opacity:0;
 }
 .an-card.open .an-card-body{
-  max-height:1500px;opacity:1;
-  margin-top:14px;padding-top:14px;
-  border-top:1.5px dashed var(--an-accent,#c9a227);
+  max-height:2000px;opacity:1;
+  margin-top:16px;padding-top:16px;
+  border-top:1.5px solid;
+  border-image:linear-gradient(90deg,transparent 0%,var(--an-accent,#c9a227) 50%,transparent 100%) 1;
 }
 
 /* أنماط المحتوى الداخلي */
@@ -2102,11 +2158,13 @@ body.dark-mode .ae-pillar-hint{ color:#9ab0a4; }
 .an-card[data-card="essence"]{--an-accent:#c9a227;--an-accent-soft:rgba(201,162,39,.15);}
 .an-card[data-card="goals"]{--an-accent:#1a7a4a;--an-accent-soft:rgba(26,122,74,.12);}
 .an-card[data-card="values"]{--an-accent:#8D1B3D;--an-accent-soft:rgba(141,27,61,.12);}
+.an-card[data-card="founder"]{--an-accent:#185fa5;--an-accent-soft:rgba(24,95,165,.12);}
 
 .an-card[data-card="why"] .an-card-icon{background:linear-gradient(135deg,#5C3A1E,#3d2614);color:#f5d76e;}
 .an-card[data-card="essence"] .an-card-icon{background:linear-gradient(135deg,#c9a227,#7a6418);color:#fff;}
 .an-card[data-card="goals"] .an-card-icon{background:linear-gradient(135deg,#1a7a4a,#0f5a33);color:#fff;}
 .an-card[data-card="values"] .an-card-icon{background:linear-gradient(135deg,#8D1B3D,#5e0f27);color:#fff;}
+.an-card[data-card="founder"] .an-card-icon{background:linear-gradient(135deg,#185fa5,#0c447c);color:#fff;}
 
 .an-card:hover[data-card] .an-card-icon{transform:scale(1.05);}
 
@@ -8434,61 +8492,86 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 .ms-tab{
   flex-shrink:0;
   position:relative;
-  padding:13px 22px 13px 14px;
+  padding:11px 20px 11px 14px;
   background:transparent;
   border:none;
-  border-right:1px solid rgba(201,162,39,.15);
+  border-right:1px solid rgba(201,162,39,.18);
   color:#5C3A1E;
-  font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:600;
+  font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;
   cursor:pointer;white-space:nowrap;
-  transition:all .35s ease;
+  transition:all .35s cubic-bezier(.34,1.2,.64,1);
   display:inline-flex;align-items:center;gap:9px;
   user-select:none;
   letter-spacing:-.1px;
 }
 .ms-tab:last-child{border-right:none;}
 .ms-tab:hover{
-  background:var(--cbg,#fef9ec);
-  opacity:.9;
+  background:linear-gradient(180deg,var(--cbg,#fef9ec) 0%,rgba(255,255,255,.6) 100%);
 }
 .ms-tab:hover .ms-tab-name{color:var(--cd,#3d2614);}
+.ms-tab:hover .ms-tab-icon{
+  color:var(--c,#c9a227);
+  transform:scale(1.1);
+}
+
+/* 🎨 أيقونة التاب */
+.ms-tab-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;
+  color:#9a7c3a;
+  transition:all .3s cubic-bezier(.34,1.2,.64,1);
+  flex-shrink:0;
+  opacity:.75;
+}
+.ms-tab-icon svg{width:100%;height:100%;display:block;}
 
 /* النقطة الجانبية الملوّنة */
 .ms-tab::after{
   content:'';
   position:absolute;
-  top:50%;right:8px;
+  top:50%;right:7px;
   transform:translateY(-50%);
-  width:7px;height:7px;
+  width:6px;height:6px;
   border-radius:50%;
   background:var(--c,#c9a227);
   transition:all .3s ease;
-  opacity:.7;
+  opacity:.5;
 }
 .ms-tab:hover::after{
   opacity:1;
   box-shadow:0 0 0 3px var(--cglow,rgba(201,162,39,.2));
 }
 
-/* الحالة النشطة: Triple Layer (نقطة + شريط علوي + خلفية ملوّنة) */
+/* الحالة النشطة: تصميم فاخر */
 .ms-tab.active{
   background:linear-gradient(180deg,var(--cbg,#fef9ec) 0%,#fff 100%);
   color:var(--cd,#3d2614);
-  font-weight:700;
+  font-weight:900;
+  box-shadow:
+    inset 0 -1px 0 var(--c,#c9a227),
+    0 2px 8px rgba(60,38,20,.05);
 }
 .ms-tab.active::before{
   content:'';
   position:absolute;
-  top:0;left:0;right:0;
-  height:2.5px;
-  background:linear-gradient(90deg,transparent,var(--c,#c9a227) 50%,transparent);
-  box-shadow:0 0 8px var(--cglow,rgba(201,162,39,.4));
+  top:0;left:8%;right:8%;
+  height:3px;
+  background:linear-gradient(90deg,transparent 0%,var(--c,#c9a227) 30%,#f5d76e 50%,var(--c,#c9a227) 70%,transparent 100%);
+  border-radius:0 0 3px 3px;
+  box-shadow:0 0 12px var(--cglow,rgba(201,162,39,.5));
 }
 .ms-tab.active::after{
   opacity:1;
-  width:8px;height:8px;
+  width:7px;height:7px;
   background:var(--c,#c9a227);
-  box-shadow:0 0 12px var(--cglow,rgba(201,162,39,.6));
+  box-shadow:
+    0 0 12px var(--cglow,rgba(201,162,39,.6)),
+    0 0 0 2px rgba(255,255,255,.8);
+}
+.ms-tab.active .ms-tab-icon{
+  color:var(--c,#c9a227);
+  opacity:1;
+  transform:scale(1.05);
 }
 
 /* ألوان لكل تاب */
@@ -8499,34 +8582,143 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 .ms-tab[data-tab-id="elite"]{--c:#c9a227;--cd:#7a6418;--cbg:#fef5d3;--cglow:rgba(245,215,110,.6);}
 .ms-tab[data-tab-id="mine"]{--c:#534AB7;--cd:#3C3489;--cbg:#eeedfe;--cglow:rgba(83,74,183,.4);}
 
-/* عداد الأسئلة - أنيق وواضح */
+/* عداد الأسئلة - فاخر مع إطار ذهبي رقيق */
 .ms-tab-count{
-  background:#fef9ec;
-  color:#a08660;
-  padding:2px 9px;border-radius:10px;
-  font-size:.68rem;font-weight:600;
+  background:linear-gradient(180deg,#fffef9 0%,#fef6dc 100%);
+  color:#8a6c1c;
+  padding:2.5px 9px;border-radius:12px;
+  font-size:.66rem;font-weight:900;
   font-family:'Cairo',sans-serif;
-  min-width:24px;text-align:center;
-  border:1px solid rgba(201,162,39,.3);
+  min-width:22px;text-align:center;
+  border:1.2px solid rgba(201,162,39,.35);
   font-variant-numeric:tabular-nums;
   letter-spacing:.3px;
   transition:all .3s ease;
+  box-shadow:0 1px 3px rgba(201,162,39,.1);
 }
 .ms-tab.active .ms-tab-count{
-  background:#fff;
+  background:linear-gradient(180deg,#fff 0%,var(--cbg,#fef9ec) 100%);
   color:var(--c,#7a5c00);
   border-color:var(--c,#c9a227);
-  font-weight:700;
+  font-weight:900;
+  box-shadow:0 2px 6px var(--cglow,rgba(201,162,39,.2));
 }
+
+/* جوال */
+@media (max-width:520px){
+  .ms-tab{padding:10px 16px 10px 12px;font-size:.76rem;gap:7px;}
+  .ms-tab-icon{width:15px;height:15px;}
+  .ms-tab-count{font-size:.62rem;padding:2px 7px;}
+}
+
+/* 🔍 شريط البحث السريع في الفئات */
+.ms-search-wrap{
+  position:relative;
+  display:flex;align-items:center;
+  margin:8px 0 10px;
+  height:0;overflow:hidden;
+  transition:all .35s cubic-bezier(.34,1.2,.64,1);
+}
+.ms-search-wrap .ms-search-btn{
+  position:absolute;top:-44px;left:0;
+  width:32px;height:32px;
+  background:linear-gradient(135deg,#fffef9 0%,#fef6dc 100%);
+  border:1.5px solid rgba(201,162,39,.4);
+  border-radius:50%;
+  color:#8a6c1c;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s ease;
+  box-shadow:0 3px 10px rgba(60,38,20,.08);
+  z-index:5;
+}
+.ms-search-wrap .ms-search-btn:hover{
+  border-color:#c9a227;color:#5C3A1E;
+  transform:scale(1.08) rotate(8deg);
+  box-shadow:0 6px 16px rgba(201,162,39,.25);
+}
+.ms-search-wrap .ms-search-btn svg{width:15px;height:15px;}
+
+.ms-search-wrap.active{
+  height:46px;
+  margin:10px 0 14px;
+}
+.ms-search-wrap.active .ms-search-btn{
+  position:absolute;top:50%;right:12px;left:auto;
+  transform:translateY(-50%);
+  width:24px;height:24px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  color:#9a7c3a;
+  pointer-events:none;
+}
+.ms-search-wrap.active .ms-search-btn:hover{transform:translateY(-50%);}
+
+.ms-search-input{
+  width:100%;
+  padding:11px 42px 11px 44px;
+  background:linear-gradient(180deg,#fffef9 0%,#fdfaef 100%);
+  border:1.5px solid rgba(201,162,39,.4);
+  border-radius:14px;
+  font-family:'Tajawal','Cairo',sans-serif;
+  font-size:.92rem;color:#3d2614;
+  outline:none;
+  transition:all .25s ease;
+  box-shadow:
+    0 4px 12px rgba(60,38,20,.06),
+    0 0 0 0 var(--cglow,rgba(201,162,39,0));
+  display:none;
+}
+.ms-search-wrap.active .ms-search-input{display:block;}
+.ms-search-input:focus{
+  border-color:#c9a227;
+  box-shadow:
+    0 6px 18px rgba(201,162,39,.18),
+    0 0 0 3px rgba(252,223,101,.2);
+}
+.ms-search-input::placeholder{color:#a08660;font-weight:500;}
+
+.ms-search-clear{
+  position:absolute;top:50%;left:8px;
+  transform:translateY(-50%);
+  width:28px;height:28px;
+  background:rgba(141,27,61,.08);
+  border:none;
+  border-radius:50%;
+  color:#8D1B3D;
+  cursor:pointer;
+  display:none;
+  align-items:center;justify-content:center;
+  transition:all .25s ease;
+}
+.ms-search-wrap.active .ms-search-clear{display:flex;}
+.ms-search-clear:hover{
+  background:#8D1B3D;color:#fff;
+  transform:translateY(-50%) rotate(90deg);
+}
+.ms-search-clear svg{width:14px;height:14px;}
+
+/* الوضع المظلم */
+body.dark-mode .ms-search-wrap .ms-search-btn{
+  background:#2a1a0c;border-color:#7a6418;color:#f5d76e;
+}
+body.dark-mode .ms-search-input{
+  background:#1a1410;border-color:#7a6418;color:#fdfaef;
+}
+body.dark-mode .ms-search-input::placeholder{color:#a08660;}
 
 /* شبكة البطاقات المسطحة (تستخدم نفس .cat-btn القديم!) */
 .ms-cat-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);gap:9px;
+  grid-template-columns:repeat(3,1fr);gap:8px;
   margin-bottom:8px;
 }
 @media (min-width:600px){
   .ms-cat-grid{grid-template-columns:repeat(4,1fr);gap:10px;}
+}
+@media (min-width:900px){
+  .ms-cat-grid{grid-template-columns:repeat(5,1fr);gap:11px;}
 }
 
 /* تحسينات على .cat-btn ضمن السياق الجديد فقط */
@@ -8602,15 +8794,16 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 .ms-group-header{
   grid-column:1/-1;
   display:flex;align-items:center;gap:10px;
-  padding:10px 12px;margin:6px 0 4px;
+  padding:8px 12px;margin:4px 0 3px;
   background:linear-gradient(135deg,#fdfaf2 0%,#fef9ec 100%);
-  border-right:4px solid var(--mgh-accent,#c9a227);
-  border-radius:9px;
+  border-right:3px solid var(--mgh-accent,#c9a227);
+  border-radius:8px;
   font-family:'Cairo',sans-serif;
   cursor:pointer;
   user-select:none;
   transition:all .2s ease;
   position:relative;
+  min-height:42px;
 }
 .ms-group-header:hover{
   background:linear-gradient(135deg,#fef9ec 0%,#fbf3da 100%);
@@ -8663,26 +8856,29 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 }
 .ms-group-header.collapsed:hover::after{opacity:.7;}
 .ms-group-header-icon{
-  width:34px;height:34px;border-radius:9px;
+  width:28px;height:28px;border-radius:7px;
   background:var(--mgh-accent,#c9a227);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
-  box-shadow:0 3px 8px rgba(0,0,0,.15);
+  box-shadow:0 2px 6px rgba(0,0,0,.12);
 }
-.ms-group-header-icon svg{width:18px;height:18px;display:block;}
-.ms-group-header-info{flex:1;min-width:0;}
+.ms-group-header-icon svg{width:15px;height:15px;display:block;}
+.ms-group-header-info{flex:1;min-width:0;display:flex;align-items:center;gap:8px;}
 .ms-group-header-title{
-  font-weight:900;font-size:.92rem;color:#3d2614;
-  line-height:1.3;letter-spacing:-.2px;
+  font-weight:900;font-size:.86rem;color:#3d2614;
+  line-height:1.2;letter-spacing:-.2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .ms-group-header-sub{
-  font-size:.7rem;color:#7a5c00;font-weight:700;margin-top:2px;
+  font-size:.66rem;color:#7a5c00;font-weight:700;
+  white-space:nowrap;
+  opacity:.85;
 }
 .ms-group-header-count{
   background:#fff;color:#3d2614;
   border:1.5px solid var(--mgh-accent,#c9a227);
-  padding:3px 11px;border-radius:13px;
-  font-weight:900;font-size:.74rem;
+  padding:2px 9px;border-radius:11px;
+  font-weight:900;font-size:.7rem;
   white-space:nowrap;flex-shrink:0;
 }
 
@@ -8714,12 +8910,38 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 .ms-cat-grid .cat-btn[data-palette="p10"]{background:linear-gradient(135deg,#0f6e56 0%,#08503e 100%);}
 
 @media (max-width:560px){
-  .ms-group-header{padding:8px 10px;gap:8px;}
-  .ms-group-header-icon{width:28px;height:28px;}
-  .ms-group-header-icon svg{width:15px;height:15px;}
-  .ms-group-header-title{font-size:.84rem;}
-  .ms-group-header-sub{font-size:.64rem;}
-  .ms-group-header-count{font-size:.68rem;padding:2px 9px;}
+  .ms-group-header{padding:7px 10px;gap:7px;min-height:38px;}
+  .ms-group-header-icon{width:24px;height:24px;border-radius:6px;}
+  .ms-group-header-icon svg{width:13px;height:13px;}
+  .ms-group-header-title{font-size:.78rem;}
+  .ms-group-header-sub{font-size:.6rem;}
+  .ms-group-header-count{font-size:.66rem;padding:2px 7px;}
+  .ms-group-header-info{gap:6px;}
+  /* على الجوال نخفي subtitle لتركيز أكبر على العنوان */
+  .ms-group-header-sub{display:none;}
+}
+
+/* ─── تحسين النصوص داخل البطاقات للحجم الصغير ─── */
+@media (min-width:900px){
+  .ms-cat-grid .cat-btn .ci-lbl{
+    font-size:.66rem;
+    padding:7px 5px 6px;
+    min-height:28px;
+  }
+  .ms-cat-qcount{
+    font-size:.58rem;
+    padding:1.5px 6px;
+    top:5px;right:5px;
+  }
+}
+/* الجوال - بطاقات أصغر شوية */
+@media (max-width:480px){
+  .ms-cat-grid .cat-btn .ci-lbl{
+    font-size:.66rem;
+    padding:6px 4px 5px;
+    min-height:26px;
+  }
+  .ms-cat-qcount{font-size:.56rem;padding:1.5px 5px;}
 }
 
 /* شريط سفلي مُرقّى — ضمن السياق الجديد */
@@ -10412,13 +10634,13 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           <span>الرعاة والداعمون</span>
         </button></li>
-        <li><button class="nav-link" data-section="story" onclick="hhNavigate('screen-about')">
+        <li><button class="nav-link" data-section="story" onclick="hhNavigate('screen-story')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           <span>قصتنا</span>
         </button></li>
-        <li><button class="nav-link" data-section="about" onclick="hhNavigate('screen-about')" title="عن المنصة">
+        <li><button class="nav-link" data-section="about" onclick="hhNavigate('screen-about')" title="عن الملهم">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <span>عن المنصة</span>
+          <span>عن الملهم</span>
         </button></li>
       </ul>
 
@@ -10493,7 +10715,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         <span>الرعاة والداعمون</span>
       </button>
-      <button class="mobile-menu-link" data-section="story" onclick="hhNavigate('screen-about');closeMobileMenu();">
+      <button class="mobile-menu-link" data-section="story" onclick="hhNavigate('screen-story');closeMobileMenu();">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         <span>قصتنا</span>
       </button>
@@ -12976,13 +13198,13 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 <div class="screen" id="screen-about">
   <div class="top-bar">
     <button class="btn btn-outline btn-sm" onclick="goBack()">رجوع</button>
-    <div style="font-weight:900;">من نحن</div>
+    <div style="font-weight:900;">عن الملهم</div>
     <div></div>
   </div>
   <div class="about-section" style="padding-bottom:30px;">
     <div class="an-wrapper">
 
-      <!-- 🏛️ HERO — يدمج رؤية قطر + تعريف المنصة -->
+      <!-- 🏛️ HERO -->
       <div class="an-hero">
         <div class="an-hero-row">
           <div class="an-hero-icon">
@@ -12991,9 +13213,9 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             </svg>
           </div>
           <div class="an-hero-text">
-            <div class="an-hero-eyebrow">منصة الملهم</div>
+            <div class="an-hero-eyebrow">منصة الملهم التعليمية</div>
             <div class="an-hero-title">حيث يبدأ الإلهام</div>
-            <div class="an-hero-tagline">منصة تربوية تعين المعلم أن يترك أثرا حقيقيا في طلابه</div>
+            <div class="an-hero-tagline">منصة قطرية صنعها معلم لزملائه — شريك في رحلة صناعة الأثر</div>
           </div>
         </div>
 
@@ -13004,10 +13226,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         </div>
       </div>
 
-      <!-- 📚 4 بطاقات نظيفة -->
+      <!-- 📚 البطاقات الخمس -->
       <div class="an-cards">
 
-        <!-- ① لماذا الملهم؟ (يدمج الرؤية) -->
+        <!-- ① لماذا الملهم؟ -->
         <div class="an-card" data-card="why" onclick="anToggleCard(this)">
           <div class="an-card-head">
             <div class="an-card-icon">
@@ -13017,18 +13239,18 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             </div>
             <div class="an-card-info">
               <div class="an-card-title">لماذا «الملهم»؟</div>
-              <div class="an-card-hint">سر الاسم والرؤية</div>
+              <div class="an-card-hint">قصة الاسم والرسالة</div>
             </div>
             <svg class="an-card-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
           </div>
           <div class="an-card-body">
             <div class="an-body-text">
-              <p>المعلم الحقيقي لا يكتفي بشرح الدرس، بل <strong>يلهم</strong> طلابه ويترك <strong>رسالة خالدة</strong> في قلوبهم.</p>
-              <p style="margin-top:10px;">فمهما تبدلت الأزمان، يبقى أثر المعلم الملهم حيا في طلابه — يضيء لهم الدروب كلما اشتد ظلامها.</p>
+              <p>في كل فصل دراسي معلم لا يُنسى — ليس لأنه أعطى أكثر الدروس، بل لأنه ترك <strong>أثرًا في الأرواح</strong>.</p>
+              <p style="margin-top:10px;">هذا المعلم لا يُلقّن، بل <strong>يُلهم</strong>. لا يملأ العقول، بل يُشعل فيها <strong>شغف المعرفة</strong>.</p>
             </div>
-            <div class="an-quote">«كم من معلم لا يذكره التاريخ، لكن طلابه يذكرونه إلى الأبد...»</div>
+            <div class="an-quote">«كم من معلم لا يذكره التاريخ، لكن طلابه يذكرونه إلى الأبد»</div>
             <div class="an-body-text" style="margin-top:12px;">
-              ولهذا سُميت <strong>«الملهم»</strong> — لتكون منصة تعينك أن تكون <strong>المعلم الملهم</strong>، وتسهم في تحقيق رؤية قطر 2030 من خلال تعليم تفاعلي ممتع ومؤثر.
+              من هنا وُلدت <strong>«الملهم»</strong> — لتكون يدًا تمتد للمعلم، وتسهم في تحقيق <strong>رؤية قطر 2030</strong> بجيل يحبّ التعلم.
             </div>
           </div>
         </div>
@@ -13052,22 +13274,22 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
               <div class="an-pillar">
                 <div class="an-pillar-num">1</div>
                 <div class="an-pillar-info">
-                  <div class="an-pillar-title">وقت وجهد أقل للمعلم</div>
-                  <div class="an-pillar-desc">أدوات جاهزة تختصر التحضير وتحرر طاقتك للأهم</div>
+                  <div class="an-pillar-title">وقت أقل... أثر أعمق</div>
+                  <div class="an-pillar-desc">أدوات جاهزة تختصر التحضير، فتتفرّغ لما يستحق وقتك: طلابك</div>
                 </div>
               </div>
               <div class="an-pillar">
                 <div class="an-pillar-num">2</div>
                 <div class="an-pillar-info">
-                  <div class="an-pillar-title">أثر أعمق في الطالب</div>
-                  <div class="an-pillar-desc">تعلم تفاعلي يبقى في الذاكرة طويلا</div>
+                  <div class="an-pillar-title">تفاعل يصنع الذاكرة</div>
+                  <div class="an-pillar-desc">حين يلعب الطالب يتعلّم، وحين يستمتع يتذكّر</div>
                 </div>
               </div>
               <div class="an-pillar">
                 <div class="an-pillar-num">3</div>
                 <div class="an-pillar-info">
                   <div class="an-pillar-title">قطرية الجوهر والهوية</div>
-                  <div class="an-pillar-desc">صنعت في قطر، لمعلمي قطر، بهوية قطرية أصيلة</div>
+                  <div class="an-pillar-desc">صُنعت في قطر، لمعلمي قطر، بهوية لا تُستعار</div>
                 </div>
               </div>
             </div>
@@ -13086,7 +13308,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             </div>
             <div class="an-card-info">
               <div class="an-card-title">أهدافنا</div>
-              <div class="an-card-hint">ما نسعى إليه</div>
+              <div class="an-card-hint">الرحلة التي نسير فيها</div>
             </div>
             <svg class="an-card-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
           </div>
@@ -13094,23 +13316,23 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             <div class="an-goals">
               <div class="an-goal">
                 <div class="an-goal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span>تحفيز الطلاب بالتنافس الإيجابي والمتعة</span>
+                <span>تحويل الفصل من مكان للحفظ إلى ساحة للشغف</span>
               </div>
               <div class="an-goal">
                 <div class="an-goal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span>تزويد المعلمين بأداة تفاعلية سهلة الاستخدام</span>
+                <span>تمكين كل معلم بأدوات احترافية ميسّرة</span>
               </div>
               <div class="an-goal">
                 <div class="an-goal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span>تغطية المناهج القطرية بأسئلة دقيقة ومصنفة</span>
+                <span>تغطية المناهج القطرية بمحتوى دقيق بُني بفلسفة تربوية</span>
               </div>
               <div class="an-goal">
                 <div class="an-goal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span>بناء مجتمع معلمين مبدعين يصنعون الأثر</span>
+                <span>بناء مجتمع تربوي قطري يصنع المحتوى لا يستهلكه</span>
               </div>
               <div class="an-goal">
                 <div class="an-goal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span>الوصول لكل فصل في قطر والعالم العربي</span>
+                <span>الوصول لكل فصل في قطر، ثم لكل فصل عربي</span>
               </div>
             </div>
           </div>
@@ -13126,7 +13348,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             </div>
             <div class="an-card-info">
               <div class="an-card-title">قيمنا</div>
-              <div class="an-card-hint">المبادئ التي نؤمن بها</div>
+              <div class="an-card-hint">المبادئ التي تحكمنا</div>
             </div>
             <svg class="an-card-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
           </div>
@@ -13134,26 +13356,50 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
             <div class="an-values">
               <div class="an-value">
                 <div class="an-value-name"><span class="an-value-num">1</span>الإلهام قبل التلقين</div>
-                <div class="an-value-desc">المعلم الحق يوقد شعلة، لا يملأ إناء — وكل أداة في المنصة مصممة لتخدم هذا المبدأ</div>
+                <div class="an-value-desc">نوقد الشعلة، لا نملأ الإناء</div>
               </div>
               <div class="an-value">
                 <div class="an-value-name"><span class="an-value-num">2</span>الإتقان في كل تفصيل</div>
-                <div class="an-value-desc">من التشكيل الصحيح على الحرف إلى تفاصيل التصميم — نعمل كأن الله يرانا، لأنه يرانا</div>
+                <div class="an-value-desc">نعمل كأن الله يرانا، لأنه يرانا</div>
               </div>
               <div class="an-value">
                 <div class="an-value-name"><span class="an-value-num">3</span>قطرية الجوهر</div>
-                <div class="an-value-desc">صنعت في قطر، لمعلمي قطر، تخدم رؤية قطر 2030 — هويتنا روح تسري في كل شيء</div>
+                <div class="an-value-desc">هويتنا روح تسري في كل شيء، لا شعار على غلاف</div>
               </div>
               <div class="an-value">
-                <div class="an-value-name"><span class="an-value-num">4</span>المعلم شريك، لا مستخدم</div>
-                <div class="an-value-desc">آراؤكم توجهنا، تجاربكم تحسننا، أفكاركم تصنع مستقبل المنصة</div>
+                <div class="an-value-name"><span class="an-value-num">4</span>المعلم شريك لا مستخدم</div>
+                <div class="an-value-desc">آراؤكم توجّهنا، وأفكاركم تصنع مستقبلنا</div>
               </div>
               <div class="an-value">
                 <div class="an-value-name"><span class="an-value-num">5</span>الأثر قبل العدد</div>
-                <div class="an-value-desc">لا نسعى لاستخدام الجموع، بل لترك أثر يدوم بعد إغلاق الشاشة</div>
+                <div class="an-value-desc">طالب واحد تأثّر = نجاح يستحق</div>
               </div>
             </div>
-            <div class="an-quote" style="margin-top:14px;text-align:center;">«معلم يصنع أثرا» — شعارنا الذي نحيا به</div>
+            <div class="an-quote" style="margin-top:14px;text-align:center;">«معلم يصنع أثرا»</div>
+          </div>
+        </div>
+
+        <!-- ⑤ كلمة من القلب -->
+        <div class="an-card" data-card="founder" onclick="anToggleCard(this)">
+          <div class="an-card-head">
+            <div class="an-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+              </svg>
+            </div>
+            <div class="an-card-info">
+              <div class="an-card-title">كلمة من القلب</div>
+              <div class="an-card-hint">من معلم لمعلم</div>
+            </div>
+            <svg class="an-card-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+          </div>
+          <div class="an-card-body">
+            <div class="an-body-text">
+              <p>كل فكرة في «الملهم» وُلدت من <strong>حصة حقيقية</strong>، ومن معلم تمنّى أداة تليق برسالته.</p>
+              <p style="margin-top:10px;">حين تستخدمها، اعلم أنك أمام <strong>عصارة تجربة ميدانية</strong> صاغها معلم يفهم ما تمرّ به.</p>
+              <p style="margin-top:10px;">إن وجدت فيها روحًا — فاعلم أنها روحك أنت، أيها المعلم.</p>
+            </div>
+            <div class="an-quote" style="margin-top:14px;text-align:center;">«صنعت لكم ما تمنّيت أن يصنعه لي أحد»</div>
           </div>
         </div>
 
@@ -13162,6 +13408,127 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
     </div>
   </div>
 </div>
+
+<!-- ═══════════════ شاشة قصتنا — رسالة ملهمة واحدة ═══════════════ -->
+<div class="screen" id="screen-story">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="goBack()">رجوع</button>
+    <div style="font-weight:900;">قصتنا</div>
+    <div></div>
+  </div>
+  <div class="about-section" style="padding:20px 16px 40px;">
+    <div class="story-message">
+
+      <!-- اقتباس بداية -->
+      <div class="story-eyebrow">قصة الملهم</div>
+
+      <!-- العنوان الكبير -->
+      <h1 class="story-title">
+        كانت <span class="gold">حصةً عادية</span>...<br>
+        فأصبحت <span class="gold">منصة</span>.
+      </h1>
+
+      <!-- زخرفة فاصلة -->
+      <div class="story-ornament">
+        <svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="10" x2="40" y2="10" stroke="currentColor" stroke-width="1"/>
+          <circle cx="50" cy="10" r="3" fill="currentColor"/>
+          <line x1="60" y1="10" x2="100" y2="10" stroke="currentColor" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <!-- النص الملهم -->
+      <div class="story-body">
+        <p>في حصةٍ عادية، لاحظ معلمٌ أن طلابه يحبّون اللعب أكثر من الاستماع.</p>
+        <p>ففكّر: <strong>لِمَ لا نحوّل التعلّمَ نفسَه إلى لعبةٍ ممتعةٍ دون أن يفقد عمقَه؟</strong></p>
+        <p>من تلك الفكرة وُلدت «الملهم» — أداةً صنعها معلمٌ على طاولته، فطلبها زملاؤه، ثم تحوّلت إلى منصةٍ يستخدمها <strong>آلاف المعلمين والطلاب</strong>.</p>
+      </div>
+
+      <!-- الاقتباس النهائي الفاخر -->
+      <div class="story-quote">
+        <svg class="story-quote-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M9.17 4A5.001 5.001 0 0 0 4 9v6h6V9H7c0-1.654 1.346-3 3-3V4zm10 0A5.001 5.001 0 0 0 14 9v6h6V9h-3c0-1.654 1.346-3 3-3V4z"/>
+        </svg>
+        <p>القصة لم تنتهِ بعد...<br>وأنت — أيها المعلم — جزءٌ منها.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.story-message{
+  max-width:680px;margin:0 auto;text-align:center;
+  font-family:'Tajawal','Cairo',sans-serif;
+}
+.story-eyebrow{
+  font-family:'Cairo',sans-serif;font-weight:800;
+  font-size:.78rem;color:#8a6c1c;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:24px;
+  opacity:.85;
+}
+.story-title{
+  font-family:'Cairo',sans-serif;font-weight:900;
+  font-size:clamp(1.7rem,5vw,2.4rem);
+  color:#2a1a0c;line-height:1.4;letter-spacing:-.5px;
+  margin:0 0 28px;
+}
+.story-title .gold{
+  background:linear-gradient(180deg,#fcdf65 0%,#c9a227 50%,#7a5818 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1px 2px rgba(201,162,39,.25));
+}
+.story-ornament{
+  color:#c9a227;
+  width:120px;height:24px;margin:0 auto 28px;
+  opacity:.7;
+}
+.story-ornament svg{width:100%;height:100%;}
+.story-body{
+  font-size:1.08rem;line-height:2;color:#3d2614;
+  font-weight:500;margin-bottom:36px;
+}
+.story-body p{margin:0 0 16px;}
+.story-body strong{color:#5C3A1E;font-weight:800;}
+.story-quote{
+  position:relative;
+  background:linear-gradient(135deg,#fdfaef 0%,#fef6dc 100%);
+  border:1.5px solid rgba(201,162,39,.4);
+  border-radius:16px;
+  padding:28px 24px 24px;
+  margin-top:8px;
+  box-shadow:
+    0 8px 24px rgba(60,38,20,.08),
+    0 0 0 1px rgba(252,223,101,.3) inset;
+}
+.story-quote::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:60%;height:3px;
+  background:linear-gradient(90deg,transparent 0%,#c9a227 50%,transparent 100%);
+  border-radius:0 0 3px 3px;
+}
+.story-quote-mark{
+  width:32px;height:32px;color:#c9a227;
+  margin:0 auto 10px;display:block;opacity:.8;
+}
+.story-quote p{
+  font-family:'Cairo',sans-serif;font-weight:800;
+  font-size:1.1rem;color:#3d2614;line-height:1.7;
+  margin:0;letter-spacing:-.3px;
+}
+@media (max-width:520px){
+  .story-body{font-size:1rem;line-height:1.85;}
+  .story-quote p{font-size:1rem;}
+}
+body.dark-mode .story-title{color:#fdfaef;}
+body.dark-mode .story-body{color:#e8dcc8;}
+body.dark-mode .story-body strong{color:#fcdf65;}
+body.dark-mode .story-quote{
+  background:linear-gradient(135deg,#1a1410 0%,#2a1a0c 100%);
+  border-color:#7a6418;
+}
+body.dark-mode .story-quote p{color:#fdfaef;}
+</style>
 
 <!-- ═══════════════ شاشة شخصيات مؤثرة (للمصرح لهم) ═══════════════ -->
 <div class="screen" id="screen-influencers">
@@ -13618,6 +13985,18 @@ if(typeof QDB_ORIGINAL === 'undefined'){
  */
 function _loadQDB(){
   try{
+    // 🔄 فحص رقم النسخة — إذا تغير، نتجاهل localStorage القديم
+    const CURRENT_VERSION = 'v4-2026-05-13-sports';
+    const savedVersion = localStorage.getItem('hh_qdb_version');
+    if(savedVersion !== CURRENT_VERSION){
+      // نسخة جديدة! نمسح القديم ونستخدم الأصلية
+      localStorage.removeItem('hh_qdb_override');
+      localStorage.removeItem('hh_qdb_modified_at');
+      localStorage.setItem('hh_qdb_version', CURRENT_VERSION);
+      console.log('🔄 تم تحديث قاعدة الأسئلة للنسخة:', CURRENT_VERSION);
+      return JSON.parse(JSON.stringify(QDB_ORIGINAL));
+    }
+    
     const saved = localStorage.getItem('hh_qdb_override');
     if(saved){
       const parsed = JSON.parse(saved);
@@ -13675,6 +14054,15 @@ function _hh_initQDB(){
   // 1) تحميل سريع من localStorage (للظهور الفوري)
   QDB = _loadQDB();
   
+  // 🔄 إعادة رسم سريعة بعد 200ms لضمان تحميل ملفات JS الخارجية (defer)
+  // الـ defer scripts تنفّذ بعد DOMContentLoaded لكن قد لا تكون QDB_ORIGINAL محدّثة فوراً
+  setTimeout(() => {
+    QDB = _loadQDB(); // إعادة تحميل بعد ضمان تحميل الخرائط/الأعلام/العواصم
+    if(typeof buildCatSelect === 'function'){
+      try{ buildCatSelect(); }catch(e){}
+    }
+  }, 200);
+  
   // 2) محاولة تحميل من Firestore بعد قليل (لجلب أحدث التعديلات من الإدارة)
   // ننتظر لحظة لتهيأ Firebase
   setTimeout(async ()=>{
@@ -13688,6 +14076,11 @@ function _hh_initQDB(){
             if(catSelect && catSelect.value){
               loadAdminCatQuestions();
             }
+          }
+          // 🔄 إعادة رسم قائمة الفئات (لتحديث عدادات الأسئلة)
+          // هذا يحل مشكلة ظهور "0 سؤال" قبل اكتمال تحميل البيانات
+          if(typeof buildCatSelect === 'function'){
+            try{ buildCatSelect(); }catch(e){ console.warn('buildCatSelect refresh skipped:', e); }
           }
         }
       }
@@ -14072,6 +14465,12 @@ function trackActivity(type, data = {}){
 // ═══════════════════════════════════════════════════════════════════
 
 const CAT_INFO = {
+'قصص الأنبياء':       {emoji:'🌟', label:'قصص الأنبياء',color:'#1a7a4a',bg:'#e8f5ee'},
+'التراث الخليجي':     {emoji:'🐪', label:'التراث الخليجي',color:'#8D1B3D',bg:'#fbe8ee'},
+'تاريخ قطر العميق':   {emoji:'🏛️', label:'تاريخ قطر العميق',color:'#8D1B3D',bg:'#fbe8ee'},
+'الأدب العربي':       {emoji:'📜', label:'الأدب العربي',color:'#c97640',bg:'#fdeee2'},
+'الإنجليزية':         {emoji:'🔤', label:'الإنجليزية',color:'#185fa5',bg:'#e6f1fb'},
+'الرياضيات الذهنية':  {emoji:'🧮', label:'الرياضيات الذهنية',color:'#185fa5',bg:'#e6f1fb'},
 'الأساطير':          {exclusive:true, label:'الأساطير — المعيار الذهبي',color:'#c9a227',bg:'#faf2d6',img:'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><radialGradient id=\"lg\" cx=\"50%25\" cy=\"50%25\" r=\"50%25\"><stop offset=\"0%25\" stop-color=\"%23f5d76e\"/><stop offset=\"50%25\" stop-color=\"%23c9a227\"/><stop offset=\"100%25\" stop-color=\"%237a6418\"/></radialGradient></defs><rect width=\"100\" height=\"100\" fill=\"%230a2820\"/><circle cx=\"50\" cy=\"50\" r=\"38\" fill=\"none\" stroke=\"url(%23lg)\" stroke-width=\"2\" opacity=\".6\"/><polygon points=\"50,18 57,38 78,38 61,51 68,72 50,60 32,72 39,51 22,38 43,38\" fill=\"url(%23lg)\" stroke=\"%237a6418\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"6\" fill=\"%23faf2d6\"/><text x=\"50\" y=\"88\" text-anchor=\"middle\" font-size=\"8\" font-family=\"Cairo\" font-weight=\"900\" fill=\"%23c9a227\">LEGENDS</text></svg>'},
 'أساطير السيرة':     {exclusive:true, label:'أساطير السيرة والصحابة',color:'#c9a227',bg:'#faf2d6'},
 'أساطير الحضارة':    {exclusive:true, label:'أساطير الحضارة والأندلس',color:'#c9a227',bg:'#faf2d6'},
@@ -14084,7 +14483,7 @@ const CAT_INFO = {
 'قطر':               {emoji:'🏙', label:'دولة قطر',color:'#8D1B3D',bg:'#fbe8ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="5" y="15" width="90" height="70" rx="4" fill="%23fff" stroke="%23ddd" stroke-width="1"/><rect x="5" y="15" width="28" height="70" rx="4" fill="%238D1B3D"/><path d="M33,15 L90,15 L90,85 L33,85 L38,77 L33,69 L38,61 L33,53 L38,45 L33,37 L38,29 L33,21 Z" fill="%23fff"/><text x="55" y="58" text-anchor="middle" font-size="11" font-family="serif" fill="%238D1B3D" font-weight="bold">قطر</text></svg>'},
 'النبي محمد':        {emoji:'🕌', label:'النبي محمد ﷺ',color:'#5C3A1E',bg:'#e8f2ec',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="70" rx="38" ry="22" fill="%231a3a5c" opacity=".15"/><rect x="30" y="35" width="40" height="35" rx="8" fill="%231a3a5c"/><ellipse cx="50" cy="35" rx="18" ry="18" fill="%23e8c88a"/><path d="M32 38 Q50 50 68 38" fill="%231a3a5c" opacity=".3"/><circle cx="43" cy="33" r="2.5" fill="%23333"/><circle cx="57" cy="33" r="2.5" fill="%23333"/><path d="M44 40 Q50 44 56 40" stroke="%23c97" stroke-width="1.5" fill="none"/><path d="M14 70 Q30 50 50 55 Q70 50 86 70" fill="%231a3a5c" opacity=".7"/></svg>'},
 'الصحابة':          {emoji:'⭐', label:'الصحابة الكرام',color:'#27ae60',bg:'#e8f5ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="35" cy="35" r="14" fill="%23e8c88a"/><circle cx="65" cy="35" r="14" fill="%23e8c88a"/><path d="M10 80 Q35 55 35 55 Q50 65 65 55 Q65 55 90 80 Z" fill="%231a3a5c"/><text x="50" y="50" text-anchor="middle" font-size="9" font-family="Cairo" fill="%23fff">الصحابة</text></svg>'},
-'كرة قدم':          {emoji:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1A5.01 5.01 0 0016.61 12.94C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>', label:'كرة القدم',color:'#27ae60',bg:'#e8f5ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="%23fff" stroke="%23222" stroke-width="2.5"/><polygon points="50,18 58,32 74,32 62,42 67,58 50,48 33,58 38,42 26,32 42,32" fill="%23222" stroke="%23222" stroke-width="1"/><circle cx="50" cy="50" r="8" fill="%23222"/><path d="M26,32 L42,32 M58,32 L74,32 M67,58 L50,48 M33,58 L50,48" stroke="%23fff" stroke-width="1.5"/></svg>'},
+'الدوري الإنجليزي':  {emoji:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1A5.01 5.01 0 0016.61 12.94C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>', label:'الدوري الإنجليزي',color:'#27ae60',bg:'#e8f5ee',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="%23fff" stroke="%23222" stroke-width="2.5"/><polygon points="50,18 58,32 74,32 62,42 67,58 50,48 33,58 38,42 26,32 42,32" fill="%23222" stroke="%23222" stroke-width="1"/><circle cx="50" cy="50" r="8" fill="%23222"/><path d="M26,32 L42,32 M58,32 L74,32 M67,58 L50,48 M33,58 L50,48" stroke="%23fff" stroke-width="1.5"/></svg>'},
 'سادس - التاريخ':           {emoji:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M20 4v16H4V4h16m0-2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 8.5l-2.5 3.01L8 11.25l-3.5 5h13l-3.5-5.75z"/></svg>', label:'سادس - التاريخ',color:'#5C3A1E',bg:'#f3eadb'},
 'سادس - المواطنة':           {emoji:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>', label:'سادس - المواطنة',color:'#8D1B3D',bg:'#fdeef0'},
 'سادس - الجغرافيا':           {emoji:'🌍', label:'سادس - الجغرافيا',color:'#1a7a4a',bg:'#e8f5ee'},
@@ -14098,8 +14497,8 @@ const CAT_INFO = {
 'خرائط الدول':       {emoji:'🗺️', label:'خرائط الدول — جغرافيا',color:'#1e4d8c',bg:'#e6edf7',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="50%25" cy="40%25" r="60%25"><stop offset="0%25" stop-color="%23cfe1f0"/><stop offset="100%25" stop-color="%23185fa5"/></radialGradient></defs><rect width="100" height="100" rx="14" fill="url(%23g)"/><circle cx="50" cy="50" r="32" fill="%23fdfaf2" stroke="%235C3A1E" stroke-width="2"/><path d="M50 18 Q72 30 72 50 Q72 70 50 82 Q28 70 28 50 Q28 30 50 18 Z" fill="none" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><line x1="28" y1="50" x2="72" y2="50" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><line x1="50" y1="18" x2="50" y2="82" stroke="%235C3A1E" stroke-width="1" opacity=".5"/><path d="M40 35 Q48 32 56 38 Q60 45 55 52 Q48 56 42 50 Q38 42 40 35 Z" fill="%233d2614" stroke="%232a1a0c" stroke-width="1"/><circle cx="80" cy="20" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M75 18 L78 23 L82 18 L85 23 L82 25 L78 25 Z" fill="%23fff"/></svg>'},
 'أعلام الدول':       {emoji:'🚩', label:'أعلام الدول — جغرافيا',color:'#c0392b',bg:'#fde8e8',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="fg" x1="0%25" y1="0%25" x2="0%25" y2="100%25"><stop offset="0%25" stop-color="%23c0392b"/><stop offset="100%25" stop-color="%23700e0e"/></linearGradient></defs><rect width="100" height="100" rx="14" fill="url(%23fg)"/><rect x="20" y="22" width="3" height="60" fill="%237a5818"/><path d="M23 22 Q35 25 50 22 Q65 19 78 24 L78 52 Q65 49 50 52 Q35 55 23 52 Z" fill="%23faf2d6" stroke="%23c9a227" stroke-width="1.5"/><path d="M28 28 L40 28 L40 36 L28 36 Z" fill="%231a7a4a"/><path d="M44 30 L72 30 L72 34 L44 34 Z" fill="%238D1B3D"/><path d="M28 40 L72 40 L72 44 L28 44 Z" fill="%23c9a227"/><circle cx="85" cy="15" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M82 13 L85 16 L88 13 L86 18 L84 18 Z" fill="%23fff"/></svg>'},
 'عواصم الدول':       {emoji:'🏛️', label:'عواصم الدول — جغرافيا',color:'#5C3A1E',bg:'#faf2d6',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="cg" cx="50%25" cy="40%25" r="60%25"><stop offset="0%25" stop-color="%23faf2d6"/><stop offset="100%25" stop-color="%235C3A1E"/></radialGradient></defs><rect width="100" height="100" rx="14" fill="url(%23cg)"/><rect x="20" y="55" width="60" height="30" fill="%23faf2d6" stroke="%237a5818" stroke-width="1.5"/><path d="M25 55 L50 28 L75 55 Z" fill="%23c9a227" stroke="%237a5818" stroke-width="1.5"/><rect x="28" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="36" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="47" y="60" width="6" height="25" fill="%235C3A1E"/><rect x="59" y="60" width="5" height="25" fill="%235C3A1E"/><rect x="67" y="60" width="5" height="25" fill="%235C3A1E"/><circle cx="50" cy="40" r="3" fill="%23faf2d6"/><polygon points="50,32 51,35 54,35 52,37 53,40 50,38 47,40 48,37 46,35 49,35" fill="%23faf2d6"/><circle cx="85" cy="15" r="11" fill="%23c9a227" stroke="%237a6418" stroke-width="1.5"/><path d="M82 13 L85 16 L88 13 L86 18 L84 18 Z" fill="%23fff"/></svg>'},
-'كأس العالم':        {emoji:'🌍', label:'كأس العالم',color:'#c0392b',bg:'#fde8e8'},
-'الرياضة':           {emoji:'🏅', label:'الرياضة العامة',color:'#e67e22',bg:'#fff3e0'},
+'دوري أبطال أوروبا': {emoji:'🏆', label:'دوري أبطال أوروبا',color:'#c0392b',bg:'#fde8e8'},
+'الدوري الإسباني':   {emoji:'🇪🇸', label:'الدوري الإسباني',color:'#e67e22',bg:'#fff3e0'},
 'حروف':              {emoji:'🔤', label:'حروف (تلميح)',color:'#e67e22',bg:'#fff3e0',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="15" y="15" width="70" height="70" rx="12" fill="%23e67e22"/><text x="50" y="45" text-anchor="middle" font-size="22" font-family="Cairo,Arial" fill="%23fff" font-weight="bold">أ</text><text x="30" y="70" text-anchor="middle" font-size="16" font-family="Cairo,Arial" fill="%23fff" opacity=".8">ب</text><text x="70" y="70" text-anchor="middle" font-size="16" font-family="Cairo,Arial" fill="%23fff" opacity=".8">ت</text></svg>'},
 'جزء عم':            {emoji:'📖', label:'جزء عم',color:'#0e6655',bg:'#d1f2eb',img:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="20" y="10" width="60" height="80" rx="6" fill="%231a7a4a"/><rect x="25" y="15" width="50" height="70" rx="4" fill="%23fff"/><line x1="32" y1="30" x2="68" y2="30" stroke="%231a7a4a" stroke-width="2"/><line x1="32" y1="40" x2="68" y2="40" stroke="%231a7a4a" stroke-width="2"/><line x1="32" y1="50" x2="60" y2="50" stroke="%231a7a4a" stroke-width="2"/><line x1="32" y1="60" x2="64" y2="60" stroke="%231a7a4a" stroke-width="2"/><text x="50" y="78" text-anchor="middle" font-size="9" font-family="Cairo,Arial" fill="%231a7a4a" font-weight="bold">جزء عم</text></svg>'},
 'أكمل الفراغ':       {emoji:'✍️', label:'أكمل الفراغ',color:'#9b59b6',bg:'#f0e8fb'},
@@ -14125,10 +14524,12 @@ const CAT_SVG = {
   'اجتماعيات 8 - حقوق الإنسان':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="m5bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1e4d8c"/><stop offset="60%" stop-color="#0a1c3a"/><stop offset="100%" stop-color="#020812"/></radialGradient><linearGradient id="m5g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="m5gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#m5bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#m5gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#m5gl)"/><circle cx="200" cy="200" r="160" fill="#fcdf65" opacity=".08"/><ellipse cx="200" cy="370" rx="160" ry="8" fill="#000" opacity=".7"/><line x1="200" y1="100" x2="200" y2="320" stroke="url(#m5g)" stroke-width="6"/><line x1="120" y1="140" x2="280" y2="140" stroke="url(#m5g)" stroke-width="5"/><circle cx="200" cy="100" r="10" fill="url(#m5g)" filter="url(#m5gl)"/><line x1="120" y1="140" x2="100" y2="180" stroke="url(#m5g)" stroke-width="3"/><line x1="120" y1="140" x2="140" y2="180" stroke="url(#m5g)" stroke-width="3"/><path d="M85 180 Q120 175 155 180 L150 200 L90 200 Z" fill="url(#m5g)" stroke="#7a5818" stroke-width="2"/><rect x="98" y="200" width="44" height="2" fill="#7a5818"/><line x1="280" y1="140" x2="260" y2="180" stroke="url(#m5g)" stroke-width="3"/><line x1="280" y1="140" x2="300" y2="180" stroke="url(#m5g)" stroke-width="3"/><path d="M245 180 Q280 175 315 180 L310 200 L250 200 Z" fill="url(#m5g)" stroke="#7a5818" stroke-width="2"/><rect x="258" y="200" width="44" height="2" fill="#7a5818"/><rect x="180" y="320" width="40" height="20" fill="url(#m5g)" stroke="#7a5818" stroke-width="2"/><rect x="160" y="335" width="80" height="10" rx="3" fill="url(#m5g)" stroke="#7a5818" stroke-width="2"/></svg>`,
   'اجتماعيات 8 - نحن والبيئة':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="m6bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#0d4a2a"/><stop offset="60%" stop-color="#062818"/><stop offset="100%" stop-color="#020a05"/></radialGradient><radialGradient id="m6e" cx="40%" cy="35%"><stop offset="0%" stop-color="#7accff"/><stop offset="40%" stop-color="#3a8aff"/><stop offset="100%" stop-color="#0a3a7a"/></radialGradient><linearGradient id="m6g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="m6gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#m6bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#m6gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#m6gl)"/><ellipse cx="200" cy="370" rx="160" ry="8" fill="#000" opacity=".7"/><circle cx="200" cy="200" r="120" fill="url(#m6e)" stroke="#fff" stroke-width="3" filter="url(#m6gl)"/><path d="M130 170 Q160 150 190 160 Q220 165 245 175 Q260 200 245 220 L225 240 Q200 250 170 240 Q145 220 130 195 Z" fill="#3a8a3a" stroke="#062818" stroke-width="1.5"/><path d="M250 175 Q275 185 280 210" fill="#3a8a3a"/><path d="M170 240 L185 260 L200 250 L195 270 Q175 270 165 255 Z" fill="#3a8a3a"/><ellipse cx="200" cy="200" rx="120" ry="50" fill="none" stroke="#fff" stroke-width="0.8" opacity=".4"/><ellipse cx="200" cy="200" rx="50" ry="120" fill="none" stroke="#fff" stroke-width="0.8" opacity=".4"/><g transform="translate(100,80)"><circle cx="0" cy="0" r="10" fill="#3a8a3a" stroke="#1a4a1a" stroke-width="2"/><path d="M-7 0 Q-7 -10 0 -10 Q7 -10 7 0 Z" fill="#5aba5a"/><circle cx="0" cy="0" r="2" fill="#fff"/></g><g transform="translate(310,90)"><circle cx="0" cy="0" r="8" fill="#3a8a3a" stroke="#1a4a1a" stroke-width="2"/><path d="M-5 0 Q-5 -8 0 -8 Q5 -8 5 0 Z" fill="#5aba5a"/></g><g transform="translate(80,330)"><circle cx="0" cy="0" r="9" fill="#3a8a3a" stroke="#1a4a1a" stroke-width="2"/><path d="M-6 0 Q-6 -9 0 -9 Q6 -9 6 0 Z" fill="#5aba5a"/></g></svg>`,
   'اجتماعيات 8 - تاريخ أوروبا':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="m7bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fcdf65"/><stop offset="50%" stop-color="#a86a2a"/><stop offset="100%" stop-color="#3a1500"/></linearGradient><linearGradient id="m7bld" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f5e6c8"/><stop offset="50%" stop-color="#a87a3a"/><stop offset="100%" stop-color="#3a2a1a"/></linearGradient><filter id="m7gl"><feGaussianBlur stdDeviation="4"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#m7bg)"/><circle cx="350" cy="60" r="25" fill="#ff6a2a" opacity=".7" filter="url(#m7gl)"/><ellipse cx="200" cy="380" rx="200" ry="20" fill="#000" opacity=".7"/><rect x="0" y="320" width="400" height="60" fill="#3a1500"/><line x1="0" y1="320" x2="400" y2="320" stroke="#fcdf65" stroke-width="2"/><ellipse cx="200" cy="320" rx="160" ry="40" fill="url(#m7bld)" stroke="#5C3A1E" stroke-width="2"/><rect x="40" y="180" width="320" height="140" fill="url(#m7bld)" stroke="#5C3A1E" stroke-width="2"/><path d="M40 180 L40 100 L70 80 L330 80 L360 100 L360 180 Z" fill="url(#m7bld)" stroke="#5C3A1E" stroke-width="2"/><rect x="55" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="85" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="115" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="145" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="175" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="205" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="235" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="265" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="295" y="240" width="20" height="60" fill="#3a2a1a"/><rect x="325" y="240" width="20" height="60" fill="#3a2a1a"/><path d="M55 240 Q65 230 75 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M85 240 Q95 230 105 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M115 240 Q125 230 135 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M145 240 Q155 230 165 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M175 240 Q185 230 195 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M205 240 Q215 230 225 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M235 240 Q245 230 255 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M265 240 Q275 230 285 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M295 240 Q305 230 315 240" fill="none" stroke="#7a5818" stroke-width="2"/><path d="M325 240 Q335 230 345 240" fill="none" stroke="#7a5818" stroke-width="2"/><rect x="55" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="85" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="115" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="145" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="175" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="205" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="235" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="265" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="295" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="325" y="160" width="20" height="40" fill="#3a2a1a"/><rect x="55" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="85" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="115" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="145" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="175" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="205" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="235" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="265" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="295" y="100" width="20" height="40" fill="#3a2a1a"/><rect x="325" y="100" width="20" height="40" fill="#3a2a1a"/></svg>`,
+  'أعلام الدول':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="fg1bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#c0392b"/><stop offset="60%" stop-color="#600a0a"/><stop offset="100%" stop-color="#1a0202"/></radialGradient><linearGradient id="fg1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="fg1gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#fg1bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#fg1gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#fg1gl)"/><ellipse cx="200" cy="370" rx="160" ry="8" fill="#000" opacity=".7"/><rect x="105" y="80" width="10" height="280" fill="#7a5818" stroke="#5a3a0a" stroke-width="1"/><rect x="105" y="80" width="10" height="280" fill="url(#fg1g)"/><circle cx="110" cy="76" r="8" fill="url(#fg1g)" stroke="#5a3a0a" stroke-width="1.5"/><path d="M115 90 Q175 100 235 90 Q280 84 320 95 L320 195 Q280 184 235 195 Q175 205 115 195 Z" fill="#faf2d6" stroke="url(#fg1g)" stroke-width="2.5" filter="url(#fg1gl)"/><rect x="130" y="105" width="55" height="30" fill="#1a7a4a"/><rect x="185" y="105" width="135" height="30" fill="#faf2d6"/><rect x="130" y="135" width="190" height="20" fill="#fff"/><rect x="130" y="155" width="190" height="22" fill="#c0392b"/><circle cx="157" cy="120" r="9" fill="#fcdf65" stroke="#7a5818" stroke-width="1.5"/><path d="M250 110 L250 195" stroke="#fff" stroke-width="0.5" opacity=".3"/><path d="M280 110 L280 195" stroke="#fff" stroke-width="0.5" opacity=".3"/><path d="M115 250 Q165 240 215 250 Q260 258 300 248 L300 330 Q260 320 215 330 Q165 340 115 330 Z" fill="#faf2d6" stroke="url(#fg1g)" stroke-width="2.5" filter="url(#fg1gl)" opacity=".95"/><rect x="115" y="250" width="93" height="80" fill="#c0392b"/><rect x="208" y="250" width="92" height="40" fill="#fff"/><rect x="208" y="290" width="92" height="40" fill="#1a7a4a"/><circle cx="160" cy="290" r="14" fill="#fcdf65" stroke="#5a3a0a" stroke-width="1"/><polygon points="160,283 162,288 167,288 163,291 165,296 160,293 155,296 157,291 153,288 158,288" fill="#c0392b"/></svg>`,
+  'عواصم الدول':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="cp1bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#5C3A1E"/><stop offset="60%" stop-color="#2a1a0a"/><stop offset="100%" stop-color="#0a0500"/></radialGradient><linearGradient id="cp1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><radialGradient id="cp1dome" cx="50%" cy="40%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="100%" stop-color="#7a5818"/></radialGradient><filter id="cp1gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#cp1bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#cp1gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#cp1gl)"/><circle cx="320" cy="80" r="40" fill="#fcdf65" opacity=".15"/><circle cx="320" cy="80" r="22" fill="#fcdf65" opacity=".3"/><circle cx="320" cy="80" r="14" fill="#fff5c0"/><ellipse cx="200" cy="370" rx="170" ry="8" fill="#000" opacity=".7"/><rect x="75" y="220" width="250" height="130" fill="#cfe1f0" stroke="url(#cp1g)" stroke-width="3" filter="url(#cp1gl)"/><rect x="75" y="220" width="250" height="20" fill="url(#cp1g)"/><path d="M200 80 Q140 80 140 160 Q140 220 200 220 Q260 220 260 160 Q260 80 200 80 Z" fill="url(#cp1dome)" stroke="#7a5818" stroke-width="2.5" filter="url(#cp1gl)"/><rect x="195" y="50" width="10" height="35" fill="url(#cp1g)" stroke="#7a5818" stroke-width="1"/><circle cx="200" cy="48" r="8" fill="url(#cp1g)" stroke="#7a5818" stroke-width="1.5"/><path d="M200 40 Q204 46 200 50 Q196 46 200 40" fill="#fff5c0"/><rect x="85" y="170" width="22" height="180" fill="url(#cp1g)" stroke="#7a5818" stroke-width="2"/><path d="M85 170 Q96 152 107 170" fill="url(#cp1g)" stroke="#7a5818" stroke-width="2"/><circle cx="96" cy="162" r="3" fill="#fff5c0"/><rect x="293" y="170" width="22" height="180" fill="url(#cp1g)" stroke="#7a5818" stroke-width="2"/><path d="M293 170 Q304 152 315 170" fill="url(#cp1g)" stroke="#7a5818" stroke-width="2"/><circle cx="304" cy="162" r="3" fill="#fff5c0"/><rect x="95" y="195" width="3" height="3" fill="#fcdf65"/><rect x="103" y="195" width="3" height="3" fill="#fcdf65"/><rect x="95" y="220" width="3" height="3" fill="#fcdf65"/><rect x="103" y="220" width="3" height="3" fill="#fcdf65"/><rect x="95" y="260" width="3" height="3" fill="#fcdf65"/><rect x="103" y="260" width="3" height="3" fill="#fcdf65"/><rect x="95" y="295" width="3" height="3" fill="#fcdf65"/><rect x="103" y="295" width="3" height="3" fill="#fcdf65"/><rect x="303" y="195" width="3" height="3" fill="#fcdf65"/><rect x="295" y="195" width="3" height="3" fill="#fcdf65"/><rect x="303" y="220" width="3" height="3" fill="#fcdf65"/><rect x="295" y="220" width="3" height="3" fill="#fcdf65"/><rect x="303" y="260" width="3" height="3" fill="#fcdf65"/><rect x="295" y="260" width="3" height="3" fill="#fcdf65"/><rect x="303" y="295" width="3" height="3" fill="#fcdf65"/><rect x="295" y="295" width="3" height="3" fill="#fcdf65"/><rect x="180" y="270" width="40" height="80" fill="#3a1a0a" stroke="#5C3A1E" stroke-width="1"/><path d="M180 270 Q200 250 220 270" fill="#3a1a0a" stroke="#5C3A1E" stroke-width="1"/><rect x="195" y="305" width="3" height="3" fill="#fcdf65"/><polygon points="200,130 204,142 217,142 207,150 211,162 200,155 189,162 193,150 183,142 196,142" fill="#fff" opacity=".5"/></svg>`,
   'خرائط الدول':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="kh1bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#1e4d8c"/><stop offset="60%" stop-color="#0a1c3a"/><stop offset="100%" stop-color="#020812"/></radialGradient><radialGradient id="kh1e" cx="40%" cy="35%"><stop offset="0%" stop-color="#7accff"/><stop offset="40%" stop-color="#3a8aff"/><stop offset="100%" stop-color="#0a3a7a"/></radialGradient><linearGradient id="kh1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="kh1gl"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#kh1bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#kh1gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#kh1gl)"/><ellipse cx="200" cy="370" rx="160" ry="8" fill="#000" opacity=".7"/><circle cx="200" cy="200" r="140" fill="url(#kh1e)" stroke="#fff" stroke-width="3" filter="url(#kh1gl)"/><ellipse cx="200" cy="200" rx="140" ry="60" fill="none" stroke="#fff" stroke-width="1" opacity=".4"/><ellipse cx="200" cy="200" rx="60" ry="140" fill="none" stroke="#fff" stroke-width="1" opacity=".4"/><ellipse cx="200" cy="200" rx="140" ry="40" fill="none" stroke="#fff" stroke-width="0.6" opacity=".25"/><ellipse cx="200" cy="200" rx="140" ry="100" fill="none" stroke="#fff" stroke-width="0.6" opacity=".25"/><path d="M120 150 Q140 130 165 140 Q190 145 215 150 Q245 155 270 150 Q280 175 270 195 Q255 215 235 215 L220 235 Q195 245 170 235 Q145 220 130 195 Q115 175 120 150 Z" fill="#3a8a3a" stroke="#062818" stroke-width="1.5"/><path d="M270 165 Q290 175 295 200" fill="#3a8a3a" stroke="#062818" stroke-width="1"/><path d="M165 220 Q190 230 205 245 L195 260 L175 260 L165 245 Z" fill="#3a8a3a" stroke="#062818" stroke-width="1"/><circle cx="160" cy="180" r="2" fill="#fcdf65"/><circle cx="220" cy="195" r="2" fill="#fcdf65"/><circle cx="195" cy="225" r="2" fill="#fcdf65"/><ellipse cx="180" cy="170" rx="20" ry="10" fill="#fff" opacity=".25"/><ellipse cx="170" cy="165" rx="8" ry="4" fill="#fff" opacity=".4"/></svg>`,
-  'كرة قدم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="kk1bg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#5a9a3a"/><stop offset="60%" stop-color="#2a6a1a"/><stop offset="100%" stop-color="#0a2a08"/></radialGradient><radialGradient id="kk1ball" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff"/><stop offset="40%" stop-color="#f5f5f5"/><stop offset="80%" stop-color="#aaa"/><stop offset="100%" stop-color="#555"/></radialGradient><radialGradient id="kk1light" cx="50%" cy="20%"><stop offset="0%" stop-color="#fff" stop-opacity="0.5"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient><filter id="kk1gl"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#kk1bg)"/><ellipse cx="200" cy="40" rx="240" ry="80" fill="url(#kk1light)"/><line x1="0" y1="200" x2="400" y2="200" stroke="#fff" stroke-width="2" opacity=".5"/><circle cx="200" cy="200" r="70" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/><circle cx="200" cy="200" r="6" fill="#fff" opacity=".4"/><line x1="40" y1="360" x2="160" y2="200" stroke="#fff" stroke-width="1" opacity=".25"/><line x1="360" y1="360" x2="240" y2="200" stroke="#fff" stroke-width="1" opacity=".25"/><ellipse cx="200" cy="320" rx="70" ry="12" fill="#000" opacity=".6"/><circle cx="200" cy="200" r="100" fill="url(#kk1ball)" stroke="#222" stroke-width="3" filter="url(#kk1gl)"/><polygon points="200,144 234,168 226,206 174,206 166,168" fill="#1a1a1a" stroke="#000" stroke-width="1"/><polygon points="234,168 268,144 284,174 260,206 226,206" fill="#1a1a1a" opacity=".85" stroke="#000" stroke-width="1"/><polygon points="166,168 132,144 116,174 140,206 174,206" fill="#1a1a1a" opacity=".85" stroke="#000" stroke-width="1"/><polygon points="174,206 226,206 240,246 200,270 160,246" fill="#1a1a1a" opacity=".75" stroke="#000" stroke-width="1"/><polygon points="226,206 260,206 268,250 240,246" fill="#1a1a1a" opacity=".7" stroke="#000" stroke-width="0.8"/><polygon points="174,206 140,206 132,250 160,246" fill="#1a1a1a" opacity=".7" stroke="#000" stroke-width="0.8"/><line x1="200" y1="144" x2="200" y2="120" stroke="#1a1a1a" stroke-width="2"/><line x1="234" y1="168" x2="260" y2="156" stroke="#1a1a1a" stroke-width="2"/><line x1="166" y1="168" x2="140" y2="156" stroke="#1a1a1a" stroke-width="2"/><line x1="226" y1="206" x2="260" y2="206" stroke="#1a1a1a" stroke-width="2"/><line x1="174" y1="206" x2="140" y2="206" stroke="#1a1a1a" stroke-width="2"/><line x1="200" y1="270" x2="200" y2="296" stroke="#1a1a1a" stroke-width="2"/><line x1="240" y1="246" x2="260" y2="250" stroke="#1a1a1a" stroke-width="2"/><line x1="160" y1="246" x2="140" y2="250" stroke="#1a1a1a" stroke-width="2"/><ellipse cx="156" cy="160" rx="28" ry="16" fill="#fff" opacity=".5"/><ellipse cx="148" cy="152" rx="12" ry="6" fill="#fff" opacity=".7"/></svg>`,
-  'كأس العالم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="kp1bg" cx="50%" cy="35%" r="80%"><stop offset="0%" stop-color="#5a3a1a"/><stop offset="50%" stop-color="#2a1a0a"/><stop offset="100%" stop-color="#000"/></radialGradient><linearGradient id="kp1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fffbe0"/><stop offset="20%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="80%" stop-color="#7a5818"/><stop offset="100%" stop-color="#2a1a0a"/></linearGradient><filter id="kp1gl"><feGaussianBlur stdDeviation="8"/><feColorMatrix values="0 0 0 0 1   0 0 0 0 0.85   0 0 0 0 0.3   0 0 0 1 0" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter><radialGradient id="kp1halo" cx="50%" cy="40%"><stop offset="0%" stop-color="#fcdf65" stop-opacity="0.5"/><stop offset="100%" stop-color="#fcdf65" stop-opacity="0"/></radialGradient></defs><rect width="400" height="400" fill="url(#kp1bg)"/><circle cx="80" cy="60" r="40" fill="#fcdf65" opacity=".15"/><circle cx="320" cy="80" r="30" fill="#fcdf65" opacity=".1"/><ellipse cx="200" cy="180" rx="180" ry="140" fill="url(#kp1halo)"/><ellipse cx="200" cy="370" rx="100" ry="12" fill="#000" opacity=".7"/><path d="M130 130 Q70 130 65 175 Q65 220 120 230" fill="none" stroke="#7a5818" stroke-width="22" stroke-linecap="round"/><path d="M130 130 Q70 130 65 175 Q65 220 120 230" fill="none" stroke="url(#kp1g)" stroke-width="18" stroke-linecap="round"/><path d="M270 130 Q330 130 335 175 Q335 220 280 230" fill="none" stroke="#7a5818" stroke-width="22" stroke-linecap="round"/><path d="M270 130 Q330 130 335 175 Q335 220 280 230" fill="none" stroke="url(#kp1g)" stroke-width="18" stroke-linecap="round"/><path d="M130 110 Q130 100 140 100 L260 100 Q270 100 270 110 L270 220 Q260 260 200 280 Q140 260 130 220 Z" fill="url(#kp1g)" stroke="#7a5818" stroke-width="2"/><path d="M150 110 Q145 200 165 240" fill="none" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><ellipse cx="200" cy="160" rx="55" ry="6" fill="none" stroke="#7a5818" stroke-width="1.5" opacity=".6"/><polygon points="200,180 207,196 225,196 211,206 217,222 200,212 183,222 189,206 175,196 193,196" fill="#fff" opacity=".4"/><rect x="184" y="280" width="32" height="14" fill="url(#kp1g)" stroke="#7a5818" stroke-width="1"/><rect x="160" y="294" width="80" height="14" rx="3" fill="url(#kp1g)" stroke="#7a5818" stroke-width="1.5"/><rect x="130" y="308" width="140" height="28" rx="5" fill="url(#kp1g)" stroke="#7a5818" stroke-width="2"/><line x1="145" y1="326" x2="255" y2="326" stroke="#7a5818" stroke-width="1.5" opacity=".7"/><polygon points="60,80 64,90 74,90 66,96 70,106 60,100 50,106 54,96 46,90 56,90" fill="#fff5c0" filter="url(#kp1gl)"/><polygon points="340,100 344,110 354,110 346,116 350,126 340,120 330,126 334,116 326,110 336,110" fill="#fff5c0" filter="url(#kp1gl)"/></svg>`,
-  'الرياضة':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ry1bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#173404"/><stop offset="60%" stop-color="#0a1a02"/><stop offset="100%" stop-color="#000"/></radialGradient><linearGradient id="ry1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><radialGradient id="ry1ball" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#888"/></radialGradient><filter id="ry1gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#ry1bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#ry1gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#ry1gl)"/><circle cx="200" cy="200" r="160" fill="#fcdf65" opacity=".08"/><ellipse cx="200" cy="370" rx="160" ry="6" fill="#000" opacity=".7"/><path d="M120 100 L280 100 L280 200 Q280 250 200 270 Q120 250 120 200 Z" fill="url(#ry1g)" stroke="#7a5818" stroke-width="3" filter="url(#ry1gl)"/><path d="M120 110 Q90 110 90 145 Q90 175 122 180" fill="none" stroke="url(#ry1g)" stroke-width="6" stroke-linecap="round"/><path d="M280 110 Q310 110 310 145 Q310 175 278 180" fill="none" stroke="url(#ry1g)" stroke-width="6" stroke-linecap="round"/><text x="200" y="180" text-anchor="middle" font-family="Cairo,Arial" font-size="48" fill="#5a3a0a" font-weight="900">★</text><line x1="135" y1="220" x2="265" y2="220" stroke="#7a5818" stroke-width="2"/><rect x="180" y="270" width="40" height="30" fill="url(#ry1g)"/><rect x="160" y="295" width="80" height="14" rx="3" fill="url(#ry1g)" stroke="#7a5818" stroke-width="1"/><rect x="140" y="305" width="120" height="20" rx="4" fill="url(#ry1g)" stroke="#7a5818" stroke-width="2"/><circle cx="200" cy="350" r="20" fill="url(#ry1ball)" stroke="#222" stroke-width="2"/><polygon points="200,338 207,343 204,351 196,351 193,343" fill="#222"/></svg>`,
+  'الدوري الإنجليزي':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="kk1bg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#5a9a3a"/><stop offset="60%" stop-color="#2a6a1a"/><stop offset="100%" stop-color="#0a2a08"/></radialGradient><radialGradient id="kk1ball" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff"/><stop offset="40%" stop-color="#f5f5f5"/><stop offset="80%" stop-color="#aaa"/><stop offset="100%" stop-color="#555"/></radialGradient><radialGradient id="kk1light" cx="50%" cy="20%"><stop offset="0%" stop-color="#fff" stop-opacity="0.5"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient><filter id="kk1gl"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#kk1bg)"/><ellipse cx="200" cy="40" rx="240" ry="80" fill="url(#kk1light)"/><line x1="0" y1="200" x2="400" y2="200" stroke="#fff" stroke-width="2" opacity=".5"/><circle cx="200" cy="200" r="70" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/><circle cx="200" cy="200" r="6" fill="#fff" opacity=".4"/><line x1="40" y1="360" x2="160" y2="200" stroke="#fff" stroke-width="1" opacity=".25"/><line x1="360" y1="360" x2="240" y2="200" stroke="#fff" stroke-width="1" opacity=".25"/><ellipse cx="200" cy="320" rx="70" ry="12" fill="#000" opacity=".6"/><circle cx="200" cy="200" r="100" fill="url(#kk1ball)" stroke="#222" stroke-width="3" filter="url(#kk1gl)"/><polygon points="200,144 234,168 226,206 174,206 166,168" fill="#1a1a1a" stroke="#000" stroke-width="1"/><polygon points="234,168 268,144 284,174 260,206 226,206" fill="#1a1a1a" opacity=".85" stroke="#000" stroke-width="1"/><polygon points="166,168 132,144 116,174 140,206 174,206" fill="#1a1a1a" opacity=".85" stroke="#000" stroke-width="1"/><polygon points="174,206 226,206 240,246 200,270 160,246" fill="#1a1a1a" opacity=".75" stroke="#000" stroke-width="1"/><polygon points="226,206 260,206 268,250 240,246" fill="#1a1a1a" opacity=".7" stroke="#000" stroke-width="0.8"/><polygon points="174,206 140,206 132,250 160,246" fill="#1a1a1a" opacity=".7" stroke="#000" stroke-width="0.8"/><line x1="200" y1="144" x2="200" y2="120" stroke="#1a1a1a" stroke-width="2"/><line x1="234" y1="168" x2="260" y2="156" stroke="#1a1a1a" stroke-width="2"/><line x1="166" y1="168" x2="140" y2="156" stroke="#1a1a1a" stroke-width="2"/><line x1="226" y1="206" x2="260" y2="206" stroke="#1a1a1a" stroke-width="2"/><line x1="174" y1="206" x2="140" y2="206" stroke="#1a1a1a" stroke-width="2"/><line x1="200" y1="270" x2="200" y2="296" stroke="#1a1a1a" stroke-width="2"/><line x1="240" y1="246" x2="260" y2="250" stroke="#1a1a1a" stroke-width="2"/><line x1="160" y1="246" x2="140" y2="250" stroke="#1a1a1a" stroke-width="2"/><ellipse cx="156" cy="160" rx="28" ry="16" fill="#fff" opacity=".5"/><ellipse cx="148" cy="152" rx="12" ry="6" fill="#fff" opacity=".7"/></svg>`,
+  'دوري أبطال أوروبا':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="kp1bg" cx="50%" cy="35%" r="80%"><stop offset="0%" stop-color="#5a3a1a"/><stop offset="50%" stop-color="#2a1a0a"/><stop offset="100%" stop-color="#000"/></radialGradient><linearGradient id="kp1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fffbe0"/><stop offset="20%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="80%" stop-color="#7a5818"/><stop offset="100%" stop-color="#2a1a0a"/></linearGradient><filter id="kp1gl"><feGaussianBlur stdDeviation="8"/><feColorMatrix values="0 0 0 0 1   0 0 0 0 0.85   0 0 0 0 0.3   0 0 0 1 0" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter><radialGradient id="kp1halo" cx="50%" cy="40%"><stop offset="0%" stop-color="#fcdf65" stop-opacity="0.5"/><stop offset="100%" stop-color="#fcdf65" stop-opacity="0"/></radialGradient></defs><rect width="400" height="400" fill="url(#kp1bg)"/><circle cx="80" cy="60" r="40" fill="#fcdf65" opacity=".15"/><circle cx="320" cy="80" r="30" fill="#fcdf65" opacity=".1"/><ellipse cx="200" cy="180" rx="180" ry="140" fill="url(#kp1halo)"/><ellipse cx="200" cy="370" rx="100" ry="12" fill="#000" opacity=".7"/><path d="M130 130 Q70 130 65 175 Q65 220 120 230" fill="none" stroke="#7a5818" stroke-width="22" stroke-linecap="round"/><path d="M130 130 Q70 130 65 175 Q65 220 120 230" fill="none" stroke="url(#kp1g)" stroke-width="18" stroke-linecap="round"/><path d="M270 130 Q330 130 335 175 Q335 220 280 230" fill="none" stroke="#7a5818" stroke-width="22" stroke-linecap="round"/><path d="M270 130 Q330 130 335 175 Q335 220 280 230" fill="none" stroke="url(#kp1g)" stroke-width="18" stroke-linecap="round"/><path d="M130 110 Q130 100 140 100 L260 100 Q270 100 270 110 L270 220 Q260 260 200 280 Q140 260 130 220 Z" fill="url(#kp1g)" stroke="#7a5818" stroke-width="2"/><path d="M150 110 Q145 200 165 240" fill="none" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><ellipse cx="200" cy="160" rx="55" ry="6" fill="none" stroke="#7a5818" stroke-width="1.5" opacity=".6"/><polygon points="200,180 207,196 225,196 211,206 217,222 200,212 183,222 189,206 175,196 193,196" fill="#fff" opacity=".4"/><rect x="184" y="280" width="32" height="14" fill="url(#kp1g)" stroke="#7a5818" stroke-width="1"/><rect x="160" y="294" width="80" height="14" rx="3" fill="url(#kp1g)" stroke="#7a5818" stroke-width="1.5"/><rect x="130" y="308" width="140" height="28" rx="5" fill="url(#kp1g)" stroke="#7a5818" stroke-width="2"/><line x1="145" y1="326" x2="255" y2="326" stroke="#7a5818" stroke-width="1.5" opacity=".7"/><polygon points="60,80 64,90 74,90 66,96 70,106 60,100 50,106 54,96 46,90 56,90" fill="#fff5c0" filter="url(#kp1gl)"/><polygon points="340,100 344,110 354,110 346,116 350,126 340,120 330,126 334,116 326,110 336,110" fill="#fff5c0" filter="url(#kp1gl)"/></svg>`,
+  'الدوري الإسباني':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ry1bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#173404"/><stop offset="60%" stop-color="#0a1a02"/><stop offset="100%" stop-color="#000"/></radialGradient><linearGradient id="ry1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><radialGradient id="ry1ball" cx="40%" cy="35%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#888"/></radialGradient><filter id="ry1gl"><feGaussianBlur stdDeviation="5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#ry1bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fcdf65" filter="url(#ry1gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fcdf65" filter="url(#ry1gl)"/><circle cx="200" cy="200" r="160" fill="#fcdf65" opacity=".08"/><ellipse cx="200" cy="370" rx="160" ry="6" fill="#000" opacity=".7"/><path d="M120 100 L280 100 L280 200 Q280 250 200 270 Q120 250 120 200 Z" fill="url(#ry1g)" stroke="#7a5818" stroke-width="3" filter="url(#ry1gl)"/><path d="M120 110 Q90 110 90 145 Q90 175 122 180" fill="none" stroke="url(#ry1g)" stroke-width="6" stroke-linecap="round"/><path d="M280 110 Q310 110 310 145 Q310 175 278 180" fill="none" stroke="url(#ry1g)" stroke-width="6" stroke-linecap="round"/><text x="200" y="180" text-anchor="middle" font-family="Cairo,Arial" font-size="48" fill="#5a3a0a" font-weight="900">★</text><line x1="135" y1="220" x2="265" y2="220" stroke="#7a5818" stroke-width="2"/><rect x="180" y="270" width="40" height="30" fill="url(#ry1g)"/><rect x="160" y="295" width="80" height="14" rx="3" fill="url(#ry1g)" stroke="#7a5818" stroke-width="1"/><rect x="140" y="305" width="120" height="20" rx="4" fill="url(#ry1g)" stroke="#7a5818" stroke-width="2"/><circle cx="200" cy="350" r="20" fill="url(#ry1ball)" stroke="#222" stroke-width="2"/><polygon points="200,338 207,343 204,351 196,351 193,343" fill="#222"/></svg>`,
   'النبي محمد':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="i1sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0a1f3a"/><stop offset="40%" stop-color="#2a5a98"/><stop offset="80%" stop-color="#5a3a1a"/><stop offset="100%" stop-color="#1a0500"/></linearGradient><radialGradient id="i1dome" cx="40%" cy="30%"><stop offset="0%" stop-color="#7aba7a"/><stop offset="60%" stop-color="#1a5a2a"/><stop offset="100%" stop-color="#062818"/></radialGradient><linearGradient id="i1bld" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff8e8"/><stop offset="60%" stop-color="#f5d8a0"/><stop offset="100%" stop-color="#a87a3a"/></linearGradient><linearGradient id="i1g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="i1glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="400" fill="url(#i1sky)"/><circle cx="50" cy="50" r="2" fill="#fff"/><circle cx="350" cy="40" r="2" fill="#fff"/><circle cx="100" cy="80" r="1.5" fill="#fff" opacity=".8"/><circle cx="280" cy="60" r="1.8" fill="#fff"/><circle cx="320" cy="100" r="1" fill="#fff" opacity=".7"/><path d="M340 70 A 18 18 0 1 1 326 50 A 13 13 0 1 0 340 70" fill="url(#i1g)" filter="url(#i1glow)"/><polygon points="320,60 322,65 327,65 323,68 325,73 320,70 315,73 317,68 313,65 318,65" fill="#fff" filter="url(#i1glow)"/><ellipse cx="200" cy="200" rx="80" ry="50" fill="#7aba7a" opacity=".15"/><rect x="40" y="180" width="14" height="100" fill="url(#i1bld)"/><path d="M38 180 L47 162 L56 180 Z" fill="url(#i1g)"/><circle cx="47" cy="158" r="3" fill="url(#i1g)" filter="url(#i1glow)"/><rect x="110" y="120" width="16" height="160" fill="url(#i1bld)"/><path d="M105 120 L118 96 L131 120 Z" fill="url(#i1g)"/><circle cx="118" cy="92" r="4" fill="url(#i1g)" filter="url(#i1glow)"/><rect x="274" y="120" width="16" height="160" fill="url(#i1bld)"/><path d="M269 120 L282 96 L295 120 Z" fill="url(#i1g)"/><circle cx="282" cy="92" r="4" fill="url(#i1g)" filter="url(#i1glow)"/><rect x="346" y="180" width="14" height="100" fill="url(#i1bld)"/><path d="M344 180 L353 162 L362 180 Z" fill="url(#i1g)"/><circle cx="353" cy="158" r="3" fill="url(#i1g)" filter="url(#i1glow)"/><rect x="64" y="208" width="272" height="112" fill="url(#i1bld)" stroke="#a87a3a" stroke-width="1.5"/><rect x="60" y="200" width="280" height="10" fill="url(#i1g)"/><path d="M170 320 L170 250 Q200 230 230 250 L230 320 Z" fill="#3a2a1a" stroke="#7a5818" stroke-width="2"/><path d="M170 250 Q200 220 230 250" fill="none" stroke="url(#i1g)" stroke-width="2"/><rect x="195" y="290" width="10" height="20" fill="#5C3A1E"/><circle cx="200" cy="295" r="1.5" fill="#fcdf65"/><path d="M88 320 L88 260 Q105 248 122 260 L122 320 Z" fill="#5C3A1E" stroke="#7a5818" stroke-width="1"/><path d="M278 320 L278 260 Q295 248 312 260 L312 320 Z" fill="#5C3A1E" stroke="#7a5818" stroke-width="1"/><circle cx="140" cy="265" r="6" fill="#3a2a1a" stroke="url(#i1g)" stroke-width="1"/><circle cx="260" cy="265" r="6" fill="#3a2a1a" stroke="url(#i1g)" stroke-width="1"/><path d="M150 208 Q150 145 200 138 Q250 145 250 208 Z" fill="url(#i1dome)" stroke="#062818" stroke-width="2"/><path d="M165 190 Q170 165 185 152" fill="none" stroke="#fff" stroke-width="2.5" opacity=".5" stroke-linecap="round"/><rect x="196" y="125" width="8" height="13" fill="url(#i1g)"/><circle cx="200" cy="105" r="5" fill="url(#i1g)" filter="url(#i1glow)"/><rect x="0" y="320" width="400" height="80" fill="#1a0500"/><line x1="0" y1="320" x2="400" y2="320" stroke="url(#i1g)" stroke-width="2"/></svg>`,
   'الصحابة':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="i2bg" cx="50%" cy="40%"><stop offset="0%" stop-color="#3a2a1a"/><stop offset="60%" stop-color="#1a0f08"/><stop offset="100%" stop-color="#000"/></radialGradient><linearGradient id="i2k" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3a2a1a"/><stop offset="50%" stop-color="#1a0a02"/><stop offset="100%" stop-color="#000"/></linearGradient><linearGradient id="i2g2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#fcdf65"/><stop offset="100%" stop-color="#7a5818"/></linearGradient><filter id="i2gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/><feColorMatrix values="0 0 0 0 1   0 0 0 0 0.85   0 0 0 0 0.3   0 0 0 1 0" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter><radialGradient id="i2halo" cx="50%" cy="50%"><stop offset="0%" stop-color="#fcdf65" stop-opacity="0.4"/><stop offset="100%" stop-color="#fcdf65" stop-opacity="0"/></radialGradient></defs><rect width="400" height="400" fill="url(#i2bg)"/><polygon points="50,40 53,48 61,48 55,53 58,61 50,56 42,61 45,53 39,48 47,48" fill="#fff" filter="url(#i2gl)"/><polygon points="350,50 353,58 361,58 355,63 358,71 350,66 342,71 345,63 339,58 347,58" fill="#fff" filter="url(#i2gl)"/><circle cx="100" cy="60" r="1.5" fill="#fff" opacity=".8"/><circle cx="300" cy="80" r="1.5" fill="#fff" opacity=".8"/><circle cx="200" cy="40" r="1" fill="#fff" opacity=".7"/><ellipse cx="200" cy="220" rx="180" ry="120" fill="url(#i2halo)"/><ellipse cx="200" cy="340" rx="100" ry="10" fill="#000" opacity=".7"/><rect x="120" y="160" width="160" height="180" fill="url(#i2k)" stroke="url(#i2g2)" stroke-width="3"/><rect x="120" y="220" width="160" height="22" fill="url(#i2g2)" filter="url(#i2gl)"/><text x="200" y="237" text-anchor="middle" font-family="serif" font-size="14" fill="#1a0a02" font-weight="900">۞ كسوة الكعبة ۞</text><rect x="180" y="260" width="40" height="80" fill="url(#i2g2)" filter="url(#i2gl)"/><path d="M180 260 L220 260 L220 268 L180 268 Z" fill="#fcdf65"/><rect x="195" y="280" width="10" height="40" fill="#3a2a1a"/><circle cx="200" cy="290" r="1.5" fill="#fcdf65"/><path d="M120 160 Q200 140 280 160" fill="none" stroke="url(#i2g2)" stroke-width="2"/><path d="M115 165 L285 165" stroke="url(#i2g2)" stroke-width="2"/><circle cx="125" cy="170" r="3" fill="url(#i2g2)"/><circle cx="200" cy="170" r="3" fill="url(#i2g2)"/><circle cx="275" cy="170" r="3" fill="url(#i2g2)"/><rect x="0" y="340" width="400" height="60" fill="#0a0500"/><line x1="0" y1="340" x2="400" y2="340" stroke="url(#i2g2)" stroke-width="2"/></svg>`,
   'حروف':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="i5bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#fcdf65"/><stop offset="50%" stop-color="#c9a227"/><stop offset="100%" stop-color="#3a2a0a"/></radialGradient><linearGradient id="i5pg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff8e8"/><stop offset="50%" stop-color="#f5e6c8"/><stop offset="100%" stop-color="#d8b878"/></linearGradient><linearGradient id="i5g5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff5c0"/><stop offset="50%" stop-color="#c9a227"/><stop offset="100%" stop-color="#5a3a0a"/></linearGradient></defs><rect width="400" height="400" fill="url(#i5bg)"/><circle cx="50" cy="50" r="3" fill="#fff" opacity=".5"/><circle cx="350" cy="60" r="3" fill="#fff" opacity=".5"/><circle cx="60" cy="340" r="3" fill="#fff" opacity=".5"/><circle cx="340" cy="350" r="3" fill="#fff" opacity=".5"/><rect x="50" y="50" width="300" height="300" rx="15" fill="url(#i5pg)" stroke="url(#i5g5)" stroke-width="4"/><rect x="60" y="60" width="280" height="280" rx="10" fill="none" stroke="url(#i5g5)" stroke-width="1.5" stroke-dasharray="6,3"/><path d="M70 75 Q90 65 110 75" fill="none" stroke="url(#i5g5)" stroke-width="2"/><path d="M290 75 Q310 65 330 75" fill="none" stroke="url(#i5g5)" stroke-width="2"/><path d="M70 325 Q90 335 110 325" fill="none" stroke="url(#i5g5)" stroke-width="2"/><path d="M290 325 Q310 335 330 325" fill="none" stroke="url(#i5g5)" stroke-width="2"/><circle cx="80" cy="80" r="4" fill="url(#i5g5)"/><circle cx="320" cy="80" r="4" fill="url(#i5g5)"/><circle cx="80" cy="320" r="4" fill="url(#i5g5)"/><circle cx="320" cy="320" r="4" fill="url(#i5g5)"/><text x="200" y="240" text-anchor="middle" font-family="Cairo,Arial" font-size="190" font-weight="900" fill="#5C3A1E">ع</text><text x="200" y="240" text-anchor="middle" font-family="Cairo,Arial" font-size="190" font-weight="900" fill="none" stroke="url(#i5g5)" stroke-width="1"/><polygon points="200,290 205,300 215,300 207,307 210,317 200,310 190,317 193,307 185,300 195,300" fill="url(#i5g5)"/></svg>`,
@@ -14786,7 +15187,7 @@ const CAT_LEVELS = [
     color:'#185fa5',
     accent:'#378add',
     status:'available',
-    groupIds:['islamic','lang','qatar','sport','geography']
+    groupIds:['islamic','lang','qatar','sport','geography','knowledge']
   },
   {
     id:'elite',
@@ -14819,19 +15220,19 @@ const CAT_GROUPS = [
     id:'islamic',
     label:'الدين الإسلامي',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#2a1a0c"/><path d="M50 20 L50 12 M46 14 L54 14" stroke="#f5d76e" stroke-width="2.5" stroke-linecap="round"/><path d="M42 22 Q50 18 58 22" stroke="#f5d76e" stroke-width="2" fill="none"/><path d="M22 40 Q22 35 27 35 L73 35 Q78 35 78 40 L78 75 Q78 80 73 80 L27 80 Q22 80 22 75 Z" fill="#faf2d6" stroke="#c9a227" stroke-width="2"/><line x1="50" y1="35" x2="50" y2="80" stroke="#c9a227" stroke-width="1.5"/><line x1="30" y1="48" x2="46" y2="48" stroke="#c9a227" stroke-width="1"/><line x1="30" y1="55" x2="46" y2="55" stroke="#c9a227" stroke-width="1"/><line x1="30" y1="62" x2="46" y2="62" stroke="#c9a227" stroke-width="1"/><line x1="30" y1="69" x2="46" y2="69" stroke="#c9a227" stroke-width="1"/><line x1="54" y1="48" x2="70" y2="48" stroke="#c9a227" stroke-width="1"/><line x1="54" y1="55" x2="70" y2="55" stroke="#c9a227" stroke-width="1"/><line x1="54" y1="62" x2="70" y2="62" stroke="#c9a227" stroke-width="1"/><line x1="54" y1="69" x2="70" y2="69" stroke="#c9a227" stroke-width="1"/><polygon points="50,40 52,45 57,45 53,48 55,53 50,50 45,53 47,48 43,45 48,45" fill="#c9a227"/></svg>`,
-    cats:['دين','النبي محمد','الصحابة','جزء عم']
+    cats:['دين','النبي محمد','الصحابة','جزء عم','قصص الأنبياء']
   },
   {
     id:'lang',
     label:'اللغة والأدب',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#4a1b0c"/><path d="M20 60 L20 35 Q20 25 30 25 L70 25 Q80 25 80 35 L80 60 L75 60 L75 35 Q75 32 72 32 L28 32 Q25 32 25 35 L25 60 Z" fill="#f0997b" stroke="#c97640" stroke-width="1.5"/><line x1="32" y1="42" x2="68" y2="42" stroke="#993c1d" stroke-width="1"/><line x1="32" y1="48" x2="64" y2="48" stroke="#993c1d" stroke-width="1"/><line x1="32" y1="54" x2="60" y2="54" stroke="#993c1d" stroke-width="1"/><path d="M65 20 L75 10 L80 15 L70 25 Z" fill="#c9a227" stroke="#7a6418" stroke-width="1.5"/><circle cx="68" cy="22" r="1.5" fill="#7a6418"/><ellipse cx="55" cy="72" rx="3" ry="5" fill="#c9a227"/><path d="M20 60 Q50 75 80 60" stroke="#c97640" stroke-width="2" fill="none"/></svg>`,
-    cats:['حروف','أكمل الفراغ','أكمل المثل']
+    cats:['حروف','أكمل الفراغ','أكمل المثل','الأدب العربي']
   },
   {
     id:'qatar',
-    label:'قطر',
+    label:'قطر والخليج',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#2a0612"/><path d="M25 22 L75 22 Q82 22 82 30 L82 55 Q82 72 50 85 Q18 72 18 55 L18 30 Q18 22 25 22 Z" fill="#fff" stroke="#c9a227" stroke-width="2"/><rect x="25" y="28" width="14" height="52" fill="#8D1B3D"/><path d="M39 28 L75 28 L75 80 L44 80 L46 76 L44 72 L46 68 L44 64 L46 60 L44 56 L46 52 L44 48 L46 44 L44 40 L46 36 L44 32 Z" fill="#fff"/><text x="58" y="57" text-anchor="middle" font-size="10" font-family="Cairo,Arial" fill="#8D1B3D" font-weight="900">قطر</text><circle cx="80" cy="22" r="6" fill="#faf2d6" stroke="#c9a227" stroke-width="1.5"/><circle cx="78" cy="20" r="1.5" fill="#fff"/></svg>`,
-    cats:['قطر']
+    cats:['قطر','تاريخ قطر العميق','التراث الخليجي']
   },
   {
     id:'social6',
@@ -14873,15 +15274,21 @@ const CAT_GROUPS = [
   },
   {
     id:'sport',
-    label:'الرياضة',
+    label:'الكرة الأوروبية',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#173404"/><path d="M30 20 L70 20 L70 45 Q70 58 50 62 Q30 58 30 45 Z" fill="#c9a227" stroke="#7a6418" stroke-width="2"/><path d="M30 25 L20 25 L20 35 Q20 42 28 42" fill="none" stroke="#c9a227" stroke-width="2.5"/><path d="M70 25 L80 25 L80 35 Q80 42 72 42" fill="none" stroke="#c9a227" stroke-width="2.5"/><rect x="44" y="62" width="12" height="8" fill="#7a6418"/><rect x="35" y="70" width="30" height="5" rx="2" fill="#7a6418"/><text x="50" y="42" text-anchor="middle" font-size="14" font-family="Cairo,Arial" fill="#4a2c04" font-weight="900">★</text><circle cx="50" cy="88" r="7" fill="#fff" stroke="#222" stroke-width="1.5"/><polygon points="50,83 52,87 56,87 53,89 54,93 50,91 46,93 47,89 44,87 48,87" fill="#222"/><circle cx="18" cy="15" r="2" fill="#f5d76e"/><circle cx="82" cy="15" r="2" fill="#f5d76e"/></svg>`,
-    cats:['الرياضة','كرة قدم','كأس العالم']
+    cats:['الدوري الإسباني','الدوري الإنجليزي','دوري أبطال أوروبا']
   },
   {
     id:'geography',
     label:'الجغرافيا',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#1e4d8c"/><circle cx="50" cy="50" r="32" fill="#cfe1f0" stroke="#fdfaf2" stroke-width="2"/><path d="M50 18 Q72 30 72 50 Q72 70 50 82 Q28 70 28 50 Q28 30 50 18 Z" fill="none" stroke="#fdfaf2" stroke-width="1" opacity=".7"/><line x1="28" y1="50" x2="72" y2="50" stroke="#fdfaf2" stroke-width="1" opacity=".7"/><path d="M30 30 Q40 25 50 28 Q60 32 70 30 Q72 38 68 45 Q62 50 56 48 L52 55 Q48 60 42 58 Q36 55 32 48 Q28 40 30 30 Z" fill="#3d2614" stroke="#2a1a0c" stroke-width="1.2"/><circle cx="80" cy="20" r="9" fill="#c9a227" stroke="#7a6418" stroke-width="1.5"/><path d="M76 18 L80 22 L84 18 L82 24 L78 24 Z" fill="#fff"/></svg>`,
     cats:['خرائط الدول','أعلام الدول','عواصم الدول']
+  },
+  {
+    id:'knowledge',
+    label:'المعرفة والمهارات',
+    icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#1e3a5f"/><circle cx="50" cy="50" r="32" fill="none" stroke="#f5d76e" stroke-width="2"/><circle cx="50" cy="50" r="22" fill="none" stroke="#c9a227" stroke-width="1.5" opacity=".7"/><text x="50" y="44" text-anchor="middle" font-size="11" font-family="Cairo,Arial" fill="#fdfaef" font-weight="900">ABC</text><text x="50" y="62" text-anchor="middle" font-size="11" font-family="Cairo,Arial" fill="#fdfaef" font-weight="900">123</text><circle cx="80" cy="22" r="9" fill="#c9a227" stroke="#7a6418" stroke-width="1.5"/><path d="M76 22 L79 25 L84 19" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    cats:['الإنجليزية','الرياضيات الذهنية']
   },
   {
     id:'custom',
@@ -14963,7 +15370,7 @@ function buildCatSelect(){
     });
   });
   if(totalQs > 0){
-    tabs.push({ id:'all', label:'الكل', count: totalQs, icon:'' });
+    tabs.push({ id:'all', label:'الكل', count: totalQs, icon:'all', status:'available' });
   }
 
   CAT_LEVELS.forEach(level => {
@@ -14975,8 +15382,8 @@ function buildCatSelect(){
       g.cats.forEach(c => { levelQs += (QDB[c]||[]).length; });
     });
     // نعرض التاب حتى لو فارغ (للحالة 'soon' و 'mine' الفارغة)
-    let tabIcon = '';
-    if(level.id === 'elite') tabIcon = '⭐';
+    // إيموجي فقط للأساطير حالياً (الباقي SVG inline)
+    let tabIcon = level.id;
     tabs.push({
       id: level.id,
       label: level.label,
@@ -14991,19 +15398,67 @@ function buildCatSelect(){
     _msActiveTab = tabs[0] ? tabs[0].id : 'all';
   }
 
+  // 🎨 أيقونات SVG أنيقة لكل تاب
+  const tabIcons = {
+    'all':     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+    'primary': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+    'prep':    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    'general': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    'elite':   '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>',
+    'mine':    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'
+  };
+
   tabs.forEach(tab => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ms-tab' + (tab.id === _msActiveTab ? ' active' : '');
     btn.dataset.tabId = tab.id;
     const countHtml = tab.count > 0 ? `<span class="ms-tab-count">${tab.count}</span>` : '';
-    const iconHtml = tab.icon ? `<span style="font-size:.78rem;">${tab.icon}</span>` : '';
+    const iconSvg = tabIcons[tab.icon] || '';
+    const iconHtml = iconSvg ? `<span class="ms-tab-icon">${iconSvg}</span>` : '';
     btn.innerHTML = `${iconHtml}<span class="ms-tab-name">${tab.label}</span>${countHtml}`;
     btn.onclick = () => msSwitchTab(tab.id);
     tabsBar.appendChild(btn);
   });
 
   container.appendChild(tabsWrap);
+
+  // 🔍 زر البحث السريع (يفتح حقل بحث يفلتر الفئات)
+  const searchWrap = document.createElement('div');
+  searchWrap.className = 'ms-search-wrap';
+  searchWrap.id = 'ms-search-wrap';
+  searchWrap.innerHTML = `
+    <button type="button" class="ms-search-btn" id="ms-search-btn" aria-label="بحث في الفئات" title="بحث">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+    <input type="search" class="ms-search-input" id="ms-search-input" placeholder="ابحث عن فئة..." autocomplete="off">
+    <button type="button" class="ms-search-clear" id="ms-search-clear" aria-label="مسح البحث" title="إغلاق">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(searchWrap);
+
+  // منطق البحث
+  setTimeout(() => {
+    const sBtn = document.getElementById('ms-search-btn');
+    const sInput = document.getElementById('ms-search-input');
+    const sClear = document.getElementById('ms-search-clear');
+    if(!sBtn || !sInput || !sClear) return;
+
+    sBtn.onclick = () => {
+      searchWrap.classList.add('active');
+      sInput.focus();
+    };
+    sClear.onclick = () => {
+      sInput.value = '';
+      searchWrap.classList.remove('active');
+      applyCatSearch('');
+    };
+    sInput.oninput = () => applyCatSearch(sInput.value);
+    sInput.onkeydown = (e) => {
+      if(e.key === 'Escape') sClear.click();
+    };
+  }, 50);
 
   // زر السهم اليمين (للسابق - في RTL يكون لليمين)
   const arrowRight = document.createElement('button');
@@ -15042,6 +15497,35 @@ function buildCatSelect(){
   }, 50);
 
   updateCatHint();
+}
+
+/**
+ * 🔍 تطبيق فلتر البحث على بطاقات الفئات
+ */
+function applyCatSearch(query){
+  const q = (query || '').trim().toLowerCase();
+  const grid = document.getElementById('ms-cat-grid');
+  if(!grid) return;
+
+  const btns = grid.querySelectorAll('.cat-btn');
+  const headers = grid.querySelectorAll('.ms-group-header');
+
+  if(!q){
+    // إعادة كل شيء طبيعي
+    btns.forEach(b => b.style.display = '');
+    headers.forEach(h => h.style.display = '');
+    return;
+  }
+
+  // فلترة البطاقات حسب الاسم
+  btns.forEach(b => {
+    const lbl = b.querySelector('.ci-lbl');
+    const name = lbl ? lbl.textContent.toLowerCase() : '';
+    b.style.display = name.includes(q) ? '' : 'none';
+  });
+
+  // إخفاء عناوين المجموعات (لأن البحث يكسر التجميع)
+  headers.forEach(h => h.style.display = 'none');
 }
 
 /**
@@ -15391,7 +15875,7 @@ function msRenderTabContent(tabId){
   // إذا كانت هناك أكثر من مجموعة في هذا التاب، نعرض العناوين الفاصلة
   const showHeaders = groupedSections.length > 1;
 
-  // ─── حالة الطي: نقرأ من localStorage أو نطبق الافتراضي (أول قسم مفتوح، الباقي مطوي) ───
+  // ─── حالة الطي: نقرأ من localStorage أو نطبق الافتراضي (كل الأقسام مطوية) ───
   // المفتاح خاص بكل تاب
   const collapseKey = 'ms_collapsed_'+tabId;
   let collapsedGroups = new Set();
@@ -15399,11 +15883,9 @@ function msRenderTabContent(tabId){
     const saved = JSON.parse(localStorage.getItem(collapseKey) || 'null');
     if(Array.isArray(saved)){
       collapsedGroups = new Set(saved);
-    } else if(showHeaders && groupedSections.length > 1){
-      // افتراضي: كل الأقسام مطوية ما عدا الأول
-      for(let i = 1; i < groupedSections.length; i++){
-        collapsedGroups.add(groupedSections[i].groupId);
-      }
+    } else if(showHeaders){
+      // افتراضي: كل الأقسام مطوية — يفتحها المستخدم بضغطة
+      groupedSections.forEach(s => collapsedGroups.add(s.groupId));
     }
   }catch(e){}
 
@@ -15422,10 +15904,14 @@ function msRenderTabContent(tabId){
       header.style.setProperty('--mgh-accent', accent);
       const subText = section.isSoon
         ? (section.group.soonNote || 'قريباً')
-        : (section.cats.length + ' فئات · ' + groupQs + ' سؤال');
+        : (groupQs > 0 
+            ? (section.cats.length + ' فئات')
+            : 'جاري التحميل...');
       const countBadge = section.isSoon
         ? '<div class="ms-group-header-count" style="background:rgba(90,58,142,.15);color:#5a3a8e;border-color:#5a3a8e;">قريباً</div>'
-        : '<div class="ms-group-header-count">' + groupQs + '</div>';
+        : (groupQs > 0 
+            ? '<div class="ms-group-header-count">' + groupQs + '</div>'
+            : '<div class="ms-group-header-count" style="background:rgba(201,162,39,.12);color:#7a5818;border-color:#c9a227;font-size:.65rem;">⏳</div>');
       // سهم الطي (لا يظهر على مجموعات soon لأنها فارغة)
       const chevron = section.isSoon ? '' :
         '<div class="ms-group-header-chevron" aria-label="طي/فتح">' +
@@ -21559,9 +22045,11 @@ async function loadQDBFromCloud(){
     
     if(Object.keys(cloudQDB).length === 0) return false;
     
-    // 4) ندمج مع QDB_ORIGINAL (الذي يحوي الخرائط) — بدون استبدال الخرائط
+    // 4) ندمج مع QDB_ORIGINAL (الذي يحوي الخرائط) — بدون استبدال الخرائط/الأعلام/العواصم
     const merged = JSON.parse(JSON.stringify(QDB_ORIGINAL));
+    const _EXT_CATS = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول']);
     for(const cat in cloudQDB){
+      if(_EXT_CATS.has(cat)) continue; // لا نسمح للسحابة بالكتابة فوق فئات الملفات الخارجية
       merged[cat] = cloudQDB[cat];
     }
     
@@ -21569,7 +22057,7 @@ async function loadQDBFromCloud(){
     
     // 5) نحفظ نسخة محلية (cache)
     try{
-      const _HH_EXT = new Set(['خرائط الدول','أساطير الخرائط']);
+      const _HH_EXT = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول']);
       const slim = {};
       for(const c in cloudQDB){ if(!_HH_EXT.has(c)) slim[c] = cloudQDB[c]; }
       localStorage.setItem('hh_qdb_override', JSON.stringify(slim));
@@ -22357,6 +22845,86 @@ function _hh_getWhatsNew(){
   catch(e){ arr = []; }
   // ⚡ التحديثات الافتراضية المحقنة (تظهر إن لم يكن هناك مثلها)
   const defaults = [
+    {
+      id:'wn_v4_2_quality_legends_2026_05',
+      title:'🌟 ترقية شاملة: 252 سؤال أسطوري بجودة نخبوية!',
+      desc:'تم إعادة بناء فئات الأساطير السبع بفلسفة "الجودة فوق الكمية": 36 سؤالاً نخبوياً لكل فئة (12 سهل + 12 متوسط + 12 صعب) — كل سؤال مدقّق ومنقّى لا يكشف إجابته. ومضافة فئات حديثة: علماء عرب معاصرون (أحمد زويل، فاروق الباز، حياة سندي)، شخصيات خليجية، وإنجازات قطر العصرية.',
+      category:'content',
+      link:'',
+      published:true,
+      createdAt: 1747200000000,
+      updatedAt: 1747200000000
+    },
+    {
+      id:'wn_v4_1_european_football_2026_05',
+      title:'⚽ قسم جديد: الكرة الأوروبية',
+      desc:'استبدلنا فئات الرياضة العامة بثلاث فئات احترافية: الدوري الإسباني 🇪🇸، الدوري الإنجليزي 🏴󠁧󠁢󠁥󠁮󠁧󠁿، ودوري أبطال أوروبا 🏆. 60 سؤالاً متخصصاً عن أهم البطولات والأندية واللاعبين.',
+      category:'content',
+      link:'',
+      published:true,
+      createdAt: 1747100000000,
+      updatedAt: 1747100000000
+    },
+    {
+      id:'wn_v3_3_general_categories_2026_05',
+      title:'📚 تطوير شامل لـ 11 فئة عامة',
+      desc:'تم تطوير فئات: قطر، دين، النبي محمد ﷺ، الصحابة، جزء عم، الحروف، أكمل الفراغ، أكمل المثل — بفلسفة "سؤال واحد = معلومة واحدة". الأسئلة أصبحت أقصر وأذكى وأكثر تأثيراً تربوياً.',
+      category:'content',
+      link:'',
+      published:true,
+      createdAt: 1747000000000,
+      updatedAt: 1747000000000
+    },
+    {
+      id:'wn_v3_2_geography_split_2026_05',
+      title:'🌍 الجغرافيا الآن 3 فئات منفصلة!',
+      desc:'فئة الجغرافيا توسعت إلى ثلاث فئات احترافية: 🗺️ خرائط الدول، 🚩 أعلام الدول، 🏛️ عواصم الدول. أكثر من 72 سؤالاً جغرافياً بصور حقيقية وأيقونات أنيقة. تجربة بصرية ممتعة وتعليمية.',
+      category:'content',
+      link:'',
+      published:true,
+      createdAt: 1746900000000,
+      updatedAt: 1746900000000
+    },
+    {
+      id:'wn_v3_1_qa_tribute_2026_05',
+      title:'🇶🇦 توسعة فئة قطر الحبيبة',
+      desc:'إضافات عصرية لفئة قطر: استاد 974، جزيرة اللؤلؤة، رؤية قطر 2030، الشيخ حمد بن خليفة، تاريخ إعلان الرؤية. الفئة الآن 24 سؤالاً متوازناً (8 سهل + 8 متوسط + 8 صعب).',
+      category:'content',
+      link:'',
+      published:true,
+      createdAt: 1746800000000,
+      updatedAt: 1746800000000
+    },
+    {
+      id:'wn_v2_3_firestore_security_2026_05',
+      title:'🛡️ تعزيز قواعد الأمان',
+      desc:'تحديث قواعد أمان Firestore: حماية أقوى لنقاط الفرق من العبث، خصوصية محسّنة للوحات المتصدرين، صلاحيات أدق للمراجعات والأسئلة المخصصة. أمانك التعليمي أولوية.',
+      category:'security',
+      link:'',
+      published:true,
+      createdAt: 1746700000000,
+      updatedAt: 1746700000000
+    },
+    {
+      id:'wn_v2_2_visual_identity_2026_05',
+      title:'🎨 أيقونات احترافية للفئات الجديدة',
+      desc:'تصميم أيقونات SVG فاخرة للفئات الجديدة بهوية الملهم البصرية (الذهبي والنبيتي والأخضر). الأعلام بإطار ذهبي، والعواصم بقباب ومآذن متوهجة. تجربة بصرية تليق بالمنصة.',
+      category:'design',
+      link:'',
+      published:true,
+      createdAt: 1746600000000,
+      updatedAt: 1746600000000
+    },
+    {
+      id:'wn_v2_1_question_philosophy_2026_05',
+      title:'💡 فلسفة جديدة للأسئلة: 1-1-1',
+      desc:'قاعدة ذهبية تُطبّق على كل المحتوى الجديد: سؤال واحد = معلومة واحدة = إجابة واحدة. السؤال لا يكشف إجابته، والإجابة قصيرة محددة. تعلّم أعمق وتركيز أعلى للطلاب.',
+      category:'education',
+      link:'',
+      published:true,
+      createdAt: 1746500000000,
+      updatedAt: 1746500000000
+    },
     {
       id:'wn_default_grade8_unit345',
       title:'منهج الصف الثامن — الفصل الثاني متاح الآن!',
@@ -26499,7 +27067,7 @@ window.formatMinutesArabic = formatMinutesArabic;
 
 const HH_NAV = {
   // الشاشات التي يظهر فيها الشريط السفلي
-  visibleScreens: ['screen-menu','screen-mygames','screen-toolbox','screen-about',
+  visibleScreens: ['screen-menu','screen-mygames','screen-toolbox','screen-about','screen-story',
                    'screen-references','screen-contact',
                    'screen-setup','screen-lb','screen-rate','screen-rules',
                    'screen-guide','screen-reviews','screen-sponsors',
@@ -26544,7 +27112,8 @@ const HH_NAV = {
     'screen-reviews':    'home',
     'screen-rate':       'home',
     'screen-lb':         'home',
-    'screen-about':      'story',
+    'screen-about':      'about',
+    'screen-story':      'story',
     'screen-sponsors':   'sponsors',
     'screen-influencers':'influencers',
   },
@@ -26678,8 +27247,10 @@ const HH_SEARCH_INDEX = [
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>' },
 
   // ─── الشريط العلوي ───
-  { title:'قصتنا', desc:'من نحن ولماذا أنشأنا الملهم', kw:'about story قصة عن', screen:'screen-about',
+  { title:'قصتنا', desc:'رحلة المنصة من الفصل إلى المنصة', kw:'story قصة رحلة بداية', screen:'screen-story',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v18l4-2 4 2 4-2 4 2V4c0-1.1-.9-2-2-2z"/></svg>' },
+  { title:'عن الملهم', desc:'من نحن ولماذا أنشأنا الملهم', kw:'about عن المنصة قيم رسالة', screen:'screen-about',
+    icon:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12" stroke="#fff" stroke-width="2"/><line x1="12" y1="8" x2="12.01" y2="8" stroke="#fff" stroke-width="2"/></svg>' },
   { title:'الرعاة والداعمون', desc:'شكرا لمن أسهم في الرحلة', kw:'sponsors رعاة داعمين', screen:'screen-sponsors',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' },
   { title:'شخصيات مؤثرة', desc:'النخبة الذين أسهموا في رحلتنا', kw:'influencers شخصيات مؤثرة نخبة influences', screen:'screen-influencers',
@@ -29221,150 +29792,285 @@ function _hh_attrEsc(s){
 
 .sp-hero{
   position:relative;
-  background:linear-gradient(135deg,#2a1a0c 0%,#5C3A1E 50%,#2a1a0c 100%);
+  background:linear-gradient(135deg,#1f1108 0%,#5C3A1E 40%,#3d2614 70%,#1f1108 100%);
   border:1.5px solid #c9a227;
-  border-radius:14px;
-  padding:18px 20px;
+  border-radius:18px;
+  padding:22px 24px;
   text-align:center;
   overflow:hidden;
-  margin-bottom:14px;
+  margin-bottom:18px;
+  box-shadow:
+    0 12px 32px rgba(60,38,20,.25),
+    0 0 0 1px rgba(252,223,101,.15) inset;
 }
 .sp-hero::before{
-  content:'';position:absolute;top:-50%;right:-10%;
-  width:220px;height:220px;
-  background:radial-gradient(circle,rgba(245,215,110,.18),transparent 70%);
+  content:'';position:absolute;top:-60%;right:-15%;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(245,215,110,.22),transparent 70%);
   pointer-events:none;
 }
-.sp-hero-inner{ position:relative;z-index:1;display:flex;align-items:center;gap:14px; }
+.sp-hero::after{
+  content:'';position:absolute;bottom:-30%;left:-10%;
+  width:220px;height:220px;
+  background:radial-gradient(circle,rgba(201,162,39,.15),transparent 70%);
+  pointer-events:none;
+}
+.sp-hero-inner{ position:relative;z-index:1;display:flex;align-items:center;gap:16px; }
 .sp-hero-icon{
-  width:52px;height:52px;
-  background:linear-gradient(135deg,#f5d76e,#c9a227 60%,#7a6418);
-  border-radius:13px;
+  width:58px;height:58px;
+  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 30%,#c9a227 60%,#7a6418 100%);
+  border-radius:15px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 16px rgba(201,162,39,.4),inset 0 -2px 0 rgba(0,0,0,.15);
-  border:2px solid #fdfaf2;flex-shrink:0;
+  box-shadow:
+    0 8px 22px rgba(201,162,39,.45),
+    inset 0 -2px 4px rgba(0,0,0,.2),
+    inset 0 2px 4px rgba(255,255,255,.5);
+  border:2.5px solid #fdfaf2;flex-shrink:0;
+  position:relative;
+}
+/* لمعة ذهبية على الأيقونة */
+.sp-hero-icon::before{
+  content:'';position:absolute;inset:-4px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(252,223,101,.4),transparent 50%);
+  z-index:-1;
+  opacity:.7;
 }
 .sp-hero-text{ flex:1;text-align:right; }
 .sp-hero-title{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:1.1rem;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:1.18rem;
   color:#fff;line-height:1.3;
+  letter-spacing:-.3px;
 }
 .sp-hero-title .gold{
-  background:linear-gradient(180deg,#f5d76e,#c9a227);
+  background:linear-gradient(180deg,#fff5c0 0%,#f5d76e 50%,#c9a227 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1px 2px rgba(252,223,101,.4));
 }
 .sp-hero-sub{
-  font-family:Tajawal,sans-serif;font-size:.78rem;
-  color:#f5d76e;opacity:.85;margin-top:4px;line-height:1.5;
+  font-family:Tajawal,sans-serif;font-size:.82rem;
+  color:#f5d76e;opacity:.92;margin-top:6px;line-height:1.6;
+  font-weight:500;
 }
 
 /* ═══ التابات ═══ */
-.sp-tabs{ display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px; }
+.sp-tabs{ display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px; }
 .sp-tab{
-  background:#fff;border:1.5px solid #e6dec9;border-radius:11px;
-  padding:10px 6px;cursor:pointer;text-align:center;
-  transition:all .25s ease;position:relative;
+  background:linear-gradient(180deg,#fffef9 0%,#fdfaef 100%);
+  border:1.5px solid #e6dec9;border-radius:14px;
+  padding:13px 6px 12px;cursor:pointer;text-align:center;
+  transition:all .3s cubic-bezier(.34,1.2,.64,1);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(60,38,20,.05);
 }
-.sp-tab:hover{ transform:translateY(-1px); }
+.sp-tab::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle,rgba(252,223,101,.15),transparent 70%);
+  pointer-events:none;
+  opacity:0;
+  transition:all .4s ease;
+}
+.sp-tab:hover{ 
+  transform:translateY(-3px); 
+  border-color:rgba(201,162,39,.6);
+  box-shadow:0 10px 22px rgba(60,38,20,.12);
+}
+.sp-tab:hover::before{opacity:1;transform:scale(1.5);}
 .sp-tab-icon{
-  width:32px;height:32px;margin:0 auto 5px;
+  width:38px;height:38px;margin:0 auto 7px;
   border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:#fff;transition:transform .2s ease;
+  color:#fff;
+  transition:all .3s cubic-bezier(.34,1.2,.64,1);
+  box-shadow:
+    0 4px 12px rgba(60,38,20,.15),
+    inset 0 -1px 0 rgba(0,0,0,.1),
+    0 0 0 3px rgba(255,255,255,.6);
 }
-.sp-tab[data-color="platinum"] .sp-tab-icon{ background:linear-gradient(135deg,#f5d76e,#c9a227);color:#2a1a0c; }
-.sp-tab[data-color="gold"] .sp-tab-icon{ background:linear-gradient(135deg,#c9a227,#7a6418); }
-.sp-tab[data-color="green"] .sp-tab-icon{ background:linear-gradient(135deg,#97c459,#1a7a4a); }
-.sp-tab-name{ font-family:Cairo,sans-serif;font-weight:900;font-size:.82rem;color:#2a1a0c;line-height:1;margin-bottom:3px; }
-.sp-tab-tag{ font-family:Tajawal,sans-serif;font-size:.62rem;color:#7a5c00;line-height:1; }
+.sp-tab[data-color="platinum"] .sp-tab-icon{ 
+  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 40%,#c9a227 100%);color:#2a1a0c;
+  box-shadow:0 5px 16px rgba(201,162,39,.45),inset 0 -1px 0 rgba(0,0,0,.15),0 0 0 3px rgba(255,255,255,.7);
+}
+.sp-tab[data-color="gold"] .sp-tab-icon{ 
+  background:linear-gradient(135deg,#c9a227 0%,#a08415 60%,#7a6418 100%);
+  box-shadow:0 5px 14px rgba(201,162,39,.4),inset 0 -1px 0 rgba(0,0,0,.15),0 0 0 3px rgba(255,255,255,.6);
+}
+.sp-tab[data-color="green"] .sp-tab-icon{ 
+  background:linear-gradient(135deg,#97c459 0%,#5cb37a 50%,#1a7a4a 100%);
+  box-shadow:0 5px 14px rgba(26,122,74,.4),inset 0 -1px 0 rgba(0,0,0,.15),0 0 0 3px rgba(255,255,255,.6);
+}
+.sp-tab-name{ font-family:Cairo,sans-serif;font-weight:900;font-size:.85rem;color:#2a1a0c;line-height:1.1;margin-bottom:4px;letter-spacing:-.2px; }
+.sp-tab-tag{ font-family:Tajawal,sans-serif;font-size:.65rem;color:#8a6c1c;line-height:1;font-weight:700; }
 .sp-tab.active{
-  background:linear-gradient(180deg,#fdfaf2,#fff);
+  background:linear-gradient(180deg,#fffef9 0%,#fdf7e3 100%);
   border-color:#c9a227;
-  box-shadow:0 4px 14px rgba(201,162,39,.18);
-  transform:translateY(-2px);
+  border-width:2px;
+  box-shadow:
+    0 10px 28px rgba(201,162,39,.25),
+    0 0 0 1px rgba(252,223,101,.4) inset;
+  transform:translateY(-3px);
 }
-.sp-tab.active .sp-tab-icon{ transform:scale(1.05); }
+.sp-tab.active .sp-tab-icon{ transform:scale(1.1); }
 .sp-tab.active::after{
-  content:'';position:absolute;bottom:-1.5px;left:50%;transform:translateX(-50%);
-  width:36px;height:3px;
-  background:linear-gradient(90deg,#c9a227,#f5d76e,#c9a227);
-  border-radius:2px;
+  content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);
+  width:48px;height:4px;
+  background:linear-gradient(90deg,transparent 0%,#c9a227 25%,#f5d76e 50%,#c9a227 75%,transparent 100%);
+  border-radius:3px;
+}
+
+/* البطاقة المميزة (platinum) — تميز خاص */
+.sp-tab[data-color="platinum"]::before{
+  background:radial-gradient(circle,rgba(252,223,101,.25),transparent 70%);
+  opacity:.6;
+}
+.sp-tab[data-color="platinum"].active{
+  background:linear-gradient(180deg,#fffbe6 0%,#fdf3c8 100%);
+  border-color:#c9a227;
+  box-shadow:
+    0 14px 32px rgba(201,162,39,.3),
+    0 0 0 2px rgba(252,223,101,.5) inset;
 }
 
 /* ═══ بطاقة المحتوى ═══ */
 .sp-content{
-  background:#fff;border:1.5px solid #c9a227;border-radius:14px;
-  padding:14px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#fffef9 0%,#fdfaef 100%);
+  border:1.5px solid #c9a227;
+  border-radius:18px;
+  padding:18px;position:relative;overflow:hidden;
+  box-shadow:
+    0 8px 28px rgba(60,38,20,.1),
+    0 0 0 1px rgba(252,223,101,.25) inset;
 }
 .sp-content::before{
-  content:'';position:absolute;top:0;right:0;left:0;height:3px;
-  background:linear-gradient(90deg,#f5d76e,#c9a227,#7a6418);
+  content:'';position:absolute;top:0;right:0;left:0;height:5px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    #f5d76e 20%,
+    #c9a227 50%,
+    #f5d76e 80%,
+    transparent 100%);
+  border-radius:18px 18px 0 0;
+}
+.sp-content::after{
+  content:'';position:absolute;top:-40px;left:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(252,223,101,.2),transparent 70%);
+  pointer-events:none;
 }
 .sp-content-head{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;
+  position:relative;z-index:1;
 }
-.sp-tagline{ font-family:Cairo,sans-serif;font-weight:700;font-size:.84rem;color:#5C3A1E;flex:1; }
+.sp-tagline{ 
+  font-family:Cairo,sans-serif;font-weight:800;font-size:.92rem;
+  color:#3d2614;flex:1;line-height:1.4;
+  letter-spacing:-.2px;
+}
 .sp-pitch{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.65rem;
-  background:linear-gradient(135deg,#fef9ec,#fff);
-  color:#7a5c00;border:1.5px solid #c9a227;
-  padding:4px 11px;border-radius:12px;flex-shrink:0;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.7rem;
+  background:linear-gradient(135deg,#fff5c0 0%,#fef9ec 100%);
+  color:#7a5c00;
+  border:1.5px solid #c9a227;
+  padding:5px 13px;border-radius:14px;flex-shrink:0;
+  box-shadow:0 2px 6px rgba(201,162,39,.2);
 }
 
 /* ═══ بطاقات المميزات ═══ */
 .sp-perks{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;
+  position:relative;z-index:1;
 }
-@media (max-width:520px){ .sp-perks{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .sp-perks{ grid-template-columns:1fr;gap:8px; } }
 .sp-perk{
-  background:linear-gradient(180deg,#fdfaf2 0%,#fff 100%);
-  border:1px solid #e6dec9;border-radius:10px;
-  padding:10px 7px;text-align:center;
-  transition:all .25s ease;
+  background:linear-gradient(180deg,#fffef9 0%,#fdf7e3 100%);
+  border:1.5px solid rgba(201,162,39,.35);
+  border-radius:14px;
+  padding:14px 10px 12px;text-align:center;
+  transition:all .3s cubic-bezier(.34,1.2,.64,1);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(60,38,20,.06);
+}
+.sp-perk::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:60px;height:60px;border-radius:50%;
+  background:radial-gradient(circle,rgba(252,223,101,.2),transparent 70%);
+  pointer-events:none;
+  opacity:0;
+  transition:all .4s ease;
 }
 .sp-perk:hover{
-  transform:translateY(-2px);
-  box-shadow:0 4px 12px rgba(201,162,39,.18);
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(201,162,39,.22);
   border-color:#c9a227;
 }
+.sp-perk:hover::before{opacity:1;transform:scale(1.5);}
 .sp-perk-check{
-  width:28px;height:28px;margin:0 auto 6px;
-  background:linear-gradient(135deg,#f5d76e 0%,#c9a227 60%,#7a6418 100%);
+  width:34px;height:34px;margin:0 auto 8px;
+  background:linear-gradient(135deg,#fff5c0 0%,#f5d76e 30%,#c9a227 70%,#7a6418 100%);
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   color:#2a1a0c;
-  box-shadow:0 3px 8px rgba(201,162,39,.4),inset 0 -1px 0 rgba(0,0,0,.15);
-  border:1.5px solid #fdfaf2;
+  box-shadow:
+    0 4px 12px rgba(201,162,39,.5),
+    inset 0 -1px 2px rgba(0,0,0,.15),
+    inset 0 1px 2px rgba(255,255,255,.5),
+    0 0 0 3px rgba(255,255,255,.7);
 }
 .sp-perk-text{
-  font-family:Tajawal,sans-serif;font-size:.75rem;color:#3d2614;
-  line-height:1.4;font-weight:600;
+  font-family:Tajawal,sans-serif;font-size:.78rem;color:#3d2614;
+  line-height:1.5;font-weight:700;
+  letter-spacing:-.1px;
 }
 
 /* ═══ زر CTA ═══ */
 .sp-cta{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:11px;
-  background:linear-gradient(135deg,#5C3A1E,#2a1a0c);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px;
+  background:linear-gradient(135deg,#5C3A1E 0%,#2a1a0c 100%);
   color:#f5d76e;
-  border:1.5px solid #c9a227;
-  border-radius:10px;
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.88rem;
+  border:2px solid #c9a227;
+  border-radius:14px;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
   cursor:pointer;width:100%;
-  box-shadow:0 4px 12px rgba(92,58,30,.25);
-  transition:all .25s ease;
+  box-shadow:
+    0 8px 22px rgba(92,58,30,.35),
+    0 0 0 1px rgba(252,223,101,.3) inset;
+  transition:all .3s cubic-bezier(.34,1.2,.64,1);
   text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  letter-spacing:-.2px;
 }
-.sp-cta:hover{ transform:translateY(-1px);box-shadow:0 6px 16px rgba(92,58,30,.35); }
+.sp-cta::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(252,223,101,.25),transparent);
+  transition:left .6s ease;
+}
+.sp-cta:hover{ 
+  transform:translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(92,58,30,.45),
+    0 0 0 1px rgba(252,223,101,.5) inset;
+  border-color:#f5d76e;
+}
+.sp-cta:hover::before{left:100%;}
 .sp-cta.green{
-  background:linear-gradient(135deg,#1a7a4a,#0d5c36);
-  color:#fff;border-color:#97c459;
+  background:linear-gradient(135deg,#1a7a4a 0%,#0d5c36 100%);
+  color:#fff;
+  border-color:#97c459;
+  box-shadow:0 8px 22px rgba(26,122,74,.35),0 0 0 1px rgba(151,196,89,.3) inset;
+}
+.sp-cta.green:hover{
+  box-shadow:0 12px 32px rgba(26,122,74,.45),0 0 0 1px rgba(151,196,89,.5) inset;
+  border-color:#97c459;
 }
 
-body.dark-mode .sp-content{ background:#1a1410;border-color:#7a6418; }
-body.dark-mode .sp-tab{ background:#1a1410;border-color:#3d2614; }
-body.dark-mode .sp-tab.active{ background:#2a1a0c; }
+body.dark-mode .sp-content{ background:linear-gradient(180deg,#1a1410 0%,#100b08 100%);border-color:#7a6418; }
+body.dark-mode .sp-tab{ background:linear-gradient(180deg,#1a1410 0%,#100b08 100%);border-color:#3d2614; }
+body.dark-mode .sp-tab.active{ background:linear-gradient(180deg,#2a1a0c 0%,#1a1410 100%); }
 body.dark-mode .sp-tab-name{ color:#f5d76e; }
-body.dark-mode .sp-perk{ background:#1a1410;border-color:#3d2614; }
+body.dark-mode .sp-perk{ background:linear-gradient(180deg,#1a1410 0%,#100b08 100%);border-color:#3d2614; }
 body.dark-mode .sp-perk-text{ color:#e8dcc8; }
 body.dark-mode .sp-tagline{ color:#f5d76e; }
 </style>
@@ -29378,21 +30084,20 @@ body.dark-mode .sp-tagline{ color:#f5d76e; }
 const HH_SPONSORS_DEFAULT = {
   hero: {
     title: 'شركاؤنا في صناعة <span class="gold">الأثر</span>',
-    subtitle: 'منصة تربوية تخدم معلمي وطلاب قطر — والأبواب مفتوحة لكل من يريد المساهمة'
+    subtitle: 'تربية الجيل ليست عملاً فردياً — هي شراكة بين كل من يؤمن بأن التعليم رسالة'
   },
   tiers: [
     {
       id: 'platinum',
       color: 'platinum',
       name: 'شريك مميز',
-      tag: '★ خاص',
-      tagline: 'شراكة استراتيجية في رحلة المنصة',
-      pitch: 'مكان واحد فقط',
+      tag: '★ استراتيجي',
+      tagline: 'شراكة استراتيجية تُخلّد في رحلة المنصة',
+      pitch: 'مقعد حصري — مكان واحد فقط',
       perks: [
-        'شكر علني على المنصة',
-        'فئة باسم الشريك',
-        'تعريف للمعلمين',
-        'تواصل ومتابعة دورية'
+        'فئة كاملة باسم شريكك على المنصة يلعبها كل المعلمين والطلاب',
+        'حضور بصري دائم في الواجهة الرئيسية وشاشة التعريف بالمنصة',
+        'تقارير دورية بأثر الشراكة وأرقام الوصول الفعلي للطلاب'
       ],
       ctaText: 'تواصل معنا للشراكة',
       ctaLink: 'https://wa.me/97471776644',
@@ -29402,13 +30107,13 @@ const HH_SPONSORS_DEFAULT = {
       id: 'gold',
       color: 'gold',
       name: 'شريك داعم',
-      tag: 'داعم',
-      tagline: 'مساهمة في نشر الرسالة التربوية',
-      pitch: 'بالاتفاق',
+      tag: '◆ داعم',
+      tagline: 'يدٌ تُمدّ لرسالة تربوية تستحق الانتشار',
+      pitch: 'شراكة مرنة بالاتفاق',
       perks: [
-        'شكر في صفحة الشركاء',
-        'ذكر اسم المؤسسة',
-        'شراكة مرنة'
+        'تعريف بمؤسستك في صفحة الشركاء مع شعارها ووصف مختصر',
+        'ذكر بالشكر العلني في فعاليات المنصة الموسمية للمعلمين',
+        'فرصة تخصيص شراكة على نشاط أو مسابقة معينة'
       ],
       ctaText: 'انضم كشريك داعم',
       ctaLink: 'https://wa.me/97471776644',
@@ -29418,15 +30123,15 @@ const HH_SPONSORS_DEFAULT = {
       id: 'friend',
       color: 'green',
       name: 'صديق المنصة',
-      tag: 'صديق',
-      tagline: 'مساهم بمحبة في صناعة الأثر',
-      pitch: 'الأبواب مفتوحة',
+      tag: '♡ صديق',
+      tagline: 'القلوب الطيبة التي تصنع المجتمع التربوي',
+      pitch: 'الأبواب مفتوحة لكل محسن',
       perks: [
-        'تقدير وشكر علني',
-        'ذكر الاسم في الأصدقاء',
-        'مساهمة بمحتوى أو خبرة أو وقت'
+        'اسمك ضمن قائمة أصدقاء المنصة بتقدير دائم',
+        'دعوة لحضور لقاءات المعلمين والورش التطويرية',
+        'مساهمة بمحتوى أو خبرة أو وقت — كل دعم يصنع فرقاً'
       ],
-      ctaText: 'كن صديقا للمنصة',
+      ctaText: 'كن صديقاً للمنصة',
       ctaLink: 'https://wa.me/97471776644',
       visible: true
     }

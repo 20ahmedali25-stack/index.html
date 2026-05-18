@@ -1,0 +1,228 @@
+rules_version = '2';
+
+// ════════════════════════════════════════════════════════════
+// 🛡️ قواعد أمان Firestore المحسّنة — منصة الملهم
+// ════════════════════════════════════════════════════════════
+// التحسينات:
+// ✅ حماية team_scores من التعديل العشوائي
+// ✅ حماية game_history من التلاعب
+// ✅ leaderboard للمسجلين فقط
+// ✅ السماح للمستخدم بحذف مراجعته
+// ✅ دوال مساعدة لتنظيف الكود وتقليل التكرار
+// ✅ حماية إضافية لـ user_games (آخر منصة الأمان)
+// ════════════════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────
+    // 🔧 دوال مساعدة (Helper Functions)
+    // ─────────────────────────────────────────────
+    
+    // التحقق من تسجيل دخول المستخدم
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // التحقق من أن المستخدم هو الأدمن (عبر الإيميل)
+    // 💡 لتغيير الأدمن: عدّل الإيميل أدناه
+    function isAdmin() {
+      return isSignedIn() 
+        && request.auth.token.email == '20ahmedali25@gmail.com';
+    }
+    
+    // التحقق من أن المستخدم هو صاحب المستند (يمتلك userId يطابق UID)
+    function isOwner() {
+      return isSignedIn() 
+        && resource.data.userId == request.auth.uid;
+    }
+    
+    // التحقق من أن المستخدم هو صاحب المستند الجديد (للإنشاء)
+    function isCreatingOwn() {
+      return isSignedIn() 
+        && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // التحقق من أن المستخدم هو المعلم صاحب الفصل
+    function isClassTeacher() {
+      return isSignedIn() 
+        && resource.data.teacherId == request.auth.uid;
+    }
+
+    // ─────────────────────────────────────────────
+    // 👤 المستخدمون (Users)
+    // ─────────────────────────────────────────────
+    match /users/{userId} {
+      // الجميع يقرأ بيانات المستخدمين العامة
+      allow read: if true;
+      // المستخدم يُنشئ ملفه فقط
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      // المستخدم يعدّل/يحذف ملفه فقط، أو الأدمن
+      allow update, delete: if (isSignedIn() && request.auth.uid == userId) 
+        || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // ⭐ المراجعات (Reviews)
+    // ─────────────────────────────────────────────
+    match /reviews/{reviewId} {
+      // الجميع يقرأ المراجعات
+      allow read: if true;
+      // المستخدم المسجل ينشئ مراجعة باسمه فقط
+      allow create: if isCreatingOwn();
+      // 🆕 المستخدم يقدر يحذف مراجعته، أو الأدمن
+      allow delete: if isOwner() || isAdmin();
+      // 🆕 المستخدم يعدّل مراجعته فقط، أو الأدمن
+      allow update: if isOwner() || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🏆 نقاط الفرق (Team Scores) — محسّن
+    // ─────────────────────────────────────────────
+    match /team_scores/{doc} {
+      // الجميع يقرأ النقاط
+      allow read: if true;
+      // 🆕 المستخدم المسجل ينشئ نقاطه فقط (بشرط أن userId مطابق)
+      allow create: if isCreatingOwn();
+      // 🆕 المستخدم يعدّل نقاطه فقط، أو الأدمن
+      allow update: if isOwner() || isAdmin();
+      // 🆕 الحذف للأدمن فقط (منع التخريب)
+      allow delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🔒 منطقة الأدمن
+    // ─────────────────────────────────────────────
+    match /admin/{doc} {
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🏫 الفصول الدراسية (Classrooms)
+    // ─────────────────────────────────────────────
+    match /classrooms/{code} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() 
+        && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if isClassTeacher() || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 👨‍🎓 طلاب الفصول (Classroom Students)
+    // ─────────────────────────────────────────────
+    match /classroom_students/{docId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      // المعلم أو الطالب نفسه يقدر يعدّل/يحذف
+      allow update, delete: if isSignedIn() 
+        && (resource.data.teacherId == request.auth.uid
+            || resource.data.userId == request.auth.uid)
+        || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // ⚙️ إعدادات المنصة (Platform Settings)
+    // ─────────────────────────────────────────────
+    match /platform_settings/{docId} {
+      allow read: if true;  // قابلة للقراءة العامة (للموقع)
+      allow write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🎮 سجل الألعاب (Game History) — محسّن
+    // ─────────────────────────────────────────────
+    match /game_history/{gameId} {
+      // 🆕 القراءة للمسجلين فقط (خصوصية)
+      allow read: if isSignedIn();
+      allow create: if isCreatingOwn();
+      // 🆕 الحذف للأدمن فقط (سجل لا يُمسح)
+      allow update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 📝 نتائج الاختبارات (Quiz Results)
+    // ─────────────────────────────────────────────
+    match /quiz_results/{resultId} {
+      allow read: if isSignedIn();
+      allow create: if isCreatingOwn();
+      allow update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // ❓ الأسئلة المخصصة (Custom Questions)
+    // ─────────────────────────────────────────────
+    match /custom_questions/{questionId} {
+      allow read: if isSignedIn();
+      allow create: if isCreatingOwn();
+      allow update, delete: if isOwner() || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🏅 لوحات المتصدرين (Leaderboards) — محسّن
+    // ─────────────────────────────────────────────
+    match /leaderboard/{docId} {
+      // 🆕 القراءة للمسجلين فقط (حماية الخصوصية)
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /leaderboards/{docId} {
+      // 🆕 القراءة للمسجلين فقط
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🚨 بلاغات المشاكل (Problem Reports)
+    // ─────────────────────────────────────────────
+    match /problem_reports/{reportId} {
+      // أي مستخدم يقدر يبلّغ (حتى غير مسجل)
+      allow create: if true;
+      // القراءة والإدارة للأدمن فقط
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🗄️ قاعدة الأسئلة الإدارية (Admin QDB)
+    // ─────────────────────────────────────────────
+    match /admin_qdb/{docId} {
+      // 🆕 الجميع يقرأ (لأن الأسئلة تُحمَّل في الموقع)
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🖼️ صور الفئات الإدارية
+    // ─────────────────────────────────────────────
+    match /admin_cat_images/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🎯 ألعاب المستخدمين (User Games) — محسّن
+    // ─────────────────────────────────────────────
+    match /user_games/{gameId} {
+      // المستخدم يقرأ ألعابه فقط
+      allow read: if isOwner() || isAdmin();
+      allow create: if isCreatingOwn();
+      allow delete: if isOwner() || isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🤝 الشركاء (Partners) — معلومات عامة
+    // ─────────────────────────────────────────────
+    match /partners/{partnerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // 🔐 قاعدة احتياطية — كل ما لم يُذكر صراحة يُمنع
+    // ─────────────────────────────────────────────
+    // 💡 هذي الطبقة الأخيرة من الحماية: لو نسينا ذكر مجموعة،
+    // الوصول إليها يُمنع تلقائياً (مبدأ الحد الأدنى للأذونات)
+    
+    // (لا حاجة لإضافتها صراحة — Firestore يطبقها افتراضياً)
+  }
+}
