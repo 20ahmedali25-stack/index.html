@@ -572,6 +572,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -14664,6 +14665,24 @@ const _hardLoaderCap = setTimeout(()=>{
 
 try {
   firebase.initializeApp(FB_CONFIG);
+  
+  // 🛡️ Firebase App Check — حماية من البوتات والوصول غير المصرح
+  // ⚠️ مهم: استبدل 'YOUR_RECAPTCHA_SITE_KEY' بـ Site Key من reCAPTCHA v3
+  // خطوات الإعداد: https://www.google.com/recaptcha/admin
+  try {
+    const APP_CHECK_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY'; // 👈 ضع Site Key هنا
+    if (APP_CHECK_SITE_KEY && APP_CHECK_SITE_KEY !== 'YOUR_RECAPTCHA_SITE_KEY') {
+      const appCheck = firebase.appCheck();
+      appCheck.activate(
+        new firebase.appCheck.ReCaptchaV3Provider(APP_CHECK_SITE_KEY),
+        true // isTokenAutoRefreshEnabled
+      );
+      console.log('🛡️ App Check مُفعّل');
+    }
+  } catch(e) {
+    console.warn('App Check تعذر تفعيله:', e.message);
+  }
+  
   auth=firebase.auth();
   db=firebase.firestore();
   auth.onAuthStateChanged(async user=>{
@@ -19442,6 +19461,14 @@ function resetEverything(){
 }
 
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+// 🛡️ تنظيف القيم داخل سمات HTML (مثل onclick='...${id}...')
+// تمنع XSS عبر الـ id أو الـ name
+function escAttr(s){
+  if (s == null) return '';
+  return String(s).replace(/['"\\<>&]/g, function(c){
+    return {"'":'&#39;','"':'&quot;','\\':'&#92;','<':'&lt;','>':'&gt;','&':'&amp;'}[c];
+  });
+}
 let tt;function toast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3200);}
 
 // 🔜 رسالة "قريبا" للميزات قيد التطوير
@@ -20390,7 +20417,7 @@ async function loadHomeReviews(){
       ? `<div style="display:inline-flex;align-items:center;gap:5px;font-size:.68rem;color:#7a6418;font-weight:800;background:linear-gradient(135deg,#f3e8c4,#f0e5b8);border:1px solid rgba(201,162,39,.5);padding:3px 10px;border-radius:999px;margin-top:5px;box-shadow:0 2px 6px rgba(201,162,39,.12);"><span style="color:#c9a227;">${sparkIcon}</span>شخص مميز ومبدع</div>`
       : '';
     return `<div class="review-card">
-      ${isAdmin?`<button class="rc-delete" onclick="deleteReview('${r.id}')" title="حذف">حذف</button>`:''}
+      ${isAdmin?`<button class="rc-delete" onclick="deleteReview('${escAttr(r.id)}')" title="حذف">حذف</button>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <div>
           <div class="rc-name">${esc(displayName)}</div>
@@ -20400,7 +20427,7 @@ async function loadHomeReviews(){
         <div class="rc-date" style="text-align:left;">${dateStr}</div>
       </div>
       ${r.comment?`<div class="rc-text" id="rc-${r.id}" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">"${esc(r.comment)}"</div>
-      ${r.comment.length>120?`<button onclick="expandReview('${r.id}')" id="rcb-${r.id}" style="background:none;border:none;color:#5C3A1E;font-family:Cairo,sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;padding:2px 0;margin-top:2px;">اقرأ المزيد ▼</button>`:''}`:''
+      ${r.comment.length>120?`<button onclick="expandReview('${escAttr(r.id)}')" id="rcb-${escAttr(r.id)}" style="background:none;border:none;color:#5C3A1E;font-family:Cairo,sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;padding:2px 0;margin-top:2px;">اقرأ المزيد ▼</button>`:''}`:''
       }
     </div>`;
   }).join('');
@@ -22154,7 +22181,7 @@ async function loadPermissionsPanel(){
               <div style="font-size:.78rem;font-weight:800;color:#1a1a2e;">تعديل الأسئلة</div>
               <div style="font-size:.68rem;color:${canEdit?'#1a7a4a':'#888'};font-weight:700;">${canEdit?'مصرح':'غير مصرح'}</div>
             </div>
-            <button onclick="toggleUserPerm('${u.id}','canEditQuestions',${canEdit},'${nameSafe}','تعديل الأسئلة')"
+            <button onclick="toggleUserPerm('${escAttr(u.id)}','canEditQuestions',${canEdit},'${nameSafe}','تعديل الأسئلة')"
               style="padding:5px 12px;background:${canEdit?'#fde8e8':'#e8f5ee'};border:1.5px solid ${canEdit?'#c0392b':'#1a7a4a'};border-radius:8px;font-family:Cairo;font-size:.75rem;font-weight:900;color:${canEdit?'#c0392b':'#1a7a4a'};cursor:pointer;white-space:nowrap;">
               ${canEdit?'إلغاء':'منح'}
             </button>
@@ -22166,7 +22193,7 @@ async function loadPermissionsPanel(){
               <div style="font-size:.78rem;font-weight:800;color:#1a1a2e;">رؤية شركاء النجاح</div>
               <div style="font-size:.68rem;color:${canPartners?'#1a7a4a':'#888'};font-weight:700;">${canPartners?'مصرح':'غير مصرح'}</div>
             </div>
-            <button onclick="toggleUserPerm('${u.id}','canViewPartners',${canPartners},'${nameSafe}','رؤية شركاء النجاح')"
+            <button onclick="toggleUserPerm('${escAttr(u.id)}','canViewPartners',${canPartners},'${nameSafe}','رؤية شركاء النجاح')"
               style="padding:5px 12px;background:${canPartners?'#fde8e8':'#e8f5ee'};border:1.5px solid ${canPartners?'#c0392b':'#1a7a4a'};border-radius:8px;font-family:Cairo;font-size:.75rem;font-weight:900;color:${canPartners?'#c0392b':'#1a7a4a'};cursor:pointer;white-space:nowrap;">
               ${canPartners?'إلغاء':'منح'}
             </button>
@@ -23748,7 +23775,7 @@ async function loadAdminPanel(){
             <div style="font-size:.68rem;color:#aaa;margin-top:3px;">${r.date||''}</div>
             ${deviceBlock}
           </div>
-          <button class="admin-del-btn" onclick="adminDeleteReview('${r.id}')">حذف</button>
+          <button class="admin-del-btn" onclick="adminDeleteReview('${escAttr(r.id)}')">حذف</button>
         </div>`;
       }).join('');
     }
@@ -23936,7 +23963,7 @@ function renderUsersList(){
       if(userBadge) badgeHTML = renderBadgeHTML(userBadge, { size:'sm' });
     }catch(e){}
     const reviewBtn = !u.hasReviewed
-      ? `<button onclick="requestUserReview('${u.id}','${esc(u.name||'')}')" title="اطلب منه التقييم" style="padding:4px 10px;background:linear-gradient(135deg,#c9a227,#7a5c00);color:#fff;border:none;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(201,162,39,.35);">
+      ? `<button onclick="requestUserReview('${escAttr(u.id)}','${esc(u.name||'')}')" title="اطلب منه التقييم" style="padding:4px 10px;background:linear-gradient(135deg,#c9a227,#7a5c00);color:#fff;border:none;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(201,162,39,.35);">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           اطلب منه التقييم
         </button>`
@@ -23963,7 +23990,7 @@ function renderUsersList(){
           <div class="au-pts" style="margin-top:4px;">★ ${u.points||0} نقطة ${u.gamesPlayed?'• '+u.gamesPlayed+' لعبة':''}${u.totalMinutes?' • ⏱️ '+(typeof formatMinutesArabic==='function'?formatMinutesArabic(u.totalMinutes):(u.totalMinutes+' دقيقة'))+(u.sessionsCount?' ('+u.sessionsCount+' جلسة)':''):''}</div>
           ${reviewBtn ? `<div style="margin-top:8px;">${reviewBtn}</div>` : ''}
         </div>
-        <button class="admin-del-btn" onclick="adminDeleteUser('${u.id}','${esc(u.name||'')}')">حذف</button>
+        <button class="admin-del-btn" onclick="adminDeleteUser('${escAttr(u.id)}','${esc(u.name||'')}')">حذف</button>
       </div>`;
   }).join('');
 }
@@ -26537,11 +26564,11 @@ function renderBagItems(){
           <div style="font-size:.74rem;color:#777;font-weight:500;">${preview}${item.data.subject?' • '+escAG(item.data.subject):''}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">
-          <button onclick="reuseBagItem('${item.id}')" title="إعادة استخدام" style="padding:6px 10px;background:linear-gradient(135deg,#1a7a4a,#0f5a33);color:#fff;border:none;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;display:flex;align-items:center;gap:4px;">
+          <button onclick="reuseBagItem('${escAttr(item.id)}')" title="إعادة استخدام" style="padding:6px 10px;background:linear-gradient(135deg,#1a7a4a,#0f5a33);color:#fff;border:none;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;display:flex;align-items:center;gap:4px;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
             استخدم
           </button>
-          <button onclick="deleteBagItem('${item.id}')" title="حذف" style="padding:6px 10px;background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">
+          <button onclick="deleteBagItem('${escAttr(item.id)}')" title="حذف" style="padding:6px 10px;background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">
             حذف
           </button>
         </div>
