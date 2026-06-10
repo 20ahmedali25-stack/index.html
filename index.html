@@ -1222,50 +1222,69 @@ body.admin-edit-mode .cat-btn .cat-admin-tools{display:flex;}
   .pu-lbl-lg{font-size:.68rem !important;}
 }
 
-/* 🏆 الشريط السفلي - بطاقات الفرق الكبيرة */
+/* 🏆 الشريط السفلي - بطاقات الفرق المدمجة */
+#board-bottom-bar{
+  padding:6px 8px !important;
+}
+#board-bottom-bar .scores-row{
+  flex-wrap:nowrap !important;
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  padding-bottom:2px;
+}
+#board-bottom-bar .scores-row::-webkit-scrollbar{height:4px;}
+#board-bottom-bar .scores-row::-webkit-scrollbar-thumb{background:#8A1538;border-radius:2px;}
+
 #board-bottom-bar .team-score-card{
   background:linear-gradient(180deg,#fff 0%,#fdfaef 100%);
-  border:2.5px solid #8A1538;
-  border-radius:14px;
-  padding:10px 16px;
-  display:flex;align-items:center;gap:10px;
-  min-width:200px;
-  box-shadow:0 4px 12px rgba(138,21,56,.15);
-  transition:all .25s ease;
+  border:1.5px solid #8A1538;
+  border-radius:10px;
+  padding:4px 8px;
+  display:flex;align-items:center;gap:6px;
+  min-width:auto;
+  flex-shrink:0;
+  box-shadow:0 1px 4px rgba(138,21,56,.1);
+  transition:all .2s ease;
 }
 #board-bottom-bar .team-score-card.active{
   background:linear-gradient(180deg,#FFFEF9 0%,#fef6dc 100%);
   border-color:#d4b740;
-  box-shadow:0 6px 20px rgba(212,183,64,.35),inset 0 0 0 1px rgba(255,255,255,.6);
-  transform:translateY(-2px);
+  border-width:2px;
+  box-shadow:0 2px 10px rgba(212,183,64,.3);
 }
 #board-bottom-bar .team-name{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
-  color:#5E0E26;flex:1;text-align:right;letter-spacing:-.2px;
+  font-family:Cairo,sans-serif;font-weight:800;font-size:.72rem;
+  color:#5E0E26;text-align:right;letter-spacing:-.2px;
+  white-space:nowrap;
+  max-width:90px;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 #board-bottom-bar .team-score{
-  font-family:Cairo,sans-serif;font-weight:900;font-size:1.35rem;
-  color:#8A1538;min-width:48px;text-align:center;
-  background:#F7EBEE;border-radius:10px;padding:4px 10px;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
+  color:#8A1538;min-width:28px;text-align:center;
+  background:#F7EBEE;border-radius:6px;padding:1px 6px;
   font-variant-numeric:tabular-nums;
 }
 #board-bottom-bar .score-btn{
-  width:32px;height:32px;border-radius:50%;
+  width:22px;height:22px;border-radius:50%;
   border:none;cursor:pointer;
-  font-family:Cairo,sans-serif;font-weight:900;font-size:1.1rem;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.85rem;
   display:flex;align-items:center;justify-content:center;
-  transition:all .2s ease;
+  transition:all .15s ease;
   flex-shrink:0;
+  padding:0;
+  line-height:1;
 }
 #board-bottom-bar .score-btn.plus{background:#3D6B53;color:#fff;}
 #board-bottom-bar .score-btn.minus{background:#c0392b;color:#fff;}
-#board-bottom-bar .score-btn:hover{transform:scale(1.1);box-shadow:0 4px 10px rgba(0,0,0,.2);}
-#board-bottom-bar .score-btn:active{transform:scale(.95);}
+#board-bottom-bar .score-btn:active{transform:scale(.9);}
 @media (max-width:520px){
-  #board-bottom-bar .team-score-card{min-width:170px;padding:8px 12px;gap:6px;}
-  #board-bottom-bar .team-name{font-size:.82rem;}
-  #board-bottom-bar .team-score{font-size:1.15rem;padding:3px 8px;}
-  #board-bottom-bar .score-btn{width:28px;height:28px;font-size:1rem;}
+  #board-bottom-bar .team-name{font-size:.66rem;max-width:70px;}
+  #board-bottom-bar .team-score{font-size:.85rem;min-width:24px;}
+  #board-bottom-bar .score-btn{width:20px;height:20px;font-size:.78rem;}
 }
 body.dark-mode #board-bottom-bar{background:linear-gradient(180deg,rgba(20,15,15,.97) 0%,#1a1a1a 100%);border-top-color:#d4b740;}
 body.dark-mode #board-bottom-bar .team-score-card{background:linear-gradient(180deg,#2a1a1a 0%,#1a1010 100%);border-color:#d4b740;}
@@ -5675,7 +5694,8 @@ body.dark-mode .royal-last-update{background:rgba(255,255,255,.05);border-color:
 .team-entry input:focus{border-color:#8A1538;}
 
 /* SCOREBOARD - dynamic */
-.scores-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+.scores-row{display:flex;align-items:center;gap:6px;justify-content:center;}
+#board-bottom-bar .scores-row{justify-content:flex-start !important;}
 .sbox{padding:6px 12px;border-radius:10px;text-align:center;border:2px solid #8A1538;background:#fff;transition:all .3s;min-width:80px;}
 .sbox.active-t{background:#8A1538;color:#fff;}
 .sbox .sn{font-size:.6rem;opacity:.7;}
@@ -11336,8 +11356,8 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
   <div class="board-grid" id="board-grid"></div>
   
   <!-- 🏆 الشريط السفلي: نقاط الفرق -->
-  <div id="board-bottom-bar" style="position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.97) 0%,#fff 100%);border-top:2px solid #8A1538;padding:10px 12px;box-shadow:0 -4px 14px rgba(0,0,0,.08);z-index:10;">
-    <div class="scores-row" id="b-scores-row" style="display:flex;align-items:stretch;justify-content:center;gap:10px;flex-wrap:wrap;"></div>
+  <div id="board-bottom-bar" style="position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.97) 0%,#fff 100%);border-top:1.5px solid #8A1538;padding:6px 8px;box-shadow:0 -2px 8px rgba(0,0,0,.06);z-index:10;">
+    <div class="scores-row" id="b-scores-row" style="display:flex;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:nowrap;overflow-x:auto;"></div>
   </div>
 </div>
 
@@ -21991,31 +22011,25 @@ function populateAQCatSelect(){
 // 🆕 إنشاء فئة جديدة من لوحة التحكم
 // ═══════════════════════════════════════════════════════════
 function hhOpenNewCategoryModal(){
-  // نبني قائمة المجموعات المتاحة
+  // نبني قائمة المجموعات المتاحة + خيار إنشاء جديد
   let groupOptions = '';
   if(typeof CAT_GROUPS !== 'undefined'){
     CAT_GROUPS.forEach(g => {
-      // نتجاهل grade5_soon و grade9_soon (مجموعات "قريباً")
       if(g.id.includes('_soon')) return;
       groupOptions += `<option value="${g.id}">${g.label}</option>`;
     });
   }
+  groupOptions += `<option value="__new__" style="font-weight:900;color:#8A1538;background:#F7EBEE;">+ إنشاء مجموعة جديدة</option>`;
 
-  // إيموجي مقترحة شائعة
-  const suggestedEmojis = ['📚','📖','✨','🎯','🌟','🏆','⭐','🎓','📝','🔬','🧪','🎨','🎭','🎵','⚽','🏛️','🌍','🗺️','🇶🇦','🕌','📜','💡','🧠','🔢','🔤','🌱','🌳','🦅','🦁','🐪'];
-  const emojiBtns = suggestedEmojis.map(e => 
-    `<button type="button" onclick="document.getElementById('hh-newcat-emoji').value='${e}';return false;" style="padding:6px 10px;background:#fff;border:1.5px solid #B8924A;border-radius:8px;font-size:1.1rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='#F7EBEE'" onmouseout="this.style.background='#fff'">${e}</button>`
-  ).join('');
-
-  // ألوان مقترحة (متناسقة مع الهوية)
+  // ألوان مقترحة احترافية (بدون فاقع)
   const suggestedColors = [
     {label:'عنابي',c:'#8A1538'},
-    {label:'ذهبي',c:'#B8924A'},
+    {label:'عنابي داكن',c:'#5E0E26'},
+    {label:'ذهبي مطفي',c:'#B8924A'},
     {label:'كحلي',c:'#1E3A5F'},
-    {label:'أخضر',c:'#3D6B53'},
-    {label:'بنفسجي',c:'#3D4A7A'},
-    {label:'برتقالي',c:'#A67C4A'},
-    {label:'عنابي داكن',c:'#5E0E26'}
+    {label:'أخضر هادئ',c:'#3D6B53'},
+    {label:'بنفسجي رصين',c:'#3D4A7A'},
+    {label:'بني فاخر',c:'#A67C4A'}
   ];
   const colorBtns = suggestedColors.map(co => 
     `<button type="button" onclick="document.getElementById('hh-newcat-color').value='${co.c}';document.getElementById('hh-newcat-color-preview').style.background='${co.c}';return false;" title="${co.label}" style="width:34px;height:34px;background:${co.c};border:2px solid #fff;border-radius:50%;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15);"></button>`
@@ -22028,7 +22042,7 @@ function hhOpenNewCategoryModal(){
     <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);border:2px solid #8A1538;">
       <!-- header -->
       <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:16px 20px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;">🆕 إنشاء فئة جديدة</div>
+        <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;">إنشاء فئة جديدة</div>
         <button onclick="hhCloseNewCategoryModal()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:900;">✕</button>
       </div>
 
@@ -22046,20 +22060,18 @@ function hhOpenNewCategoryModal(){
         <!-- المجموعة -->
         <div style="margin-bottom:14px;">
           <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">المجموعة <span style="color:#c0392b;">*</span></label>
-          <select id="hh-newcat-group" style="width:100%;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Cairo,sans-serif;font-size:.9rem;background:#fff;">
+          <select id="hh-newcat-group" onchange="hhHandleGroupChange(this)" style="width:100%;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Cairo,sans-serif;font-size:.9rem;background:#fff;">
             <option value="">-- اختر المجموعة --</option>
             ${groupOptions}
           </select>
           <div style="font-size:.7rem;color:#8A6D2E;margin-top:4px;">المجموعة تحدد أين ستظهر الفئة في القائمة</div>
-        </div>
 
-        <!-- الإيموجي -->
-        <div style="margin-bottom:14px;">
-          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">الإيموجي</label>
-          <input id="hh-newcat-emoji" type="text" placeholder="📚" value="📚" maxlength="4"
-            style="width:80px;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Tajawal;font-size:1.4rem;text-align:center;outline:none;">
-          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;max-height:120px;overflow-y:auto;padding:8px;background:#F8F8F6;border-radius:8px;">
-            ${emojiBtns}
+          <!-- نموذج إنشاء مجموعة جديدة (يظهر عند اختيار "+ إنشاء مجموعة") -->
+          <div id="hh-newgroup-form" style="display:none;margin-top:10px;padding:12px;background:#F7EBEE;border:1.5px dashed #8A1538;border-radius:10px;">
+            <label style="font-family:Cairo;font-weight:800;font-size:.78rem;color:#5E0E26;display:block;margin-bottom:5px;">اسم المجموعة الجديدة</label>
+            <input id="hh-newgroup-name" type="text" placeholder="مثال: التراث والفنون"
+              style="width:100%;padding:9px;border:1.5px solid #8A1538;border-radius:8px;font-family:Tajawal;font-size:.9rem;outline:none;background:#fff;" autocomplete="off">
+            <div style="font-size:.68rem;color:#8A1538;margin-top:5px;">ستصبح مجموعة جديدة في قائمة الفئات تحتوي على هذه الفئة وأي فئات تُنشئها لاحقاً</div>
           </div>
         </div>
 
@@ -22101,18 +22113,15 @@ function hhOpenNewCategoryModal(){
   `;
   document.body.appendChild(modal);
 
-  // إغلاق بالضغط على الخلفية
   modal.addEventListener('click', (e) => {
     if(e.target === modal) hhCloseNewCategoryModal();
   });
 
-  // تركيز على حقل الاسم
   setTimeout(() => {
     const nameInput = document.getElementById('hh-newcat-name');
     if(nameInput) nameInput.focus();
   }, 100);
 
-  // معاينة اللون عند الكتابة
   setTimeout(() => {
     const colorInput = document.getElementById('hh-newcat-color');
     if(colorInput){
@@ -22122,6 +22131,21 @@ function hhOpenNewCategoryModal(){
       };
     }
   }, 100);
+}
+
+// 🆕 معالجة تغيير المجموعة (إظهار نموذج إنشاء مجموعة جديدة)
+function hhHandleGroupChange(sel){
+  const form = document.getElementById('hh-newgroup-form');
+  if(!form) return;
+  if(sel.value === '__new__'){
+    form.style.display = 'block';
+    setTimeout(() => {
+      const input = document.getElementById('hh-newgroup-name');
+      if(input) input.focus();
+    }, 50);
+  } else {
+    form.style.display = 'none';
+  }
 }
 
 function hhCloseNewCategoryModal(){
@@ -22200,12 +22224,11 @@ async function hhDeleteCurrentCategory(){
 
 async function hhCreateNewCategory(){
   const name = (document.getElementById('hh-newcat-name')?.value || '').trim();
-  const groupId = document.getElementById('hh-newcat-group')?.value || '';
-  const emoji = (document.getElementById('hh-newcat-emoji')?.value || '📚').trim();
+  let groupId = document.getElementById('hh-newcat-group')?.value || '';
   const color = (document.getElementById('hh-newcat-color')?.value || '#8A1538').trim();
   const desc = (document.getElementById('hh-newcat-desc')?.value || '').trim();
 
-  // التحقق
+  // التحقق من اسم الفئة
   if(!name){
     if(typeof toast === 'function') toast('⚠️ يجب إدخال اسم الفئة', 'error');
     document.getElementById('hh-newcat-name')?.focus();
@@ -22216,6 +22239,51 @@ async function hhCreateNewCategory(){
     document.getElementById('hh-newcat-group')?.focus();
     return;
   }
+
+  // 🆕 إذا اختار "إنشاء مجموعة جديدة"
+  if(groupId === '__new__'){
+    const newGroupName = (document.getElementById('hh-newgroup-name')?.value || '').trim();
+    if(!newGroupName){
+      if(typeof toast === 'function') toast('⚠️ يجب إدخال اسم المجموعة الجديدة', 'error');
+      document.getElementById('hh-newgroup-name')?.focus();
+      return;
+    }
+    // ننشئ ID للمجموعة (بسيط من الاسم)
+    const newGroupId = 'custom_' + Date.now();
+    
+    if(typeof CAT_GROUPS !== 'undefined'){
+      // التحقق من عدم وجود مجموعة بنفس الاسم
+      if(CAT_GROUPS.some(g => g.label === newGroupName)){
+        if(typeof toast === 'function') toast('⚠️ هذه المجموعة موجودة بالفعل', 'error');
+        return;
+      }
+      // نضيف المجموعة الجديدة
+      CAT_GROUPS.push({
+        id: newGroupId,
+        label: newGroupName,
+        icon: `<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="${color}"/><text x="50" y="62" text-anchor="middle" font-size="40" font-family="Cairo,Arial" fill="#fff" font-weight="900">${newGroupName.charAt(0)}</text></svg>`,
+        cats: []
+      });
+      
+      // نضيف المجموعة لمستوى "العامة" تلقائياً
+      if(typeof CAT_LEVELS !== 'undefined'){
+        const generalLevel = CAT_LEVELS.find(l => l.id === 'general');
+        if(generalLevel && !generalLevel.groupIds.includes(newGroupId)){
+          generalLevel.groupIds.push(newGroupId);
+        }
+      }
+      
+      // حفظ المجموعة المخصصة في localStorage
+      try{
+        const customGroups = JSON.parse(localStorage.getItem('hh_custom_groups') || '{}');
+        customGroups[newGroupId] = { label: newGroupName, color: color };
+        localStorage.setItem('hh_custom_groups', JSON.stringify(customGroups));
+      }catch(e){}
+      
+      groupId = newGroupId;
+    }
+  }
+
   // التحقق من عدم وجود فئة بنفس الاسم
   if(QDB[name] || (typeof CAT_INFO !== 'undefined' && CAT_INFO[name])){
     if(typeof toast === 'function') toast('⚠️ هذه الفئة موجودة بالفعل', 'error');
@@ -22226,19 +22294,18 @@ async function hhCreateNewCategory(){
     // 1) إضافة الفئة لـ QDB (فارغة)
     QDB[name] = [];
 
-    // 2) إضافة الفئة لـ CAT_INFO ديناميكياً
+    // 2) إضافة الفئة لـ CAT_INFO (بدون إيموجي)
     if(typeof CAT_INFO !== 'undefined'){
-      // خلفية فاتحة من اللون
-      const bgColor = color + '15'; // إضافة شفافية 15
+      const bgColor = color + '15';
       CAT_INFO[name] = {
-        emoji: emoji,
+        emoji: '',
         label: name,
         color: color,
         bg: bgColor
       };
     }
 
-    // 3) إضافة الفئة للمجموعة المختارة في CAT_GROUPS
+    // 3) إضافة الفئة للمجموعة المختارة
     if(typeof CAT_GROUPS !== 'undefined'){
       const grp = CAT_GROUPS.find(g => g.id === groupId);
       if(grp && Array.isArray(grp.cats)){
@@ -22248,13 +22315,12 @@ async function hhCreateNewCategory(){
       }
     }
 
-    // 4) حفظ الفئة الجديدة في Firestore (داخل admin_qdb)
+    // 4) حفظ في Firestore
     if(typeof db !== 'undefined' && db && typeof currentUser !== 'undefined' && currentUser){
       try{
         await db.collection('admin_qdb').doc(name).set({
           questions: [],
           meta: {
-            emoji: emoji,
             color: color,
             bg: color + '15',
             groupId: groupId,
@@ -22268,11 +22334,10 @@ async function hhCreateNewCategory(){
       }
     }
 
-    // 5) حفظ محلي كنسخة احتياطية
+    // 5) حفظ محلي
     try{
       const customCats = JSON.parse(localStorage.getItem('hh_custom_cats') || '{}');
       customCats[name] = {
-        emoji: emoji,
         color: color,
         bg: color + '15',
         groupId: groupId,
@@ -22285,7 +22350,7 @@ async function hhCreateNewCategory(){
     if(typeof populateAQCatSelect === 'function') populateAQCatSelect();
     if(typeof buildCatSelect === 'function') buildCatSelect();
 
-    // 7) اختيار الفئة الجديدة تلقائياً
+    // 7) اختيار الفئة الجديدة
     setTimeout(() => {
       const sel = document.getElementById('aq-cat-select');
       if(sel){
