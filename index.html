@@ -1208,6 +1208,69 @@ body.admin-edit-mode .cat-btn .cat-admin-tools{display:flex;}
 .pu-badge.dagf-b{background:#B8924A;color:#fff;}
 .pu-badge.eskot-b{background:#7f8c8d;color:#fff;}
 .pu-lbl{font-size:10px;font-weight:700;color:#555;font-family:"Cairo",sans-serif;line-height:1;}
+
+/* 🎮 الأدوات الكبيرة في شريط اللعبة العلوي */
+.pu-btn-lg{
+  width:54px !important;height:54px !important;border-width:3px !important;border-radius:14px !important;
+}
+.pu-btn-lg svg{width:32px !important;height:32px !important;}
+.pu-lbl-lg{font-size:.78rem !important;font-weight:900 !important;color:#3d2614 !important;margin-top:3px !important;}
+.pu-btn-lg .pu-badge{width:20px;height:20px;font-size:11px;top:-8px;right:-8px;}
+@media (max-width:760px){
+  .pu-btn-lg{width:44px !important;height:44px !important;}
+  .pu-btn-lg svg{width:26px !important;height:26px !important;}
+  .pu-lbl-lg{font-size:.68rem !important;}
+}
+
+/* 🏆 الشريط السفلي - بطاقات الفرق الكبيرة */
+#board-bottom-bar .team-score-card{
+  background:linear-gradient(180deg,#fff 0%,#fdfaef 100%);
+  border:2.5px solid #8A1538;
+  border-radius:14px;
+  padding:10px 16px;
+  display:flex;align-items:center;gap:10px;
+  min-width:200px;
+  box-shadow:0 4px 12px rgba(138,21,56,.15);
+  transition:all .25s ease;
+}
+#board-bottom-bar .team-score-card.active{
+  background:linear-gradient(180deg,#FFFEF9 0%,#fef6dc 100%);
+  border-color:#d4b740;
+  box-shadow:0 6px 20px rgba(212,183,64,.35),inset 0 0 0 1px rgba(255,255,255,.6);
+  transform:translateY(-2px);
+}
+#board-bottom-bar .team-name{
+  font-family:Cairo,sans-serif;font-weight:900;font-size:.92rem;
+  color:#5E0E26;flex:1;text-align:right;letter-spacing:-.2px;
+}
+#board-bottom-bar .team-score{
+  font-family:Cairo,sans-serif;font-weight:900;font-size:1.35rem;
+  color:#8A1538;min-width:48px;text-align:center;
+  background:#F7EBEE;border-radius:10px;padding:4px 10px;
+  font-variant-numeric:tabular-nums;
+}
+#board-bottom-bar .score-btn{
+  width:32px;height:32px;border-radius:50%;
+  border:none;cursor:pointer;
+  font-family:Cairo,sans-serif;font-weight:900;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s ease;
+  flex-shrink:0;
+}
+#board-bottom-bar .score-btn.plus{background:#3D6B53;color:#fff;}
+#board-bottom-bar .score-btn.minus{background:#c0392b;color:#fff;}
+#board-bottom-bar .score-btn:hover{transform:scale(1.1);box-shadow:0 4px 10px rgba(0,0,0,.2);}
+#board-bottom-bar .score-btn:active{transform:scale(.95);}
+@media (max-width:520px){
+  #board-bottom-bar .team-score-card{min-width:170px;padding:8px 12px;gap:6px;}
+  #board-bottom-bar .team-name{font-size:.82rem;}
+  #board-bottom-bar .team-score{font-size:1.15rem;padding:3px 8px;}
+  #board-bottom-bar .score-btn{width:28px;height:28px;font-size:1rem;}
+}
+body.dark-mode #board-bottom-bar{background:linear-gradient(180deg,rgba(20,15,15,.97) 0%,#1a1a1a 100%);border-top-color:#d4b740;}
+body.dark-mode #board-bottom-bar .team-score-card{background:linear-gradient(180deg,#2a1a1a 0%,#1a1010 100%);border-color:#d4b740;}
+body.dark-mode #board-bottom-bar .team-name{color:#fdfaef;}
+body.dark-mode #board-bottom-bar .team-score{background:#3D0918;color:#d4b740;}
 #q-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:10px;}
 #q-modal.open{display:flex;}
 .qm-box{background:#fff;border:2px solid #8A1538;border-radius:16px;padding:14px;width:100%;max-width:560px;max-height:94vh;overflow-y:auto;box-shadow:8px 8px 0 #8A1538;animation:modalIn .25s ease;}
@@ -8496,11 +8559,8 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 
 /* ألوان لكل تاب — كلها عنابي بسيط */
 .ms-tab[data-tab-id="all"],
-.ms-tab[data-tab-id="primary"],
-.ms-tab[data-tab-id="prep"],
-.ms-tab[data-tab-id="general"],
-.ms-tab[data-tab-id="elite"],
-.ms-tab[data-tab-id="mine"]{
+.ms-tab[data-tab-id="schools"],
+.ms-tab[data-tab-id="general"]{
   --c:#8A1538;--cd:#5E0E26;--cbg:transparent;--cglow:rgba(138,21,56,.15);
 }
 
@@ -9410,6 +9470,130 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
 </head>
 <body>
 <div id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     🎓 Onboarding Tour — جولة تعريفية للمعلم الجديد
+     ═══════════════════════════════════════════════════════════ -->
+<div id="onboarding-modal" style="display:none;position:fixed;inset:0;z-index:99998;background:rgba(43,9,24,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px;font-family:Tajawal,sans-serif;">
+  <div style="background:#fff;max-width:540px;width:100%;border-radius:20px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.5);border:2.5px solid #B8924A;">
+    
+    <!-- شريط التقدم -->
+    <div style="height:5px;background:#F8F8F6;position:relative;">
+      <div id="ob-progress" style="height:100%;background:linear-gradient(90deg,#B8924A,#D4BC85);width:25%;transition:width .35s ease;"></div>
+    </div>
+    
+    <!-- المحتوى -->
+    <div id="ob-content" style="padding:24px 24px 20px;">
+      <!-- يُحقن بـ JS -->
+    </div>
+    
+    <!-- الأزرار -->
+    <div style="display:flex;gap:10px;padding:0 24px 22px;">
+      <button id="ob-skip" onclick="hhOnboardingClose()" style="flex:1;padding:11px;background:transparent;color:#8A1538;border:1.5px solid #8A1538;border-radius:10px;font-family:Cairo;font-weight:800;font-size:.85rem;cursor:pointer;">تخطي</button>
+      <button id="ob-prev" onclick="hhOnboardingPrev()" style="flex:1;padding:11px;background:#F8F8F6;color:#5E0E26;border:1.5px solid #B8924A;border-radius:10px;font-family:Cairo;font-weight:800;font-size:.85rem;cursor:pointer;display:none;">⟶ السابق</button>
+      <button id="ob-next" onclick="hhOnboardingNext()" style="flex:2;padding:11px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,21,56,.3);">التالي ⟵</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ Onboarding Tour Logic ═══
+const HH_ONBOARDING_STEPS = [
+  {
+    icon:'👋',
+    title:'مرحباً بك في الملهم!',
+    desc:'منصة قطرية صنعها معلم لزملائه. خلّيني آخذك في جولة سريعة (تستغرق 30 ثانية) للتعرف على أهم الميزات.',
+    color:'#8A1538'
+  },
+  {
+    icon:'📚',
+    title:'+1000 سؤال نخبوي',
+    desc:'في 40 فئة متنوعة: المنهج القطري الرسمي، الديني، اللغة، الجغرافيا، الأساطير، وأكثر. جميعها بفلسفة "1-1-1": كل سؤال = معلومة واحدة.',
+    color:'#B8924A'
+  },
+  {
+    icon:'🎮',
+    title:'لعبة تفاعلية للفصل',
+    desc:'اختر فرقاً، حدّد فئات، وابدأ! استخدم أدوات المساعدة (حفرة، ضاعف، منع، جوابين) لإضافة عنصر التشويق.',
+    color:'#3D6B53'
+  },
+  {
+    icon:'🛠️',
+    title:'صندوق الأدوات',
+    desc:'بطاقات مراجعة + الخط الزمني التفاعلي + مولّد الأنشطة. كل ما تحتاجه لحصة لا تُنسى.',
+    color:'#1E3A5F'
+  },
+  {
+    icon:'🚀',
+    title:'جاهز للانطلاق؟',
+    desc:'استكشف القائمة الرئيسية، جرّب لعبة، وأخبرنا برأيك! نحن نطوّر المنصة باستمرار بناءً على ملاحظات المعلمين.',
+    color:'#8A1538',
+    final:true
+  }
+];
+
+let _obStep = 0;
+
+function hhOnboardingShow(){
+  // لو سبق ورأى الـonboarding، لا نظهره
+  if(localStorage.getItem('hh_onboarding_seen') === '1') return;
+  _obStep = 0;
+  document.getElementById('onboarding-modal').style.display = 'flex';
+  hhOnboardingRender();
+}
+
+function hhOnboardingRender(){
+  const step = HH_ONBOARDING_STEPS[_obStep];
+  const total = HH_ONBOARDING_STEPS.length;
+  const progress = ((_obStep + 1) / total) * 100;
+  
+  document.getElementById('ob-progress').style.width = progress + '%';
+  
+  document.getElementById('ob-content').innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:3.5rem;margin-bottom:14px;line-height:1;">${step.icon}</div>
+      <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.35rem;color:${step.color};margin-bottom:10px;letter-spacing:-.3px;">${step.title}</div>
+      <div style="color:#5E0E26;font-size:.95rem;line-height:1.85;font-weight:500;">${step.desc}</div>
+      <div style="margin-top:18px;display:flex;justify-content:center;gap:6px;">
+        ${HH_ONBOARDING_STEPS.map((_,i) => 
+          `<div style="width:${i===_obStep?'24px':'8px'};height:8px;border-radius:4px;background:${i===_obStep?step.color:'#E5DCD0'};transition:all .3s ease;"></div>`
+        ).join('')}
+      </div>
+    </div>
+  `;
+  
+  // أزرار
+  document.getElementById('ob-prev').style.display = _obStep > 0 ? 'block' : 'none';
+  document.getElementById('ob-next').textContent = step.final ? 'ابدأ الآن! 🎯' : 'التالي ⟵';
+}
+
+function hhOnboardingNext(){
+  if(_obStep < HH_ONBOARDING_STEPS.length - 1){
+    _obStep++;
+    hhOnboardingRender();
+  } else {
+    hhOnboardingClose();
+  }
+}
+
+function hhOnboardingPrev(){
+  if(_obStep > 0){
+    _obStep--;
+    hhOnboardingRender();
+  }
+}
+
+function hhOnboardingClose(){
+  localStorage.setItem('hh_onboarding_seen', '1');
+  document.getElementById('onboarding-modal').style.display = 'none';
+}
+
+// إعادة الفتح يدوياً (للأدمن/الإعدادات)
+function hhOnboardingRestart(){
+  localStorage.removeItem('hh_onboarding_seen');
+  hhOnboardingShow();
+}
+</script>
 
 <!-- ═══════════════════════════════════════════════════════════
      مودال موافقة الخصوصية (Privacy Consent) — يظهر مرة واحدة فقط
@@ -11099,55 +11283,62 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 </div>
 
 <div class="screen" id="screen-board">
-  <div class="top-bar" id="board-top-bar" style="display:flex;flex-wrap:nowrap;gap:6px;padding:5px 10px;align-items:center;min-height:0;">
-    <!-- يسار: إنهاء + وسائل المساعدة -->
-    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-      <button class="btn btn-outline btn-sm" onclick="confirmQuit()" style="padding:4px 10px;font-size:.75rem;">إنهاء</button>
-      <div class="pu-wrap">
-        <button class="pu-btn hafra-btn" id="pu-hafra" onclick="armPU('hafra')" title="حفرة — قبل السؤال">
-          <span class="pu-badge hafra-b" id="pu-hafra-badge">1</span>
-          <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="48" cy="62" r="30" fill="#2c2c2c"/><circle cx="48" cy="62" r="22" fill="#3d3d3d"/><path d="M62 34 Q72 20 78 24 Q84 28 75 38" stroke="#f39c12" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="76" cy="26" r="5" fill="#d4b740"/></svg>
-        </button>
-        <span class="pu-lbl">حفرة</span>
-      </div>
-      <div class="pu-wrap">
-        <button class="pu-btn dagf-btn" id="pu-dagf" onclick="armPU('dagf')" title="ضاعف — قبل السؤال">
-          <span class="pu-badge dagf-b" id="pu-dagf-badge">1</span>
-          <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="58,8 33,52 50,52 40,92 74,44 56,44" fill="#d4b740" stroke="#B8924A" stroke-width="3"/></svg>
-        </button>
-        <span class="pu-lbl">ضاعف</span>
-      </div>
-      <div class="pu-wrap">
-        <button class="pu-btn eskot-btn" id="pu-eskot" onclick="armPU('eskot')" title="منع — بعد السؤال" disabled>
-          <span class="pu-badge eskot-b" id="pu-eskot-badge">1</span>
-          <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#f5e6c8" stroke="#e0c080" stroke-width="3"/><circle cx="35" cy="40" r="7" fill="#555"/><circle cx="65" cy="40" r="7" fill="#555"/><path d="M30 68 Q50 58 70 68" stroke="#c0392b" stroke-width="5" fill="none" stroke-linecap="round"/><line x1="28" y1="68" x2="72" y2="68" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/></svg>
-        </button>
-        <span class="pu-lbl">منع</span>
-      </div>
-      <div class="pu-wrap">
-        <button class="pu-btn two-ans-btn" id="pu-twoans" onclick="armPU('twoans')" title="جوابين — بعد السؤال" disabled>
-          <span class="pu-badge two-ans-b" id="pu-twoans-badge">1</span>
-          <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="22" width="34" height="56" rx="4" fill="#fff" stroke="#3D6B53" stroke-width="3"/><rect x="54" y="22" width="34" height="56" rx="4" fill="#fff" stroke="#3D6B53" stroke-width="3"/><text x="29" y="60" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="28" fill="#3D6B53">1</text><text x="71" y="60" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="28" fill="#3D6B53">2</text></svg>
-        </button>
-        <span class="pu-lbl">جوابين</span>
-      </div>
-    </div>
-    <!-- وسط: اسم اللعبة + دور + وقت — يأخذ المساحة المتبقية -->
-    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;overflow:hidden;">
-      <span id="board-game-name" style="display:none;"></span>
-      <div class="turn-badge" id="turn-badge" style="flex-shrink:0;"><div style="height:4px;background:#d4b740;width:100%;"></div><div style="display:flex;"><div style="flex:1;padding:4px 10px;border-left:1px solid rgba(255,255,255,.18);"><span style="font-size:.58rem;color:rgba(255,255,255,.5);display:block;">اسم اللعبة</span><span style="font-size:.82rem;font-weight:900;color:#d4b740;font-family:Cairo,sans-serif;">—</span></div><div style="flex:1;padding:4px 10px;"><span style="font-size:.58rem;color:rgba(255,255,255,.5);display:block;">دور</span><span style="font-size:.82rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;">الفريق 1</span></div></div></div>
-      <div id="game-elapsed" style="font-size:.68rem;font-weight:700;color:#8A1538;background:#f0f4f8;border:1.5px solid #8A1538;border-radius:8px;padding:2px 7px;white-space:nowrap;flex-shrink:0;">⏱ 0:00</div>
-    </div>
-    <!-- يمين: نقاط الفرق + <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.39 5.39 0 0117.6 12c-3.92 0-7.1-3.18-7.1-7.1 0-.41.04-.81.1-1.2A8.55 8.55 0 0012 3z"/></svg> -->
-    <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-      <div class="scores-row" id="b-scores-row" style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;"></div>
+  <!-- 🎮 الشريط العلوي: اسم اللعبة + الأدوات المساعدة + أزرار التحكم -->
+  <div class="top-bar" id="board-top-bar" style="display:flex;flex-wrap:nowrap;gap:8px;padding:8px 12px;align-items:center;min-height:0;">
+    <!-- يسار: زر إنهاء + الوضع الليلي -->
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+      <button class="btn btn-outline btn-sm" onclick="confirmQuit()" style="padding:6px 14px;font-size:.82rem;font-weight:900;">إنهاء</button>
       <button onclick="toggleDarkMode()" id="board-dark-btn" title="الوضع الليلي"
-        style="background:none;border:1.5px solid #ddd;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;padding:0;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.39 5.39 0 0117.6 12c-3.92 0-7.1-3.18-7.1-7.1 0-.41.04-.81.1-1.2A8.55 8.55 0 0012 3z"/></svg></span></button>
+        style="background:none;border:1.5px solid #ddd;border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;"><span class="hh-icon" style="display:inline-flex;width:1.1em;height:1.1em;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.39 5.39 0 0117.6 12c-3.92 0-7.1-3.18-7.1-7.1 0-.41.04-.81.1-1.2A8.55 8.55 0 0012 3z"/></svg></span></button>
+    </div>
+    
+    <!-- وسط: اسم اللعبة + الوقت -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;overflow:hidden;">
+      <span id="board-game-name" style="display:none;"></span>
+      <div class="turn-badge" id="turn-badge" style="flex-shrink:0;"><div style="height:5px;background:#d4b740;width:100%;"></div><div style="display:flex;"><div style="flex:1;padding:6px 14px;border-left:1px solid rgba(255,255,255,.18);"><span style="font-size:.65rem;color:rgba(255,255,255,.55);display:block;">اسم اللعبة</span><span style="font-size:.95rem;font-weight:900;color:#d4b740;font-family:Cairo,sans-serif;">—</span></div><div style="flex:1;padding:6px 14px;"><span style="font-size:.65rem;color:rgba(255,255,255,.55);display:block;">دور</span><span style="font-size:.95rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;">الفريق 1</span></div></div></div>
+      <div id="game-elapsed" style="font-size:.78rem;font-weight:800;color:#8A1538;background:#f0f4f8;border:1.5px solid #8A1538;border-radius:10px;padding:5px 12px;white-space:nowrap;flex-shrink:0;">⏱ 0:00</div>
+    </div>
+    
+    <!-- يمين: الأدوات المساعدة (كبيرة وواضحة) -->
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <div class="pu-wrap">
+        <button class="pu-btn hafra-btn pu-btn-lg" id="pu-hafra" onclick="armPU('hafra')" title="حفرة — قبل السؤال">
+          <span class="pu-badge hafra-b" id="pu-hafra-badge">1</span>
+          <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="48" cy="62" r="30" fill="#2c2c2c"/><circle cx="48" cy="62" r="22" fill="#3d3d3d"/><path d="M62 34 Q72 20 78 24 Q84 28 75 38" stroke="#f39c12" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="76" cy="26" r="5" fill="#d4b740"/></svg>
+        </button>
+        <span class="pu-lbl pu-lbl-lg">حفرة</span>
+      </div>
+      <div class="pu-wrap">
+        <button class="pu-btn dagf-btn pu-btn-lg" id="pu-dagf" onclick="armPU('dagf')" title="ضاعف — قبل السؤال">
+          <span class="pu-badge dagf-b" id="pu-dagf-badge">1</span>
+          <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="58,8 33,52 50,52 40,92 74,44 56,44" fill="#d4b740" stroke="#B8924A" stroke-width="3"/></svg>
+        </button>
+        <span class="pu-lbl pu-lbl-lg">ضاعف</span>
+      </div>
+      <div class="pu-wrap">
+        <button class="pu-btn eskot-btn pu-btn-lg" id="pu-eskot" onclick="armPU('eskot')" title="منع — بعد السؤال" disabled>
+          <span class="pu-badge eskot-b" id="pu-eskot-badge">1</span>
+          <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#f5e6c8" stroke="#e0c080" stroke-width="3"/><circle cx="35" cy="40" r="7" fill="#555"/><circle cx="65" cy="40" r="7" fill="#555"/><path d="M30 68 Q50 58 70 68" stroke="#c0392b" stroke-width="5" fill="none" stroke-linecap="round"/><line x1="28" y1="68" x2="72" y2="68" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/></svg>
+        </button>
+        <span class="pu-lbl pu-lbl-lg">منع</span>
+      </div>
+      <div class="pu-wrap">
+        <button class="pu-btn two-ans-btn pu-btn-lg" id="pu-twoans" onclick="armPU('twoans')" title="جوابين — بعد السؤال" disabled>
+          <span class="pu-badge two-ans-b" id="pu-twoans-badge">1</span>
+          <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="22" width="34" height="56" rx="4" fill="#fff" stroke="#3D6B53" stroke-width="3"/><rect x="54" y="22" width="34" height="56" rx="4" fill="#fff" stroke="#3D6B53" stroke-width="3"/><text x="29" y="60" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="28" fill="#3D6B53">1</text><text x="71" y="60" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="28" fill="#3D6B53">2</text></svg>
+        </button>
+        <span class="pu-lbl pu-lbl-lg">جوابين</span>
+      </div>
     </div>
   </div>
   <!-- powerups-bar placeholder (مطلوب للكود القديم) -->
   <div id="powerups-bar" style="display:none;"></div>
   <div class="board-grid" id="board-grid"></div>
+  
+  <!-- 🏆 الشريط السفلي: نقاط الفرق -->
+  <div id="board-bottom-bar" style="position:sticky;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.97) 0%,#fff 100%);border-top:2px solid #8A1538;padding:10px 12px;box-shadow:0 -4px 14px rgba(0,0,0,.08);z-index:10;">
+    <div class="scores-row" id="b-scores-row" style="display:flex;align-items:stretch;justify-content:center;gap:10px;flex-wrap:wrap;"></div>
+  </div>
 </div>
 
 <div id="q-modal" onclick="handleModalOutsideClick(event)">
@@ -11256,6 +11447,11 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       style="flex:1;min-width:130px;padding:11px 8px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:12px;font-family:Cairo,sans-serif;font-weight:900;color:#fff;cursor:pointer;font-size:.82rem;transition:all .2s;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-left:5px;"><rect x="3" y="3" width="4" height="18" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="5" width="4" height="16" rx="1"/></svg>
       الإحصائيات
+    </button>
+    <button onclick="hhExportGameResults()" title="تصدير النتائج كملف Excel"
+      style="flex:1;min-width:130px;padding:11px 8px;background:rgba(212,188,133,.2);border:1.5px solid #D4BC85;border-radius:12px;font-family:Cairo,sans-serif;font-weight:900;color:#fff;cursor:pointer;font-size:.82rem;transition:all .2s;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-left:5px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      تصدير Excel
     </button>
     <button onclick="toggleReplayTeams()"
       style="flex:1;min-width:130px;padding:11px 8px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:12px;font-family:Cairo,sans-serif;font-weight:900;color:#fff;cursor:pointer;font-size:.82rem;transition:all .2s;">
@@ -11910,10 +12106,17 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <!-- اختيار الفئة -->
       <div style="margin-bottom:14px;">
         <label style="font-size:.82rem;font-weight:700;color:#8A1538;display:block;margin-bottom:6px;">أو اختر فئة لتصفحها:</label>
-        <select id="aq-cat-select" onchange="loadAdminCatQuestions()"
-          style="width:100%;padding:10px;border:2px solid #8A1538;border-radius:8px;font-family:Cairo,sans-serif;font-size:.9rem;background:#fff;">
-          <option value="">-- اختر فئة --</option>
-        </select>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="aq-cat-select" onchange="loadAdminCatQuestions()"
+            style="flex:1;padding:10px;border:2px solid #8A1538;border-radius:8px;font-family:Cairo,sans-serif;font-size:.9rem;background:#fff;">
+            <option value="">-- اختر فئة --</option>
+          </select>
+          <button onclick="hhOpenNewCategoryModal()" title="إنشاء فئة جديدة"
+            style="padding:10px 14px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:8px;font-family:Cairo,sans-serif;font-weight:900;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(138,21,56,.25);white-space:nowrap;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            فئة جديدة
+          </button>
+        </div>
       </div>
 
       <!-- <svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg> فلتر داخل الفئة المختارة -->
@@ -11926,6 +12129,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <button onclick="hhRenameCurrentCategory()" id="aq-rename-btn" style="padding:8px 12px;background:linear-gradient(135deg,#F8F8F6,#fff);border:1.5px solid #B8924A;border-radius:8px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:900;font-size:.78rem;color:#8A6D2E;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
             تعديل اسم الفئة
+          </button>
+          <button onclick="hhDeleteCurrentCategory()" id="aq-delete-cat-btn" title="حذف الفئة (للفئات المخصصة فقط)" style="padding:8px 12px;background:#fff;border:1.5px solid #c0392b;border-radius:8px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:900;font-size:.78rem;color:#c0392b;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            حذف
           </button>
         </div>
       </div>
@@ -13446,6 +13653,160 @@ body.dark-mode .story-quote{
 body.dark-mode .story-quote p{color:#FAFAF8;}
 </style>
 
+<!-- ═══════════════ شاشة سياسة الخصوصية ═══════════════ -->
+<div class="screen" id="screen-privacy">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="goBack()">رجوع</button>
+    <div style="font-weight:900;">سياسة الخصوصية</div>
+    <div></div>
+  </div>
+  <div style="max-width:780px;margin:0 auto;padding:20px 16px 40px;font-family:Tajawal,sans-serif;line-height:2;color:#3D0918;">
+    
+    <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:20px;border-radius:14px;margin-bottom:20px;">
+      <div style="font-family:Cairo;font-weight:900;font-size:1.2rem;margin-bottom:6px;">🛡️ سياسة الخصوصية</div>
+      <div style="font-size:.85rem;opacity:.9;">آخر تحديث: يونيو 2026</div>
+    </div>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">1. مقدمة</h3>
+    <p>نحن في <strong>منصة الملهم التعليمية</strong> نلتزم بحماية خصوصية المعلمين والطلاب والمستخدمين. هذه السياسة توضح كيف نجمع ونستخدم ونحمي معلوماتك.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">2. البيانات التي نجمعها</h3>
+    <p>عند تسجيلك في المنصة، نقوم بجمع:</p>
+    <ul style="padding-right:20px;">
+      <li>الاسم الكامل</li>
+      <li>البريد الإلكتروني</li>
+      <li>الفئات التي تختارها وسجل الألعاب</li>
+      <li>نقاط الفرق والإحصائيات</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">3. كيف نستخدم بياناتك</h3>
+    <ul style="padding-right:20px;">
+      <li>تقديم خدمة تعليمية مخصصة</li>
+      <li>تحسين تجربة المستخدم</li>
+      <li>إرسال تحديثات هامة عن المنصة</li>
+      <li>تحليل الاستخدام لتطوير المحتوى</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">4. حماية البيانات</h3>
+    <p>نستخدم تقنيات حماية متقدمة:</p>
+    <ul style="padding-right:20px;">
+      <li>تشفير البيانات (HTTPS/SSL)</li>
+      <li>Firebase Authentication بمعايير عالمية</li>
+      <li>قواعد أمان Firestore محكمة</li>
+      <li>حماية من البوتات (App Check)</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">5. خصوصية الأطفال</h3>
+    <p>منصتنا موجهة لاستخدام المعلمين مع طلابهم. <strong>لا نجمع بيانات شخصية مباشرة من الأطفال دون 13 سنة</strong>، والمعلم هو المسؤول عن إدارة بيانات طلابه.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">6. حقوقك</h3>
+    <ul style="padding-right:20px;">
+      <li>الاطلاع على بياناتك</li>
+      <li>تعديل أو حذف معلوماتك</li>
+      <li>طلب نسخة من بياناتك</li>
+      <li>سحب موافقتك في أي وقت</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">7. الكوكيز وlocalStorage</h3>
+    <p>نستخدم تخزيناً محلياً في متصفحك لحفظ تفضيلاتك (مثل الوضع الليلي ولغة الواجهة). لا نشارك هذه البيانات مع أطراف ثالثة.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">8. تواصل معنا</h3>
+    <p>لأي استفسار عن سياسة الخصوصية، تواصل معنا:</p>
+    <div style="background:#F8F8F6;padding:14px;border-radius:10px;border-right:3px solid #8A1538;margin-top:8px;">
+      📧 <strong>الإيميل:</strong> 20ahmedali25@gmail.com<br>
+      📱 <strong>إنستغرام:</strong> @almulhim_edu<br>
+      🌐 <strong>الموقع:</strong> almulhimedu.org
+    </div>
+
+    <div style="margin-top:30px;padding:16px;background:#F7EBEE;border-radius:10px;text-align:center;font-size:.82rem;color:#5E0E26;">
+      🇶🇦 منصة الملهم — أحمد الحلحلي<br>
+      جميع الحقوق محفوظة © 2026
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ شاشة شروط الاستخدام ═══════════════ -->
+<div class="screen" id="screen-terms">
+  <div class="top-bar">
+    <button class="btn btn-outline btn-sm" onclick="goBack()">رجوع</button>
+    <div style="font-weight:900;">شروط الاستخدام</div>
+    <div></div>
+  </div>
+  <div style="max-width:780px;margin:0 auto;padding:20px 16px 40px;font-family:Tajawal,sans-serif;line-height:2;color:#3D0918;">
+    
+    <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:20px;border-radius:14px;margin-bottom:20px;">
+      <div style="font-family:Cairo;font-weight:900;font-size:1.2rem;margin-bottom:6px;">📜 شروط الاستخدام</div>
+      <div style="font-size:.85rem;opacity:.9;">آخر تحديث: يونيو 2026</div>
+    </div>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">1. القبول بالشروط</h3>
+    <p>باستخدامك لمنصة الملهم، فإنك توافق على الالتزام بهذه الشروط. إذا لم توافق عليها، يرجى عدم استخدام المنصة.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">2. الاستخدام المسموح به</h3>
+    <p>المنصة مخصصة للأغراض التعليمية فقط:</p>
+    <ul style="padding-right:20px;">
+      <li>استخدامها من قبل المعلمين والطلاب</li>
+      <li>الاستخدام داخل الفصول الدراسية</li>
+      <li>التعلم الذاتي والمراجعة</li>
+      <li>التحفيز التربوي عبر الألعاب التعليمية</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">3. السلوكيات المحظورة</h3>
+    <p>يُحظر استخدام المنصة في:</p>
+    <ul style="padding-right:20px;">
+      <li>أي نشاط غير قانوني</li>
+      <li>الإساءة لأي مستخدم أو نشر محتوى مسيء</li>
+      <li>محاولة اختراق المنصة أو تعطيلها</li>
+      <li>نسخ المحتوى لاستخدام تجاري دون إذن</li>
+      <li>انتحال شخصية الأدمن أو معلمين آخرين</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">4. الملكية الفكرية</h3>
+    <p>جميع المحتوى (الأسئلة، التصميم، الأكواد، الشعار) مملوك لـ<strong>منصة الملهم</strong> والمعلم <strong>أحمد الحلحلي</strong>. لا يجوز:</p>
+    <ul style="padding-right:20px;">
+      <li>نسخ المحتوى أو إعادة نشره دون إذن</li>
+      <li>استخدامه لأغراض تجارية</li>
+      <li>إزالة العلامات التجارية أو حقوق الملكية</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">5. الحساب والأمان</h3>
+    <ul style="padding-right:20px;">
+      <li>أنت مسؤول عن حماية كلمة مرورك</li>
+      <li>المعلومات التي تقدمها يجب أن تكون صحيحة</li>
+      <li>يحق لنا تعليق الحسابات المخالفة</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">6. المحتوى الذي ينشئه المستخدم</h3>
+    <p>إذا أنشأت أسئلة مخصصة، فإنك تمنحنا حق استخدامها داخل المنصة. تتحمل مسؤولية صحة ومناسبة هذا المحتوى.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">7. إخلاء المسؤولية</h3>
+    <p>المنصة مقدمة "كما هي" لأغراض تعليمية. لا نضمن:</p>
+    <ul style="padding-right:20px;">
+      <li>توافر المنصة 24/7 دون انقطاع</li>
+      <li>خلو المحتوى من الأخطاء البشرية</li>
+      <li>توافق المحتوى مع كل المناهج بدقة 100%</li>
+    </ul>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">8. التعديلات</h3>
+    <p>نحتفظ بحق تعديل هذه الشروط في أي وقت. التعديلات تكون نافذة فور نشرها.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">9. القانون المعمول به</h3>
+    <p>تخضع هذه الشروط لقوانين <strong>دولة قطر</strong>، ويتم حل أي نزاع وفقاً لها.</p>
+
+    <h3 style="color:#8A1538;font-family:Cairo;font-weight:900;font-size:1.05rem;margin-top:24px;margin-bottom:10px;">10. تواصل معنا</h3>
+    <div style="background:#F8F8F6;padding:14px;border-radius:10px;border-right:3px solid #8A1538;margin-top:8px;">
+      📧 <strong>الإيميل:</strong> 20ahmedali25@gmail.com<br>
+      📱 <strong>إنستغرام:</strong> @almulhim_edu<br>
+      🌐 <strong>الموقع:</strong> almulhimedu.org
+    </div>
+
+    <div style="margin-top:30px;padding:16px;background:#F7EBEE;border-radius:10px;text-align:center;font-size:.82rem;color:#5E0E26;">
+      🇶🇦 منصة الملهم — أحمد الحلحلي<br>
+      جميع الحقوق محفوظة © 2026
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ شاشة شخصيات مؤثرة (للمصرح لهم) ═══════════════ -->
 <div class="screen" id="screen-influencers">
   <div class="top-bar">
@@ -13970,6 +14331,32 @@ function _hh_initQDB(){
   // 1) تحميل سريع من localStorage (للظهور الفوري)
   QDB = _loadQDB();
   
+  // 🆕 تحميل الفئات المخصصة (التي أنشأها الأدمن) من localStorage
+  try{
+    const customCats = JSON.parse(localStorage.getItem('hh_custom_cats') || '{}');
+    Object.keys(customCats).forEach(catName => {
+      const meta = customCats[catName];
+      // تسجيل في CAT_INFO إن لم تكن موجودة
+      if(typeof CAT_INFO !== 'undefined' && !CAT_INFO[catName]){
+        CAT_INFO[catName] = {
+          emoji: meta.emoji || '📚',
+          label: catName,
+          color: meta.color || '#8A1538',
+          bg: meta.bg || '#F7EBEE'
+        };
+      }
+      // إضافة للمجموعة المختارة
+      if(typeof CAT_GROUPS !== 'undefined' && meta.groupId){
+        const grp = CAT_GROUPS.find(g => g.id === meta.groupId);
+        if(grp && Array.isArray(grp.cats) && !grp.cats.includes(catName)){
+          grp.cats.push(catName);
+        }
+      }
+      // إضافة لـ QDB إن لم تكن موجودة
+      if(!QDB[catName]) QDB[catName] = [];
+    });
+  }catch(e){ console.warn('تعذر تحميل الفئات المخصصة:', e); }
+  
   // 🔄 إعادة رسم سريعة بعد 200ms لضمان تحميل ملفات JS الخارجية (defer)
   // الـ defer scripts تنفّذ بعد DOMContentLoaded لكن قد لا تكون QDB_ORIGINAL محدّثة فوراً
   setTimeout(() => {
@@ -14381,9 +14768,12 @@ function trackActivity(type, data = {}){
 // ═══════════════════════════════════════════════════════════════════
 
 const CAT_INFO = {
+'تاريخ قطر':{emoji:'🏛️', label:'تاريخ قطر',color:'#8A1538',bg:'#F7EBEE'},
+'قطر والخليج':{emoji:'🌊', label:'قطر والخليج',color:'#8A1538',bg:'#F7EBEE'},
+'العمل التطوعي في قطر':{emoji:'🤝', label:'العمل التطوعي في قطر',color:'#8A1538',bg:'#F7EBEE'},
+'معلومات عامة عن قطر':{emoji:'🇶🇦', label:'معلومات عامة عن قطر',color:'#8A1538',bg:'#F7EBEE'},
 'قصص الأنبياء':       {emoji:'🌟', label:'قصص الأنبياء',color:'#3D6B53',bg:'#EBF2EE'},
 'التراث الخليجي':     {emoji:'🐪', label:'التراث الخليجي',color:'#8A1538',bg:'#F7EBEE'},
-'تاريخ قطر العميق':   {emoji:'🏛️', label:'تاريخ قطر العميق',color:'#8A1538',bg:'#F7EBEE'},
 'الأدب العربي':       {emoji:'📜', label:'الأدب العربي',color:'#A67C4A',bg:'#F4EFE8'},
 'الإنجليزية':         {emoji:'🔤', label:'الإنجليزية',color:'#1E3A5F',bg:'#EDF1F6'},
 'الرياضيات الذهنية':  {emoji:'🧮', label:'الرياضيات الذهنية',color:'#1E3A5F',bg:'#EDF1F6'},
@@ -14612,6 +15002,11 @@ try {
       // أنتقل للقائمة فوراً — تفاصيل المستخدم تُجلب في الخلفية
       showScreen('screen-menu');
       hideLoader();
+
+      // 🎓 إظهار Onboarding للمعلم الجديد (مرة واحدة فقط)
+      setTimeout(() => {
+        if(typeof hhOnboardingShow === 'function') hhOnboardingShow();
+      }, 1200);
 
       // جلب اسم المستخدم وتحديثه (في الخلفية، غير معلِّق)
       (async ()=>{
@@ -15088,58 +15483,29 @@ const CAT_COLORS_PEARL = {};
 // الترتيب هنا هو ترتيب العرض في الواجهة.
 const CAT_LEVELS = [
   {
-    id:'primary',
-    label:'المرحلة الابتدائية',
-    desc:'الخامس والسادس — الدراسات الاجتماعية',
+    id:'schools',
+    label:'المدارس',
+    desc:'المناهج الرسمية القطرية لكل المراحل',
     color:'#8A1538',
     accent:'#B8924A',
     status:'available',
-    groupIds:['grade5_soon','social6'],
+    groupIds:['grade5_soon','social6','social7','science7','social8','grade9_soon'],
     subTabs:[
       { id:'g5', label:'الخامس',  accent:'#1E3A5F', groupIds:['grade5_soon'], status:'soon' },
-      { id:'g6', label:'السادس',  accent:'#8A1538', groupIds:['social6'],     status:'available' }
-    ]
-  },
-  {
-    id:'prep',
-    label:'المرحلة الإعدادية',
-    desc:'منهج الفصل الثاني — السابع والثامن والتاسع',
-    color:'#8A1538',
-    accent:'#B8924A',
-    status:'available',     // available | soon | elite
-    groupIds:['social7','science7','social8','grade9_soon'],
-    subTabs:[
-      { id:'g7', label:'السابع', accent:'#8A1538', groupIds:['social7','science7'], status:'available' },
-      { id:'g8', label:'الثامن', accent:'#A67C4A', groupIds:['social8'], status:'available' },
-      { id:'g9', label:'التاسع', accent:'#5a3a8e', groupIds:['grade9_soon'], status:'soon' }
+      { id:'g6', label:'السادس',  accent:'#8A1538', groupIds:['social6'],     status:'available' },
+      { id:'g7', label:'السابع',  accent:'#8A1538', groupIds:['social7','science7'], status:'available' },
+      { id:'g8', label:'الثامن',  accent:'#A67C4A', groupIds:['social8'], status:'available' },
+      { id:'g9', label:'التاسع',  accent:'#5a3a8e', groupIds:['grade9_soon'], status:'soon' }
     ]
   },
   {
     id:'general',
-    label:'عام',
-    desc:'مجالات متنوعة لكل المراحل',
-    color:'#1E3A5F',
-    accent:'#2C5F88',
-    status:'available',
-    groupIds:['islamic','lang','qatar','sport','geography','knowledge']
-  },
-  {
-    id:'elite',
-    label:'الأساطير',
-    desc:'للنخبة — أسئلة متدرجة الصعوبة',
-    color:'#8A6D2E',
+    label:'العامة',
+    desc:'مجالات متنوعة وأساطير وأسئلة مخصصة',
+    color:'#8A1538',
     accent:'#B8924A',
-    status:'elite',
-    groupIds:['legends']
-  },
-  {
-    id:'mine',
-    label:'أسئلتي',
-    desc:'الأسئلة التي أنشأتها بنفسك',
-    color:'#3D4A7A',
-    accent:'#5A6BA8',
     status:'available',
-    groupIds:['custom']
+    groupIds:['islamic','lang','qatar','sport','geography','knowledge','legends','custom']
   }
 ];
 
@@ -15166,7 +15532,7 @@ const CAT_GROUPS = [
     id:'qatar',
     label:'قطر والخليج',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#2a0612"/><path d="M25 22 L75 22 Q82 22 82 30 L82 55 Q82 72 50 85 Q18 72 18 55 L18 30 Q18 22 25 22 Z" fill="#fff" stroke="#B8924A" stroke-width="2"/><rect x="25" y="28" width="14" height="52" fill="#8A1538"/><path d="M39 28 L75 28 L75 80 L44 80 L46 76 L44 72 L46 68 L44 64 L46 60 L44 56 L46 52 L44 48 L46 44 L44 40 L46 36 L44 32 Z" fill="#fff"/><text x="58" y="57" text-anchor="middle" font-size="10" font-family="Cairo,Arial" fill="#8A1538" font-weight="900">قطر</text><circle cx="80" cy="22" r="6" fill="#F8F8F6" stroke="#B8924A" stroke-width="1.5"/><circle cx="78" cy="20" r="1.5" fill="#fff"/></svg>`,
-    cats:['قطر','تاريخ قطر العميق','التراث الخليجي']
+    cats:['تاريخ قطر','قطر والخليج','العمل التطوعي في قطر','معلومات عامة عن قطر','التراث الخليجي']
   },
   {
     id:'social6',
@@ -15335,11 +15701,8 @@ function buildCatSelect(){
   // 🎨 أيقونات SVG أنيقة لكل تاب
   const tabIcons = {
     'all':     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
-    'primary': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
-    'prep':    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-    'general': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
-    'elite':   '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>',
-    'mine':    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'
+    'schools': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+    'general': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
   };
 
   tabs.forEach(tab => {
@@ -16964,43 +17327,40 @@ function updateBoardUI(){
     row.innerHTML='';
     G.teams.forEach((t,i)=>{
       const isActive=G.turn===i;
-      // wrapper لكل فريق: سهم+ | صندوق | سهم-
-      const wrap=document.createElement('div');
-      wrap.style.cssText='display:flex;align-items:center;gap:2px;';
+      // بطاقة الفريق الكبيرة
+      const card=document.createElement('div');
+      card.className='team-score-card' + (isActive?' active':'');
 
       // زر +
       const btnPlus=document.createElement('button');
+      btnPlus.className='score-btn plus';
       btnPlus.textContent='+';
       btnPlus.title='+ 50 نقطة';
-      btnPlus.style.cssText='width:22px;height:22px;border-radius:50%;background:#27ae60;border:none;cursor:pointer;font-size:.85rem;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;line-height:1;transition:transform .1s;';
-      btnPlus.onmousedown=()=>btnPlus.style.transform='scale(.88)';
-      btnPlus.onmouseup=()=>btnPlus.style.transform='scale(1)';
       btnPlus.onclick=()=>adjustScore(i,1);
 
-      // صندوق النقاط
-      const box=document.createElement('div');
-      box.className='sbox'+(isActive?' active-t':'');
-      box.style.cssText='min-width:52px;padding:2px 6px;';
-      box.innerHTML='<div class="sn" style="font-size:.58rem;">'+esc(t)+'</div><div class="sp" style="font-size:1rem;">'+G.scores[i]+'</div>';
+      // اسم الفريق
+      const name=document.createElement('div');
+      name.className='team-name';
+      name.textContent=t;
+
+      // النقاط
+      const score=document.createElement('div');
+      score.className='team-score';
+      score.textContent=G.scores[i];
 
       // زر -
       const btnMinus=document.createElement('button');
+      btnMinus.className='score-btn minus';
       btnMinus.textContent='−';
       btnMinus.title='- 50 نقطة';
-      btnMinus.style.cssText='width:22px;height:22px;border-radius:50%;background:#c0392b;border:none;cursor:pointer;font-size:.95rem;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;line-height:1;transition:transform .1s;';
-      btnMinus.onmousedown=()=>btnMinus.style.transform='scale(.88)';
-      btnMinus.onmouseup=()=>btnMinus.style.transform='scale(1)';
       btnMinus.onclick=()=>adjustScore(i,-1);
 
-      wrap.appendChild(btnPlus);
-      wrap.appendChild(box);
-      wrap.appendChild(btnMinus);
-      row.appendChild(wrap);
-      if(i<G.teams.length-1){
-        const vs=document.createElement('div');
-        vs.className='vs-d';vs.textContent='VS';
-        row.appendChild(vs);
-      }
+      // الترتيب: − [نقاط] [اسم] +
+      card.appendChild(btnMinus);
+      card.appendChild(score);
+      card.appendChild(name);
+      card.appendChild(btnPlus);
+      row.appendChild(card);
     });
   }
   const tb=document.getElementById('turn-badge');
@@ -17516,6 +17876,71 @@ function toggleGameStats(){
   } else {
     panel.style.display='none';
     if(btn)btn.style.display='block';
+  }
+}
+
+// 📤 تصدير نتائج اللعبة إلى CSV (يفتح في Excel)
+function hhExportGameResults(){
+  try{
+    const date = new Date();
+    const dateStr = date.toLocaleDateString('ar-QA');
+    const timeStr = date.toLocaleTimeString('ar-QA');
+    
+    // 1) معلومات اللعبة العامة
+    let csv = '\uFEFF'; // BOM لدعم UTF-8 في Excel
+    csv += 'منصة الملهم — تقرير نتائج اللعبة\n';
+    csv += 'اسم اللعبة,' + (G.gameName || 'بدون اسم') + '\n';
+    csv += 'التاريخ,' + dateStr + '\n';
+    csv += 'الوقت,' + timeStr + '\n\n';
+    
+    // 2) جدول الفرق والنتائج
+    csv += 'الترتيب,اسم الفريق,النقاط\n';
+    const sorted = G.teams.map((t,i) => ({name:t, score:G.scores[i]}))
+      .sort((a,b) => b.score - a.score);
+    sorted.forEach((t,i) => {
+      const rank = i === 0 ? '🏆 الأول' : (i+1) + '';
+      csv += rank + ',' + t.name + ',' + t.score + '\n';
+    });
+    
+    // 3) الفئات المختارة
+    csv += '\nالفئات المختارة\n';
+    (G.selectedCats || []).forEach(c => {
+      csv += c + '\n';
+    });
+    
+    // 4) إحصائيات الأسئلة
+    let totalQ = 0, answeredQ = 0;
+    if(G.boardData){
+      Object.entries(G.boardData).forEach(([cat,diffs])=>{
+        Object.entries(diffs).forEach(([diff,qs])=>{
+          qs.forEach(q=>{
+            const key = cat + '__' + diff + '__' + qs.indexOf(q);
+            const cell = document.getElementById('cell_'+key);
+            const used = cell && cell.classList.contains('used');
+            totalQ++;
+            if(used) answeredQ++;
+          });
+        });
+      });
+    }
+    csv += '\nإحصائيات الأسئلة\n';
+    csv += 'إجمالي الأسئلة,' + totalQ + '\n';
+    csv += 'الأسئلة المُجاب عليها,' + answeredQ + '\n';
+    csv += 'النسبة,' + (totalQ ? Math.round(answeredQ/totalQ*100) : 0) + '%\n';
+    
+    // إنشاء وتحميل الملف
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    const fileName = 'نتائج_' + (G.gameName||'لعبة') + '_' + date.toISOString().slice(0,10) + '.csv';
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    
+    if(typeof toast === 'function') toast('✅ تم تصدير النتائج بنجاح', 'success');
+  }catch(e){
+    console.error('خطأ في التصدير:', e);
+    if(typeof toast === 'function') toast('❌ تعذر التصدير: ' + e.message, 'error');
   }
 }
 
@@ -21560,6 +21985,327 @@ function populateAQCatSelect(){
     opt.value = cat; opt.textContent = cat;
     sel.appendChild(opt);
   });
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🆕 إنشاء فئة جديدة من لوحة التحكم
+// ═══════════════════════════════════════════════════════════
+function hhOpenNewCategoryModal(){
+  // نبني قائمة المجموعات المتاحة
+  let groupOptions = '';
+  if(typeof CAT_GROUPS !== 'undefined'){
+    CAT_GROUPS.forEach(g => {
+      // نتجاهل grade5_soon و grade9_soon (مجموعات "قريباً")
+      if(g.id.includes('_soon')) return;
+      groupOptions += `<option value="${g.id}">${g.label}</option>`;
+    });
+  }
+
+  // إيموجي مقترحة شائعة
+  const suggestedEmojis = ['📚','📖','✨','🎯','🌟','🏆','⭐','🎓','📝','🔬','🧪','🎨','🎭','🎵','⚽','🏛️','🌍','🗺️','🇶🇦','🕌','📜','💡','🧠','🔢','🔤','🌱','🌳','🦅','🦁','🐪'];
+  const emojiBtns = suggestedEmojis.map(e => 
+    `<button type="button" onclick="document.getElementById('hh-newcat-emoji').value='${e}';return false;" style="padding:6px 10px;background:#fff;border:1.5px solid #B8924A;border-radius:8px;font-size:1.1rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='#F7EBEE'" onmouseout="this.style.background='#fff'">${e}</button>`
+  ).join('');
+
+  // ألوان مقترحة (متناسقة مع الهوية)
+  const suggestedColors = [
+    {label:'عنابي',c:'#8A1538'},
+    {label:'ذهبي',c:'#B8924A'},
+    {label:'كحلي',c:'#1E3A5F'},
+    {label:'أخضر',c:'#3D6B53'},
+    {label:'بنفسجي',c:'#3D4A7A'},
+    {label:'برتقالي',c:'#A67C4A'},
+    {label:'عنابي داكن',c:'#5E0E26'}
+  ];
+  const colorBtns = suggestedColors.map(co => 
+    `<button type="button" onclick="document.getElementById('hh-newcat-color').value='${co.c}';document.getElementById('hh-newcat-color-preview').style.background='${co.c}';return false;" title="${co.label}" style="width:34px;height:34px;background:${co.c};border:2px solid #fff;border-radius:50%;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15);"></button>`
+  ).join('');
+
+  const modal = document.createElement('div');
+  modal.id = 'hh-newcat-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(43,11,30,.65);backdrop-filter:blur(4px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);border:2px solid #8A1538;">
+      <!-- header -->
+      <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:16px 20px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:1.05rem;">🆕 إنشاء فئة جديدة</div>
+        <button onclick="hhCloseNewCategoryModal()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:900;">✕</button>
+      </div>
+
+      <!-- body -->
+      <div style="padding:20px;font-family:Tajawal,sans-serif;">
+        
+        <!-- اسم الفئة -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">اسم الفئة <span style="color:#c0392b;">*</span></label>
+          <input id="hh-newcat-name" type="text" placeholder="مثال: التاريخ الإسلامي" 
+            style="width:100%;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Tajawal;font-size:.92rem;outline:none;" autocomplete="off">
+          <div style="font-size:.7rem;color:#8A6D2E;margin-top:4px;">سيظهر هذا الاسم في قائمة الفئات</div>
+        </div>
+
+        <!-- المجموعة -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">المجموعة <span style="color:#c0392b;">*</span></label>
+          <select id="hh-newcat-group" style="width:100%;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Cairo,sans-serif;font-size:.9rem;background:#fff;">
+            <option value="">-- اختر المجموعة --</option>
+            ${groupOptions}
+          </select>
+          <div style="font-size:.7rem;color:#8A6D2E;margin-top:4px;">المجموعة تحدد أين ستظهر الفئة في القائمة</div>
+        </div>
+
+        <!-- الإيموجي -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">الإيموجي</label>
+          <input id="hh-newcat-emoji" type="text" placeholder="📚" value="📚" maxlength="4"
+            style="width:80px;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Tajawal;font-size:1.4rem;text-align:center;outline:none;">
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;max-height:120px;overflow-y:auto;padding:8px;background:#F8F8F6;border-radius:8px;">
+            ${emojiBtns}
+          </div>
+        </div>
+
+        <!-- اللون -->
+        <div style="margin-bottom:14px;">
+          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">لون الفئة</label>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input id="hh-newcat-color" type="text" value="#8A1538" 
+              style="flex:1;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:monospace;font-size:.92rem;outline:none;">
+            <div id="hh-newcat-color-preview" style="width:44px;height:44px;background:#8A1538;border:2px solid #fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);"></div>
+          </div>
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+            ${colorBtns}
+          </div>
+        </div>
+
+        <!-- الوصف -->
+        <div style="margin-bottom:18px;">
+          <label style="font-family:Cairo;font-weight:800;font-size:.85rem;color:#8A1538;display:block;margin-bottom:6px;">وصف مختصر (اختياري)</label>
+          <input id="hh-newcat-desc" type="text" placeholder="وصف يظهر تحت اسم الفئة" 
+            style="width:100%;padding:11px;border:1.5px solid #B8924A;border-radius:8px;font-family:Tajawal;font-size:.88rem;outline:none;">
+        </div>
+
+        <!-- الأزرار -->
+        <div style="display:flex;gap:10px;">
+          <button onclick="hhCloseNewCategoryModal()" 
+            style="flex:1;padding:12px;background:#fff;color:#8A1538;border:1.5px solid #8A1538;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.92rem;cursor:pointer;">
+            إلغاء
+          </button>
+          <button onclick="hhCreateNewCategory()" 
+            style="flex:2;padding:12px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,21,56,.3);display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            إنشاء الفئة
+          </button>
+        </div>
+
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // إغلاق بالضغط على الخلفية
+  modal.addEventListener('click', (e) => {
+    if(e.target === modal) hhCloseNewCategoryModal();
+  });
+
+  // تركيز على حقل الاسم
+  setTimeout(() => {
+    const nameInput = document.getElementById('hh-newcat-name');
+    if(nameInput) nameInput.focus();
+  }, 100);
+
+  // معاينة اللون عند الكتابة
+  setTimeout(() => {
+    const colorInput = document.getElementById('hh-newcat-color');
+    if(colorInput){
+      colorInput.oninput = () => {
+        const preview = document.getElementById('hh-newcat-color-preview');
+        if(preview) preview.style.background = colorInput.value;
+      };
+    }
+  }, 100);
+}
+
+function hhCloseNewCategoryModal(){
+  const modal = document.getElementById('hh-newcat-modal');
+  if(modal) modal.remove();
+}
+
+// 🗑️ حذف فئة مخصصة (للفئات التي أنشأها الأدمن فقط)
+async function hhDeleteCurrentCategory(){
+  const cat = _aqCurrentCat;
+  if(!cat){
+    if(typeof toast === 'function') toast('⚠️ اختر فئة أولاً', 'error');
+    return;
+  }
+
+  // التحقق: هل هذه فئة مخصصة (في hh_custom_cats)؟
+  let customCats = {};
+  try{ customCats = JSON.parse(localStorage.getItem('hh_custom_cats') || '{}'); }catch(e){}
+  
+  if(!customCats[cat]){
+    if(typeof toast === 'function') toast('⚠️ لا يمكن حذف الفئات الأصلية — فقط الفئات التي أنشأتها', 'error');
+    return;
+  }
+
+  // تأكيد الحذف
+  const confirmMsg = `هل أنت متأكد من حذف فئة "${cat}"؟\n\nسيتم حذف:\n• الفئة من القائمة\n• جميع أسئلتها (${(QDB[cat]||[]).length} سؤال)\n\nهذا الإجراء لا يمكن التراجع عنه!`;
+  if(!confirm(confirmMsg)) return;
+
+  try{
+    // 1) حذف من QDB
+    if(QDB[cat]) delete QDB[cat];
+
+    // 2) حذف من CAT_INFO
+    if(typeof CAT_INFO !== 'undefined' && CAT_INFO[cat]) delete CAT_INFO[cat];
+
+    // 3) حذف من CAT_GROUPS
+    if(typeof CAT_GROUPS !== 'undefined'){
+      CAT_GROUPS.forEach(g => {
+        if(Array.isArray(g.cats)){
+          g.cats = g.cats.filter(c => c !== cat);
+        }
+      });
+    }
+
+    // 4) حذف من localStorage
+    delete customCats[cat];
+    localStorage.setItem('hh_custom_cats', JSON.stringify(customCats));
+
+    // 5) حذف من Firestore
+    if(typeof db !== 'undefined' && db){
+      try{
+        await db.collection('admin_qdb').doc(cat).delete();
+      }catch(e){
+        console.warn('حذف السحابي تعذر:', e);
+      }
+    }
+
+    // 6) إعادة بناء الواجهة
+    _aqCurrentCat = '';
+    if(typeof populateAQCatSelect === 'function') populateAQCatSelect();
+    if(typeof buildCatSelect === 'function') buildCatSelect();
+    
+    // مسح قائمة الأسئلة المعروضة
+    const listEl = document.getElementById('aq-questions-list');
+    if(listEl) listEl.innerHTML = '';
+    const filterWrap = document.getElementById('aq-filter-wrap');
+    if(filterWrap) filterWrap.style.display = 'none';
+
+    if(typeof toast === 'function') toast('🗑️ تم حذف فئة "' + cat + '"', 'success');
+
+  }catch(e){
+    console.error('خطأ في حذف الفئة:', e);
+    if(typeof toast === 'function') toast('❌ تعذر الحذف: ' + e.message, 'error');
+  }
+}
+
+async function hhCreateNewCategory(){
+  const name = (document.getElementById('hh-newcat-name')?.value || '').trim();
+  const groupId = document.getElementById('hh-newcat-group')?.value || '';
+  const emoji = (document.getElementById('hh-newcat-emoji')?.value || '📚').trim();
+  const color = (document.getElementById('hh-newcat-color')?.value || '#8A1538').trim();
+  const desc = (document.getElementById('hh-newcat-desc')?.value || '').trim();
+
+  // التحقق
+  if(!name){
+    if(typeof toast === 'function') toast('⚠️ يجب إدخال اسم الفئة', 'error');
+    document.getElementById('hh-newcat-name')?.focus();
+    return;
+  }
+  if(!groupId){
+    if(typeof toast === 'function') toast('⚠️ يجب اختيار المجموعة', 'error');
+    document.getElementById('hh-newcat-group')?.focus();
+    return;
+  }
+  // التحقق من عدم وجود فئة بنفس الاسم
+  if(QDB[name] || (typeof CAT_INFO !== 'undefined' && CAT_INFO[name])){
+    if(typeof toast === 'function') toast('⚠️ هذه الفئة موجودة بالفعل', 'error');
+    return;
+  }
+
+  try{
+    // 1) إضافة الفئة لـ QDB (فارغة)
+    QDB[name] = [];
+
+    // 2) إضافة الفئة لـ CAT_INFO ديناميكياً
+    if(typeof CAT_INFO !== 'undefined'){
+      // خلفية فاتحة من اللون
+      const bgColor = color + '15'; // إضافة شفافية 15
+      CAT_INFO[name] = {
+        emoji: emoji,
+        label: name,
+        color: color,
+        bg: bgColor
+      };
+    }
+
+    // 3) إضافة الفئة للمجموعة المختارة في CAT_GROUPS
+    if(typeof CAT_GROUPS !== 'undefined'){
+      const grp = CAT_GROUPS.find(g => g.id === groupId);
+      if(grp && Array.isArray(grp.cats)){
+        if(!grp.cats.includes(name)){
+          grp.cats.push(name);
+        }
+      }
+    }
+
+    // 4) حفظ الفئة الجديدة في Firestore (داخل admin_qdb)
+    if(typeof db !== 'undefined' && db && typeof currentUser !== 'undefined' && currentUser){
+      try{
+        await db.collection('admin_qdb').doc(name).set({
+          questions: [],
+          meta: {
+            emoji: emoji,
+            color: color,
+            bg: color + '15',
+            groupId: groupId,
+            desc: desc,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: currentUser.email || currentUser.uid
+          }
+        }, { merge: true });
+      }catch(e){
+        console.warn('حفظ السحابي تعذر:', e);
+      }
+    }
+
+    // 5) حفظ محلي كنسخة احتياطية
+    try{
+      const customCats = JSON.parse(localStorage.getItem('hh_custom_cats') || '{}');
+      customCats[name] = {
+        emoji: emoji,
+        color: color,
+        bg: color + '15',
+        groupId: groupId,
+        desc: desc
+      };
+      localStorage.setItem('hh_custom_cats', JSON.stringify(customCats));
+    }catch(e){}
+
+    // 6) إعادة بناء الواجهة
+    if(typeof populateAQCatSelect === 'function') populateAQCatSelect();
+    if(typeof buildCatSelect === 'function') buildCatSelect();
+
+    // 7) اختيار الفئة الجديدة تلقائياً
+    setTimeout(() => {
+      const sel = document.getElementById('aq-cat-select');
+      if(sel){
+        sel.value = name;
+        if(typeof loadAdminCatQuestions === 'function') loadAdminCatQuestions();
+      }
+    }, 100);
+
+    // إغلاق النموذج
+    hhCloseNewCategoryModal();
+
+    // رسالة نجاح
+    if(typeof toast === 'function'){
+      toast('✅ تم إنشاء فئة "' + name + '" بنجاح! ابدأ بإضافة الأسئلة', 'success');
+    }
+
+  }catch(e){
+    console.error('خطأ في إنشاء الفئة:', e);
+    if(typeof toast === 'function') toast('❌ تعذر إنشاء الفئة: ' + e.message, 'error');
+  }
 }
 
 function loadAdminCatQuestions(){
@@ -27010,7 +27756,7 @@ window.formatMinutesArabic = formatMinutesArabic;
 const HH_NAV = {
   // الشاشات التي يظهر فيها الشريط السفلي
   visibleScreens: ['screen-menu','screen-mygames','screen-toolbox','screen-about','screen-story',
-                   'screen-references','screen-contact',
+                   'screen-references','screen-contact','screen-privacy','screen-terms',
                    'screen-setup','screen-lb','screen-rate','screen-rules',
                    'screen-guide','screen-reviews','screen-sponsors',
                    'screen-influencers','screen-achievements','screen-custom-q',
@@ -29233,7 +29979,7 @@ window.submitProblemReport = async function(){
     const d = now.getDate();
     // أوقات تقريبية — يمكن تعديلها
     if(m === 9 && d <= 15) return {id:'school_start', title:'🎒 عام دراسي مبارك', body:'عودة موفقة للمعلمين والطلاب — الملهم بجانبك في رحلة التعليم.'};
-    if(m === 6 && d <= 15) return {id:'school_end',   title:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg> ختام بلا تعب', body:'مبروك إنجاز عام كامل — تابع رحلتك مع الملهم في الإجازة.'};
+    if(m === 6 && d <= 15) return {id:'school_end',   title:'🎓 ختام بلا تعب', body:'مبروك إنجاز عام كامل — تابع رحلتك مع الملهم في الإجازة.'};
     if(m === 12)            return {id:'qatar_day',    title:'🇶🇦 يوم قطر الوطني', body:'كل عام وقطر وأهلها بألف خير.'};
     // شهر رمضان غير ثابت بالميلادي — نتركه يدويا للأدمن
     return null;
@@ -32098,6 +32844,140 @@ document.addEventListener('keydown', function(e){
   }
 })();
 
+</script>
+<!-- ⌨️ اختصارات لوحة المفاتيح -->
+<script>
+(function(){
+  // تتبع الاختصارات
+  let _kbHelp = null;
+  
+  document.addEventListener('keydown', function(e){
+    // تجاهل لو كان المستخدم يكتب في حقل
+    const tag = (e.target.tagName || '').toLowerCase();
+    if(tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+    
+    // Shift + ? = إظهار قائمة الاختصارات
+    if(e.shiftKey && e.key === '?'){
+      e.preventDefault();
+      hhShowKeyboardHelp();
+      return;
+    }
+    
+    // Escape = العودة للقائمة الرئيسية (لو ليس داخل modal)
+    if(e.key === 'Escape'){
+      const openModal = document.querySelector('#q-modal.open, #onboarding-modal[style*="flex"]');
+      if(openModal) return; // المودالات لها معالجها الخاص
+      
+      // إغلاق modal الاختصارات إن كان مفتوحاً
+      if(_kbHelp){
+        _kbHelp.remove(); _kbHelp = null;
+        return;
+      }
+    }
+    
+    // اختصارات تعمل فقط لو المستخدم على شاشة القائمة
+    const activeScreen = document.querySelector('.screen.active');
+    if(!activeScreen) return;
+    const screenId = activeScreen.id;
+    
+    // Ctrl + N = لعبة جديدة (من القائمة)
+    if((e.ctrlKey || e.metaKey) && e.key === 'n' && screenId === 'screen-menu'){
+      e.preventDefault();
+      if(typeof showScreen === 'function') showScreen('screen-setup');
+      return;
+    }
+    
+    // اختصارات شاشة اللعبة فقط
+    if(screenId === 'screen-board'){
+      // H = حفرة
+      if(e.key === 'h' || e.key === 'H'){
+        const btn = document.getElementById('pu-hafra');
+        if(btn && !btn.disabled){ btn.click(); }
+      }
+      // D = ضاعف
+      if(e.key === 'd' || e.key === 'D'){
+        const btn = document.getElementById('pu-dagf');
+        if(btn && !btn.disabled){ btn.click(); }
+      }
+      // M = منع
+      if(e.key === 'm' || e.key === 'M'){
+        const btn = document.getElementById('pu-eskot');
+        if(btn && !btn.disabled){ btn.click(); }
+      }
+      // J = جوابين
+      if(e.key === 'j' || e.key === 'J'){
+        const btn = document.getElementById('pu-twoans');
+        if(btn && !btn.disabled){ btn.click(); }
+      }
+    }
+    
+    // اختصارات شاشة السؤال
+    const modalOpen = document.getElementById('q-modal');
+    if(modalOpen && modalOpen.classList.contains('open')){
+      // Space = كشف الجواب
+      if(e.key === ' '){
+        e.preventDefault();
+        const btn = document.getElementById('reveal-btn');
+        if(btn) btn.click();
+      }
+    }
+  });
+  
+  function hhShowKeyboardHelp(){
+    if(_kbHelp){ _kbHelp.remove(); _kbHelp = null; return; }
+    
+    _kbHelp = document.createElement('div');
+    _kbHelp.style.cssText = 'position:fixed;inset:0;background:rgba(43,9,24,.7);backdrop-filter:blur(6px);z-index:99997;display:flex;align-items:center;justify-content:center;padding:16px;font-family:Tajawal,sans-serif;';
+    _kbHelp.innerHTML = `
+      <div style="background:#fff;max-width:480px;width:100%;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);border:2px solid #B8924A;">
+        <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:Cairo;font-weight:900;font-size:1.1rem;">⌨️ اختصارات لوحة المفاتيح</div>
+          <button onclick="this.closest('div[style*=fixed]').remove();" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.1rem;font-weight:900;">✕</button>
+        </div>
+        <div style="padding:18px 22px;font-family:Tajawal;color:#3D0918;line-height:2;">
+          <div style="display:grid;gap:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #E5DCD0;">
+              <span>إظهار/إخفاء هذه القائمة</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 8px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">Shift + ?</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #E5DCD0;">
+              <span>لعبة جديدة (من القائمة)</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 8px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">Ctrl + N</kbd>
+            </div>
+            <div style="margin-top:6px;padding-top:8px;border-top:2px solid #B8924A;font-weight:900;color:#8A1538;font-family:Cairo;">داخل اللعبة:</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <span>🕳️ حفرة</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 10px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">H</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <span>⚡ ضاعف</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 10px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">D</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <span>🚫 منع</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 10px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">M</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <span>🎯 جوابين</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 10px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">J</kbd>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;">
+              <span>كشف الجواب</span>
+              <kbd style="background:#F8F8F6;border:1.5px solid #B8924A;border-radius:6px;padding:3px 8px;font-family:monospace;font-size:.82rem;font-weight:900;color:#5E0E26;">Space</kbd>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:10px;background:#F7EBEE;border-radius:8px;text-align:center;font-size:.78rem;color:#5E0E26;">
+            💡 اضغط <kbd style="background:#fff;border:1px solid #B8924A;border-radius:4px;padding:1px 6px;font-family:monospace;font-weight:900;">Esc</kbd> للإغلاق
+          </div>
+        </div>
+      </div>
+    `;
+    _kbHelp.addEventListener('click', (e) => { if(e.target === _kbHelp){ _kbHelp.remove(); _kbHelp = null; } });
+    document.body.appendChild(_kbHelp);
+  }
+  
+  window.hhShowKeyboardHelp = hhShowKeyboardHelp;
+})();
 </script>
 </body>
 </html>
