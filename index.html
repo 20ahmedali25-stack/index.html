@@ -14855,6 +14855,17 @@ function _hh_initQDB(){
           if(typeof updateBoardUI==='function') updateBoardUI();
         }
       }
+      // تحميل تخصيصات الأدمن (ألوان/إخفاء/مخصّصة) — تصل لكل المستخدمين
+      if(typeof loadCustomizationsFromCloud === 'function'){
+        await loadCustomizationsFromCloud();
+        if(typeof buildCatSelect === 'function' && document.getElementById('screen-setup') && document.getElementById('screen-setup').classList.contains('active')){
+          buildCatSelect();
+        }
+      }
+      // تحميل صور المؤثرين السحابية
+      if(typeof loadInfluencerImagesFromCloud === 'function'){
+        await loadInfluencerImagesFromCloud();
+      }
     }catch(e){ console.warn('cloud load skipped:', e); }
   }, 1500);
 }
@@ -17184,6 +17195,8 @@ function toggleCatHidden(cat){
     toast('تم إظهار الفئة','success');
   }
   localStorage.setItem('hh_hidden_cats', JSON.stringify(list));
+  // مزامنة سحابية فورية — تصل لكل المستخدمين
+  if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
   // إعادة بناء قائمة الفئات لتعكس التغيير
   if(typeof buildCatSelect === 'function') buildCatSelect();
 }
@@ -17200,6 +17213,7 @@ function changeCatColor(cat, color){
   try{ map = JSON.parse(localStorage.getItem('hh_cat_colors')||'{}'); }catch(e){ map = {}; }
   map[cat] = color;
   localStorage.setItem('hh_cat_colors', JSON.stringify(map));
+  if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
   toast('تم تغيير لون الفئة','success');
   if(typeof buildCatSelect === 'function') buildCatSelect();
 }
@@ -17212,6 +17226,7 @@ function resetCatColor(cat){
   if(map[cat]){
     delete map[cat];
     localStorage.setItem('hh_cat_colors', JSON.stringify(map));
+    if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
     toast('تم استعادة اللون الافتراضي','info');
     if(typeof buildCatSelect === 'function') buildCatSelect();
   }
@@ -19158,6 +19173,7 @@ async function updateServiceStatus(serviceId, newStatus){
     } else {
       // وضع offline → localStorage
       localStorage.setItem('hh_path_services', JSON.stringify(_pathServicesCache));
+      if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
     }
     if(typeof toast === 'function') toast('تم التحديث', 'success');
     return true;
@@ -22642,7 +22658,9 @@ function saveInfluencer(){
   // معالجة الصورة
   const preview = document.getElementById('influencer-img-preview');
   if(preview.dataset.newImg){
-    try{ localStorage.setItem('influencer_img_' + targetId, preview.dataset.newImg); }catch(e){ toast('الذاكرة ممتلئة — لم تحفظ الصورة','warn'); }
+    try{ localStorage.setItem('influencer_img_' + targetId, preview.dataset.newImg);
+      if(typeof _hh_saveInfluencerImgToCloud === 'function') _hh_saveInfluencerImgToCloud(targetId, preview.dataset.newImg);
+    }catch(e){ toast('الذاكرة ممتلئة — لم تحفظ الصورة','warn'); }
     delete preview.dataset.newImg;
   } else if(preview.dataset.removeImg === '1'){
     localStorage.removeItem('influencer_img_' + targetId);
@@ -22916,6 +22934,7 @@ async function hhDeleteCurrentCategory(){
     // 4) حذف من localStorage
     delete customCats[cat];
     localStorage.setItem('hh_custom_cats', JSON.stringify(customCats));
+    if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
 
     // 5) حذف من Firestore
     if(typeof db !== 'undefined' && db){
@@ -23001,6 +23020,7 @@ async function hhCreateNewCategory(){
         const customGroups = JSON.parse(localStorage.getItem('hh_custom_groups') || '{}');
         customGroups[newGroupId] = { label: newGroupName, color: color };
         localStorage.setItem('hh_custom_groups', JSON.stringify(customGroups));
+        if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
       }catch(e){}
       
       // حفظ المجموعة المخصصة في Firestore (لتظهر لكل المستخدمين)
@@ -23081,6 +23101,7 @@ async function hhCreateNewCategory(){
         desc: desc
       };
       localStorage.setItem('hh_custom_cats', JSON.stringify(customCats));
+      if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud();
     }catch(e){}
 
     // 6) إعادة بناء الواجهة (إجبار كامل)
@@ -26560,6 +26581,113 @@ async function uploadCatImg(cat, file){
 function _hh_safeDocId(cat){
   // Firestore لا يقبل '/'، نستبدل المسافات والأحرف الخاصة
   return encodeURIComponent(cat).replace(/%/g,'_');
+}
+
+// ════════════════════════════════════════════════════
+// 🔄 مزامنة تخصيصات الأدمن (ألوان/إخفاء/مخصّصة) عبر السحابة
+// تصل لكل المستخدمين فوراً — قلب "الفولاذية"
+// ════════════════════════════════════════════════════
+
+// حفظ تخصيصات الأدمن في السحابة (يستدعى عند أي تغيير من الأدمن)
+async function _hh_saveCustomizationsToCloud(){
+  if(OFFLINE_MODE || !db || !isAdminUser(currentUser)) return false;
+  try{
+    const payload = {
+      hidden_cats: _hh_getHiddenCats(),
+      cat_colors: JSON.parse(localStorage.getItem('hh_cat_colors')||'{}'),
+      custom_cats: JSON.parse(localStorage.getItem('hh_custom_cats')||'{}'),
+      custom_groups: JSON.parse(localStorage.getItem('hh_custom_groups')||'[]'),
+      sponsors_config: JSON.parse(localStorage.getItem('hh_sponsors_config')||'null'),
+      landing_settings: JSON.parse(localStorage.getItem('hh_landing_settings')||'null'),
+      path_services: JSON.parse(localStorage.getItem('hh_path_services')||'null'),
+      activity_logo: localStorage.getItem('hh_activity_logo')||null,
+      updated_at: Date.now()
+    };
+    await db.collection('platform_settings').doc('admin_customizations').set(payload);
+    return true;
+  }catch(e){
+    console.warn('saveCustomizations cloud:', e.message);
+    return false;
+  }
+}
+
+// تحميل تخصيصات الأدمن من السحابة (يستدعى لكل المستخدمين عند فتح الموقع)
+async function loadCustomizationsFromCloud(){
+  if(OFFLINE_MODE || !db) return;
+  try{
+    const doc = await db.collection('platform_settings').doc('admin_customizations').get();
+    if(!doc.exists) return;
+    const data = doc.data();
+    if(!data) return;
+    // تطبيق الفئات المخفية
+    if(Array.isArray(data.hidden_cats)){
+      localStorage.setItem('hh_hidden_cats', JSON.stringify(data.hidden_cats));
+    }
+    // تطبيق ألوان الفئات
+    if(data.cat_colors && typeof data.cat_colors === 'object'){
+      localStorage.setItem('hh_cat_colors', JSON.stringify(data.cat_colors));
+    }
+    // تطبيق الفئات المخصّصة
+    if(data.custom_cats && typeof data.custom_cats === 'object'){
+      localStorage.setItem('hh_custom_cats', JSON.stringify(data.custom_cats));
+    }
+    // تطبيق المجموعات المخصّصة
+    if(Array.isArray(data.custom_groups)){
+      localStorage.setItem('hh_custom_groups', JSON.stringify(data.custom_groups));
+    }
+    // تطبيق إعدادات الشركاء/الرعاة
+    if(data.sponsors_config && typeof data.sponsors_config === 'object'){
+      localStorage.setItem('hh_sponsors_config', JSON.stringify(data.sponsors_config));
+    }
+    // تطبيق إعدادات صفحة الهبوط
+    if(data.landing_settings && typeof data.landing_settings === 'object'){
+      localStorage.setItem('hh_landing_settings', JSON.stringify(data.landing_settings));
+    }
+    // تطبيق خدمات المسارات (الأقسام المخفية/الظاهرة)
+    if(data.path_services && typeof data.path_services === 'object'){
+      localStorage.setItem('hh_path_services', JSON.stringify(data.path_services));
+    }
+    // تطبيق شعار الأنشطة
+    if(data.activity_logo){
+      localStorage.setItem('hh_activity_logo', data.activity_logo);
+    }
+  }catch(e){
+    console.warn('loadCustomizations cloud:', e.message);
+  }
+}
+
+function _hh_safeDocId_partner(cat){ return encodeURIComponent(cat).replace(/%/g,'_'); }
+
+// حفظ صورة مؤثر في السحابة (تصل لكل المستخدمين)
+async function _hh_saveInfluencerImgToCloud(influencerId, dataUrl){
+  if(OFFLINE_MODE || !db || !isAdminUser(currentUser)) return false;
+  try{
+    await db.collection('admin_influencer_images').doc(String(influencerId)).set({
+      influencerId: String(influencerId),
+      dataUrl: dataUrl,
+      updated_at: Date.now()
+    });
+    return true;
+  }catch(e){
+    console.warn('saveInfluencerImg cloud:', e.message);
+    return false;
+  }
+}
+
+// تحميل صور المؤثرين من السحابة (لكل المستخدمين عند فتح الموقع)
+async function loadInfluencerImagesFromCloud(){
+  if(OFFLINE_MODE || !db) return;
+  try{
+    const snap = await db.collection('admin_influencer_images').get();
+    snap.forEach(doc => {
+      const data = doc.data();
+      if(data && data.influencerId && data.dataUrl){
+        try{ localStorage.setItem('influencer_img_'+data.influencerId, data.dataUrl); }catch(e){}
+      }
+    });
+  }catch(e){
+    console.warn('loadInfluencerImages cloud:', e.message);
+  }
 }
 
 // تحميل صور الفئات السحابية عند فتح الموقع
@@ -32576,7 +32704,7 @@ window._hh_getSponsorsConfig = function(){
 };
 
 window._hh_saveSponsorsConfig = function(cfg){
-  try{ localStorage.setItem('hh_sponsors_config', JSON.stringify(cfg)); return true; }
+  try{ localStorage.setItem('hh_sponsors_config', JSON.stringify(cfg)); if(typeof _hh_saveCustomizationsToCloud === 'function') _hh_saveCustomizationsToCloud(); return true; }
   catch(e){ return false; }
 };
 
