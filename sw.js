@@ -1,6 +1,6 @@
 // Service Worker لمنصة الملهم — يدعم الأوفلاين والتثبيت
 const CACHE_NAME = 'almulhim-v1.5';
-const RUNTIME_CACHE = 'almulhim-runtime';
+const RUNTIME_CACHE = 'almulhim-runtime-v1.5';
 
 // الملفات الأساسية للتخزين المؤقت
 const PRECACHE_URLS = [
@@ -55,7 +55,10 @@ self.addEventListener('fetch', event => {
     fetch(req)
       .then(response => {
         // ناجح: نخزن نسخة في cache
-        if(response && response.status === 200 && response.type === 'basic'){
+        // لكن لا نخزّن index.html أو الصفحة الرئيسية ليحصل المستخدم دائماً على أحدث نسخة
+        const _isHTML = req.url.endsWith('/') || req.url.includes('index.html') ||
+                        (req.headers.get('accept') || '').includes('text/html');
+        if(response && response.status === 200 && response.type === 'basic' && !_isHTML){
           const responseClone = response.clone();
           caches.open(RUNTIME_CACHE).then(cache => {
             cache.put(req, responseClone);
