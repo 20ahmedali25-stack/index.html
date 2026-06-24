@@ -12646,13 +12646,21 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <div style="font-family:Cairo;font-weight:900;color:#8A1538;font-size:1rem;">إدارة فئات الأسئلة</div>
         </div>
         <div style="font-size:.82rem;color:#8A6D2E;line-height:1.7;">
-          من هنا يمكنك التحكم بكل فئة: <strong>الإخفاء</strong> عن الزوار، <strong>تغيير لونها</strong>، أو <strong>حذف فئتك المخصصة</strong>. ستحفظ التعديلات تلقائيا.
+          من هنا يمكنك التحكم بكل فئة: <strong>تغيير صورتها</strong>، <strong>إخفاؤها</strong> عن الزوار (للتحكم بصلاحية الوصول)، <strong>تغيير لونها</strong>، أو <strong>حذف فئتك المخصصة</strong>. ستحفظ التعديلات تلقائيا.
         </div>
       </div>
 
       <!-- شريط بحث -->
-      <div style="margin-bottom:12px;">
+      <div style="margin-bottom:10px;">
         <input type="text" id="aq-cat-mgmt-search" placeholder="ابحث عن فئة..." oninput="renderAdminCategoriesList()" style="width:100%;padding:10px;border:1.5px solid #8A1538;border-radius:8px;font-family:Tajawal;font-size:.88rem;outline:none;box-sizing:border-box;">
+      </div>
+
+      <!-- فلتر سريع -->
+      <div id="admin-cat-filter" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="acat-filter active" data-filter="all" onclick="setAdminCatFilter('all')" style="padding:7px 14px;border:1.5px solid #8A1538;background:#8A1538;color:#fff;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">الكل</button>
+        <button class="acat-filter" data-filter="partners" onclick="setAdminCatFilter('partners')" style="padding:7px 14px;border:1.5px solid #B8924A;background:#fff;color:#8A6D2E;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">فئات الشركاء</button>
+        <button class="acat-filter" data-filter="hidden" onclick="setAdminCatFilter('hidden')" style="padding:7px 14px;border:1.5px solid #c0392b;background:#fff;color:#c0392b;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">المخفية</button>
+        <button class="acat-filter" data-filter="custom" onclick="setAdminCatFilter('custom')" style="padding:7px 14px;border:1.5px solid #3D6B53;background:#fff;color:#3D6B53;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">المخصصة</button>
       </div>
 
       <!-- قائمة الفئات -->
@@ -24694,6 +24702,25 @@ async function deleteProblemReport(id, isLocal){
 //  تبويب: إدارة الفئات (Admin Categories Tab)
 // ════════════════════════════════════════════════════════════════════
 
+let _adminCatFilter = 'all';
+function setAdminCatFilter(f){
+  _adminCatFilter = f;
+  document.querySelectorAll('.acat-filter').forEach(b=>{
+    const active = b.dataset.filter === f;
+    b.classList.toggle('active', active);
+    if(active){
+      const colors = {all:'#8A1538',partners:'#B8924A',hidden:'#c0392b',custom:'#3D6B53'};
+      b.style.background = colors[f]||'#8A1538';
+      b.style.color = '#fff';
+    } else {
+      const colors = {all:'#8A1538',partners:'#8A6D2E',hidden:'#c0392b',custom:'#3D6B53'};
+      b.style.background = '#fff';
+      b.style.color = colors[b.dataset.filter]||'#8A1538';
+    }
+  });
+  renderAdminCategoriesList();
+}
+
 function renderAdminCategoriesList(){
   const list = document.getElementById('admin-categories-list');
   if(!list) return;
@@ -24705,11 +24732,27 @@ function renderAdminCategoriesList(){
   let colorMap = {};
   try{ colorMap = JSON.parse(localStorage.getItem('hh_cat_colors')||'{}'); }catch(e){}
 
-  // كل الفئات من CAT_INFO
-  const allCats = Object.keys(CAT_INFO);
+  // كل الفئات من CAT_INFO + QDB + CAT_GROUPS (توحيد المصدر مع لوحة اللعب)
+  const _catSet = new Set(Object.keys(CAT_INFO));
+  try{ Object.keys(QDB||{}).forEach(c => _catSet.add(c)); }catch(e){}
+  try{
+    if(typeof CAT_GROUPS !== 'undefined'){
+      CAT_GROUPS.forEach(g => { (g.cats||[]).forEach(c => _catSet.add(c)); });
+    }
+  }catch(e){}
+  const allCats = [..._catSet];
   const filtered = allCats.filter(cat => {
+    // فلتر النوع
+    if(_adminCatFilter === 'partners'){
+      if(!(cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1)) return false;
+    } else if(_adminCatFilter === 'hidden'){
+      if(hidden.indexOf(cat) === -1) return false;
+    } else if(_adminCatFilter === 'custom'){
+      if(!custom[cat]) return false;
+    }
+    // فلتر البحث
     if(!search) return true;
-    const ci = CAT_INFO[cat];
+    const ci = CAT_INFO[cat] || {label:cat};
     return cat.toLowerCase().includes(search) || (ci.label||'').toLowerCase().includes(search);
   });
 
@@ -24724,12 +24767,12 @@ function renderAdminCategoriesList(){
     if(aCustom !== bCustom) return bCustom - aCustom;
     const aHide = hidden.indexOf(a)!==-1 ? 1 : 0, bHide = hidden.indexOf(b)!==-1 ? 1 : 0;
     if(aHide !== bHide) return bHide - aHide;
-    return (CAT_INFO[a].label||a).localeCompare(CAT_INFO[b].label||b,'ar');
+    return (CAT_INFO[a]?.label||a).localeCompare(CAT_INFO[b]?.label||b,'ar');
   });
 
   list.innerHTML = '';
   filtered.forEach(cat => {
-    const ci = CAT_INFO[cat];
+    const ci = CAT_INFO[cat] || {label:cat, color:'#8A1538'};
     const isCustom = !!custom[cat];
     const isHidden = hidden.indexOf(cat) !== -1;
     const customColor = colorMap[cat] || null;
@@ -24739,10 +24782,17 @@ function renderAdminCategoriesList(){
     const row = document.createElement('div');
     row.style.cssText = 'background:#fff;border:1.5px solid #ecf0f1;border-right:5px solid '+displayColor+';border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;'+(isHidden?'opacity:.55;':'');
 
-    // الأيقونة المصغرة
+    // الأيقونة المصغرة (صورة الفئة إن وُجدت، وإلا الحرف الأول)
     const iconWrap = document.createElement('div');
-    iconWrap.style.cssText = 'width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,'+displayColor+','+_hh_darken(displayColor,.3)+');display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#D4BC85;font-family:Cairo;font-weight:900;font-size:1.1rem;';
-    iconWrap.textContent = (ci.label||cat).trim().charAt(0);
+    const _savedImg = localStorage.getItem('cat_img_'+cat);
+    const _catImg = _savedImg || ci.img;
+    if(_catImg){
+      iconWrap.style.cssText = 'width:42px;height:42px;border-radius:9px;background:#fff;border:1.5px solid '+displayColor+';display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;';
+      iconWrap.innerHTML = '<img src="'+_catImg+'" alt="" style="width:100%;height:100%;object-fit:contain;padding:3px;box-sizing:border-box;">';
+    } else {
+      iconWrap.style.cssText = 'width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,'+displayColor+','+_hh_darken(displayColor,.3)+');display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#D4BC85;font-family:Cairo;font-weight:900;font-size:1.1rem;';
+      iconWrap.textContent = (ci.label||cat).trim().charAt(0);
+    }
     row.appendChild(iconWrap);
 
     // المعلومات
@@ -24766,6 +24816,13 @@ function renderAdminCategoriesList(){
     hideBtn.innerHTML = isHidden ? '<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z"/></svg>️ إظهار' : '<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27z"/></svg> إخفاء';
     hideBtn.onclick = ()=>{ toggleCatHidden(cat); };
     actions.appendChild(hideBtn);
+
+    // زر تغيير الصورة
+    const imgBtn = document.createElement('button');
+    imgBtn.style.cssText = 'padding:6px 10px;border:1.5px solid #1E3A5F;background:#fff;color:#1E3A5F;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;';
+    imgBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg> صورة';
+    imgBtn.onclick = ()=>{ if(typeof openCatImageEditor==='function') openCatImageEditor(cat); };
+    actions.appendChild(imgBtn);
 
     // زر تغيير اللون
     const colorWrap = document.createElement('label');
