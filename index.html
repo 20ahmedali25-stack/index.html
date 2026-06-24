@@ -12682,6 +12682,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <button class="acat-filter" data-filter="hidden" onclick="setAdminCatFilter('hidden')" style="padding:7px 14px;border:1.5px solid #c0392b;background:#fff;color:#c0392b;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">المخفية</button>
         <button class="acat-filter" data-filter="custom" onclick="setAdminCatFilter('custom')" style="padding:7px 14px;border:1.5px solid #3D6B53;background:#fff;color:#3D6B53;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">المخصصة</button>
       </div>
+      <div style="margin-bottom:12px;">
+        <button onclick="cleanPartnerCloudImages()" style="padding:8px 16px;border:1.5px solid #c0392b;background:linear-gradient(135deg,#c0392b,#922b21);color:#fff;border-radius:10px;font-family:Cairo;font-weight:800;font-size:.76rem;cursor:pointer;">🧹 تنظيف صور الشركاء من السحابة</button>
+        <span style="font-size:.7rem;color:#8A6D2E;margin-right:8px;">يحذف الصور القديمة المرفوعة لفئات الشركاء ليظهر الشعار الأصلي للجميع</span>
+      </div>
 
       <!-- قائمة الفئات -->
       <div id="admin-categories-list"></div>
@@ -16758,11 +16762,11 @@ function msRenderTabContent(tabId){
 
       const savedCatImg = localStorage.getItem('cat_img_'+cat);
       var iconHtml;
-      if(savedCatImg){
-        iconHtml = '<div class="ci-img"><img src="'+savedCatImg+'" alt="'+ci.label+'" loading="lazy"></div>';
-      } else if(_isPartnerCat && ci.img){
-        // فئات الشركاء: شعار الشريك يملأ البطاقة على خلفية بيضاء
+      if(_isPartnerCat && ci.img){
+        // شعار الشريك (من الكود) له الأولوية القصوى — يطغى على أي صورة قديمة معطوبة
         iconHtml = '<div class="ci-img ci-img-logo"><img src="'+ci.img+'" alt="'+ci.label+'" loading="lazy"></div>';
+      } else if(savedCatImg){
+        iconHtml = '<div class="ci-img"><img src="'+savedCatImg+'" alt="'+ci.label+'" loading="lazy"></div>';
       } else if(typeof CAT_SVG !== 'undefined' && CAT_SVG && CAT_SVG[cat]){
         iconHtml = '<div class="ci-svg">'+CAT_SVG[cat]+'</div>';
       } else if(ci.img){
@@ -17821,12 +17825,12 @@ function buildBoard(){
         imgWrap.style.boxShadow = 'inset 0 0 0 2px rgba(212,188,133,.55), 0 0 16px rgba(184,146,74,.25)';
       }
       const savedImg = localStorage.getItem('cat_img_'+cat);
-      if(savedImg){
-        imgWrap.innerHTML = `<img src="${savedImg}" alt="${ci.label}" style="width:100%;height:100%;object-fit:contain;">`;
-      } else if(_isPartnerCat && ci.img){
-        // شعار الشريك يملأ المساحة على خلفية بيضاء
+      if(_isPartnerCat && ci.img){
+        // شعار الشريك (من الكود) له الأولوية القصوى — يطغى على أي صورة قديمة معطوبة
         imgWrap.style.background = '#fff';
         imgWrap.innerHTML = `<img src="${ci.img}" alt="${ci.label}" style="width:100%;height:100%;object-fit:contain;padding:8px;box-sizing:border-box;">`;
+      } else if(savedImg){
+        imgWrap.innerHTML = `<img src="${savedImg}" alt="${ci.label}" style="width:100%;height:100%;object-fit:contain;">`;
       } else if(CAT_SVG[cat]){
         imgWrap.innerHTML = CAT_SVG[cat];
       } else if(ci.img){
@@ -26563,6 +26567,31 @@ async function loadCatImagesFromCloud(){
     }
   }catch(e){
     console.warn('loadCatImages skip:', e.message);
+  }
+}
+
+// تنظيف صور فئات الشركاء من السحابة والجهاز (ليظهر الشعار الأصلي من الكود للجميع)
+async function cleanPartnerCloudImages(){
+  if(!confirm('سيحذف هذا كل الصور المرفوعة لفئات الشركاء (بيرف آب وطموح) من السحابة، ليظهر الشعار الأصلي المدمج لجميع المستخدمين. متابعة؟')) return;
+  // كل فئات الشركاء من CAT_INFO
+  const partnerCats = Object.keys(CAT_INFO).filter(c => c.indexOf('بيرف آب')!==-1 || c.indexOf('طموح')!==-1);
+  let cloudDeleted = 0, localDeleted = 0;
+  for(const cat of partnerCats){
+    // حذف محلي
+    if(localStorage.getItem('cat_img_'+cat)){ localStorage.removeItem('cat_img_'+cat); localDeleted++; }
+    // حذف سحابي
+    if(!OFFLINE_MODE && db && isAdminUser()){
+      try{
+        await db.collection('admin_cat_images').doc(_hh_safeDocId(cat)).delete();
+        cloudDeleted++;
+      }catch(e){ console.warn('cloud img delete:', cat, e); }
+    }
+  }
+  toast('تم التنظيف: '+cloudDeleted+' من السحابة، '+localDeleted+' من الجهاز. الشعار الأصلي سيظهر للجميع.','success');
+  // إعادة رسم
+  if(typeof renderAdminCategoriesList==='function') renderAdminCategoriesList();
+  if(document.getElementById('screen-board') && document.getElementById('screen-board').classList.contains('active') && typeof G!=='undefined' && G.selectedCats && G.selectedCats.length){
+    if(typeof buildBoard==='function') buildBoard();
   }
 }
 
@@ -35831,8 +35860,30 @@ setTimeout(() => {
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('Service Worker registered'))
+        .then(reg => {
+          console.log('Service Worker registered');
+          // فحص التحديثات فوراً وكل مرة
+          reg.update();
+          // عند توفّر نسخة جديدة، فعّلها فوراً وأعد التحميل
+          reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            if(!newWorker) return;
+            newWorker.addEventListener('statechange', () => {
+              if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+                // نسخة جديدة جاهزة — نطلب تفعيلها فوراً
+                newWorker.postMessage({type:'SKIP_WAITING'});
+              }
+            });
+          });
+        })
         .catch(err => console.log('SW registration failed:', err));
+      // عند تبديل الـ Service Worker المتحكم، نعيد تحميل الصفحة مرة واحدة لجلب أحدث محتوى
+      let _swReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if(_swReloaded) return;
+        _swReloaded = true;
+        window.location.reload();
+      });
     });
   }
   
