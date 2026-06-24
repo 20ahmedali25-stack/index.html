@@ -17367,7 +17367,7 @@ function autoSuggestTeamNames(){
   for(let i=0;i<teamCount;i++){
     const el=document.getElementById('tm-'+i);
     if(el && !el.value.trim()){
-      const defaults=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي','الفريق البرتقالي'];
+      const defaults=['الفريق 1','الفريق 2','الفريق 3','الفريق 4','الفريق 5','الفريق 6'];
       el.value=defaults[i]||('الفريق '+(i+1));
     }
   }
@@ -17377,7 +17377,7 @@ function autoSuggestTeamNames(){
 // تعبئة أسماء الفرق الافتراضية (الألوان) — زر يدوي
 // ────────────────────────────────────────────────
 function autoTeamNames(){
-  const defaults=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي','الفريق البرتقالي'];
+  const defaults=['الفريق 1','الفريق 2','الفريق 3','الفريق 4','الفريق 5','الفريق 6'];
   for(let i=0;i<teamCount;i++){
     const el=document.getElementById('tm-'+i);
     if(el)el.value=defaults[i]||('الفريق '+(i+1));
@@ -17387,7 +17387,7 @@ function autoTeamNames(){
 }
 
 function buildTeamsUI(){
-  const names=['الفريق الأحمر','الفريق الأزرق','الفريق الأخضر','الفريق الأصفر','الفريق البنفسجي','الفريق البرتقالي'];
+  const names=['الفريق 1','الفريق 2','الفريق 3','الفريق 4','الفريق 5','الفريق 6'];
   let saved=[];
   try{ saved=JSON.parse(localStorage.getItem('hh_team_names')||'[]'); }catch(e){ saved=[]; }
   const c=document.getElementById('teams-container');
