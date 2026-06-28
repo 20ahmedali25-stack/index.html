@@ -14912,7 +14912,7 @@ async function _hhLoadExtOverridesFromCloud(){
 function _loadQDB(){
   try{
     // فحص رقم النسخة — إذا تغير، نتجاهل localStorage القديم
-    const CURRENT_VERSION = 'v7-2026-06-29-inject';
+    const CURRENT_VERSION = 'v8-2026-06-29-admincats';
     const savedVersion = localStorage.getItem('hh_qdb_version');
     if(savedVersion !== CURRENT_VERSION){
       // نسخة جديدة! نمسح القديم ونستخدم الأصلية
@@ -17140,7 +17140,7 @@ function msRenderTabContent(tabId){
 
       // تطبيق اللون المخصص للأدمن (إن وجد) كخلفية متدرجة
       const customColor = _hh_getCatCustomColor(cat);
-      const _isPartnerCat = (cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1);
+      const _isPartnerCat = (cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1 || cat.indexOf('قنوان')!==-1);
       if(customColor){
         d.style.background = 'linear-gradient(135deg,'+customColor+' 0%,'+_hh_darken(customColor,.25)+' 100%)';
       } else if(_isPartnerCat && ci.img && ci.color){
@@ -18203,7 +18203,7 @@ function buildBoard(){
         : CAT_PALETTES[globalIdx % CAT_PALETTES.length];
       const center = document.createElement('div');
       center.className = 'cat-center';
-      const _isPartnerCat = (cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1);
+      const _isPartnerCat = (cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1 || cat.indexOf('قنوان')!==-1);
       if(_isPartnerCat && ci.img){
         // الخيار ①: خلفية بيضاء كاملة + الشعار يملأ + شريط اسم ملوّن
         center.style.cssText = `background:#fff;border:2.5px solid ${ci.color||_cp[9]};box-shadow:0 4px 0 ${_cp[10]};`;
@@ -19694,8 +19694,7 @@ function _renderPathService(svc, pathType){
  */
 // 🚀 زر "ابدأ الآن" — ينقل المستخدم مباشرة لشاشة بدء اللعبة
 function hhStartGameNow(){
-  // صوت لطيف
-  if(window.hhSoundPowerUp) hhSoundPowerUp();
+  // (حُذف صوت الضغط على «ابدأ الآن» بناءً على طلب المستخدم)
   // مسح أي اختيار محفوظ سابق ليبدأ من جديد
   try{ localStorage.removeItem('hh_saved_cats'); }catch(e){}
   // الانتقال لشاشة الإعداد
@@ -25333,7 +25332,7 @@ function renderAdminCategoriesList(){
   const filtered = allCats.filter(cat => {
     // فلتر النوع
     if(_adminCatFilter === 'partners'){
-      if(!(cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1)) return false;
+      if(!(cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1 || cat.indexOf('قنوان')!==-1)) return false;
     } else if(_adminCatFilter === 'hidden'){
       if(hidden.indexOf(cat) === -1) return false;
     } else if(_adminCatFilter === 'custom'){
