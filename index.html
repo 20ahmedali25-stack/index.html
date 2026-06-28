@@ -14802,6 +14802,19 @@ try{
   window.QDB_ORIGINAL['طموح — معلومات عامة'] = [{"diff": "easy", "q": "كم عدد فصول السنة؟", "a": "أربعة فصول"}, {"diff": "easy", "q": "ما النجم الذي يمدّ الأرض بالضوء والحرارة؟", "a": "الشمس"}, {"diff": "easy", "q": "ما الحيوان الذي يُعطينا الحليب ويُربّى في المزارع؟", "a": "البقرة"}, {"diff": "easy", "q": "كم لوناً في علم قطر؟", "a": "لونان (العنّابي والأبيض)"}, {"diff": "med", "q": "ما أقرب كوكب إلى الشمس؟", "a": "عطارد"}, {"diff": "med", "q": "ما المعدن السائل في درجة حرارة الغرفة؟", "a": "الزئبق"}, {"diff": "med", "q": "ما العضو المسؤول عن التنفّس في جسم الإنسان؟", "a": "الرئتان"}, {"diff": "med", "q": "كم عدد أسنان الإنسان البالغ الكاملة؟", "a": "32 سنّاً"}, {"diff": "hard", "q": "ما أكبر صحراء حارّة في العالم؟", "a": "الصحراء الكبرى (أفريقيا)"}, {"diff": "hard", "q": "من مكتشف قانون الجاذبية الأرضية؟", "a": "إسحاق نيوتن"}, {"diff": "hard", "q": "ما الوحدة المستخدمة لقياس شدة الزلازل؟", "a": "مقياس ريختر"}, {"diff": "hard", "q": "ما أعمق نقطة في المحيطات على وجه الأرض؟", "a": "خندق ماريانا"}];
 }catch(e){console.warn('طموح qs:',e);}
 
+// ★ ضمان حاسم: نزرع أسئلة الشركاء في المرجع QDB_ORIGINAL نفسه (لا window فقط)
+//   لأن المزامنة السحابية وبعض الدوال تقرأ QDB_ORIGINAL مباشرة لبناء QDB
+try{
+  if(typeof QDB_ORIGINAL !== 'undefined' && QDB_ORIGINAL && typeof window.QDB_ORIGINAL === 'object'){
+    var _partnerSeed = ['المهني — قنوان','القرآني — قنوان','الترفيهي — قنوان','الاستكشافي — قنوان','الهوية — قنوان','الأمني — قنوان','بيرف آب — ثقافة قطرية','بيرف آب — معلومات دينية','بيرف آب — رياضة','بيرف آب — مسابقات وألغاز','بيرف آب — دول وعواصم','بيرف آب — معلومات عامة','طموح — ثقافة قطرية','طموح — معلومات دينية','طموح — رياضة','طموح — مسابقات وألغاز','طموح — دول وعواصم','طموح — معلومات عامة'];
+    _partnerSeed.forEach(function(_sc){
+      if(window.QDB_ORIGINAL[_sc] && (!QDB_ORIGINAL[_sc] || QDB_ORIGINAL[_sc].length === 0)){
+        QDB_ORIGINAL[_sc] = window.QDB_ORIGINAL[_sc];
+      }
+    });
+  }
+}catch(_seedErr){ console.warn('partner seed:', _seedErr); }
+
 
 // ═══════════════════════════════════════════════════════════════════
 // نظام تعديل الأسئلة الأصلية محليا (localStorage)
@@ -14912,7 +14925,7 @@ async function _hhLoadExtOverridesFromCloud(){
 function _loadQDB(){
   try{
     // فحص رقم النسخة — إذا تغير، نتجاهل localStorage القديم
-    const CURRENT_VERSION = 'v8-2026-06-29-admincats';
+    const CURRENT_VERSION = 'v10-2026-06-29-ensure2';
     const savedVersion = localStorage.getItem('hh_qdb_version');
     if(savedVersion !== CURRENT_VERSION){
       // نسخة جديدة! نمسح القديم ونستخدم الأصلية
@@ -16496,7 +16509,23 @@ let _msActiveSubTab = (function(){
   return null;
 })();
 
+// ★ دالة موحّدة: تضمن وجود أسئلة الشركاء (أجيال+بيرف آب+طموح) في QDB
+//   تُستدعى من كل نقطة تقرأ QDB لئلا تظهر الفئات فارغة أو «يتم التحضير»
+function _hhEnsurePartnerQs(){
+  try{
+    if(typeof _HH_PARTNER_QUESTIONS === 'object' && _HH_PARTNER_QUESTIONS && typeof QDB === 'object'){
+      for(var _pcE in _HH_PARTNER_QUESTIONS){
+        if(!Array.isArray(QDB[_pcE]) || QDB[_pcE].length === 0){
+          QDB[_pcE] = JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_pcE]));
+        }
+      }
+    }
+  }catch(_e){}
+}
+
 function buildCatSelect(){
+  // ★ ضمان أسئلة الشركاء قبل بناء التابات (وإلا تظهر «يتم التحضير»)
+  if(typeof _hhEnsurePartnerQs === 'function') _hhEnsurePartnerQs();
   // نمسح الفئات المحفوظة لنبدأ نظيف في كل جلسة إعداد
   localStorage.removeItem('hh_saved_cats');
 
@@ -16869,6 +16898,8 @@ function _msUpdateCatsNav(){
  * "tabId" = فئات هذا المستوى فقط
  */
 function msRenderTabContent(tabId){
+  // ★ ضمان أسئلة الشركاء قبل بناء محتوى التاب (وإلا تظهر «يتم التحضير»)
+  if(typeof _hhEnsurePartnerQs === 'function') _hhEnsurePartnerQs();
   const grid = document.getElementById('ms-cat-grid');
   if(!grid) return;
   grid.innerHTML = '';
@@ -23216,6 +23247,16 @@ function setAQDiff(d){
 function populateAQCatSelect(){
   const sel = document.getElementById('aq-cat-select');
   if(!sel) return;
+  // ★ ضمان أسئلة الشركاء في QDB قبل بناء القائمة (وإلا تغيب فئاتها من «اختر فئة»)
+  try{
+    if(typeof _HH_PARTNER_QUESTIONS === 'object' && _HH_PARTNER_QUESTIONS){
+      for(var _pcB in _HH_PARTNER_QUESTIONS){
+        if(!Array.isArray(QDB[_pcB]) || QDB[_pcB].length === 0){
+          QDB[_pcB] = JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_pcB]));
+        }
+      }
+    }
+  }catch(_eB){}
   sel.innerHTML = '<option value="">-- اختر فئة --</option>';
   // الشريك المقيّد يرى فئاته فقط؛ الأدمن يرى كل الفئات
   let allowed = null;
@@ -24811,6 +24852,18 @@ async function loadQDBFromCloud(){
     _hhApplyExtOverrides(merged);
     
     QDB = merged;
+
+    // ★ ضمان أسئلة الشركاء (أجيال + بيرف آب + طموح) بعد المزامنة السحابية
+    //   المزامنة تبني QDB من QDB_ORIGINAL الذي قد لا يحوي أسئلة الشركاء — فنحقنها من المصدر الموثوق
+    try{
+      if(typeof _HH_PARTNER_QUESTIONS === 'object' && _HH_PARTNER_QUESTIONS){
+        for(var _pc3 in _HH_PARTNER_QUESTIONS){
+          if(!Array.isArray(QDB[_pc3]) || QDB[_pc3].length === 0){
+            QDB[_pc3] = JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_pc3]));
+          }
+        }
+      }
+    }catch(_e3){ console.warn('partner qs inject (cloud):', _e3); }
     
     // 5) نحفظ نسخة محلية (cache)
     try{
@@ -25321,6 +25374,16 @@ function renderAdminCategoriesList(){
   try{ colorMap = JSON.parse(localStorage.getItem('hh_cat_colors')||'{}'); }catch(e){}
 
   // كل الفئات من CAT_INFO + QDB + CAT_GROUPS (توحيد المصدر مع لوحة اللعب)
+  // ★ ضمان أسئلة الشركاء في QDB قبل حساب الأعداد (وإلا تظهر «0 سؤال»)
+  try{
+    if(typeof _HH_PARTNER_QUESTIONS === 'object' && _HH_PARTNER_QUESTIONS){
+      for(var _pcA in _HH_PARTNER_QUESTIONS){
+        if(!Array.isArray(QDB[_pcA]) || QDB[_pcA].length === 0){
+          QDB[_pcA] = JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_pcA]));
+        }
+      }
+    }
+  }catch(_eA){}
   const _catSet = new Set(Object.keys(CAT_INFO));
   try{ Object.keys(QDB||{}).forEach(c => _catSet.add(c)); }catch(e){}
   try{
