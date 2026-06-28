@@ -1,87 +1,136 @@
-// Service Worker لمنصة الملهم — يدعم الأوفلاين والتثبيت
-const CACHE_NAME = 'almulhim-v1.5';
-const RUNTIME_CACHE = 'almulhim-runtime-v1.5';
+/* ============================================================
+   المُلهم التعليمي — Service Worker
+   almulhimedu.org
+   ------------------------------------------------------------
+   مهم جداً: عند كل نشر جديد، غيّر رقم النسخة في السطر التالي فقط
+   (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
+   الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
+   ============================================================ */
+const SW_VERSION = 'almulhim-v1';
 
-// الملفات الأساسية للتخزين المؤقت
-const PRECACHE_URLS = [
+// الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
+// لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
+const CORE_ASSETS = [
   '/',
   '/index.html',
   '/questions.js',
+  '/maps-questions.js',
+  '/flags-questions.js',
+  '/capitals-questions.js',
   '/partners-questions.js',
-  '/firebase-app-compat.js',
-  '/firebase-auth-compat.js',
-  '/firebase-firestore-compat.js',
+  '/legend-maps-questions.js',
   '/favicon.svg',
+  '/favicon-32.png',
+  '/favicon-16.png',
   '/apple-touch-icon.png',
-  '/manifest.json'
+  '/site.webmanifest'
 ];
 
-// تثبيت Service Worker
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_URLS.filter(u => u)))
-      .then(() => self.skipWaiting())
-      .catch(err => console.warn('SW install error:', err))
-  );
-});
+// النطاقات التي يجب ألا يلمسها الـ Service Worker إطلاقاً
+// (تمر مباشرة للشبكة دائماً — بيانات لحظية وحيّة)
+const BYPASS_HOSTS = [
+  'firestore.googleapis.com',
+  'firebase.googleapis.com',
+  'firebaseinstallations.googleapis.com',
+  'identitytoolkit.googleapis.com',
+  'securetoken.googleapis.com',
+  'www.gstatic.com',
+  'apis.google.com',
+  'www.googleapis.com',
+  'firebaselogging-pa.googleapis.com'
+];
 
-// تفعيل Service Worker
-self.addEventListener('activate', event => {
+// ═══════════════════ التثبيت ═══════════════════
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.filter(name => 
-          name !== CACHE_NAME && name !== RUNTIME_CACHE
-        ).map(name => caches.delete(name))
+    caches.open(SW_VERSION).then((cache) => {
+      // نضيف الملفات واحداً واحداً حتى لا يفشل التثبيت كله لو غاب ملف
+      return Promise.allSettled(
+        CORE_ASSETS.map((url) => cache.add(url).catch((e) => {
+          console.warn('SW: تعذّر تخزين', url, e);
+        }))
       );
-    }).then(() => self.clients.claim())
+    })
+  );
+  // ملاحظة: لا نستدعي skipWaiting هنا تلقائياً — ننتظر موافقة المستخدم
+  // عبر رسالة SKIP_WAITING القادمة من index.html
+});
+
+// ═══════════════════ التفعيل ═══════════════════
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      // حذف الكاشات القديمة من النسخ السابقة
+      const keys = await caches.keys();
+      await Promise.all(
+        keys.filter((k) => k !== SW_VERSION).map((k) => caches.delete(k))
+      );
+      // السيطرة على كل الصفحات المفتوحة فوراً
+      await self.clients.claim();
+    })()
   );
 });
 
-// استراتيجية: Network First، fallback to Cache
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  
-  // نتجاهل: غير GET، التطلبات لـ Firebase، التطلبات لـ Anthropic API
-  if(req.method !== 'GET') return;
-  if(req.url.includes('googleapis.com')) return;
-  if(req.url.includes('firestore')) return;
-  if(req.url.includes('firebase')) return;
-  if(req.url.includes('anthropic.com')) return;
-  if(req.url.includes('claude.com')) return;
-  
-  event.respondWith(
-    fetch(req)
-      .then(response => {
-        // ناجح: نخزن نسخة في cache
-        // لكن لا نخزّن index.html أو الصفحة الرئيسية ليحصل المستخدم دائماً على أحدث نسخة
-        const _isHTML = req.url.endsWith('/') || req.url.includes('index.html') ||
-                        (req.headers.get('accept') || '').includes('text/html');
-        if(response && response.status === 200 && response.type === 'basic' && !_isHTML){
-          const responseClone = response.clone();
-          caches.open(RUNTIME_CACHE).then(cache => {
-            cache.put(req, responseClone);
-          });
-        }
-        return response;
-      })
-      .catch(() => {
-        // فشل الشبكة: نرجع من cache
-        return caches.match(req).then(cached => {
-          if(cached) return cached;
-          // لو HTML طلب، نرجع الصفحة الرئيسية
-          if(req.headers.get('accept')?.includes('text/html')){
-            return caches.match('/index.html');
-          }
-        });
-      })
-  );
-});
-
-// رسائل من الصفحة الرئيسية
-self.addEventListener('message', event => {
-  if(event.data && event.data.type === 'SKIP_WAITING'){
+// ═══════════════════ استقبال الرسائل ═══════════════════
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    // المستخدم وافق على التحديث → نفعّل النسخة الجديدة فوراً
     self.skipWaiting();
   }
+});
+
+// ═══════════════════ اعتراض الطلبات ═══════════════════
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+
+  // 1) نتعامل فقط مع طلبات GET
+  if (req.method !== 'GET') return;
+
+  let url;
+  try { url = new URL(req.url); } catch (e) { return; }
+
+  // 2) نتجاهل أي نطاق حيّ (Firestore/Firebase/Google) — يمر مباشرة للشبكة
+  if (BYPASS_HOSTS.some((h) => url.hostname.endsWith(h))) {
+    return; // لا نعترض — المتصفح يتولّاه طبيعياً
+  }
+
+  // 3) نتعامل فقط مع طلبات نفس الأصل (الموقع نفسه)
+  if (url.origin !== self.location.origin) {
+    return; // الخطوط وغيرها من CDN تمر طبيعياً
+  }
+
+  // 4) صفحات HTML (التنقّل): الشبكة أولاً ثم الكاش (Network-First)
+  //    حتى يحصل المستخدم دائماً على أحدث index.html إن كان متصلاً
+  const isHTML = req.mode === 'navigate' ||
+                 (req.headers.get('accept') || '').includes('text/html');
+
+  if (isHTML) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(SW_VERSION).then((c) => c.put('/index.html', copy)).catch(() => {});
+          return res;
+        })
+        .catch(() => caches.match('/index.html').then((r) => r || caches.match('/')))
+    );
+    return;
+  }
+
+  // 5) باقي الملفات المحلية (JS/أيقونات): الكاش أولاً ثم الشبكة (Cache-First)
+  //    أسرع، ومع تحديث الكاش في الخلفية
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      const networkFetch = fetch(req)
+        .then((res) => {
+          if (res && res.status === 200 && res.type === 'basic') {
+            const copy = res.clone();
+            caches.open(SW_VERSION).then((c) => c.put(req, copy)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => cached);
+      return cached || networkFetch;
+    })
+  );
 });
