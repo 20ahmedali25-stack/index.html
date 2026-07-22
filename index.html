@@ -794,16 +794,16 @@ body.dark-mode .btn-home-lux:hover{
   line-height:.95;
   color:#8A1538;
   font-family:'Cairo', sans-serif;
-  letter-spacing:-2px;
+  letter-spacing:0;
   margin:0;
   position:relative;
   display:inline-block;
-  background:linear-gradient(135deg,
-    #5E0E26 0%,
-    #8A1538 30%,
-    #2d6e54 50%,
-    #8A1538 70%,
-    #5E0E26 100%
+  background:linear-gradient(180deg,
+    #c23a61 0%,
+    #a21b42 16%,
+    #8A1538 46%,
+    #5E0E26 84%,
+    #6f1230 100%
   );
   -webkit-background-clip:text;
   background-clip:text;
@@ -821,16 +821,18 @@ body.dark-mode .btn-home-lux:hover{
   bottom:6px;
   right:8%;
   left:8%;
-  height:3px;
+  height:2.5px;
   background:linear-gradient(90deg,
     transparent 0%,
-    rgba(184,146,74,.3) 15%,
+    rgba(212,188,133,.35) 12%,
+    #D4BC85 38%,
     #B8924A 50%,
-    rgba(184,146,74,.3) 85%,
+    #D4BC85 62%,
+    rgba(212,188,133,.35) 88%,
     transparent 100%
   );
   border-radius:3px;
-  box-shadow:0 1px 4px rgba(184,146,74,.4);
+  box-shadow:0 3px 0 -1.2px rgba(184,146,74,.35), 0 1px 5px rgba(184,146,74,.45);
 }
 
 /* تتويج بنجيمتين ذهبيتين (ولكنهما مخفيتان لمن يظهر زخرفة فقط) */
@@ -855,14 +857,15 @@ body.dark-mode .btn-home-lux:hover{
 }
 
 .logo-sub{
-  font-size:.92rem;
+  font-size:1.35rem;
   color:#8A6D2E;
-  margin-top:8px;
-  letter-spacing:6px;
+  margin-top:6px;
+  letter-spacing:normal;
+  word-spacing:4px;
   text-align:center;
-  font-family:'Cairo', sans-serif;
+  font-family:'Amiri','Cairo', serif;
   font-weight:700;
-  text-transform:uppercase;
+  text-transform:none;
   position:relative;
   display:inline-block;
   padding:4px 22px;
@@ -885,11 +888,24 @@ body.dark-mode .btn-home-lux:hover{
   text-align:center;
   margin:18px 0 26px;
   padding:8px 0;
+  position:relative;
 }
+.logo-wrap::before{
+  content:'';
+  position:absolute;
+  top:50%; left:50%;
+  width:min(560px, 90%);
+  height:190px;
+  transform:translate(-50%,-58%);
+  background:radial-gradient(ellipse, rgba(212,188,133,.22) 0%, rgba(212,188,133,.08) 45%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+.logo-wrap > *{ position:relative; z-index:1; }
 
 @media (max-width:480px){
   .logo-title{ font-size:clamp(3rem, 14vw, 4.8rem); letter-spacing:-1.5px; }
-  .logo-sub{ font-size:.78rem; letter-spacing:4px; }
+  .logo-sub{ font-size:1.12rem; letter-spacing:normal; word-spacing:3px; }
 }
 .logo-wrap{margin-bottom:24px;}
 .card{background:#fff;border:2px solid #8A1538;border-radius:16px;padding:24px 28px;width:100%;max-width:480px;box-shadow:6px 6px 0 #8A1538;}
@@ -1650,12 +1666,10 @@ body.dark-mode .game-history-item{background:#1a2e24;border-color:#2d5544;}
 body.dark-mode .link-row,body.dark-mode .link-row a{color:#7ab3e0;}
 body.dark-mode .err-msg{color:#ff7070;}
 body.dark-mode .logo-title{
-  background:linear-gradient(135deg,
-    #82c04e 0%,
-    #D4BC85 30%,
-    #B8924A 50%,
-    #D4BC85 70%,
-    #82c04e 100%
+  background:linear-gradient(180deg,
+    #F2DFAE 0%,
+    #D4BC85 50%,
+    #B8924A 100%
   );
   -webkit-background-clip:text;
   background-clip:text;
@@ -11019,7 +11033,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 </div>
 
 <div class="screen" id="screen-login">
-  <div class="logo-wrap"><div class="logo-title">الملهم</div><div class="logo-sub">حيث يبدأ الإلهام</div></div>
+  <div class="logo-wrap"><div class="logo-title">المُلهِم</div><div class="logo-sub">حيثُ يبدأ الإلهام</div></div>
   <div class="card">
     <div class="card-title">تسجيل الدخول</div>
     <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="login-email" placeholder="example@email.com" style="direction:ltr;text-align:left"></div>
@@ -11037,7 +11051,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 </div>
 
 <div class="screen" id="screen-register">
-  <div class="logo-wrap"><div class="logo-title">الملهم</div></div>
+  <div class="logo-wrap"><div class="logo-title">المُلهِم</div></div>
   <div class="card">
     <div class="card-title">إنشاء حساب</div>
     <div class="ig"><label>الاسم الكامل</label><input type="text" id="reg-name" placeholder="اكتب اسمك الكامل"></div>
@@ -14849,7 +14863,7 @@ try{
 // بدلاً من ذلك نخزّن فقط "طبقة تعديلات" (overrides) لكل فئة: الأسئلة المعدّلة/المضافة/المحذوفة.
 // تُطبَّق هذه الطبقة فوق الملف الأصلي بعد تحميله.
 // ═══════════════════════════════════════════════════════════════════
-const _HH_EDITABLE_EXT_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء']);
+const _HH_EDITABLE_EXT_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء', 'مسابقة مركز أجيال التربوي']);
 
 function _hhIsExternalCat(cat){ return _HH_EDITABLE_EXT_CATS.has(cat); }
 
@@ -14982,7 +14996,7 @@ function _loadQDB(){
 function _saveQDB(){
   try{
     // نستثني فئات الخرائط (تأتي من ملفات .js منفصلة) لتجنب تجاوز حد localStorage
-    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء']);
+    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء', 'مسابقة مركز أجيال التربوي']);
     const slim = {};
     for(const cat in QDB){
       if(_HH_EXTERNAL_CATS.has(cat)) continue; // نتخطى الفئات الكبيرة
@@ -15102,6 +15116,7 @@ try{
 //    لوحة شخصية: 4 فئات فرعية × 6 أسئلة (200/400/600 × 2) والصورة كاملة وسط اللوحة
 // ═══════════════════════════════════════════════════════════════════
 var _HH_WAFA_CAT = 'مسابقة مركز أجيال التربوي - يوم الوفاء';
+var _HH_WAFA_LABEL_DEFAULT = 'مسابقة يوم الوفاء - الأمير الوالد';
 var _HH_WAFA_NAME1 = 'الأمير الوالد';
 var _HH_WAFA_NAME2 = 'الشيخ حمد بن خليفة آل ثاني — رحمه الله';
 var _HH_WAFA_NAME = _HH_WAFA_NAME1 + ' ' + _HH_WAFA_NAME2;
@@ -15790,13 +15805,23 @@ const CAT_INFO = {
 'علوم سابع - وحدة 5': {emoji:'🧠', label:'علوم سابع - وحدة 5',color:'#8e44ad',bg:'#f4ecf7'},
 'علوم سابع - وحدة 6': {emoji:'✨', label:'علوم سابع - وحدة 6',color:'#27ae60',bg:'#eafaf1'},
 'مسابقة أجيال في القرآن الكريم': {emoji:'🏆', label:'مسابقة أجيال في القرآن الكريم',color:'#8A1538',bg:'#F8F3E6'},
-'مسابقة مركز أجيال التربوي - يوم الوفاء': {emoji:'🕊️', label:'مسابقة مركز أجيال التربوي - يوم الوفاء',color:'#5E0E26',bg:'#F8F3E6'},
+'مسابقة مركز أجيال التربوي': {emoji:'🏆', label:'مسابقة مركز أجيال التربوي',color:'#7a1f2b',bg:'#f7eef0'},
+'مسابقة مركز أجيال التربوي - يوم الوفاء': {emoji:'🕊️', label:'مسابقة يوم الوفاء - الأمير الوالد',color:'#5E0E26',bg:'#F8F3E6'},
 };
 
 const ALL_CATS = Object.keys(CAT_INFO);
 try{ _hhApplyCompConfig(); }catch(e){}
 
 const CAT_SVG = {
+  'قصص الأنبياء':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1F4D43"/><stop offset="100%" stop-color="#0E2B25"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg1)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M110 218 L290 218 L262 258 L138 258 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><rect x="196" y="128" width="7" height="90" fill="#B8924A"/><path d="M203 132 L268 200 L203 200 Z" fill="#D4BC85" opacity=".92"/><path d="M96 268 q22 -16 44 0 q22 16 44 0 q22 -16 44 0 q22 16 44 0 q22 -16 32 -6" fill="none" stroke="#D4BC85" stroke-width="6" stroke-linecap="round" opacity=".85"/><path d="M142 96 a26 26 0 1 0 20 -42 a22 22 0 1 1 -20 42Z" fill="#D4BC85" opacity=".9"/><circle cx="258" cy="76" r="5" fill="#D4BC85"/><circle cx="288" cy="102" r="3.5" fill="#D4BC85" opacity=".8"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">قصص الأنبياء</text></svg>`,
+  'الأدب العربي':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A2B1E"/><stop offset="100%" stop-color="#2E130C"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg2)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M158 232 q0 -22 22 -22 h40 q22 0 22 22 v18 q0 26 -42 26 q-42 0 -42 -26 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><ellipse cx="200" cy="212" rx="30" ry="8" fill="#8A6D2E"/><path d="M214 200 C238 150 268 112 300 92 C280 134 258 176 226 206 Z" fill="#D4BC85"/><path d="M300 92 C286 118 272 146 252 176" stroke="#8A6D2E" stroke-width="3" fill="none"/><line x1="112" y1="140" x2="176" y2="140" stroke="#D4BC85" stroke-width="5" stroke-linecap="round" opacity=".7"/><line x1="100" y1="164" x2="164" y2="164" stroke="#D4BC85" stroke-width="5" stroke-linecap="round" opacity=".5"/><line x1="112" y1="188" x2="156" y2="188" stroke="#D4BC85" stroke-width="5" stroke-linecap="round" opacity=".35"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">الأدب العربي</text></svg>`,
+  'تاريخ قطر':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6b1230"/><stop offset="100%" stop-color="#3D0918"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg3)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><rect x="118" y="162" width="164" height="100" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><rect x="96" y="128" width="44" height="134" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><rect x="260" y="128" width="44" height="134" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><rect x="98" y="118" width="12" height="14" fill="#D4BC85"/><rect x="114" y="118" width="12" height="14" fill="#D4BC85"/><rect x="126" y="118" width="12" height="14" fill="#D4BC85"/><rect x="262" y="118" width="12" height="14" fill="#D4BC85"/><rect x="278" y="118" width="12" height="14" fill="#D4BC85"/><rect x="290" y="118" width="12" height="14" fill="#D4BC85"/><rect x="146" y="152" width="13" height="14" fill="#D4BC85"/><rect x="170" y="152" width="13" height="14" fill="#D4BC85"/><rect x="194" y="152" width="13" height="14" fill="#D4BC85"/><rect x="218" y="152" width="13" height="14" fill="#D4BC85"/><rect x="242" y="152" width="13" height="14" fill="#D4BC85"/><path d="M186 236 q14 -18 28 0 v26 h-28 Z" fill="#8A6D2E"/><line x1="200" y1="78" x2="200" y2="118" stroke="#8A6D2E" stroke-width="5"/><path d="M200 80 h52 l-12 12 12 12 h-52 Z" fill="#7a1024" stroke="#D4BC85" stroke-width="2.5"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">تاريخ قطر</text></svg>`,
+  'قطر والخليج':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#123A5C"/><stop offset="100%" stop-color="#081F33"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg4)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M186 96 q30 -10 44 12 q16 24 8 56 q-6 26 6 44 q12 20 2 40 q-10 22 -36 22 q-28 0 -38 -24 q-8 -20 0 -44 q8 -22 2 -48 q-6 -30 12 -58Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><circle cx="204" cy="176" r="9" fill="#7a1024" stroke="#8A6D2E" stroke-width="2"/><path d="M84 300 q20 -14 40 0 q20 14 40 0 q20 -14 40 0 q20 14 40 0 q20 -14 40 0 q16 12 32 2" fill="none" stroke="#D4BC85" stroke-width="6" stroke-linecap="round" opacity=".8"/><circle cx="120" cy="120" r="4" fill="#D4BC85" opacity=".7"/><circle cx="300" cy="140" r="4" fill="#D4BC85" opacity=".7"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">قطر والخليج</text></svg>`,
+  'العمل التطوعي في قطر':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2F6B4F"/><stop offset="100%" stop-color="#153426"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg5)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M200 150 c14 -26 52 -24 56 4 c3 22 -22 44 -56 68 c-34 -24 -59 -46 -56 -68 c4 -28 42 -30 56 -4Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><path d="M92 262 q30 -26 62 -12 l46 18 q12 5 8 16 q-4 10 -16 7 l-44 -12" fill="none" stroke="#D4BC85" stroke-width="9" stroke-linecap="round"/><path d="M308 262 q-30 -26 -62 -12 l-30 12" fill="none" stroke="#D4BC85" stroke-width="9" stroke-linecap="round" opacity=".85"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">العمل التطوعي</text></svg>`,
+  'معلومات عامة عن قطر':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A1440"/><stop offset="100%" stop-color="#26081F"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg6)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M176 262 q-18 -70 10 -128 q8 -18 14 -34 q6 16 14 34 q28 58 10 128 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><ellipse cx="200" cy="262" rx="34" ry="10" fill="#8A6D2E"/><path d="M200 60 q16 18 6 34 q-8 12 -6 22 q-14 -14 -8 -30 q5 -12 8 -26Z" fill="#D4BC85"/><line x1="140" y1="286" x2="260" y2="286" stroke="#D4BC85" stroke-width="5" stroke-linecap="round" opacity=".6"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">معلومات عن قطر</text></svg>`,
+  'التراث الخليجي':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7a5410"/><stop offset="100%" stop-color="#3a2606"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg7)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M168 150 h52 l10 78 q2 20 -36 20 q-38 0 -36 -20 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><path d="M168 150 l-22 -26 l10 -6 l24 24Z" fill="#D4BC85"/><path d="M220 162 q26 6 20 30 q-4 18 -24 16" fill="none" stroke="#D4BC85" stroke-width="7"/><rect x="180" y="132" width="28" height="12" rx="4" fill="#D4BC85"/><circle cx="194" cy="126" r="6" fill="#8A6D2E"/><path d="M258 224 h34 q-3 22 -17 22 q-14 0 -17 -22Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="2.5"/><path d="M116 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M152 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M188 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M224 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M260 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">التراث الخليجي</text></svg>`,
+  'الإنجليزية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1E3A6E"/><stop offset="100%" stop-color="#0C1B38"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg8)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><text x="140" y="200" text-anchor="middle" font-family="Arial" font-weight="900" font-size="120" fill="#D4BC85">A</text><text x="228" y="230" text-anchor="middle" font-family="Arial" font-weight="900" font-size="88" fill="#D4BC85" opacity=".85">B</text><text x="292" y="180" text-anchor="middle" font-family="Arial" font-weight="900" font-size="64" fill="#D4BC85" opacity=".65">C</text><line x1="112" y1="248" x2="288" y2="248" stroke="#B8924A" stroke-width="5" stroke-linecap="round" opacity=".7"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">الإنجليزية</text></svg>`,
+  'الرياضيات الذهنية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3B2F63"/><stop offset="100%" stop-color="#1A1330"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg9)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><text x="160" y="192" text-anchor="middle" font-family="Arial" font-weight="900" font-size="116" fill="#D4BC85">7</text><text x="248" y="160" text-anchor="middle" font-family="Arial" font-weight="900" font-size="70" fill="#D4BC85" opacity=".8">3</text><text x="258" y="236" text-anchor="middle" font-family="Arial" font-weight="900" font-size="54" fill="#D4BC85" opacity=".9">+</text><text x="120" y="120" text-anchor="middle" font-family="Arial" font-weight="900" font-size="44" fill="#D4BC85" opacity=".6">×</text><text x="296" y="112" text-anchor="middle" font-family="Arial" font-weight="900" font-size="40" fill="#D4BC85" opacity=".55">=</text><circle cx="132" cy="238" r="7" fill="#D4BC85" opacity=".6"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9A8">رياضيات ذهنية</text></svg>`,
   'مسابقة مركز أجيال التربوي - يوم الوفاء':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="wafa_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient></defs><rect width="400" height="400" rx="44" fill="url(#wafa_bg)"/><rect x="52" y="26" width="296" height="296" rx="22" fill="#baaf9d" stroke="#B8924A" stroke-width="6"/><image x="58" y="32" width="284" height="284" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_WAFA_IMG}"/><text x="200" y="362" text-anchor="middle" font-family="Amiri,Cairo,serif" font-weight="700" font-size="27" fill="#D4BC85">يوم الوفاء — رحمه الله</text></svg>`,
   'مسابقة أجيال في القرآن الكريم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ajq_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient><linearGradient id="ajq_gold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D4BC85"/><stop offset="100%" stop-color="#B8924A"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#ajq_bg)"/><circle cx="200" cy="185" r="128" fill="none" stroke="#B8924A" stroke-width="3" opacity=".5"/><path d="M200 70 L212 100 L245 100 L219 120 L229 152 L200 133 L171 152 L181 120 L155 100 L188 100 Z" fill="url(#ajq_gold)" stroke="#8A6D2E" stroke-width="2"/><path d="M118 175 Q118 165 128 165 L196 165 L196 275 L128 275 Q118 275 118 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><path d="M282 175 Q282 165 272 165 L204 165 L204 275 L272 275 Q282 275 282 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><line x1="200" y1="165" x2="200" y2="275" stroke="#8A6D2E" stroke-width="3"/><line x1="132" y1="190" x2="185" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="208" x2="185" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="226" x2="185" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="244" x2="185" y2="244" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="190" x2="268" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="208" x2="268" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="226" x2="268" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="244" x2="268" y2="244" stroke="#B8924A" stroke-width="2"/><text x="200" y="330" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#D4BC85">مسابقة أجيال في القرآن</text><text x="200" y="366" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="800" font-size="20" fill="#F8F8F6" opacity=".85">200 · 400 · 600 · 800</text></svg>`,
   'بيرف آب — ثقافة قطرية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
@@ -15805,6 +15830,7 @@ const CAT_SVG = {
   'بيرف آب — مسابقات وألغاز':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
   'بيرف آب — دول وعواصم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
   'بيرف آب — معلومات عامة':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
+  'مسابقة مركز أجيال التربوي':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_QANWAN}"/></svg>`,
   'المهني — قنوان':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_QANWAN}"/></svg>`,
   'القرآني — قنوان':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_QANWAN}"/></svg>`,
   'الترفيهي — قنوان':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_QANWAN}"/></svg>`,
@@ -16525,7 +16551,7 @@ const CAT_LEVELS = [
     color:'#8A1538',
     accent:'#B8924A',
     status:'available',
-    groupIds:['ajyal_wafa_comp','ajyal_quran_comp']
+    groupIds:['ajyal_center_comp','ajyal_wafa_comp','ajyal_quran_comp']
   }
 ];
 
@@ -16635,8 +16661,15 @@ const CAT_GROUPS = [
     cats:['المهني — قنوان','القرآني — قنوان','الترفيهي — قنوان','الاستكشافي — قنوان','الهوية — قنوان','الأمني — قنوان','الرياضي — قنوان','ثقافة عامة — قنوان']
   },
   {
+    id:'ajyal_center_comp',
+    label:'مسابقة مركز أجيال التربوي',
+    icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#3D0918"/><path d="M22 30 H78 V38 C78 52 66 60 55 62 V72 H62 V80 H38 V72 H45 V62 C34 60 22 52 22 38 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="2"/><circle cx="50" cy="44" r="8" fill="#7a1024"/></svg>`,
+    compSoloNote:'لوحة شعار المركز وسط أربع فئات — 24 سؤالاً متنوعاً',
+    cats:['مسابقة مركز أجيال التربوي']
+  },
+  {
     id:'ajyal_wafa_comp',
-    label:'مسابقة مركز أجيال التربوي - يوم الوفاء',
+    label:'مسابقة يوم الوفاء - الأمير الوالد',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#3D0918"/><rect x="16" y="12" width="68" height="62" rx="8" fill="#2c0712" stroke="#B8924A" stroke-width="3"/><circle cx="50" cy="34" r="12" fill="#D4BC85"/><path d="M28 66 Q50 44 72 66 L72 70 L28 70 Z" fill="#D4BC85"/><rect x="20" y="80" width="60" height="12" rx="6" fill="#5E0E26" stroke="#B8924A" stroke-width="2"/></svg>`,
     compSoloNote:'لوحة شخصية تكريمية — 4 فئات × 6 أسئلة والصورة كاملة وسط اللوحة',
     cats:['مسابقة مركز أجيال التربوي - يوم الوفاء']
@@ -18148,7 +18181,7 @@ function startGame(overrideTeams, overrideCats, overrideName){
   resetPU();
   // 🏆 وضع المسابقة الخاصة: فئة واحدة بلوحة 4 مستويات × 8 أسئلة
   G.isComp = (cats.length === 1) && (typeof _HH_COMP_CATS !== 'undefined') && _HH_COMP_CATS.has(cats[0]);
-  G.compKind = G.isComp ? ((typeof _HH_WAFA_CAT !== 'undefined' && cats[0] === _HH_WAFA_CAT) ? 'wafa' : 'quran') : '';
+  G.compKind = G.isComp ? (((typeof _HH_WAFA_CAT !== 'undefined' && cats[0] === _HH_WAFA_CAT) || (typeof _HH_CHAR_COMPS !== 'undefined' && _HH_CHAR_COMPS[cats[0]])) ? 'wafa' : 'quran') : '';
   // قائمة الفئات الأسطورية — تستخدم المجموعة العالمية المعرفة قرب CAT_PALETTES
   cats.forEach(cat=>{
     G.boardData[cat]={};
@@ -18530,13 +18563,38 @@ const COMP_LEVELS = [
   {diff:'elite', pts:800, label:'نخبة',  bg:'linear-gradient(135deg,#3D0918,#5E0E26)', border:'#B8924A', text:'#D4BC85'}
 ];
 
+// ═══════════════════════════════════════════════════════════════════
+// 🏆 مسابقة مركز أجيال التربوي — لوحة شعار المركز وسط أربع فئات
+// ═══════════════════════════════════════════════════════════════════
+var _HH_AJYALC_CAT = 'مسابقة مركز أجيال التربوي';
+_HH_PARTNER_QUESTIONS[_HH_AJYALC_CAT] = [{"diff": "easy", "q": "ما الرياضة التراثية التي يمارسها القطريون بالصقور؟", "a": "الصقارة (الصيد بالصقور)", "sub": 0}, {"diff": "easy", "q": "ما البطولة القارية التي توّج بها العنابي عامي 2019 و2023؟", "a": "بطولة كأس آسيا", "sub": 0}, {"diff": "med", "q": "ما النادي القطري الملقب بـ«الملك»؟", "a": "نادي الريان", "sub": 0}, {"diff": "med", "q": "من هدّاف المنتخب القطري التاريخي الملقب بـ«المعلم»؟", "a": "منصور مفتاح", "sub": 0}, {"diff": "hard", "q": "ما أقدم نادٍ رياضي تأسس في قطر؟", "a": "النادي الأهلي (عام 1950)", "sub": 0}, {"diff": "hard", "q": "في أي عام استضافت الدوحة دورة الألعاب الآسيوية؟", "a": "عام 2006", "sub": 0}, {"diff": "easy", "q": "ما الناقل الجوي الوطني لدولة قطر؟", "a": "الخطوط الجوية القطرية", "sub": 1}, {"diff": "easy", "q": "ما وسيلة النقل الحديثة التي تربط أنحاء الدوحة بثلاثة خطوط؟", "a": "مترو الدوحة", "sub": 1}, {"diff": "med", "q": "ما الوزارة القطرية المسؤولة عن رعاية الفنون والتراث والمهرجانات؟", "a": "وزارة الثقافة", "sub": 1}, {"diff": "med", "q": "في أي منطقة بالدوحة يقع مبنى مكتبة قطر الوطنية؟", "a": "المدينة التعليمية", "sub": 1}, {"diff": "hard", "q": "في أي عام تأسست جامعة قطر؟", "a": "عام 1977", "sub": 1}, {"diff": "hard", "q": "ما «البِشت» في اللباس القطري؟", "a": "عباءة رجالية تُلبس فوق الثوب في المناسبات", "sub": 1}, {"diff": "easy", "q": "في أي قارة تقع دولة قطر؟", "a": "قارة آسيا", "sub": 2}, {"diff": "easy", "q": "ما المسطح المائي الذي يحيط بقطر من ثلاث جهات؟", "a": "الخليج العربي", "sub": 2}, {"diff": "med", "q": "ما المدينة الساحلية شمال الدوحة التي سُمّيت على خورها البحري وميناء صيدها العريق؟", "a": "مدينة الخور", "sub": 2}, {"diff": "med", "q": "ما المدينة الصناعية جنوب قطر المرتبطة بتصدير النفط؟", "a": "مدينة مسيعيد", "sub": 2}, {"diff": "hard", "q": "ما البلدة القطرية الشهيرة بمحمية أشجار القرم (المانغروف)؟", "a": "الذخيرة", "sub": 2}, {"diff": "hard", "q": "ما المنطقة الجنوبية التي يلتقي فيها البحر بالكثبان الرملية؟", "a": "خور العديد (البحر الداخلي)", "sub": 2}, {"diff": "easy", "q": "ما المشروب الساخن بالحليب والهيل الرائج في المجالس القطرية؟", "a": "شاي الكرك", "sub": 3}, {"diff": "easy", "q": "ما الحيوان الملقب بـ«سفينة الصحراء» في الموروث القطري؟", "a": "الجمل", "sub": 3}, {"diff": "med", "q": "ما الفعالية التراثية المصاحبة لاحتفالات اليوم الوطني في أم صلال؟", "a": "درب الساعي", "sub": 3}, {"diff": "med", "q": "كم درهماً في الريال القطري الواحد؟", "a": "100 درهم", "sub": 3}, {"diff": "hard", "q": "ما الاسم القديم الذي عُرفت به مدينة الدوحة؟", "a": "البِدع", "sub": 3}, {"diff": "hard", "q": "من مؤلف كلمات النشيد الوطني القطري «قسماً»؟", "a": "الشيخ مبارك بن سيف آل ثاني", "sub": 3}];
+_HH_COMP_CATS.add(_HH_AJYALC_CAT);
+var _HH_CHAR_COMPS = _HH_CHAR_COMPS || {};
+_HH_CHAR_COMPS[_HH_AJYALC_CAT] = {
+  get img(){ return (typeof _HH_IMG_QANWAN!=='undefined') ? _HH_IMG_QANWAN : ''; },
+  name1:'برنامج قنوان',
+  name2:'',
+  frameBg:'#ffffff',
+  subs:[
+    {label:'الرياضي',    c:'#3D6B53', bg:'#EBF2EE'},
+    {label:'الثقافي',    c:'#b5801f', bg:'#FDF3DD'},
+    {label:'الاستكشافي', c:'#c0392b', bg:'#FDE8E8'},
+    {label:'الترفيهي',   c:'#5E0E26', bg:'#F7ECEF'}
+  ]
+};
+try{
+  var _hhAjycSeed = JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_HH_AJYALC_CAT]));
+  if(typeof window !== 'undefined' && window.QDB_ORIGINAL){ window.QDB_ORIGINAL[_HH_AJYALC_CAT] = _hhAjycSeed; }
+  if(typeof QDB_ORIGINAL === 'object' && QDB_ORIGINAL && QDB_ORIGINAL !== window.QDB_ORIGINAL){ QDB_ORIGINAL[_HH_AJYALC_CAT] = _hhAjycSeed; }
+}catch(_e){}
+
 // ═══ تخصيصات الأدمن للمسابقات (اسم المسابقة، الشخصية، الصورة، الفئات الفرعية، الأسئلة) ═══
 var _HH_COMP_DEFAULTS = null;
 function _hhSnapshotCompDefaults(){
   if(_HH_COMP_DEFAULTS) return;
   try{
     _HH_COMP_DEFAULTS = {
-      wafa:{ label:_HH_WAFA_CAT, name1:_HH_WAFA_NAME1, name2:_HH_WAFA_NAME2, img:_HH_WAFA_IMG,
+      wafa:{ label:_HH_WAFA_LABEL_DEFAULT, name1:_HH_WAFA_NAME1, name2:_HH_WAFA_NAME2, img:_HH_WAFA_IMG,
              subs:_HH_WAFA_SUBS.map(x=>x.label),
              questions: JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_HH_WAFA_CAT]||[])) },
       quran:{ label:_HH_AJYAL_QURAN_COMP_CAT,
@@ -18575,6 +18633,14 @@ _hhApplyCompConfig();
 // ═══════════════════════════════════════════════════════════════════
 function buildWafaBoard(wrap){
   const cat = G.selectedCats[0];
+  // تكوين اللوحة: يوم الوفاء بإعداداتها القابلة للتخصيص، أو أي لوحة شخصية من السجل
+  const _cc = (typeof _HH_CHAR_COMPS !== 'undefined' && _HH_CHAR_COMPS[cat]) || null;
+  const _isWafaSelf = (typeof _HH_WAFA_CAT !== 'undefined' && cat === _HH_WAFA_CAT);
+  const CC_IMG  = _isWafaSelf ? _HH_WAFA_IMG   : (_cc ? _cc.img   : '');
+  const CC_N1   = _isWafaSelf ? _HH_WAFA_NAME1 : (_cc ? _cc.name1 : '');
+  const CC_N2   = _isWafaSelf ? _HH_WAFA_NAME2 : (_cc ? _cc.name2 : '');
+  const CC_SUBS = _isWafaSelf ? _HH_WAFA_SUBS  : (_cc ? _cc.subs  : []);
+  const CC_FBG  = (!_isWafaSelf && _cc && _cc.frameBg) ? _cc.frameBg : '#baaf9d';
   const isMobile    = window.innerWidth < 700;
   const isLandscape = window.innerWidth > window.innerHeight;
   const vh = window.innerHeight;
@@ -18629,7 +18695,7 @@ function buildWafaBoard(wrap){
       justify-content:${stacked?'center':'flex-start'}; padding-top:${stacked?0:topShift}px; gap:${gap}px;
       ${stacked?'order:-1;':''} }
     .wafa-frame{ width:${frameSide}px; height:${frameSide}px; flex-shrink:0;
-      border-radius:22px; background:#baaf9d; border:4px solid #B8924A;
+      border-radius:22px; background:${CC_FBG}; border:4px solid #B8924A;
       box-shadow:0 0 0 3px #8A1538, 0 12px 34px rgba(61,9,24,.4);
       display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .wafa-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -18649,7 +18715,7 @@ function buildWafaBoard(wrap){
   const stage=document.createElement('div'); stage.className='wafa-stage';
 
   const mkSubBlock=(si)=>{
-    const sub=_HH_WAFA_SUBS[si];
+    const sub=CC_SUBS[si];
     const box=document.createElement('div'); box.className='wafa-cat';
     box.style.setProperty('--wc',sub.c); box.style.setProperty('--wbg',sub.bg);
     const nm=document.createElement('div'); nm.className='wname'; nm.textContent=sub.label; box.appendChild(nm);
@@ -18678,10 +18744,10 @@ function buildWafaBoard(wrap){
   sideR.appendChild(mkSubBlock(0)); sideR.appendChild(mkSubBlock(1));
   const center=document.createElement('div'); center.className='wafa-center';
   const frame=document.createElement('div'); frame.className='wafa-frame';
-  const img=document.createElement('img'); img.src=_HH_WAFA_IMG; img.alt=_HH_WAFA_NAME; frame.appendChild(img);
+  const img=document.createElement('img'); img.src=CC_IMG; img.alt=(CC_N1+' '+CC_N2); frame.appendChild(img);
   const nameEl=document.createElement('div'); nameEl.className='wafa-name';
-  nameEl.innerHTML='<div class="wn1">'+esc(_HH_WAFA_NAME1)+'</div><div class="wn2">'+esc(_HH_WAFA_NAME2)+'</div>';
-  nameEl.setAttribute('aria-label',_HH_WAFA_NAME);
+  nameEl.innerHTML='<div class="wn1">'+esc(CC_N1)+'</div>'+(CC_N2?('<div class="wn2">'+esc(CC_N2)+'</div>'):'');
+  nameEl.setAttribute('aria-label',CC_N1+' '+CC_N2);
   center.appendChild(frame); center.appendChild(nameEl);
   const sideL=document.createElement('div'); sideL.className='wafa-side';
   sideL.appendChild(mkSubBlock(2)); sideL.appendChild(mkSubBlock(3));
@@ -25273,7 +25339,7 @@ async function saveQDBToCloud(){
   
   try{
     // نستثني فئات الخرائط الكبيرة (تأتي من ملفات .js منفصلة)
-    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء']);
+    const _HH_EXTERNAL_CATS = new Set(['خرائط الدول', 'أساطير الخرائط', 'أعلام الدول', 'عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء', 'مسابقة مركز أجيال التربوي']);
     const slim = {};
     for(const cat in QDB){
       if(_HH_EXTERNAL_CATS.has(cat)) continue;
@@ -25367,7 +25433,7 @@ async function loadQDBFromCloud(){
     
     // 4) ندمج مع QDB_ORIGINAL (الذي يحوي الخرائط) — بدون استبدال الخرائط/الأعلام/العواصم
     const merged = JSON.parse(JSON.stringify(QDB_ORIGINAL));
-    const _EXT_CATS = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء']);
+    const _EXT_CATS = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء', 'مسابقة مركز أجيال التربوي']);
     for(const cat in cloudQDB){
       if(_EXT_CATS.has(cat)) continue; // لا نسمح للسحابة بالكتابة فوق فئات الملفات الخارجية
       merged[cat] = cloudQDB[cat];
@@ -25392,7 +25458,7 @@ async function loadQDBFromCloud(){
     
     // 5) نحفظ نسخة محلية (cache)
     try{
-      const _HH_EXT = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء']);
+      const _HH_EXT = new Set(['خرائط الدول','أساطير الخرائط','أعلام الدول','عواصم الدول', 'بيرف آب — ثقافة قطرية', 'بيرف آب — معلومات دينية', 'بيرف آب — رياضة', 'بيرف آب — مسابقات وألغاز', 'بيرف آب — دول وعواصم', 'بيرف آب — معلومات عامة', 'طموح — ثقافة قطرية', 'طموح — معلومات دينية', 'طموح — رياضة', 'طموح — مسابقات وألغاز', 'طموح — دول وعواصم', 'طموح — معلومات عامة', 'المهني — قنوان', 'القرآني — قنوان', 'الترفيهي — قنوان', 'الاستكشافي — قنوان', 'الهوية — قنوان', 'الأمني — قنوان', 'الرياضي — قنوان', 'ثقافة عامة — قنوان', 'مسابقة أجيال في القرآن الكريم', 'مسابقة مركز أجيال التربوي - يوم الوفاء', 'مسابقة مركز أجيال التربوي']);
       const slim = {};
       for(const c in cloudQDB){ if(!_HH_EXT.has(c)) slim[c] = cloudQDB[c]; }
       localStorage.setItem('hh_qdb_override', JSON.stringify(slim));
@@ -26607,6 +26673,12 @@ function showWhatsNewModal(opts){
   let lastSeenId = null;
   try{ lastSeenId = localStorage.getItem('hh_wn_last_seen') || null; }catch(e){}
 
+  // 🆕 زائر لأول مرة: التحديثات قصة العائدين لا القادمين — نعلّمها كمقروءة بصمت ولا نعرض شيئاً
+  if(!lastSeenId && !opts.force){
+    try{ if(all.length > 0) localStorage.setItem('hh_wn_last_seen', all[0].id); }catch(e){}
+    return;
+  }
+
   // الجديد فقط (لم يره)
   let toShow = all;
   if(lastSeenId && !opts.force){
@@ -26783,7 +26855,12 @@ function _hh_autoShowWhatsNew(){
   setTimeout(function(){ try{ refreshWhatsNewBadge(); }catch(e){} }, 500);
   // افتح المودال بعد 4 ثوان (لما المستخدم يستوعب الصفحة)
   setTimeout(function(){
-    try{ showWhatsNewModal({}); refreshWhatsNewBadge(); }catch(e){}
+    try{
+      // لا نزاحم نوافذ البداية: الخصوصية أو الجولة التعريفية أولى — تكفيه الشارة
+      const _vis = el => { if(!el) return false; const st = getComputedStyle(el); return st.display !== 'none' && st.visibility !== 'hidden'; };
+      if(_vis(document.getElementById('privacy-consent-modal')) || _vis(document.getElementById('onboarding-modal'))){ refreshWhatsNewBadge(); return; }
+      showWhatsNewModal({}); refreshWhatsNewBadge();
+    }catch(e){}
   }, 4000);
 }
 if(document.readyState === 'loading'){
@@ -37047,7 +37124,8 @@ button:active:not(:disabled){
 
 /* خط فاخر أعلى - نسخة محسّنة */
 .logo-title{
-  text-shadow: 0 2px 8px rgba(138,21,56,.15), 0 1px 0 rgba(255,255,255,.8);
+  text-shadow:none;
+  filter:drop-shadow(0 5px 14px rgba(94,14,38,.28));
 }
 
 /* تأثير parallax خفيف على البطاقات */
