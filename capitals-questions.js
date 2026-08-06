@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-// 🏛️ فئة "عواصم الدول" — 24 سؤالاً
+// 🏛️ فئة "عواصم الدول" — 36 سؤالاً بميل نادر (سؤال واحد مباشر)
 // الفلسفة: سؤال قصير مباشر، إجابة كلمة
 // التدرج: easy=عواصم مشهورة، med=متوسطة، hard=نادرة
 // الأيقونات: SVG واحدة موحدة (مبنى عاصمة) بهوية المنصة
@@ -33,37 +33,42 @@
   var inject = function(){
     if(typeof QDB_ORIGINAL === 'undefined') return false;
     QDB_ORIGINAL['عواصم الدول'] = [
-
-      // ════════ EASY (8) — عواصم مشهورة ════════
-      {q:'ما عاصمة قطر؟',             a:'الدوحة',         diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة السعودية؟',         a:'الرياض',         diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة الإمارات؟',         a:'أبوظبي',         diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة مصر؟',              a:'القاهرة',        diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة الكويت؟',           a:'مدينة الكويت',   diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة فرنسا؟',            a:'باريس',          diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة بريطانيا؟',         a:'لندن',           diff:'easy', img:ICON_CAPITAL},
-      {q:'ما عاصمة اليابان؟',          a:'طوكيو',          diff:'easy', img:ICON_CAPITAL},
-
-      // ════════ MED (8) — عواصم متوسطة ════════
-      {q:'ما عاصمة عُمان؟',            a:'مسقط',           diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة الأردن؟',           a:'عمّان',          diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة المغرب؟',           a:'الرباط',         diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة تركيا؟',            a:'أنقرة',          diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة ألمانيا؟',          a:'برلين',          diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة إيطاليا؟',          a:'روما',           diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة الصين؟',            a:'بكين',           diff:'med', img:ICON_CAPITAL},
-      {q:'ما عاصمة كوريا الجنوبية؟',   a:'سيول',           diff:'med', img:ICON_CAPITAL},
-
-      // ════════ HARD (8) — عواصم نادرة ════════
-      {q:'ما عاصمة كازاخستان؟',        a:'أستانا',         diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة أستراليا؟',         a:'كانبرا',         diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة كندا؟',             a:'أوتاوا',         diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة البرازيل؟',         a:'برازيليا',       diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة نيوزيلندا؟',        a:'ويلينغتون',      diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة موريتانيا؟',        a:'نواكشوط',        diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة جزر القمر؟',        a:'موروني',         diff:'hard', img:ICON_CAPITAL},
-      {q:'ما عاصمة بوتان؟',            a:'تيمفو',          diff:'hard', img:ICON_CAPITAL},
-
+      {q:'ما عاصمة تركيا؟', a:'أنقرة', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة الهند؟', a:'نيودلهي', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة كوريا الجنوبية؟', a:'سيول', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة أستراليا؟', a:'كانبرا', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة كندا؟', a:'أوتاوا', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة البرازيل؟', a:'برازيليا', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة إندونيسيا؟', a:'جاكرتا', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة ماليزيا؟', a:'كوالالمبور', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة الأرجنتين؟', a:'بوينس آيرس', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة اليونان؟', a:'أثينا', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة سويسرا؟', a:'برن', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة البرتغال؟', a:'لشبونة', diff:'easy', img:ICON_CAPITAL},
+      {q:'ما عاصمة فيتنام؟', a:'هانوي', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة تايلاند؟', a:'بانكوك', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة النرويج؟', a:'أوسلو', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة الدنمارك؟', a:'كوبنهاغن', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة بولندا؟', a:'وارسو', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة التشيك؟', a:'براغ', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة المجر؟', a:'بودابست', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة تشيلي؟', a:'سانتياغو', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة كولومبيا؟', a:'بوغوتا', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة نيجيريا؟', a:'أبوجا', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة كينيا؟', a:'نيروبي', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة كوبا؟', a:'هافانا', diff:'med', img:ICON_CAPITAL},
+      {q:'ما عاصمة بوتان؟', a:'تيمفو', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة نيبال؟', a:'كاتماندو', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة كازاخستان؟', a:'أستانا', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة منغوليا؟', a:'أولان باتور', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة آيسلندا؟', a:'ريكيافيك', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة جزر فيجي؟', a:'سوفا', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة جزر سيشل؟', a:'فيكتوريا', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة جزر المالديف؟', a:'ماليه', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة مدغشقر؟', a:'أنتاناناريفو', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة جامايكا؟', a:'كينغستون', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة قيرغيزستان؟', a:'بيشكيك', diff:'hard', img:ICON_CAPITAL},
+      {q:'ما عاصمة بابوا غينيا الجديدة؟', a:'بورت مورسبي', diff:'hard', img:ICON_CAPITAL},
     ];
     return true;
   };

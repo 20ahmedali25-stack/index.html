@@ -6,13 +6,15 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-wa-center-bank';
+const SW_VERSION = 'almulhim-wk-stats';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
 const CORE_ASSETS = [
   '/',
   '/index.html',
+  '/almulhim.css',
+  '/almulhim-engine.js',
   '/questions.js',
   '/maps-questions.js',
   '/flags-questions.js',
