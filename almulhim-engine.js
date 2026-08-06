@@ -1344,6 +1344,7 @@ try {
   auth=firebase.auth();
   db=firebase.firestore();
   auth.onAuthStateChanged(async user=>{
+    try{ if(user) setTimeout(()=>{ try{ hhLoadNotifications(); }catch(_){} }, 2500); }catch(_e){}
     clearTimeout(_loaderTimeout);
     clearInterval(_barInterval);
     const _bar=document.getElementById('loader-bar');
@@ -4026,10 +4027,28 @@ function _hhSnapshotCompDefaults(){
              subs:_HH_WAFA_SUBS.map(x=>x.label),
              questions: JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_HH_WAFA_CAT]||[])) },
       quran:{ label:_HH_AJYAL_QURAN_COMP_CAT,
-             questions: JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_HH_AJYAL_QURAN_COMP_CAT]||[])) }
+             questions: JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[_HH_AJYAL_QURAN_COMP_CAT]||[])) },
+      chars:{}
     };
+    // كل لوحات الشخصية من السجل المعمم (عدا الوفاء المغطاة أعلاه)
+    try{
+      if(typeof _HH_CHAR_COMPS!=='undefined'){
+        Object.keys(_HH_CHAR_COMPS).forEach(function(cat){
+          if(typeof _HH_WAFA_CAT!=='undefined' && cat===_HH_WAFA_CAT) return;
+          var cc=_HH_CHAR_COMPS[cat];
+          _HH_COMP_DEFAULTS.chars[cat]={
+            label:(typeof CAT_INFO!=='undefined'&&CAT_INFO[cat]&&CAT_INFO[cat].label)||cat,
+            name1:cc.name1||'', name2:cc.name2||'',
+            subs:(cc.subs||[]).map(function(x){return x.label;}),
+            questions: JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[cat]||[]))
+          };
+        });
+      }
+    }catch(_e2){}
   }catch(_e){}
 }
+// تجاوزات لوحات الشخصية (صورة/أسماء/فئات) — تُقرأ في buildWafaBoard
+var _HH_COMP_OVR = {};
 function _hhApplyCompConfig(){
   _hhSnapshotCompDefaults();
   var cfg=null; try{ cfg=JSON.parse(localStorage.getItem('hh_comp_config')||'null'); }catch(_e){}
@@ -4052,6 +4071,32 @@ function _hhApplyCompConfig(){
       if(CAT_INFO[_HH_AJYAL_QURAN_COMP_CAT]) CAT_INFO[_HH_AJYAL_QURAN_COMP_CAT].label = q.label || d.quran.label;
     } }catch(_e){}
   }catch(_e){}
+  // لوحات الشخصية الأخرى من السجل المعمم
+  try{
+    _HH_COMP_OVR = {};
+    var chars=(cfg&&cfg.chars)||{};
+    var dch=(d&&d.chars)||{};
+    if(typeof _HH_CHAR_COMPS!=='undefined'){
+      Object.keys(_HH_CHAR_COMPS).forEach(function(cat){
+        if(typeof _HH_WAFA_CAT!=='undefined' && cat===_HH_WAFA_CAT) return;
+        var c=chars[cat]||{}; var dd=dch[cat]||{};
+        // الأسئلة: نقبل التخصيص إذا طابق حجم الأصل (حماية من التلف)
+        var qs=(Array.isArray(c.questions)&&dd.questions&&c.questions.length===dd.questions.length)?c.questions:dd.questions;
+        if(qs){
+          _HH_PARTNER_QUESTIONS[cat]=JSON.parse(JSON.stringify(qs));
+          try{ if(typeof window!=='undefined'&&window.QDB_ORIGINAL) window.QDB_ORIGINAL[cat]=JSON.parse(JSON.stringify(qs)); }catch(_a){}
+          try{ if(typeof QDB!=='undefined'&&QDB) QDB[cat]=JSON.parse(JSON.stringify(qs)); }catch(_b){}
+        }
+        try{ if(typeof CAT_INFO!=='undefined'&&CAT_INFO[cat]) CAT_INFO[cat].label=c.label||dd.label||CAT_INFO[cat].label; }catch(_c){}
+        var ovr={};
+        if(c.name1) ovr.name1=c.name1;
+        if(c.name2!==undefined&&c.name2!==null&&c.name2!=='') ovr.name2=c.name2;
+        if(c.img&&String(c.img).indexOf('data:image')===0) ovr.img=c.img;
+        if(Array.isArray(c.subs)&&c.subs.some(function(x){return x;})) ovr.subs=c.subs;
+        if(Object.keys(ovr).length) _HH_COMP_OVR[cat]=ovr;
+      });
+    }
+  }catch(_e3){}
 }
 _hhApplyCompConfig();
 
@@ -4064,10 +4109,11 @@ function buildWafaBoard(wrap){
   // تكوين اللوحة: يوم الوفاء بإعداداتها القابلة للتخصيص، أو أي لوحة شخصية من السجل
   const _cc = (typeof _HH_CHAR_COMPS !== 'undefined' && _HH_CHAR_COMPS[cat]) || null;
   const _isWafaSelf = (typeof _HH_WAFA_CAT !== 'undefined' && cat === _HH_WAFA_CAT);
-  const CC_IMG  = _isWafaSelf ? _HH_WAFA_IMG   : (_cc ? _cc.img   : '');
-  const CC_N1   = _isWafaSelf ? _HH_WAFA_NAME1 : (_cc ? _cc.name1 : '');
-  const CC_N2   = _isWafaSelf ? _HH_WAFA_NAME2 : (_cc ? _cc.name2 : '');
-  const CC_SUBS = _isWafaSelf ? _HH_WAFA_SUBS  : (_cc ? _cc.subs  : []);
+  const _ov = (typeof _HH_COMP_OVR!=='undefined' && _HH_COMP_OVR[cat]) || {};
+  const CC_IMG  = _isWafaSelf ? _HH_WAFA_IMG   : (_ov.img   || (_cc ? _cc.img   : ''));
+  const CC_N1   = _isWafaSelf ? _HH_WAFA_NAME1 : (_ov.name1 || (_cc ? _cc.name1 : ''));
+  const CC_N2   = _isWafaSelf ? _HH_WAFA_NAME2 : ((_ov.name2!==undefined) ? _ov.name2 : (_cc ? _cc.name2 : ''));
+  const CC_SUBS = _isWafaSelf ? _HH_WAFA_SUBS  : ((_cc ? _cc.subs : []).map((sb,i)=> (_ov.subs&&_ov.subs[i]) ? Object.assign({},sb,{label:_ov.subs[i]}) : sb));
   const CC_FBG  = (!_isWafaSelf && _cc && _cc.frameBg) ? _cc.frameBg : '#baaf9d';
   const isMobile    = window.innerWidth < 700;
   const isLandscape = window.innerWidth > window.innerHeight;
@@ -4613,9 +4659,110 @@ document.addEventListener('keydown', function(e){
   }
 });
 
+// ═══════════════════════════════════════════════════════════════════
+// 🔔 نظام الإشعارات — شكر وتقدير من الإدارة للمستخدمين
+// ═══════════════════════════════════════════════════════════════════
+async function hhSendUserNotification(toUid, toEmail, toName, title, body){
+  if(typeof firebase==='undefined' || !firebase.firestore) throw new Error('لا اتصال بالسحابة');
+  await firebase.firestore().collection('user_notifications').add({
+    toUid: toUid||null, toEmail: (toEmail||'').toLowerCase()||null, toName: toName||'',
+    title: String(title||'').slice(0,120), body: String(body||'').slice(0,800),
+    from:'إدارة المُلهِم', read:false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+function hhOpenThanksComposer(reportId){
+  const r=(window._allReports||[]).find(x=>String(x.id)===String(reportId));
+  if(!r){ toast('تعذر إيجاد البلاغ','error'); return; }
+  const toName=r.reporterName||(r.user&&(r.user.displayName||(r.user.email||'').split('@')[0]))||'صديق المنصة';
+  const old=document.getElementById('hh-thanks-overlay'); if(old) old.remove();
+  const ov=document.createElement('div'); ov.id='hh-thanks-overlay';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.55);backdrop-filter:blur(4px);z-index:999995;display:flex;align-items:center;justify-content:center;padding:18px;';
+  ov.onclick=ev=>{ if(ev.target===ov) ov.remove(); };
+  const defTitle='🎁 شكر وتقدير من إدارة المُلهِم';
+  const defBody='أخي الكريم '+toName+'،\nشكراً جزيلاً على تصويبك الدقيق — بمثل حرصك تزداد المنصة جودةً وموثوقية. تم اعتماد ملاحظتك وستجد أثرها قريباً.\nمع خالص التقدير 🌹';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:460px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;" onclick="event.stopPropagation()">'
+    +'<div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;">🔔 إرسال شكر وتقدير إلى: '+esc(toName)+'</div>'
+    +'<div style="padding:16px 18px;">'
+    +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">العنوان</div>'
+    +'<input id="th-title" type="text" value="'+defTitle+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;margin-bottom:10px;">'
+    +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">نص الرسالة</div>'
+    +'<textarea id="th-body" rows="5" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px 12px;font-family:Cairo;font-size:.85rem;line-height:1.9;resize:vertical;box-sizing:border-box;">'+defBody+'</textarea>'
+    +'<div style="display:flex;gap:9px;margin-top:11px;">'
+    +'<button id="th-send" style="background:linear-gradient(135deg,#3D6B53,#2a4d3a);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-weight:900;font-size:.84rem;cursor:pointer;">إرسال الشكر</button>'
+    +'<button onclick="document.getElementById(\'hh-thanks-overlay\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:10px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>'
+    +'</div></div></div>';
+  document.body.appendChild(ov);
+  document.getElementById('th-send').onclick=async function(){
+    this.disabled=true; this.textContent='جار الإرسال...';
+    try{
+      await hhSendUserNotification(r.user&&r.user.uid, r.user&&r.user.email, toName,
+        document.getElementById('th-title').value, document.getElementById('th-body').value);
+      toast('🎁 وصل الشكر إلى '+toName,'success');
+      ov.remove();
+    }catch(err){ toast('تعذر الإرسال: '+(err.message||err),'error'); this.disabled=false; this.textContent='إرسال الشكر'; }
+  };
+}
+
+// ── جرس المستخدم ──
+let _hhNotifs=[];
+async function hhLoadNotifications(){
+  try{
+    if(typeof firebase==='undefined'||!firebase.firestore||typeof currentUser==='undefined'||!currentUser) return;
+    const db=firebase.firestore(); const col=db.collection('user_notifications');
+    const seen={}; const out=[];
+    const pull=async q=>{ const snap=await q.limit(30).get(); snap.forEach(d=>{ if(!seen[d.id]){ seen[d.id]=1; out.push(Object.assign({id:d.id}, d.data())); } }); };
+    if(currentUser.uid) await pull(col.where('toUid','==',currentUser.uid));
+    if(currentUser.email) await pull(col.where('toEmail','==',currentUser.email.toLowerCase()));
+    out.sort((a,b)=>{ const ta=a.createdAt&&a.createdAt.seconds||0, tb=b.createdAt&&b.createdAt.seconds||0; return tb-ta; });
+    _hhNotifs=out;
+    hhUpdateNotifBadge();
+  }catch(e){ console.warn('notifs:',e); }
+}
+function hhUpdateNotifBadge(){
+  const badge=document.getElementById('hh-notif-badge'); if(!badge) return;
+  const unread=_hhNotifs.filter(n=>!n.read).length;
+  badge.textContent=unread>9?'9+':unread;
+  badge.style.display=unread>0?'flex':'none';
+}
+function hhToggleNotifPanel(){
+  const panel=document.getElementById('hh-notif-panel'); if(!panel) return;
+  const opening=panel.style.display==='none'||!panel.style.display;
+  panel.style.display=opening?'block':'none';
+  if(!opening) return;
+  const list=document.getElementById('hh-notif-list');
+  if(!_hhNotifs.length){
+    list.innerHTML='<div style="text-align:center;color:#999;font-family:Cairo;font-weight:700;font-size:.82rem;padding:22px 10px;">لا إشعارات بعد 🕊</div>';
+  } else {
+    list.innerHTML=_hhNotifs.map(n=>{
+      const d=n.createdAt&&n.createdAt.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('ar-QA',{day:'numeric',month:'long'}):'';
+      return '<div style="background:'+(n.read?'#fff':'#FBF6EA')+';border:1.5px solid '+(n.read?'#eee':'#E3D9C6')+';border-radius:12px;padding:11px 13px;margin-bottom:8px;">'
+        +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px;">'
+        +'<div style="font-family:Cairo;font-weight:900;font-size:.82rem;color:#5E0E26;">'+esc(n.title||'')+'</div>'
+        +(d?'<div style="font-size:.66rem;color:#aaa;font-family:Cairo;white-space:nowrap;">'+d+'</div>':'')
+        +'</div>'
+        +'<div style="font-family:Cairo;font-weight:700;font-size:.78rem;color:#555;line-height:1.9;white-space:pre-wrap;">'+esc(n.body||'')+'</div>'
+        +'<div style="font-size:.66rem;color:#B8924A;font-family:Cairo;font-weight:800;margin-top:5px;">— '+esc(n.from||'إدارة المُلهِم')+'</div>'
+        +'</div>';
+    }).join('');
+  }
+  // تعليم الكل مقروءاً
+  try{
+    if(typeof firebase!=='undefined'&&firebase.firestore){
+      const db=firebase.firestore();
+      _hhNotifs.filter(n=>!n.read&&n.id).forEach(n=>{ db.collection('user_notifications').doc(n.id).update({read:true}).catch(()=>{}); n.read=true; });
+      setTimeout(hhUpdateNotifBadge,300);
+    }
+  }catch(e){}
+}
+
 function hhOpenCorrection(){
   const f=document.getElementById('qm-correct-form'); const b=document.getElementById('qm-correct-btn');
   if(f) f.style.display='block'; if(b) b.style.display='none';
+  const nm=document.getElementById('qm-correct-name');
+  if(nm && !nm.value && typeof currentUser!=='undefined' && currentUser){
+    nm.value = currentUser.displayName || (currentUser.email||'').split('@')[0] || '';
+  }
   const n=document.getElementById('qm-correct-note'); if(n) setTimeout(()=>n.focus(),50);
 }
 function hhCloseCorrection(){
@@ -4641,6 +4788,7 @@ async function hhSubmitCorrection(){
       qText: q.q || '',
       qAnswer: q.a || '',
       qDiff: q.diff || '',
+      reporterName: ((document.getElementById('qm-correct-name')||{}).value||'').trim().slice(0,60),
       user: userInfo,
       userAgent: navigator.userAgent.substring(0,200),
       url: window.location.pathname,
@@ -11227,12 +11375,30 @@ async function toggleUserPermission(uid, currentVal, name){
 var _compAdminSel = 'wafa';
 function _compCfg(){ try{ return JSON.parse(localStorage.getItem('hh_comp_config')||'{}')||{}; }catch(e){ return {}; } }
 
+function _compAdminList(){
+  // كل المسابقات: الوفاء ثم بقية لوحات الشخصية من السجل ثم القرآن
+  const out=[['wafa', (CAT_INFO[_HH_WAFA_CAT]&&CAT_INFO[_HH_WAFA_CAT].label)||'يوم الوفاء']];
+  try{
+    if(typeof _HH_CHAR_COMPS!=='undefined'){
+      Object.keys(_HH_CHAR_COMPS).forEach(cat=>{
+        if(cat===_HH_WAFA_CAT) return;
+        out.push([cat, (CAT_INFO[cat]&&CAT_INFO[cat].label)||cat]);
+      });
+    }
+  }catch(_e){}
+  out.push(['quran','مسابقة القرآن']);
+  return out;
+}
 function renderCompAdmin(){
   _hhSnapshotCompDefaults();
   const box=document.getElementById('comp-admin-body'); if(!box) return;
   const isWafa=_compAdminSel==='wafa';
-  const cat = isWafa? _HH_WAFA_CAT : _HH_AJYAL_QURAN_COMP_CAT;
+  const isQuran=_compAdminSel==='quran';
+  const isChar=!isWafa && !isQuran;
+  const cat = isWafa? _HH_WAFA_CAT : (isQuran? _HH_AJYAL_QURAN_COMP_CAT : _compAdminSel);
   const label = (CAT_INFO[cat]&&CAT_INFO[cat].label)||cat;
+  const charOvr=(typeof _HH_COMP_OVR!=='undefined'&&_HH_COMP_OVR[cat])||{};
+  const charCC=isChar&&_HH_CHAR_COMPS[cat]?_HH_CHAR_COMPS[cat]:null;
   box.innerHTML='';
 
   const mk=(tag,css,txt)=>{const e=document.createElement(tag); if(css)e.style.cssText=css; if(txt!=null)e.textContent=txt; return e;};
@@ -11244,10 +11410,10 @@ function renderCompAdmin(){
     w.appendChild(inp); return w;
   };
 
-  // اختيار المسابقة
-  const selWrap=mk('div','display:flex;gap:8px;margin-bottom:14px;');
-  [['wafa','يوم الوفاء'],['quran','مسابقة القرآن']].forEach(([k,t])=>{
-    const b=mk('button','padding:9px 20px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;border:2px solid #8A1538;'+(k===_compAdminSel?'background:#8A1538;color:#fff;':'background:#fff;color:#8A1538;'),t);
+  // اختيار المسابقة — ديناميكي من السجل: أي مسابقة جديدة تظهر تلقائياً
+  const selWrap=mk('div','display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;');
+  _compAdminList().forEach(([k,t])=>{
+    const b=mk('button','padding:8px 14px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;border:2px solid #8A1538;'+(k===_compAdminSel?'background:#8A1538;color:#fff;':'background:#fff;color:#8A1538;'),t);
     b.onclick=()=>{ _compAdminSel=k; renderCompAdmin(); };
     selWrap.appendChild(b);
   });
@@ -11255,6 +11421,35 @@ function renderCompAdmin(){
 
   const card=mk('div','background:#fff;border:1.5px solid #e6dde1;border-radius:14px;padding:16px;');
   card.appendChild(fld('اسم المسابقة (يظهر في رأس اللوحة وبطاقة الاختيار)', label, 'ca-label'));
+
+  if(isChar && charCC){
+    card.appendChild(fld('لوحة الاسم — السطر الأول', charOvr.name1||charCC.name1||'', 'ca-n1'));
+    card.appendChild(fld('لوحة الاسم — السطر الثاني (اختياري)', (charOvr.name2!==undefined?charOvr.name2:(charCC.name2||'')), 'ca-n2'));
+    const imgW2=mk('div','display:flex;align-items:center;gap:14px;margin:12px 0;');
+    const prev2=document.createElement('img'); prev2.id='ca-img-prev'; prev2.src=charOvr.img||charCC.img||'';
+    prev2.style.cssText='width:84px;height:84px;border-radius:12px;border:2px solid #B8924A;object-fit:contain;background:#fff;';
+    const up2=document.createElement('input'); up2.type='file'; up2.accept='image/*'; up2.id='ca-img-file';
+    up2.style.cssText='font-family:Cairo;font-size:.78rem;';
+    up2.onchange=function(){ const f=this.files&&this.files[0]; if(!f) return;
+      const r=new FileReader(); r.onload=ev=>{
+        const img=new Image(); img.onload=()=>{
+          const c=document.createElement('canvas'); c.width=520; c.height=520;
+          const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,520,520);
+          const rr=Math.min(464/img.width,464/img.height);
+          const nw=img.width*rr, nh=img.height*rr;
+          x.drawImage(img,(520-nw)/2,(520-nh)/2,nw,nh);
+          prev2.src=c.toDataURL('image/jpeg',.85);
+        }; img.src=ev.target.result;
+      }; r.readAsDataURL(f);
+    };
+    const lab3=mk('div','font-family:Cairo;font-weight:800;font-size:.8rem;color:#5E0E26;','صورة الوسط (تُهيّأ 520×520 على أبيض تلقائياً)');
+    const col2=mk('div',''); col2.appendChild(lab3); col2.appendChild(up2);
+    imgW2.appendChild(prev2); imgW2.appendChild(col2); card.appendChild(imgW2);
+    const subsW2=mk('div','display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;');
+    (charCC.subs||[]).forEach((sb,i)=>{ subsW2.appendChild(fld('الفئة الفرعية '+(i+1), (charOvr.subs&&charOvr.subs[i])||sb.label, 'ca-sub-'+i)); });
+    card.appendChild(mk('div','font-family:Cairo;font-weight:900;font-size:.85rem;color:#8A1538;margin:8px 0;','الفئات الفرعية الأربع'));
+    card.appendChild(subsW2);
+  }
 
   if(isWafa){
     card.appendChild(fld('اسم الشخصية — السطر الأول', _HH_WAFA_NAME1, 'ca-n1'));
@@ -11294,7 +11489,8 @@ function renderCompAdmin(){
     const row=mk('div','background:#fff;border:1px solid #e8e0e3;border-radius:10px;padding:8px 10px;');
     const meta=mk('div','display:flex;gap:6px;margin-bottom:6px;align-items:center;');
     meta.appendChild(mk('span','background:#8A1538;color:#fff;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',diffLab[qq.diff]||qq.diff));
-    if(isWafa && typeof qq.sub==='number') meta.appendChild(mk('span','background:#f5ecd7;color:#8A6D2E;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',_HH_WAFA_SUBS[qq.sub]?_HH_WAFA_SUBS[qq.sub].label:''));
+    const _subsSrc = isWafa ? _HH_WAFA_SUBS : (charCC ? charCC.subs : null);
+    if(_subsSrc && typeof qq.sub==='number') meta.appendChild(mk('span','background:#f5ecd7;color:#8A6D2E;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',_subsSrc[qq.sub]?_subsSrc[qq.sub].label:''));
     row.appendChild(meta);
     const qi=document.createElement('input'); qi.type='text'; qi.value=qq.q; qi.className='ca-q'; qi.dataset.i=i;
     qi.style.cssText='width:100%;padding:7px 10px;border:1px solid #ddd;border-radius:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:5px;';
@@ -11311,7 +11507,8 @@ function renderCompAdmin(){
   save.onclick=saveCompAdmin;
   const reset=mk('button','padding:11px 22px;background:#fff;color:#c0392b;border:2px solid #c0392b;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;','↩ استعادة الافتراضي لهذه المسابقة');
   reset.onclick=()=>{ if(!confirm('استعادة الإعدادات والأسئلة الافتراضية لهذه المسابقة؟')) return;
-    const cfg=_compCfg(); delete cfg[_compAdminSel];
+    const cfg=_compCfg();
+    if(isChar){ if(cfg.chars) delete cfg.chars[cat]; } else { delete cfg[_compAdminSel]; }
     localStorage.setItem('hh_comp_config', JSON.stringify(cfg));
     _hhApplyCompConfig(); renderCompAdmin();
     if(typeof _hh_saveCustomizationsToCloud==='function') _hh_saveCustomizationsToCloud();
@@ -11324,7 +11521,9 @@ function renderCompAdmin(){
 function saveCompAdmin(){
   try{
     const isWafa=_compAdminSel==='wafa';
-    const cat = isWafa? _HH_WAFA_CAT : _HH_AJYAL_QURAN_COMP_CAT;
+    const isQuran=_compAdminSel==='quran';
+    const isChar=!isWafa && !isQuran;
+    const cat = isWafa? _HH_WAFA_CAT : (isQuran? _HH_AJYAL_QURAN_COMP_CAT : _compAdminSel);
     const base=JSON.parse(JSON.stringify(_HH_PARTNER_QUESTIONS[cat]||[]));
     document.querySelectorAll('#comp-admin-body .ca-q').forEach(inp=>{ const i=+inp.dataset.i; if(base[i]&&inp.value.trim()) base[i].q=inp.value.trim(); });
     document.querySelectorAll('#comp-admin-body .ca-a').forEach(inp=>{ const i=+inp.dataset.i; if(base[i]&&inp.value.trim()) base[i].a=inp.value.trim(); });
@@ -11339,10 +11538,28 @@ function saveCompAdmin(){
         questions:base
       };
       if(cfg.wafa.img && cfg.wafa.img.indexOf('data:image')!==0) delete cfg.wafa.img;
+    } else if(isChar){
+      cfg.chars=cfg.chars||{};
+      const subsN=(_HH_CHAR_COMPS[cat]&&_HH_CHAR_COMPS[cat].subs||[]).length;
+      cfg.chars[cat]={
+        label:(document.getElementById('ca-label')||{}).value||'',
+        name1:(document.getElementById('ca-n1')||{}).value||'',
+        name2:(document.getElementById('ca-n2')||{}).value||'',
+        img:(document.getElementById('ca-img-prev')||{}).src||'',
+        subs:Array.from({length:subsN},(_,i)=>((document.getElementById('ca-sub-'+i)||{}).value||'')),
+        questions:base
+      };
+      if(cfg.chars[cat].img && cfg.chars[cat].img.indexOf('data:image')!==0) delete cfg.chars[cat].img;
     } else {
       cfg.quran={ label:(document.getElementById('ca-label')||{}).value||'', questions:base };
     }
-    localStorage.setItem('hh_comp_config', JSON.stringify(cfg));
+    // 🛡 حارس الحجم: حماية مستند المزامنة من حد 1MB (تلف صامت سابقاً)
+    const _cfgStr=JSON.stringify(cfg);
+    if(_cfgStr.length > 700*1024){
+      toast('حجم التخصيصات تجاوز الحد الآمن (700KB) — صغّر الصورة أو استعد الافتراضي لمسابقة أخرى','error');
+      return;
+    }
+    localStorage.setItem('hh_comp_config', _cfgStr);
     _hhApplyCompConfig();
     toast('✓ حُفظت تخصيصات المسابقة','success');
     if(typeof _hh_saveCustomizationsToCloud==='function') _hh_saveCustomizationsToCloud();
@@ -11618,12 +11835,17 @@ async function renderProblemReports(filter){
         +   '</div>'
         +   '<span style="font-size:.7rem;color:#888;">'+esc(date)+'</span>'
         + '</div>'
-        + (isCorrection ? ''
-            + '<div style="background:#FDF8EC;border:1.5px dashed #B8924A;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:.8rem;line-height:1.8;">'
+        + (isCorrection ? (function(){
+            const repName = r.reporterName || (r.user&&(r.user.displayName||r.user.email)) || '';
+            const repEmail = (r.user&&r.user.email)||'';
+            return ''
+            + '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:.8rem;line-height:1.8;">'
             +   (r.qCat ? '<div><b style="color:#8A6D2E;">الفئة:</b> '+esc(r.qCat)+(r.qDiff?' <span style="color:#999;">('+esc(r.qDiff)+')</span>':'')+'</div>' : '')
             +   '<div><b style="color:#8A6D2E;">السؤال:</b> '+esc(r.qText||'')+'</div>'
             +   '<div><b style="color:#8A6D2E;">الجواب المسجل:</b> '+esc(r.qAnswer||'')+'</div>'
-            + '</div>' : '')
+            +   (repName ? '<div style="margin-top:4px;padding-top:6px;border-top:1px solid #eee2c8;"><b style="color:#3D6B53;">👤 المبلّغ:</b> '+esc(repName)+(repEmail&&repEmail!==repName?' <span style="color:#999;font-size:.72rem;">('+esc(repEmail)+')</span>':'')+'</div>' : '')
+            + '</div>';
+          })() : '')
         + '<div style="font-size:.88rem;color:#3D0918;line-height:1.7;margin-bottom:10px;white-space:pre-wrap;">'+(isCorrection?'<b style=\'color:#8A1538;font-family:Cairo;\'>التصويب المقترح: </b>':'')+esc(r.description||'')+'</div>'
         + (r.imageData ? '<div style="margin-bottom:10px;"><img src="'+r.imageData+'" alt="مرفق" style="max-width:100%;max-height:300px;border-radius:8px;border:1px solid #ecf0f1;cursor:pointer;" onclick="window.open(this.src,\'_blank\')"></div>' : '')
         + (r.url ? '<div style="font-size:.7rem;color:#888;margin-bottom:8px;">📍 '+esc(r.url)+'</div>' : '')
@@ -11631,6 +11853,7 @@ async function renderProblemReports(filter){
         +   (status==='new' ? '<button onclick="updateProblemReport(\''+r.id+'\',\'viewed\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">تحديد كمعروض</button>' : '')
         +   (status!=='resolved' ? '<button onclick="updateProblemReport(\''+r.id+'\',\'resolved\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">تحديد كمحلول</button>' : '')
         +   '<button onclick="deleteProblemReport(\''+r.id+'\','+(!!r._isLocal)+')" style="padding:5px 10px;background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>'
+        +   ((r.user&&r.user.uid)||(r.user&&r.user.email) ? '<button onclick="hhOpenThanksComposer(\''+r.id+'\')" style="padding:5px 12px;background:linear-gradient(135deg,#B8924A,#8A6D2E);color:#fff;border:none;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;box-shadow:0 2px 8px rgba(138,109,46,.3);">🎁 أرسل شكراً</button>' : '')
         + '</div>';
       list.appendChild(card);
     });
@@ -14157,6 +14380,9 @@ syncCustomQsToQDB();
 document.addEventListener('keydown', function(e){
   const modal = document.getElementById('q-modal');
   if(!modal || !modal.classList.contains('open')) return;
+  // حرية الكتابة الكاملة داخل الحقول (نموذج صوّب وغيره): لا التقاط للمسافة أو الإدخال
+  const _t=e.target;
+  if(_t && (_t.tagName==='INPUT'||_t.tagName==='TEXTAREA'||_t.tagName==='SELECT'||_t.isContentEditable)) return;
   if(e.key === 'Enter' || e.key === ' '){
     e.preventDefault();
     const revBtn = document.getElementById('reveal-btn');

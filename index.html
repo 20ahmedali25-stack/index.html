@@ -1953,6 +1953,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <div class="main-nav-actions">
         <!-- مجموعة الأيقونات السريعة -->
         <div class="nav-quick-group" title="إجراءات سريعة">
+          <button onclick="hhToggleNotifPanel()" id="nav-notif-btn" class="nav-icon-btn nav-icon-in-group" title="الإشعارات" style="position:relative;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span id="hh-notif-badge" style="display:none;position:absolute;top:-6px;left:-6px;min-width:15px;height:15px;background:#c0392b;color:#fff;border-radius:8px;border:1.5px solid #fff;font-family:Cairo;font-weight:900;font-size:.58rem;align-items:center;justify-content:center;padding:0 3px;"></span>
+          </button>
           <button onclick="toggleDarkMode()" id="dark-toggle" class="nav-icon-btn nav-icon-in-group" title="الوضع الليلي">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36A5.389 5.389 0 0115.54 11 5.53 5.53 0 0110 5.46c0-1.41.53-2.7 1.36-3.68.45 0-.92-.08-1.36-.08z"/></svg>
           </button>
@@ -2527,6 +2531,13 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
 
 </div>
 
+<div id="hh-notif-panel" style="display:none;position:fixed;top:64px;left:14px;width:min(360px,92vw);max-height:70vh;background:#fff;border:2px solid #B8924A;border-radius:16px;box-shadow:0 18px 50px rgba(94,14,38,.22);z-index:999985;overflow:hidden;direction:rtl;">
+  <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:11px 16px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-family:Cairo;font-weight:900;font-size:.9rem;">🔔 إشعاراتك</span>
+    <button onclick="hhToggleNotifPanel()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
+  </div>
+  <div id="hh-notif-list" style="padding:12px;overflow-y:auto;max-height:calc(70vh - 50px);"></div>
+</div>
 <div id="hh-blackout" onclick="hhBlackout(false)" style="display:none;position:fixed;inset:0;background:#000;z-index:999990;cursor:pointer;">
   <div style="position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#333;font-family:Cairo;font-size:.75rem;">اضغط أي زر للعودة</div>
 </div>
@@ -2675,14 +2686,22 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
     <div id="qm-trap-banner" style="display:none;background:linear-gradient(90deg,#7c1f14,#c0392b);color:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;font-family:Cairo;font-weight:900;font-size:.92rem;text-align:center;box-shadow:0 4px 14px rgba(192,57,43,.35);"></div>
     <div class="answer-box" id="answer-box"></div>
     <div id="qm-correct-wrap" style="display:none;text-align:center;margin:-2px 0 10px;">
-      <button type="button" id="qm-correct-btn" onclick="hhOpenCorrection()" style="background:none;border:none;cursor:pointer;font-family:Cairo,Tajawal,sans-serif;font-weight:800;font-size:.78rem;color:#8A6D2E;text-decoration:underline dotted;padding:4px 8px;">✎ صوّب — أبلغ عن خطأ في السؤال أو الجواب</button>
-      <div id="qm-correct-form" style="display:none;background:#FDF8EC;border:1.5px dashed #B8924A;border-radius:12px;padding:12px;margin-top:6px;text-align:right;">
-        <div style="font-family:Cairo;font-weight:900;font-size:.82rem;color:#8A6D2E;margin-bottom:6px;">ما الخطأ؟ وما التصويب المقترح؟</div>
-        <textarea id="qm-correct-note" rows="3" style="width:100%;border:1.5px solid #d9c9ce;border-radius:10px;padding:9px;font-family:Tajawal,sans-serif;font-size:.85rem;resize:vertical;" placeholder="مثال: الجواب الصحيح هو كذا، أو السؤال غير دقيق لأن..."></textarea>
-        <div id="qm-correct-err" style="color:#c0392b;font-size:.72rem;font-family:Cairo;font-weight:800;min-height:14px;margin-top:3px;"></div>
-        <div style="display:flex;gap:8px;justify-content:flex-start;margin-top:6px;">
-          <button type="button" id="qm-correct-send" onclick="hhSubmitCorrection()" style="background:#8A1538;color:#fff;border:none;border-radius:10px;padding:7px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إرسال التصويب</button>
-          <button type="button" onclick="hhCloseCorrection()" style="background:#eee;color:#555;border:none;border-radius:10px;padding:7px 14px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>
+      <button type="button" id="qm-correct-btn" onclick="hhOpenCorrection()" style="display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid #C9B37E;border-radius:999px;cursor:pointer;font-family:Cairo,Tajawal,sans-serif;font-weight:800;font-size:.78rem;color:#8A6D2E;padding:7px 16px;box-shadow:0 2px 8px rgba(138,109,46,.12);transition:all .15s;" onmouseover="this.style.background='#FBF6EA'" onmouseout="this.style.background='#fff'">✎ صوّب — أبلغ عن خطأ في السؤال أو الجواب</button>
+      <div id="qm-correct-form" style="display:none;background:#fff;border:1.5px solid #C9B37E;border-radius:16px;padding:0;margin-top:8px;text-align:right;box-shadow:0 10px 30px rgba(94,14,38,.10);overflow:hidden;">
+        <div style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:9px;">
+          <span style="font-size:1.05rem;">✎</span>
+          <span style="font-family:Cairo;font-weight:900;font-size:.88rem;">صوّب السؤال — ساهم في جودة المنصة</span>
+        </div>
+        <div style="padding:14px 16px;">
+          <div style="font-family:Cairo;font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">اسمك <span style="color:#a99;font-weight:700;">(اختياري — ليصلك الشكر)</span></div>
+          <input type="text" id="qm-correct-name" style="width:100%;border:1.5px solid #E3D9C6;border-radius:11px;padding:9px 12px;font-family:Cairo,Tajawal,sans-serif;font-size:.84rem;box-sizing:border-box;margin-bottom:11px;outline:none;" placeholder="مثال: أ. محمد" onfocus="this.style.borderColor='#B8924A'" onblur="this.style.borderColor='#E3D9C6'">
+          <div style="font-family:Cairo;font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">ما الخطأ؟ وما التصويب المقترح؟</div>
+          <textarea id="qm-correct-note" rows="4" style="width:100%;border:1.5px solid #E3D9C6;border-radius:11px;padding:10px 12px;font-family:Cairo,Tajawal,sans-serif;font-size:.86rem;line-height:1.8;resize:vertical;box-sizing:border-box;outline:none;" placeholder="اكتب بحرية وبكل تفصيل تراه مفيداً..." onfocus="this.style.borderColor='#B8924A'" onblur="this.style.borderColor='#E3D9C6'"></textarea>
+          <div id="qm-correct-err" style="color:#c0392b;font-size:.72rem;font-family:Cairo;font-weight:800;min-height:14px;margin-top:4px;"></div>
+          <div style="display:flex;gap:9px;justify-content:flex-start;margin-top:8px;">
+            <button type="button" id="qm-correct-send" onclick="hhSubmitCorrection()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,21,56,.25);">إرسال التصويب</button>
+            <button type="button" onclick="hhCloseCorrection()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إلغاء</button>
+          </div>
         </div>
       </div>
     </div>
@@ -10154,6 +10173,18 @@ window.mcRenderHome = function(){
         items.push(`<div class="mc-alert" onclick="adminTab('review')">
           <div class="mc-alert-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"/></svg></div>
           <div class="mc-alert-text"><strong>${pendingCount} سؤال</strong> لم تتم مراجعتهم بعد</div>
+          <svg class="mc-alert-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+        </div>`);
+      }
+      let correctionsCount = 0;
+      try{
+        const reps = window._allReports || [];
+        correctionsCount = reps.filter(r => r.type==='question_correction' && (r.status==='new' || (!r.status && !r.resolved))).length;
+      }catch(e){}
+      if(correctionsCount > 0){
+        items.push(`<div class="mc-alert urgent" onclick="adminTab('reports')">
+          <div class="mc-alert-icon" style="background:#FBF6EA;color:#8A6D2E;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+          <div class="mc-alert-text"><strong>${correctionsCount} تصويب سؤال</strong> من المستخدمين — راجعها وأرسل لهم الشكر 🎁</div>
           <svg class="mc-alert-arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
         </div>`);
       }
