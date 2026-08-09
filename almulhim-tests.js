@@ -115,7 +115,7 @@ async function safeEval(page, fn, arg){
     return { bank, cells:document.querySelectorAll('#board-grid .qcell').length,
       imgOK: !!(img&&img.complete&&img.naturalWidth>0) };
   });
-  T('مسابقة الحفل الختامي: بنك 48 ولوحة 24 وشعار بيرف', !perfFin.skip && !perfFin.err && perfFin.bank===48 && perfFin.cells===24 && perfFin.imgOK, perfFin.err||('بنك:'+(perfFin.bank||0)));
+  T('مسابقة الحفل الختامي: بنك 48 ولوحة موسعة 36 وشعار بيرف', !perfFin.skip && !perfFin.err && perfFin.bank===48 && perfFin.cells===36 && perfFin.imgOK, perfFin.err||('بنك:'+(perfFin.bank||0)+' خلايا:'+(perfFin.cells||0)));
 
   const quran=await safeEval(page, async()=>{
     const cat='مسابقة أجيال في القرآن الكريم';
