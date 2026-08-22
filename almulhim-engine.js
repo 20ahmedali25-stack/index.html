@@ -8850,22 +8850,6 @@ function hhSpkCloseRes(){
 
 var HH_LEADER_PROGRAMS = [
   {
-    id: 'almulhim_leader',
-    name: 'مؤشر القيادة',
-    tagline: 'رصد القيادات الطلابية وفق مؤشر متعدد الأبعاد',
-    color: '#B8924A',
-    dark: '#8A6D2E',
-    status: 'active',
-    threshold: 85,
-    desc: 'برنامج يرصد الطلاب المتميزين وفق مؤشر قيادي متعدد الأبعاد، ويمنحهم أدواراً قيادية تنمّي شخصياتهم وتصنع أثراً في مدارسهم.',
-    pillars: [
-      { t:'التحصيل الأكاديمي', d:'تميّز في المادة وانتظام في الأداء', w:35 },
-      { t:'الانتظام والالتزام', d:'حضور مستمر والتزام بالواجبات', w:25 },
-      { t:'المشاركة والسلوك', d:'تفاعل صفي إيجابي وسلوك قدوة', w:25 },
-      { t:'المهارات القيادية', d:'إلقاء وتحدث وعمل جماعي وإبداع', w:15 }
-    ]
-  },
-  {
     id: 'speak_master',
     name: 'القائد المُلهِم',
     tagline: 'فنّ الإلقاء والتأثير — برنامج تدريبي مدفوع',
@@ -10328,17 +10312,39 @@ function hhOpenSchool(){
         var roleCol = isAdm ? '#8A1538' : isTch ? '#1F4E79' : '#3D6B53';
         var cls = (_hhMyClasses && _hhMyClasses.length)
           ? _hhMyClasses.map(function(c){ return esc(c.name||''); }).join(' · ') : '';
-        return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1.5px solid '+roleCol+';border-radius:11px;padding:9px 12px;margin-bottom:12px;">'
-          + '<div><span style="background:'+roleCol+';color:#fff;border-radius:8px;padding:2px 10px;font-size:.68rem;font-weight:900;">'+roleLbl+'</span>'
-          + (cls?'<span style="font-size:.72rem;color:#888;font-weight:700;margin-right:7px;">'+cls+'</span>':'')+'</div>'
-          + '<div style="display:flex;gap:6px;flex-wrap:wrap;">'
-          + (isAdm ? '<button onclick="hhAdminTeachers()" style="background:#8A1538;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">اعتماد المعلمين</button>' : '')
-          + (isTch ? '<button onclick="hhOpenClasses()" style="background:#1F4E79;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">صفوفي</button>' : '')
-          + (isTch ? '<button onclick="hhOpenGradebook()" style="background:#8A6D2E;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">دفتر المتابعة</button>' : '')
-          + (isTch ? '<button onclick="hhOpenLeaderPrograms()" style="background:linear-gradient(135deg,#B8924A,#8A6D2E);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">برامج القادة</button>' : '')
-          + (!isTch ? '<button onclick="hhJoinClassPrompt()" style="background:#3D6B53;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">انضم بكود</button>'
-                     + '<button onclick="hhRequestTeacher()" style="background:#fff;color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">أنا معلم</button>' : '')
-          + '</div></div>';
+        function svc(on, col, dark, name, d, ico){
+          return '<button onclick="'+on+'" style="display:flex;flex-direction:column;align-items:center;gap:7px;background:#fff;border:1.5px solid '+col+';border-radius:14px;padding:13px 8px;font-family:Cairo;cursor:pointer;text-align:center;box-shadow:0 3px 10px rgba(94,14,38,.07);transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform=\'translateY(-3px)\';this.style.boxShadow=\'0 8px 18px rgba(94,14,38,.16)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 3px 10px rgba(94,14,38,.07)\'">'
+            + '<span style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,'+col+','+dark+');display:inline-flex;align-items:center;justify-content:center;">'
+            + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+ico+'</svg></span>'
+            + '<span style="font-weight:900;font-size:.8rem;color:'+col+';">'+name+'</span>'
+            + '<span style="font-weight:700;font-size:.64rem;color:#999;line-height:1.6;">'+d+'</span>'
+            + '</button>';
+        }
+        var I = {
+          approve:'<path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10.5V15c0 1.4 2.7 2.8 6 2.8s6-1.4 6-2.8v-4.5"/><path d="M9 19l2 2 4-4"/>',
+          classes:'<path d="M17 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9.5" cy="8" r="3.5"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M15.5 4.6a3.5 3.5 0 010 6.8"/>',
+          gradebook:'<path d="M4 4h13a3 3 0 013 3v13H7a3 3 0 01-3-3V4z"/><path d="M8 4v16"/><path d="M12 9h5"/><path d="M12 13h5"/>',
+          curriculum:'<path d="M4 4h7a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2H4V4z"/><path d="M20 4h-7a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2H20V4z"/>',
+          join:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 9h4"/><path d="M7 13h2"/><path d="M14.5 11.5l2 2 3.5-3.5"/>',
+          request:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h1"/><path d="M17 14v6"/><path d="M14 17h6"/>'
+        };
+        var services = '';
+        if(isAdm) services += svc('hhAdminTeachers()','#8A1538','#5E0E26','اعتماد المعلمين','مراجعة طلبات الاعتماد', I.approve);
+        if(isTch){
+          services += svc('hhOpenClasses()','#1F4E79','#12304d','صفوفي','إنشاء الصفوف وأكواد الدعوة', I.classes);
+          services += svc('hhOpenGradebook()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
+          services += svc('hhOpenCurriculum()','#1F4E79','#12304d','مركز المناهج','رفع الدروس وتوليد المحتوى', I.curriculum);
+        } else {
+          services += svc('hhJoinClassPrompt()','#3D6B53','#26443A','انضم بكود','ادخل صف معلمك برمز من 6 خانات', I.join);
+          services += svc('hhRequestTeacher()','#8A6D2E','#5E4A1E','أنا معلم','اطلب اعتمادك كمعلم', I.request);
+        }
+        return '<div style="background:#fff;border:1.5px solid '+roleCol+';border-radius:13px;padding:11px 12px;margin-bottom:12px;">'
+          + '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">'
+          + '<span style="background:'+roleCol+';color:#fff;border-radius:8px;padding:3px 12px;font-size:.7rem;font-weight:900;">'+roleLbl+'</span>'
+          + (cls?'<span style="font-size:.72rem;color:#888;font-weight:700;">'+cls+'</span>':'')
+          + '</div>'
+          + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;">'+services+'</div>'
+          + '</div>';
       })()
     +   cards
     +   ((_hhMyRole==='teacher'||(typeof hhIsAdmin==='function'&&hhIsAdmin()))
@@ -12057,8 +12063,25 @@ async function openTeacherPath(){
   title.textContent = 'مسار المعلم';
   sub.textContent = 'اختر النشاط الذي تريد القيام به مع طلابك';
 
-  // بناء المحتوى ديناميكيا
-  options.innerHTML = TEACHER_PATH_SERVICES.map(svc => _renderPathService(svc, 'teacher')).join('');
+  // بناء المحتوى ديناميكيا — «المدرسة» أولاً بشرط الاعتماد
+  var _isTchApproved = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher')
+                       || (typeof hhIsAdmin==='function' && hhIsAdmin());
+  var _schoolSvc = {
+    id: 'tch-school',
+    title: 'المدرسة',
+    desc: _isTchApproved
+      ? 'مسار متدرج: صفوفك وموادك ووحدات ببوابات إتقان'
+      : 'خاصة بالمعلم المعتمد — قدّم طلب اعتمادك',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/></svg>',
+    iconBg: _isTchApproved
+      ? 'background:linear-gradient(135deg,#8A1538,#5E0E26);'
+      : 'background:linear-gradient(135deg,#9a8a90,#6d5f64);',
+    onClick: _isTchApproved
+      ? "closePathModal();hhSchoolEntry();"
+      : "closePathModal();hhRequestTeacher();"
+  };
+  options.innerHTML = [_renderPathService(_schoolSvc, 'teacher')]
+    .concat(TEACHER_PATH_SERVICES.map(svc => _renderPathService(svc, 'teacher'))).join('');
 
   document.getElementById('path-modal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -12102,6 +12125,14 @@ function openVisitorPath(){
 
 // تعريف خدمات مسار الطالب
 const STUDENT_PATH_SERVICES = [
+  {
+    id: 'std-school',
+    title: 'المدرسة',
+    desc: 'مسار متدرج: وحدات ودروس واختبارات إتقان',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/></svg>',
+    iconBg: 'background:linear-gradient(135deg,#8A1538,#5E0E26);',
+    onClick: "closePathModal();hhSchoolEntry();"
+  },
   {
     id: 'std-games',
     title: 'العب مع أصدقائك',
@@ -20444,38 +20475,12 @@ const ACTIVITY_GEN = {
 //  بنك المقولات — يتغير يوميا (متنوع: قطر، المعلم، التاريخ، العلم)
 // ═══════════════════════════════════════════════════════════════════
 const QUOTES_BANK = [
-  // صاحب السمو الشيخ تميم بن حمد
-  { text: 'الإنسان هو الثروة الحقيقية، فهو الذي يبني الأوطان.', author: 'صاحب السمو الشيخ تميم بن حمد آل ثاني', category: 'قطر' },
-  { text: 'التعليم رؤية، والاستثمار في الإنسان يبني المستقبل.', author: 'صاحب السمو الشيخ تميم بن حمد آل ثاني', category: 'قطر' },
-  { text: 'نحن نبني مستقبلا، وكل منا له دور في صناعته.', author: 'صاحب السمو الشيخ تميم بن حمد آل ثاني', category: 'قطر' },
-  { text: 'العلم هو الطريق إلى التقدم والازدهار.', author: 'صاحب السمو الشيخ تميم بن حمد آل ثاني', category: 'قطر' },
-
-  //  الشيخ الوالد حمد بن خليفة
-  { text: 'إن أهم ما نملكه هو الإنسان القطري المتعلم القادر على بناء مستقبله ومستقبل وطنه.', author: 'الشيخ حمد بن خليفة آل ثاني', category: 'قطر' },
-
-  //  المعلم
-  { text: 'المعلم لا يعلم فقط... يلهم. يشعل العقول، ويزرع البذور التي تثمر بعد سنوات.', author: 'حكمة تربوية', category: 'المعلم' },
-  { text: 'كم من معلم لا يذكره التاريخ، لكن طلابه يذكرونه إلى الأبد.', author: 'حكمة تربوية', category: 'المعلم' },
-  { text: 'قم للمعلم وفه التبجيلا — كاد المعلم أن يكون رسولا.', author: 'أحمد شوقي', category: 'المعلم' },
-  { text: 'المعلمون كالشموع، يحرقون أنفسهم ليضيؤوا الطريق للآخرين.', author: 'مأثور', category: 'المعلم' },
-  { text: 'من علمني حرفا صرت له مُقدِّرا ومُجِلّا.', author: 'مأثور', category: 'المعلم' },
-
-  //  التاريخ
-  { text: 'الأمم التي تنسى تاريخها تكتب نهايتها بأيديها.', author: 'حكمة', category: 'التاريخ' },
-  { text: 'التاريخ لا يكتب بأيدي الضعفاء.', author: 'محمود سامي البارودي', category: 'التاريخ' },
-  { text: 'من لا يعرف ماضيه لا يستطيع أن يفهم حاضره ولا أن يخطط لمستقبله.', author: 'حكمة', category: 'التاريخ' },
-  { text: 'من لا يتذكر الماضي محكوم عليه بتكراره.', author: 'جورج سانتايانا', category: 'التاريخ' },
-  { text: 'في التاريخ عبرة لمن اعتبر، وموعظة لمن ادكر.', author: 'ابن خلدون', category: 'التاريخ' },
-
-  //  طلب العلم
-  { text: 'طلب العلم فريضة على كل مسلم.', author: 'حديث شريف — رواه ابن ماجه', category: 'العلم' },
-  { text: 'من سلك طريقا يلتمس فيه علما، سهل الله له به طريقا إلى الجنة.', author: 'حديث شريف — رواه مسلم', category: 'العلم' },
-  { text: 'اعلم أن العلم لا يحصل بالراحة.', author: 'الإمام النووي', category: 'العلم' },
-  { text: 'العلم في الصغر كالنقش على الحجر.', author: 'الحسن البصري', category: 'العلم' },
-  { text: 'من أراد الدنيا فعليه بالعلم، ومن أراد الآخرة فعليه بالعلم، ومن أرادهما فعليه بالعلم.', author: 'الإمام الشافعي', category: 'العلم' },
-  { text: 'لا حياء في العلم.', author: 'مأثور', category: 'العلم' },
-  { text: 'تعلموا العلم، فإن تعلمه لله خشية، وطلبه عبادة.', author: 'معاذ بن جبل رضي الله عنه', category: 'العلم' },
-  { text: 'من أراد أن يكون عالما فليجعل في غذائه قلة، وفي نومه قلة، وفي كلامه قلة.', author: 'الإمام أحمد بن حنبل', category: 'العلم' }
+  { text: 'إن أهم ما نملكه هو الإنسان القطري المتعلم القادر على بناء مستقبله ومستقبل وطنه.',
+    author: 'الشيخ حمد بن خليفة آل ثاني', role: 'الأمير الوالد', category: 'قطر' },
+  { text: 'الإنسان هو أهم لبنات بناء الوطن، وأعظم استثماراته.. فيكم استثمرت قطر وبكم تعلو ومنكم تنتظر.',
+    author: 'الشيخ تميم بن حمد آل ثاني', role: 'أمير دولة قطر — من كلمة سموه للشباب في جامعة قطر', category: 'قطر' },
+  { text: 'لكل إنسان في حياته ذكرى لمعلم أو معلمة تركت كلمة صادقة أو توجيهاً حكيماً أو موقفاً مخلصاً كان له أثر باقٍ في مسيرته.',
+    author: 'لولوة بنت راشد الخاطر', role: 'وزيرة التربية والتعليم والتعليم العالي — يوم المعلم القطري 2025', category: 'قطر' }
 ];
 
 //  إظهار مقولة اليوم (تختار حسب اليوم — تتغير يوميا تلقائيا)
@@ -20519,7 +20524,9 @@ function applyQuote(quote){
     labelEl.innerHTML = labels[quote.category] || 'مقولة اليوم';
   }
   if(textEl) textEl.textContent = `«${quote.text}»`;
-  if(authorEl) authorEl.textContent = `— ${quote.author}`;
+  if(authorEl) authorEl.textContent = quote.author;
+  var roleEl = document.getElementById('dq-role');
+  if(roleEl) roleEl.textContent = quote.role || '';
 }
 
 const INSPIRATION_BANK = [

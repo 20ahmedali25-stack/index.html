@@ -1958,12 +1958,6 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <div class="main-nav-actions">
         <!-- مجموعة الأيقونات السريعة -->
         <div class="nav-quick-group" title="إجراءات سريعة">
-          <button onclick="hhSchoolEntry()" id="nav-school-btn" class="nav-icon-btn nav-icon-in-group" title="مدرستي — المسار التعليمي المتدرج">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-          </button>
-          <button onclick="hhOpenCurriculum()" id="nav-curr-btn" class="nav-icon-btn nav-icon-in-group" title="مركز المنهج — رفع الدروس وتوليد المحتوى">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2H4V4zm16 0h-7a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2H20V4z"/></svg>
-          </button>
           <button onclick="hhOpenGuide()" id="nav-tour-btn" class="nav-icon-btn nav-icon-in-group" title="دليل الاستخدام">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 10.9 12 11.5 12 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A1.96 1.96 0 0012 6a2 2 0 00-2 2H8a4 4 0 118 0c0 .88-.36 1.68-.93 2.25z"/></svg>
           </button>
@@ -2035,103 +2029,82 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
   <!-- ═══ التصميم الملكي ═══ -->
   <div class="royal-menu">
 
-    <!--  هيدر الترحيب الفاخر -->
-    <div class="royal-greeting hero-premium">
-      <!-- خلفية متحركة -->
-      <div class="hero-bg-pattern" aria-hidden="true">
-        <div class="hero-shine"></div>
-        <div class="hero-particles"></div>
-      </div>
-      
-      <div class="royal-brand-mini" style="position:relative;z-index:3;">
-        <div class="royal-brand-mini-icon hero-shield-pulse">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="brandShieldBg" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#8A1538"/>
-                <stop offset="100%" stop-color="#3D0918"/>
-              </linearGradient>
-              <linearGradient id="brandGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#e8c968"/>
-                <stop offset="50%" stop-color="#d4b740"/>
-                <stop offset="100%" stop-color="#B8924A"/>
-              </linearGradient>
-            </defs>
-            <path d="M100 10 L175 30 L175 100 Q175 155 100 190 Q25 155 25 100 L25 30 Z" fill="url(#brandShieldBg)" stroke="url(#brandGoldGrad)" stroke-width="6"/>
-            <path d="M100 10 L175 30 L175 50 L25 50 L25 30 Z" fill="#8A1538"/>
-            <text x="100" y="145" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="105" fill="url(#brandGoldGrad)">ح</text>
-          </svg>
-        </div>
-        <div class="royal-brand-name-wrap">
-          <div class="royal-brand-name">الملهم</div>
-          <div class="royal-brand-tag">منصة تعليمية قطرية</div>
-          <!--  شارة "المنصة الرسمية" -->
-          <div class="hero-badge">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            <span>منصة معتمدة</span>
-          </div>
-        </div>
-      </div>
-      <div style="text-align:left;position:relative;z-index:3;">
+    <!--  التاج الملكي — صف الترحيب والإجراءات (الهوية في الشريط العلوي فقط) -->
+    <div class="royal-greeting hh-crown">
+      <svg width="120" height="120" viewBox="0 0 70 70" class="hh-crown-orn hh-crown-orn-l" aria-hidden="true"><g fill="none" stroke="#D4BC85" stroke-width="1.2"><circle cx="35" cy="35" r="30"/><circle cx="35" cy="35" r="21"/><path d="M35 5v60M5 35h60M14 14l42 42M56 14L14 56"/></g></svg>
+      <svg width="90" height="90" viewBox="0 0 70 70" class="hh-crown-orn hh-crown-orn-r" aria-hidden="true"><g fill="none" stroke="#D4BC85" stroke-width="1.2"><circle cx="35" cy="35" r="30"/><circle cx="35" cy="35" r="21"/><path d="M35 5v60M5 35h60M14 14l42 42M56 14L14 56"/></g></svg>
+      <div class="hh-crown-greet">
         <div class="royal-hello" id="royal-greeting-time">مرحبا بعودتك</div>
         <div class="royal-username"><span id="royal-username-text">أهلا</span></div>
         <div id="royal-user-badge" style="margin-top:6px;display:none;"></div>
+      </div>
+      <div class="hh-crown-tray">
+        <button class="hh-crown-btn hh-crown-primary" onclick="localStorage.removeItem('hh_saved_cats');showScreen('screen-setup')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span>ابدأ الآن</span>
+        </button>
+        <button class="hh-crown-btn" onclick="hhSchoolEntry()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/></svg>
+          <span>المدرسة</span>
+        </button>
+        <button class="hh-crown-btn" onclick="hhOpenLeaderPrograms()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg>
+          <span>البرامج التربوية</span>
+        </button>
       </div>
     </div>
 
     <!--  شريط الإحصائيات + اقتباس اليوم (صف مزدوج على الشاشات العريضة) -->
     <div class="hh-hero-duo">
-    <div class="hero-stats-bar" id="hero-stats-bar">
-      <div class="hero-stat-item">
-        <div class="hero-stat-icon" style="color:#8A1538;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
-        </div>
-        <div class="hero-stat-value hero-stat-count" id="hero-stat-questions" data-target="1000" data-suffix="+">0</div>
-        <div class="hero-stat-label">سؤال نخبوي</div>
+    <div class="hero-stats-bar hh-stats-royal" id="hero-stats-bar">
+      <div class="hh-stat-royal">
+        <span class="hh-stat-medal"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg></span>
+        <div class="hh-stat-num hero-stat-count" id="hero-stat-questions" data-target="1000" data-suffix="+">0</div>
+        <div class="hh-stat-label">سؤال نخبوي</div>
+        <div class="hh-stat-chip">+24 هذا الأسبوع</div>
       </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat-item">
-        <div class="hero-stat-icon" style="color:#B8924A;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
-        </div>
-        <div class="hero-stat-value hero-stat-count" data-target="40" data-suffix="">0</div>
-        <div class="hero-stat-label">فئة متنوعة</div>
+      <div class="hh-stat-royal">
+        <span class="hh-stat-medal"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></span>
+        <div class="hh-stat-num hero-stat-count" data-target="40" data-suffix="">0</div>
+        <div class="hh-stat-label">فئة متنوعة</div>
+        <div class="hh-stat-chip">7 مسابقات موسمية</div>
       </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat-item">
-        <div class="hero-stat-icon" style="color:#3D6B53;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-        </div>
-        <div class="hero-stat-value hero-stat-count" data-target="6" data-suffix="">0</div>
-        <div class="hero-stat-label">فرق في اللعبة</div>
+      <div class="hh-stat-royal">
+        <span class="hh-stat-medal"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
+        <div class="hh-stat-num hero-stat-count" data-target="6" data-suffix="">0</div>
+        <div class="hh-stat-label">فرق في اللعبة</div>
+        <div class="hh-stat-chip">حتى 5 لاعبين للفريق</div>
       </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat-item">
-        <div class="hero-stat-icon" style="color:#1E3A5F;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <div class="hero-stat-value hero-stat-count" data-target="100" data-suffix="%">0</div>
-        <div class="hero-stat-label">مجاني</div>
+      <div class="hh-stat-royal">
+        <span class="hh-stat-medal"><svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>
+        <div class="hh-stat-num hero-stat-count" data-target="100" data-suffix="%">0</div>
+        <div class="hh-stat-label">مجاني بالكامل</div>
+        <div class="hh-stat-chip">بلا إعلانات أو اشتراك</div>
       </div>
     </div>
 
     <!-- ═══════════════════════════════════════════
          اقتباس اليوم — تصميم Premium
          ═══════════════════════════════════════════ -->
-    <div id="daily-quote-card" class="daily-quote-card daily-quote-premium">
-      <div class="dq-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.318.142-.686.238-1.028.466-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.945-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 6.5 10zm11 0c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162-.293.408-.492.856-.702 1.299-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539l.025.168.026-.006A4.5 4.5 0 1 0 17.5 10z"/></svg>
+    <div id="daily-quote-card" class="daily-quote-card hh-quote-royal">
+      <svg width="90" height="90" viewBox="0 0 70 70" class="hh-quote-orn" aria-hidden="true"><g fill="none" stroke="#8A6D2E" stroke-width="1.4"><circle cx="35" cy="35" r="30"/><circle cx="35" cy="35" r="21"/><path d="M35 5v60M5 35h60M14 14l42 42M56 14L14 56"/></g></svg>
+      <div class="hh-quote-head">
+        <span class="hh-quote-line hh-ql-r"></span>
+        <span class="dq-label hh-quote-badge" id="dq-label">من رؤية القيادة</span>
+        <span class="hh-quote-line hh-ql-l"></span>
       </div>
-      <div class="dq-body">
-        <div class="dq-meta-row">
-          <div class="dq-label" id="dq-label">اقتباس اليوم</div>
+      <div class="hh-quote-mark">&#8220;</div>
+      <div class="dq-text hh-quote-text" id="dq-text">«إن أهم ما نملكه هو الإنسان القطري المتعلم القادر على بناء مستقبله ومستقبل وطنه.»</div>
+      <div class="hh-quote-sign">
+        <span class="hh-quote-dash"></span>
+        <div>
+          <div class="dq-author hh-quote-name" id="dq-author">الشيخ حمد بن خليفة آل ثاني</div>
+          <div class="hh-quote-role" id="dq-role">الأمير الوالد</div>
         </div>
-        <div class="dq-text" id="dq-text">«المعلم رسالة، وأثره يبقى وإن غاب صاحبه.»</div>
-        <div class="dq-author" id="dq-author">— مأثور</div>
+        <span class="hh-quote-dash"></span>
       </div>
-      <button class="dq-refresh" onclick="refreshDailyQuote()" aria-label="اقتباس جديد" title="اقتباس آخر">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-        <span>اقتباس آخر</span>
+      <button class="dq-refresh hh-quote-refresh" onclick="refreshDailyQuote()" aria-label="مقولة أخرى" title="مقولة أخرى">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
       </button>
     </div>
     </div><!-- /hh-hero-duo -->
@@ -2208,44 +2181,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         </div>
       </div>
 
-      <!-- ═════ بطاقة مدرستي الكبرى (المسار المتدرج) ═════ -->
-      <div class="path-card path-school" onclick="hhSchoolEntry()">
-        <div class="path-card-inner">
-          <div class="path-badge">المسار المتدرج</div>
-          <div class="path-school-row">
-            <div class="path-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18"/>
-                <path d="M5 21V8l7-5 7 5v13"/>
-                <path d="M9 21v-6h6v6"/>
-                <path d="M12 3v2"/>
-              </svg>
-            </div>
-            <div class="path-school-main">
-              <h3 class="path-title">المدرسة</h3>
-              <p class="path-desc">رحلة تعليمية متدرجة: صفوف ومواد ووحدات مع بوابات إتقان تفتح الطريق وحدةً بعد وحدة</p>
-              <div class="path-features">
-                <div class="path-feature">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> وحدات المنهج كاملة بدروسها وملخصاتها
-                </div>
-                <div class="path-feature">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> اختبارات إتقان تفتح الوحدة التالية (80%)
-                </div>
-                <div class="path-feature">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> مسار مخصص للمعلم وآخر للطالب حسب دورك
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="path-cta">
-            <span>ادخل إلى مدرستك</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </div>
-        </div>
-      </div>
-
     </div>
-
     <!-- ═════════════ شريط شركاء النجاح ═════════════ -->
     <div class="partners-strip" id="partners-strip-home">
       <div class="ps-header">
@@ -11585,50 +11521,6 @@ mark.search-highlight{
   box-shadow: 0 4px 12px rgba(184,146,74,.4) !important;
 }
 
-/* ═════ بطاقة مدرستي الكبرى (عرض كامل أسفل المسارين) ═════ */
-.paths-container .path-school{
-  width: 100%;
-  flex-basis: 100%;
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, #5E0E26 0%, #8A1538 55%, #5E0E26 100%) !important;
-  border: 2px solid #B8924A !important;
-  cursor: pointer;
-}
-.paths-container .path-school .path-badge{
-  background: linear-gradient(135deg, #B8924A, #D4BC85) !important;
-  color: #3D0918 !important;
-}
-.paths-container .path-school .path-school-row{
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  text-align: right;
-}
-.paths-container .path-school .path-school-main{ flex: 1; min-width: 0; }
-.paths-container .path-school .path-title,
-.paths-container .path-school .path-desc,
-.paths-container .path-school .path-feature{ color: #fff !important; }
-.paths-container .path-school .path-desc{ opacity: .92; }
-.paths-container .path-school .path-icon{
-  color: #D4BC85 !important;
-  background: rgba(255,255,255,.08) !important;
-  border: 1.5px solid rgba(212,188,133,.5) !important;
-  flex-shrink: 0;
-}
-.paths-container .path-school .path-feature svg{ fill: #D4BC85 !important; }
-.paths-container .path-school .path-cta{
-  background: rgba(255,255,255,.1) !important;
-  color: #FDF3DD !important;
-  border-color: rgba(212,188,133,.6) !important;
-}
-.paths-container .path-school:hover .path-cta{
-  background: linear-gradient(135deg, #B8924A, #8A6D2E) !important;
-  color: #fff !important;
-}
-@media (max-width: 640px){
-  .paths-container .path-school .path-school-row{ flex-direction: column; text-align: center; }
-}
-
 /* ═════════════════════════════════════════════
     أزرار الشريط العلوي المُجمّعة
    ═════════════════════════════════════════════ */
@@ -11825,6 +11717,149 @@ mark.search-highlight{
 }
 
 /* ═════════════════════════════════════════════
+    طبقة الهوية الملكية المعتمدة — الخط والألوان
+    (تعلو على almulhim.css لأنها تُحمَّل بعده وبـ important)
+   ═════════════════════════════════════════════ */
+:root{
+  --hh-maroon-deep:#4A0B1E; --hh-maroon:#5E0E26; --hh-maroon-mid:#8A1538;
+  --hh-gold:#B8924A; --hh-gold-light:#D4BC85; --hh-gold-pale:#EAD9B0; --hh-cream:#FDF3DD;
+}
+*{ font-family:'Sakkal Majalla','Traditional Arabic',Cairo,Tajawal,sans-serif !important; }
+
+/* ═════ التاج الملكي (صف الترحيب والإجراءات) ═════ */
+#screen-menu .hh-crown{
+  background:linear-gradient(175deg,var(--hh-maroon-deep),var(--hh-maroon)) !important;
+  border:1.5px solid var(--hh-gold) !important;
+  border-radius:14px !important;
+  padding:14px 18px !important;
+  display:flex !important; align-items:center; justify-content:space-between;
+  gap:14px; flex-wrap:wrap; position:relative; overflow:hidden;
+  min-height:0 !important;
+}
+.hh-crown-orn{ position:absolute; opacity:.11; pointer-events:none; }
+.hh-crown-orn-l{ top:-32px; left:-32px; }
+.hh-crown-orn-r{ bottom:-26px; right:-26px; opacity:.09; }
+.hh-crown-greet{ position:relative; z-index:2; }
+#screen-menu .hh-crown .royal-hello{ color:var(--hh-gold-light) !important; font-size:1rem !important; }
+#screen-menu .hh-crown .royal-username{ color:#fff !important; font-size:1.6rem !important; font-weight:700 !important; }
+.hh-crown-tray{
+  position:relative; z-index:2;
+  background:rgba(212,188,133,.09); border:1px solid rgba(212,188,133,.45);
+  border-radius:14px; padding:6px; display:flex; align-items:center; gap:7px; flex-wrap:wrap;
+}
+.hh-crown-btn{
+  display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+  background:rgba(94,14,38,.55); border:1px solid var(--hh-gold); color:var(--hh-cream);
+  border-radius:10px; padding:9px 16px; font-size:1rem; font-weight:700;
+  transition:transform .12s ease, box-shadow .2s ease;
+}
+.hh-crown-btn:active{ transform:scale(.94); }
+.hh-crown-btn:hover{ box-shadow:0 4px 14px rgba(184,146,74,.35); }
+.hh-crown-primary{
+  background:linear-gradient(135deg,var(--hh-gold-pale),var(--hh-gold)) !important;
+  border-color:var(--hh-cream) !important; color:#3D0918 !important;
+  font-size:1.08rem; padding:9px 21px;
+}
+
+/* ═════ الإحصاءات الملكية البراقة ═════ */
+#screen-menu .hh-stats-royal{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px; background:none !important; border:none !important;
+  padding:0 !important; box-shadow:none !important;
+}
+.hh-stat-royal{
+  position:relative; text-align:center; overflow:hidden;
+  background:linear-gradient(165deg,#6E1230,#3D0918);
+  border:1px solid var(--hh-gold); border-radius:13px;
+  padding:13px 8px 11px;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.hh-stat-royal:hover{ transform:translateY(-4px); box-shadow:0 10px 22px rgba(61,9,24,.35); }
+.hh-stat-royal::after{
+  content:''; position:absolute; top:0; right:0; left:0; height:2.5px;
+  background:linear-gradient(90deg,transparent,var(--hh-gold-pale),transparent);
+}
+.hh-stat-medal{
+  width:46px; height:46px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#F5E6C4,var(--hh-gold) 70%);
+  border:2px solid var(--hh-cream);
+  display:inline-flex; align-items:center; justify-content:center;
+  color:#3D0918; margin-bottom:5px;
+  box-shadow:0 0 0 3px rgba(212,188,133,.25);
+}
+.hh-stat-num{ font-weight:700 !important; font-size:1.65rem !important; color:#F5E6C4 !important; line-height:1.1; }
+.hh-stat-label{ font-size:.95rem; color:var(--hh-gold-pale); font-weight:700; }
+.hh-stat-chip{
+  display:inline-block; margin-top:5px;
+  background:rgba(234,217,176,.14); border:1px solid rgba(212,188,133,.4);
+  border-radius:99px; padding:1px 10px; font-size:.78rem; color:#F5E6C4; font-weight:700;
+}
+
+/* ═════ منبر مقولات القيادة ═════ */
+#screen-menu .hh-quote-royal{
+  background:linear-gradient(160deg,#FDF9EF,#F7EED6) !important;
+  border:1.5px solid var(--hh-gold) !important; border-radius:14px !important;
+  padding:16px 18px 13px !important; position:relative; text-align:center; overflow:hidden;
+  display:block !important;
+}
+.hh-quote-orn{ position:absolute; top:-26px; right:-26px; opacity:.08; pointer-events:none; }
+.hh-quote-head{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:6px; }
+.hh-quote-line{ height:1px; width:52px; }
+.hh-ql-r{ background:linear-gradient(90deg,transparent,var(--hh-gold)); }
+.hh-ql-l{ background:linear-gradient(270deg,transparent,var(--hh-gold)); }
+#screen-menu .hh-quote-badge{
+  background:var(--hh-maroon-mid) !important; color:var(--hh-cream) !important;
+  border-radius:99px !important; padding:2px 14px !important; font-size:.85rem !important; font-weight:700 !important;
+}
+.hh-quote-mark{ color:var(--hh-gold); font-size:2.1rem; line-height:.6; margin-bottom:2px; font-weight:700; }
+#screen-menu .hh-quote-text{
+  font-size:1.25rem !important; color:#3D2A16 !important; line-height:1.9 !important;
+  margin:0 auto 10px !important; max-width:560px; font-weight:700 !important;
+}
+.hh-quote-sign{ display:flex; align-items:center; justify-content:center; gap:10px; }
+.hh-quote-dash{ height:1px; width:38px; background:var(--hh-gold-light); }
+#screen-menu .hh-quote-name{ color:var(--hh-maroon-mid) !important; font-size:1.1rem !important; font-weight:700 !important; }
+.hh-quote-role{ color:#8A6D2E; font-size:.85rem; letter-spacing:.3px; font-weight:700; }
+#screen-menu .hh-quote-refresh{
+  position:absolute !important; bottom:10px !important; left:12px !important;
+  width:32px !important; height:32px !important; border-radius:9px !important;
+  background:#fff !important; border:1px solid var(--hh-gold) !important;
+  color:#8A6D2E !important; display:inline-flex !important;
+  align-items:center; justify-content:center; padding:0 !important; cursor:pointer;
+}
+
+/* ═════ توحيد الشريط السفلي: حجم وسلوك ووضوح واحد للجميع ═════ */
+.hh-bottom-nav{ background:linear-gradient(175deg,var(--hh-maroon-deep),var(--hh-maroon)) !important; border-top:1.5px solid var(--hh-gold) !important; }
+.hh-bottom-nav .hh-nav-item,
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara,
+.hh-bottom-nav .hh-nav-item.hh-nav-center{
+  width:64px !important; min-width:64px !important; max-width:64px !important;
+  padding:6px 0 5px !important; margin:0 !important; border-radius:11px !important;
+  transform:none !important; transition:transform .12s ease !important;
+  background:none !important; border:none !important; box-shadow:none !important;
+}
+.hh-bottom-nav .hh-nav-item:active{ transform:scale(.9) !important; }
+.hh-bottom-nav .hh-nav-icon,
+.hh-bottom-nav .hh-nav-mihbara .hh-nav-icon,
+.hh-bottom-nav .hh-nav-center .hh-nav-icon{
+  width:34px !important; height:34px !important; margin:0 auto !important;
+  border-radius:10px !important; background:none !important;
+  border:1px solid transparent !important; box-shadow:none !important;
+  color:#C9A876 !important; transition:all .2s ease !important;
+}
+.hh-bottom-nav .hh-nav-icon svg{ width:17px !important; height:17px !important; }
+.hh-bottom-nav .hh-nav-label,
+.hh-bottom-nav .hh-nav-mihbara .hh-nav-label{
+  font-size:.78rem !important; color:#C9A876 !important; margin-top:2px !important; font-weight:700 !important;
+}
+.hh-bottom-nav .hh-nav-item.active .hh-nav-icon{
+  background:linear-gradient(135deg,var(--hh-gold-pale),var(--hh-gold)) !important;
+  color:#3D0918 !important; border-color:var(--hh-cream) !important;
+}
+.hh-bottom-nav .hh-nav-item.active .hh-nav-label{ color:var(--hh-cream) !important; }
+
+/* ═════════════════════════════════════════════
     التخطيط العريض للشاشة الرئيسية (معتمد)
     الخلفية على كامل العرض والمحتوى حتى 1280px
    ═════════════════════════════════════════════ */
@@ -11835,21 +11870,6 @@ mark.search-highlight{
     margin-left: auto !important;
     margin-right: auto !important;
   }
-  /* ترويسة نحيفة: شريط بدل بطاقة عالية */
-  #screen-menu .royal-greeting{
-    padding: 10px 22px !important;
-    margin-bottom: 8px !important;
-    min-height: 0 !important;
-  }
-  #screen-menu .royal-brand-mini-icon{
-    width: 46px !important;
-    height: 46px !important;
-  }
-  #screen-menu .royal-brand-mini-icon svg{ width:100%; height:100%; }
-  #screen-menu .royal-brand-name{ font-size: 1.25rem !important; }
-  #screen-menu .royal-brand-tag{ font-size: .68rem !important; }
-  #screen-menu .royal-hello{ font-size: .74rem !important; }
-  #screen-menu .royal-username{ font-size: 1.1rem !important; }
   /* الإحصاءات والاقتباس: عمودان فقط إن توفر عرض حقيقي كافٍ، وإلا تراص عمودي */
   #screen-menu .hh-hero-duo{
     display: grid;
@@ -12030,6 +12050,39 @@ body.dark-mode input, body.dark-mode textarea, body.dark-mode select{ background
   setTimeout(() => {
     if(typeof db !== 'undefined' && db) showLiveIndicator();
   }, 2000);
+})();
+</script>
+<script>
+/* ═════ فرض التخطيط العريض المعتمد للشاشة الرئيسية ═════
+   الأنماط السطرية مع important تتقدم على أي ملف CSS خارجي */
+(function(){
+  function hhApplyWideHome(){
+    try{
+      var m=document.getElementById('screen-menu'); if(!m) return;
+      var wide = window.innerWidth>900;
+      var st=m.style;
+      if(wide){
+        st.setProperty('max-width','min(1280px,96vw)','important');
+        st.setProperty('width','96%','important');
+        st.setProperty('margin-left','auto','important');
+        st.setProperty('margin-right','auto','important');
+      } else {
+        st.removeProperty('max-width'); st.removeProperty('width');
+        st.removeProperty('margin-left'); st.removeProperty('margin-right');
+      }
+      ['royal-greeting','hh-hero-duo','hero-stats-bar','daily-quote-card','paths-container','partners-strip'].forEach(function(c){
+        var els=m.getElementsByClassName(c);
+        for(var i=0;i<els.length;i++){
+          if(wide){ els[i].style.setProperty('max-width','100%','important'); }
+          else { els[i].style.removeProperty('max-width'); }
+        }
+      });
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', hhApplyWideHome);
+  else hhApplyWideHome();
+  window.addEventListener('resize', hhApplyWideHome);
+  window.hhApplyWideHome = hhApplyWideHome;
 })();
 </script>
 </body>
