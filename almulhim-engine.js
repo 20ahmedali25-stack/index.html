@@ -10362,10 +10362,6 @@ function hhSchWizClose(){ var e=document.getElementById('hh-sch-wiz'); if(e) e.r
 function hhSchWizGo(step){ _hhSchWiz.step=step; hhSchWizRender(); }
 function hhSchWizRole(r){
   _hhSchWiz.role=r; try{ localStorage.setItem('hh_sch_wiz_role', r); }catch(e){}
-  hhSchWizGo('branch');
-}
-function hhSchWizBranch(b){
-  if(b==='programs'){ hhSchWizClose(); if(typeof hhOpenLeaderPrograms==='function') hhOpenLeaderPrograms(); return; }
   hhSchWizGo('grade');
 }
 function hhSchWizFinish(){
@@ -10374,19 +10370,41 @@ function hhSchWizFinish(){
 }
 function hhSchWizSoon(){ if(typeof toast==='function') toast('قريباً بإذن الله — التوسعة مستمرة','warn'); }
 
+/* أيقونات SVG احترافية للمعالج (بلا أي إيموجي) */
+function _hhSchWizIco(name, col){
+  var s='width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+  var body={
+    school:'<path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/>',
+    teacher:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4"/><path d="M8 20h8"/><path d="M7 8h6"/><path d="M7 11h4"/>',
+    student:'<path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 9v5"/>',
+    social:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.4 3.8 5.6 3.8 9S14.5 18.6 12 21c-2.5-2.4-3.8-5.6-3.8-9S9.5 5.4 12 3z"/>',
+    science:'<path d="M9 3h6"/><path d="M10 3v6L4.5 18.5A2 2 0 006.3 21h11.4a2 2 0 001.8-2.5L14 9V3"/><path d="M7.5 14h9"/>',
+    term:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M3 10h18"/>',
+    units:'<path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5z"/><path d="M20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/>'
+  }[name]||'';
+  return '<svg '+s+'>'+body+'</svg>';
+}
+/* شارة رقم الصف (رقم داخل درع صغير بدل الإيموجي) */
+function _hhSchWizNum(n, col){
+  return '<svg width="26" height="26" viewBox="0 0 24 24" fill="none">'
+    + '<path d="M12 2l8 3v7c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5l8-3z" stroke="'+col+'" stroke-width="1.8" stroke-linejoin="round"/>'
+    + '<text x="12" y="15.5" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="9.5" fill="'+col+'">'+n+'</text>'
+    + '</svg>';
+}
+
 function _hhSchWizOpt(o){
-  /* o: {icon, title, sub, on, soon, color} */
+  /* o: {icon(html svg), title, sub, on, soon, color} */
   var col = o.color || '#8A1538';
   if(o.soon){
     return '<button onclick="hhSchWizSoon()" style="display:flex;align-items:center;gap:12px;width:100%;background:#F3F0F1;border:2px dashed #C9BFC3;border-radius:14px;padding:14px 16px;font-family:Cairo;cursor:pointer;text-align:right;opacity:.75;">'
-      + '<span style="font-size:1.5rem;flex-shrink:0;filter:grayscale(1);">'+o.icon+'</span>'
+      + '<span style="flex-shrink:0;display:inline-flex;">'+o.icon+'</span>'
       + '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:900;font-size:.92rem;color:#777;">'+o.title+'</span>'
       + (o.sub?'<span style="display:block;font-weight:700;font-size:.72rem;color:#999;margin-top:2px;">'+o.sub+'</span>':'')+'</span>'
       + '<span style="background:#C9BFC3;color:#fff;border-radius:8px;padding:3px 11px;font-size:.66rem;font-weight:900;flex-shrink:0;">قريباً</span>'
       + '</button>';
   }
   return '<button onclick="'+o.on+'" style="display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:2px solid '+col+';border-radius:14px;padding:14px 16px;font-family:Cairo;cursor:pointer;text-align:right;box-shadow:0 3px 10px rgba(94,14,38,.08);transition:transform .15s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'\'">'
-    + '<span style="font-size:1.5rem;flex-shrink:0;">'+o.icon+'</span>'
+    + '<span style="flex-shrink:0;display:inline-flex;">'+o.icon+'</span>'
     + '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:900;font-size:.92rem;color:'+col+';">'+o.title+'</span>'
     + (o.sub?'<span style="display:block;font-weight:700;font-size:.72rem;color:#888;margin-top:2px;">'+o.sub+'</span>':'')+'</span>'
     + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;"><polyline points="15 18 9 12 15 6"/></svg>'
@@ -10400,7 +10418,7 @@ function hhSchWizRender(){
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999974;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
   ov.onclick=function(ev){ if(ev.target===ov) hhSchWizClose(); };
 
-  var steps=['role','branch','grade','subject','term'];
+  var steps=['role','grade','subject','term'];
   var idx=steps.indexOf(w.step);
   var dots = (idx>=0)
     ? '<div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">'
@@ -10408,7 +10426,7 @@ function hhSchWizRender(){
       + '</div>'
     : '';
 
-  var back = {role:'welcome', branch:'role', grade:'branch', subject:'grade', term:'subject'}[w.step];
+  var back = {role:'welcome', grade:'role', subject:'grade', term:'subject'}[w.step];
   var backBtn = back
     ? '<button onclick="hhSchWizGo(\''+back+'\')" style="background:none;border:none;color:#fff;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;display:flex;align-items:center;gap:4px;opacity:.85;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>رجوع</button>'
     : '<span></span>';
@@ -10417,10 +10435,13 @@ function hhSchWizRender(){
 
   if(w.step==='welcome'){
     var done = localStorage.getItem('hh_sch_wiz_done')==='1';
-    title='أهلاً بك في مدرستي';
+    title='أهلاً بك في المدرسة';
     sub='رحلتك التعليمية المتدرجة: وحدات ودروس وقصص واختبارات إتقان تفتح الطريق خطوةً بعد خطوة';
     body = '<div style="text-align:center;padding:6px 0 2px;">'
-      + '<div style="font-size:3rem;margin-bottom:10px;">🏫</div>'
+      + '<div style="display:flex;justify-content:center;margin-bottom:12px;">'
+      +   '<span style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#8A1538,#5E0E26);border:2px solid #B8924A;display:inline-flex;align-items:center;justify-content:center;">'
+      +   '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D4BC85" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/></svg>'
+      +   '</span></div>'
       + '<button onclick="hhSchWizGo(\'role\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;font-family:Cairo;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 6px 18px rgba(94,14,38,.35);">ابدأ الرحلة</button>'
       + (done ? '<button onclick="hhSchWizFinish()" style="width:100%;background:#fff;color:#3D6B53;border:2px solid #3D6B53;border-radius:14px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:9px;">الدخول مباشرة إلى وحداتي</button>' : '')
       + '</div>';
@@ -10428,37 +10449,30 @@ function hhSchWizRender(){
   else if(w.step==='role'){
     title='من أنت؟'; sub='اختر دورك لنُهيّئ لك التجربة المناسبة';
     body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:'👨‍🏫', title:'معلم', sub:'إدارة الصفوف ودفتر المتابعة ومتابعة تقدم الطلاب', on:'hhSchWizRole(\'teacher\')', color:'#1F4E79'})
-      + _hhSchWizOpt({icon:'🎓', title:'طالب', sub:'التعلم المتدرج والاختبارات وشهادات التفوق', on:'hhSchWizRole(\'student\')', color:'#3D6B53'})
-      + '</div>';
-  }
-  else if(w.step==='branch'){
-    title='إلى أين وجهتك؟'; sub='اختر المسار الذي تريد';
-    body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:'🏫', title:'المدرسة', sub:'الصفوف والمواد والوحدات الدراسية المتدرجة', on:'hhSchWizBranch(\'school\')', color:'#8A1538'})
-      + _hhSchWizOpt({icon:'🏆', title:'البرامج التربوية', sub:'برامج القادة والبرامج التدريبية المصاحبة', on:'hhSchWizBranch(\'programs\')', color:'#8A6D2E'})
+      + _hhSchWizOpt({icon:_hhSchWizIco('teacher','#1F4E79'), title:'معلم', sub:'إدارة الصفوف ودفتر المتابعة ومتابعة تقدم الطلاب', on:'hhSchWizRole(\'teacher\')', color:'#1F4E79'})
+      + _hhSchWizOpt({icon:_hhSchWizIco('student','#3D6B53'), title:'طالب', sub:'التعلم المتدرج والاختبارات وشهادات التفوق', on:'hhSchWizRole(\'student\')', color:'#3D6B53'})
       + '</div>';
   }
   else if(w.step==='grade'){
-    title='اختر الصف'; sub='الصفوف المتاحة في مدرستي';
+    title='اختر الصف'; sub='الصفوف المتاحة في المدرسة';
     body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:'7️⃣', title:'الصف السابع', sub:'المسار متاح كاملاً', on:'hhSchWizGo(\'subject\')', color:'#8A1538'})
-      + _hhSchWizOpt({icon:'8️⃣', title:'الصف الثامن', soon:true})
-      + _hhSchWizOpt({icon:'9️⃣', title:'الصف التاسع', soon:true})
+      + _hhSchWizOpt({icon:_hhSchWizNum('7','#8A1538'), title:'الصف السابع', sub:'المسار متاح كاملاً', on:'hhSchWizGo(\'subject\')', color:'#8A1538'})
+      + _hhSchWizOpt({icon:_hhSchWizNum('8','#999'), title:'الصف الثامن', soon:true})
+      + _hhSchWizOpt({icon:_hhSchWizNum('9','#999'), title:'الصف التاسع', soon:true})
       + '</div>';
   }
   else if(w.step==='subject'){
     title='اختر المادة'; sub='مواد الصف السابع';
     body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:'🌍', title:'الدراسات الاجتماعية', sub:'6 وحدات كاملة بدروسها وقصصها واختباراتها', on:'hhSchWizGo(\'term\')', color:'#8A1538'})
-      + _hhSchWizOpt({icon:'🔬', title:'العلوم', soon:true})
+      + _hhSchWizOpt({icon:_hhSchWizIco('social','#8A1538'), title:'الدراسات الاجتماعية', sub:'6 وحدات كاملة بدروسها وقصصها واختباراتها', on:'hhSchWizGo(\'term\')', color:'#8A1538'})
+      + _hhSchWizOpt({icon:_hhSchWizIco('science','#999'), title:'العلوم', soon:true})
       + '</div>';
   }
   else if(w.step==='term'){
     title='اختر الفصل الدراسي'; sub='الدراسات الاجتماعية — الصف السابع';
     body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:'🍂', title:'الفصل الدراسي الأول', soon:true})
-      + _hhSchWizOpt({icon:'🌱', title:'الفصل الدراسي الثاني', sub:'6 وحدات — ابدأ الآن', on:'hhSchWizFinish()', color:'#3D6B53'})
+      + _hhSchWizOpt({icon:_hhSchWizIco('term','#999'), title:'الفصل الدراسي الأول', soon:true})
+      + _hhSchWizOpt({icon:_hhSchWizIco('units','#3D6B53'), title:'الفصل الدراسي الثاني', sub:'6 وحدات — ابدأ الآن', on:'hhSchWizFinish()', color:'#3D6B53'})
       + '</div>';
   }
 

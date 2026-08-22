@@ -2222,7 +2222,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
               </svg>
             </div>
             <div class="path-school-main">
-              <h3 class="path-title">مدرستي</h3>
+              <h3 class="path-title">المدرسة</h3>
               <p class="path-desc">رحلة تعليمية متدرجة: صفوف ومواد ووحدات مع بوابات إتقان تفتح الطريق وحدةً بعد وحدة</p>
               <div class="path-features">
                 <div class="path-feature">
@@ -2232,7 +2232,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> اختبارات إتقان تفتح الوحدة التالية (80%)
                 </div>
                 <div class="path-feature">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> مسار للمعلم ومسار للطالب والبرامج التربوية
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> مسار مخصص للمعلم وآخر للطالب حسب دورك
                 </div>
               </div>
             </div>
@@ -6849,6 +6849,30 @@ window.submitProblemReport = async function(){
       </svg>
     </span>
     <span class="hh-nav-label">ابدأ رحلتك</span>
+  </button>
+
+  <!-- 1ب · المدرسة -->
+  <button class="hh-nav-item" onclick="hhSchoolEntry()" type="button">
+    <span class="hh-nav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+        <path d="M3 21h18"/>
+        <path d="M5 21V9l7-5 7 5v12"/>
+        <path d="M9 21v-5h6v5"/>
+        <path d="M12 4v2"/>
+      </svg>
+    </span>
+    <span class="hh-nav-label">المدرسة</span>
+  </button>
+
+  <!-- 1ج · البرامج التربوية -->
+  <button class="hh-nav-item" onclick="hhOpenLeaderPrograms()" type="button">
+    <span class="hh-nav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+        <circle cx="12" cy="9" r="5"/>
+        <path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/>
+      </svg>
+    </span>
+    <span class="hh-nav-label">البرامج التربوية</span>
   </button>
 
   <!-- 2 · ألعابي -->
