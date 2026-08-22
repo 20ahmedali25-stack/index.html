@@ -11826,22 +11826,20 @@ mark.search-highlight{
   #screen-menu .royal-brand-tag{ font-size: .68rem !important; }
   #screen-menu .royal-hello{ font-size: .74rem !important; }
   #screen-menu .royal-username{ font-size: 1.1rem !important; }
-  /* الإحصاءات والاقتباس في صف واحد */
+  /* الإحصاءات والاقتباس: عمودان فقط إن توفر عرض حقيقي كافٍ، وإلا تراص عمودي */
   #screen-menu .hh-hero-duo{
     display: grid;
-    grid-template-columns: 1.15fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
     gap: 12px;
     align-items: stretch;
     margin-bottom: 12px;
   }
   #screen-menu .hh-hero-duo .hero-stats-bar{
     margin: 0 !important;
-    height: 100%;
     box-sizing: border-box;
   }
   #screen-menu .hh-hero-duo .daily-quote-card{
     margin: 0 !important;
-    height: 100%;
     box-sizing: border-box;
   }
   #screen-menu .hh-hero-duo .dq-text{ font-size: .92rem !important; }
