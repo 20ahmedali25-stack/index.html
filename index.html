@@ -1958,7 +1958,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <div class="main-nav-actions">
         <!-- مجموعة الأيقونات السريعة -->
         <div class="nav-quick-group" title="إجراءات سريعة">
-          <button onclick="hhOpenSchool()" id="nav-school-btn" class="nav-icon-btn nav-icon-in-group" title="مدرستي — المسار التعليمي المتدرج">
+          <button onclick="hhSchoolEntry()" id="nav-school-btn" class="nav-icon-btn nav-icon-in-group" title="مدرستي — المسار التعليمي المتدرج">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
           </button>
           <button onclick="hhOpenCurriculum()" id="nav-curr-btn" class="nav-icon-btn nav-icon-in-group" title="مركز المنهج — رفع الدروس وتوليد المحتوى">
@@ -2079,7 +2079,8 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       </div>
     </div>
 
-    <!--  شريط الإحصائيات اللحظية -->
+    <!--  شريط الإحصائيات + اقتباس اليوم (صف مزدوج على الشاشات العريضة) -->
+    <div class="hh-hero-duo">
     <div class="hero-stats-bar" id="hero-stats-bar">
       <div class="hero-stat-item">
         <div class="hero-stat-icon" style="color:#8A1538;">
@@ -2133,6 +2134,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <span>اقتباس آخر</span>
       </button>
     </div>
+    </div><!-- /hh-hero-duo -->
 
 <!-- ═══════════════════════════════════════════
          مسارا المنصة: معلم / طالب (تبسيط الواجهة)
@@ -2201,6 +2203,42 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           </div>
           <div class="path-cta">
             <span>ابدأ التعلم</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════ بطاقة مدرستي الكبرى (المسار المتدرج) ═════ -->
+      <div class="path-card path-school" onclick="hhSchoolEntry()">
+        <div class="path-card-inner">
+          <div class="path-badge">المسار المتدرج</div>
+          <div class="path-school-row">
+            <div class="path-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"/>
+                <path d="M5 21V8l7-5 7 5v13"/>
+                <path d="M9 21v-6h6v6"/>
+                <path d="M12 3v2"/>
+              </svg>
+            </div>
+            <div class="path-school-main">
+              <h3 class="path-title">مدرستي</h3>
+              <p class="path-desc">رحلة تعليمية متدرجة: صفوف ومواد ووحدات مع بوابات إتقان تفتح الطريق وحدةً بعد وحدة</p>
+              <div class="path-features">
+                <div class="path-feature">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> وحدات المنهج كاملة بدروسها وملخصاتها
+                </div>
+                <div class="path-feature">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> اختبارات إتقان تفتح الوحدة التالية (80%)
+                </div>
+                <div class="path-feature">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> مسار للمعلم ومسار للطالب والبرامج التربوية
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="path-cta">
+            <span>ادخل إلى مدرستك</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
           </div>
         </div>
@@ -3986,7 +4024,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
         <button onclick="hhOpenCurriculum()" style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#8A6D2E;cursor:pointer;text-align:right;">
           مكتبة الدروس<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">رفع الدروس وتوليد المحتوى</div></button>
-        <button onclick="hhOpenSchool()" style="background:#fff;border:2px solid #5E0E26;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#5E0E26;cursor:pointer;text-align:right;">
+        <button onclick="hhSchoolEntry()" style="background:#fff;border:2px solid #5E0E26;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#5E0E26;cursor:pointer;text-align:right;">
           مدرستي<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">المسار المتدرج وبوابات الإتقان</div></button>
         <button onclick="hhAISettings()" style="background:#fff;border:2px solid #3D6B53;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#3D6B53;cursor:pointer;text-align:right;">
           إعدادات التوليد الذكي<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">ربط الوسيط السحابي</div></button>
@@ -6671,7 +6709,7 @@ window.submitProblemReport = async function(){
         </button>
 
         <!-- الحصة التفاعلية -->
-        <button class="tbx-tool" onclick="hhOpenSchool()">
+        <button class="tbx-tool" onclick="hhSchoolEntry()">
           <div class="tbx-tool-icon" style="background:linear-gradient(135deg,#1E3A5F,#0e3d60);">
             <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M3 3h18v2H3zm0 16h18v2H3z"/></svg>
           </div>
@@ -11523,6 +11561,50 @@ mark.search-highlight{
   box-shadow: 0 4px 12px rgba(184,146,74,.4) !important;
 }
 
+/* ═════ بطاقة مدرستي الكبرى (عرض كامل أسفل المسارين) ═════ */
+.paths-container .path-school{
+  width: 100%;
+  flex-basis: 100%;
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #5E0E26 0%, #8A1538 55%, #5E0E26 100%) !important;
+  border: 2px solid #B8924A !important;
+  cursor: pointer;
+}
+.paths-container .path-school .path-badge{
+  background: linear-gradient(135deg, #B8924A, #D4BC85) !important;
+  color: #3D0918 !important;
+}
+.paths-container .path-school .path-school-row{
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-align: right;
+}
+.paths-container .path-school .path-school-main{ flex: 1; min-width: 0; }
+.paths-container .path-school .path-title,
+.paths-container .path-school .path-desc,
+.paths-container .path-school .path-feature{ color: #fff !important; }
+.paths-container .path-school .path-desc{ opacity: .92; }
+.paths-container .path-school .path-icon{
+  color: #D4BC85 !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1.5px solid rgba(212,188,133,.5) !important;
+  flex-shrink: 0;
+}
+.paths-container .path-school .path-feature svg{ fill: #D4BC85 !important; }
+.paths-container .path-school .path-cta{
+  background: rgba(255,255,255,.1) !important;
+  color: #FDF3DD !important;
+  border-color: rgba(212,188,133,.6) !important;
+}
+.paths-container .path-school:hover .path-cta{
+  background: linear-gradient(135deg, #B8924A, #8A6D2E) !important;
+  color: #fff !important;
+}
+@media (max-width: 640px){
+  .paths-container .path-school .path-school-row{ flex-direction: column; text-align: center; }
+}
+
 /* ═════════════════════════════════════════════
     أزرار الشريط العلوي المُجمّعة
    ═════════════════════════════════════════════ */
@@ -11716,6 +11798,57 @@ mark.search-highlight{
 /* تقليل padding-bottom للشاشة الرئيسية */
 #screen-menu{
   padding-bottom: 80px;
+}
+
+/* ═════════════════════════════════════════════
+    التخطيط العريض للشاشة الرئيسية (معتمد)
+    الخلفية على كامل العرض والمحتوى حتى 1280px
+   ═════════════════════════════════════════════ */
+@media (min-width:901px){
+  #screen-menu{
+    max-width: min(1280px, 96vw) !important;
+    width: 96% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  /* ترويسة نحيفة: شريط بدل بطاقة عالية */
+  #screen-menu .royal-greeting{
+    padding: 10px 22px !important;
+    margin-bottom: 8px !important;
+    min-height: 0 !important;
+  }
+  #screen-menu .royal-brand-mini-icon{
+    width: 46px !important;
+    height: 46px !important;
+  }
+  #screen-menu .royal-brand-mini-icon svg{ width:100%; height:100%; }
+  #screen-menu .royal-brand-name{ font-size: 1.25rem !important; }
+  #screen-menu .royal-brand-tag{ font-size: .68rem !important; }
+  #screen-menu .royal-hello{ font-size: .74rem !important; }
+  #screen-menu .royal-username{ font-size: 1.1rem !important; }
+  /* الإحصاءات والاقتباس في صف واحد */
+  #screen-menu .hh-hero-duo{
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 12px;
+  }
+  #screen-menu .hh-hero-duo .hero-stats-bar{
+    margin: 0 !important;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  #screen-menu .hh-hero-duo .daily-quote-card{
+    margin: 0 !important;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  #screen-menu .hh-hero-duo .dq-text{ font-size: .92rem !important; }
+}
+/* على الجوال: الحاوية شفافة والترتيب العمودي كما كان */
+@media (max-width:900px){
+  #screen-menu .hh-hero-duo{ display: contents; }
 }
 
 /* تحسين الوضع الليلي - شامل لكل الصفحات */

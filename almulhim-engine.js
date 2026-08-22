@@ -5938,9 +5938,9 @@ var HH_GUIDE_STUDENT = {
   intro:'كل ما تحتاجه لتبدأ رحلتك في المُلهِم — خطوة بخطوة.',
   steps:[
     { t:'انضم لصف معلمك', d:'اطلب من معلمك كود الصف (6 خانات مثل AB12CD)، ثم افتح «مدرستي» واضغط «انضم بكود». إن أرسل لك رابطاً فالكود يُملأ تلقائياً.',
-      act:{ label:'افتح مدرستي', fn:'hhOpenSchool' } },
+      act:{ label:'افتح مدرستي', fn:'hhSchoolEntry' } },
     { t:'ابدأ مسارك في مدرستي', d:'ستجد الوحدات مرتبة. ابدأ بالوحدة الأولى: اقرأ المادة، ثم الملخص، ثم جرّب القصة التفاعلية، ثم اختبر نفسك.',
-      act:{ label:'ابدأ الآن', fn:'hhOpenSchool' } },
+      act:{ label:'ابدأ الآن', fn:'hhSchoolEntry' } },
     { t:'اجتز اختبار الإتقان', d:'كل وحدة تُقفل التالية حتى تحصل على 80% في اختبار الإتقان. إن لم تنجح من أول مرة، راجع الملخص وأعد المحاولة — بعد محاولتين يُفتح لك مسار الدعم.' },
     { t:'العب وتنافس', d:'من الشاشة الرئيسية اختر فئاتك المفضلة وابدأ لعبة مع زملائك. استخدم وسائل المساعدة الخمس بذكاء: حفرة، ضاعف، منع، جوابين، والفخ.',
       act:{ label:'ابدأ لعبة', fn:'goToSetup' } },
@@ -10348,6 +10348,134 @@ function hhOpenSchool(){
   document.body.appendChild(ov);
 }
 function hhCloseSchool(){ var e=document.getElementById('hh-school'); if(e) e.remove(); }
+
+/* ═══════════════════════════════════════════════════════════
+   معالج الدخول المتدرج لمدرستي (ترحيب ← الدور ← الوجهة ← الصف ← المادة ← الفصل)
+   ═══════════════════════════════════════════════════════════ */
+var _hhSchWiz = { step:'welcome', role:null };
+
+function hhSchoolEntry(){
+  _hhSchWiz = { step:'welcome', role: (localStorage.getItem('hh_sch_wiz_role')||null) };
+  hhSchWizRender();
+}
+function hhSchWizClose(){ var e=document.getElementById('hh-sch-wiz'); if(e) e.remove(); }
+function hhSchWizGo(step){ _hhSchWiz.step=step; hhSchWizRender(); }
+function hhSchWizRole(r){
+  _hhSchWiz.role=r; try{ localStorage.setItem('hh_sch_wiz_role', r); }catch(e){}
+  hhSchWizGo('branch');
+}
+function hhSchWizBranch(b){
+  if(b==='programs'){ hhSchWizClose(); if(typeof hhOpenLeaderPrograms==='function') hhOpenLeaderPrograms(); return; }
+  hhSchWizGo('grade');
+}
+function hhSchWizFinish(){
+  try{ localStorage.setItem('hh_sch_wiz_done','1'); }catch(e){}
+  hhSchWizClose(); hhOpenSchool();
+}
+function hhSchWizSoon(){ if(typeof toast==='function') toast('قريباً بإذن الله — التوسعة مستمرة','warn'); }
+
+function _hhSchWizOpt(o){
+  /* o: {icon, title, sub, on, soon, color} */
+  var col = o.color || '#8A1538';
+  if(o.soon){
+    return '<button onclick="hhSchWizSoon()" style="display:flex;align-items:center;gap:12px;width:100%;background:#F3F0F1;border:2px dashed #C9BFC3;border-radius:14px;padding:14px 16px;font-family:Cairo;cursor:pointer;text-align:right;opacity:.75;">'
+      + '<span style="font-size:1.5rem;flex-shrink:0;filter:grayscale(1);">'+o.icon+'</span>'
+      + '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:900;font-size:.92rem;color:#777;">'+o.title+'</span>'
+      + (o.sub?'<span style="display:block;font-weight:700;font-size:.72rem;color:#999;margin-top:2px;">'+o.sub+'</span>':'')+'</span>'
+      + '<span style="background:#C9BFC3;color:#fff;border-radius:8px;padding:3px 11px;font-size:.66rem;font-weight:900;flex-shrink:0;">قريباً</span>'
+      + '</button>';
+  }
+  return '<button onclick="'+o.on+'" style="display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:2px solid '+col+';border-radius:14px;padding:14px 16px;font-family:Cairo;cursor:pointer;text-align:right;box-shadow:0 3px 10px rgba(94,14,38,.08);transition:transform .15s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'\'">'
+    + '<span style="font-size:1.5rem;flex-shrink:0;">'+o.icon+'</span>'
+    + '<span style="flex:1;min-width:0;"><span style="display:block;font-weight:900;font-size:.92rem;color:'+col+';">'+o.title+'</span>'
+    + (o.sub?'<span style="display:block;font-weight:700;font-size:.72rem;color:#888;margin-top:2px;">'+o.sub+'</span>':'')+'</span>'
+    + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;"><polyline points="15 18 9 12 15 6"/></svg>'
+    + '</button>';
+}
+
+function hhSchWizRender(){
+  var w=_hhSchWiz;
+  var old=document.getElementById('hh-sch-wiz'); if(old) old.remove();
+  var ov=document.createElement('div'); ov.id='hh-sch-wiz';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999974;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
+  ov.onclick=function(ev){ if(ev.target===ov) hhSchWizClose(); };
+
+  var steps=['role','branch','grade','subject','term'];
+  var idx=steps.indexOf(w.step);
+  var dots = (idx>=0)
+    ? '<div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">'
+      + steps.map(function(_,i){ return '<span style="width:'+(i===idx?'22px':'8px')+';height:8px;border-radius:99px;background:'+(i<=idx?'#D4BC85':'rgba(255,255,255,.25)')+';transition:all .3s;"></span>'; }).join('')
+      + '</div>'
+    : '';
+
+  var back = {role:'welcome', branch:'role', grade:'branch', subject:'grade', term:'subject'}[w.step];
+  var backBtn = back
+    ? '<button onclick="hhSchWizGo(\''+back+'\')" style="background:none;border:none;color:#fff;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;display:flex;align-items:center;gap:4px;opacity:.85;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>رجوع</button>'
+    : '<span></span>';
+
+  var title='', sub='', body='';
+
+  if(w.step==='welcome'){
+    var done = localStorage.getItem('hh_sch_wiz_done')==='1';
+    title='أهلاً بك في مدرستي';
+    sub='رحلتك التعليمية المتدرجة: وحدات ودروس وقصص واختبارات إتقان تفتح الطريق خطوةً بعد خطوة';
+    body = '<div style="text-align:center;padding:6px 0 2px;">'
+      + '<div style="font-size:3rem;margin-bottom:10px;">🏫</div>'
+      + '<button onclick="hhSchWizGo(\'role\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;font-family:Cairo;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 6px 18px rgba(94,14,38,.35);">ابدأ الرحلة</button>'
+      + (done ? '<button onclick="hhSchWizFinish()" style="width:100%;background:#fff;color:#3D6B53;border:2px solid #3D6B53;border-radius:14px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:9px;">الدخول مباشرة إلى وحداتي</button>' : '')
+      + '</div>';
+  }
+  else if(w.step==='role'){
+    title='من أنت؟'; sub='اختر دورك لنُهيّئ لك التجربة المناسبة';
+    body = '<div style="display:grid;gap:10px;">'
+      + _hhSchWizOpt({icon:'👨‍🏫', title:'معلم', sub:'إدارة الصفوف ودفتر المتابعة ومتابعة تقدم الطلاب', on:'hhSchWizRole(\'teacher\')', color:'#1F4E79'})
+      + _hhSchWizOpt({icon:'🎓', title:'طالب', sub:'التعلم المتدرج والاختبارات وشهادات التفوق', on:'hhSchWizRole(\'student\')', color:'#3D6B53'})
+      + '</div>';
+  }
+  else if(w.step==='branch'){
+    title='إلى أين وجهتك؟'; sub='اختر المسار الذي تريد';
+    body = '<div style="display:grid;gap:10px;">'
+      + _hhSchWizOpt({icon:'🏫', title:'المدرسة', sub:'الصفوف والمواد والوحدات الدراسية المتدرجة', on:'hhSchWizBranch(\'school\')', color:'#8A1538'})
+      + _hhSchWizOpt({icon:'🏆', title:'البرامج التربوية', sub:'برامج القادة والبرامج التدريبية المصاحبة', on:'hhSchWizBranch(\'programs\')', color:'#8A6D2E'})
+      + '</div>';
+  }
+  else if(w.step==='grade'){
+    title='اختر الصف'; sub='الصفوف المتاحة في مدرستي';
+    body = '<div style="display:grid;gap:10px;">'
+      + _hhSchWizOpt({icon:'7️⃣', title:'الصف السابع', sub:'المسار متاح كاملاً', on:'hhSchWizGo(\'subject\')', color:'#8A1538'})
+      + _hhSchWizOpt({icon:'8️⃣', title:'الصف الثامن', soon:true})
+      + _hhSchWizOpt({icon:'9️⃣', title:'الصف التاسع', soon:true})
+      + '</div>';
+  }
+  else if(w.step==='subject'){
+    title='اختر المادة'; sub='مواد الصف السابع';
+    body = '<div style="display:grid;gap:10px;">'
+      + _hhSchWizOpt({icon:'🌍', title:'الدراسات الاجتماعية', sub:'6 وحدات كاملة بدروسها وقصصها واختباراتها', on:'hhSchWizGo(\'term\')', color:'#8A1538'})
+      + _hhSchWizOpt({icon:'🔬', title:'العلوم', soon:true})
+      + '</div>';
+  }
+  else if(w.step==='term'){
+    title='اختر الفصل الدراسي'; sub='الدراسات الاجتماعية — الصف السابع';
+    body = '<div style="display:grid;gap:10px;">'
+      + _hhSchWizOpt({icon:'🍂', title:'الفصل الدراسي الأول', soon:true})
+      + _hhSchWizOpt({icon:'🌱', title:'الفصل الدراسي الثاني', sub:'6 وحدات — ابدأ الآن', on:'hhSchWizFinish()', color:'#3D6B53'})
+      + '</div>';
+  }
+
+  ov.innerHTML = '<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:22px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,.4);">'
+    + '<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:16px 18px;">'
+    +   '<div style="display:flex;justify-content:space-between;align-items:center;">'
+    +     backBtn
+    +     '<button onclick="hhSchWizClose()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button>'
+    +   '</div>'
+    +   '<div style="font-weight:900;font-size:1.15rem;text-align:center;margin-top:4px;">'+title+'</div>'
+    +   '<div style="font-size:.76rem;opacity:.85;text-align:center;margin-top:4px;line-height:1.8;">'+sub+'</div>'
+    +   dots
+    + '</div>'
+    + '<div style="padding:18px;">'+body+'</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+}
 function hhSchSetRole(r){ _hhSchRole=r; hhOpenSchool(); }
 function hhSchOverride(i){
   _hhSchProg['override_u'+i]=true; hhSchSave(); hhOpenSchool();
