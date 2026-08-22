@@ -11764,9 +11764,12 @@ mark.search-highlight{
 /* ═════ الإحصاءات الملكية البراقة ═════ */
 #screen-menu .hh-stats-royal{
   display:grid !important;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  grid-template-columns:repeat(4,1fr) !important;
   gap:10px; background:none !important; border:none !important;
   padding:0 !important; box-shadow:none !important;
+}
+@media (max-width:760px){
+  #screen-menu .hh-stats-royal{ grid-template-columns:repeat(2,1fr) !important; }
 }
 .hh-stat-royal{
   position:relative; text-align:center; overflow:hidden;
@@ -12060,15 +12063,25 @@ body.dark-mode input, body.dark-mode textarea, body.dark-mode select{ background
     try{
       var m=document.getElementById('screen-menu'); if(!m) return;
       var wide = window.innerWidth>900;
-      var st=m.style;
-      if(wide){
-        st.setProperty('max-width','min(1280px,96vw)','important');
-        st.setProperty('width','96%','important');
-        st.setProperty('margin-left','auto','important');
-        st.setProperty('margin-right','auto','important');
-      } else {
-        st.removeProperty('max-width'); st.removeProperty('width');
-        st.removeProperty('margin-left'); st.removeProperty('margin-right');
+      // تسلق الأسلاف من الشاشة حتى body وكسر أي قيد عرض يضيّق المحتوى
+      var node=m;
+      while(node && node!==document.body){
+        if(wide){
+          var cs=getComputedStyle(node);
+          var mw=parseFloat(cs.maxWidth);
+          var w=node.getBoundingClientRect().width;
+          var target=Math.min(1280, window.innerWidth*0.96);
+          if(((!isNaN(mw) && mw < 1100) || (w>0 && w < window.innerWidth*0.85)) && !(w >= target*0.9)){
+            node.style.setProperty('max-width','min(1280px,96vw)','important');
+            node.style.setProperty('width','96%','important');
+            node.style.setProperty('margin-left','auto','important');
+            node.style.setProperty('margin-right','auto','important');
+          }
+        } else {
+          node.style.removeProperty('max-width'); node.style.removeProperty('width');
+          node.style.removeProperty('margin-left'); node.style.removeProperty('margin-right');
+        }
+        node=node.parentElement;
       }
       ['royal-greeting','hh-hero-duo','hero-stats-bar','daily-quote-card','paths-container','partners-strip'].forEach(function(c){
         var els=m.getElementsByClassName(c);
