@@ -8012,19 +8012,17 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 
 /* تابات أفقية للفئات */
 .ms-tabs{
-  display:flex;gap:7px;margin-bottom:14px;
-  overflow-x:auto;padding:4px 2px 8px;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+  gap:10px;margin-bottom:14px;
+  padding:2px;
   position:relative;
-  -ms-overflow-style:none;
-  scroll-behavior:smooth;
 }
 .ms-tabs::-webkit-scrollbar{display:none;height:0;width:0;}
 .ms-tabs-wrap{
   position:relative;
   margin-bottom:14px;
-  padding:0 38px;
+  padding:0;
 }
 .ms-tabs-wrap::before,
 .ms-tabs-wrap::after{
@@ -8032,17 +8030,12 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
   width:16px;pointer-events:none;z-index:2;
   transition:opacity .2s;
 }
-.ms-tabs-wrap::before{
-  right:38px;
-  background:linear-gradient(270deg,#FAFAF8 0%,rgba(253,250,242,0) 100%);
-}
-.ms-tabs-wrap::after{
-  left:38px;
-  background:linear-gradient(90deg,#FAFAF8 0%,rgba(253,250,242,0) 100%);
-}
+.ms-tabs-wrap::before,
+.ms-tabs-wrap::after{display:none;}
 
 /* أسهم التنقل بين التابات */
 .ms-tabs-arrow{
+  display:none !important;
   position:absolute;top:50%;transform:translateY(-50%);
   width:30px;height:30px;border-radius:50%;
   border:1px solid rgba(184,146,74,.35);
@@ -8237,110 +8230,85 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
     transform:translateY(0);
   }
 }
-/* ─── شريط التابات — إطار ذهبي مزدوج فاخر (Patek Philippe Style) ─── */
+/* ─── شريط التابات — بطاقات فاخرة متساوية على شبكة ─── */
 .ms-tabs{
-  display:flex;
-  background:linear-gradient(180deg,#FAFAF8 0%,#F8F8F6 100%);
-  border:2px solid #B8924A;
-  border-radius:14px;
-  padding:0;
-  overflow-x:auto;overflow-y:hidden;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+  gap:10px;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  padding:2px;
+  overflow:visible;
   position:relative;
-  -ms-overflow-style:none;
-  scroll-behavior:smooth;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.9),
-    0 0 0 4px rgba(212,188,133,.12),
-    0 4px 14px rgba(94,14,38,.1),
-    0 1px 3px rgba(184,146,74,.2);
+  box-shadow:none;
   margin-bottom:0;
 }
 .ms-tabs::-webkit-scrollbar{display:none;height:0;width:0;}
 
-/* خط ذهبي علوي مزخرف متوهج */
-.ms-tabs::before{
-  content:'';
-  position:absolute;
-  top:-1px;left:8px;right:8px;
-  height:3px;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(184,146,74,.4) 12%,
-    #B8924A 25%,
-    #D4BC85 50%,
-    #B8924A 75%,
-    rgba(184,146,74,.4) 88%,
-    transparent 100%);
-  box-shadow:0 0 12px rgba(212,188,133,.5);
-  border-radius:0 0 3px 3px;
-  pointer-events:none;
-  z-index:1;
-}
+/* خط الإطار الملغى */
+.ms-tabs::before{display:none;}
+
 
 /* تنعيم زوايا التاب الأول والأخير لتطابق الإطار الذهبي */
 .ms-tab:first-child{border-radius:0 12px 12px 0;}
 .ms-tab:last-child{border-radius:12px 0 0 12px;border-right:none;}
 
 .ms-tab{
-  flex-shrink:0;
+  min-width:0;
   position:relative;
-  padding:11px 20px 11px 14px;
-  background:transparent;
-  border:none;
-  border-right:1px solid rgba(184,146,74,.18);
-  color:#8A1538;
-  font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;
+  padding:12px 12px;
+  background:#fff;
+  border:1.5px solid rgba(184,146,74,.45);
+  border-radius:14px;
+  color:var(--tad,#5E0E26);
+  font-family:'Cairo',sans-serif;font-size:.86rem;font-weight:800;
   cursor:pointer;white-space:nowrap;
-  transition:all .35s cubic-bezier(.34,1.2,.64,1);
-  display:inline-flex;align-items:center;gap:9px;
+  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
   user-select:none;
-  letter-spacing:-.1px;
+  box-shadow:0 2px 8px rgba(94,14,38,.06);
+  overflow:hidden;
 }
-.ms-tab:last-child{border-right:none;}
-.ms-tab:hover{
-  background:transparent;
-  color:#8A1538;
+.ms-tab:hover:not(.active){
+  transform:translateY(-2px);
+  border-color:var(--ta,#B8924A);
+  box-shadow:0 8px 18px rgba(94,14,38,.12);
+  background:linear-gradient(180deg,#fff,var(--tas,#FBF6EA));
 }
-.ms-tab:hover .ms-tab-name{color:#8A1538;}
-.ms-tab:hover .ms-tab-icon{
-  color:#8A1538;
-  opacity:1;
-}
+.ms-tab:active{transform:translateY(0);}
 
 /* أيقونة التاب */
 .ms-tab-icon{
   display:inline-flex;align-items:center;justify-content:center;
-  width:17px;height:17px;
-  color:#9a7c3a;
-  transition:all .25s ease;
+  width:20px;height:20px;
+  color:var(--ta,#8A1538);
+  transition:all .14s ease;
   flex-shrink:0;
-  opacity:.7;
+  opacity:1;
 }
 .ms-tab-icon svg{width:100%;height:100%;display:block;}
 
 /* الحالة النشطة */
 .ms-tab.active{
-  color:#8A1538;
+  color:#EAD9A8;
   font-weight:900;
-  background:transparent;
+  background:linear-gradient(135deg,var(--ta,#8A1538),var(--tad,#5E0E26));
+  border-color:var(--tad,#5E0E26);
+  box-shadow:0 8px 20px rgba(94,14,38,.30), 0 2px 0 var(--tad,#5E0E26);
+  transform:translateY(-1px);
 }
 .ms-tab.active::before{
   content:'';
   position:absolute;
-  bottom:-1px;left:20%;right:20%;
-  height:2.5px;
-  background:#8A1538;
-  border-radius:2px;
+  bottom:5px;left:22%;right:22%;
+  height:3px;
+  background:#D4BC85;
+  border-radius:3px;
+  box-shadow:0 0 8px rgba(212,188,133,.6);
 }
-.ms-tab.active::after{
-  display:none;
-}
-.ms-tab.active .ms-tab-icon{
-  color:#8A1538;
-  opacity:1;
-}
+.ms-tab.active::after{ display:none; }
+.ms-tab.active .ms-tab-icon{ color:#EAD9A8; }
 
 /* ألوان لكل تاب — كلها عنابي بسيط */
 .ms-tab[data-tab-id="all"],
@@ -8351,27 +8319,20 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
 
 /* عداد الأسئلة - نقطة صغيرة جداً (احترافية) */
 .ms-tab-count{
-  background:transparent;
-  color:rgba(138,21,56,.5);
-  padding:0;border-radius:0;
-  font-size:.55rem;font-weight:700;
+  background:var(--tas,#F7ECEF);
+  color:var(--tad,#5E0E26);
+  border:1px solid var(--ta,#B8924A);
+  border-radius:999px;
+  padding:2px 9px;
+  font-size:.7rem;font-weight:900;
   font-family:'Cairo',sans-serif;
-  min-width:auto;text-align:center;
-  font-variant-numeric:tabular-nums;
-  transition:all .25s ease;
-  opacity:.6;
-  letter-spacing:-.2px;
-  margin-right:2px;
+  line-height:1.5;
+  transition:all .14s ease;
 }
 .ms-tab:hover .ms-tab-count{
   opacity:.85;
 }
-.ms-tab.active .ms-tab-count{
-  background:transparent;
-  color:#8A1538;
-  opacity:.85;
-  font-weight:800;
-}
+.ms-tab.active .ms-tab-count{ background:#EAD9A8; color:var(--tad,#5E0E26); border-color:#D4BC85; }
 
 /* جوال */
 @media (max-width:520px){
@@ -9271,3 +9232,11 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
 }
 .lp-footer-bottom strong{color:#D4BC85}
 
+
+/* الجوال: بطاقات أصغر بنفس التساوي */
+@media (max-width:560px){
+  .ms-tabs{gap:7px;grid-template-columns:repeat(auto-fit,minmax(94px,1fr));}
+  .ms-tab{padding:10px 6px;font-size:.76rem;gap:5px;}
+  .ms-tab-icon{width:16px;height:16px;}
+  .ms-tab-count{padding:1px 6px;font-size:.62rem;}
+}
