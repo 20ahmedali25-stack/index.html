@@ -5179,11 +5179,29 @@ function hhShowTestReport(){
 // ═══════════════════════════════════════════════════════════════════
 //  تقرير الجلسة التربوية — قابل للطباعة والتصدير
 // ═══════════════════════════════════════════════════════════════════
+function hhOfferSessionReport(){
+  try{
+    var old=document.getElementById('hh-sr-offer'); if(old) old.remove();
+    var bar=document.createElement('div'); bar.id='hh-sr-offer';
+    bar.style.cssText='position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:999979;background:linear-gradient(175deg,#4A0B1E,#5E0E26);border:1.5px solid #B8924A;border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(30,6,15,.4);direction:rtl;';
+    bar.innerHTML='<span style="color:#F5E6C4;font-weight:800;font-size:.85rem;">انتهت الجلسة — تقرير الأداء جاهز</span>'
+      +'<button onclick="hhCloseOfferSR();hhShowSessionReport(null,false)" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:9px;padding:7px 14px;font-weight:800;font-size:.8rem;cursor:pointer;">عرض التقرير</button>'
+      +'<button onclick="hhCloseOfferSR()" aria-label="إخفاء" style="background:rgba(255,255,255,.1);color:#EAD9B0;border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;font-weight:800;cursor:pointer;">✕</button>';
+    document.body.appendChild(bar);
+    setTimeout(hhCloseOfferSR, 12000);
+  }catch(e){}
+}
+function hhCloseOfferSR(){ var b=document.getElementById('hh-sr-offer'); if(b) b.remove(); }
+function hhCloseSessionReport(){
+  var e=document.getElementById('hh-session-report');
+  if(e) e.remove();
+}
 function hhShowSessionReport(testData, isTest){
   const log = isTest ? testData : (G.sessionLog||[]);
   if(!log || !log.length){ toast('لا توجد بيانات جلسة بعد','info'); return; }
   const ov=document.createElement('div'); ov.id='hh-session-report';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.6);z-index:999980;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
+  ov.addEventListener('click', function(e){ if(e.target===ov) hhCloseSessionReport(); });
   // إحصاءات
   const total=log.length;
   const correct=log.filter(r=>r.correct).length;
@@ -5229,7 +5247,7 @@ function hhShowSessionReport(testData, isTest){
   ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#E9EEF8;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#1F4E79;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#1F4E79;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
     +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#E9EEF8;color:#1F4E79;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +(!isTest?'<button onclick=\"hhSaveSessionDialog()\" style=\"background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>':'')
     +(!isTest?'<button onclick=\"hhShowAnalytics()\" style=\"background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> التحليلات التراكمية</button>':'')
-    +'<button onclick=\"hhCloseReport()\" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
+    +'<button onclick="hhCloseSessionReport()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
 }
 function hhPrintReport(){
@@ -8943,7 +8961,7 @@ function endGame(){
   clearInterval(window._gameElapsedTimer);
   clearTimeout(window._resizeBuildTimer);
   //  عرض تقرير الجلسة للمعلم-الباحث
-  try{ if(G.sessionLog && G.sessionLog.length>0) setTimeout(()=>hhShowSessionReport(null,false), 1800); }catch(_e){}
+  try{ if(G.sessionLog && G.sessionLog.length>0) setTimeout(hhOfferSessionReport, 1500); }catch(_e){}
 
   // تتبع نشاط اللعبة للإنجازات
   try{

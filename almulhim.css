@@ -69,7 +69,7 @@
 }
 
 body{
-  font-family:'Sakkal Majalla','Traditional Arabic','Amiri','Tajawal','Cairo',sans-serif;
+  font-family:"Tajawal","Cairo",sans-serif;
   color:#2c3e50;
   min-height:100vh;
   background-color:#fbf9f2;
@@ -2290,7 +2290,7 @@ body.dark-mode .about-goal-item{ color:#c8d8e8; }
 /* Container الرئيسي */
 .royal-menu{
   width:100%;max-width:520px;margin:0 auto;padding:64px 14px 30px;
-  font-family:'Sakkal Majalla','Traditional Arabic','Amiri','Cairo',sans-serif;
+  font-family:'Cairo',sans-serif;
 }
 /* التخطيط العريض المعتمد: الحاوية تطابق عرض الشريطين */
 @media (min-width:901px){
@@ -9323,3 +9323,32 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
 @media (max-width:900px){
   .paths-container{ grid-template-columns:1fr !important; }
 }
+
+
+/* ═══ الكلمة الأخيرة: الشريطان الثابتان الملكيان (تعلو على كل ما سبق) ═══ */
+.main-nav{
+  position:fixed !important;
+  top:0 !important; left:0 !important; right:0 !important;
+  width:100% !important; max-width:none !important;
+  margin:0 !important; border-radius:0 !important;
+  z-index:2000 !important;
+  background:linear-gradient(175deg,#4A0B1E,#5E0E26) !important;
+  border-bottom:2px solid #B8924A !important;
+  box-shadow:0 2px 14px rgba(61,9,24,.35) !important;
+}
+.hh-bottom-nav{
+  position:fixed !important;
+  bottom:0 !important; left:0 !important; right:0 !important;
+  width:100% !important; max-width:none !important;
+  margin:0 !important; border-radius:0 !important;
+  z-index:2000 !important;
+  background:linear-gradient(175deg,#4A0B1E,#5E0E26) !important;
+  border-top:1.5px solid #B8924A !important;
+  box-shadow:0 -3px 16px rgba(61,9,24,.4) !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:clamp(6px, 2.2vw, 34px) !important;
+  padding:9px 12px 10px !important;
+}
+.hh-bottom-nav::before{ display:none !important; }
