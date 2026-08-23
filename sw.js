@@ -6,7 +6,7 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-zp-unified-bars-games';
+const SW_VERSION = 'almulhim-zt-modular';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
@@ -15,6 +15,8 @@ const CORE_ASSETS = [
   '/index.html',
   '/almulhim.css',
   '/almulhim-engine.js',
+  '/almulhim-programs.js',
+  '/almulhim-school.js',
   '/curriculum-social7.js',
   '/madrasati-social7.js',
   '/questions.js',

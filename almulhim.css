@@ -69,7 +69,7 @@
 }
 
 body{
-  font-family:'Sakkal Majalla','Traditional Arabic','Tajawal','Cairo',sans-serif;
+  font-family:'Sakkal Majalla','Traditional Arabic','Amiri','Tajawal','Cairo',sans-serif;
   color:#2c3e50;
   min-height:100vh;
   background-color:#fbf9f2;
@@ -2290,7 +2290,7 @@ body.dark-mode .about-goal-item{ color:#c8d8e8; }
 /* Container الرئيسي */
 .royal-menu{
   width:100%;max-width:520px;margin:0 auto;padding:64px 14px 30px;
-  font-family:'Sakkal Majalla','Traditional Arabic','Cairo',sans-serif;
+  font-family:'Sakkal Majalla','Traditional Arabic','Amiri','Cairo',sans-serif;
 }
 /* التخطيط العريض المعتمد: الحاوية تطابق عرض الشريطين */
 @media (min-width:901px){

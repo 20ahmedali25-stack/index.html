@@ -559,6 +559,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="almulhim.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap">
 
 
 <style id="hh-mcq-css">
@@ -5603,6 +5606,8 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 <script src="legend-maps-questions.js" defer></script>
 
 <script src="almulhim-engine.js" charset="utf-8"></script>
+<script src="almulhim-programs.js" charset="utf-8"></script>
+<script src="almulhim-school.js" charset="utf-8"></script>
 <script>
 // صمام الفتح المنفرد: إن لم يُحمَّل المحرك (فتح الملف بلا رفيقيه) نعرض توجيهاً بدل صفحة عارية
 setTimeout(function(){
@@ -11751,7 +11756,16 @@ mark.search-highlight{
   --hh-maroon-deep:#4A0B1E; --hh-maroon:#5E0E26; --hh-maroon-mid:#8A1538;
   --hh-gold:#B8924A; --hh-gold-light:#D4BC85; --hh-gold-pale:#EAD9B0; --hh-cream:#FDF3DD;
 }
-*{ font-family:'Sakkal Majalla','Traditional Arabic',Cairo,Tajawal,sans-serif !important; }
+/* خط المنصة: يستخدم المثبت محلياً (ويندوز)، وعند إضافة ملف الخط المرخص
+   ارفع fonts/SakkalMajalla.woff2 وأزل التعليق عن سطر url أدناه
+   ليعمل على أندرويد وآيفون أيضاً */
+@font-face{
+  font-family:'Sakkal Majalla';
+  src: local('Sakkal Majalla'), local('SakkalMajalla');
+       /* , url('fonts/SakkalMajalla.woff2') format('woff2') */
+  font-display: swap;
+}
+*{ font-family:'Sakkal Majalla','Traditional Arabic','Amiri',Cairo,Tajawal,sans-serif !important; }
 
 /* ═════ التاج الملكي (صف الترحيب والإجراءات) ═════ */
 #screen-menu .hh-crown{
