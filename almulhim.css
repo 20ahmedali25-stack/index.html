@@ -9352,3 +9352,28 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
   padding:9px 12px 10px !important;
 }
 .hh-bottom-nav::before{ display:none !important; }
+
+
+/* ═══ الكلمة الأخيرة v2: كبسولات العلوي النقية + محبرة ذهبية ═══ */
+.main-nav .nav-link *{
+  background:none !important; border:none !important;
+  box-shadow:none !important; border-radius:0 !important;
+  width:auto !important; height:auto !important;
+  min-width:0 !important; min-height:0 !important;
+  padding:0 !important; margin:0 !important;
+}
+.main-nav .nav-link *::before, .main-nav .nav-link *::after{ display:none !important; }
+.main-nav .nav-link svg{ width:15px !important; height:15px !important; color:#D4BC85 !important; }
+.main-nav .nav-link span{ color:#F5E6C4 !important; font-weight:700 !important; font-size:12px !important; }
+.main-nav .nav-link:hover svg, .main-nav .nav-link.active svg,
+.main-nav .nav-link:hover span, .main-nav .nav-link.active span{ color:#3D0918 !important; }
+
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-icon{
+  width:46px !important; height:46px !important; border-radius:13px !important;
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  color:#3D0918 !important; border:2px solid #FDF3DD !important;
+  box-shadow:0 6px 16px rgba(184,146,74,.4) !important;
+}
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara{ transform:translateY(-9px) !important; }
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara:active{ transform:translateY(-9px) scale(.9) !important; }
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-label{ color:#FDF3DD !important; }
