@@ -5599,6 +5599,7 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 <script src="questions.js"></script>
 <script src="curriculum-social7.js" defer></script>
 <script src="madrasati-social7.js" defer></script>
+<script src="madrasati-social7-t1.js" defer></script>
 <script src="maps-questions.js" defer></script>
 <script src="flags-questions.js" defer></script>
 <script src="capitals-questions.js" defer></script>
@@ -11902,6 +11903,115 @@ mark.search-highlight{
   color:#3D0918 !important; border-color:var(--hh-cream) !important;
 }
 .hh-bottom-nav .hh-nav-item.active .hh-nav-label{ color:var(--hh-cream) !important; }
+
+/* ═════ طبقة الإتقان البصري النهائية ═════ */
+
+/* الشريط العلوي: مكتمل من حافة لحافة بلا أطراف ظاهرة */
+.main-nav{
+  border-radius:0 !important;
+  margin:0 !important;
+  left:0 !important; right:0 !important;
+  width:100% !important; max-width:none !important;
+  top:0 !important;
+}
+/* ألوان الخط: من الباهت إلى المضيء */
+.main-nav .main-nav-link{ color:#EAD9B0 !important; font-weight:700 !important; }
+.main-nav .main-nav-link .hh-icon, .main-nav .main-nav-link svg{ color:#F5E6C4 !important; }
+
+/* الشريط السفلي: قوي متناسق مكتمل */
+.hh-bottom-nav{
+  padding-top:9px !important; padding-bottom:10px !important;
+}
+.hh-bottom-nav .hh-nav-item,
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara,
+.hh-bottom-nav .hh-nav-item.hh-nav-center{
+  width:72px !important; min-width:72px !important; max-width:72px !important;
+}
+.hh-bottom-nav .hh-nav-icon,
+.hh-bottom-nav .hh-nav-mihbara .hh-nav-icon,
+.hh-bottom-nav .hh-nav-center .hh-nav-icon{
+  width:38px !important; height:38px !important;
+  border:1px solid rgba(212,188,133,.4) !important;
+  background:rgba(212,188,133,.08) !important;
+  color:#EAD9B0 !important;
+}
+.hh-bottom-nav .hh-nav-icon svg{ width:19px !important; height:19px !important; }
+.hh-bottom-nav .hh-nav-label,
+.hh-bottom-nav .hh-nav-mihbara .hh-nav-label{
+  font-size:.86rem !important; color:#EAD9B0 !important; margin-top:3px !important;
+}
+.hh-bottom-nav .hh-nav-item.active .hh-nav-icon{
+  background:linear-gradient(135deg,var(--hh-gold-pale),var(--hh-gold)) !important;
+  color:#3D0918 !important; border-color:var(--hh-cream) !important;
+  box-shadow:0 0 0 3px rgba(212,188,133,.22) !important;
+}
+
+/* بطاقات المسارات: أبعاد طبيعية وخلفيات نقية */
+@media (min-width:901px){
+  .paths-container{
+    max-width:1060px !important;
+    grid-template-columns:repeat(3, minmax(0, 340px)) !important;
+    justify-content:center !important;
+    gap:16px !important;
+  }
+}
+.paths-container .path-card{
+  min-height:300px !important;
+  border-radius:16px !important;
+  overflow:hidden !important;
+}
+.paths-container .path-card-inner{ padding:22px 18px !important; }
+.paths-container .path-title{ font-size:1.3rem !important; color:#fff !important; }
+.paths-container .path-desc{ font-size:.95rem !important; line-height:1.9 !important; }
+.paths-container .path-cta{ font-size:1rem !important; padding:10px !important; }
+/* خلفيات نقية تلغي أي تدرجات قديمة متداخلة */
+#screen-menu .path-card.path-teacher{ background:linear-gradient(160deg,#7A1330,#4A0B1E) !important; border:1.5px solid #B8924A !important; }
+#screen-menu .path-card.path-student{ background:linear-gradient(160deg,#3A6A54,#22443A) !important; border:1.5px solid #B8924A !important; }
+#screen-menu .path-card.path-games{ background:linear-gradient(160deg,#8A6D2E,#4A3A14) !important; border:1.5px solid #D4BC85 !important; }
+#screen-menu .path-card::before, #screen-menu .path-card::after{ display:none !important; }
+
+/* المشهد الأول بطول الشاشة: التاج والاقتباس والإحصاءات يملأون أول شاشة */
+@media (min-width:901px){
+  #screen-menu .hh-crown{ min-height:150px !important; padding:22px 26px !important; }
+  #screen-menu .hh-crown .royal-username{ font-size:2rem !important; }
+  #screen-menu .hh-hero-duo{ min-height:calc(100vh - 420px); align-items:stretch !important; }
+  #screen-menu .hh-hero-duo > *{ height:100%; }
+  #screen-menu .hh-quote-royal{ display:flex !important; flex-direction:column; justify-content:center; }
+  #screen-menu .hh-stats-royal{ align-content:stretch; }
+  .hh-stat-royal{ display:flex; flex-direction:column; justify-content:center; padding:20px 10px 18px !important; }
+  .hh-stat-medal{ width:56px !important; height:56px !important; }
+  .hh-stat-num{ font-size:2rem !important; }
+  .hh-stat-label{ font-size:1.05rem !important; }
+  .hh-stat-chip{ font-size:.85rem !important; }
+  #screen-menu .hh-quote-text{ font-size:1.4rem !important; }
+}
+
+/* شاشة الدخول: الهوية الملكية */
+#screen-login .logo-title{ color:#5E0E26 !important; font-weight:700 !important; }
+#screen-login .logo-sub{ color:#8A6D2E !important; }
+#screen-login .card{
+  background:#FBF7F0 !important;
+  border:1.5px solid #B8924A !important;
+  border-top:4px solid #8A1538 !important;
+  border-radius:16px !important;
+  box-shadow:0 14px 40px rgba(94,14,38,.14) !important;
+}
+#screen-login .card-title{ color:#5E0E26 !important; font-weight:700 !important; }
+#screen-login input{
+  background:#fff !important;
+  border:1.5px solid #D4BC85 !important;
+  border-radius:10px !important;
+  color:#3D2A16 !important;
+}
+#screen-login input:focus{ border-color:#8A1538 !important; box-shadow:0 0 0 3px rgba(138,21,56,.12) !important; }
+#screen-login .btn{
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  color:#3D0918 !important;
+  border:1px solid #FDF3DD !important;
+  border-radius:11px !important;
+  font-weight:700 !important;
+  box-shadow:0 5px 14px rgba(138,109,46,.3) !important;
+}
 
 /* ═════════════════════════════════════════════
     التخطيط العريض للشاشة الرئيسية (معتمد)

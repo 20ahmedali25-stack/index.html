@@ -334,14 +334,25 @@ function hhCloseStory(){
 var _hhSchProg = {};
 var _hhSchRole = 'student';   // student | teacher
 
+// ═══ دعم الفصلين: الفصل الثاني (الافتراضي) والفصل الأول ═══
+var _hhSchTerm = 't2';
+function hhSchData(){
+  return (_hhSchTerm === 't1' && window._HH_SCHOOL_T1) ? window._HH_SCHOOL_T1 : window._HH_SCHOOL;
+}
+function hhSchSetTerm(t){
+  _hhSchTerm = (t === 't1' && window._HH_SCHOOL_T1) ? 't1' : 't2';
+  hhSchLoad();
+}
+function _hhSchKey(){ return _HH_SCH_KEY + (_hhSchTerm === 't1' ? '_t1' : ''); }
+
 function hhSchLoad(){
-  try{ _hhSchProg = JSON.parse(localStorage.getItem(_HH_SCH_KEY) || '{}') || {}; }
+  try{ _hhSchProg = JSON.parse(localStorage.getItem(_hhSchKey()) || '{}') || {}; }
   catch(e){ _hhSchProg = {}; }
   return _hhSchProg;
 }
 function hhSchSave(){
   try{
-    localStorage.setItem(_HH_SCH_KEY, JSON.stringify(_hhSchProg));
+    localStorage.setItem(_hhSchKey(), JSON.stringify(_hhSchProg));
     if(typeof firebase!=='undefined' && firebase.firestore && typeof currentUser!=='undefined' && currentUser){
       firebase.firestore().collection('school_progress').doc(currentUser.uid)
         .set({ progress:_hhSchProg, name:(currentUser.displayName||currentUser.email||''),
@@ -352,7 +363,7 @@ function hhSchSave(){
 hhSchLoad();
 
 function hhSchUnitState(uIdx){
-  var S = window._HH_SCHOOL; if(!S) return 'locked';
+  var S = hhSchData(); if(!S) return 'locked';
   if(uIdx === 0) return _hhSchProg['u'+uIdx+'_mastery'] >= S.masteryPass ? 'done' : 'open';
   var prev = _hhSchProg['u'+(uIdx-1)+'_mastery'] || 0;
   if(_hhSchProg['override_u'+uIdx]) return _hhSchProg['u'+uIdx+'_mastery'] >= S.masteryPass ? 'done' : 'open';
@@ -363,7 +374,7 @@ function hhSchAttempts(uIdx){ return _hhSchProg['u'+uIdx+'_attempts'] || 0; }
 
 // ── الواجهة الرئيسة ──
 function hhOpenSchool(){
-  var S = window._HH_SCHOOL;
+  var S = hhSchData();
   if(!S){ if(typeof toast==='function') toast('لم تُحمَّل بيانات مدرستي','warn'); return; }
   hhSchLoad();
   var old=document.getElementById('hh-school'); if(old) old.remove();
@@ -505,8 +516,9 @@ function hhSchWizRole(r){
   _hhSchWiz.role=r; try{ localStorage.setItem('hh_sch_wiz_role', r); }catch(e){}
   hhSchWizGo('grade');
 }
-function hhSchWizFinish(){
+function hhSchWizFinish(term){
   try{ localStorage.setItem('hh_sch_wiz_done','1'); }catch(e){}
+  hhSchSetTerm(term || 't2');
   hhSchWizClose(); hhOpenSchool();
 }
 function hhSchWizSoon(){ if(typeof toast==='function') toast('قريباً بإذن الله — التوسعة مستمرة','warn'); }
@@ -611,9 +623,12 @@ function hhSchWizRender(){
   }
   else if(w.step==='term'){
     title='اختر الفصل الدراسي'; sub='الدراسات الاجتماعية — الصف السابع';
+    var t1ok = !!window._HH_SCHOOL_T1;
     body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:_hhSchWizIco('term','#999'), title:'الفصل الدراسي الأول', soon:true})
-      + _hhSchWizOpt({icon:_hhSchWizIco('units','#3D6B53'), title:'الفصل الدراسي الثاني', sub:'6 وحدات — ابدأ الآن', on:'hhSchWizFinish()', color:'#3D6B53'})
+      + (t1ok
+          ? _hhSchWizOpt({icon:_hhSchWizIco('term','#8A1538'), title:'الفصل الدراسي الأول', sub:'6 وحدات: الأرض من حولي، بلاد الرافدين، السلطات، السكان، العباسية، الأمن الوطني', on:'hhSchWizFinish(\'t1\')', color:'#8A1538'})
+          : _hhSchWizOpt({icon:_hhSchWizIco('term','#999'), title:'الفصل الدراسي الأول', soon:true}))
+      + _hhSchWizOpt({icon:_hhSchWizIco('units','#3D6B53'), title:'الفصل الدراسي الثاني', sub:'6 وحدات — ابدأ الآن', on:'hhSchWizFinish(\'t2\')', color:'#3D6B53'})
       + '</div>';
   }
 
@@ -637,7 +652,7 @@ function hhSchOverride(i){
   if(typeof toast==='function') toast('فُتحت الوحدة استثنائياً','success');
 }
 function hhSchSupport(i){
-  var U=window._HH_SCHOOL.units[i];
+  var U=hhSchData().units[i];
   var html = U.lessons.map(function(L){
     return '<div style="background:#fff;border-radius:10px;padding:11px;margin-bottom:8px;">'
       + '<div style="font-weight:900;font-size:.82rem;color:#8A6D2E;margin-bottom:5px;">'+esc(L.title)+'</div>'
@@ -650,7 +665,7 @@ function hhSchSupport(i){
   hhSchModal('مسار الدعم — '+U.unit, html, '#B8924A');
 }
 function hhSchLesson(ui, li, kind){
-  var L = window._HH_SCHOOL.units[ui].lessons[li];
+  var L = hhSchData().units[ui].lessons[li];
   if(kind==='summary'){
     var h = L.summary.map(function(s,i){
       return '<div style="background:#fff;border-right:3px solid #8A1538;border-radius:9px;padding:10px 12px;margin-bottom:7px;font-size:.82rem;line-height:1.95;color:#333;">'+esc(s)+'</div>';
@@ -690,7 +705,7 @@ function hhSchModal(title, html, color){
 // ── الاختبارات ──
 var _hhTest = null;
 function hhSchTest(ui, li, kind){
-  var S=window._HH_SCHOOL, U=S.units[ui];
+  var S=hhSchData(), U=S.units[ui];
   var pool=[], title='';
   if(kind==='mastery'){
     U.lessons.forEach(function(L){ pool=pool.concat(L.q.map(function(q){return Object.assign({},q,{_l:L.title});})); });
@@ -751,7 +766,7 @@ function hhSchFinish(){
   var T=_hhTest; if(!T) return;
   var correct=T.answers.filter(function(a){return a.correct;}).length;
   var pct=Math.round(correct/T.answers.length*100);
-  var S=window._HH_SCHOOL;
+  var S=hhSchData();
   var passed = pct >= S.masteryPass;
 
   // حفظ التقدم
@@ -810,7 +825,7 @@ function hhSchRetry(){
 
 // ── لوحة متابعة المعلم ──
 function hhSchTeacherPanel(){
-  var S=window._HH_SCHOOL;
+  var S=hhSchData();
   var rows = S.units.map(function(U,i){
     var st=hhSchUnitState(i);
     var m=_hhSchProg['u'+i+'_mastery']||0;
@@ -846,7 +861,7 @@ function hhSchTeacherPanel(){
   hhSchModal('لوحة متابعة الصف', html, '#1F4E79');
 }
 function hhSchExportCSV(){
-  var S=window._HH_SCHOOL;
+  var S=hhSchData();
   var rows=[['الوحدة','الدرس','اختبار سريع%','اختبار شامل%','الإتقان%','المحاولات','الحالة']];
   S.units.forEach(function(U,i){
     var m=_hhSchProg['u'+i+'_mastery']||0, at=hhSchAttempts(i), st=hhSchUnitState(i);
