@@ -364,6 +364,9 @@ hhSchLoad();
 
 function hhSchUnitState(uIdx){
   var S = hhSchData(); if(!S) return 'locked';
+  // القاعدة المعتمدة: المدرسة مفتوحة بالكامل — الإتقان شارة تقدم لا قفل
+  if(_hhSchProg['u'+uIdx+'_mastery'] >= S.masteryPass) return 'done';
+  return 'open';
   if(uIdx === 0) return _hhSchProg['u'+uIdx+'_mastery'] >= S.masteryPass ? 'done' : 'open';
   var prev = _hhSchProg['u'+(uIdx-1)+'_mastery'] || 0;
   if(_hhSchProg['override_u'+uIdx]) return _hhSchProg['u'+uIdx+'_mastery'] >= S.masteryPass ? 'done' : 'open';
@@ -449,6 +452,13 @@ function hhOpenSchool(){
     +       '<div style="font-size:.8rem;color:#EAD9B0;margin-top:4px;font-weight:700;">أتممت '+doneCount+' من '+S.units.length+' وحدات في رحلة الإتقان</div>'
     +     '</div>'
     +   '</div>'
+    +   (_hhSchRole==='teacher'
+        ? '<div style="display:flex;align-items:center;gap:8px;margin-top:11px;position:relative;flex-wrap:wrap;">'
+          + '<span style="background:rgba(31,78,121,.35);border:1px solid #6FA8DC;color:#CFE2F3;border-radius:99px;padding:2px 12px;font-size:.76rem;font-weight:700;">وضع المعلم</span>'
+          + '<button onclick="hhSchTeacherAdd()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:99px;padding:5px 16px;font-weight:700;font-size:.82rem;cursor:pointer;">+ إضافة محتوى</button>'
+          + '<span style="color:#D4BC85;font-size:.72rem;">ارفع درساً وحوّله تلقائياً إلى اختبار أو قصة</span>'
+          + '</div>'
+        : '')
     + '</div>'
     + '<div style="padding:15px 18px;">'
     +   (function(){
@@ -506,8 +516,21 @@ function hhCloseSchool(){ var e=document.getElementById('hh-school'); if(e) e.re
    ═══════════════════════════════════════════════════════════ */
 var _hhSchWiz = { step:'welcome', role:null };
 
-function hhSchoolEntry(){
-  _hhSchWiz = { step:'welcome', role: (localStorage.getItem('hh_sch_wiz_role')||null) };
+// دور المدرسة: يُستنتج من السياق (المسار أو تصنيف المستخدم في المنصة) — لا يُسأل
+var _hhSchRole = 'student';
+function hhSchResolveRole(explicit){
+  if(explicit==='teacher' || explicit==='student'){ _hhSchRole=explicit; return _hhSchRole; }
+  try{
+    if(typeof hhIsAdmin==='function' && hhIsAdmin()){ _hhSchRole='teacher'; return _hhSchRole; }
+    if(typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher'){ _hhSchRole='teacher'; return _hhSchRole; }
+  }catch(e){}
+  _hhSchRole='student';
+  return _hhSchRole;
+}
+function hhSchoolEntry(role){
+  hhSchResolveRole(role);
+  try{ localStorage.setItem('hh_sch_wiz_role', _hhSchRole); }catch(e){}
+  _hhSchWiz = { step:'welcome', role:_hhSchRole };
   hhSchWizRender();
 }
 function hhSchWizClose(){ var e=document.getElementById('hh-sch-wiz'); if(e) e.remove(); }
@@ -595,15 +618,8 @@ function hhSchWizRender(){
       +   '<span style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#8A1538,#5E0E26);border:2px solid #B8924A;display:inline-flex;align-items:center;justify-content:center;">'
       +   '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D4BC85" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/></svg>'
       +   '</span></div>'
-      + '<button onclick="hhSchWizGo(\'role\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;font-family:Cairo;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 6px 18px rgba(94,14,38,.35);">ابدأ الرحلة</button>'
+      + '<button onclick="hhSchWizGo(\'grade\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;font-family:Cairo;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 6px 18px rgba(94,14,38,.35);">ابدأ الرحلة</button>'
       + (done ? '<button onclick="hhSchWizFinish()" style="width:100%;background:#fff;color:#3D6B53;border:2px solid #3D6B53;border-radius:14px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:9px;">الدخول مباشرة إلى وحداتي</button>' : '')
-      + '</div>';
-  }
-  else if(w.step==='role'){
-    title='من أنت؟'; sub='اختر دورك لنُهيّئ لك التجربة المناسبة';
-    body = '<div style="display:grid;gap:10px;">'
-      + _hhSchWizOpt({icon:_hhSchWizIco('teacher','#1F4E79'), title:'معلم', sub:'إدارة الصفوف ودفتر المتابعة ومتابعة تقدم الطلاب', on:'hhSchWizRole(\'teacher\')', color:'#1F4E79'})
-      + _hhSchWizOpt({icon:_hhSchWizIco('student','#3D6B53'), title:'طالب', sub:'التعلم المتدرج والاختبارات وشهادات التفوق', on:'hhSchWizRole(\'student\')', color:'#3D6B53'})
       + '</div>';
   }
   else if(w.step==='grade'){
@@ -882,6 +898,80 @@ function hhSchReset(){
   if(typeof toast==='function') toast('صُفّر التقدّم','info');
 }
 
+// بوابة إضافة المحتوى للمعلم: تتطلب اعتماد المنصة
+function hhSchTeacherAdd(){
+  var approved = false;
+  try{
+    approved = (typeof hhIsAdmin==='function' && hhIsAdmin())
+            || (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher');
+  }catch(e){}
+  if(approved){ hhOpenCurriculum(); return; }
+  hhSchApprovalForm();
+}
+
+// نموذج طلب الاعتماد: الاسم، المادة، المدرسة، رقم التواصل، البريد
+async function hhSchApprovalForm(){
+  if(typeof currentUser==='undefined' || !currentUser){
+    if(typeof toast==='function') toast('سجّل دخولك أولاً لتقديم طلب الاعتماد','warn');
+    return;
+  }
+  try{
+    if(db){
+      var doc = await db.collection('teacher_requests').doc(currentUser.uid).get();
+      if(doc.exists && doc.data().status==='pending'){
+        if(typeof toast==='function') toast('طلب اعتمادك قيد المراجعة — سنعلمك فور القبول','info');
+        return;
+      }
+    }
+  }catch(e){}
+  var old=document.getElementById('hh-sch-approve'); if(old) old.remove();
+  var ov=document.createElement('div'); ov.id='hh-sch-approve';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999992;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;overflow-y:auto;';
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
+  function fld(id,label,val,type){
+    return '<div style="margin-bottom:10px;"><label style="display:block;font-size:.78rem;color:#8A6D2E;font-weight:700;margin-bottom:4px;">'+label+'</label>'
+      +'<input id="'+id+'" type="'+(type||'text')+'" value="'+(val||'')+'" style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #D4BC85;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;color:#3D2A16;"></div>';
+  }
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-top:4px solid #8A1538;border-radius:16px;max-width:420px;width:100%;overflow:hidden;">'
+    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 16px;border-bottom:2px solid #B8924A;">'
+    +'<div style="font-weight:700;font-size:1.05rem;">طلب اعتماد معلم</div>'
+    +'<div style="font-size:.78rem;color:#EAD9B0;margin-top:2px;">الاعتماد يمنحك صلاحية إضافة المحتوى وتحويله لاختبارات وقصص</div></div>'
+    +'<div style="padding:16px;">'
+    + fld('ap-name','اسم المعلم', currentUser.displayName||'')
+    + fld('ap-subject','المادة التي تدرّسها','')
+    + fld('ap-school','المدرسة','')
+    + fld('ap-phone','رقم التواصل','','tel')
+    + fld('ap-email','البريد الإلكتروني', currentUser.email||'','email')
+    +'<div id="ap-status" style="font-size:.78rem;font-weight:700;margin-bottom:8px;"></div>'
+    +'<button onclick="hhSchSubmitApproval()" style="width:100%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer;">إرسال الطلب</button>'
+    +'<button onclick="document.getElementById(\'hh-sch-approve\').remove()" style="width:100%;background:none;border:none;color:#8A6D2E;font-weight:700;font-size:.8rem;cursor:pointer;margin-top:8px;">إلغاء</button>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+}
+
+async function hhSchSubmitApproval(){
+  var g=function(id){ var e=document.getElementById(id); return e?e.value.trim():''; };
+  var st=document.getElementById('ap-status');
+  var name=g('ap-name'), subject=g('ap-subject'), school=g('ap-school'), phone=g('ap-phone'), email=g('ap-email');
+  if(!name||!subject||!school||!phone||!email){
+    if(st){ st.textContent='أكمل الحقول الخمسة جميعها'; st.style.color='#c0392b'; }
+    return;
+  }
+  try{
+    await db.collection('teacher_requests').doc(currentUser.uid).set({
+      uid: currentUser.uid, name:name, subject:subject, school:school,
+      phone:phone, email:email, status:'pending',
+      createdAt: new Date().toISOString()
+    });
+    var ov=document.getElementById('hh-sch-approve'); if(ov) ov.remove();
+    if(typeof toast==='function') toast('أُرسل طلب اعتمادك — ستصلك صلاحية الإضافة فور القبول','success');
+    if(typeof hhLogActivity==='function') hhLogActivity('teacher_request', name+' — '+school);
+  }catch(e){
+    console.error('approval submit', e);
+    if(st){ st.textContent='تعذر الإرسال — تأكد من اتصالك وحاول ثانية'; st.style.color='#c0392b'; }
+  }
+}
+
 function hhOpenCurriculum(){
   hhLoadLessons();
   var old = document.getElementById('hh-curr'); if(old) old.remove();
@@ -889,7 +979,7 @@ function hhOpenCurriculum(){
   ov.style.cssText = 'position:fixed;inset:0;background:rgba(30,6,15,.66);z-index:999975;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
 
   var lessonCards = _hhLessons.length ? _hhLessons.map(function(L, i){
-    return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-right:4px solid #1F4E79;border-radius:12px;padding:11px 13px;margin-bottom:8px;">' + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">' +   '<div style="flex:1;min-width:0;">' +     '<div style="font-weight:900;font-size:.85rem;color:#1F4E79;">' + esc(L.lesson||'درس') + '</div>' +     '<div style="font-size:.7rem;color:#888;font-weight:700;margin-top:2px;">' +        esc(L.subject||'') + ' · ' + esc(L.grade||'') + ' · ' + esc(L.unit||'') + '</div>' +     '<div style="font-size:.68rem;color:#aaa;margin-top:3px;">' + (L.text ? L.text.length : 0) + ' حرفاً · ' + esc(L.date||'') + '</div>' +   '</div>' +   '<div style="display:flex;gap:5px;flex-wrap:wrap;">' +     '<button onclick="hhGenerateFromLesson(' + i + ')" style="background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;"> ولّد</button>' +     '<button onclick="hhViewLesson(' + i + ')" style="background:#E9EEF8;color:#1F4E79;border:1px solid #1F4E79;border-radius:8px;padding:6px 10px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">نص</button>' +     '<button onclick="hhDeleteLesson(' + i + ')" style="background:#fff;color:#c0392b;border:1px solid #e0c0c0;border-radius:8px;padding:6px 10px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>' +   '</div></div></div>';
+    return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-right:4px solid #1F4E79;border-radius:12px;padding:11px 13px;margin-bottom:8px;">' + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">' +   '<div style="flex:1;min-width:0;">' +     '<div style="font-weight:900;font-size:.85rem;color:#1F4E79;">' + esc(L.lesson||'درس') + '</div>' +     '<div style="font-size:.7rem;color:#888;font-weight:700;margin-top:2px;">' +        esc(L.subject||'') + ' · ' + esc(L.grade||'') + ' · ' + esc(L.unit||'') + '</div>' +     '<div style="font-size:.68rem;color:#aaa;margin-top:3px;">' + (L.text ? L.text.length : 0) + ' حرفاً · ' + esc(L.date||'') + '</div>' +   '</div>' +   '<div style="display:flex;gap:5px;flex-wrap:wrap;">' +     '<button onclick="hhGenerateFromLesson(' + i + ')" style="background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;"> ولّد</button>' +     '<button onclick="hhLessonToStory(' + i + ')" style="background:#F5E9EE;color:#8A1538;border:1px solid #8A1538;border-radius:8px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">قصة</button>' +     '<button onclick="hhViewLesson(' + i + ')" style="background:#E9EEF8;color:#1F4E79;border:1px solid #1F4E79;border-radius:8px;padding:6px 10px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">نص</button>' +     '<button onclick="hhDeleteLesson(' + i + ')" style="background:#fff;color:#c0392b;border:1px solid #e0c0c0;border-radius:8px;padding:6px 10px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>' +   '</div></div></div>';
   }).join('') : '<div style="text-align:center;color:#999;font-size:.82rem;font-weight:700;padding:22px;">لم تُضف دروس بعد — ابدأ برفع درسك الأول </div>';
 
   ov.innerHTML = '<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' + '<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +   '<div style="font-weight:900;font-size:.98rem;"> مركز المنهج</div>' +   '<button onclick="hhCloseCurriculum()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' + '<div style="padding:16px 18px;">' // نموذج الإضافة
@@ -945,6 +1035,46 @@ function hhDeleteLesson(i){
   hhOpenCurriculum();
   if(typeof toast==='function') toast('حُذف الدرس','info');
 }
+// تحويل درس من مكتبة المعلم إلى قصة تفاعلية تلقائياً
+function hhLessonToStory(i){
+  var L=_hhLessons[i]; if(!L) return;
+  var sents=(L.text||'').replace(/\s+/g,' ').split(/[.؟!،؛\n]+/)
+    .map(function(s){return s.trim();})
+    .filter(function(s){return s.length>=30 && s.length<=220;});
+  if(sents.length<4){
+    if(typeof toast==='function') toast('نص الدرس قصير عن توليد قصة — يحتاج 4 جمل معلوماتية على الأقل','warn');
+    return;
+  }
+  var flips=[['يزداد','يقل'],['تزداد','تقل'],['مرتفع','منخفض'],['ارتفاع','انخفاض'],['شمال','جنوب'],['شرق','غرب'],['أكبر','أصغر'],['قبل','بعد'],['صيف','شتاء'],['عكسية','طردية'],['الأول','الأخير'],['جميع','بعض'],['دائماً','نادراً']];
+  function distort(s){
+    for(var f=0; f<flips.length; f++){
+      if(s.indexOf(flips[f][0])!==-1) return s.split(flips[f][0]).join(flips[f][1]);
+      if(s.indexOf(flips[f][1])!==-1) return s.split(flips[f][1]).join(flips[f][0]);
+    }
+    var m=s.match(/\d+/);
+    if(m){ var n=parseInt(m[0],10); return s.replace(m[0], String(n+(n>10?Math.round(n/2):3))); }
+    return 'ليس صحيحاً أن '+s;
+  }
+  function shuffle(a){ for(var x=a.length-1;x>0;x--){var j=Math.floor(Math.random()*(x+1));var t=a[x];a[x]=a[j];a[j]=t;} return a; }
+  var picked=sents.slice(0, Math.min(5, sents.length));
+  var scenes=picked.map(function(s, idx){
+    var ch=shuffle([
+      { t:s, ok:true,  fb:'أحسنت — هذه هي المعلومة الدقيقة كما وردت في الدرس.' },
+      { t:distort(s), ok:false, fb:'انتبه — الصياغة الدقيقة في الدرس هي: «'+s+'».' }
+    ]);
+    return { id:idx+1, text:'المحطة '+(idx+1)+': أيُّ العبارتين هي الدقيقة علمياً؟', choices:ch };
+  });
+  var sid='cur_'+(L.ts||Date.now());
+  HH_STORIES[sid]={
+    title:'رحلة: '+L.lesson,
+    unit:'من مناهجي — '+(L.subject||''),
+    intro:'قصة مولدة تلقائياً من درسك «'+L.lesson+'»: في كل محطة عبارتان إحداهما دقيقة والأخرى محرفة — ميّز الصواب لتتقدم.',
+    scenes:scenes
+  };
+  if(typeof hhLogActivity==='function') hhLogActivity('generate','قصة من درس: '+L.lesson);
+  hhStartStory(sid);
+}
+
 function hhViewLesson(i){
   var L=_hhLessons[i]; if(!L) return;
   var ov=document.createElement('div');
