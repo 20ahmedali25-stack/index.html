@@ -11915,9 +11915,18 @@ mark.search-highlight{
   border-radius:0 !important;
   z-index:1200 !important;
 }
-/* ألوان الخط: من الباهت إلى المضيء */
-.main-nav .main-nav-link{ color:#EAD9B0 !important; font-weight:700 !important; }
-.main-nav .main-nav-link .hh-icon, .main-nav .main-nav-link svg{ color:#F5E6C4 !important; }
+/* ألوان الخط: من الباهت المخفي إلى المضيء الواضح */
+.main-nav .nav-link,
+.main-nav .nav-link span{ color:#F5E6C4 !important; font-weight:700 !important; }
+.main-nav .nav-link svg{ color:#F5E6C4 !important; stroke:#F5E6C4; }
+.main-nav .nav-link:hover, .main-nav .nav-link:hover span,
+.main-nav .nav-link.active, .main-nav .nav-link.active span{ color:#fff !important; }
+/* تسميات الواجهة الصغيرة بخط Cairo الثقيل — Sakkal للعناوين الكبيرة فقط */
+.main-nav .nav-link span, .main-nav .nav-link,
+.hh-bottom-nav .hh-nav-label,
+.main-nav input, .main-nav input::placeholder{
+  font-family:'Cairo','Tajawal',sans-serif !important;
+}
 
 /* الشريط السفلي: قوي متناسق مكتمل */
 .hh-bottom-nav{
@@ -11961,7 +11970,10 @@ mark.search-highlight{
 .hh-bottom-nav .hh-nav-icon svg{ width:19px !important; height:19px !important; }
 .hh-bottom-nav .hh-nav-label,
 .hh-bottom-nav .hh-nav-mihbara .hh-nav-label{
-  font-size:.86rem !important; color:#EAD9B0 !important; margin-top:3px !important;
+  font-family:'Cairo','Tajawal',sans-serif !important;
+  font-size:.78rem !important; font-weight:800 !important;
+  color:#F5E6C4 !important; margin-top:3px !important;
+  letter-spacing:0 !important;
 }
 .hh-bottom-nav .hh-nav-item.active .hh-nav-icon{
   background:linear-gradient(135deg,var(--hh-gold-pale),var(--hh-gold)) !important;
@@ -11979,11 +11991,12 @@ mark.search-highlight{
   }
 }
 .paths-container .path-card{
-  min-height:300px !important;
+  min-height:0 !important;
   border-radius:16px !important;
   overflow:hidden !important;
 }
-.paths-container .path-card-inner{ padding:22px 18px !important; }
+.paths-container .path-card-inner{ padding:18px 16px !important; }
+.paths-container .path-cta{ margin-top:14px !important; }
 .paths-container .path-title{ font-size:1.3rem !important; color:#fff !important; }
 .paths-container .path-desc{ font-size:.95rem !important; line-height:1.9 !important; }
 .paths-container .path-cta{ font-size:1rem !important; padding:10px !important; }
@@ -12000,25 +12013,23 @@ mark.search-highlight{
 
 /* المشهد الأول بطول الشاشة: التاج والاقتباس والإحصاءات يملأون أول شاشة */
 @media (min-width:901px){
-  #screen-menu .hh-crown{ min-height:150px !important; padding:22px 26px !important; }
-  #screen-menu .hh-crown .royal-username{ font-size:2rem !important; }
-  #screen-menu .hh-hero-duo{ min-height:calc(100vh - 340px); align-items:stretch !important; }
-  #screen-menu .hh-hero-duo > *{ height:100%; box-sizing:border-box; }
+  #screen-menu .hh-crown{ padding:16px 22px !important; }
+  #screen-menu .hh-crown .royal-username{ font-size:1.7rem !important; }
+  #screen-menu .hh-hero-duo{ align-items:stretch !important; }
+  #screen-menu .hh-hero-duo > *{ box-sizing:border-box; }
   #screen-menu .hh-quote-royal{ display:flex !important; flex-direction:column; justify-content:center; }
-  /* الإحصاءات داخل الصف المزدوج: شبكة 2×2 تملأ الارتفاع */
+  /* الإحصاءات 2×2 مدمجة تساوي ارتفاع الاقتباس طبيعياً */
   #screen-menu .hh-hero-duo .hh-stats-royal{
     grid-template-columns:repeat(2,1fr) !important;
     grid-auto-rows:1fr !important;
-    height:100% !important;
     align-content:stretch !important;
   }
-  .hh-stat-royal{ display:flex; flex-direction:column; justify-content:center; padding:18px 10px 16px !important; }
-  #screen-menu .hh-hero-duo .hh-stat-royal{ height:100% !important; }
-  .hh-stat-medal{ width:56px !important; height:56px !important; }
-  .hh-stat-num{ font-size:2rem !important; }
-  .hh-stat-label{ font-size:1.05rem !important; }
-  .hh-stat-chip{ font-size:.85rem !important; }
-  #screen-menu .hh-quote-text{ font-size:1.4rem !important; }
+  .hh-stat-royal{ display:flex; flex-direction:column; justify-content:center; padding:12px 8px 10px !important; }
+  .hh-stat-medal{ width:44px !important; height:44px !important; }
+  .hh-stat-num{ font-size:1.45rem !important; }
+  .hh-stat-label{ font-size:.92rem !important; }
+  .hh-stat-chip{ font-size:.76rem !important; }
+  #screen-menu .hh-quote-text{ font-size:1.15rem !important; }
 }
 
 /* شاشة الدخول: الهوية الملكية */
