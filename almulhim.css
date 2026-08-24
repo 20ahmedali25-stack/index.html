@@ -9428,3 +9428,131 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
 }
 #screen-menu .hh-quote-name, #dq-author{ font-size:1.08rem !important; }
 .hh-quote-role, #dq-role{ font-size:.92rem !important; color:#7A5E22 !important; font-weight:700 !important; }
+
+
+/* ═══════════ اللوحة الملكية v1 — الكلمة الأخيرة ═══════════ */
+
+/* الغمر: شاشات اللعب بلا أشرطة منصة ولا إطار */
+body.hh-immersive .main-nav,
+body.hh-immersive .hh-bottom-nav,
+body.hh-immersive #hh-more-sheet{ display:none !important; }
+body.hh-immersive::before, body.hh-immersive::after{ display:none !important; }
+body.hh-immersive #hh-fin-tr, body.hh-immersive #hh-fin-br,
+body.hh-immersive #hh-fin-tl, body.hh-immersive #hh-fin-bl{ display:none !important; }
+body.hh-immersive #screen-board{ padding-top:0 !important; }
+
+/* خلفية الملعب */
+#screen-board{ background:linear-gradient(180deg,#F6F1E7,#EFE7D6) !important; }
+
+/* شريط اللوحة العلوي: عنابي ملكي */
+#board-top-bar{
+  background:linear-gradient(175deg,#4A0B1E,#5E0E26) !important;
+  border-bottom:2px solid #B8924A !important;
+  box-shadow:0 3px 14px rgba(61,9,24,.3) !important;
+}
+#board-top-bar .pu-lbl{ color:#EAD9B0 !important; font-weight:800 !important; }
+#turn-badge{
+  background:rgba(212,188,133,.1) !important;
+  border:1px solid rgba(212,188,133,.5) !important;
+  border-radius:12px !important; overflow:hidden !important;
+}
+
+/* الخلايا: ثلاث سلالات ملكية (تعلو الأنماط السطرية) */
+.qcell.easy{
+  background:linear-gradient(160deg,#FDF9EF,#F2E7CE) !important;
+  border:1.5px solid #B8924A !important;
+  border-radius:10px !important;
+  box-shadow:0 2px 0 #D4BC85 !important;
+}
+.qcell.easy .qpts{ color:#8A6D2E !important; }
+.qcell.med{
+  background:linear-gradient(160deg,#8A6D2E,#5E4A1E) !important;
+  border:1.5px solid #D4BC85 !important;
+  border-radius:10px !important;
+  box-shadow:0 2px 0 #4A3A14 !important;
+}
+.qcell.med .qpts{ color:#FDF3DD !important; }
+.qcell.hard{
+  background:linear-gradient(160deg,#7A1330,#4A0B1E) !important;
+  border:1.5px solid #B8924A !important;
+  border-radius:10px !important;
+  box-shadow:0 2px 0 #2E0710 !important;
+}
+.qcell.hard .qpts{ color:#F5E6C4 !important; }
+.qcell.used{
+  background:#EDE6D8 !important;
+  border:1.5px dashed #C9BFA8 !important;
+  box-shadow:none !important;
+}
+.qcell.used .qpts{ color:#B8AD94 !important; text-decoration:line-through; }
+
+/* بطاقة الفئة الوسطى: عاجية ملكية تصون الصور */
+.cat-center{
+  background:linear-gradient(165deg,#FFFFFF,#F4ECDC) !important;
+  border:1.5px solid #B8924A !important;
+  border-radius:12px !important;
+  box-shadow:0 3px 10px rgba(94,14,38,.08) !important;
+}
+.cat-center .cc-label-bar{
+  background:linear-gradient(135deg,#7A1330,#4A0B1E) !important;
+  color:#F5E6C4 !important;
+  border-top:1.5px solid #B8924A !important;
+}
+
+/* شريط الفرق السفلي */
+#board-bottom-bar{
+  background:linear-gradient(175deg,#4A0B1E,#5E0E26) !important;
+  border-top:1.5px solid #B8924A !important;
+}
+
+/* ═══ مودال السؤال الملكي ═══ */
+#q-modal .qm-box{
+  background:#FBF7F0 !important;
+  border:2px solid #B8924A !important;
+  border-top:5px solid #8A1538 !important;
+  border-radius:18px !important;
+  box-shadow:0 24px 60px rgba(30,6,15,.5) !important;
+}
+#q-modal .qm-top{
+  background:linear-gradient(175deg,#4A0B1E,#5E0E26) !important;
+  border-bottom:2px solid #B8924A !important;
+  border-radius:13px 13px 0 0 !important;
+  padding:10px 14px !important;
+  margin:-1px -1px 10px !important;
+}
+#q-modal .qm-cat{ color:#EAD9B0 !important; font-weight:800 !important; }
+#q-modal #qm-pts{ color:#F5E6C4 !important; }
+#q-modal .qm-badge{
+  border:1px solid #D4BC85 !important; color:#F5E6C4 !important;
+  border-radius:99px !important;
+}
+#q-modal .qm-badge.easy{ background:#8A6D2E !important; }
+#q-modal .qm-badge.med{ background:#B8792E !important; }
+#q-modal .qm-badge.hard{ background:#7A1330 !important; }
+#q-modal .timer-wrap .t-track{ stroke:#EDE0C8 !important; }
+#q-modal .timer-wrap .t-prog{ stroke:#B8924A !important; }
+#q-modal .t-num{ color:#5E0E26 !important; font-weight:800 !important; }
+#q-modal .qm-text{
+  background:#fff !important;
+  border:1.5px solid #B8924A !important;
+  border-radius:13px !important;
+  color:#2A1A0E !important;
+  box-shadow:none !important;
+}
+#q-modal .answer-reveal-btn{
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  color:#3D0918 !important;
+  border:1px solid #FDF3DD !important;
+  border-radius:13px !important;
+  font-weight:800 !important;
+  box-shadow:0 4px 12px rgba(138,109,46,.3) !important;
+}
+#q-modal .answer-box{
+  border:1.5px solid #3D6B53 !important;
+  border-radius:13px !important;
+}
+#q-modal .pu-btn{
+  border:1.5px solid #B8924A !important;
+  border-radius:10px !important;
+  background:#fff !important;
+}

@@ -3594,8 +3594,8 @@ function startGame(overrideTeams, overrideCats, overrideName){
             const picked=[]; keys.forEach(k=>{ picked.push(...bySub[k].slice(0,perSub)); });
             G.boardData[cat][diff]=picked.length?picked:all.slice(0,cap);
           } else {
-            // بنك موسع: سحب عشوائي متوازن كل لعبة
-            const picked=[]; keys.forEach(k=>{ picked.push(...shuffle(bySub[k].slice()).slice(0,perSub)); });
+            // بنك موسع: سحب طازج متوازن بلا تكرار عبر اللعبات
+            const picked=[]; keys.forEach(k=>{ picked.push(...hhPickFresh(cat+'::'+diff+'::s'+k, bySub[k], perSub)); });
             G.boardData[cat][diff]=picked;
           }
         });
@@ -3603,16 +3603,16 @@ function startGame(overrideTeams, overrideCats, overrideName){
       }
       // مسابقة القرآن: 8 أسئلة عشوائية من كل مستوى (200/400/600/800)
       ['easy','med','hard','elite'].forEach(diff=>{
-        const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
-        G.boardData[cat][diff]=pool.slice(0,8);
+        const pool=(QDB[cat]||[]).filter(q=>q.diff===diff);
+        G.boardData[cat][diff]=hhPickFresh(cat+'::'+diff, pool, 8);
       });
       return;
     }
     // الأساطير: نأخذ سؤالين من كل مستوى (easy=600, med=800, hard=1000)
-    // الفئات العادية: نفس المنطق
+    // الفئات العادية والأساطير: انتقاء طازج بلا تكرار عبر اللعبات
     ['easy','med','hard'].forEach(diff=>{
-      const pool=shuffle((QDB[cat]||[]).filter(q=>q.diff===diff));
-      G.boardData[cat][diff]=pool.slice(0,2);
+      const pool=(QDB[cat]||[]).filter(q=>q.diff===diff);
+      G.boardData[cat][diff]=hhPickFresh(cat+'::'+diff, pool, 2);
     });
   });
   showScreen('screen-board');
@@ -3662,6 +3662,50 @@ function startGame(overrideTeams, overrideCats, overrideName){
       }, 400);
     });
   });
+}
+
+// ═══ ذاكرة الأسئلة المطروحة: منع التكرار عبر اللعبات ═══
+var _HH_SEEN_KEY = 'hh_seen_v1';
+function _hhQHash(q){
+  var s = (q && q.q) ? String(q.q) : '';
+  var h = 5381;
+  for(var i=0;i<s.length;i++){ h = ((h<<5)+h+s.charCodeAt(i))|0; }
+  return 'q'+(h>>>0).toString(36);
+}
+function _hhSeenLoad(){
+  try{ return JSON.parse(localStorage.getItem(_HH_SEEN_KEY)||'{}')||{}; }catch(e){ return {}; }
+}
+function _hhSeenSave(m){
+  try{ localStorage.setItem(_HH_SEEN_KEY, JSON.stringify(m)); }catch(e){}
+}
+// وسم سؤال بأنه طُرح فعلاً (يستدعى عند فتح السؤال)
+function hhMarkSeen(cat, q){
+  try{
+    var m=_hhSeenLoad();
+    (m[cat]=m[cat]||{})[_hhQHash(q)]=Date.now();
+    _hhSeenSave(m);
+  }catch(e){}
+}
+// انتقاء طازج: غير المطروح أولاً، ثم الأقدم طرحاً؛ وإن اكتملت الدورة صُفّرت ذاكرة الفئة
+function hhPickFresh(cat, pool, count){
+  if(!pool || !pool.length) return [];
+  var m=_hhSeenLoad(), seen=m[cat]||{};
+  var freshQ=[], old=[];
+  pool.forEach(function(q){
+    var h=_hhQHash(q);
+    if(seen[h]) old.push({q:q, t:seen[h]}); else freshQ.push(q);
+  });
+  // اكتملت الدورة على هذه المجموعة؟ صفّر وابدأ من جديد
+  if(freshQ.length===0 && old.length>0){
+    delete m[cat]; _hhSeenSave(m);
+    freshQ=pool.slice(); old=[];
+  }
+  var picked=shuffle(freshQ.slice()).slice(0, count);
+  if(picked.length<count && old.length){
+    old.sort(function(a,b){ return a.t-b.t; }); // الأقدم طرحاً أولاً
+    picked=picked.concat(old.map(function(x){return x.q;}).slice(0, count-picked.length));
+  }
+  return picked;
 }
 
 function buildBoard(){
@@ -4558,8 +4602,8 @@ function updateBoardUI(){
           '<span style="font-size:.56rem;color:rgba(255,255,255,.45);font-family:Cairo,sans-serif;letter-spacing:.8px;">اسم اللعبة</span>'+
           '<span style="font-size:.84rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">'+gameName+'</span>'+
         '</div>'+
-        '<div style="flex:1;padding:5px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;">'+
-          '<span style="font-size:.56rem;color:rgba(255,255,255,.45);font-family:Cairo,sans-serif;letter-spacing:.8px;">دور</span>'+
+        '<div onclick="hhSwitchTurn()" title="انقر لتبديل الدور (للحكم)" style="flex:1;padding:5px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;cursor:pointer;">'+
+          '<span style="font-size:.56rem;color:rgba(255,255,255,.45);font-family:Cairo,sans-serif;letter-spacing:.8px;">دور <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#D4BC85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M8 3L4 7l4 4"/><path d="M4 7h16"/><path d="M16 21l4-4-4-4"/><path d="M20 17H4"/></svg></span>'+
           '<span style="font-size:.84rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">'+name+'</span>'+
         '</div>'+
       '</div>';
@@ -4567,6 +4611,18 @@ function updateBoardUI(){
   const nameEl=document.getElementById('board-game-name');
   if(nameEl)nameEl.textContent=G.gameName||'';
   updatePUDisplay();
+}
+
+// تبديل الدور بقرار الحكم: نقرة على خانة الدور
+function hhSwitchTurn(){
+  if(!G || !G.teams || G.teams.length<2) return;
+  if(document.getElementById('q-modal').classList.contains('open')){
+    if(typeof toast==='function') toast('أغلق السؤال أولاً ثم بدّل الدور','warn');
+    return;
+  }
+  G.turn=(G.turn+1)%G.teams.length;
+  updateBoardUI();
+  if(typeof toast==='function') toast('الدور الآن: '+G.teams[G.turn],'info');
 }
 
 function updatePUDisplay(){
@@ -4634,6 +4690,9 @@ function armPU(type){
 
 function openQ(q,diff,key,isLegend){
   G.curQ=q;G.curKey=key;G.answered=false;
+  G.ansRevealed=false;
+  // وسم السؤال مطروحاً (لمنظومة منع التكرار)
+  try{ hhMarkSeen(key.split('__')[0]+'::'+diff, q); }catch(e){}
   G.curIsLegend = !!isLegend;
   G.curLegendDiff = isLegend ? diff : null;
   const d=DIFF_MAP[diff];const ci=CAT_INFO[key.split('__')[0]]||{};
@@ -4909,7 +4968,31 @@ function hhShowMcqOptions(){
   if(window.hhSoundClick) try{hhSoundClick();}catch(e){}
 }
 
+// رجوع آمن: يغلق السؤال دون احتسابه — للاختيار الخاطئ
+function hhQCancel(){
+  if(G.ansRevealed){
+    if(typeof toast==='function') toast('لا رجوع بعد كشف الجواب','warn');
+    return;
+  }
+  clearInterval(G.timer);
+  // إعادة فخ الخصم إن كان مفعلاً على هذا السؤال
+  try{
+    if(G.trapBy!=null && G.teams && G.teams[G.trapBy]){
+      PU.teams[G.trapBy].trap=(PU.teams[G.trapBy].trap||0)+1;
+    }
+  }catch(e){}
+  G.trapTarget=null; G.trapBy=null;
+  var tb=document.getElementById('qm-trap-banner'); if(tb){tb.style.display='none';tb.innerHTML='';}
+  var tw=document.querySelector('.timer-wrap'); if(tw) tw.classList.remove('time-expired');
+  G.timeExpired=false;
+  G.curQ=null; G.curKey='';
+  document.getElementById('q-modal').classList.remove('open');
+  if(typeof updatePUDisplay==='function') updatePUDisplay();
+  if(typeof toast==='function') toast('رجعت دون احتساب السؤال — الخلية ما زالت متاحة','info');
+}
+
 function revealAnswer(){
+  G.ansRevealed=true;
   clearInterval(G.timer);
   clearInterval(window._gameElapsedTimer);
   // صوت الكشف
@@ -10603,7 +10686,10 @@ function loadScript(src){
 //  سجل التنقل (للرجوع الذكي)
 window._screenHistory = window._screenHistory || [];
 
+var HH_IMMERSIVE_SCREENS = ['screen-board'];
 function showScreen(id){
+  // اللعب الغامر: شاشات اللعب تُخفي أشرطة المنصة وإطارها
+  try{ document.body.classList.toggle('hh-immersive', HH_IMMERSIVE_SCREENS.indexOf(id)!==-1); }catch(e){}
   // أضف الشاشة الحالية للسجل قبل الانتقال
   const currentActive = document.querySelector('.screen.active');
   if(currentActive && currentActive.id && currentActive.id !== id){
