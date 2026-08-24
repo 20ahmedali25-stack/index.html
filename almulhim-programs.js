@@ -803,7 +803,7 @@ function hhSpkRender(hasAccess){
     +'<div style="font-weight:900;font-size:.95rem;margin-bottom:6px;">هذا البرنامج يتطلّب صلاحية وصول</div>'
     +'<div style="font-size:.79rem;opacity:.9;line-height:1.9;margin-bottom:11px;">المحتوى والتمارين والاختبارات متاحة للمشتركين فقط. للاشتراك تواصل مع إدارة المنصة.</div>'
     +'<div style="font-size:1.6rem;font-weight:900;color:#EAD9A8;">'+P.price+' <span style="font-size:.8rem;">'+esc(P.currency)+'</span></div>'
-    +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:11px;">طلب الاشتراك</button>'
+    +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:11px;">طلب التسجيل</button>'
     +'</div>';
 
   var adminBar = (typeof hhIsAdmin==='function' && hhIsAdmin())
@@ -838,19 +838,113 @@ function hhSpkRender(hasAccess){
 }
 
 // ── طلب الاشتراك ──
-async function hhSpkRequestAccess(){
+// طلب التسجيل في البرنامج: نموذج بيانات أساسية (الاسم، الجوال، البريد، الجهة)
+function hhSpkRequestAccess(){
   if(typeof currentUser==='undefined' || !currentUser){
-    if(typeof toast==='function') toast('سجّل الدخول أولاً','warn'); return;
+    if(typeof toast==='function') toast('سجّل الدخول أولاً لتقديم طلب التسجيل','warn'); return;
+  }
+  var old=document.getElementById('hh-prog-reg'); if(old) old.remove();
+  var ov=document.createElement('div'); ov.id='hh-prog-reg';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999993;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;overflow-y:auto;';
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
+  function fld(id,label,val,type){
+    return '<div style="margin-bottom:10px;"><label style="display:block;font-size:.78rem;color:#8A6D2E;font-weight:700;margin-bottom:4px;">'+label+'</label>'
+      +'<input id="'+id+'" type="'+(type||'text')+'" value="'+(val||'')+'" style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #D4BC85;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;color:#3D2A16;"></div>';
+  }
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-top:4px solid #8A1538;border-radius:16px;max-width:420px;width:100%;overflow:hidden;">'
+    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 16px;border-bottom:2px solid #B8924A;">'
+    +'<div style="font-weight:700;font-size:1.05rem;">طلب التسجيل — القائد المُلهِم</div>'
+    +'<div style="font-size:.78rem;color:#EAD9B0;margin-top:2px;">بعد استلام طلبك وتأكيد الدفع تُمنح الصلاحية الكاملة</div></div>'
+    +'<div style="padding:16px;">'
+    + fld('pr-name','الاسم الكامل', currentUser.displayName||'')
+    + fld('pr-phone','رقم الجوال','','tel')
+    + fld('pr-email','البريد الإلكتروني', currentUser.email||'','email')
+    + fld('pr-org','المدرسة / الجهة','')
+    +'<div id="pr-status" style="font-size:.78rem;font-weight:700;margin-bottom:8px;"></div>'
+    +'<button onclick="hhSpkSubmitReg()" style="width:100%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer;">إرسال طلب التسجيل</button>'
+    +'<button onclick="document.getElementById(\'hh-prog-reg\').remove()" style="width:100%;background:none;border:none;color:#8A6D2E;font-weight:700;font-size:.8rem;cursor:pointer;margin-top:8px;">إلغاء</button>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+}
+
+async function hhSpkSubmitReg(){
+  var g=function(id){ var e=document.getElementById(id); return e?e.value.trim():''; };
+  var st=document.getElementById('pr-status');
+  var name=g('pr-name'), phone=g('pr-phone'), email=g('pr-email'), org=g('pr-org');
+  if(!name||!phone||!email){
+    if(st){ st.textContent='الاسم ورقم الجوال والبريد حقول إلزامية'; st.style.color='#c0392b'; }
+    return;
   }
   try{
     await firebase.firestore().collection('program_requests').add({
-      program:'speak_master', uid:currentUser.uid, email:currentUser.email||'',
-      name:currentUser.displayName||'', status:'pending',
-      createdAt:new Date().toISOString()
+      program:'speak_master', uid:currentUser.uid,
+      name:name, phone:phone, email:email, org:org,
+      status:'new', createdAt:new Date().toISOString()
     });
-    if(typeof toast==='function') toast('أُرسل طلب الاشتراك — ستُبلَّغ عند التفعيل','success');
-    if(typeof hhLogActivity==='function') hhLogActivity('generate','طلب اشتراك: القائد المُلهِم');
-  }catch(e){ if(typeof toast==='function') toast('تعذر الإرسال','error'); }
+    var ov=document.getElementById('hh-prog-reg'); if(ov) ov.remove();
+    if(typeof toast==='function') toast('أُرسل طلب تسجيلك — سنتواصل معك لإتمام التفعيل','success');
+    if(typeof hhLogActivity==='function') hhLogActivity('generate','طلب تسجيل: القائد المُلهِم — '+name);
+  }catch(e){
+    console.error('prog reg', e);
+    if(st){ st.textContent='تعذر الإرسال — حاول ثانية'; st.style.color='#c0392b'; }
+  }
+}
+
+// ── طلبات التسجيل — البرامج التربوية (أدمن) ──
+async function hhAdminProgRegs(){
+  if(!(typeof hhIsAdmin==='function' && hhIsAdmin())) return;
+  var old=document.getElementById('hh-prog-regs-admin'); if(old) old.remove();
+  var ov=document.createElement('div'); ov.id='hh-prog-regs-admin';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:999994;display:flex;align-items:flex-start;justify-content:center;padding:20px 14px;overflow-y:auto;direction:rtl;';
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:680px;width:100%;overflow:hidden;">'
+    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 18px;border-bottom:2px solid #B8924A;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div><div style="font-weight:700;font-size:1.1rem;">طلبات التسجيل — البرامج التربوية</div>'
+    +'<div style="font-size:.76rem;color:#EAD9B0;margin-top:2px;">امنح الصلاحية الكاملة لمن أتم الدفع</div></div>'
+    +'<button onclick="document.getElementById(\'hh-prog-regs-admin\').remove()" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;cursor:pointer;">✕</button></div>'
+    +'<div id="prg-admin-list" style="padding:16px;max-height:70vh;overflow-y:auto;"><div style="text-align:center;color:#8A6D2E;padding:22px;font-weight:700;">جاري التحميل...</div></div></div>';
+  document.body.appendChild(ov);
+  try{
+    var snap=await firebase.firestore().collection('program_requests')
+      .where('program','==','speak_master').limit(60).get();
+    var rows=snap.docs.map(function(d){ return Object.assign({_id:d.id}, d.data()); })
+      .sort(function(a,b){ return (b.createdAt||'').localeCompare(a.createdAt||''); });
+    var list=document.getElementById('prg-admin-list');
+    if(!rows.length){ list.innerHTML='<div style="text-align:center;color:#8A6D2E;padding:22px;font-weight:700;">لا طلبات تسجيل بعد</div>'; return; }
+    list.innerHTML=rows.map(function(r){
+      var granted = r.status==='granted';
+      return '<div style="background:#fff;border:1px solid #B8924A;border-right:4px solid '+(granted?'#3D6B53':'#8A1538')+';border-radius:12px;padding:11px 14px;margin-bottom:9px;">'
+        +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
+        +'<div style="min-width:0;">'
+        +'<div style="font-weight:700;font-size:.95rem;color:#5E0E26;">'+esc(r.name||'')+'</div>'
+        +'<div style="font-size:.76rem;color:#666;margin-top:2px;">'+esc(r.phone||'—')+' · '+esc(r.email||'')+(r.org?' · '+esc(r.org):'')+'</div>'
+        +'<div style="font-size:.68rem;color:#aaa;margin-top:2px;">'+esc((r.createdAt||'').slice(0,10))+'</div></div>'
+        +(granted
+          ? '<span style="background:#E8F3ED;color:#3D6B53;border:1px solid #3D6B53;border-radius:99px;padding:3px 14px;font-size:.74rem;font-weight:700;">مُفعَّل</span>'
+          : '<button onclick="hhAdminGrantProg(\''+r._id+'\',\''+(r.uid||'')+'\',\''+esc(r.email||'')+'\')" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:99px;padding:6px 16px;font-weight:700;font-size:.78rem;cursor:pointer;">منح الصلاحية الكاملة</button>')
+        +'</div></div>';
+    }).join('');
+  }catch(e){
+    console.error('prog regs', e);
+    var l=document.getElementById('prg-admin-list');
+    if(l) l.innerHTML='<div style="text-align:center;color:#c0392b;padding:22px;font-weight:700;">تعذر التحميل</div>';
+  }
+}
+window.hhAdminProgRegs = hhAdminProgRegs;
+
+async function hhAdminGrantProg(reqId, uid, email){
+  try{
+    var db=firebase.firestore();
+    if(uid){
+      await db.collection('program_access').doc(uid).set({
+        speak_master:true, email:email,
+        grantedBy: currentUser.email, grantedAt:new Date().toISOString()
+      }, {merge:true});
+    }
+    await db.collection('program_requests').doc(reqId).set({status:'granted'},{merge:true});
+    if(typeof toast==='function') toast('مُنحت الصلاحية الكاملة لـ '+email,'success');
+    hhAdminProgRegs();
+  }catch(e){ console.error('grant', e); if(typeof toast==='function') toast('تعذر المنح','error'); }
 }
 
 // ── إدارة المشتركين (أدمن) ──
@@ -1032,7 +1126,7 @@ var HH_LEADER_PROGRAMS = [
 function hhOpenLeaderPrograms(){
   var old=document.getElementById('hh-leaders'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-leaders';
-  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.75);z-index:999973;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
+  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:18px 14px 40px;direction:rtl;';
 
   var cards = HH_LEADER_PROGRAMS.map(function(P){
     var pillSrc = (P.pillars||[]).map(function(x){return x.t;});
@@ -1063,9 +1157,25 @@ function hhOpenLeaderPrograms(){
     +'<div style="display:flex;justify-content:space-between;align-items:center;position:relative;">'
     +'<div><div style="font-weight:700;font-size:1.35rem;">البرامج التربوية</div>'
     +'<div style="font-size:.85rem;color:#EAD9B0;margin-top:2px;font-weight:700;">اكتشاف القيادات الطلابية ورعايتها وصناعة أثرها</div></div>'
-    +'<button onclick="hhCloseLeaders()" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;font-size:1rem;cursor:pointer;">✕</button></div></div>'
+    +'<div style="display:flex;gap:7px;">'
+    +'<button onclick="hhLeadersBack()" title="رجوع خطوة" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:30px;padding:0 12px;color:#FDF3DD;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>'
+    +'<button onclick="hhLeadersHome()" title="الشاشة الرئيسية" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg></button>'
+    +'</div></div></div>'
     +'<div style="padding:16px 18px;">'+cards+'</div></div>';
   document.body.appendChild(ov);
+}
+var _HH_LDR_LAYERS = ['hh-spk','hh-spk-admin','hh-prog-reg'];
+function hhLeadersBack(){
+  for(var i=0;i<_HH_LDR_LAYERS.length;i++){
+    var e=document.getElementById(_HH_LDR_LAYERS[i]);
+    if(e){ e.remove(); return; }
+  }
+  hhCloseLeaders();
+}
+function hhLeadersHome(){
+  _HH_LDR_LAYERS.forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
+  hhCloseLeaders();
+  if(typeof showScreen==='function') showScreen('screen-menu');
 }
 function hhCloseLeaders(){ var e=document.getElementById('hh-leaders'); if(e) e.remove(); }
 

@@ -11415,7 +11415,7 @@ mark.search-highlight{
 }
 
 .daily-quote-premium .dq-text{
-  font-size: 1.05rem !important;
+  font-size:1.3rem !important;
   font-weight: 700 !important;
   color: #3D0918 !important;
   line-height: 1.85 !important;
@@ -12092,7 +12092,9 @@ mark.search-highlight{
     grid-auto-rows:1fr !important;
     align-content:stretch !important;
   }
-  #screen-menu .hh-quote-text{ font-size:.98rem !important; line-height:1.85 !important; margin:0 !important; }
+  #screen-menu .hh-quote-text{ font-size:1.28rem !important; line-height:2 !important; margin:0 !important; color:#2A1A0E !important; font-weight:700 !important; }
+  #screen-menu .hh-quote-name{ font-size:1.08rem !important; }
+  .hh-quote-role{ font-size:.9rem !important; color:#7A5E22 !important; }
 }
 
 /* شاشة الدخول: الهوية الملكية */
@@ -12149,7 +12151,7 @@ mark.search-highlight{
     margin: 0 !important;
     box-sizing: border-box;
   }
-  #screen-menu .hh-hero-duo .dq-text{ font-size: .92rem !important; }
+  #screen-menu .hh-hero-duo .dq-text{ font-size:1.3rem !important; }
 }
 /* على الجوال: الحاوية شفافة والترتيب العمودي كما كان */
 @media (max-width:900px){
@@ -12409,7 +12411,21 @@ body.dark-mode input, body.dark-mode textarea, body.dark-mode select{ background
         var el=document.querySelector(sel);
         if(el && el.parentElement!==document.body) document.body.appendChild(el);
       });
+      hhFrameFinials();
     }catch(e){}
+  }
+  // رؤوس الإطار المعينية عند طرفي كل قضيب
+  function hhFrameFinials(){
+    if(window.innerWidth < 901) return;
+    if(document.getElementById('hh-fin-tr')) return;
+    var edge = 'calc((100vw - min(1280px, 96vw)) / 2 - 16px)';
+    [['hh-fin-tr','top:76px','right:'+edge],['hh-fin-br','bottom:98px','right:'+edge],
+     ['hh-fin-tl','top:76px','left:'+edge],['hh-fin-bl','bottom:98px','left:'+edge]
+    ].forEach(function(f){
+      var d=document.createElement('div'); d.id=f[0];
+      d.style.cssText='position:fixed;'+f[1]+';'+f[2]+';width:9px;height:9px;background:#B8924A;border:1px solid #FDF3DD;transform:translateX(calc(50% * '+(f[2].indexOf('right')===0?'1':'-1')+')) rotate(45deg);z-index:1500;pointer-events:none;';
+      document.body.appendChild(d);
+    });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', hhLiftBars);
   else hhLiftBars();

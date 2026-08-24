@@ -7944,7 +7944,7 @@ async function hhTplUpload(input){
       id:'tpl_'+Date.now().toString(36),
       name: nameVal || ('نموذج '+n),
       img:url, w:out.width, h:out.height,
-      sealX:0.13, sealY:0.81, sealR:0.075
+      sealX:0.30, sealY:0.78, sealR:0.075
     };
     _hhCertTemplates.push(tpl);
     await hhTplSaveOne(tpl);
@@ -8047,7 +8047,7 @@ function hhRenderTemplateCert(o, T){
       }
       if(o.serial){
         x.fillStyle='rgba(94,14,38,.4)'; x.font=F(700,Math.round(H*0.014));
-        x.fillText('رقم التحقق: '+o.serial, W/2, H*0.965);
+
       }
       resolve(c.toDataURL('image/png'));
     };
@@ -8197,7 +8197,18 @@ async function hhSaveIssuer(){
   }
 }
 
+// صلاحية إصدار الشهادات: المعلم المعتمد أو الأدمن حصراً
+function hhCertAllowed(){
+  try{
+    if(typeof hhIsAdmin==='function' && hhIsAdmin()) return true;
+    if(typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') return true;
+  }catch(e){}
+  if(typeof toast==='function') toast('إصدار الشهادات صلاحية للمعلم المعتمد فقط — قدّم طلب الاعتماد من المدرسة','warn');
+  if(typeof hhSchApprovalForm==='function') setTimeout(hhSchApprovalForm, 900);
+  return false;
+}
 function hhOpenCertificates(){
+  if(!hhCertAllowed()) return;
   hhCertLoadIssuer();
   var isAdm = (typeof hhIsAdmin==='function' && hhIsAdmin());
   var old=document.getElementById('hh-cert'); if(old) old.remove();
@@ -8280,9 +8291,11 @@ async function hhGenerateCert(){
   var reason=((document.getElementById('cert-reason')||{}).value||'').trim();
   var score=((document.getElementById('cert-score')||{}).value||'').trim();
   var showT=(document.getElementById('cert-showteacher')||{}).checked;
-  // اسم المعلم من الحساب حصراً — لا يُكتب يدوياً
-  var teacher = showT && typeof currentUser!=='undefined' && currentUser
-    ? (currentUser.displayName || (currentUser.email||'').split('@')[0] || '') : '';
+  // اسم المعلم بالعربية — من وثيقة اعتماده أولاً (الاسم الثنائي كاملاً)، ثم اسم الحساب
+  var _tn = '';
+  try{ if(typeof _hhMyTeacherDoc!=='undefined' && _hhMyTeacherDoc && _hhMyTeacherDoc.name) _tn=_hhMyTeacherDoc.name; }catch(e){}
+  if(!_tn && typeof currentUser!=='undefined' && currentUser) _tn = currentUser.displayName || '';
+  var teacher = showT ? _tn : '';
 
   hhCertLoadIssuer();
   if(typeof hhEnsureFonts==='function') await hhEnsureFonts();
@@ -8314,7 +8327,7 @@ async function hhGenerateCert(){
           +'<button onclick="hhPrintCert()" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">طباعة</button>'
           +'<button onclick="hhShareCert()" style="background:#25d366;color:#fff;border:none;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">مشاركة</button>'
           +'</div>'
-          +'<div style="font-size:.71rem;color:#999;margin-top:8px;text-align:center;line-height:1.75;">'+esc(chosenTpl.name)+' · الختم مضاف إلزامياً · رقم التحقق: <b style="color:#8A6D2E;font-family:monospace;">'+serialEarly+'</b></div>';
+          +'<div style="font-size:.71rem;color:#999;margin-top:8px;text-align:center;line-height:1.75;">'+esc(chosenTpl.name)+' · الختم مضاف إلزامياً</div>';
         boxT.scrollIntoView({behavior:'smooth', block:'nearest'});
       }
       return;
@@ -18428,7 +18441,7 @@ const ACTIVITY_GEN = {
 // ═══════════════════════════════════════════════════════════════════
 const QUOTES_BANK = [
   { text: 'إن أهم ما نملكه هو الإنسان القطري المتعلم القادر على بناء مستقبله ومستقبل وطنه.',
-    author: 'الشيخ حمد بن خليفة آل ثاني', role: 'الأمير الوالد', category: 'قطر' },
+    author: 'الشيخ حمد بن خليفة آل ثاني', role: 'الأمير الوالد — رحمه الله', category: 'قطر' },
   { text: 'الإنسان هو أهم لبنات بناء الوطن، وأعظم استثماراته.. فيكم استثمرت قطر وبكم تعلو ومنكم تنتظر.',
     author: 'الشيخ تميم بن حمد آل ثاني', role: 'أمير دولة قطر — من كلمة سموه للشباب في جامعة قطر', category: 'قطر' },
   { text: 'لكل إنسان في حياته ذكرى لمعلم أو معلمة تركت كلمة صادقة أو توجيهاً حكيماً أو موقفاً مخلصاً كان له أثر باقٍ في مسيرته.',
@@ -18543,6 +18556,7 @@ function initActivityGen(){
 
 // ═══ فتح مولد الشهادات مباشرة (من خانة المعلم) ═══
 function openCertificateDirect(){
+  if(!hhCertAllowed()) return;
   showScreen('screen-activity-gen');
   // تأخير صغير حتى تتحمل الشاشة
   setTimeout(()=>{

@@ -382,7 +382,7 @@ function hhOpenSchool(){
   hhSchLoad();
   var old=document.getElementById('hh-school'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-school';
-  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:999974;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
+  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:999974;display:flex;align-items:flex-start;justify-content:center;padding:18px 14px 40px;overflow-y:auto;direction:rtl;';
 
   var cards = S.units.map(function(U, i){
     var st = hhSchUnitState(i);
@@ -439,7 +439,10 @@ function hhOpenSchool(){
     +   orn
     +   '<div style="display:flex;justify-content:space-between;align-items:center;position:relative;">'
     +     '<div style="font-weight:700;font-size:1.35rem;">المدرسة</div>'
-    +     '<button onclick="hhCloseSchool()" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;font-size:1rem;cursor:pointer;">✕</button></div>'
+    +     '<div style="display:flex;gap:7px;">'
+    +       '<button onclick="hhSchBack()" title="رجوع خطوة" aria-label="رجوع خطوة" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:30px;padding:0 12px;color:#FDF3DD;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>'
+    +       '<button onclick="hhSchHome()" title="الشاشة الرئيسية" aria-label="الشاشة الرئيسية" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg></button>'
+    +     '</div></div>'
     +   '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;position:relative;">'
     +     '<span style="background:rgba(212,188,133,.16);border:1px solid #B8924A;color:#FDF3DD;border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:700;">'+esc(S.grade)+'</span>'
     +     '<span style="background:rgba(212,188,133,.16);border:1px solid #B8924A;color:#FDF3DD;border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:700;">'+esc(S.subject)+'</span>'
@@ -508,6 +511,20 @@ function hhOpenSchool(){
         : '')
     + '</div></div>';
   document.body.appendChild(ov);
+}
+// رجوع خطوة: يغلق أعلى نافذة خدمة فوق المدرسة، وإلا يغلق المدرسة نفسها
+var _HH_SCH_LAYERS = ['hh-story','hh-sch-approve','hh-curriculum','hh-gradebook','hh-classes','hh-cert-maker','hh-sch-test'];
+function hhSchBack(){
+  for(var i=0;i<_HH_SCH_LAYERS.length;i++){
+    var e=document.getElementById(_HH_SCH_LAYERS[i]);
+    if(e){ e.remove(); return; }
+  }
+  hhCloseSchool();
+}
+function hhSchHome(){
+  _HH_SCH_LAYERS.forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
+  hhCloseSchool();
+  if(typeof showScreen==='function') showScreen('screen-menu');
 }
 function hhCloseSchool(){ var e=document.getElementById('hh-school'); if(e) e.remove(); }
 

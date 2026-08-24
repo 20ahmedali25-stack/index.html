@@ -9377,3 +9377,54 @@ body.dark-mode .ms-footer-text-main{color:#D4BC85;}
 .hh-bottom-nav .hh-nav-item.hh-nav-mihbara{ transform:translateY(-9px) !important; }
 .hh-bottom-nav .hh-nav-item.hh-nav-mihbara:active{ transform:translateY(-9px) scale(.9) !important; }
 .hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-label{ color:#FDF3DD !important; }
+
+
+/* ═══ الكلمة الأخيرة v3: شريط موحد بلا قص + إطار داخلي معيني ═══ */
+.hh-bottom-nav{
+  overflow:visible !important;
+  align-items:center !important;
+  padding-top:8px !important; padding-bottom:8px !important;
+}
+.hh-bottom-nav .hh-nav-item,
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara{
+  flex:1 1 0 !important; max-width:none !important;
+  display:inline-flex !important; flex-direction:column !important;
+  align-items:center !important; justify-content:center !important;
+  transform:none !important; padding:0 !important;
+}
+.hh-bottom-nav .hh-nav-icon,
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-icon{
+  width:36px !important; height:36px !important; border-radius:11px !important;
+}
+.hh-bottom-nav .hh-nav-label,
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-label{
+  font-size:.8rem !important; margin-top:3px !important; line-height:1.2 !important;
+}
+/* المحبرة: التمييز بالذهب لا بالرفع القاصّ — بروز خفيف داخل الشريط */
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-icon{
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  color:#3D0918 !important; border:2px solid #FDF3DD !important;
+  box-shadow:0 0 0 3px rgba(212,188,133,.25), 0 4px 12px rgba(184,146,74,.35) !important;
+  transform:translateY(-4px);
+}
+.hh-bottom-nav .hh-nav-item.hh-nav-mihbara .hh-nav-label{ color:#FDF3DD !important; }
+.hh-bottom-nav .hh-nav-new-badge{ display:none !important; }
+
+/* الإطار من الداخل: بمحاذاة حافة المحتوى */
+@media (min-width:901px){
+  body::before, body::after{
+    top:82px !important; bottom:104px !important;
+    width:2.5px !important;
+    background:linear-gradient(#B8924A, rgba(184,146,74,.3) 50%, #B8924A) !important;
+  }
+  body::before{ right:calc((100vw - min(1280px, 96vw)) / 2 - 16px) !important; left:auto !important; }
+  body::after{  left:calc((100vw - min(1280px, 96vw)) / 2 - 16px) !important; right:auto !important; }
+}
+
+/* المقولة: خط كبير واضح (اعتماد التقوية) */
+#screen-menu .hh-quote-text, #dq-text{
+  font-size:1.3rem !important; line-height:2 !important;
+  color:#2A1A0E !important; font-weight:700 !important;
+}
+#screen-menu .hh-quote-name, #dq-author{ font-size:1.08rem !important; }
+.hh-quote-role, #dq-role{ font-size:.92rem !important; color:#7A5E22 !important; font-weight:700 !important; }
