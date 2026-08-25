@@ -1112,7 +1112,7 @@ var HH_LEADER_PROGRAMS = [
   {
     id: 'speak_master',
     name: 'القائد المُلهِم',
-    tagline: 'فنّ الإلقاء والتأثير · برنامج تدريبي مدفوع',
+    tagline: 'فنّ الإلقاء والتأثير · برنامج تدريبي عليه رسوم',
     color: '#8A1538', dark: '#5E0E26',
     status: 'active', premium: true, threshold: 0,
     desc: 'برنامج تدريبي متكامل في مهارات الإلقاء والخطابة والتحدث أمام الجمهور: الثقة بالنفس، لغة الجسد، نبرات الصوت، بناء الخطاب، الارتجال، والحضور المؤثر. ست وحدات و24 تمريناً عملياً واختبار لكل وحدة.',
@@ -1127,6 +1127,7 @@ var HH_LEADER_PROGRAMS = [
 ];
 
 function hhOpenLeaderPrograms(){
+  try{ document.body.classList.add('hh-immersive'); }catch(e){}
   var old=document.getElementById('hh-leaders'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-leaders';
   ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:18px 14px 40px;direction:rtl;';
@@ -1137,7 +1138,7 @@ function hhOpenLeaderPrograms(){
     var pills = pillSrc.slice(0,4).map(function(t){ return {t:t}; }).map(function(pl){
       return '<span style="background:#FDF9EF;border:1px solid #B8924A;color:#8A6D2E;border-radius:99px;padding:2px 11px;font-size:.74rem;font-weight:700;">'+esc(pl.t)+'</span>';
     }).join('');
-    var stBadge = (P.premium||P.price)?('مدفوع'+(P.price?(' · '+P.price+' '+(P.currency||'ر.ق')):'')):(P.status==='active'?'نشط الآن':'قريباً');
+    var stBadge = (P.premium||P.price)?('عليه رسوم'+(P.price?(' · '+P.price+' '+(P.currency||'ر.ق')):'')):(P.status==='active'?'نشط الآن':'قريباً');
     return '<div style="background:#fff;border:1px solid #B8924A;border-top:3px solid '+P.dark+';border-radius:0 0 16px 16px;padding:16px;margin-bottom:12px;box-shadow:0 4px 14px rgba(94,14,38,.07);transition:transform .18s ease,box-shadow .18s ease;" onmouseover="this.style.transform=\'translateY(-4px)\';this.style.boxShadow=\'0 12px 26px rgba(94,14,38,.15)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 4px 14px rgba(94,14,56,.07)\'">'
       +'<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:9px;">'
       +'<span style="width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 70%);border:2px solid #FDF3DD;display:inline-flex;align-items:center;justify-content:center;color:#3D0918;box-shadow:0 0 0 3px rgba(212,188,133,.25);flex-shrink:0;">'
@@ -1180,7 +1181,8 @@ function hhLeadersHome(){
   hhCloseLeaders();
   if(typeof showScreen==='function') showScreen('screen-menu');
 }
-function hhCloseLeaders(){ var e=document.getElementById('hh-leaders'); if(e) e.remove(); }
+function hhCloseLeaders(){
+  try{ if(!document.getElementById('hh-wathiq')) document.body.classList.remove('hh-immersive'); }catch(e){} var e=document.getElementById('hh-leaders'); if(e) e.remove(); }
 
 function hhOpenProgram(pid){
   if(pid==='speak_master'){ if(typeof hhOpenSpeakProgram==='function'){ hhCloseLeaders(); hhOpenSpeakProgram(); } return; }

@@ -67,6 +67,7 @@ function _wqAllowed(secId){
 
 // ═══ فتح الاستوديو ═══
 function hhWathiqOpen(){
+  try{ document.body.classList.add('hh-immersive'); }catch(e){}
   try{ if(typeof hhSpkCheckAccess==='function') hhSpkCheckAccess(); }catch(e){}
   var old=document.getElementById('hh-wathiq'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-wathiq';
@@ -134,11 +135,13 @@ function hhWathiqOpen(){
 }
 
 function wqBack(){
+  try{ if(!document.getElementById('hh-wq-reader') && document.getElementById('hh-wathiq')) document.body.classList.remove('hh-immersive'); }catch(e){}
   var r=document.getElementById('hh-wq-reader');
   if(r){ r.remove(); return; }
   var w=document.getElementById('hh-wathiq'); if(w) w.remove();
 }
 function wqHome(){
+  try{ document.body.classList.remove('hh-immersive'); }catch(e){}
   ['hh-wq-reader','hh-wathiq'].forEach(function(id){ var e=document.getElementById(id); if(e) e.remove(); });
   if(typeof hhCloseLeaders==='function'){ var l=document.getElementById('hh-leaders'); if(l) l.remove(); }
   if(typeof showScreen==='function') showScreen('screen-menu');
