@@ -1,11 +1,11 @@
-/* وحدة مستخرجة من محرك المُلهِم — تُحمَّل بعد almulhim-engine.js */
+/* وحدة مستخرجة من محرك المُلهِم · تُحمَّل بعد almulhim-engine.js */
 
 // ═══ البرامج التربوية: برنامج القائد الملهم + الدورات + السجل واللوحة ═══
 var HH_SPEAK_PROGRAM = {
   id: 'speak_master',
   name: 'القائد المُلهِم',
   subtitle: 'فنّ الإلقاء والتأثير',
-  tagline: 'من الرهبة إلى المنصّة — رحلة صناعة متحدّث واثق',
+  tagline: 'من الرهبة إلى المنصّة · رحلة صناعة متحدّث واثق',
   color: '#8A1538', dark: '#5E0E26', accent: '#B8924A',
   price: 750, currency: 'ر.ق',
   duration: '6 وحدات · 18 مهارة · 24 تمريناً عملياً',
@@ -29,7 +29,7 @@ var HH_SPEAK_PROGRAM = {
       exercises:[
         { t:'تمرين التنفس الرباعي', d:'طبّق دورة التنفس (4-4-6) خمس مرات قبل أي عرض. سجّل شعورك قبل وبعد على مقياس 1-10.', time:'5 دقائق' },
         { t:'المرآة الصامتة', d:'قف أمام المرآة وتحدث دقيقتين عن يومك بلا توقف. لاحظ: أين تنظر؟ ماذا تفعل بيديك؟', time:'3 دقائق' },
-        { t:'الجمهور المتدرّج', d:'ألقِ فقرتك أمام شخص واحد، ثم ثلاثة، ثم عشرة — على ثلاثة أيام متتالية.', time:'أسبوع' },
+        { t:'الجمهور المتدرّج', d:'ألقِ فقرتك أمام شخص واحد، ثم ثلاثة، ثم عشرة · على ثلاثة أيام متتالية.', time:'أسبوع' },
         { t:'إعادة التأطير', d:'اكتب ثلاث جمل تحوّل «أنا خائف» إلى «أنا متحمّس». استخدمها قبل كل إلقاء.', time:'10 دقائق' }
       ],
       quiz:[
@@ -45,10 +45,10 @@ var HH_SPEAK_PROGRAM = {
 
     { id:'sp2', title:'الوحدة الثانية: لغة الجسد',
       skills:['الوقفة المتوازنة','حركة اليدين الهادفة','التواصل البصري الفعّال'],
-      lesson:'جسدك يتحدث قبل لسانك. الوقفة المتوازنة: القدمان بعرض الكتفين، الوزن موزّع، الظهر مستقيم بلا تصنّع. اليدان أداة إيضاح لا أداة إخفاء — أخرجهما من الجيوب ولا تعقد ذراعيك. الحركة في المساحة تكون هادفة: انتقل عند الانتقال بين الأفكار لا عشوائياً. والتواصل البصري يمنح كل جزء من القاعة نصيبه ثلاث إلى خمس ثوانٍ.',
+      lesson:'جسدك يتحدث قبل لسانك. الوقفة المتوازنة: القدمان بعرض الكتفين، الوزن موزّع، الظهر مستقيم بلا تصنّع. اليدان أداة إيضاح لا أداة إخفاء · أخرجهما من الجيوب ولا تعقد ذراعيك. الحركة في المساحة تكون هادفة: انتقل عند الانتقال بين الأفكار لا عشوائياً. والتواصل البصري يمنح كل جزء من القاعة نصيبه ثلاث إلى خمس ثوانٍ.',
       exercises:[
         { t:'وقفة الجبل', d:'قف بوقفة متوازنة لمدة دقيقتين دون حركة. صوّر نفسك ولاحظ ثباتك.', time:'2 دقيقة' },
-        { t:'اليدان تحكيان', d:'اشرح فكرة بلا كلام — بيديك فقط. اطلب من زميلك أن يخمّنها.', time:'5 دقائق' },
+        { t:'اليدان تحكيان', d:'اشرح فكرة بلا كلام · بيديك فقط. اطلب من زميلك أن يخمّنها.', time:'5 دقائق' },
         { t:'خريطة النظر', d:'قسّم القاعة ذهنياً إلى ثلاث مناطق، ووزّع نظرك عليها بالتساوي أثناء الإلقاء.', time:'أثناء العرض' },
         { t:'الفيديو الصامت', d:'صوّر نفسك تلقي دقيقتين، ثم شاهدها بلا صوت. هل رسالتك واضحة من الجسد وحده؟', time:'10 دقائق' }
       ],
@@ -65,7 +65,7 @@ var HH_SPEAK_PROGRAM = {
 
     { id:'sp3', title:'الوحدة الثالثة: نبرات الصوت',
       skills:['التنويع في الطبقة','الوقفات المؤثرة','الإيقاع والسرعة'],
-      lesson:'الصوت الرتيب يقتل أجمل المحتوى. ثلاث أدوات تصنع الفرق: التنويع في الطبقة (اخفض عند السرّ، ارفع عند الحماسة)، والوقفة الصامتة قبل الفكرة المهمة وبعدها — فالصمت يصنع ترقّباً أقوى من الصياح، والإيقاع المتغيّر (أبطئ عند الرقم والاسم المهم، أسرع عند السرد المألوف). واحرص على إنهاء الجملة بنبرة هابطة لا صاعدة، فالصاعدة تُشعر السامع بالتردد.',
+      lesson:'الصوت الرتيب يقتل أجمل المحتوى. ثلاث أدوات تصنع الفرق: التنويع في الطبقة (اخفض عند السرّ، ارفع عند الحماسة)، والوقفة الصامتة قبل الفكرة المهمة وبعدها · فالصمت يصنع ترقّباً أقوى من الصياح، والإيقاع المتغيّر (أبطئ عند الرقم والاسم المهم، أسرع عند السرد المألوف). واحرص على إنهاء الجملة بنبرة هابطة لا صاعدة، فالصاعدة تُشعر السامع بالتردد.',
       exercises:[
         { t:'الجملة بسبع نبرات', d:'قل «لم أقل ذلك» سبع مرات مع تشديد كلمة مختلفة كل مرة. لاحظ تغيّر المعنى.', time:'5 دقائق' },
         { t:'قوة الصمت', d:'ألقِ فقرة وضع وقفة ثانيتين قبل كل فكرة رئيسة. سجّل وقارن.', time:'6 دقائق' },
@@ -85,7 +85,7 @@ var HH_SPEAK_PROGRAM = {
 
     { id:'sp4', title:'الوحدة الرابعة: بناء الخطاب',
       skills:['المقدمة الجاذبة','تنظيم الأفكار','الخاتمة المؤثرة'],
-      lesson:'الخطاب المؤثر بناء لا كلام مرسل. المقدمة تملك عشر ثوانٍ لتكسب الجمهور: ابدأ بسؤال مثير أو قصة قصيرة أو رقم صادم — لا بـ«اليوم سأتحدث عن». الجسد ينظَّم في ثلاث نقاط لا أكثر، فالذاكرة تحتفظ بالثلاث ولا تحتفظ بالسبع. والخاتمة تعيد الفكرة المحورية في جملة واحدة تُحفظ، وتنتهي بدعوة واضحة للعمل.',
+      lesson:'الخطاب المؤثر بناء لا كلام مرسل. المقدمة تملك عشر ثوانٍ لتكسب الجمهور: ابدأ بسؤال مثير أو قصة قصيرة أو رقم صادم · لا بـ«اليوم سأتحدث عن». الجسد ينظَّم في ثلاث نقاط لا أكثر، فالذاكرة تحتفظ بالثلاث ولا تحتفظ بالسبع. والخاتمة تعيد الفكرة المحورية في جملة واحدة تُحفظ، وتنتهي بدعوة واضحة للعمل.',
       exercises:[
         { t:'عشر ثوانٍ', d:'اكتب ثلاث مقدمات مختلفة لموضوع واحد: سؤال، قصة، رقم. جرّبها على زملائك.', time:'12 دقيقة' },
         { t:'قاعدة الثلاث', d:'لخّص موضوعاً في ثلاث نقاط فقط، وتدرّب على شرح كل نقطة في دقيقة.', time:'10 دقائق' },
@@ -105,7 +105,7 @@ var HH_SPEAK_PROGRAM = {
 
     { id:'sp5', title:'الوحدة الخامسة: الارتجال وإدارة الأسئلة',
       skills:['التفكير السريع المنظّم','التعامل مع السؤال الصعب','استعادة السيطرة عند التعثّر'],
-      lesson:'الارتجال مهارة تُكتسب بقالب لا بموهبة. قالب «نقطة-سبب-مثال-خلاصة» ينقذك في أي موقف: اذكر رأيك، علّله، مثّل له، ثم اختم. وعند السؤال الصعب: أعد صياغته لتكسب وقتاً، وأجب بما تعرف بصدق، وقل «لا أعلم، سأبحث» عند الجهل — فالصدق أقوى من التخمين. وإن تعثّرت: توقف، تنفّس، وأعد الجملة الأخيرة — الجمهور أرحم مما تظن.',
+      lesson:'الارتجال مهارة تُكتسب بقالب لا بموهبة. قالب «نقطة-سبب-مثال-خلاصة» ينقذك في أي موقف: اذكر رأيك، علّله، مثّل له، ثم اختم. وعند السؤال الصعب: أعد صياغته لتكسب وقتاً، وأجب بما تعرف بصدق، وقل «لا أعلم، سأبحث» عند الجهل · فالصدق أقوى من التخمين. وإن تعثّرت: توقف، تنفّس، وأعد الجملة الأخيرة · الجمهور أرحم مما تظن.',
       exercises:[
         { t:'قالب الأربع', d:'اطلب موضوعاً عشوائياً وتحدث دقيقة بقالب: نقطة، سبب، مثال، خلاصة.', time:'دقيقة لكل موضوع' },
         { t:'السؤال المباغت', d:'اطلب من زميلك ثلاثة أسئلة صعبة عن عرضك، وتدرّب على الإجابة بهدوء.', time:'10 دقائق' },
@@ -158,10 +158,10 @@ var HH_SPEAK_PROGRAM = {
 // واجهة برنامج القائد المُلهِم + نظام صلاحية الوصول
 // ═══════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════
-// محرر برنامج القائد المُلهِم — تحرير كامل من لوحة التحكم
+// محرر برنامج القائد المُلهِم · تحرير كامل من لوحة التحكم
 // ═══════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════
-// دورات البرنامج — مواعيد · تسجيل أساسي · قائمة انتظار
+// دورات البرنامج · مواعيد · تسجيل أساسي · قائمة انتظار
 // ═══════════════════════════════════════════════════════════════════
 var _HH_COHORTS = [];   // [{id,title,start,end,days,time,venue,seats,mode,status}]
 var _HH_MY_ENROLL = {}; // {cohortId: 'enrolled'|'waitlist'}
@@ -202,7 +202,7 @@ function hhCohortStatus(C){
   if(C.status==='closed') return 'مغلقة';
   if(C.status==='running') return 'جارية';
   if(C.status==='done') return 'منتهية';
-  return hhCohortSeatsLeft(C)>0 ? 'التسجيل مفتوح' : 'مكتملة — قائمة انتظار';
+  return hhCohortSeatsLeft(C)>0 ? 'التسجيل مفتوح' : 'مكتملة · قائمة انتظار';
 }
 function hhFmtDate(iso){
   if(!iso) return '';
@@ -216,7 +216,7 @@ function hhFmtDate(iso){
 function hhCohortsHTML(){
   if(!_HH_COHORTS.length){
     return '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:16px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.8rem;line-height:1.9;">'
-      +'لم تُعلن مواعيد الدورات بعد.<br><span style="font-size:.73rem;color:#aaa;font-weight:700;">تابع المنصة — ستُفتح قريباً.</span></div>';
+      +'لم تُعلن مواعيد الدورات بعد.<br><span style="font-size:.73rem;color:#aaa;font-weight:700;">تابع المنصة · ستُفتح قريباً.</span></div>';
   }
   return _HH_COHORTS.map(function(C){
     var left=hhCohortSeatsLeft(C);
@@ -230,7 +230,7 @@ function hhCohortsHTML(){
       +'<div style="flex:1;min-width:0;">'
       +'<div style="font-weight:900;font-size:.88rem;color:'+col+';">'+esc(C.title||'دورة')+'</div>'
       +'<div style="font-size:.73rem;color:#888;font-weight:700;margin-top:3px;">'
-      + esc(hhFmtDate(C.start)) + (C.end? ' — ' + esc(hhFmtDate(C.end)) : '') +'</div></div>'
+      + esc(hhFmtDate(C.start)) + (C.end? ' · ' + esc(hhFmtDate(C.end)) : '') +'</div></div>'
       +'<span style="background:'+col+';color:#fff;border-radius:8px;padding:3px 10px;font-size:.64rem;font-weight:900;white-space:nowrap;">'+esc(st)+'</span>'
       +'</div>'
       +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;font-size:.73rem;color:#666;font-weight:700;margin-bottom:9px;">'
@@ -314,7 +314,7 @@ async function hhCohortsAdmin(){
 
   var html='<div style="background:#fff;border:1.5px solid #C9B37E;border-radius:12px;padding:13px;margin-bottom:13px;">'
     +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:9px;">دورة جديدة</div>'
-    +'<input id="coh-title" placeholder="اسم الدورة (الدفعة الأولى — خريف 2026)" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:8px;">'
+    +'<input id="coh-title" placeholder="اسم الدورة (الدفعة الأولى · خريف 2026)" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:8px;">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
     +'<div><div style="font-size:.72rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">تاريخ البداية</div>'
     +'<input id="coh-start" type="date" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
@@ -324,7 +324,7 @@ async function hhCohortsAdmin(){
     +'<div style="font-size:.72rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">أيام الأسبوع</div>'
     +'<div style="margin-bottom:8px;">'+dayBoxes+'</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
-    +'<input id="coh-time" placeholder="التوقيت (4:00 — 6:00 مساءً)" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
+    +'<input id="coh-time" placeholder="التوقيت (4:00 · 6:00 مساءً)" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<input id="coh-venue" placeholder="المكان (قاعة المركز)" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<input id="coh-seats" type="number" min="1" placeholder="عدد المقاعد" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<select id="coh-mode" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
@@ -461,7 +461,7 @@ async function hhSpkSaveOverride(){
   try{
     var s=JSON.stringify(payload);
     if(s.length > 900*1024){
-      if(typeof toast==='function') toast('حجم البرنامج كبير جداً — اختصر النصوص','error');
+      if(typeof toast==='function') toast('حجم البرنامج كبير جداً · اختصر النصوص','error');
       return false;
     }
     await firebase.firestore().collection('platform_settings').doc('speak_program')
@@ -469,7 +469,7 @@ async function hhSpkSaveOverride(){
     if(typeof toast==='function') toast('حُفظ البرنامج سحابياً','success');
     return true;
   }catch(e){
-    if(typeof toast==='function') toast('حُفظ محلياً — تعذرت المزامنة','warn');
+    if(typeof toast==='function') toast('حُفظ محلياً · تعذرت المزامنة','warn');
     return false;
   }
 }
@@ -495,7 +495,7 @@ function hhSpkEditor(){
   ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #1F4E79;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">محرر البرنامج</div>'
-    +'<div style="font-size:.73rem;opacity:.85;margin-top:2px;">عدّل كل شيء — يُحفظ سحابياً ويسري على الجميع</div></div>'
+    +'<div style="font-size:.73rem;opacity:.85;margin-top:2px;">عدّل كل شيء · يُحفظ سحابياً ويسري على الجميع</div></div>'
     +'<button onclick="hhSpkCloseEd()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:16px 18px;">'
     // تبويبات
@@ -580,10 +580,10 @@ function hhSpkEditUnit(i){
     +'<textarea id="spu-skills" rows="3" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.82rem;box-sizing:border-box;margin-bottom:9px;">'+g(U.skills.join('\n'))+'</textarea>'
     +'<div style="font-size:.74rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">نص الدرس</div>'
     +'<textarea id="spu-lesson" rows="6" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.82rem;line-height:1.9;box-sizing:border-box;margin-bottom:9px;">'+g(U.lesson)+'</textarea>'
-    +'<div style="font-size:.74rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">التمارين — سطر لكل تمرين بالصيغة: العنوان | الوصف | الزمن</div>'
+    +'<div style="font-size:.74rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">التمارين · سطر لكل تمرين بالصيغة: العنوان | الوصف | الزمن</div>'
     +'<textarea id="spu-ex" rows="5" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:9px;">'
     + g(U.exercises.map(function(e){return e.t+' | '+e.d+' | '+e.time;}).join('\n')) +'</textarea>'
-    +'<div style="font-size:.74rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">الأسئلة — سطر لكل سؤال: السؤال | الإجابة | المستوى | خيار٬خيار٬خيار</div>'
+    +'<div style="font-size:.74rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">الأسئلة · سطر لكل سؤال: السؤال | الإجابة | المستوى | خيار٬خيار٬خيار</div>'
     +'<div style="font-size:.68rem;color:#aaa;margin-bottom:3px;">المستوى: easy أو med أو hard · الخيارات مفصولة بفاصلة والإجابة تُضاف تلقائياً</div>'
     +'<textarea id="spu-q" rows="6" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.78rem;box-sizing:border-box;margin-bottom:11px;">'
     + g(U.quiz.map(function(q){
@@ -611,7 +611,7 @@ function hhSpkSaveUnit(i){
   }).filter(Boolean);
   var m=document.getElementById('hh-sch-modal'); if(m) m.remove();
   hhSpkEdTab('units');
-  if(typeof toast==='function') toast('حُدّثت الوحدة — اضغط «حفظ كل التعديلات»','info');
+  if(typeof toast==='function') toast('حُدّثت الوحدة · اضغط «حفظ كل التعديلات»','info');
 }
 function hhSpkAddUnit(){
   var n=HH_SPEAK_PROGRAM.units.length+1;
@@ -684,7 +684,7 @@ function hhSpkImportJSON(){
         var d=JSON.parse(String(e.target.result));
         hhSpkApplyOverride(d);
         hhSpkEdTab('info');
-        if(typeof toast==='function') toast('استُورد البرنامج — اضغط حفظ','success');
+        if(typeof toast==='function') toast('استُورد البرنامج · اضغط حفظ','success');
       }catch(err){ if(typeof toast==='function') toast('ملف غير صالح','error'); }
     };
     r.readAsText(f,'utf-8');
@@ -697,7 +697,7 @@ async function hhSpkResetOverride(){
   try{
     await firebase.firestore().collection('platform_settings').doc('speak_program').delete();
   }catch(e){}
-  if(typeof toast==='function') toast('استُعيد الأصل — أعد تحميل الصفحة','info');
+  if(typeof toast==='function') toast('استُعيد الأصل · أعد تحميل الصفحة','info');
   hhSpkCloseEd();
 }
 
@@ -803,12 +803,15 @@ function hhSpkRender(hasAccess){
     +'<div style="font-weight:900;font-size:.95rem;margin-bottom:6px;">هذا البرنامج يتطلّب صلاحية وصول</div>'
     +'<div style="font-size:.79rem;opacity:.9;line-height:1.9;margin-bottom:11px;">المحتوى والتمارين والاختبارات متاحة للمشتركين فقط. للاشتراك تواصل مع إدارة المنصة.</div>'
     +'<div style="font-size:1.6rem;font-weight:900;color:#EAD9A8;">'+P.price+' <span style="font-size:.8rem;">'+esc(P.currency)+'</span></div>'
-    +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;margin-top:11px;">طلب التسجيل</button>'
+    +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:11px;">'
+    +'<button onclick="hhWathiqOpen()" style="background:linear-gradient(135deg,#F5E6C4,#B8924A);color:#16283F;border:1px solid #FDF3DD;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">ادخل الاستوديو</button>'
+    +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">طلب التسجيل</button>'
+    +'</div>'
     +'</div>';
 
   var adminBar = (typeof hhIsAdmin==='function' && hhIsAdmin())
     ? '<div style="background:#E9EEF8;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 12px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
-      +'<span style="font-size:.76rem;font-weight:800;color:#1F4E79;">أنت مدير — الوصول مفتوح · تدير الصلاحيات من هنا</span>'
+      +'<span style="font-size:.76rem;font-weight:800;color:#1F4E79;">أنت مدير · الوصول مفتوح · تدير الصلاحيات من هنا</span>'
       +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
       +'<button onclick="hhSpkEditor()" style="background:#8A1538;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">تحرير البرنامج</button>'
       +'<button onclick="hhSpkAdminAccess()" style="background:#1F4E79;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">إدارة المشتركين</button></div></div>'
@@ -853,7 +856,7 @@ function hhSpkRequestAccess(){
   }
   ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-top:4px solid #8A1538;border-radius:16px;max-width:420px;width:100%;overflow:hidden;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 16px;border-bottom:2px solid #B8924A;">'
-    +'<div style="font-weight:700;font-size:1.05rem;">طلب التسجيل — القائد المُلهِم</div>'
+    +'<div style="font-weight:700;font-size:1.05rem;">طلب التسجيل · القائد المُلهِم</div>'
     +'<div style="font-size:.78rem;color:#EAD9B0;margin-top:2px;">بعد استلام طلبك وتأكيد الدفع تُمنح الصلاحية الكاملة</div></div>'
     +'<div style="padding:16px;">'
     + fld('pr-name','الاسم الكامل', currentUser.displayName||'')
@@ -882,15 +885,15 @@ async function hhSpkSubmitReg(){
       status:'new', createdAt:new Date().toISOString()
     });
     var ov=document.getElementById('hh-prog-reg'); if(ov) ov.remove();
-    if(typeof toast==='function') toast('أُرسل طلب تسجيلك — سنتواصل معك لإتمام التفعيل','success');
-    if(typeof hhLogActivity==='function') hhLogActivity('generate','طلب تسجيل: القائد المُلهِم — '+name);
+    if(typeof toast==='function') toast('أُرسل طلب تسجيلك · سنتواصل معك لإتمام التفعيل','success');
+    if(typeof hhLogActivity==='function') hhLogActivity('generate','طلب تسجيل: القائد المُلهِم · '+name);
   }catch(e){
     console.error('prog reg', e);
-    if(st){ st.textContent='تعذر الإرسال — حاول ثانية'; st.style.color='#c0392b'; }
+    if(st){ st.textContent='تعذر الإرسال · حاول ثانية'; st.style.color='#c0392b'; }
   }
 }
 
-// ── طلبات التسجيل — البرامج التربوية (أدمن) ──
+// ── طلبات التسجيل · البرامج التربوية (أدمن) ──
 async function hhAdminProgRegs(){
   if(!(typeof hhIsAdmin==='function' && hhIsAdmin())) return;
   var old=document.getElementById('hh-prog-regs-admin'); if(old) old.remove();
@@ -899,7 +902,7 @@ async function hhAdminProgRegs(){
   ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
   ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:680px;width:100%;overflow:hidden;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 18px;border-bottom:2px solid #B8924A;display:flex;justify-content:space-between;align-items:center;">'
-    +'<div><div style="font-weight:700;font-size:1.1rem;">طلبات التسجيل — البرامج التربوية</div>'
+    +'<div><div style="font-weight:700;font-size:1.1rem;">طلبات التسجيل · البرامج التربوية</div>'
     +'<div style="font-size:.76rem;color:#EAD9B0;margin-top:2px;">امنح الصلاحية الكاملة لمن أتم الدفع</div></div>'
     +'<button onclick="document.getElementById(\'hh-prog-regs-admin\').remove()" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;cursor:pointer;">✕</button></div>'
     +'<div id="prg-admin-list" style="padding:16px;max-height:70vh;overflow-y:auto;"><div style="text-align:center;color:#8A6D2E;padding:22px;font-weight:700;">جاري التحميل...</div></div></div>';
@@ -917,7 +920,7 @@ async function hhAdminProgRegs(){
         +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
         +'<div style="min-width:0;">'
         +'<div style="font-weight:700;font-size:.95rem;color:#5E0E26;">'+esc(r.name||'')+'</div>'
-        +'<div style="font-size:.76rem;color:#666;margin-top:2px;">'+esc(r.phone||'—')+' · '+esc(r.email||'')+(r.org?' · '+esc(r.org):'')+'</div>'
+        +'<div style="font-size:.76rem;color:#666;margin-top:2px;">'+esc(r.phone||'·')+' · '+esc(r.email||'')+(r.org?' · '+esc(r.org):'')+'</div>'
         +'<div style="font-size:.68rem;color:#aaa;margin-top:2px;">'+esc((r.createdAt||'').slice(0,10))+'</div></div>'
         +(granted
           ? '<span style="background:#E8F3ED;color:#3D6B53;border:1px solid #3D6B53;border-radius:99px;padding:3px 14px;font-size:.74rem;font-weight:700;">مُفعَّل</span>'
@@ -980,7 +983,7 @@ async function hhSpkGrantUid(uid, email){
       .set({ speak_master:true, email:email, grantedBy:currentUser.email, grantedAt:new Date().toISOString() }, {merge:true});
     await firebase.firestore().collection('user_notifications').add({
       toUid:uid, title:'فُعّل اشتراكك في القائد المُلهِم',
-      body:'أهلاً بك! فُعّل وصولك لبرنامج «القائد المُلهِم — فنّ الإلقاء والتأثير». ابدأ رحلتك من مدرستي ← برامج القادة.',
+      body:'أهلاً بك! فُعّل وصولك لبرنامج «القائد المُلهِم · فنّ الإلقاء والتأثير». ابدأ رحلتك من مدرستي ← برامج القادة.',
       from:'إدارة المُلهِم', read:false, createdAt:new Date().toISOString()
     }).catch(function(){});
     if(typeof toast==='function') toast('فُعّل الوصول','success');
@@ -992,7 +995,7 @@ async function hhSpkGrant(grant){
   if(!em){ if(st){st.textContent='أدخل البريد'; st.style.color='#c0392b';} return; }
   try{
     var snap=await firebase.firestore().collection('program_requests').where('email','==',em).limit(1).get();
-    if(snap.empty){ if(st){st.textContent='لا يوجد طلب بهذا البريد — اطلب منه التسجيل أولاً'; st.style.color='#b5801f';} return; }
+    if(snap.empty){ if(st){st.textContent='لا يوجد طلب بهذا البريد · اطلب منه التسجيل أولاً'; st.style.color='#b5801f';} return; }
     var uid=snap.docs[0].data().uid;
     await firebase.firestore().collection('program_access').doc(uid)
       .set({ speak_master:grant, email:em, grantedBy:currentUser.email, grantedAt:new Date().toISOString() }, {merge:true});
@@ -1021,7 +1024,7 @@ function hhSpkDrills(i){
       +'<button onclick="hhSpkToggleEx(\''+doneKey+'\','+i+')" style="background:'+(done?'#3D6B53':'#fff')+';color:'+(done?'#fff':'#3D6B53')+';border:1.5px solid #3D6B53;border-radius:9px;padding:5px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">'
       + (done?'✓ أُنجز':'وسمه منجزاً') +'</button></div>';
   }).join('');
-  if(typeof hhSchModal==='function') hhSchModal('تمارين — '+U.title, html, '#8A6D2E');
+  if(typeof hhSchModal==='function') hhSchModal('تمارين · '+U.title, html, '#8A6D2E');
 }
 function hhSpkToggleEx(key, i){
   _hhSpkProg[key] = !_hhSpkProg[key];
@@ -1109,7 +1112,7 @@ var HH_LEADER_PROGRAMS = [
   {
     id: 'speak_master',
     name: 'القائد المُلهِم',
-    tagline: 'فنّ الإلقاء والتأثير — برنامج تدريبي مدفوع',
+    tagline: 'فنّ الإلقاء والتأثير · برنامج تدريبي مدفوع',
     color: '#8A1538', dark: '#5E0E26',
     status: 'active', premium: true, threshold: 0,
     desc: 'برنامج تدريبي متكامل في مهارات الإلقاء والخطابة والتحدث أمام الجمهور: الثقة بالنفس، لغة الجسد، نبرات الصوت، بناء الخطاب، الارتجال، والحضور المؤثر. ست وحدات و24 تمريناً عملياً واختبار لكل وحدة.',
@@ -1164,7 +1167,7 @@ function hhOpenLeaderPrograms(){
     +'<div style="padding:16px 18px;">'+cards+'</div></div>';
   document.body.appendChild(ov);
 }
-var _HH_LDR_LAYERS = ['hh-spk','hh-spk-admin','hh-prog-reg'];
+var _HH_LDR_LAYERS = ['hh-wq-reader','hh-wathiq','hh-spk','hh-spk-admin','hh-prog-reg'];
 function hhLeadersBack(){
   for(var i=0;i<_HH_LDR_LAYERS.length;i++){
     var e=document.getElementById(_HH_LDR_LAYERS[i]);
@@ -1236,17 +1239,17 @@ function hhOpenProgram(pid){
       : '<div style="text-align:center;color:#999;padding:20px;font-weight:700;font-size:.82rem;line-height:1.9;">'
         +'لا بيانات كافية بعد.<br>ارصد درجات وحضوراً وملاحظات في دفتر المتابعة ليظهر الترتيب تلقائياً.</div>')
     +'<div style="background:#E9EEF8;border-radius:11px;padding:11px 13px;margin-top:13px;font-size:.74rem;color:#1F4E79;font-weight:700;line-height:1.85;">'
-    +'تُحدَّث لوحة الترتيب تلقائياً من دفتر المتابعة — كلما رصدت بيانات أدق، صار الترشيح أعدل.</div>';
+    +'تُحدَّث لوحة الترتيب تلقائياً من دفتر المتابعة · كلما رصدت بيانات أدق، صار الترشيح أعدل.</div>';
 
   if(typeof hhSchModal==='function') hhSchModal(P.name, html, P.color);
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// شهادات التفوق — تصميم قطري فاخر · دقة طباعة عالية
+// شهادات التفوق · تصميم قطري فاخر · دقة طباعة عالية
 // ═══════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════
-// شهادات التفوق — نسخة محصّنة: الجهة المُصدِرة بيد الأدمن وحده
+// شهادات التفوق · نسخة محصّنة: الجهة المُصدِرة بيد الأدمن وحده
 // ═══════════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════════
-// أختام المنصة — أربعة تصاميم متجهة بالهوية القطرية
+// أختام المنصة · أربعة تصاميم متجهة بالهوية القطرية
 // ═══════════════════════════════════════════════════════════════════
