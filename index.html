@@ -12560,16 +12560,42 @@ body.hh-immersive #hh-bottom-nav{ display:none !important; }
 #main-nav .main-nav-logo svg{ width:30px !important; height:30px !important; }
 #main-nav .main-nav-name{ font-size:12.5px !important; }
 #main-nav .main-nav-tag{ font-size:7.5px !important; }
+/* التوأمة: روابط العلوي بنفس لغة السفلي — أيقونة مؤطرة فوقها التسمية */
 #main-nav .nav-link{
-  padding:4px 11px !important; font-size:11px !important; gap:5px !important;
+  display:inline-flex !important; flex-direction:column !important;
+  align-items:center !important; justify-content:center !important;
+  gap:3px !important; padding:0 !important;
+  background:none !important; border:none !important; box-shadow:none !important;
   height:auto !important; min-height:0 !important; line-height:1.1 !important;
+  transform:none !important;
 }
+#main-nav .nav-link:hover{ background:none !important; transform:none !important; }
+#main-nav .nav-link:active{ transform:scale(.93) !important; }
 #main-nav .main-nav-inner{ min-height:0 !important; height:auto !important; }
 #main-nav .nav-search-wrap{ height:auto !important; min-height:0 !important; }
 #main-nav .profile-btn{ height:auto !important; min-height:0 !important; }
-#main-nav .nav-link svg{ width:12px !important; height:12px !important; }
-#main-nav .nav-link span{ font-size:11px !important; }
-#nav-center{ gap:6px !important; }
+#main-nav .nav-link svg{
+  box-sizing:border-box !important;
+  width:36px !important; height:36px !important;
+  padding:10px !important;
+  border-radius:11px !important;
+  background:rgba(212,188,133,.08) !important;
+  border:1px solid rgba(212,188,133,.4) !important;
+  color:#EAD9B0 !important;
+}
+#main-nav .nav-link span{
+  font-size:12px !important; font-weight:800 !important;
+  color:#EAD9B0 !important; white-space:nowrap !important;
+}
+#main-nav .nav-link.nav-link-active svg,
+#main-nav .nav-link:hover svg{
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  border-color:#FDF3DD !important;
+  color:#3D0918 !important;
+}
+#main-nav .nav-link.nav-link-active span{ color:#FDF3DD !important; }
+#nav-center{ gap:18px !important; }
+#nav-center .main-nav-links{ gap:18px !important; }
 #nav-center .nav-search-wrap{
   min-width:150px !important; max-width:165px !important; width:160px !important;
   padding:4px 12px !important; border-radius:99px !important;

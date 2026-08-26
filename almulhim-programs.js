@@ -1128,45 +1128,107 @@ var HH_LEADER_PROGRAMS = [
 
 function hhOpenLeaderPrograms(){
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
+  try{ if(typeof hhSpkCheckAccess==='function') hhSpkCheckAccess(); }catch(e){}
   var old=document.getElementById('hh-leaders'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-leaders';
-  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:18px 14px 40px;direction:rtl;';
+  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
 
-  var cards = HH_LEADER_PROGRAMS.map(function(P){
-    var pillSrc = (P.pillars||[]).map(function(x){return x.t;});
-    if(!pillSrc.length && P.goals) pillSrc = ['6 وحدات تدريبية','تمارين عملية مصوّرة','اختبار إتقان','شهادة معتمدة'];
-    var pills = pillSrc.slice(0,4).map(function(t){ return {t:t}; }).map(function(pl){
-      return '<span style="background:#FDF9EF;border:1px solid #B8924A;color:#8A6D2E;border-radius:99px;padding:2px 11px;font-size:.74rem;font-weight:700;">'+esc(pl.t)+'</span>';
+  function ic(p){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
+  var I = {
+    home: ic('<path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/>'),
+    mic:  ic('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>'),
+    map:  ic('<path d="M9 20l-6-2V4l6 2 6-2 6 2v14l-6-2-6 2z"/><path d="M9 6v14M15 4v14"/>'),
+    gem:  ic('<path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20M12 21L8 9l4-6 4 6-4 12"/>'),
+    form: ic('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'),
+    medal:ic('<circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/>'),
+    grp:  ic('<path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/>')
+  };
+  function side(items){
+    return items.map(function(it){
+      return '<div onclick="'+it.fn+'" style="display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:11px;color:#EAD9B0;font-weight:800;font-size:.78rem;cursor:pointer;margin-bottom:3px;'+(it.on?'background:rgba(212,188,133,.14);':'')+'">'
+        +'<span style="width:28px;height:28px;border-radius:9px;'+(it.on?'background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;color:#3D0918;':'background:rgba(212,188,133,.1);border:1px solid rgba(212,188,133,.4);color:#EAD9B0;')+'display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">'+it.svg+'</span>'+it.t+'</div>';
     }).join('');
-    var stBadge = (P.premium||P.price)?('عليه رسوم'+(P.price?(' · '+P.price+' '+(P.currency||'ر.ق')):'')):(P.status==='active'?'نشط الآن':'قريباً');
-    return '<div style="background:#fff;border:1px solid #B8924A;border-top:3px solid '+P.dark+';border-radius:0 0 16px 16px;padding:16px;margin-bottom:12px;box-shadow:0 4px 14px rgba(94,14,38,.07);transition:transform .18s ease,box-shadow .18s ease;" onmouseover="this.style.transform=\'translateY(-4px)\';this.style.boxShadow=\'0 12px 26px rgba(94,14,38,.15)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 4px 14px rgba(94,14,56,.07)\'">'
-      +'<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:9px;">'
-      +'<span style="width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 70%);border:2px solid #FDF3DD;display:inline-flex;align-items:center;justify-content:center;color:#3D0918;box-shadow:0 0 0 3px rgba(212,188,133,.25);flex-shrink:0;">'
-      +'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg></span>'
-      +'<div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
-      +'<div style="font-weight:700;font-size:1.15rem;color:'+P.dark+';">'+esc(P.name)+'</div>'
-      +'<span style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:99px;padding:2px 12px;font-size:.76rem;font-weight:700;">'+stBadge+'</span></div>'
-      +'<div style="font-size:.88rem;color:#8A6D2E;font-weight:700;margin-top:2px;">'+esc(P.tagline)+'</div></div></div>'
-      +'<div style="font-size:.95rem;color:#4A3A2A;line-height:1.9;margin-bottom:10px;">'+esc(P.desc||P.overview||'')+'</div>'
-      +(P.duration?'<div style="font-size:.82rem;color:#8A6D2E;font-weight:700;margin:-4px 0 10px;">'+esc(P.duration)+(P.level?' · '+esc(P.level):'')+'</div>':'')
-      +(pills?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">'+pills+'</div>':'')
-      +'<button onclick="hhOpenProgram(\''+P.id+'\')" style="width:100%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:11px;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,109,46,.25);">فتح البرنامج</button>'
+  }
+  var done=0; try{ done=Object.keys(JSON.parse(localStorage.getItem('hh_wq_done')||'{}')||{}).length; }catch(e){}
+  var isAdm = (typeof hhIsAdmin==='function' && hhIsAdmin());
+
+  var chapters = (typeof WQ_MAP!=='undefined' ? WQ_MAP.chapters : []).map(function(c){
+    var open = (typeof _wqAllowed==='function') ? _wqAllowed(c.id) : (c.n===1);
+    return '<div onclick="hhLdrStation('+c.id+')" style="cursor:pointer;text-align:center;background:'+(open?'linear-gradient(165deg,#FFFDF8,#FBF5E9)':'rgba(255,255,255,.5)')+';border:1.5px solid '+(open?'#B8924A':'#DDD3BC')+';border-radius:13px;padding:10px 6px;">'
+      +'<div style="width:30px;height:30px;border-radius:50%;margin:0 auto 5px;background:'+(open?'radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 78%)':'#EDE6D8')+';border:1.5px solid '+(open?'#FDF3DD':'#DDD3BC')+';display:flex;align-items:center;justify-content:center;color:'+(open?'#3D0918':'#B8AD94')+';font-weight:900;font-size:.74rem;">'+c.n+'</div>'
+      +'<div style="color:'+(open?'#3D0918':'#B8AD94')+';font-weight:800;font-size:.68rem;">'+c.t+'</div>'
+      +'<div style="color:'+(open?'#8A6D2E':'#C9BFA8')+';font-size:.56rem;margin-top:1px;">'+(open?(c.n===1?'معاينة مجانية':'مفتوح'):'🔒 بالتسجيل')+'</div>'
       +'</div>';
   }).join('');
 
-  var ornL='<svg width="110" height="110" viewBox="0 0 70 70" style="position:absolute;top:-30px;left:-30px;opacity:.11;pointer-events:none;" aria-hidden="true"><g fill="none" stroke="#D4BC85" stroke-width="1.2"><circle cx="35" cy="35" r="30"/><circle cx="35" cy="35" r="21"/><path d="M35 5v60M5 35h60M14 14l42 42M56 14L14 56"/></g></svg>';
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
-    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:16px 18px 14px;position:relative;overflow:hidden;border-bottom:2px solid #B8924A;">'
-    +ornL
-    +'<div style="display:flex;justify-content:space-between;align-items:center;position:relative;">'
-    +'<div><div style="font-weight:700;font-size:1.35rem;">البرامج التربوية</div>'
-    +'<div style="font-size:.85rem;color:#EAD9B0;margin-top:2px;font-weight:700;">اكتشاف القيادات الطلابية ورعايتها وصناعة أثرها</div></div>'
+  ov.innerHTML =
+    '<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;box-shadow:0 3px 14px rgba(61,9,24,.3);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:30;">'
     +'<div style="display:flex;gap:7px;">'
-    +'<button onclick="hhLeadersBack()" title="رجوع خطوة" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:30px;padding:0 12px;color:#FDF3DD;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>'
-    +'<button onclick="hhLeadersHome()" title="الشاشة الرئيسية" style="background:rgba(212,188,133,.15);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;color:#FDF3DD;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg></button>'
-    +'</div></div></div>'
-    +'<div style="padding:16px 18px;">'+cards+'</div></div>';
+    +  '<button onclick="hhLeadersBack()" style="background:rgba(212,188,133,.12);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:32px;padding:0 13px;color:#F5E6C4;font-weight:800;font-size:.78rem;cursor:pointer;font-family:Cairo;">‹ رجوع</button>'
+    +  '<button onclick="hhLeadersHome()" style="background:rgba(212,188,133,.12);border:1px solid rgba(212,188,133,.5);border-radius:9px;width:32px;height:32px;color:#F5E6C4;cursor:pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg></button>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:10px;">'
+    +  '<span style="color:#F5E6C4;font-weight:800;font-size:1rem;">البرامج التربوية</span>'
+    +  '<span style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:99px;padding:3px 13px;color:#3D0918;font-size:.68rem;font-weight:800;">تمارينك المنجزة: '+done+'</span>'
+    +'</div>'
+    +'<span style="width:90px;"></span>'
+    +'</div>'
+
+    +'<div style="display:grid;grid-template-columns:200px minmax(0,1fr);min-height:calc(100vh - 55px);">'
+    +'<div style="background:linear-gradient(180deg,#4A0B1E,#3D0918);border-left:2px solid #B8924A;padding:13px 9px;">'
+    + side([
+        {t:'الرئيسة', svg:I.home, fn:'hhOpenLeaderPrograms()', on:true},
+        {t:'استوديو الواثق', svg:I.mic, fn:'hhWathiqOpen()'},
+        {t:'محطات الرحلة', svg:I.map, fn:'hhWathiqOpen()'},
+        {t:'كنوز الواثق', svg:I.gem, fn:'hhLdrStation(18)'}
+      ])
+    +'<div style="height:1px;background:rgba(212,188,133,.25);margin:9px 6px;"></div>'
+    + side([
+        {t:'طلب التسجيل', svg:I.form, fn:'hhSpkRequestAccess()'},
+        {t:'وسام الإتمام', svg:I.medal, fn:'hhLdrStation(26)'}
+      ].concat(isAdm?[{t:'طلبات التسجيل · إدارة', svg:I.grp, fn:'hhAdminProgRegs()'}]:[]))
+    +'</div>'
+
+    +'<div style="padding:16px 18px 40px;">'
+    +'<div style="background:linear-gradient(165deg,#5E0E26,#3D0918);border:1px solid rgba(212,188,133,.55);border-radius:18px;padding:18px 20px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">'
+    +  '<div style="position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,transparent,#D4BC85,transparent);"></div>'
+    +  '<div style="min-width:0;">'
+    +    '<div style="color:#D4BC85;font-size:.68rem;font-weight:800;">البرنامج التدريبي المعتمد · عليه رسوم</div>'
+    +    '<div style="color:#fff;font-weight:900;font-size:1.35rem;margin-top:3px;">الواثــق المُـلـهِـم</div>'
+    +    '<div style="color:#C9A96A;font-size:.76rem;margin-top:3px;">دليلك الشامل في مهارات الإلقاء والتحدث أمام الجمهور · إعداد المدرب: أحمد الحلحلي</div>'
+    +    '<div style="display:inline-flex;gap:7px;align-items:center;margin-top:9px;background:rgba(20,35,55,.55);border:1px solid #D4BC85;border-radius:99px;padding:5px 15px;flex-wrap:wrap;">'
+    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">جسد واثق</span><span style="color:#D4BC85;">+</span>'
+    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">صوت واضح</span><span style="color:#D4BC85;">+</span>'
+    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">كلام مرتب</span><span style="color:#D4BC85;">=</span>'
+    +      '<span style="color:#F5E6C4;font-weight:800;font-size:.7rem;">متحدث مُلهِم</span>'
+    +    '</div>'
+    +  '</div>'
+    +  '<div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">'
+    +    '<button onclick="hhWathiqOpen()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:11px;padding:10px 22px;color:#3D0918;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;box-shadow:0 3px 10px rgba(138,109,46,.3);">ادخل الاستوديو</button>'
+    +    '<button onclick="hhSpkRequestAccess()" style="background:rgba(212,188,133,.1);border:1px solid #B8924A;border-radius:11px;padding:10px 22px;color:#F5E6C4;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;">طلب التسجيل</button>'
+    +  '</div>'
+    +'</div>'
+
+    +'<div style="color:#8A1538;font-weight:800;font-size:.85rem;margin:15px 2px 9px;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:#B8924A;transform:rotate(45deg);"></span>محطات الرحلة الست</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;">'+chapters+'</div>'
+
+    +'<div id="hh-ldr-cohorts" style="margin-top:15px;"></div>'
+    +'</div></div>';
+
   document.body.appendChild(ov);
+  try{
+    if(typeof hhCohortsLoad==='function'){
+      hhCohortsLoad().then(function(){
+        var b=document.getElementById('hh-ldr-cohorts');
+        if(b && typeof hhCohortsHTML==='function'){ var h=hhCohortsHTML(); if(h) b.innerHTML=h; }
+      }).catch(function(){});
+    }
+  }catch(e){}
+}
+
+function hhLdrStation(id){
+  hhWathiqOpen();
+  setTimeout(function(){ try{ wqOpenSec(id); }catch(e){} }, 250);
 }
 var _HH_LDR_LAYERS = ['hh-wq-reader','hh-wathiq','hh-spk','hh-spk-admin','hh-prog-reg'];
 function hhLeadersBack(){
