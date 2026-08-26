@@ -1141,7 +1141,9 @@ function hhOpenLeaderPrograms(){
     gem:  ic('<path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20M12 21L8 9l4-6 4 6-4 12"/>'),
     form: ic('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'),
     medal:ic('<circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/>'),
-    grp:  ic('<path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/>')
+    grp:  ic('<path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/>'),
+    fire: ic('<path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c0-1.5-.8-2.5-.8-2.5S17 10 17 13a5 5 0 0 1-10 0c0-5 5-7 5-11z"/>'),
+    list: ic('<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>')
   };
   function side(items){
     return items.map(function(it){
@@ -1150,16 +1152,44 @@ function hhOpenLeaderPrograms(){
     }).join('');
   }
   var done=0; try{ done=Object.keys(JSON.parse(localStorage.getItem('hh_wq_done')||'{}')||{}).length; }catch(e){}
+  var lastCh=6; try{ lastCh=parseInt(localStorage.getItem('hh_wq_last_ch')||'6',10)||6; }catch(e){}
   var isAdm = (typeof hhIsAdmin==='function' && hhIsAdmin());
+  var hasWQ = (typeof WQ_MAP!=='undefined');
+  var canAll = (typeof _wqAllowed==='function') ? _wqAllowed(7) : false;
+  var roleBadge = isAdm ? 'مدير المنصة' : (canAll ? 'متدرب مسجل ✓' : 'معاينة مجانية');
 
-  var chapters = (typeof WQ_MAP!=='undefined' ? WQ_MAP.chapters : []).map(function(c){
+  // ── مسار الرحلة ──
+  var lastChapter = null;
+  var journey = (hasWQ ? WQ_MAP.chapters : []).map(function(c){
     var open = (typeof _wqAllowed==='function') ? _wqAllowed(c.id) : (c.n===1);
-    return '<div onclick="hhLdrStation('+c.id+')" style="cursor:pointer;text-align:center;background:'+(open?'linear-gradient(165deg,#FFFDF8,#FBF5E9)':'rgba(255,255,255,.5)')+';border:1.5px solid '+(open?'#B8924A':'#DDD3BC')+';border-radius:13px;padding:10px 6px;">'
-      +'<div style="width:30px;height:30px;border-radius:50%;margin:0 auto 5px;background:'+(open?'radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 78%)':'#EDE6D8')+';border:1.5px solid '+(open?'#FDF3DD':'#DDD3BC')+';display:flex;align-items:center;justify-content:center;color:'+(open?'#3D0918':'#B8AD94')+';font-weight:900;font-size:.74rem;">'+c.n+'</div>'
+    var now = (c.id===lastCh);
+    if(now) lastChapter=c;
+    return '<div onclick="hhLdrStation('+c.id+')" style="position:relative;cursor:pointer;text-align:center;background:'+(open?'linear-gradient(165deg,#FFFDF8,#FBF5E9)':'rgba(255,255,255,.55)')+';border:1.5px solid '+(open?'#B8924A':'#DDD3BC')+';border-radius:14px;padding:13px 6px 9px;'+(open&&now?'box-shadow:0 5px 16px rgba(94,14,38,.12);':'')+'">'
+      +(now?'<span style="position:absolute;top:-9px;right:50%;transform:translateX(50%);background:linear-gradient(175deg,#7A1330,#4A0B1E);border:1px solid #B8924A;color:#F5E6C4;border-radius:99px;padding:1px 10px;font-size:.56rem;font-weight:800;white-space:nowrap;">أنت هنا</span>':'')
+      +'<div style="width:34px;height:34px;border-radius:50%;margin:0 auto 6px;position:relative;z-index:1;background:'+(open?'radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 78%)':'#EDE6D8')+';border:2px solid '+(open?'#FDF3DD':'#DDD3BC')+';'+(now&&open?'box-shadow:0 0 0 4px rgba(184,146,74,.3);':'')+'display:flex;align-items:center;justify-content:center;color:'+(open?'#3D0918':'#B8AD94')+';font-weight:900;font-size:.82rem;">'+c.n+'</div>'
       +'<div style="color:'+(open?'#3D0918':'#B8AD94')+';font-weight:800;font-size:.68rem;">'+c.t+'</div>'
-      +'<div style="color:'+(open?'#8A6D2E':'#C9BFA8')+';font-size:.56rem;margin-top:1px;">'+(open?(c.n===1?'معاينة مجانية':'مفتوح'):'🔒 بالتسجيل')+'</div>'
+      +'<div style="color:'+(open?'#8A6D2E':'#C9BFA8')+';font-size:.54rem;margin-top:2px;">'+(open?(c.n===1?'معاينة مجانية':'مفتوح'):'🔒 بالتسجيل')+'</div>'
       +'</div>';
   }).join('');
+
+  // ── الكنوز والوسام ──
+  var gems='', medalItem=null;
+  if(hasWQ && WQ_MAP.treasures){
+    WQ_MAP.treasures.items.forEach(function(it){
+      if(it.id===26){ medalItem=it; return; }
+      var open = (typeof _wqAllowed==='function') ? _wqAllowed(it.id) : false;
+      gems += '<div onclick="hhLdrStation('+it.id+')" style="display:flex;align-items:center;gap:10px;cursor:pointer;background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1px solid rgba(184,146,74,.5);border-radius:12px;padding:8px 12px;margin-bottom:7px;'+(open?'':'opacity:.75;')+'">'
+        +'<span style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 80%);border:1.5px solid #FDF3DD;display:inline-flex;align-items:center;justify-content:center;color:#3D0918;flex-shrink:0;">'+I.gem+'</span>'
+        +'<div style="flex:1;min-width:0;"><div style="color:#3D0918;font-weight:800;font-size:.74rem;">'+it.t+'</div>'
+        +'<div style="color:#8A7A63;font-size:.6rem;margin-top:1px;">'+(it.sub||'')+'</div></div>'
+        +(open?'<span style="color:#B8924A;font-size:.85rem;">‹</span>':'<span style="color:#B8AD94;font-size:.62rem;font-weight:800;">🔒 بالتسجيل</span>')
+        +'</div>';
+    });
+  }
+  var medalCard = '<div onclick="hhLdrStation(26)" style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:10px;background:rgba(184,146,74,.07);border:1px dashed #B8924A;border-radius:12px;padding:9px 12px;">'
+    +'<span style="width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 75%);border:2px solid #8A1538;display:flex;align-items:center;justify-content:center;color:#3D0918;">'+I.medal+'</span>'
+    +'<div><div style="color:#8A1538;font-weight:800;font-size:.72rem;">وسام الواثق المُلهِم</div>'
+    +'<div style="color:#8A7A63;font-size:.6rem;">يُمنح بعد إتمام المحطات الست واجتياز التقييم الختامي</div></div></div>';
 
   ov.innerHTML =
     '<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;box-shadow:0 3px 14px rgba(61,9,24,.3);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:30;">'
@@ -1169,7 +1199,7 @@ function hhOpenLeaderPrograms(){
     +'</div>'
     +'<div style="display:flex;align-items:center;gap:10px;">'
     +  '<span style="color:#F5E6C4;font-weight:800;font-size:1rem;">البرامج التربوية</span>'
-    +  '<span style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:99px;padding:3px 13px;color:#3D0918;font-size:.68rem;font-weight:800;">تمارينك المنجزة: '+done+'</span>'
+    +  '<span style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:99px;padding:3px 13px;color:#3D0918;font-size:.68rem;font-weight:800;">'+roleBadge+'</span>'
     +'</div>'
     +'<span style="width:90px;"></span>'
     +'</div>'
@@ -1179,7 +1209,7 @@ function hhOpenLeaderPrograms(){
     + side([
         {t:'الرئيسة', svg:I.home, fn:'hhOpenLeaderPrograms()', on:true},
         {t:'استوديو الواثق', svg:I.mic, fn:'hhWathiqOpen()'},
-        {t:'محطات الرحلة', svg:I.map, fn:'hhWathiqOpen()'},
+        {t:'محطات الرحلة', svg:I.map, fn:'hhLdrContinue()'},
         {t:'كنوز الواثق', svg:I.gem, fn:'hhLdrStation(18)'}
       ])
     +'<div style="height:1px;background:rgba(212,188,133,.25);margin:9px 6px;"></div>'
@@ -1189,30 +1219,51 @@ function hhOpenLeaderPrograms(){
       ].concat(isAdm?[{t:'طلبات التسجيل · إدارة', svg:I.grp, fn:'hhAdminProgRegs()'}]:[]))
     +'</div>'
 
-    +'<div style="padding:16px 18px 40px;">'
-    +'<div style="background:linear-gradient(165deg,#5E0E26,#3D0918);border:1px solid rgba(212,188,133,.55);border-radius:18px;padding:18px 20px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">'
+    +'<div style="padding:14px 17px 40px;">'
+    +'<div style="display:flex;align-items:center;gap:7px;color:#8A7A63;font-size:.68rem;font-weight:700;margin-bottom:10px;">البرامج التربوية <span style="color:#B8924A;">‹</span> <b style="color:#8A1538;">الرئيسة</b></div>'
+
+    +'<div style="background:linear-gradient(165deg,#5E0E26,#3D0918);border:1px solid rgba(212,188,133,.55);border-radius:18px;padding:17px 19px;position:relative;overflow:hidden;">'
     +  '<div style="position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,transparent,#D4BC85,transparent);"></div>'
-    +  '<div style="min-width:0;">'
-    +    '<div style="color:#D4BC85;font-size:.68rem;font-weight:800;">البرنامج التدريبي المعتمد · عليه رسوم</div>'
-    +    '<div style="color:#fff;font-weight:900;font-size:1.35rem;margin-top:3px;">الواثــق المُـلـهِـم</div>'
-    +    '<div style="color:#C9A96A;font-size:.76rem;margin-top:3px;">دليلك الشامل في مهارات الإلقاء والتحدث أمام الجمهور · إعداد المدرب: أحمد الحلحلي</div>'
-    +    '<div style="display:inline-flex;gap:7px;align-items:center;margin-top:9px;background:rgba(20,35,55,.55);border:1px solid #D4BC85;border-radius:99px;padding:5px 15px;flex-wrap:wrap;">'
-    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">جسد واثق</span><span style="color:#D4BC85;">+</span>'
-    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">صوت واضح</span><span style="color:#D4BC85;">+</span>'
-    +      '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">كلام مرتب</span><span style="color:#D4BC85;">=</span>'
-    +      '<span style="color:#F5E6C4;font-weight:800;font-size:.7rem;">متحدث مُلهِم</span>'
+    +  '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">'
+    +    '<div style="min-width:0;">'
+    +      '<div style="color:#D4BC85;font-size:.68rem;font-weight:800;">البرنامج التدريبي المعتمد · عليه رسوم</div>'
+    +      '<div style="color:#fff;font-weight:900;font-size:1.4rem;margin-top:3px;">الواثــق المُـلـهِـم</div>'
+    +      '<div style="color:#C9A96A;font-size:.74rem;margin-top:3px;">دليلك الشامل في مهارات الإلقاء والتحدث أمام الجمهور · إعداد المدرب: أحمد الحلحلي</div>'
+    +      '<div style="display:inline-flex;gap:7px;align-items:center;margin-top:9px;background:rgba(20,35,55,.55);border:1px solid #D4BC85;border-radius:99px;padding:5px 15px;flex-wrap:wrap;">'
+    +        '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">جسد واثق</span><span style="color:#D4BC85;">+</span>'
+    +        '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">صوت واضح</span><span style="color:#D4BC85;">+</span>'
+    +        '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">كلام مرتب</span><span style="color:#D4BC85;">=</span>'
+    +        '<span style="color:#F5E6C4;font-weight:800;font-size:.7rem;">متحدث مُلهِم</span>'
+    +      '</div>'
+    +    '</div>'
+    +    '<div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">'
+    +      '<button onclick="hhLdrContinue()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:11px;padding:10px 22px;color:#3D0918;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;box-shadow:0 3px 10px rgba(138,109,46,.3);">تابع من محطتك</button>'
+    +      '<button onclick="hhSpkRequestAccess()" style="background:rgba(212,188,133,.1);border:1px solid #B8924A;border-radius:11px;padding:10px 22px;color:#F5E6C4;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;">طلب التسجيل</button>'
     +    '</div>'
     +  '</div>'
-    +  '<div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">'
-    +    '<button onclick="hhWathiqOpen()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:11px;padding:10px 22px;color:#3D0918;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;box-shadow:0 3px 10px rgba(138,109,46,.3);">ادخل الاستوديو</button>'
-    +    '<button onclick="hhSpkRequestAccess()" style="background:rgba(212,188,133,.1);border:1px solid #B8924A;border-radius:11px;padding:10px 22px;color:#F5E6C4;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;">طلب التسجيل</button>'
+    +  '<div style="margin-top:12px;background:rgba(212,188,133,.09);border:1px solid rgba(212,188,133,.4);border-radius:13px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">'
+    +    '<span style="color:#F5E6C4;font-weight:800;font-size:.74rem;">رحلتك: أنجزت '+done+' تمريناً'+(lastChapter?' · محطتك الحالية: '+lastChapter.t:'')+'</span>'
+    +    '<span style="color:#EAD9B0;font-weight:800;font-size:.68rem;">'+(canAll?'كل المحطات مفتوحة لك':'المحطة الأولى معاينة مجانية')+'</span>'
     +  '</div>'
     +'</div>'
 
-    +'<div style="color:#8A1538;font-weight:800;font-size:.85rem;margin:15px 2px 9px;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:#B8924A;transform:rotate(45deg);"></span>محطات الرحلة الست</div>'
-    +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;">'+chapters+'</div>'
+    +'<div style="color:#8A1538;font-weight:800;font-size:.85rem;margin:15px 2px 10px;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:#B8924A;transform:rotate(45deg);"></span>مسار الرحلة · ست محطات نحو المنصة</div>'
+    +'<div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;padding-top:6px;">'
+    +  '<span style="position:absolute;top:29px;right:8%;left:8%;height:3px;background:repeating-linear-gradient(90deg,#B8924A 0 10px,transparent 10px 17px);opacity:.5;pointer-events:none;"></span>'
+    +  journey
+    +'</div>'
 
-    +'<div id="hh-ldr-cohorts" style="margin-top:15px;"></div>'
+    +'<div style="color:#8A1538;font-weight:800;font-size:.85rem;margin:15px 2px 10px;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:#B8924A;transform:rotate(45deg);"></span>من الحرم</div>'
+    +'<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:12px;align-items:start;">'
+    +  '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
+    +    '<div style="color:#8A1538;font-weight:800;font-size:.78rem;margin-bottom:9px;display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;background:#B8924A;transform:rotate(45deg);"></span>كنوز الواثق</div>'
+    +    gems + medalCard
+    +  '</div>'
+    +  '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
+    +    '<div style="color:#8A1538;font-weight:800;font-size:.78rem;margin-bottom:9px;display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;background:#B8924A;transform:rotate(45deg);"></span>الدورات القادمة</div>'
+    +    '<div id="hh-ldr-cohorts"><div style="text-align:center;color:#8A7A63;font-size:.72rem;font-weight:700;padding:12px;">جارٍ تحميل الدورات…</div></div>'
+    +  '</div>'
+    +'</div>'
     +'</div></div>';
 
   document.body.appendChild(ov);
@@ -1220,13 +1271,33 @@ function hhOpenLeaderPrograms(){
     if(typeof hhCohortsLoad==='function'){
       hhCohortsLoad().then(function(){
         var b=document.getElementById('hh-ldr-cohorts');
-        if(b && typeof hhCohortsHTML==='function'){ var h=hhCohortsHTML(); if(h) b.innerHTML=h; }
-      }).catch(function(){});
+        if(b && typeof hhCohortsHTML==='function'){
+          var h=hhCohortsHTML();
+          b.innerHTML = h || '<div style="text-align:center;color:#8A7A63;font-size:.72rem;font-weight:700;padding:12px;">لم تُعلن مواعيد الدورات بعد · تابع المنصة</div>';
+        }
+      }).catch(function(){
+        var b=document.getElementById('hh-ldr-cohorts');
+        if(b) b.innerHTML='<div style="text-align:center;color:#8A7A63;font-size:.72rem;font-weight:700;padding:12px;">لم تُعلن مواعيد الدورات بعد · تابع المنصة</div>';
+      });
+    } else {
+      var b=document.getElementById('hh-ldr-cohorts');
+      if(b) b.innerHTML='<div style="text-align:center;color:#8A7A63;font-size:.72rem;font-weight:700;padding:12px;">لم تُعلن مواعيد الدورات بعد · تابع المنصة</div>';
     }
   }catch(e){}
 }
 
+function hhLdrContinue(){
+  var last=6; try{ last=parseInt(localStorage.getItem('hh_wq_last_ch')||'6',10)||6; }catch(e){}
+  // إن كانت المحطة المحفوظة غير مصرح بها لهذا الزائر فليهبط على أول محطة مفتوحة
+  try{ if(typeof _wqAllowed==='function' && !_wqAllowed(last)) last=6; }catch(e){}
+  hhLdrStation(last);
+}
 function hhLdrStation(id){
+  try{
+    var isCh=false;
+    if(typeof WQ_MAP!=='undefined') WQ_MAP.chapters.forEach(function(c){ if(c.id===id) isCh=true; });
+    if(isCh) localStorage.setItem('hh_wq_last_ch', String(id));
+  }catch(e){}
   hhWathiqOpen();
   setTimeout(function(){ try{ wqOpenSec(id); }catch(e){} }, 250);
 }

@@ -6865,16 +6865,16 @@ function hhOpenGradebook(){
   }).join('');
 
   ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
-    +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;color:#F5E6C4;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">دفتر المتابعة</div>'
     +'<div style="font-size:.72rem;opacity:.85;margin-top:2px;">درجات · حضور · سلوك · تواصل</div></div>'
     +'<button onclick="hhCloseGB()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:15px 18px;">'
     +'<div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;">'
-    +'<button onclick="hhGBTab(\'grades\')" id="gbt-grades" style="flex:1;min-width:80px;background:#1F4E79;color:#fff;border:none;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الدرجات</button>'
-    +'<button onclick="hhGBTab(\'attend\')" id="gbt-attend" style="flex:1;min-width:80px;background:#fff;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الحضور</button>'
-    +'<button onclick="hhGBTab(\'notes\')" id="gbt-notes" style="flex:1;min-width:80px;background:#fff;color:#8A1538;border:1.5px solid #8A1538;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">السلوك والمهارات</button>'
-    +'<button onclick="hhGBTab(\'report\')" id="gbt-report" style="flex:1;min-width:80px;background:#fff;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">التقارير</button>'
+    +'<button onclick="hhGBTab(\'grades\')" id="gbt-grades" style="flex:1;min-width:80px;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الدرجات</button>'
+    +'<button onclick="hhGBTab(\'attend\')" id="gbt-attend" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الحضور</button>'
+    +'<button onclick="hhGBTab(\'notes\')" id="gbt-notes" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">السلوك والمهارات</button>'
+    +'<button onclick="hhGBTab(\'report\')" id="gbt-report" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">التقارير</button>'
     +'</div>'
     +'<div id="gb-body"></div>'
     +'</div></div>';
@@ -6886,10 +6886,9 @@ function hhGBTab(t){
   ['grades','attend','notes','report'].forEach(function(k){
     var b=document.getElementById('gbt-'+k); if(!b) return;
     var on = (k===t);
-    var col = k==='grades'?'#1F4E79':k==='attend'?'#3D6B53':k==='notes'?'#8A1538':'#8A6D2E';
-    b.style.background = on? col : '#fff';
-    b.style.color = on? '#fff' : col;
-    b.style.border = on? 'none' : '1.5px solid '+col;
+    b.style.background = on? 'linear-gradient(135deg,#EAD9B0,#B8924A)' : 'rgba(184,146,74,.08)';
+    b.style.color = on? '#3D0918' : '#8A6D2E';
+    b.style.border = on? '1px solid #FDF3DD' : '1px solid #B8924A';
   });
   var body=document.getElementById('gb-body'); if(!body) return;
   if(t==='grades') body.innerHTML = hhGBGradesView();
@@ -6907,7 +6906,7 @@ function hhGBGradesView(){
   var rows = _hhGB.grades.slice().reverse().slice(0,40).map(function(g,i){
     var pct = g.max? Math.round(g.score/g.max*100) : 0;
     var col = pct>=80?'#3D6B53':pct>=60?'#b5801f':'#c0392b';
-    return '<tr style="background:'+(i%2?'#F7FBFF':'#fff')+';">'
+    return '<tr style="background:'+(i%2?'#FBF5E9':'#FFFDF8')+';">'
       +'<td style="padding:6px 9px;font-weight:800;font-size:.76rem;">'+esc(g.student)+'</td>'
       +'<td style="padding:6px;font-size:.72rem;color:#777;">'+esc(g.cls||'')+'</td>'
       +'<td style="padding:6px;font-size:.74rem;">'+esc(g.reason||'')+'</td>'
@@ -6915,26 +6914,78 @@ function hhGBGradesView(){
       +'<td style="padding:6px;text-align:center;font-size:.68rem;color:#aaa;">'+esc((g.date||'').slice(5))+'</td>'
       +'<td style="padding:4px;text-align:center;"><button onclick="hhGBDelGrade('+(_hhGB.grades.length-1-i)+')" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:.9rem;">✕</button></td></tr>';
   }).join('');
-  return '<div style="background:#fff;border:1.5px solid #C9B37E;border-radius:12px;padding:13px;margin-bottom:13px;">'
-    +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:9px;">رصد درجة</div>'
+  return '<div style="background:#fff;background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:14px;padding:13px;margin-bottom:13px;">'
+    +'<div style="font-weight:900;font-size:.85rem;color:#8A1538;margin-bottom:9px;">رصد درجة جديدة</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">'
     +'<select id="gb-student" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.78rem;">'+studOpts+'</select>'
     +'<input id="gb-reason" placeholder="سبب الدرجة (اختبار الوحدة الأولى)" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.78rem;box-sizing:border-box;">'
     +'<input id="gb-score" type="number" min="0" placeholder="الدرجة" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.78rem;box-sizing:border-box;">'
     +'<input id="gb-max" type="number" min="1" value="10" placeholder="من" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.78rem;box-sizing:border-box;">'
     +'</div>'
-    +'<button onclick="hhGBAddGrade()" style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">رصد</button>'
-    +'<button onclick="hhBulkImportStudents()" style="background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">استيراد من Excel</button>'
+    +'<button onclick="hhGBAddGrade()" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">رصد</button>'
+    +'<button onclick="hhBulkImportStudents()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">استيراد من Excel</button>'
     +'<button onclick="hhGBAddStudent()" style="background:#fff;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">إضافة يدوية</button>'
+    +'<button onclick="hhGBSchoolScores()" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">درجات مدرستي للطالب</button>'
     +'</div>'
     + (_hhGB.grades.length
       ? '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">'
-        +'<thead><tr style="background:#1F4E79;color:#fff;font-size:.72rem;font-weight:900;">'
+        +'<thead><tr style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#F5E6C4;font-size:.72rem;font-weight:900;">'
         +'<th style="padding:7px 9px;text-align:right;">الطالب</th><th style="padding:7px;text-align:right;">الصف</th>'
         +'<th style="padding:7px;text-align:right;">السبب</th><th style="padding:7px;">الدرجة</th>'
         +'<th style="padding:7px;">التاريخ</th><th style="padding:7px;"></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
       : '<div style="text-align:center;color:#999;padding:18px;font-weight:700;font-size:.8rem;">لم تُرصد درجات بعد</div>');
 }
+
+// جلب درجات اختبارات «مدرستي» للطالب المرتبط بحسابه
+async function hhGBSchoolScores(){
+  var studs=hhGBStudents();
+  var si=(document.getElementById('gb-student')||{}).value;
+  if(si==='' || !studs[si]){ if(typeof toast==='function') toast('اختر طالباً من قائمة الرصد أولاً','warn'); return; }
+  var s=studs[si];
+  if(!s.uid){ if(typeof toast==='function') toast('هذا الطالب غير مرتبط بحساب في المنصة · درجات مدرستي تظهر للطلاب المسجلين فقط','warn'); return; }
+  if(typeof toast==='function') toast('جارٍ جلب درجات '+s.name+'…','info');
+  try{
+    var doc = await firebase.firestore().collection('school_progress').doc(s.uid).get();
+    if(!doc.exists){ hhGBScoresModal('درجات مدرستي · '+esc(s.name), '<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.82rem;padding:16px;">لم يبدأ الطالب رحلته في مدرستي بعد</div>'); return; }
+    var P = (doc.data()||{}).progress || {};
+    var S = (typeof hhSchData==='function') ? hhSchData() : null;
+    var rows='';
+    if(S){
+      S.units.forEach(function(U,ui){
+        var m = P['u'+ui+'_mastery'];
+        U.lessons.forEach(function(L){
+          var q=P[L.id+'_quick'], f=P[L.id+'_full'];
+          if(q===undefined && f===undefined) return;
+          function chip(v){
+            if(v===undefined) return '<span style="color:#C9BFA8;font-size:.68rem;">—</span>';
+            var c = v>=80?'#3D6B53':v>=60?'#8A6D2E':'#7A1330';
+            return '<span style="background:rgba(184,146,74,.1);border:1px solid '+c+';color:'+c+';border-radius:99px;padding:1px 11px;font-size:.68rem;font-weight:900;">'+v+'%</span>';
+          }
+          rows += '<div style="display:grid;grid-template-columns:1fr 74px 74px;gap:6px;align-items:center;background:#fff;border:1px solid rgba(184,146,74,.4);border-radius:10px;padding:7px 11px;margin-bottom:6px;">'
+            +'<div style="color:#3D0918;font-weight:800;font-size:.72rem;">'+esc(L.title)+'</div>'
+            +'<div style="text-align:center;">'+chip(q)+'</div><div style="text-align:center;">'+chip(f)+'</div></div>';
+        });
+        if(m!==undefined){
+          rows += '<div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:10px;padding:7px 13px;margin:0 0 10px;">'
+            +'<span style="color:#3D0918;font-weight:900;font-size:.72rem;">إتقان '+esc(U.unit)+'</span>'
+            +'<span style="color:#3D0918;font-weight:900;font-size:.8rem;">'+m+'%</span></div>';
+        }
+      });
+    }
+    if(!rows) rows='<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.82rem;padding:16px;">لا درجات اختبارات مسجلة بعد</div>';
+    var head='<div style="display:grid;grid-template-columns:1fr 74px 74px;gap:6px;padding:0 11px 6px;color:#8A6D2E;font-weight:900;font-size:.66rem;"><span>الدرس</span><span style="text-align:center;">سريع</span><span style="text-align:center;">شامل</span></div>';
+    hhGBScoresModal('درجات مدرستي · '+esc(s.name), head+rows);
+  }catch(e){ if(typeof toast==='function') toast('تعذر الجلب — تحقق من الاتصال والصلاحيات','warn'); }
+}
+function hhGBScoresModal(title, html){
+  if(typeof hhSchModal==='function'){ hhSchModal(title, html, '#8A1538'); return; }
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999996;display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
+  ov.onclick=function(ev){ if(ev.target===ov) ov.remove(); };
+  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:560px;width:100%;padding:16px;">'+'<div style="font-weight:900;color:#8A1538;margin-bottom:10px;">'+title+'</div>'+html+'</div>';
+  document.body.appendChild(ov);
+}
+
 function hhGBAddGrade(){
   var studs=hhGBStudents();
   var si=(document.getElementById('gb-student')||{}).value;
@@ -8305,14 +8356,14 @@ function hhOpenCertificates(){
   var typeOpts=HH_CERT_TYPES.map(function(t){ return '<option value="'+t.id+'">'+esc(t.name)+'</option>'; }).join('');
   var myName=(typeof currentUser!=='undefined'&&currentUser)?(currentUser.displayName||(currentUser.email||'').split('@')[0]||''):'';
 
-  ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
-    +'<div style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
-    +'<div><div style="font-weight:900;font-size:1rem;">شهادات التفوق</div>'
-    +'<div style="font-size:.73rem;opacity:.87;margin-top:2px;">شهادة رسمية بدقة طباعة عالية</div></div>'
+  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
+    +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;color:#F5E6C4;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div><div style="font-weight:900;font-size:1rem;">مركز الشهادات المعتمدة</div>'
+    +'<div style="font-size:.73rem;opacity:.87;margin-top:2px;">تصدر باسمك وبختم المنصة لطلابك المتقنين</div></div>'
     +'<button onclick="hhCloseCert()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:16px 18px;">'
     // ── شريط الجهة المُصدِرة (مقفل للجميع عدا الأدمن) ──
-    +'<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:11px 13px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;">'
+    +'<div style="background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:12px;padding:11px 13px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;">'
     +'<div><div style="font-size:.68rem;color:#999;font-weight:800;">الجهة المُصدِرة</div>'
     +'<div style="font-weight:900;font-size:.88rem;color:#8A6D2E;">'+esc(_hhCertIssuer.org)
     +' <span style="background:#3D6B53;color:#fff;border-radius:6px;padding:1px 8px;font-size:.6rem;">موثّقة</span></div>'
@@ -8322,35 +8373,35 @@ function hhOpenCertificates(){
        : '<span style="font-size:.68rem;color:#999;font-weight:800;">غير قابلة للتعديل</span>')
     +'</div>'
     // ── النموذج ──
-    +'<div style="background:#fff;border:1.5px solid #C9B37E;border-radius:13px;padding:14px;margin-bottom:14px;">'
+    +'<div style="background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:14px;padding:14px;margin-bottom:14px;">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px;">'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">اسم الطالب</div>'
     + (studOpts
-        ? '<select id="cert-name" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'+studOpts+'<option value="__manual__">· اسم آخر ·</option></select>'
-        : '<input id="cert-name" placeholder="اكتب اسم الطالب" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">')
+        ? '<select id="cert-name" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'+studOpts+'<option value="__manual__">· اسم آخر ·</option></select>'
+        : '<input id="cert-name" placeholder="اكتب اسم الطالب" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">')
     +'</div>'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">نوع الشهادة</div>'
-    +'<select id="cert-type" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'+typeOpts+'</select></div>'
+    +'<select id="cert-type" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'+typeOpts+'</select></div>'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">النموذج</div>'
-    +'<select id="cert-tpl" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
+    +'<select id="cert-tpl" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<option value="">شهادة المنصة الافتراضية</option>'
     + (typeof _hhCertTemplates!=='undefined' ? _hhCertTemplates.map(function(t){ return '<option value="'+esc(t.id)+'">'+esc(t.name)+'</option>'; }).join('') : '')
     +'</select></div>'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">المناسبة / المادة</div>'
-    +'<input id="cert-reason" placeholder="الدراسات الاجتماعية · الفصل الثاني" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
+    +'<input id="cert-reason" placeholder="الدراسات الاجتماعية · الفصل الثاني" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">النسبة (اختياري)</div>'
-    +'<input id="cert-score" type="number" min="0" max="100" placeholder="95" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
+    +'<input id="cert-score" type="number" min="0" max="100" placeholder="95" style="width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
     +'</div>'
-    +'<input id="cert-manual" placeholder="اسم الطالب" style="display:none;width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:9px;">'
+    +'<input id="cert-manual" placeholder="اسم الطالب" style="display:none;width:100%;border:1.5px solid rgba(184,146,74,.5);border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:9px;">'
     // ── توقيع المعلم: خيار الظهور فقط ──
-    +'<div style="background:#F7FBFF;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px 12px;margin-bottom:10px;">'
+    +'<div style="background:rgba(184,146,74,.07);border:1.5px solid rgba(184,146,74,.5);border-radius:10px;padding:10px 12px;margin-bottom:10px;">'
     +'<label style="display:flex;align-items:center;gap:8px;cursor:pointer;">'
-    +'<input type="checkbox" id="cert-showteacher" checked style="width:17px;height:17px;cursor:pointer;accent-color:#1F4E79;">'
-    +'<span style="font-size:.79rem;font-weight:800;color:#1F4E79;">إظهار اسمي كمعلم موقّع'
+    +'<input type="checkbox" id="cert-showteacher" checked style="width:17px;height:17px;cursor:pointer;accent-color:#8A1538;">'
+    +'<span style="font-size:.79rem;font-weight:800;color:#8A1538;">إظهار اسمي كمعلم موقّع'
     + (myName? ' <span style="color:#888;font-weight:700;">('+esc(myName)+')</span>':'') +'</span></label>'
     +'<div style="font-size:.68rem;color:#999;margin-top:5px;line-height:1.7;">اسم المعلم يُؤخذ من حسابك ولا يمكن تغييره · ضماناً لموثوقية الشهادة.</div>'
     +'</div>'
-    +'<button onclick="hhGenerateCert()" style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;border:none;border-radius:11px;padding:10px 24px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">إصدار الشهادة</button>'
+    +'<button onclick="hhGenerateCert()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:10px 24px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,109,46,.3);">🎖 إصدار الشهادة</button>'
     +'</div>'
     +'<div id="cert-preview"></div>'
     +'</div></div>';
@@ -14193,6 +14244,18 @@ function showAQAddForm(){
   document.getElementById('aq-question-text').focus();
 }
 
+
+// ═══ رفع صورة سؤال إلى Firebase Storage · يعيد رابط التحميل أو null ═══
+async function hhUploadQImageToStorage(dataUrl){
+  if(typeof firebase === 'undefined' || !firebase.storage) return null;
+  if(typeof OFFLINE_MODE !== 'undefined' && OFFLINE_MODE) return null;
+  const uid = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.uid : 'anon';
+  const path = 'question_images/' + uid + '_' + Date.now() + '.jpg';
+  const ref = firebase.storage().ref(path);
+  const snap = await ref.putString(dataUrl, 'data_url');
+  return await snap.ref.getDownloadURL();
+}
+
 // معالجة رفع الصورة (مع ضغط تلقائي)
 async function hhHandleImageUpload(event){
   const file = event.target.files[0];
@@ -14219,17 +14282,24 @@ async function hhHandleImageUpload(event){
     if(compressed.length > 220*1024){ compressed = await hhCompressImage(file, 800, 0.62); }
     if(compressed.length > 220*1024){ compressed = await hhCompressImage(file, 640, 0.55); }
     
+    // ═══ الرفع إلى Firebase Storage أولاً (يُحفظ الرابط الصغير بدل base64) ═══
+    let finalImg = compressed, viaStorage = false;
+    try{
+      const url = await hhUploadQImageToStorage(compressed);
+      if(url){ finalImg = url; viaStorage = true; }
+    }catch(eSt){ console.warn('Storage غير متاح، الإبقاء على base64:', eSt && eSt.message); }
+
     // عرض المعاينة
-    document.getElementById('aq-image-data').value = compressed;
-    document.getElementById('aq-image-preview').src = compressed;
+    document.getElementById('aq-image-data').value = finalImg;
+    document.getElementById('aq-image-preview').src = finalImg;
     document.getElementById('aq-image-preview-wrap').style.display = 'block';
     document.getElementById('aq-image-upload-btn').style.display = 'none';
     
     // عرض الحجم
     const sizeKB = Math.round(compressed.length * 0.75 / 1024);
-    document.getElementById('aq-image-size').textContent = sizeKB + ' KB';
+    document.getElementById('aq-image-size').textContent = viaStorage ? ('✓ Storage · '+sizeKB+' KB') : (sizeKB + ' KB');
     
-    if(typeof toast === 'function') toast('تم رفع الصورة بنجاح', 'success');
+    if(typeof toast === 'function') toast(viaStorage ? 'رُفعت الصورة إلى Storage · حُفظ الرابط فقط' : 'تم حفظ الصورة (مضغوطة محلياً — فعّل Storage للأفضل)', 'success');
   }catch(e){
     console.error('خطأ في معالجة الصورة:', e);
     if(typeof toast === 'function') toast('تعذرت معالجة الصورة: ' + e.message, 'error');
