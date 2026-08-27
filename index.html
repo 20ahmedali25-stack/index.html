@@ -12617,8 +12617,9 @@ body.dark-mode input, body.dark-mode textarea, body.dark-mode select{ background
     if(window.innerWidth < 901) return;
     if(document.getElementById('hh-fin-tr')) return;
     var edge = 'calc((100vw - min(1280px, 96vw)) / 2 - 16px)';
-    [['hh-fin-tr','top:76px','right:'+edge],['hh-fin-br','bottom:98px','right:'+edge],
-     ['hh-fin-tl','top:76px','left:'+edge],['hh-fin-bl','bottom:98px','left:'+edge]
+    var navEl=document.getElementById('main-nav'); var navH=navEl?Math.round(navEl.getBoundingClientRect().height):78; var finTop='top:'+(navH+22)+'px';
+    [['hh-fin-tr',finTop,'right:'+edge],['hh-fin-br','bottom:98px','right:'+edge],
+     ['hh-fin-tl',finTop,'left:'+edge],['hh-fin-bl','bottom:98px','left:'+edge]
     ].forEach(function(f){
       var d=document.createElement('div'); d.id=f[0];
       d.style.cssText='position:fixed;'+f[1]+';'+f[2]+';width:9px;height:9px;background:#B8924A;border:1px solid #FDF3DD;transform:translateX(calc(50% * '+(f[2].indexOf('right')===0?'1':'-1')+')) rotate(45deg);z-index:1500;pointer-events:none;';
@@ -12697,13 +12698,30 @@ body.dark-mode input, body.dark-mode textarea, body.dark-mode select{ background
 #hh-nav-ind{ display:none !important; }
 body.hh-immersive #hh-bottom-nav{ display:none !important; }
 
-/* ═══ الشريط العلوي المضغوط (الاعتماد النهائي ~50px) ═══ */
-#main-nav{ padding:6px 16px !important; }
-#main-nav .main-nav-inner{ gap:12px !important; }
-#main-nav .main-nav-logo svg{ width:30px !important; height:30px !important; }
-#main-nav .main-nav-name{ font-size:12.5px !important; }
-#main-nav .main-nav-tag{ font-size:7.5px !important; }
-/* التوأمة: روابط العلوي بنفس لغة السفلي — أيقونة مؤطرة فوقها التسمية */
+/* ═══ الشريط العلوي المرن (zzy) · مقاسات clamp متكيفة جوال/لوحي/حاسوب ═══ */
+:root{
+  --hh-tb-gap: clamp(10px, 1.2vw, 18px);        /* المسافة الموحدة بين العناصر */
+  --hh-tb-icon: clamp(40px, 3vw, 42px);       /* صندوق أيقونة الرابط */
+  --hh-tb-glyph: clamp(22px, 1.8vw, 26px);      /* الأيقونة نفسها داخل الصندوق */
+  --hh-tb-label: clamp(15px, 1.15vw, 17px);     /* نص الرابط */
+  --hh-tb-logo: clamp(40px, 3.3vw, 46px);       /* درع الشعار */
+  --hh-tb-search: clamp(250px, 22vw, 320px);    /* حقل البحث */
+  --hh-tb-btn: clamp(34px, 2.7vw, 38px);        /* أزرار الإجراءات */
+}
+#main-nav{ padding:clamp(5px, .45vw, 6px) clamp(12px, 2vw, 24px) !important; }
+#main-nav .main-nav-inner{
+  max-width:1400px !important; margin:0 auto !important; padding:0 !important;
+  gap:var(--hh-tb-gap) !important;
+  min-height:0 !important; height:auto !important;
+  justify-content:space-between !important;
+}
+/* الشعار: درع + اسم + شعار نصي بعرض كلي 110–140px */
+#main-nav .main-nav-brand{ gap:clamp(8px, .7vw, 10px) !important; }
+#main-nav .main-nav-logo{ width:var(--hh-tb-logo) !important; height:var(--hh-tb-logo) !important; }
+#main-nav .main-nav-logo svg{ width:100% !important; height:100% !important; }
+#main-nav .main-nav-name{ font-size:clamp(16px, 1.3vw, 19px) !important; line-height:1.15 !important; }
+#main-nav .main-nav-tag{ font-size:clamp(9.5px, .8vw, 11px) !important; }
+/* التوأمة مع الشريط السفلي: أيقونة مؤطرة فوقها التسمية */
 #main-nav .nav-link{
   display:inline-flex !important; flex-direction:column !important;
   align-items:center !important; justify-content:center !important;
@@ -12714,20 +12732,19 @@ body.hh-immersive #hh-bottom-nav{ display:none !important; }
 }
 #main-nav .nav-link:hover{ background:none !important; transform:none !important; }
 #main-nav .nav-link:active{ transform:scale(.93) !important; }
-#main-nav .main-nav-inner{ min-height:0 !important; height:auto !important; }
 #main-nav .nav-search-wrap{ height:auto !important; min-height:0 !important; }
 #main-nav .profile-btn{ height:auto !important; min-height:0 !important; }
 #main-nav .nav-link svg{
   box-sizing:border-box !important;
-  width:clamp(36px, 2.9vw, 42px) !important; height:clamp(36px, 2.9vw, 42px) !important;
-  padding:clamp(10px, 0.8vw, 11px) !important;
-  border-radius:11px !important;
+  width:var(--hh-tb-icon) !important; height:var(--hh-tb-icon) !important;
+  padding:calc((var(--hh-tb-icon) - var(--hh-tb-glyph)) / 2) !important;
+  border-radius:12px !important;
   background:rgba(212,188,133,.08) !important;
   border:1px solid rgba(212,188,133,.4) !important;
   color:#EAD9B0 !important;
 }
 #main-nav .nav-link span{
-  font-size:clamp(13px, 0.95vw, 14.5px) !important; font-weight:800 !important;
+  font-size:var(--hh-tb-label) !important; font-weight:800 !important;
   color:#EAD9B0 !important; white-space:nowrap !important;
 }
 #main-nav .nav-link.nav-link-active svg,
@@ -12737,26 +12754,56 @@ body.hh-immersive #hh-bottom-nav{ display:none !important; }
   color:#3D0918 !important;
 }
 #main-nav .nav-link.nav-link-active span{ color:#FDF3DD !important; }
-#nav-center{ gap:18px !important; }
-#nav-center .main-nav-links{ gap:18px !important; }
+/* الوسط: الروابط والبحث في مجموعة واحدة بمسافة موحدة */
+#nav-center{ display:flex !important; align-items:center !important; gap:var(--hh-tb-gap) !important; flex:1 1 auto !important; justify-content:center !important; min-width:0 !important; }
+#nav-center .main-nav-links{ gap:var(--hh-tb-gap) !important; flex:0 0 auto !important; }
 #nav-center .nav-search-wrap{
-  min-width:150px !important; max-width:165px !important; width:160px !important;
-  padding:4px 12px !important; border-radius:99px !important;
+  width:var(--hh-tb-search) !important; min-width:0 !important; max-width:none !important;
+  padding:clamp(6px, .55vw, 8px) 14px !important; border-radius:99px !important;
 }
-#nav-center .nav-search-input{ font-size:clamp(12px, 0.9vw, 13.5px) !important; }
-/* الشريط العلوي: وضوح متكيف جوال/حاسوب */
-#main-nav .brand-title, #main-nav .nav-brand-name{ font-size:clamp(14px, 1.05vw, 16px) !important; }
-#main-nav .profile-btn, #main-nav .profile-btn span{ font-size:clamp(11.5px, 0.85vw, 13px) !important; }
-#nav-center .nav-search-wrap{ min-width:clamp(150px, 14vw, 210px) !important; }
-#main-nav .nav-search-input::placeholder{ font-size:clamp(11.5px, 0.85vw, 13px) !important; }
-
-#main-nav .nav-icon-in-group{ width:26px !important; height:26px !important; border-radius:8px !important; }
-#main-nav .nav-icon-in-group svg{ width:12px !important; height:12px !important; }
+#nav-center .nav-search-icon svg{ width:clamp(16px, 1.2vw, 18px) !important; height:clamp(16px, 1.2vw, 18px) !important; }
+#nav-center .nav-search-input{ font-size:clamp(14px, 1vw, 15px) !important; }
+#main-nav .nav-search-input::placeholder{ font-size:clamp(13.5px, .95vw, 15px) !important; }
+/* اليسار: مجموعة الإجراءات والملف الشخصي */
+#main-nav .main-nav-actions{ gap:clamp(8px, .8vw, 12px) !important; }
+#main-nav .nav-quick-group{ gap:clamp(4px, .4vw, 6px) !important; }
+#main-nav .nav-icon-in-group{ width:var(--hh-tb-btn) !important; height:var(--hh-tb-btn) !important; border-radius:10px !important; }
+#main-nav .nav-icon-in-group svg{ width:clamp(16px, 1.25vw, 18px) !important; height:clamp(16px, 1.25vw, 18px) !important; }
 #main-nav #nav-wn-btn{ display:none !important; }
 #main-nav .nav-cta-primary{ display:none !important; }
-#main-nav .profile-btn{ padding:3px 5px 3px 12px !important; gap:5px !important; }
-#main-nav .profile-avatar{ width:21px !important; height:21px !important; font-size:9.5px !important; }
-#main-nav .profile-btn #ub-name{ font-size:11px !important; }
+#main-nav .profile-btn{ padding:4px 6px 4px 14px !important; gap:7px !important; }
+#main-nav .profile-avatar{ width:clamp(26px, 2vw, 30px) !important; height:clamp(26px, 2vw, 30px) !important; font-size:clamp(11px, .85vw, 13px) !important; }
+#main-nav .profile-btn, #main-nav .profile-btn span, #main-nav .profile-btn #ub-name{ font-size:clamp(13px, 1vw, 15px) !important; }
+/* اللوحي الأفقي 901–1180px: نضيّق البحث ونقرّب الروابط دون تصغير الأيقونات عن 22px */
+@media (max-width:1180px) and (min-width:901px){
+  :root{ --hh-tb-gap:10px; --hh-tb-search:clamp(190px, 20vw, 240px); --hh-tb-label:14.5px; --hh-tb-icon:40px; --hh-tb-glyph:22px; }
+  #main-nav .main-nav-tag{ display:none !important; }
+}
+/* الجوال واللوحي العمودي ≤900px: القائمة في زر، البحث مرن، الأيقونات لا تصغر عن 22px */
+@media (max-width:900px){
+  #main-nav{ padding:6px clamp(10px, 3vw, 16px) !important; }
+  /* الروابط يحملها الشريط السفلي هنا؛ العلوي يبقي الشعار والبحث والإجراءات فقط */
+  #nav-center .main-nav-links, #main-nav .main-nav-links{ display:none !important; }
+  #main-nav .main-nav-burger{ display:flex !important; }
+  #main-nav .main-nav-tag{ display:none !important; }
+  #nav-center{ justify-content:flex-start !important; }
+  #main-nav .main-nav-inner{ gap:8px !important; }
+  #main-nav .main-nav-burger{ width:38px !important; height:38px !important; color:#8A1538 !important; border-radius:10px !important; }
+  #main-nav .main-nav-burger svg{ width:22px !important; height:22px !important; fill:#8A1538 !important; }
+  #main-nav .main-nav-logo{ width:40px !important; height:40px !important; }
+  #main-nav .main-nav-name{ font-size:16px !important; }
+  #main-nav .nav-search-wrap{ width:clamp(150px, 38vw, 240px) !important; padding:6px 10px !important; }
+  #main-nav .nav-search-wrap:focus-within{ width:clamp(190px, 50vw, 280px) !important; }
+  #main-nav .nav-search-input{ font-size:14px !important; }
+  #main-nav .nav-icon-in-group{ width:34px !important; height:34px !important; }
+  #main-nav .nav-icon-in-group svg{ width:16px !important; height:16px !important; }
+  #main-nav .profile-avatar{ width:28px !important; height:28px !important; }
+}
+@media (max-width:480px){
+  #main-nav .nav-search-wrap{ width:clamp(120px, 34vw, 170px) !important; }
+  #main-nav .nav-quick-group{ gap:3px !important; }
+  #main-nav .nav-icon-in-group{ width:32px !important; height:32px !important; }
+}
 </style>
 </body>
 </html>
