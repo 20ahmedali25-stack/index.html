@@ -1167,7 +1167,7 @@ function hhOpenLeaderPrograms(){
     return '<div onclick="hhLdrStation('+c.id+')" style="position:relative;cursor:pointer;text-align:center;background:'+(open?'linear-gradient(165deg,#FFFDF8,#FBF5E9)':'rgba(255,255,255,.55)')+';border:1.5px solid '+(open?'#B8924A':'#DDD3BC')+';border-radius:14px;padding:13px 6px 9px;'+(open&&now?'box-shadow:0 5px 16px rgba(94,14,38,.12);':'')+'">'
       +(now?'<span style="position:absolute;top:-9px;right:50%;transform:translateX(50%);background:linear-gradient(175deg,#7A1330,#4A0B1E);border:1px solid #B8924A;color:#F5E6C4;border-radius:99px;padding:1px 10px;font-size:.56rem;font-weight:800;white-space:nowrap;">أنت هنا</span>':'')
       +'<div style="width:34px;height:34px;border-radius:50%;margin:0 auto 6px;position:relative;z-index:1;background:'+(open?'radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 78%)':'#EDE6D8')+';border:2px solid '+(open?'#FDF3DD':'#DDD3BC')+';'+(now&&open?'box-shadow:0 0 0 4px rgba(184,146,74,.3);':'')+'display:flex;align-items:center;justify-content:center;color:'+(open?'#3D0918':'#B8AD94')+';font-weight:900;font-size:.82rem;">'+c.n+'</div>'
-      +'<div style="color:'+(open?'#3D0918':'#B8AD94')+';font-weight:800;font-size:.68rem;">'+c.t+'</div>'
+      +'<div style="color:'+(open?'#3D0918':'#B8AD94')+';font-weight:800;font-size:.75rem;">'+c.t+'</div>'
       +'<div style="color:'+(open?'#8A6D2E':'#C9BFA8')+';font-size:.54rem;margin-top:2px;">'+(open?(c.n===1?'معاينة مجانية':'مفتوح'):'🔒 بالتسجيل')+'</div>'
       +'</div>';
   }).join('');
@@ -1180,7 +1180,7 @@ function hhOpenLeaderPrograms(){
       var open = (typeof _wqAllowed==='function') ? _wqAllowed(it.id) : false;
       gems += '<div onclick="hhLdrStation('+it.id+')" style="display:flex;align-items:center;gap:10px;cursor:pointer;background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1px solid rgba(184,146,74,.5);border-radius:12px;padding:8px 12px;margin-bottom:7px;'+(open?'':'opacity:.75;')+'">'
         +'<span style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 80%);border:1.5px solid #FDF3DD;display:inline-flex;align-items:center;justify-content:center;color:#3D0918;flex-shrink:0;">'+I.gem+'</span>'
-        +'<div style="flex:1;min-width:0;"><div style="color:#3D0918;font-weight:800;font-size:.74rem;">'+it.t+'</div>'
+        +'<div style="flex:1;min-width:0;"><div style="color:#3D0918;font-weight:800;font-size:.8rem;">'+it.t+'</div>'
         +'<div style="color:#8A7A63;font-size:.6rem;margin-top:1px;">'+(it.sub||'')+'</div></div>'
         +(open?'<span style="color:#B8924A;font-size:.85rem;">‹</span>':'<span style="color:#B8AD94;font-size:.62rem;font-weight:800;">🔒 بالتسجيل</span>')
         +'</div>';
@@ -1228,7 +1228,7 @@ function hhOpenLeaderPrograms(){
     +    '<div style="min-width:0;">'
     +      '<div style="color:#D4BC85;font-size:.68rem;font-weight:800;">البرنامج التدريبي المعتمد · عليه رسوم</div>'
     +      '<div style="color:#fff;font-weight:900;font-size:1.4rem;margin-top:3px;">الواثــق المُـلـهِـم</div>'
-    +      '<div style="color:#C9A96A;font-size:.74rem;margin-top:3px;">دليلك الشامل في مهارات الإلقاء والتحدث أمام الجمهور · إعداد المدرب: أحمد الحلحلي</div>'
+    +      '<div style="color:#C9A96A;font-size:.8rem;margin-top:3px;">دليلك الشامل في مهارات الإلقاء والتحدث أمام الجمهور · إعداد المدرب: أحمد الحلحلي</div>'
     +      '<div style="display:inline-flex;gap:7px;align-items:center;margin-top:9px;background:rgba(20,35,55,.55);border:1px solid #D4BC85;border-radius:99px;padding:5px 15px;flex-wrap:wrap;">'
     +        '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">جسد واثق</span><span style="color:#D4BC85;">+</span>'
     +        '<span style="color:#8FD0C9;font-weight:800;font-size:.68rem;">صوت واضح</span><span style="color:#D4BC85;">+</span>'

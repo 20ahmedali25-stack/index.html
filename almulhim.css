@@ -9783,3 +9783,7 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
   background:radial-gradient(circle at 35% 30%,#7A1330,#3D0918 78%) !important;
   color:#F5E6C4 !important; border-color:#B8924A !important;
 }
+
+/* حزمة وضوح الطالب: حقل البحث */
+#main-nav .nav-search-input{ font-size:.75rem !important; }
+#main-nav .nav-search-input::placeholder{ font-size:.72rem !important; }

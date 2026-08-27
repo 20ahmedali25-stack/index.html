@@ -209,13 +209,13 @@ function wqRender(txt, secId){
       var done = !!_wqDone()[exId];
       out += '<div style="background:linear-gradient(165deg,rgba(212,188,133,.13),rgba(212,188,133,.05));border:1.5px solid #D4BC85;border-radius:15px;padding:13px 15px;margin:13px 0;">'
         +'<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;"><span style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#F5E6C4,#B8924A);display:inline-flex;align-items:center;justify-content:center;color:#16283F;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><span style="color:#F5E6C4;font-weight:800;font-size:.82rem;">محطة تطبيق</span></div>'
-        +'<div style="color:#DCE6F2;font-size:.86rem;line-height:2;">'+html+'</div>'
+        +'<div style="color:#DCE6F2;font-size:1rem;line-height:2.1;">'+html+'</div>'
         +'<button onclick="wqToggleEx(\''+exId+'\',this)" class="'+(done?'wq-ex-on':'')+'" style="margin-top:9px;background:'+(done?'linear-gradient(135deg,#8FD0C9,#5BA8A0)':'rgba(212,188,133,.15)')+';border:1px solid #D4BC85;border-radius:99px;padding:6px 16px;color:'+(done?'#0E1B2E':'#F5E6C4')+';font-weight:800;font-size:.74rem;cursor:pointer;font-family:Cairo;">'+(done?'✓ أُنجز التمرين':'أنجزت هذا التمرين؟')+'</button>'
         +'</div>';
     } else if(isHead){
       out += '<div style="color:#D4BC85;font-weight:800;font-size:1.05rem;margin:18px 0 7px;display:flex;align-items:center;gap:9px;"><span style="width:7px;height:7px;background:#D4BC85;transform:rotate(45deg);flex-shrink:0;"></span>'+wqEsc(lines[0])+'</div>';
     } else {
-      out += '<div style="background:rgba(255,255,255,.035);border:1px solid rgba(143,163,188,.2);border-radius:13px;padding:11px 14px;margin:9px 0;color:#DCE6F2;font-size:.87rem;line-height:2.05;">'+html+'</div>';
+      out += '<div style="background:rgba(255,255,255,.035);border:1px solid rgba(143,163,188,.2);border-radius:13px;padding:11px 14px;margin:9px 0;color:#DCE6F2;font-size:1rem;line-height:2.1;">'+html+'</div>';
     }
   });
   return out;
