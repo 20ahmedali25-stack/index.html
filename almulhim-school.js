@@ -396,6 +396,7 @@ function hhOpenSchool(){
         + '<div style="font-size:.88rem;font-weight:800;color:#3D0918;flex:1;min-width:0;">'+esc(L.title)+'</div>'
         + (st!=='locked'
             ? '<div style="display:flex;gap:4px;flex-wrap:wrap;">'
+              + '<button onclick="hhJourneyOpen('+i+','+j+')" class="hj-launch" title="رحلة الدرس على الخريطة"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg> الرحلة</button>'
               + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">المادة</button>'
               + '<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">الملخص</button>'
               + (hhStoryAvailable(L.id) ? '<button onclick="hhStartStory(&quot;'+L.id+'&quot;)" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">القصة</button>' : '')
@@ -747,7 +748,7 @@ function hhCampusRenderResume(){
 function hhCampusResume(){
   var last=null; try{ last=JSON.parse(localStorage.getItem('hh_sch_last_lesson')||'null'); }catch(e){}
   hhHubGo('school');
-  if(last && typeof hhSchLesson==='function'){ try{ hhSchSetTerm(last.term||_hhSchTerm); hhSchLesson(last.ui,last.li,last.kindKey||'summary'); }catch(e){} }
+  if(last){ try{ hhSchSetTerm(last.term||_hhSchTerm); if(last.kindKey==='journey' && typeof hhJourneyOpen==='function') hhJourneyOpen(last.ui,last.li); else if(typeof hhSchLesson==='function') hhSchLesson(last.ui,last.li,last.kindKey||'summary'); }catch(e){} }
 }
 function hhCampusRenderUnits(){
   var n=document.getElementById('hh-campus-n-units'); if(!n) return;

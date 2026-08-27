@@ -3331,6 +3331,14 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
               <svg class="mc-item-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h7a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2H4V4zm16 0h-7a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2H20V4z"/></svg>
               <span class="mc-item-label">مركز المنهج</span>
             </button>
+            <button class="mc-item" onclick="adminTab('schools')" data-tab="schools" type="button">
+              <svg class="mc-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg>
+              <span class="mc-item-label">المدارس <span class="hhc-badge" id="hhc-badge-schools">0</span></span>
+            </button>
+            <button class="mc-item" onclick="adminTab('curricula')" data-tab="curricula" type="button">
+              <svg class="mc-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M20 17v5H6.5a2.5 2.5 0 0 1 0-5"/></svg>
+              <span class="mc-item-label">المناهج التربوية <span class="hhc-badge" id="hhc-badge-curricula">0</span></span>
+            </button>
             <button class="mc-item" onclick="adminTab('activity')" data-tab="activity" type="button">
               <svg class="mc-item-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 13h2v7H3v-7zm4-6h2v13H7V7zm4 3h2v10h-2V10zm4-6h2v16h-2V4zm4 8h2v8h-2v-8z"/></svg>
               <span class="mc-item-label">سجل النشاط</span>
@@ -4053,6 +4061,24 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
     </div>
 
     <!-- ═══════════ تبويب فحص صحة المنصة ═══════════ -->
+    <!-- ═══════════ كتالوج المدارس (almulhim-admin-catalog.js) ═══════════ -->
+    <div id="admin-schools-panel" class="admin-section" style="display:none;">
+      <div class="hhc-hero">
+        <h3>المدارس</h3>
+        <p>سجل المدارس المعتمدة في المنصة: إضافة وتعديل وإخفاء وحذف، وكل مدرسة تحمل مراحلها وصفوفها ومناهجها المرتبطة.</p>
+      </div>
+      <div id="hhc-schools-root" class="hhc-root"><div class="hhc-empty">جارٍ التحميل…</div></div>
+    </div>
+
+    <!-- ═══════════ كتالوج المناهج التربوية ═══════════ -->
+    <div id="admin-curricula-panel" class="admin-section" style="display:none;">
+      <div class="hhc-hero">
+        <h3>المناهج التربوية</h3>
+        <p>كل منهج مربوط بمدرسة ومرحلة وصف وفصل ومادة، بمصدر مضمّن في الكود أو سحابي؛ الظاهر منها فقط يصل إلى المعلمين.</p>
+      </div>
+      <div id="hhc-curricula-root" class="hhc-root"><div class="hhc-empty">جارٍ التحميل…</div></div>
+    </div>
+
     <div id="admin-healthcheck-panel" class="admin-section" style="display:none;">
       <div style="background:linear-gradient(135deg,#8A1538,#5E0E26);border-radius:16px;padding:20px;margin-bottom:16px;color:#fff;">
         <h3 style="margin:0 0 6px;font-family:Cairo;font-weight:900;font-size:1.1rem;"> فحص صحة المنصة</h3>
@@ -5639,6 +5665,8 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 <script src="legend-maps-questions.js" defer></script>
 
 <script src="almulhim-engine.js" charset="utf-8"></script>
+<script src="almulhim-admin-catalog.js" charset="utf-8"></script>
+<script src="almulhim-journey.js" charset="utf-8"></script>
 <script src="almulhim-programs.js" charset="utf-8"></script>
 <script src="almulhim-wathiq.js" charset="utf-8" defer></script>
 <script src="almulhim-school.js" charset="utf-8"></script>
