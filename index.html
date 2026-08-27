@@ -2396,23 +2396,26 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
     <!-- الترويسة الملكية -->
     <div class="ms-header">
       <div class="ms-header-row">
-        <button class="ms-header-back" onclick="goBack()" type="button" aria-label="رجوع">
+        <button class="ms-header-back" onclick="msHeaderBack()" type="button" aria-label="رجوع">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg> رجوع
         </button>
         <div class="ms-header-title">
-          <span>إعداد اللعبة</span>
+          <span id="ms-step-title">ماذا نلعب اليوم؟</span>
           <span class="ms-header-logo">م</span>
         </div>
       </div>
       <div class="ms-header-progress">
-        <div class="ms-progress-bar active"></div>
-        <div class="ms-progress-label">1 من 2</div>
-        <div class="ms-progress-bar"></div>
+        <div class="ms-progress-bar active" id="ms-pb-1"></div>
+        <div class="ms-progress-label" id="ms-progress-label">1 من 2 · الفئات</div>
+        <div class="ms-progress-bar" id="ms-pb-2"></div>
       </div>
     </div>
 
     <!-- جسم الشاشة -->
     <div class="ms-body">
+
+      <!-- ══ الخطوة 1 · الفئات ══ -->
+      <div id="ms-step-cats">
 
       <!-- بطاقة "تشكيلة سابقة جاهزة" · تظهر تلقائياً إذا توفرت -->
       <div class="ms-quickstart" id="ms-quickstart" style="display:none;" onclick="msQuickStartLaunch()">
@@ -2434,42 +2437,6 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <div class="ms-divider-text">أو خصّص لعبة جديدة</div>
         <div class="ms-divider-line"></div>
       </div>
-
-      <!-- صف اسم اللعبة -->
-      <div class="ms-name-row">
-        <svg class="ms-name-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 2l-4 5-4-5"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
-        <input type="text" id="game-name" class="ms-name-input" placeholder="اسم اللعبة (اختياري)" maxlength="60">
-        <button type="button" class="ms-name-refresh" onclick="autoGameName()" title="توليد اسم تلقائي">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> جدّد
-        </button>
-      </div>
-
-      <!-- صف ميتا · عدد الفرق + المؤقت في عمودين -->
-      <div class="ms-meta-row">
-        <div class="ms-meta-box">
-          <div class="ms-meta-label">عدد الفرق</div>
-          <div class="ms-meta-options">
-            <button class="ms-meta-opt active nav-tab" id="nt-2" onclick="setTeamCount(2)" type="button">2</button>
-            <button class="ms-meta-opt nav-tab" id="nt-3" onclick="setTeamCount(3)" type="button">3</button>
-            <button class="ms-meta-opt nav-tab" id="nt-4" onclick="setTeamCount(4)" type="button">4</button>
-            <button class="ms-meta-opt nav-tab" id="nt-5" onclick="setTeamCount(5)" type="button">5</button>
-            <button class="ms-meta-opt nav-tab" id="nt-6" onclick="setTeamCount(6)" type="button">6</button>
-            <button class="ms-meta-opt nav-tab" id="nt-7" onclick="setTeamCount(7)" type="button">7</button>
-            <button class="ms-meta-opt nav-tab" id="nt-8" onclick="setTeamCount(8)" type="button">8</button>
-          </div>
-        </div>
-        <div class="ms-meta-box">
-          <div class="ms-meta-label">المؤقت</div>
-          <div class="ms-meta-options" id="timer-options">
-            <button class="ms-meta-opt nav-tab" id="topt-half" onclick="setTimerMult(0.5)" type="button">سريع</button>
-            <button class="ms-meta-opt active nav-tab" id="topt-normal" onclick="setTimerMult(1)" type="button">عادي</button>
-            <button class="ms-meta-opt nav-tab" id="topt-double" onclick="setTimerMult(2)" type="button">مريح</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- أسماء الفرق -->
-      <div class="ms-teams-row teams-container" id="teams-container"></div>
 
       <!-- عنوان قسم الفئات -->
       <div class="ms-cats-header">
@@ -2494,7 +2461,59 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <div class="selected-tags" id="selected-tags"></div>
       </div>
 
-      <!-- رسالة الخطأ -->
+      </div>
+      <!-- ══ نهاية الخطوة 1 ══ -->
+
+      <!-- ══ الخطوة 2 · الاسم والفرق والوقت ══ -->
+      <div id="ms-step-settings" hidden>
+
+      <!-- ملخص الفئات المختارة مع زر التعديل -->
+      <div class="ms-cats-summary" id="ms-cats-summary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <div class="ms-cats-summary-text" id="ms-cats-summary-text">·</div>
+        <button type="button" class="ms-cats-summary-edit" onclick="msGoStep(1)">تعديل</button>
+      </div>
+
+      <!-- صف اسم اللعبة -->
+      <div class="ms-name-row">
+        <svg class="ms-name-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 2l-4 5-4-5"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
+        <input type="text" id="game-name" class="ms-name-input" placeholder="اسم اللعبة (اختياري)" maxlength="60">
+        <button type="button" class="ms-name-refresh" onclick="autoGameName()" title="توليد اسم تلقائي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> جدّد
+        </button>
+      </div>
+
+      <!-- صف ميتا · عدد الفرق + المؤقت في عمودين -->
+      <div class="ms-meta-row">
+        <div class="ms-meta-box">
+          <div class="ms-meta-label">عدد الفرق</div>
+          <div class="ms-meta-options ms-team-stepper">
+            <button class="ms-meta-opt ms-step-btn" type="button" onclick="msTeamStep(-1)" aria-label="فريق أقل">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="ms-team-num" id="ms-team-num" aria-live="polite">2</div>
+            <button class="ms-meta-opt ms-step-btn" type="button" onclick="msTeamStep(1)" aria-label="فريق أكثر">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="ms-meta-box">
+          <div class="ms-meta-label">المؤقت</div>
+          <div class="ms-meta-options" id="timer-options">
+            <button class="ms-meta-opt nav-tab" id="topt-half" onclick="setTimerMult(0.5)" type="button">سريع</button>
+            <button class="ms-meta-opt active nav-tab" id="topt-normal" onclick="setTimerMult(1)" type="button">عادي</button>
+            <button class="ms-meta-opt nav-tab" id="topt-double" onclick="setTimerMult(2)" type="button">مريح</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- أسماء الفرق -->
+      <div class="ms-teams-row teams-container" id="teams-container"></div>
+
+      </div>
+      <!-- ══ نهاية الخطوة 2 ══ -->
+
+      <!-- رسالة الخطأ (مشتركة بين الخطوتين) -->
       <div class="err-msg" id="setup-err" style="margin-top:10px;"></div>
 
     </div>
@@ -2508,11 +2527,14 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <div class="setup-action-text" id="setup-action-text">اختر فئة واحدة على الأقل</div>
         </div>
       </div>
-      <button class="setup-action-btn" id="setup-action-btn" onclick="startGameFromBar()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+      <button class="setup-action-btn" id="setup-action-btn" onclick="msPrimaryAction()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" id="ms-act-icon-play" style="display:none">
           <polygon points="5 3 19 12 5 21 5 3"/>
         </svg>
-        <span>ابدأ اللعبة</span>
+        <span id="setup-action-label">التالي</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" id="ms-act-icon-next">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
       </button>
     </div>
 
@@ -9767,6 +9789,126 @@ function startGameFromBar(){
       safeUpdate();
     }
   }, true);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// إعداد اللعبة بخطوتين · (1) الفئات ← (2) الاسم والفرق والوقت
+// زر واحد في الشريط يتحول من «التالي» إلى «ابدأ اللعبة»
+// كل الدوال الأصلية (setTeamCount/setTimerMult/autoGameName/startGame) تبقى كما هي
+// ═══════════════════════════════════════════════════════════
+(function(){
+  let _msStep = 1;
+
+  function _arCount(n, one, two, few, many){
+    if(n===1) return one;
+    if(n===2) return two;
+    if(n>=3 && n<=10) return n+' '+few;
+    return n+' '+many;
+  }
+  function _selectedCats(){
+    let cats=[]; try{ cats=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]'); }catch(e){}
+    return Array.isArray(cats)?cats:[];
+  }
+  function _totalQs(cats){
+    let t=0; cats.forEach(c=>{ if(c && typeof QDB!=='undefined' && QDB[c]) t+=QDB[c].length; }); return t;
+  }
+  function _timerLabel(){
+    const a=document.querySelector('#timer-options .ms-meta-opt.active');
+    return a? a.textContent.trim() : 'عادي';
+  }
+  function _teamCount(){
+    return (typeof teamCount!=='undefined' && teamCount) ? teamCount : 2;
+  }
+  function _summaryText(cats){
+    const qs=_totalQs(cats);
+    if(!cats.length) return 'لم تُختر فئات بعد';
+    return _arCount(cats.length,'فئة واحدة','فئتان','فئات','فئة')
+      + (qs>0 ? ' · '+_arCount(qs,'سؤال واحد','سؤالان','أسئلة','سؤالاً') : '');
+  }
+
+  function msSyncStepUI(){
+    const setup=document.getElementById('screen-setup'); if(!setup) return;
+    const s1=document.getElementById('ms-step-cats'), s2=document.getElementById('ms-step-settings');
+    const title=document.getElementById('ms-step-title'), pl=document.getElementById('ms-progress-label');
+    const pb1=document.getElementById('ms-pb-1'), pb2=document.getElementById('ms-pb-2');
+    const bar=document.getElementById('setup-action-bar'), btn=document.getElementById('setup-action-btn');
+    const label=document.getElementById('setup-action-label'), textEl=document.getElementById('setup-action-text');
+    const iPlay=document.getElementById('ms-act-icon-play'), iNext=document.getElementById('ms-act-icon-next');
+    const numEl=document.getElementById('ms-team-num');
+    if(!s1||!s2) return;
+    const cats=_selectedCats();
+    setup.classList.toggle('ms-in-step2', _msStep===2);
+    if(_msStep===1){
+      s1.hidden=false; s2.hidden=true;
+      if(title) title.textContent='ماذا نلعب اليوم؟';
+      if(pl) pl.textContent='1 من 2 · الفئات';
+      if(pb1) pb1.classList.add('active'); if(pb2) pb2.classList.remove('active');
+      if(label) label.textContent='التالي';
+      if(iPlay) iPlay.style.display='none'; if(iNext) iNext.style.display='';
+    }else{
+      s1.hidden=true; s2.hidden=false;
+      if(title) title.textContent='مَن يلعب وكيف؟';
+      if(pl) pl.textContent='2 من 2 · الفرق والوقت';
+      if(pb1) pb1.classList.add('active'); if(pb2) pb2.classList.add('active');
+      if(label) label.textContent='ابدأ اللعبة';
+      if(iPlay) iPlay.style.display=''; if(iNext) iNext.style.display='none';
+      if(numEl) numEl.textContent=_teamCount();
+      const sum=document.getElementById('ms-cats-summary-text');
+      if(sum){
+        const names=cats.map(k=>(typeof CAT_INFO!=='undefined' && CAT_INFO[k] && CAT_INFO[k].label)||k);
+        sum.textContent=names.length ? names.join(' · ')+' · '+_summaryText(cats) : _summaryText(cats);
+      }
+      if(bar){ bar.classList.add('show'); setup.classList.add('has-action-bar'); }
+      if(textEl){
+        textEl.textContent=_summaryText(cats)+' · '+_arCount(_teamCount(),'فريق واحد','فريقان','فرق','فريقاً')+' · '+_timerLabel();
+      }
+    }
+  }
+
+  function msGoStep(n){
+    _msStep=(n===2)?2:1;
+    if(_msStep===2){
+      const inp=document.getElementById('game-name');
+      if(inp && !inp.value.trim() && typeof autoGameName==='function'){ try{ autoGameName(); }catch(e){} }
+    }
+    try{ setupActionUpdate(); }catch(e){ msSyncStepUI(); }
+    try{ const w=document.querySelector('.ms-wrapper'); if(w) w.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+  }
+  function msPrimaryAction(){
+    if(_msStep===1){ msGoStep(2); return; }
+    if(typeof startGameFromBar==='function') startGameFromBar();
+  }
+  function msHeaderBack(){
+    if(_msStep===2){ msGoStep(1); return; }
+    if(typeof goBack==='function') goBack();
+  }
+  function msTeamStep(d){
+    const n=Math.min(8,Math.max(2,_teamCount()+d));
+    if(typeof setTeamCount==='function') setTeamCount(n);
+    const numEl=document.getElementById('ms-team-num'); if(numEl) numEl.textContent=n;
+    try{ setupActionUpdate(); }catch(e){}
+  }
+
+  // تغليف setupActionUpdate الأصلية: تعمل كما هي ثم نزامن الخطوتين
+  if(typeof setupActionUpdate==='function'){
+    const _orig=setupActionUpdate;
+    setupActionUpdate=function(){ const r=_orig.apply(this,arguments); try{ msSyncStepUI(); }catch(e){} return r; };
+  }
+  // عند فتح شاشة الإعداد نعود دائماً إلى الخطوة الأولى
+  const _prevShow=window.showScreen;
+  if(typeof _prevShow==='function'){
+    window.showScreen=function(name){
+      const ret=_prevShow.apply(this,arguments);
+      if(name==='screen-setup'){ _msStep=1; setTimeout(()=>{ try{ msSyncStepUI(); }catch(e){} },0); }
+      return ret;
+    };
+  }
+
+  window.msGoStep=msGoStep;
+  window.msPrimaryAction=msPrimaryAction;
+  window.msHeaderBack=msHeaderBack;
+  window.msTeamStep=msTeamStep;
+  window.msSyncStepUI=msSyncStepUI;
 })();
 
 // ═══════════════════════════════════════════════════════════════════

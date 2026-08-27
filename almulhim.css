@@ -7849,6 +7849,41 @@ body.dark-mode .qr-q-text{background:#0f1f17;color:#f0f5f2;}
   box-shadow:0 2px 6px rgba(138,21,56,.25);
 }
 
+/* ── إعداد بخطوتين (zzw) ── */
+#ms-step-cats[hidden],#ms-step-settings[hidden]{display:none !important;}
+/* اللوحة العائمة للفئات المختارة تختفي في الخطوة الثانية (الملخص يغني عنها) */
+#screen-setup.ms-in-step2 .cats-fab{display:none !important;}
+
+/* عدّاد الفرق (− رقم +) */
+.ms-team-stepper{align-items:center;gap:6px;}
+.ms-team-stepper .ms-step-btn{flex:0 0 36px;min-height:34px;padding:0;}
+.ms-team-stepper .ms-step-btn svg{display:block;}
+.ms-team-num{
+  flex:1;text-align:center;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:1.25rem;color:#5E0E26;
+  line-height:1;
+}
+
+/* ملخص الفئات المختارة في الخطوة الثانية */
+.ms-cats-summary{
+  display:flex;align-items:center;gap:9px;
+  background:#F8F8F6;border:1.5px solid #B8924A;border-radius:12px;
+  padding:9px 12px;margin-bottom:10px;
+}
+.ms-cats-summary svg{width:16px;height:16px;color:#B8924A;flex-shrink:0;}
+.ms-cats-summary-text{
+  flex:1;min-width:0;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:.8rem;color:#5E0E26;
+  line-height:1.5;
+}
+.ms-cats-summary-edit{
+  flex-shrink:0;background:#fff;color:#8A1538;
+  border:1.2px solid #B8924A;border-radius:8px;padding:5px 12px;
+  font-family:'Cairo',sans-serif;font-weight:900;font-size:.72rem;cursor:pointer;
+  transition:all .15s;
+}
+.ms-cats-summary-edit:hover{background:#8A1538;color:#D4BC85;border-color:#8A1538;}
+
 /* أسماء الفرق */
 .ms-teams-row{
   display:grid;
