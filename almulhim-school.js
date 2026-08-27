@@ -541,6 +541,8 @@ function hhSchResolveRole(explicit){
   try{
     if(typeof hhIsAdmin==='function' && hhIsAdmin()){ _hhSchRole='teacher'; return _hhSchRole; }
     if(typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher'){ _hhSchRole='teacher'; return _hhSchRole; }
+    // معلم غير معتمد: اختار دور «معلم» في المنصة · يرى الحرم كاملاً وتُقفل عليه أدوات المعتمد
+    var self=localStorage.getItem('hh_user_role'); if(self==='teacher'){ _hhSchRole='teacher'; return _hhSchRole; }
   }catch(e){}
   _hhSchRole='student';
   return _hhSchRole;
@@ -550,10 +552,7 @@ function hhSchoolEntry(role){
   try{ localStorage.setItem('hh_sch_wiz_role', _hhSchRole); }catch(e){}
   // من أتم المعالج سابقاً يدخل مباشرة: المعلم لحرمه والطالب لوحداته
   var done=false; try{ done = localStorage.getItem('hh_sch_wiz_done')==='1'; }catch(e){}
-  if(done){
-    if(_hhSchRole==='teacher'){ hhSchoolHub(); return; }
-    hhOpenSchool(); return;
-  }
+  if(done){ hhSchoolHub(); return; }
   _hhSchWiz = { step:'welcome', role:_hhSchRole };
   hhSchWizRender();
 }
@@ -566,16 +565,33 @@ function hhSchWizRole(r){
 
 // ═══════════════ الحرم المدرسي الموحد (zzx): جناح ثابت ومسرح تتبدل فيه الخدمات ═══════════════
 var _hhHubClasses = null;
-var _hhCampus = { dest:'home', obs:null };
-var _HH_CAMPUS_NAV = [
-  {id:'home',     t:'الرئيسة',               grp:'المدرسة', ico:'home'},
-  {id:'school',   t:'المنهج · مدرستي',       grp:'المدرسة', ico:'cap'},
-  {id:'quiz',     t:'الاختبارات والقصص',     grp:'المدرسة', ico:'lab'},
-  {id:'lessons',  t:'دروسي الخاصة',          grp:'المدرسة', ico:'lib'},
-  {id:'classes',  t:'صفوفي وطلابي',          grp:'طلابي',   ico:'users'},
-  {id:'gradebook',t:'دفتر المتابعة',         grp:'طلابي',   ico:'book'},
-  {id:'certs',    t:'الشهادات',              grp:'طلابي',   ico:'medal'}
+var _hhCampus = { dest:'home', obs:null, role:'student' };
+// الدور في الحرم: student | teacher (غير معتمد) | approved (معتمد أو مدير)
+function hhCampusRole(){
+  try{
+    if(typeof hhIsAdmin==='function' && hhIsAdmin()) return 'approved';
+    if(typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') return 'approved';
+    if(_hhSchRole==='teacher') return 'teacher';
+    if(localStorage.getItem('hh_user_role')==='teacher') return 'teacher';
+  }catch(e){}
+  return 'student';
+}
+// مصفوفة البوابات: lock = تظهر للمعلم غير المعتمد مقفلة (عرض فقط + طلب الاعتماد)
+var _HH_CAMPUS_NAV_ALL = [
+  {id:'home',        t:'الرئيسة',            grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
+  {id:'school',      t:'المنهج · مدرستي',    grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
+  {id:'quiz',        t:'الاختبارات والقصص',  grp:'المدرسة', ico:'lab',   roles:['student','teacher','approved']},
+  {id:'lessons',     t:'دروسي الخاصة',       grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
+  {id:'myclass',     t:'صفي',                grp:'أنا',     ico:'users', roles:['student']},
+  {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
+  {id:'mycerts',     t:'شهاداتي',            grp:'أنا',     ico:'cert',  roles:['student']},
+  {id:'classes',     t:'صفوفي وطلابي',       grp:'طلابي',   ico:'users', roles:['teacher','approved']},
+  {id:'gradebook',   t:'دفتر المتابعة',      grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
+  {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
 ];
+var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
+function hhCampusNavFor(role){ return _HH_CAMPUS_NAV_ALL.filter(function(n){ return n.roles.indexOf(role)!==-1; }); }
+function hhCampusIsLocked(id){ var n=null; _HH_CAMPUS_NAV_ALL.forEach(function(x){ if(x.id===id) n=x; }); return !!(n && n.lock && n.lock.indexOf(_hhCampus.role)!==-1); }
 function _hhCampusIco(name, sz){
   sz = sz || 16;
   var P = {
@@ -590,7 +606,10 @@ function _hhCampusIco(name, sz){
     back: '<polyline points="15 18 9 12 15 6"/>',
     refresh:'<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
     ext:  '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
-    chev: '<polyline points="15 18 9 12 15 6"/>'
+    chev: '<polyline points="15 18 9 12 15 6"/>',
+    cert: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/><circle cx="17" cy="15" r="2"/>',
+    lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/>'
   };
   return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(P[name]||'')+'</svg>';
 }
@@ -599,16 +618,23 @@ function hhSchoolHub(){
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
   var old=document.getElementById('hh-school-hub'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-school-hub'; ov.className='hh-campus';
-  var uname = (typeof currentUser!=='undefined' && currentUser && (currentUser.displayName||'').split(' ')[0]) || 'أيها المعلم';
+  var _r0 = hhCampusRole();
+  var uname = (typeof currentUser!=='undefined' && currentUser && (currentUser.displayName||'').split(' ')[0]) || (_r0==='student' ? 'أيها الطالب' : 'أيها المعلم');
 
+  _hhCampus.role = hhCampusRole();
+  var role=_hhCampus.role;
   function navHTML(){
     var out='', lastGrp='';
-    _HH_CAMPUS_NAV.forEach(function(n){
+    hhCampusNavFor(role).forEach(function(n){
       if(n.grp!==lastGrp){ out+='<div class="hh-campus-grp">'+n.grp+'</div>'; lastGrp=n.grp; }
-      out+='<button type="button" class="hh-campus-nav" data-dest="'+n.id+'" onclick="hhHubGo(\''+n.id+'\')"><span class="hh-campus-nav-ic">'+_hhCampusIco(n.ico,15)+'</span><span class="hh-campus-nav-t">'+n.t+'</span></button>';
+      var locked = n.lock && n.lock.indexOf(role)!==-1;
+      out+='<button type="button" class="hh-campus-nav'+(locked?' locked':'')+'" data-dest="'+n.id+'" onclick="hhHubGo(\''+n.id+'\')" title="'+(locked?'للمعلم المعتمد · اطلب الاعتماد':'')+'"><span class="hh-campus-nav-ic">'+_hhCampusIco(n.ico,15)+'</span><span class="hh-campus-nav-t">'+n.t+'</span>'+(locked?'<span class="hh-campus-lock">'+_hhCampusIco('lock',12)+'</span>':'')+'</button>';
     });
+    if(role==='student') out+='<button type="button" class="hh-campus-nav hh-campus-nav-minor" onclick="hhSchApprovalForm()"><span class="hh-campus-nav-ic">'+_hhCampusIco('cap',15)+'</span><span class="hh-campus-nav-t">أنا معلم</span></button>';
+    if(role==='teacher') out+='<button type="button" class="hh-campus-nav hh-campus-nav-cta" onclick="hhSchApprovalForm()"><span class="hh-campus-nav-ic">'+_hhCampusIco('cap',15)+'</span><span class="hh-campus-nav-t">اطلب الاعتماد</span></button>';
     return out;
   }
+  var roleLabel = role==='approved' ? 'معلم معتمد' : role==='teacher' ? 'معلم' : 'طالب';
 
   ov.innerHTML =
     '<div class="hh-campus-top">'
@@ -616,7 +642,7 @@ function hhSchoolHub(){
     +  '<button type="button" onclick="hhHubBack()" class="hh-campus-btn-ghost">'+_hhCampusIco('back',14)+' رجوع</button>'
     +  '<button type="button" onclick="hhHubClose()" class="hh-campus-btn-ghost hh-campus-btn-ico" aria-label="الرئيسية"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3l9 7v11h-6v-7H9v7H3V10l9-7z"/></svg></button>'
     +'</div>'
-    +'<div class="hh-campus-title"><span>المدرسة · الحرم المدرسي</span><span id="hh-hub-role" class="hh-campus-role">معلم</span></div>'
+    +'<div class="hh-campus-title"><span>المدرسة · الحرم المدرسي</span><span id="hh-hub-role" class="hh-campus-role">'+roleLabel+'</span></div>'
     +'<span class="hh-campus-top-spacer"></span>'
     +'</div>'
 
@@ -625,20 +651,28 @@ function hhSchoolHub(){
     +'<section class="hh-campus-stage">'
     +  '<div class="hh-campus-crumb-row">'
     +    '<div class="hh-campus-crumb"><span>المدرسة</span><span id="hh-campus-crumb"></span></div>'
-    +    '<button type="button" onclick="hhHubGo(\'classes\')" class="hh-campus-btn-gold">'+_hhCampusIco('play',14)+' ابدأ حصة الآن · رمز فوري</button>'
+    +    (role!=='student' ? '<button type="button" onclick="hhHubGo(\'classes\')" class="hh-campus-btn-gold">'+_hhCampusIco('play',14)+' ابدأ حصة الآن · رمز فوري</button>' : '<button type="button" onclick="hhHubGo(\'school\')" class="hh-campus-btn-gold">'+_hhCampusIco('play',14)+' تابع رحلتي</button>')
     +  '</div>'
 
     +  '<div id="hh-campus-home">'
-    +    '<div class="hh-campus-hello">حيّاك الله '+esc(uname)+' · صفوفك بين يديك</div>'
-    +    '<div id="hh-hub-sub" class="hh-campus-sub">جارٍ تحميل صفوفك…</div>'
-    +    '<div class="hh-campus-stats">'
-    +      '<div class="hh-campus-stat"><div class="hh-campus-stat-l">صفوف حية</div><div class="hh-campus-stat-n" id="hh-campus-n-classes">—</div></div>'
-    +      '<div class="hh-campus-stat"><div class="hh-campus-stat-l">طلاب مرتبطون</div><div class="hh-campus-stat-n" id="hh-campus-n-students">—</div></div>'
-    +      '<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">—</div></div>'
-    +    '</div>'
+    +    '<div class="hh-campus-hello">حيّاك الله '+esc(uname)+(role==='student'?' · رحلتك بين يديك':' · صفوفك بين يديك')+'</div>'
+    +    '<div id="hh-hub-sub" class="hh-campus-sub">'+(role==='student'?'كل درس رحلة على الخريطة · وكل مفهوم تُتقنه راية على قلعتك':'جارٍ تحميل صفوفك…')+'</div>'
+    +    (role==='student'
+        ? '<div class="hh-campus-stats">'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">نقاط الرحلات</div><div class="hh-campus-stat-n" id="hh-campus-n-pts">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">رايات مرفوعة</div><div class="hh-campus-stat-n" id="hh-campus-n-flags">—</div></div>'
+          +'</div>'
+        : '<div class="hh-campus-stats">'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">صفوف حية</div><div class="hh-campus-stat-n" id="hh-campus-n-classes">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">طلاب مرتبطون</div><div class="hh-campus-stat-n" id="hh-campus-n-students">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">—</div></div>'
+          +'</div>')
     +    '<div id="hh-campus-resume"></div>'
-    +    '<div class="hh-campus-sec">'+'<span class="hh-campus-sec-dot"></span>'+'صفوفي'+'</div>'
-    +    '<div id="hh-hub-classes" class="hh-campus-classes"><div class="hh-campus-empty">جارٍ تحميل الصفوف…</div></div>'
+    +    (role==='student'
+        ? '<div class="hh-campus-sec"><span class="hh-campus-sec-dot"></span>صفي</div><div id="hh-hub-classes" class="hh-campus-classes"><div class="hh-campus-empty">جارٍ التحقق من صفك…</div></div>'
+        : '<div class="hh-campus-sec">'+'<span class="hh-campus-sec-dot"></span>'+'صفوفي'+'</div>'
+          +'<div id="hh-hub-classes" class="hh-campus-classes"><div class="hh-campus-empty">جارٍ تحميل الصفوف…</div></div>')
     +    '<div id="hh-hub-pulse" class="hh-campus-pulse" style="display:none;"></div>'
     +  '</div>'
 
@@ -650,6 +684,15 @@ function hhSchoolHub(){
     +    '</div>'
     +  '</div>'
 
+    +  '<div id="hh-campus-myclass-pane" hidden>'
+    +    '<div class="hh-campus-sec"><span class="hh-campus-sec-dot"></span>صفي</div>'
+    +    '<div id="hh-campus-myclass"><div class="hh-campus-empty">جارٍ التحقق…</div></div>'
+    +  '</div>'
+    +  '<div id="hh-campus-ach-pane" hidden>'
+    +    '<div class="hh-campus-sec"><span class="hh-campus-sec-dot"></span>إنجازاتي</div>'
+    +    '<div id="hh-campus-ach"></div>'
+    +  '</div>'
+    +  '<div id="hh-campus-lockbar" class="hh-campus-lockbar" hidden>'+_hhCampusIco('lock',16)+'<span>هذه الأداة للمعلم المعتمد · تستعرضها الآن للاطلاع فقط</span><button type="button" class="hh-campus-btn-gold" onclick="hhSchApprovalForm()">اطلب الاعتماد الآن</button></div>'
     +  '<div id="hh-campus-mount" class="hh-campus-mount"></div>'
     +  '<div id="hh-campus-notice" class="hh-campus-empty" hidden></div>'
     +'</section>'
@@ -662,17 +705,22 @@ function hhSchoolHub(){
   hhCampusWatchMount();
   hhCampusRenderResume();
   hhCampusRenderUnits();
-  hhHubLoadClasses();
+  if(role==='student'){ hhCampusRenderStudentStats(); hhCampusLoadMyClass(); } else { hhHubLoadClasses(); }
 }
 
 function hhCampusSetNav(dest){
-  var crumb={home:'',school:' · المنهج',quiz:' · الاختبارات والقصص',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات'};
+  var crumb={home:'',school:' · المنهج',quiz:' · الاختبارات والقصص',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
   document.querySelectorAll('#hh-campus-side .hh-campus-nav').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-dest')===dest); });
   var c=document.getElementById('hh-campus-crumb'); if(c) c.textContent=crumb[dest]||'';
   var home=document.getElementById('hh-campus-home'), cls=document.getElementById('hh-campus-classes-pane'), mount=document.getElementById('hh-campus-mount'), note=document.getElementById('hh-campus-notice');
+  var myc=document.getElementById('hh-campus-myclass-pane'), ach=document.getElementById('hh-campus-ach-pane'), lb=document.getElementById('hh-campus-lockbar');
+  var native = (dest==='home'||dest==='classes'||dest==='myclass'||dest==='achievements');
   if(home) home.hidden = dest!=='home';
   if(cls)  cls.hidden  = dest!=='classes';
-  if(mount) mount.hidden = (dest==='home'||dest==='classes');
+  if(myc)  myc.hidden  = dest!=='myclass';
+  if(ach)  ach.hidden  = dest!=='achievements';
+  if(mount){ mount.hidden = native; mount.classList.toggle('hh-campus-locked', hhCampusIsLocked(dest)); }
+  if(lb) lb.hidden = !hhCampusIsLocked(dest);
   if(note) note.hidden = true;
   _hhCampus.dest=dest;
   try{ var st=document.querySelector('#hh-school-hub .hh-campus-stage'); if(st) st.scrollTop=0; document.getElementById('hh-school-hub').scrollTop=0; }catch(e){}
@@ -699,7 +747,7 @@ function hhCampusWatchMount(){
   if(_hhCampus.obs){ try{ _hhCampus.obs.disconnect(); }catch(e){} }
   _hhCampus.obs=new MutationObserver(function(){
     // إذا أغلقت الخدمة نفسها (زر إغلاقها الداخلي) نعود للرئيسة بدل مسرح فارغ
-    if(_hhCampus.dest!=='home' && _hhCampus.dest!=='classes' && !mount.firstChild){ hhHubGo('home'); }
+    if(['home','classes','myclass','achievements'].indexOf(_hhCampus.dest)===-1 && !mount.firstChild){ hhHubGo('home'); }
   });
   _hhCampus.obs.observe(mount,{childList:true});
 }
@@ -713,11 +761,14 @@ function hhHubGo(dest){
   hhCampusSetNav(dest);
   if(dest==='home'){ var m=document.getElementById('hh-campus-mount'); if(m) while(m.firstChild) m.removeChild(m.firstChild); hhCampusRenderResume(); hhCampusRenderUnits(); return; }
   if(dest==='classes'){ hhCampusRenderClasses(); return; }
+  if(dest==='myclass'){ hhCampusLoadMyClass(); return; }
+  if(dest==='achievements'){ hhCampusRenderAchievements(); return; }
+  if(hhCampusIsLocked(dest)){ hhCampusLockedPreview(dest); return; }
   var ok=false;
   if(dest==='school' || dest==='quiz'){ hhSchSetTerm(_hhSchTerm||'t1'); ok=hhCampusAdopt(function(){ hhOpenSchool(); }); }
   else if(dest==='lessons'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCurriculum==='function') hhOpenCurriculum(); }); }
   else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
-  else if(dest==='certs'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
+  else if(dest==='certs' || dest==='mycerts'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
   if(!ok){ hhCampusNotice('هذه الخدمة تحتاج صلاحية المعلم أو ما زالت قيد التجهيز'); }
 }
 function hhHubBack(){
@@ -753,6 +804,84 @@ function hhCampusResume(){
 function hhCampusRenderUnits(){
   var n=document.getElementById('hh-campus-n-units'); if(!n) return;
   try{ var S=hhSchData(); hhSchLoad(); var done=0; if(S&&S.units) S.units.forEach(function(u,i){ if(hhSchUnitState(i)==='done') done++; }); n.textContent=done+(S&&S.units?' / '+S.units.length:''); }catch(e){ n.textContent='—'; }
+}
+
+// ═══ معاينة الأدوات المقفلة للمعلم غير المعتمد (عرض فقط) ═══
+function hhCampusLockedPreview(dest){
+  var mount=document.getElementById('hh-campus-mount'); if(!mount) return;
+  var P={
+    lessons:{t:'دروسي الخاصة',d:'أنشئ دروسك بنفسك أو ارفع درساً فيتحول تلقائياً إلى ملخص وأسئلة وقصة، ثم أرسله لصفوفك.',items:['ملخص احترافي بنقاط مرقمة','بنك أسئلة بمستويات سهل ومتوسط وصعب','قصة تفاعلية خماسية المشاهد','رحلة على الخريطة لكل درس']},
+    gradebook:{t:'دفتر المتابعة',d:'رصد الدرجات والحضور والسلوك والمهارات لكل طالب، مع جلب درجات مدرستي تلقائياً وتقرير جامع قابل للتصدير.',items:['رصد الدرجات بسبب وتاريخ','الحضور والغياب','السلوك والمهارات','درجات مدرستي للطلاب المرتبطين','تقرير جامع إلى Excel']},
+    certs:{t:'الشهادات',d:'إصدار شهادات إتقان بختم المنصة باسمك لطلابك المستحقين، مع سجل يمنع التزوير.',items:['شهادة إتقان الوحدة','شهادة إتمام الفصل','ختم المنصة واسم المعلم','سجل تحقق لكل شهادة']}
+  }[dest]; if(!P) return;
+  while(mount.firstChild) mount.removeChild(mount.firstChild);
+  var el=document.createElement('div'); el.className='hh-campus-preview';
+  el.innerHTML='<div class="hh-campus-card"><div class="hh-campus-card-t">'+P.t+'</div><div class="hh-campus-card-d">'+P.d+'</div>'
+    +'<div class="hh-campus-sec"><span class="hh-campus-sec-dot"></span>ما ستحصل عليه بعد الاعتماد</div>'
+    +'<div class="hh-campus-classes">'+P.items.map(function(x){ return '<div class="hh-campus-card"><div class="hh-campus-card-d" style="color:#3D0918;font-weight:800;">'+_hhCampusIco('lock',12)+' '+x+'</div></div>'; }).join('')+'</div></div>';
+  mount.appendChild(el);
+}
+
+// ═══ الطالب: صفه وإنجازاته ═══
+function hhCampusStudentSummary(){
+  var pts=0, flags=0, journeys=0;
+  try{
+    for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf('hh_journey_')===0){ var j=JSON.parse(localStorage.getItem(k)||'{}'); journeys++; pts+=(j.pts||0); var c=j.concepts||{}; Object.keys(c).forEach(function(n){ if(c[n]>=100) flags++; }); } }
+  }catch(e){}
+  return {pts:pts, flags:flags, journeys:journeys};
+}
+function hhCampusRenderStudentStats(){
+  var s=hhCampusStudentSummary();
+  var a=document.getElementById('hh-campus-n-pts'), b=document.getElementById('hh-campus-n-flags');
+  if(a) a.textContent=s.pts; if(b) b.textContent=s.flags;
+}
+async function hhCampusLoadMyClass(){
+  var boxes=[document.getElementById('hh-hub-classes'), document.getElementById('hh-campus-myclass')].filter(Boolean);
+  if(!boxes.length) return;
+  function put(h){ boxes.forEach(function(b){ b.innerHTML=h; }); }
+  function joinForm(msg){
+    return '<div class="hh-campus-card" style="grid-column:1/-1;">'
+      +'<div class="hh-campus-card-t">'+(msg||'انضم إلى صف معلمك')+'</div>'
+      +'<div class="hh-campus-card-d">اطلب من معلمك رمز الصف المكوّن من 6 خانات وأدخله هنا</div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">'
+      +'<input id="join-class-code" type="text" maxlength="8" placeholder="رمز الصف" style="flex:1;min-width:140px;border:1.5px solid #B8924A;border-radius:10px;padding:10px 12px;font-family:Cairo;font-weight:900;font-size:1.05rem;letter-spacing:2px;text-align:center;direction:ltr;">'
+      +'<button type="button" class="hh-campus-btn-maroon" onclick="hhCampusJoin()">'+_hhCampusIco('users',14)+' انضم</button>'
+      +'</div></div>';
+  }
+  try{
+    if(typeof currentUser==='undefined' || !currentUser){ put('<div class="hh-campus-empty">سجّل دخولك لتنضم إلى صف معلمك وتُحفظ رحلاتك</div>'); return; }
+    var qs=await firebase.firestore().collection('classroom_students').where('userId','==',currentUser.uid).where('active','==',true).limit(3).get();
+    if(qs.empty){ put(joinForm()); return; }
+    var h=''; qs.forEach(function(d){ var c=d.data();
+      h+='<div class="hh-campus-card hh-campus-class"><div class="hh-campus-card-t">'+esc(c.className||c.classCode)+'</div>'
+        +'<div class="hh-campus-card-d">'+(c.schoolName?esc(c.schoolName)+' · ':'')+'المعلم: '+esc(c.teacherName||'—')+' · الرمز <b class="hh-campus-code">'+esc(c.classCode)+'</b></div>'
+        +'<div class="hh-campus-card-btns"><button type="button" class="hh-campus-btn-maroon" onclick="hhHubGo(\'school\')">'+_hhCampusIco('play',13)+' تابع رحلتي</button><button type="button" class="hh-campus-btn-line" onclick="hhHubGo(\'achievements\')">إنجازاتي</button></div></div>'; });
+    put(h);
+  }catch(e){ put('<div class="hh-campus-empty"><div class="hh-campus-empty-t">تعذر التحقق من صفك — تحقق من الاتصال</div><button type="button" onclick="hhCampusLoadMyClass()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'); }
+}
+window.hhCampusJoin=async function(){
+  if(typeof joinClassroom!=='function'){ if(typeof toast==='function') toast('الانضمام غير متاح الآن','warn'); return; }
+  try{ await joinClassroom(); }catch(e){}
+  setTimeout(hhCampusLoadMyClass, 600);
+};
+function hhCampusRenderAchievements(){
+  var box=document.getElementById('hh-campus-ach'); if(!box) return;
+  var s=hhCampusStudentSummary(); var S=null; try{ S=hhSchData(); hhSchLoad(); }catch(e){}
+  var rows='';
+  if(S && S.units){
+    S.units.forEach(function(U,ui){ (U.lessons||[]).forEach(function(L){
+      var full=_hhSchProg[L.id+'_full']||0, j=null; try{ j=JSON.parse(localStorage.getItem('hh_journey_'+L.id)||'null'); }catch(e){}
+      if(!full && !j) return;
+      var badge = full>=(S.masteryPass||80)?'متقن':full>=60?'جيد':full?'يحتاج دعماً':'في الرحلة';
+      var flags=0; if(j&&j.concepts) Object.keys(j.concepts).forEach(function(k){ if(j.concepts[k]>=100) flags++; });
+      rows+='<div class="hh-campus-card"><div class="hh-campus-card-t">'+esc(L.title)+' <span class="hh-campus-chip">'+badge+'</span></div><div class="hh-campus-card-d">'+esc(U.unit||'')+(full?' · البوابة '+full+'%':'')+(j?' · '+(j.pts||0)+' نقطة · '+flags+' راية':'')+'</div></div>';
+    }); });
+  }
+  box.innerHTML='<div class="hh-campus-stats">'
+    +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">نقاط الرحلات</div><div class="hh-campus-stat-n">'+s.pts+'</div></div>'
+    +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">رايات مرفوعة</div><div class="hh-campus-stat-n">'+s.flags+'</div></div>'
+    +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">رحلات بدأتها</div><div class="hh-campus-stat-n">'+s.journeys+'</div></div>'
+    +'</div>'+(rows||'<div class="hh-campus-empty">لم تبدأ رحلة بعد · افتح المنهج واختر درساً</div>');
 }
 
 // بطاقات الصفوف (تُستخدم في الرئيسة وفي جناح الصفوف)
@@ -802,7 +931,7 @@ function hhSchWizFinish(term){
   try{ localStorage.setItem('hh_sch_wiz_done','1'); }catch(e){}
   hhSchSetTerm(term || 't2');
   hhSchWizClose();
-  if(_hhSchRole==='teacher'){ hhSchoolHub(); } else { hhOpenSchool(); }
+  hhSchoolHub();
 }
 function hhSchWizSoon(){ if(typeof toast==='function') toast('قريباً بإذن الله · التوسعة مستمرة','warn'); }
 
