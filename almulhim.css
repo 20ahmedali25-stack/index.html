@@ -9644,6 +9644,7 @@ body.hh-immersive #hh-more-sheet{ display:none !important; }
 }
 
 /* ══════════════ رحلة الدرس على الخريطة (hj) · خط كبير وهوية ملكية ══════════════ */
+.hh-stage-launch{background:linear-gradient(135deg,#B8924A,#8A6D2E) !important;color:#FFFDF8 !important;}
 .hj-launch{background:linear-gradient(135deg,#8A1538,#5E0E26) !important;color:#F5E6C4 !important;border:1px solid #B8924A !important;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
 .hj{position:fixed;inset:0;z-index:999976;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);overflow-y:auto;direction:rtl;font-family:'Cairo','Tajawal',sans-serif;padding:0 0 30px;}
 .hj-top{position:sticky;top:0;z-index:5;background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;padding:10px 16px;display:flex;align-items:center;gap:12px;color:#F5E6C4;}

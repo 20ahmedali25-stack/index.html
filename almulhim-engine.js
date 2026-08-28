@@ -15356,62 +15356,71 @@ function confirmResetQDB(){
 async function loadPermissionsPanel(){
   const listEl = document.getElementById('admin-permissions-list');
   if(!listEl||!db) return;
-  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;">جاري التحميل...</div>';
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;font-family:Cairo;">جاري التحميل…</div>';
   try{
-    const snap = await db.collection('users').orderBy('name').get();
+    const [snap, tSnap] = await Promise.all([
+      db.collection('users').orderBy('name').get(),
+      db.collection('teacher_requests').get().catch(()=>null)
+    ]);
+    const teachers = {};
+    if(tSnap) tSnap.docs.forEach(d=>{ teachers[d.id] = (d.data()||{}).status || ''; });
     const users = snap.docs.map(d=>({id:d.id,...d.data()}));
-    listEl.innerHTML = users.map(u=>{
-      const canEdit = u.canEditQuestions === true;
-      const canPartners = u.canViewPartners === true;
-      const canExclusive = u.canAccessExclusive === true;
-      const isAdmin = u.email === SUPER_ADMIN_EMAIL;
-      const nameSafe = esc(u.name||'');
-      return `<div style="background:#fff;border:1.5px solid #e0e8f0;border-radius:10px;padding:12px 14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:${isAdmin?'0':'10px'};">
-          <div style="flex:1;min-width:0;">
-            <div style="font-weight:900;font-size:.9rem;color:#1a1a2e;">${esc(u.name||'بدون اسم')}</div>
-            <div style="font-size:.72rem;color:#888;">${esc(u.email||'')}</div>
-          </div> ${isAdmin ? '<span style="font-size:.72rem;background:#8A1538;color:#fff;border-radius:8px;padding:4px 12px;font-weight:700;">مدير عام</span>' : ''}
-        </div> ${isAdmin ? '' : `
-        <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px dashed #e0e8f0;">
+    window._hhPermUsers = users; window._hhPermTeachers = teachers;
+    const editors  = users.filter(u=>u.canEditQuestions===true).length;
+    const partners = users.filter(u=>u.canViewPartners===true).length;
+    const approved = users.filter(u=>teachers[u.id]==='approved').length;
 
-          <!-- صلاحية تعديل الأسئلة -->
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:140px;">
-              <div style="font-size:.78rem;font-weight:800;color:#1a1a2e;">تعديل الأسئلة</div>
-              <div style="font-size:.68rem;color:${canEdit?'#3D6B53':'#888'};font-weight:700;">${canEdit?'مصرح':'غير مصرح'}</div>
-            </div>
-            <button onclick="toggleUserPerm('${escAttr(u.id)}','canEditQuestions',${canEdit},'${nameSafe}','تعديل الأسئلة')"
-              style="padding:5px 12px;background:${canEdit?'#fde8e8':'#EBF2EE'};border:1.5px solid ${canEdit?'#c0392b':'#3D6B53'};border-radius:8px;font-family:Cairo;font-size:.75rem;font-weight:900;color:${canEdit?'#c0392b':'#3D6B53'};cursor:pointer;white-space:nowrap;"> ${canEdit?'إلغاء':'منح'}
-            </button>
-          </div>
-
-          <!-- صلاحية رؤية شركاء النجاح -->
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:140px;">
-              <div style="font-size:.78rem;font-weight:800;color:#1a1a2e;">رؤية شركاء النجاح</div>
-              <div style="font-size:.68rem;color:${canPartners?'#3D6B53':'#888'};font-weight:700;">${canPartners?'مصرح':'غير مصرح'}</div>
-            </div>
-            <button onclick="toggleUserPerm('${escAttr(u.id)}','canViewPartners',${canPartners},'${nameSafe}','رؤية شركاء النجاح')"
-              style="padding:5px 12px;background:${canPartners?'#fde8e8':'#EBF2EE'};border:1.5px solid ${canPartners?'#c0392b':'#3D6B53'};border-radius:8px;font-family:Cairo;font-size:.75rem;font-weight:900;color:${canPartners?'#c0392b':'#3D6B53'};cursor:pointer;white-space:nowrap;"> ${canPartners?'إلغاء':'منح'}
-            </button>
-          </div>
-
-          <!-- معلومة: الأساطير متاحة للجميع الآن -->
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:linear-gradient(135deg,#F8F8F6,#fdfaf0);border-radius:8px;border:1px solid #B8924A;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#B8924A" style="flex-shrink:0;"><path d="M12 2l3 7h7l-5.5 4.5L18 22l-6-4-6 4 1.5-8.5L2 9h7z"/></svg>
-            <div style="flex:1;">
-              <div style="font-size:.75rem;font-weight:800;color:#8A6D2E;">الأساطير متاحة للجميع</div>
-              <div style="font-size:.66rem;color:#888;font-weight:600;">لم تعد تحتاج أي صلاحية أو تسجيل دخول</div>
-            </div>
-          </div>
-
-        </div>`}
-      </div>`;
-    }).join('') || '<p style="text-align:center;color:#aaa;padding:20px;">لا يوجد مستخدمون</p>';
+    listEl.innerHTML =
+      '<div style="background:linear-gradient(170deg,#4A0B1E,#5E0E26);border:2px solid #B8924A;border-radius:16px;padding:14px 16px;margin-bottom:12px;font-family:Cairo;color:#F5E6C4;">'
+      + '<div style="font-weight:900;font-size:1rem;margin-bottom:8px;">الصلاحيات الفعالة في المنصة</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">'
+      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+users.length+'</div><div style="font-size:.7rem;color:#EAD9B0;">المستخدمون</div></div>'
+      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+editors+'</div><div style="font-size:.7rem;color:#EAD9B0;">محررو الأسئلة</div></div>'
+      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+partners+'</div><div style="font-size:.7rem;color:#EAD9B0;">رؤية الشركاء</div></div>'
+      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+approved+'</div><div style="font-size:.7rem;color:#EAD9B0;">معلمون معتمدون</div></div>'
+      + '</div>'
+      + '<div style="font-size:.72rem;color:#EAD9B0;margin-top:8px;line-height:1.7;">الصلاحيتان المتاحتان: <b>تعديل الأسئلة</b> (يظهر للمستخدم زر التحرير في الفئات) و<b>رؤية شركاء النجاح</b>. اعتماد المعلمين يُدار من تبويب «المعلمون»، وإخفاء الفئات والمسابقات من «إدارة المسابقات» و«الفئات».</div>'
+      + '</div>'
+      + '<input id="perm-search" placeholder="ابحث بالاسم أو البريد…" oninput="renderPermList(this.value)" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #B8924A;border-radius:12px;font-family:Cairo;font-weight:800;font-size:.85rem;margin-bottom:10px;background:#FFFDF8;">'
+      + '<div id="perm-rows"></div>';
+    renderPermList('');
   }catch(e){
-    listEl.innerHTML = '<p style="color:#c00;text-align:center;padding:20px;">تعذر التحميل</p>';
+    listEl.innerHTML = '<p style="color:#c00;text-align:center;padding:20px;font-family:Cairo;">تعذر التحميل: '+esc(e.message||'')+'</p>';
   }
+}
+
+function renderPermList(q){
+  const rows = document.getElementById('perm-rows'); if(!rows) return;
+  const users = window._hhPermUsers||[]; const teachers = window._hhPermTeachers||{};
+  q = (q||'').trim().toLowerCase();
+  const list = users.filter(u=>!q || (u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q));
+  const permRow=(u,field,label,desc,val)=>{
+    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">'
+      + '<div style="flex:1;min-width:150px;"><div style="font-size:.8rem;font-weight:900;color:#3D0918;">'+label+'</div><div style="font-size:.66rem;color:#8A7A63;font-weight:700;">'+desc+'</div></div>'
+      + '<div onclick="toggleUserPerm(\''+escAttr(u.id)+'\',\''+field+'\','+val+',\''+escAttr(u.name||'')+'\',\''+label+'\')" title="'+(val?'إلغاء':'منح')+'" style="width:48px;height:26px;border-radius:99px;background:'+(val?'#B8924A':'#d8cfd3')+';position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;">'
+      +   '<i style="position:absolute;top:3px;'+(val?'right:3px;':'right:25px;')+'width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);"></i>'
+      + '</div></div>';
+  };
+  rows.innerHTML = list.map(u=>{
+    const isAdmin = u.email === SUPER_ADMIN_EMAIL;
+    const tStatus = teachers[u.id];
+    const chips = []
+    if(isAdmin) chips.push('<span style="font-size:.68rem;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:1px solid #B8924A;border-radius:99px;padding:3px 12px;font-weight:900;">مدير عام</span>');
+    if(tStatus==='approved') chips.push('<span style="font-size:.68rem;background:#EBF2EE;color:#3D6B53;border:1px solid #3D6B53;border-radius:99px;padding:3px 12px;font-weight:900;">معلم معتمد</span>');
+    else if(tStatus==='pending') chips.push('<span style="font-size:.68rem;background:#FDF3DD;color:#8A6D2E;border:1px solid #B8924A;border-radius:99px;padding:3px 12px;font-weight:900;">طلب اعتماد معلق</span>');
+    return '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-family:Cairo;">'
+      + '<div style="display:flex;align-items:center;gap:10px;'+(isAdmin?'':'margin-bottom:10px;')+'">'
+      +   '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#8A1538,#5E0E26);border:2px solid #B8924A;color:#F5E6C4;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;">'+esc((u.name||'؟').trim().charAt(0))+'</div>'
+      +   '<div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+esc(u.name||'بدون اسم')+'</div><div style="font-size:.7rem;color:#8A7A63;direction:ltr;text-align:right;">'+esc(u.email||'')+'</div></div>'
+      +   chips.join(' ')
+      + '</div>'
+      + (isAdmin ? '' :
+        '<div style="display:flex;flex-direction:column;gap:9px;padding-top:9px;border-top:1px dashed #EAD9B0;">'
+        + permRow(u,'canEditQuestions','تعديل الأسئلة','يرى زر التحرير ويقترح تعديلات على بنوك الفئات', u.canEditQuestions===true)
+        + permRow(u,'canViewPartners','رؤية شركاء النجاح','تظهر له فئات الشركاء في شاشة الإعداد', u.canViewPartners===true)
+        + '</div>')
+      + '</div>';
+  }).join('') || '<p style="text-align:center;color:#8A7A63;padding:20px;font-family:Cairo;font-weight:800;">لا نتائج للبحث</p>';
 }
 
 async function toggleUserPerm(uid, field, currentVal, name, label){
@@ -15487,6 +15496,27 @@ function renderCompAdmin(){
   box.appendChild(selWrap);
 
   const card=mk('div','background:#fff;border:1.5px solid #e6dde1;border-radius:14px;padding:16px;');
+
+  // ─── الإظهار / الإخفاء للمسابقة الحالية · يستعمل آلية hh_hidden_cats والمزامنة السحابية ───
+  (function(){
+    const hid = (typeof _hh_isCatHidden==='function') && _hh_isCatHidden(cat);
+    const vis=mk('div','display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(170deg,#4A0B1E,#5E0E26);border:1.5px solid #B8924A;border-radius:12px;padding:10px 14px;margin-bottom:14px;');
+    const txt=mk('div','flex:1;min-width:180px;font-family:Cairo;color:#F5E6C4;');
+    txt.innerHTML='<div style="font-weight:900;font-size:.9rem;">حالة الظهور</div><div id="ca-vis-state" style="font-size:.72rem;color:#EAD9B0;">'+(hid?'مخفية · لا تظهر في شاشة الإعداد لأحد سواك':'ظاهرة · متاحة للجميع في خانة المسابقات')+'</div>';
+    const sw=mk('div','width:52px;height:28px;border-radius:99px;position:relative;cursor:pointer;flex-shrink:0;background:'+(hid?'#8A7A63':'#B8924A')+';');
+    sw.innerHTML='<i style="position:absolute;top:3px;'+(hid?'right:27px;':'right:3px;')+'width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);"></i>';
+    sw.title='إظهار / إخفاء هذه المسابقة';
+    sw.onclick=function(){
+      if(typeof toggleCatHidden==='function') toggleCatHidden(cat);
+      const nh=(typeof _hh_isCatHidden==='function') && _hh_isCatHidden(cat);
+      sw.style.background=nh?'#8A7A63':'#B8924A';
+      sw.querySelector('i').style.right=nh?'27px':'3px';
+      const st=document.getElementById('ca-vis-state');
+      if(st) st.textContent=nh?'مخفية · لا تظهر في شاشة الإعداد لأحد سواك':'ظاهرة · متاحة للجميع في خانة المسابقات';
+    };
+    vis.appendChild(txt); vis.appendChild(sw); card.appendChild(vis);
+  })();
+
   card.appendChild(fld('اسم المسابقة (يظهر في رأس اللوحة وبطاقة الاختيار)', label, 'ca-label'));
 
   if(isChar && charCC){

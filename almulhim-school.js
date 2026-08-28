@@ -1,6 +1,23 @@
 /* وحدة مستخرجة من محرك المُلهِم · تُحمَّل بعد almulhim-engine.js */
 
 // ═══ المدرسة: القصص التفاعلية + المسار المتدرج + معالج الدخول + مركز المناهج ═══
+// ═══ مسارح الحصص: تُفتح من خانة الدرس · زر «العرض» للمعلم على شاشة الفصل ═══
+// المفتاح: معرف الدرس أو عنوانه كما في بيانات المنهج · القيمة: مسار الملف على الاستضافة
+window.HH_STAGE_FILES = window.HH_STAGE_FILES || {
+  'عناصر المناخ': 'مسرح-الحصة/عناصر-المناخ.html'
+};
+function hhStageFor(L){
+  try{ return HH_STAGE_FILES[L.id] || HH_STAGE_FILES[(L.title||'').trim()] || null; }catch(e){ return null; }
+}
+window.hhOpenStage=function(ui,li){
+  try{
+    var S=hhSchData(); var L=S.units[ui].lessons[li]; var f=hhStageFor(L); if(!f) return;
+    var w=window.open(encodeURI(f)+'?cls='+encodeURIComponent(localStorage.getItem('hh_current_class')||''),'_blank');
+    if(!w && typeof toast==='function') toast('اسمح بالنوافذ المنبثقة لفتح مسرح الحصة','warn');
+    try{ if(typeof hhLogActivity==='function') hhLogActivity('stage','مسرح الحصة: '+L.title); }catch(e){}
+  }catch(e){}
+};
+
 var HH_STORIES = {
   'u1l1': {
     title:'رحلة النوخذة',
@@ -396,6 +413,7 @@ function hhOpenSchool(){
         + '<div style="font-size:.88rem;font-weight:800;color:#3D0918;flex:1;min-width:0;">'+esc(L.title)+'</div>'
         + (st!=='locked'
             ? '<div style="display:flex;gap:4px;flex-wrap:wrap;">'
+              + ((hhStageFor(L) && (_hhSchRole==='teacher')) ? '<button onclick="hhOpenStage('+i+','+j+')" class="hj-launch hh-stage-launch" title="مسرح الحصة على شاشة الفصل"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> العرض</button>' : '')
               + '<button onclick="hhJourneyOpen('+i+','+j+')" class="hj-launch" title="رحلة الدرس على الخريطة"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg> الرحلة</button>'
               + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">المادة</button>'
               + '<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">الملخص</button>'
