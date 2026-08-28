@@ -6,6 +6,62 @@
 window.HH_STAGE_FILES = window.HH_STAGE_FILES || {
   'عناصر المناخ': 'مسرح-الحصة/عناصر-المناخ.html'
 };
+// ═══ العرض التقديمي التلقائي: يُولَّد من بيانات الدرس نفسها ويفتح في تبويب ═══
+window.hhAutoStage=function(ui,li){
+  try{
+    var S=hhSchData(); var U=S.units[ui]; var L=U.lessons[li];
+    var qs=(L.q||[]).slice().sort(function(){return Math.random()-.5;}).slice(0,6);
+    var slides=[];
+    slides.push({t:esc(L.title), h:'<div class="cards">'
+      +'<div class="cd"><span>الوحدة</span><b>'+esc(U.unit||'')+'</b></div>'
+      +'<div class="cd"><span>الدرس</span><b>'+esc(L.lesson||'')+'</b></div>'
+      +((L.vals&&L.vals[0])?'<div class="cd"><span>قيمة الدرس</span><b>'+esc(L.vals[0])+'</b></div>':'')
+      +'</div>'});
+    if(L.text) slides.push({t:'تمهيد', h:'<p class="big" data-step="1">'+esc(L.text)+'</p>'});
+    (L.summary||[]).forEach(function(pt,k){ slides.push({t:'الفكرة '+(k+1)+' من '+(L.summary||[]).length, h:'<p class="big" data-step="1">'+esc(pt)+'</p>'}); });
+    if(L.terms&&L.terms.length) slides.push({t:'المصطلحات والمفاهيم', h:(L.terms||[]).map(function(t,k){return '<div class="term" data-step="'+(k+1)+'"><b>'+esc(t[0])+'</b><span>'+esc(t[1])+'</span></div>';}).join('')});
+    qs.forEach(function(q,k){ slides.push({t:'سؤال للفصل · '+(k+1), h:'<p class="big">'+esc(q.q)+'</p>'
+      +((q.o&&q.o.length)?'<div class="opts">'+q.o.map(function(o){return '<span class="op'+(o===q.a?' ok':'')+'" data-step="2">'+esc(o)+'</span>';}).join('')+'</div>':'')
+      +'<div class="ans" data-step="3"><b>الإجابة:</b> '+esc(q.a)+((q.why)?'<br><small>'+esc(q.why)+'</small>':'')+'</div>'}); });
+    if(L.vals&&L.vals.length) slides.push({t:'قيم أتعلمها', h:(L.vals||[]).map(function(v,k){return '<p class="big" data-step="'+(k+1)+'">✦ '+esc(v)+'</p>';}).join('')});
+    slides.push({t:'الغلق', h:'<p class="big" data-step="1">ما أهم فكرة خرجت بها من درس اليوم؟</p><p class="big" data-step="2">التقويم على المنصة: مراجعة سريعة ثم الاختبار الشامل</p>'});
+    var html='<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(L.title)+' · العرض التقديمي · المُلهم</title>'
+      +'<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet"><style>'
+      +'*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Cairo,sans-serif;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);color:#3D0918;direction:rtl}'
+      +'body{display:grid;grid-template-rows:auto 1fr auto;height:100vh}'
+      +'.top{background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;color:#FDF3DD;padding:8px 18px;display:flex;align-items:center;gap:12px}'
+      +'.top b{font-size:1.15rem}.top span{font-size:.75rem;color:#EAD9B0}.top button{margin-right:auto;background:rgba(212,188,133,.12);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:34px;padding:0 14px;color:#FDF3DD;font-family:inherit;font-weight:800;cursor:pointer}'
+      +'.stage{margin:12px;background:#FFFDF8;border:2px solid #B8924A;border-radius:18px;padding:26px 34px;overflow:auto;position:relative}'
+      +'h2{color:#5E0E26;font-size:clamp(1.5rem,3vw,2.3rem);margin:0 0 14px}'
+      +'.big{font-size:clamp(1.25rem,2.3vw,1.9rem);line-height:2;font-weight:800;margin:8px 0}'
+      +'.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}'
+      +'.cd{background:#fff;border:1.5px solid #D4BC85;border-radius:14px;padding:14px}.cd span{color:#8A7A63;font-size:.85rem;font-weight:800}.cd b{display:block;font-size:clamp(1.05rem,1.8vw,1.5rem);line-height:1.7}'
+      +'.term{background:#fff;border:1.5px solid #D4BC85;border-radius:12px;padding:10px 14px;margin:8px 0}.term b{color:#8A1538;font-size:clamp(1.05rem,1.8vw,1.45rem)}.term span{display:block;font-size:clamp(.95rem,1.6vw,1.3rem);font-weight:800;line-height:1.9}'
+      +'.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:12px 0}.op{background:#fff;border:1.5px solid #D4BC85;border-radius:12px;padding:12px;font-size:clamp(1rem,1.8vw,1.4rem);font-weight:900;text-align:center}'
+      +'.ans{background:#FDF3DD;border:1.5px dashed #B8924A;border-radius:12px;padding:12px 16px;font-size:clamp(1.05rem,1.9vw,1.5rem);font-weight:800;line-height:1.9}.ans small{color:#8A6D2E}'
+      +'[data-step]{opacity:0;transform:translateY(12px);transition:all .4s}[data-step].in{opacity:1;transform:none}'
+      +'[data-step].in .ok, .ans.in ~ .opts .ok{background:linear-gradient(135deg,#EAD9B0,#B8924A)}'
+      +'.nav{display:flex;justify-content:space-between;align-items:center;padding:8px 18px 14px}.nav button{background:#fff;border:1.5px solid #B8924A;border-radius:11px;padding:9px 20px;color:#8A1538;font-family:inherit;font-weight:900;font-size:1rem;cursor:pointer}.nav .g{background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918}'
+      +'.dots{font-size:.85rem;color:#8A7A63;font-weight:800}.dot{position:absolute;bottom:12px;left:16px;width:11px;height:11px;border-radius:50%;background:#B8924A;display:none;animation:pu 1.3s infinite}.dot.on{display:block}@keyframes pu{50%{transform:scale(1.35)}}'
+      +'</style></head><body>'
+      +'<div class="top"><b>'+esc(L.title)+'</b><span>'+esc(U.unit||'')+' · المُلهم</span><button onclick="if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()">ملء الشاشة (F)</button></div>'
+      +'<div class="stage"><div id="sl"></div><div class="dot" id="dot"></div></div>'
+      +'<div class="nav"><button onclick="go(-1)">‹ السابق</button><span class="dots" id="dots"></span><button class="g" onclick="go(1)">التالي ›</button></div>'
+      +'<scr'+'ipt>var SL='+JSON.stringify(slides)+';var i=0,st=0;'
+      +'function steps(){return [...document.querySelectorAll("#sl [data-step]")].map(function(e){return +e.getAttribute("data-step")}).filter(function(v,x,a){return a.indexOf(v)===x}).sort(function(a,b){return a-b})}'
+      +'function ap(){var ss=steps();document.querySelectorAll("#sl [data-step]").forEach(function(e){e.classList.toggle("in",+e.getAttribute("data-step")<=st)});document.getElementById("dot").classList.toggle("on",ss.length>0&&st<ss[ss.length-1])}'
+      +'function render(){var s=SL[i];document.getElementById("sl").innerHTML="<h2>"+s.t+"</h2>"+s.h;st=0;ap();document.getElementById("dots").textContent=(i+1)+" / "+SL.length}'
+      +'function go(d){var ss=steps();if(d>0){var nx=ss.filter(function(v){return v>st})[0];if(nx!=null){st=nx;ap();return}}if(d<0&&st>0){var pv=ss.filter(function(v){return v<st});st=pv.length?pv[pv.length-1]:0;ap();return}i=Math.max(0,Math.min(SL.length-1,i+d));render()}'
+      +'document.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"||e.key===" "||e.key==="PageDown")go(1);else if(e.key==="ArrowRight"||e.key==="PageUp")go(-1);else if(e.key==="f"||e.key==="F"){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}});'
+      +'document.querySelector(".stage").addEventListener("click",function(e){if(e.target.closest("button"))return;go(1)});render();'
+      +'</scr'+'ipt></body></html>';
+    var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    var w=window.open(URL.createObjectURL(blob),'_blank');
+    if(!w && typeof toast==='function') toast('اسمح بالنوافذ المنبثقة لفتح العرض التقديمي','warn');
+    try{ if(typeof hhLogActivity==='function') hhLogActivity('stage','العرض التقديمي: '+L.title); }catch(e){}
+  }catch(e){ if(typeof toast==='function') toast('تعذر توليد العرض: '+e.message,'error'); }
+};
+
 // ─── ضمان وجود درس عناصر المناخ في بيانات المنهج (إن لم يكن في ملف المنهج) ───
 function _hhEnsureClimateLesson(){
   try{
@@ -58,7 +114,8 @@ function hhStageFor(L){
 }
 window.hhOpenStage=function(ui,li){
   try{
-    var S=hhSchData(); var L=S.units[ui].lessons[li]; var f=hhStageFor(L); if(!f) return;
+    var S=hhSchData(); var L=S.units[ui].lessons[li]; var f=hhStageFor(L);
+    if(!f || _hhSchRole!=='teacher'){ hhAutoStage(ui,li); return; }
     var code=''; try{ code=localStorage.getItem('hh_current_class')||''; }catch(e){}
     // أسماء الصف تلقائياً: من صف المعلم الحالي (أو صفه الوحيد) إلى ذاكرة المسرح المشتركة
     (async function(){
@@ -473,19 +530,30 @@ function hhOpenSchool(){
     var badge = st==='done' ? 'أُتقنت '+mastery+'%' : st==='open' ? 'متاحة الآن' : 'مقفلة';
     var lessons = U.lessons.map(function(L, j){
       var qc = (_hhSchProg[L.id+'_quick']||0), fc = (_hhSchProg[L.id+'_full']||0);
-      return '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;background:#fff;border-radius:9px;margin-bottom:5px;'+(st==='locked'?'opacity:.5;':'')+'">'
-        + '<div style="font-size:.88rem;font-weight:800;color:#3D0918;flex:1;min-width:0;">'+esc(L.title)+'</div>'
+      var GBTN='background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;';
+      return '<div style="padding:8px 10px;background:#fff;border-radius:9px;margin-bottom:6px;'+(st==='locked'?'opacity:.5;':'')+'">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">'
+        +   '<div style="font-size:.9rem;font-weight:900;color:#3D0918;flex:1;min-width:0;">'+esc(L.title)+'</div>'
+        +   (st==='locked' ? '<span style="font-size:.68rem;color:#aaa;font-weight:800;">مقفل</span>' : '')
+        + '</div>'
         + (st!=='locked'
-            ? '<div style="display:flex;gap:4px;flex-wrap:wrap;">'
-              + ((hhStageFor(L) && (_hhSchRole==='teacher')) ? '<button onclick="hhOpenStage('+i+','+j+')" class="hj-launch hh-stage-launch" title="مسرح الحصة على شاشة الفصل"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> العرض</button>' : '')
-              + '<button onclick="hhJourneyOpen('+i+','+j+')" class="hj-launch" title="رحلة الدرس على الخريطة"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg> الرحلة</button>'
-              + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">المادة</button>'
-              + '<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">الملخص</button>'
-              + (hhStoryAvailable(L.id) ? '<button onclick="hhStartStory(&quot;'+L.id+'&quot;)" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">القصة</button>' : '')
-              + '<button onclick="hhSchTest('+i+','+j+',&quot;quick&quot;)" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">سريع'+(qc?' '+qc+'%':'')+'</button>'
-              + '<button onclick="hhSchTest('+i+','+j+',&quot;full&quot;)" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;">شامل'+(fc?' '+fc+'%':'')+'</button>'
-              + '</div>'
-            : '<span style="font-size:.68rem;color:#aaa;font-weight:800;">مقفل</span>')
+          ? '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;">'
+            + '<span style="font-size:.62rem;font-weight:900;color:#8A1538;background:#F7ECEF;border:1px solid #8A1538;border-radius:99px;padding:2px 9px;">المنهج</span>'
+            + '<button onclick="hhJourneyOpen('+i+','+j+')" class="hj-launch" title="رحلة الدرس على الخريطة"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4M9 7l6-3"/></svg> الرحلة</button>'
+            + '<button onclick="hhOpenStage('+i+','+j+')" class="hj-launch hh-stage-launch" title="العرض التقديمي لشاشة الفصل"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> العرض التقديمي</button>'
+            + (hhStoryAvailable(L.id) ? '<button onclick="hhStartStory(&quot;'+L.id+'&quot;)" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">القصة</button>' : '')
+            + '<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="'+GBTN+'">ملخص الدرس</button>'
+            + '<button onclick="hhSchLesson('+i+','+j+',&quot;terms&quot;)" style="'+GBTN+'">المصطلحات والمفاهيم</button>'
+            + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="'+GBTN+'">المادة</button>'
+            + '</div>'
+            + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px;">'
+            + '<span style="font-size:.62rem;font-weight:900;color:#3D6B53;background:#EBF2EE;border:1px solid #3D6B53;border-radius:99px;padding:2px 9px;">الاختبارات</span>'
+            + '<button onclick="hhSchTest('+i+','+j+',&quot;quick&quot;)" style="'+GBTN+'">مراجعة سريعة</button>'
+            + '<button onclick="hhSchTest('+i+','+j+',&quot;short&quot;)" style="'+GBTN+'">الاختبار المختصر</button>'
+            + '<button onclick="hhSchTest('+i+','+j+',&quot;full&quot;)" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">الاختبار الشامل</button>'
+            + (j===U.lessons.length-1 ? '<button onclick="hhSchTest('+i+',0,&quot;mastery&quot;)" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">اختبار إتقان الوحدة</button>' : '')
+            + '</div>'
+          : '')
         + '</div>';
     }).join('');
 
@@ -1446,8 +1514,8 @@ function hhSchTest(ui, li, kind){
   } else {
     var L=U.lessons[li];
     pool = L.q.slice().sort(function(){return Math.random()-.5;});
-    pool = kind==='quick' ? pool.slice(0,5) : pool.slice(0,10);
-    title = (kind==='quick'?'اختبار سريع · ':'اختبار شامل · ') + L.title;
+    pool = kind==='quick' ? pool.slice(0,5) : (kind==='short' ? pool.slice(0,8) : pool.slice(0,15));
+    title = (kind==='quick'?'مراجعة سريعة · ':(kind==='short'?'الاختبار المختصر · ':'الاختبار الشامل · ')) + L.title;
   }
   _hhTest = { ui:ui, li:li, kind:kind, qs:pool, idx:0, answers:[], title:title };
   hhSchRenderQ();
