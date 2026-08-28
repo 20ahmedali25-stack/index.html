@@ -17145,16 +17145,32 @@ async function loadAdminPanel(){
   }
   populateAQCatSelect();
   // تحميل المستخدمين
+  // (zzzb) كل مصدر في محاولة مستقلة: فشل التقييمات لا يُسقط المستخدمين، والسبب يظهر داخل التبويب لا في الصمت
+  function _hhAdminShowLoadError(where, e){
+    var msg = (e && e.code==='permission-denied') ? 'رُفضت القراءة بقواعد Firestore (permission-denied) · انشر القواعد المحدثة وتأكد أن بريد الدخول هو بريد الأدمن'
+            : (e && /index/i.test(e.message||'')) ? 'الاستعلام يحتاج فهرساً في Firestore · افتح الرابط في Console لإنشائه'
+            : ('تعذر التحميل: '+((e&&e.message)||e));
+    console.error('[لوحة التحكم] '+where+':', e);
+    var el=document.getElementById(where==='users'?'admin-users-list':'admin-reviews-list');
+    if(el) el.innerHTML='<div style="background:#F7ECEF;border:1.5px solid #7A1330;border-radius:12px;padding:14px;color:#7A1330;font-family:Cairo;font-weight:800;font-size:.9rem;line-height:1.8;">'+msg+'<br><button onclick="loadAdminPanel()" style="margin-top:8px;background:#fff;border:1.5px solid #B8924A;border-radius:9px;padding:6px 14px;color:#8A1538;font-family:Cairo;font-weight:900;cursor:pointer;">أعد المحاولة</button></div>';
+    var badge=document.getElementById('users-filter-count'); if(badge && where==='users') badge.textContent='خطأ';
+  }
   try{
     if(!OFFLINE_MODE&&db){
-      const usersSnap=await db.collection('users').get();
-      const users=usersSnap.docs.map(d=>({id:d.id,...d.data()}));
+      let users=[];
+      try{
+        const usersSnap=await db.collection('users').get();
+        users=usersSnap.docs.map(d=>({id:d.id,...d.data()}));
+      }catch(eU){ _hhAdminShowLoadError('users', eU); throw eU; }
       const _asUsers = document.getElementById('as-users');
       if(_asUsers) _asUsers.textContent=users.length;
 
-      // تحميل التقييمات أولا (للربط مع المستخدمين)
-      const revSnap=await db.collection('reviews').orderBy('ts','desc').get();
-      const reviews=revSnap.docs.map(d=>({id:d.id,...d.data()}));
+      // تحميل التقييمات (للربط مع المستخدمين) · فشلها لا يمنع عرض المستخدمين
+      let reviews=[];
+      try{
+        const revSnap=await db.collection('reviews').orderBy('ts','desc').get();
+        reviews=revSnap.docs.map(d=>({id:d.id,...d.data()}));
+      }catch(eR){ _hhAdminShowLoadError('reviews', eR); }
       const _asRev = document.getElementById('as-reviews');
       if(_asRev) _asRev.textContent=reviews.length;
       const avg=reviews.length?(reviews.reduce((s,r)=>s+r.stars,0)/reviews.length).toFixed(1):'-';
@@ -17190,7 +17206,7 @@ async function loadAdminPanel(){
 
       // التقييمات (الكود الأصلي)
       const revEl=document.getElementById('admin-reviews-list');
-      revEl.innerHTML=reviews.map(r=>{
+      if(revEl && reviews.length) revEl.innerHTML=reviews.map(r=>{
         const dev = r.deviceInfo;
         let deviceBlock = '';
         if(dev && (dev.deviceType || dev.os || dev.browser)){
