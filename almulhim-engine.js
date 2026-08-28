@@ -3579,11 +3579,13 @@ function startGame(overrideTeams, overrideCats, overrideName){
         // الوضع الموسع الذكي: إن اتسع البنك لثلاثة أسئلة لكل مستوى في كل فئة فرعية (بنوك 48+)
         // تُعرض اللوحة 3×3 = 36 خلية تلقائياً؛ وإلا سؤالان لكل مستوى = 24 كالمعتاد
         const _allQ=(QDB[cat]||[]);
+        const _tiers=(typeof _HH_CHAR_COMPS!=='undefined' && _HH_CHAR_COMPS[cat] && Array.isArray(_HH_CHAR_COMPS[cat].tiers)) ? _HH_CHAR_COMPS[cat].tiers : ['easy','med','hard'];
+        G.wafaTiers=_tiers;
         const _subKeys=[...new Set(_allQ.map(q=>(q.sub!==undefined)?q.sub:0))].sort((a,b)=>a-b);
-        const _rich=_subKeys.length>0 && ['easy','med','hard'].every(d=> _subKeys.every(k=> _allQ.filter(q=>q.diff===d && ((q.sub!==undefined)?q.sub:0)===k).length>=3));
+        const _rich=_subKeys.length>0 && _tiers.every(d=> _subKeys.every(k=> _allQ.filter(q=>q.diff===d && ((q.sub!==undefined)?q.sub:0)===k).length>=3));
         const perSub=_rich?3:2;
         G.wafaPerSub=perSub;
-        ['easy','med','hard'].forEach(diff=>{
+        _tiers.forEach(diff=>{
           const all=_allQ.filter(q=>q.diff===diff);
           const bySub={};
           all.forEach(q=>{ const k=(q.sub!==undefined)?q.sub:0; (bySub[k]=bySub[k]||[]).push(q); });
@@ -4236,6 +4238,8 @@ function buildWafaBoard(wrap){
   const CC_N2   = _isWafaSelf ? _HH_WAFA_NAME2 : ((_ov.name2!==undefined) ? _ov.name2 : (_cc ? _cc.name2 : ''));
   const CC_SUBS = _isWafaSelf ? _HH_WAFA_SUBS  : ((_cc ? _cc.subs : []).map((sb,i)=> (_ov.subs&&_ov.subs[i]) ? Object.assign({},sb,{label:_ov.subs[i]}) : sb));
   const CC_FBG  = (!_isWafaSelf && _cc && _cc.frameBg) ? _cc.frameBg : '#baaf9d';
+  const CC_COMPACT = (!_isWafaSelf && _cc && _cc.compact===true);
+  const CC_ORN     = (!_isWafaSelf && _cc && _cc.plateOrn===true);
   const isMobile    = window.innerWidth < 700;
   const isLandscape = window.innerWidth > window.innerHeight;
   const vh = window.innerHeight;
@@ -4255,8 +4259,9 @@ function buildWafaBoard(wrap){
   const stacked = isMobile && !isLandscape; // جوال عمودي: أعمدة متراصة
 
   // مقاس الإطار المربع: أصغر بُعدَي العمود الأوسط حتى تملأه الصورة المربعة تماماً بلا فراغ
-  const centerW   = stacked ? Math.min(170, Math.floor(window.innerWidth*0.34))
-                            : Math.max(240, Math.min(Math.floor(window.innerWidth*0.27), 420));
+  const centerW   = stacked ? Math.min(CC_COMPACT?150:170, Math.floor(window.innerWidth*0.34))
+                            : (CC_COMPACT ? Math.max(180, Math.min(Math.floor(window.innerWidth*0.17), 280))
+                                          : Math.max(240, Math.min(Math.floor(window.innerWidth*0.27), 420)));
   const nameH     = isMobile ? 60 : 80; // ارتفاع لوحة الاسم بسطرَي خط أميري
   const topShift  = stacked ? 0 : (isMobile ? 10 : 22); // إنزال الصورة قليلاً
   const stageH    = totalH - pad*2 - headerH - gap;
@@ -4280,7 +4285,7 @@ function buildWafaBoard(wrap){
       border:2.5px solid var(--wc); background:#fff; box-shadow:0 3px 0 var(--wc); }
     .wafa-cat .wname{ background:var(--wc); color:#fff; font-weight:900; text-align:center;
       padding:${isMobile?'3px':((G.wafaPerSub||2)===3?'3px':'5px')}; font-size:${isMobile?'.8rem':((G.wafaPerSub||2)===3?'.92rem':'1rem')}; font-family:Cairo,sans-serif; flex-shrink:0; }
-    .wafa-cells{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(3,1fr);
+    .wafa-cells{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(${(G.wafaTiers||['easy','med','hard']).length},1fr);
       grid-template-rows:repeat(${(typeof G!=='undefined'&&G.wafaPerSub)||2},1fr);
       gap:${isMobile?4:((G.wafaPerSub||2)===3?5:7)}px; padding:${isMobile?5:((G.wafaPerSub||2)===3?6:8)}px; }
     .wafa-cells .qcell{ display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none;
@@ -4291,7 +4296,10 @@ function buildWafaBoard(wrap){
       box-shadow:0 6px 16px rgba(61,9,24,.14), inset 0 -2px 0 rgba(61,9,24,.06); }
     .wafa-cells .qcell:not(.used):active{ transform:translateY(0); }
     .wafa-cells .qcell .qpts{ font-weight:900; font-family:Cairo,sans-serif; color:var(--wc);
-      font-size:${isMobile?'.9rem':((G.wafaPerSub||2)===3?'1rem':'1.15rem')}; }
+      font-size:${isMobile?'.85rem':((G.wafaTiers||[]).length===4?'.95rem':((G.wafaPerSub||2)===3?'1rem':'1.15rem'))}; }
+    .wafa-cells .qcell.elite{ background:linear-gradient(140deg,#3A2B10,#151007); border-color:#B8924A; position:relative; }
+    .wafa-cells .qcell.elite .qpts{ color:#EAD9B0; }
+    .wafa-cells .qcell.elite::after{ content:'★'; position:absolute; top:2px; left:6px; font-size:.55rem; color:#B8924A; }
     .wafa-center{ width:${stacked?'100%':centerW+'px'}; flex-shrink:0;
       display:flex; flex-direction:${stacked?'row':'column'}; align-items:center;
       justify-content:${stacked?'center':'flex-start'}; padding-top:${stacked?0:topShift}px; gap:${gap}px;
@@ -4301,12 +4309,18 @@ function buildWafaBoard(wrap){
       box-shadow:0 0 0 3px #8A1538, 0 12px 34px rgba(61,9,24,.4);
       display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .wafa-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .wafa-name .wn1{ font-size:${isMobile?'1.05rem':'1.35rem'}; line-height:1.5; }
+    .wafa-name .wn1{ font-size:${isMobile?'1.02rem':'clamp(1rem, 1.55vw, 1.35rem)'}; line-height:1.5; white-space:nowrap; }
+    .wafa-name{ max-width:100%; box-sizing:border-box; overflow:hidden; }
     .wafa-name .wn2{ font-size:${isMobile?'.75rem':'clamp(.82rem, 1.45vw, 1.05rem)'}; white-space:nowrap; line-height:1.7; }
     .wafa-name{ ${stacked?'flex:1;':''} background:linear-gradient(135deg,#3D0918,#5E0E26); border:2px solid #B8924A;
       color:#D4BC85; font-family:'Amiri','Cairo',serif; font-weight:700; text-align:center; line-height:1.6;
       padding:${isMobile?'6px 10px':'8px 16px'}; border-radius:12px; box-shadow:0 3px 0 #8A6D2E;
       font-size:${isMobile?'.85rem':'1.12rem'}; }
+    ${CC_ORN?`
+    .wafa-name{ position:relative; padding-inline:${isMobile?'22px':'28px'}; box-shadow:0 0 0 2px #8A1538, 0 3px 0 #8A6D2E; }
+    .wafa-name::before,.wafa-name::after{ content:'\u2756'; position:absolute; top:50%; transform:translateY(-50%); color:#B8924A; font-size:${isMobile?'.6rem':'.75rem'}; }
+    .wafa-name::before{ right:8px; } .wafa-name::after{ left:8px; }
+    .wafa-name .wn1{ font-weight:900; font-family:Cairo,sans-serif; }`:''}
   `;
 
   const outer=document.createElement('div'); outer.className='wafa-wrap';
@@ -4320,12 +4334,15 @@ function buildWafaBoard(wrap){
     const sub=CC_SUBS[si];
     const box=document.createElement('div'); box.className='wafa-cat';
     box.style.setProperty('--wc',sub.c); box.style.setProperty('--wbg',sub.bg);
-    const nm=document.createElement('div'); nm.className='wname'; nm.textContent=sub.label; box.appendChild(nm);
+    const nm=document.createElement('div'); nm.className='wname'; nm.textContent=sub.label;
+    if(sub.c2){ nm.style.background='linear-gradient(135deg,'+sub.c+','+sub.c2+')'; }
+    box.appendChild(nm);
     const cells=document.createElement('div'); cells.className='wafa-cells';
     // الأعمدة: 200/400/600 · والصفوف بعدد أسئلة المستوى (2 قياسياً، 3 في الوضع الموسع)
     const _per=G.wafaPerSub||2;
+    const _tiers=G.wafaTiers||['easy','med','hard'];
     const _order=[];
-    for(let k=0;k<_per;k++){ ['easy','med','hard'].forEach(diff=>_order.push([diff,k])); }
+    for(let k=0;k<_per;k++){ _tiers.forEach(diff=>_order.push([diff,k])); }
     _order.forEach(([diff,k])=>{
       const idx=si*_per+k;
       const q=(G.boardData[cat] && G.boardData[cat][diff] && G.boardData[cat][diff][idx])||null;
