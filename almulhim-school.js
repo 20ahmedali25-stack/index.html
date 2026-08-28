@@ -4,7 +4,7 @@
 // ═══ مسارح الحصص: تُفتح من خانة الدرس · زر «العرض» للمعلم على شاشة الفصل ═══
 // المفتاح: معرف الدرس أو عنوانه كما في بيانات المنهج · القيمة: مسار الملف على الاستضافة
 window.HH_STAGE_FILES = window.HH_STAGE_FILES || {
-  'عناصر المناخ': 'مسرح-الحصة/عناصر-المناخ.html'
+  'عناصر المناخ': 'stage/climate.html'
 };
 // ═══ ملفات الدرس: رفع صور الكتاب من داخل الدرس · تندمج فوراً في العرض والرحلة ═══
 function _hhLmRole(){
@@ -207,7 +207,7 @@ window.hhOpenStage=function(ui,li){
     (async function(){ try{ if(L.id){ var fresh=await _hhLmFetch(L.id); var pay=JSON.parse(localStorage.getItem('hh_stage_payload')||'{}'); pay.images=((L.images||[]).map(function(im){return {url:im.url,caption:im.caption||''};})).concat(fresh.map(function(x){return {url:x.url,caption:x.caption};})); pay.at=Date.now(); localStorage.setItem('hh_stage_payload', JSON.stringify(pay)); } }catch(e){} })();
     if(!f || _hhSchRole!=='teacher'){
       var lid=encodeURIComponent(L.id||('u'+ui+'l'+li));
-      var w0=window.open('مسرح-الحصة/قالب-العرض.html?lid='+lid+(_hhSchRole==='teacher'?'':'&view=1'),'_blank');
+      var w0=window.open('stage/template.html?lid='+lid+(_hhSchRole==='teacher'?'':'&view=1'),'_blank');
       if(!w0 && typeof toast==='function') toast('اسمح بالنوافذ المنبثقة لفتح العرض التقديمي','warn');
       try{ if(typeof hhLogActivity==='function') hhLogActivity('stage','العرض التقديمي: '+L.title); }catch(e){}
       return;
