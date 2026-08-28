@@ -6,6 +6,85 @@
 window.HH_STAGE_FILES = window.HH_STAGE_FILES || {
   'عناصر المناخ': 'مسرح-الحصة/عناصر-المناخ.html'
 };
+// ═══ ملفات الدرس: رفع صور الكتاب من داخل الدرس · تندمج فوراً في العرض والرحلة ═══
+function _hhLmRole(){
+  try{ if(typeof isAdminUser==='function' && typeof currentUser!=='undefined' && isAdminUser(currentUser)) return 'admin'; }catch(e){}
+  return (typeof currentUser!=='undefined' && currentUser) ? 'teacher' : null;
+}
+async function _hhLmFetch(lid){
+  var out=[];
+  try{
+    var col=firebase.firestore().collection('lesson_media');
+    var ids=[lid]; try{ if(typeof currentUser!=='undefined'&&currentUser) ids.push(lid+'__'+currentUser.uid); }catch(e){}
+    var rs=await Promise.all(ids.map(function(id){ return col.doc(id).get().catch(function(){return null;}); }));
+    rs.forEach(function(d){ if(d&&d.exists){ (d.data().images||[]).forEach(function(im,k){ out.push({url:im.url, caption:im.caption||'', _doc:d.id, _k:k}); }); } });
+  }catch(e){}
+  try{ localStorage.setItem('hh_li_'+lid, JSON.stringify(out.map(function(x){return {url:x.url, caption:x.caption};}))); }catch(e){}
+  return out;
+}
+window.hhLessonFiles=async function(ui,li){
+  var S=hhSchData(); var L=S.units[ui].lessons[li]; var lid=L.id||('u'+ui+'l'+li);
+  var role=_hhLmRole(); if(!role){ if(typeof toast==='function') toast('سجل دخولك أولاً','warn'); return; }
+  var ov=document.createElement('div');
+  ov.id='hh-lf-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px;';
+  ov.innerHTML='<div style="background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:18px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:16px;font-family:Cairo,sans-serif;" onclick="event.stopPropagation()">'
+    +'<div style="display:flex;align-items:center;gap:8px;"><b style="color:#5E0E26;font-size:1rem;flex:1;">ملفات الدرس · '+esc(L.title)+'</b><button onclick="document.getElementById(\'hh-lf-ov\').remove()" style="background:#fff;border:1.5px solid #B8924A;border-radius:9px;width:30px;height:30px;color:#8A1538;font-weight:900;cursor:pointer;">×</button></div>'
+    +'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;margin:2px 0 10px;">'+(role==='admin'?'المشرف · تظهر للجميع':'المعلم · تظهر لصفوفك (يتطلب اعتماد المعلم)')+' · تندمج فوراً في العرض التقديمي ورحلة الطالب</div>'
+    +'<label id="hh-lf-drop" style="display:block;border:2.5px dashed #B8924A;border-radius:14px;padding:20px;text-align:center;background:rgba(184,146,74,.05);font-weight:800;color:#8A6D2E;font-size:.85rem;cursor:pointer;"><b style="display:block;color:#5E0E26;font-size:.95rem;margin-bottom:2px;">اسحب الصور هنا أو انقر للاختيار</b>صور من الكتاب JPG / PNG · تُضغط تلقائياً<input id="hh-lf-inp" type="file" accept="image/*" multiple style="display:none;"></label>'
+    +'<div id="hh-lf-st" style="font-size:.75rem;font-weight:800;color:#3D6B53;min-height:18px;margin-top:6px;"></div>'
+    +'<div id="hh-lf-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px;"></div>'
+    +'</div>';
+  ov.onclick=function(){ ov.remove(); };
+  document.body.appendChild(ov);
+  function st(m,err){ var e=document.getElementById('hh-lf-st'); if(e){ e.textContent=m; e.style.color=err?'#8A1538':'#3D6B53'; } }
+  async function grid(){
+    var g=document.getElementById('hh-lf-grid'); if(!g) return;
+    g.innerHTML='<div style="grid-column:1/-1;text-align:center;color:#8A7A63;font-weight:800;font-size:.8rem;padding:8px;">جارٍ التحميل…</div>';
+    var imgs=await _hhLmFetch(lid);
+    g.innerHTML=imgs.length? imgs.map(function(im){
+      return '<div style="background:#fff;border:1.5px solid #D9C79E;border-radius:12px;padding:6px;position:relative;">'
+        +'<img src="'+esc(im.url)+'" alt="" style="width:100%;height:88px;object-fit:cover;border-radius:8px;display:block;">'
+        +'<div style="font-size:.62rem;font-weight:800;color:#3D6B53;margin-top:4px;">✓ شريحة في العرض · محطة في الرحلة</div>'
+        +'<button data-doc="'+esc(im._doc)+'" data-k="'+im._k+'" class="hh-lf-del" style="position:absolute;top:4px;left:4px;background:#fff;border:1px solid #8A1538;color:#8A1538;border-radius:7px;width:22px;height:22px;font-weight:900;cursor:pointer;">×</button>'
+        +'</div>';
+    }).join('') : '<div style="grid-column:1/-1;text-align:center;color:#8A7A63;font-weight:800;font-size:.8rem;padding:8px;">لا صور بعد · ارفع أول صورة من الكتاب</div>';
+    g.querySelectorAll('.hh-lf-del').forEach(function(b){ b.onclick=async function(){
+      if(!confirm('حذف الصورة من العرض والرحلة؟')) return;
+      try{
+        var ref=firebase.firestore().collection('lesson_media').doc(b.getAttribute('data-doc'));
+        var d=await ref.get(); var arr=(d.exists&&d.data().images)||[]; arr.splice(+b.getAttribute('data-k'),1);
+        await ref.set({lessonId:lid, images:arr, updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+        st('حُذفت الصورة'); grid(); try{ hhSchRender(); }catch(e){}
+      }catch(e){ st('تعذر الحذف: '+e.message, true); }
+    }; });
+  }
+  async function upload(files){
+    var role2=_hhLmRole(); var docId = role2==='admin' ? lid : lid+'__'+currentUser.uid;
+    var list=[].slice.call(files||[]).filter(function(f){ return /^image\//.test(f.type); });
+    if(!list.length){ st('اختر صوراً فقط (JPG/PNG)', true); return; }
+    for(var n=0;n<list.length;n++){
+      st('جارٍ رفع '+(n+1)+' من '+list.length+'…');
+      var b64=await new Promise(function(res){ var r=new FileReader(); r.onload=function(){
+        var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); var sc=Math.min(1,1200/img.width); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',.8)); }; img.src=r.result; }; r.readAsDataURL(list[n]); });
+      var url=null; try{ if(typeof hhUploadQImageToStorage==='function') url=await hhUploadQImageToStorage(b64); }catch(e){}
+      if(!url){ url=b64; if(url.length>700000){ st('صورة كبيرة والتخزين غير متاح · صغّرها', true); continue; } }
+      try{
+        var ref=firebase.firestore().collection('lesson_media').doc(docId);
+        var d=await ref.get(); var arr=(d.exists&&d.data().images)||[]; arr.push({url:url, caption:'', questions:[]});
+        await ref.set({lessonId:lid, images:arr, updatedAt:firebase.firestore.FieldValue.serverTimestamp(), by:currentUser.uid, role:role2},{merge:true});
+      }catch(e){ st('تعذر الحفظ: '+e.message+(role2!=='admin'?' · قد يتطلب اعتماد المعلم':''), true); return; }
+    }
+    st('اكتمل الرفع · الصور الآن في العرض والرحلة'); grid(); try{ hhSchRender(); }catch(e){}
+  }
+  var inp=document.getElementById('hh-lf-inp'); inp.onchange=function(){ upload(inp.files); inp.value=''; };
+  var dz=document.getElementById('hh-lf-drop');
+  dz.ondragover=function(e){ e.preventDefault(); dz.style.background='rgba(184,146,74,.15)'; };
+  dz.ondragleave=function(){ dz.style.background='rgba(184,146,74,.05)'; };
+  dz.ondrop=function(e){ e.preventDefault(); dz.style.background='rgba(184,146,74,.05)'; upload(e.dataTransfer.files); };
+  grid();
+};
+
 // ═══ العرض التقديمي التلقائي: يُولَّد من بيانات الدرس نفسها ويفتح في تبويب ═══
 window.hhAutoStage=function(ui,li){
   try{
@@ -114,8 +193,25 @@ function hhStageFor(L){
 }
 window.hhOpenStage=function(ui,li){
   try{
-    var S=hhSchData(); var L=S.units[ui].lessons[li]; var f=hhStageFor(L);
-    if(!f || _hhSchRole!=='teacher'){ hhAutoStage(ui,li); return; }
+    var S=hhSchData(); var U=S.units[ui]; var L=U.lessons[li]; var f=hhStageFor(L);
+    // حمولة الدرس لقالب العرض المعتمد
+    try{
+      localStorage.setItem('hh_stage_payload', JSON.stringify({
+        id:L.id||('u'+ui+'l'+li), title:L.title||'', unit:U.unit||'', lesson:L.lesson||'',
+        term:(S.term||''), text:L.text||'', summary:L.summary||[], terms:L.terms||[],
+        vals:L.vals||[], q:(L.q||[]).map(function(q){return {q:q.q,o:q.o||[],a:q.a,d:q.d||q.diff||'easy',why:q.why||''};}),
+        images:(function(){ var arr=(L.images||[]).map(function(im){return {url:im.url,caption:im.caption||''};}); try{ arr=arr.concat(JSON.parse(localStorage.getItem('hh_li_'+(L.id||''))||'[]')); }catch(e){} return arr; })(),
+        at:Date.now()
+      }));
+    }catch(e){}
+    (async function(){ try{ if(L.id){ var fresh=await _hhLmFetch(L.id); var pay=JSON.parse(localStorage.getItem('hh_stage_payload')||'{}'); pay.images=((L.images||[]).map(function(im){return {url:im.url,caption:im.caption||''};})).concat(fresh.map(function(x){return {url:x.url,caption:x.caption};})); pay.at=Date.now(); localStorage.setItem('hh_stage_payload', JSON.stringify(pay)); } }catch(e){} })();
+    if(!f || _hhSchRole!=='teacher'){
+      var lid=encodeURIComponent(L.id||('u'+ui+'l'+li));
+      var w0=window.open('مسرح-الحصة/قالب-العرض.html?lid='+lid+(_hhSchRole==='teacher'?'':'&view=1'),'_blank');
+      if(!w0 && typeof toast==='function') toast('اسمح بالنوافذ المنبثقة لفتح العرض التقديمي','warn');
+      try{ if(typeof hhLogActivity==='function') hhLogActivity('stage','العرض التقديمي: '+L.title); }catch(e){}
+      return;
+    }
     var code=''; try{ code=localStorage.getItem('hh_current_class')||''; }catch(e){}
     // أسماء الصف تلقائياً: من صف المعلم الحالي (أو صفه الوحيد) إلى ذاكرة المسرح المشتركة
     (async function(){
@@ -127,7 +223,7 @@ window.hhOpenStage=function(ui,li){
           if(cls.length===1 && cls[0].code) code=cls[0].code;
         }
         if(!code) return;
-        var qs=await db2.collection('classroom_students').where('classCode','==',code).where('active','==',true).get();
+        var qs=await db2.collection('classroom_students').where('teacherId','==',currentUser.uid).where('classCode','==',code).where('active','==',true).get();
         var names=qs.docs.map(function(d){ return ((d.data()||{}).studentName||'').trim(); }).filter(Boolean);
         if(!names.length) return;
         localStorage.setItem('hh_stage_roster', JSON.stringify({name:code, roster:names, team:{}, auto:true, at:Date.now()}));
@@ -545,6 +641,7 @@ function hhOpenSchool(){
             + '<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="'+GBTN+'">ملخص الدرس</button>'
             + '<button onclick="hhSchLesson('+i+','+j+',&quot;terms&quot;)" style="'+GBTN+'">المصطلحات والمفاهيم</button>'
             + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="'+GBTN+'">المادة</button>'
+            + (_hhSchRole==='teacher' ? '<button onclick="hhLessonFiles('+i+','+j+')" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:8px;padding:4px 11px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;position:relative;">ملفات الدرس'+(function(){var n=0;try{n=(JSON.parse(localStorage.getItem('hh_li_'+L.id)||'[]')).length;}catch(e){} return n?'<span style="position:absolute;top:-7px;left:-7px;background:#8A1538;color:#fff;border-radius:50%;min-width:16px;height:16px;font-size:.58rem;display:flex;align-items:center;justify-content:center;border:1.5px solid #FFFDF8;padding:0 3px;">'+n+'</span>':'';})()+'</button>' : '')
             + '</div>'
             + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px;">'
             + '<span style="font-size:.62rem;font-weight:900;color:#3D6B53;background:#EBF2EE;border:1px solid #3D6B53;border-radius:99px;padding:2px 9px;">الاختبارات</span>'
@@ -1143,7 +1240,7 @@ function hhClsShowCode(code){
   ov.innerHTML='<div class="hh-cls-big-in"><div class="hh-cls-big-t">'+esc(c.className||'')+'</div><div class="hh-cls-big-l">رمز الانضمام</div><div class="hh-cls-big-code" dir="ltr">'+esc(code)+'</div><div class="hh-cls-big-h">المدرسة ← صفي ← أدخل الرمز</div><div class="hh-cls-big-n" id="hh-cls-big-n"></div><button type="button" class="hh-campus-btn-gold" onclick="document.getElementById(\'hh-cls-big\').remove()">إغلاق</button></div>';
   document.body.appendChild(ov);
   try{ // عدّاد المنضمين الحي
-    var un=_hhClsDb().collection('classroom_students').where('classCode','==',code).where('active','==',true).onSnapshot(function(qs){ var joined=0; qs.forEach(function(d){ if(d.data().userId) joined++; }); var n=document.getElementById('hh-cls-big-n'); if(n) n.textContent=joined+' انضموا حتى الآن'; else un(); });
+    var un=_hhClsDb().collection('classroom_students').where('teacherId','==',currentUser.uid).where('classCode','==',code).where('active','==',true).onSnapshot(function(qs){ var joined=0; qs.forEach(function(d){ if(d.data().userId) joined++; }); var n=document.getElementById('hh-cls-big-n'); if(n) n.textContent=joined+' انضموا حتى الآن'; else un(); });
   }catch(e){}
 }
 function hhClsStartSession(code){
@@ -1167,7 +1264,7 @@ async function hhClsLoadStudents(code){
   var f=document.getElementById('hh-cls-fold-'+code); if(!f) return;
   f.innerHTML='<div class="hh-campus-sub">جارٍ تحميل الطلاب…</div>';
   try{
-    var qs=await _hhClsDb().collection('classroom_students').where('classCode','==',code).where('active','==',true).get();
+    var qs=await _hhClsDb().collection('classroom_students').where('teacherId','==',currentUser.uid).where('classCode','==',code).where('active','==',true).get();
     var list=[]; qs.forEach(function(d){ var s=d.data(); s._id=d.id; list.push(s); });
     list.sort(function(a,b){ return String(a.studentName||'').localeCompare(String(b.studentName||''),'ar'); });
     _hhCls.students[code]=list; hhClsRenderStudents(code);
