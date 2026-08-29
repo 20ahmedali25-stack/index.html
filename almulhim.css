@@ -10097,3 +10097,9 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 /* حزمة وضوح الطالب: حقل البحث */
 #main-nav .nav-search-input{ font-size:.75rem !important; }
 #main-nav .nav-search-input::placeholder{ font-size:.72rem !important; }
+
+/* بطاقة الدرس الفاخرة · تجاوب الجوال */
+@media(max-width:640px){
+  .hh-lcard-bd{grid-template-columns:1fr !important;}
+  .hh-lcard-bd > div:last-child{border-right:none !important;border-top:1.5px solid #EDE3CE;}
+}
