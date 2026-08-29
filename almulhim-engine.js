@@ -6211,6 +6211,7 @@ var HH_QUICK_MAP = [
   ]},
   { g:'الواجهة والمحتوى العام', c:'#8A6D2E', items:[
     ['landing','الصفحة الرئيسية','نصوص وأقسام الواجهة','M12 3l9 8h-3v9h-4v-6H10v6H6v-9H3l9-8z'],
+    ['textedit','محرّر النصوص','عدّل نصوص المدرسة والبرنامج','M12 20h9M16.5 3.5a2 2 0 013 3L7 19l-4 1 1-4z'],
     ['announcements','الإعلانات','رسائل للمستخدمين','M18 11v2h4v-2h-4zm-2 6.6c.96.7 2.2 1.6 3.2 2.4l1.2-1.6c-1-.8-2.3-1.7-3.2-2.4l-1.2 1.6zM20.4 5.6L19.2 4c-1 .8-2.2 1.7-3.2 2.4l1.2 1.6c1-.7 2.2-1.6 3.2-2.4zM4 9a2 2 0 00-2 2v2a2 2 0 002 2h1v4h2v-4h1l5 3V6L8 9H4z'],
     ['whatsnew','ماذا الجديد','تحديثات المنصة','M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21 8 13.8 2 9.4h7.6z'],
     ['sponsors','الشركاء','الرعاة والشركاء','M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'],
@@ -6245,6 +6246,7 @@ function mcRenderQuickGrid(){
 
 function mcQuickGo(tab){
   try{
+    if(tab==='textedit'){ if(typeof hhOpenTextEditor==='function'){ hhOpenTextEditor(); } else if(typeof toast==='function'){ toast('المحرّر غير متاح','error'); } return; }
     adminTab(tab);
     // إبراز التبويب في الشريط الجانبي
     var btn=document.querySelector('.mc-item[data-tab="'+tab+'"]');

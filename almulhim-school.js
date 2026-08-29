@@ -577,9 +577,134 @@ var _hhSchRole = 'student';   // student | teacher
 
 // ═══ دعم الفصلين: الفصل الثاني (الافتراضي) والفصل الأول ═══
 var _hhSchTerm = 't2';
-function hhSchData(){
+
+// ═══ محرّر النصوص الشامل (لوحة التحكم) ═══
+window.hhOpenTextEditor=async function(){
+  await _hhLoadTextOverrides();
+  var ov=document.createElement('div'); ov.id='hh-txed';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.8);z-index:99995;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;padding:16px;';
+  var termBtns='<button class="hh-txe-term" data-t="t2">الفصل الثاني</button><button class="hh-txe-term" data-t="t1">الفصل الأول</button>';
+  ov.innerHTML='<div style="max-width:820px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:18px;overflow:hidden;">'
+    +'<div style="background:linear-gradient(120deg,#4A0B1E,#5E0E26);padding:13px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;">'
+    +  '<div style="flex:1;"><b style="color:#F5E6C4;font-size:1.05rem;">محرّر النصوص الشامل</b><div style="color:#D4BC85;font-size:.68rem;">عدّل أي نص · يُحفظ فوق الأصل · الأصل يبقى سالماً · تُرجعه بنقرة</div></div>'
+    +  '<button onclick="document.getElementById(\'hh-txed\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;font-weight:900;cursor:pointer;">×</button>'
+    +'</div>'
+    +'<div style="padding:12px 16px;">'
+    +  '<div style="display:flex;gap:7px;margin-bottom:10px;" id="hh-txe-terms">'+termBtns+'</div>'
+    +  '<input id="hh-txe-search" placeholder="ابحث عن نص… (عنوان، كلمة من الشرح، مصطلح)" style="width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:10px 13px;font-family:Cairo;font-size:.85rem;background:#fff;color:#5E0E26;margin-bottom:12px;box-sizing:border-box;">'
+    +  '<div id="hh-txe-list"></div>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+  var css=document.createElement('style'); css.textContent='.hh-txe-term{border:1.5px solid #B8924A;background:#fff;color:#8A6D2E;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:800;font-size:.75rem;cursor:pointer;}.hh-txe-term.on{background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;}'; ov.appendChild(css);
+  var curTerm=_hhSchTerm||'t2';
+  function renderList(filter){
+    var prevTerm=_hhSchTerm; _hhSchTerm=curTerm;
+    var S=_hhRawSchData(); _hhSchTerm=prevTerm;
+    var scope='sch_'+curTerm;
+    var html='';
+    if(!S||!S.units){ document.getElementById('hh-txe-list').innerHTML='<div style="text-align:center;color:#8A7A63;padding:20px;font-weight:700;">لا بيانات لهذا الفصل</div>'; return; }
+    var f=(filter||'').trim();
+    S.units.forEach(function(U,ui){
+      // حقول قابلة للتعديل لكل درس
+      U.lessons.forEach(function(L,li){
+        var base=scope+'.units.'+ui+'.lessons.'+li;
+        var fields=[];
+        if(L.title!=null) fields.push({k:base+'.title',lb:'العنوان',v:L.title});
+        if(L.lesson!=null) fields.push({k:base+'.lesson',lb:'اسم الدرس',v:L.lesson});
+        if(L.text!=null) fields.push({k:base+'.text',lb:'التمهيد',v:L.text});
+        (L.summary||[]).forEach(function(pt,pi){ fields.push({k:base+'.summary.'+pi,lb:'الملخص '+(pi+1),v:pt}); });
+        (L.terms||[]).forEach(function(t,ti){ if(t[0]!=null)fields.push({k:base+'.terms.'+ti+'.0',lb:'مصطلح '+(ti+1),v:t[0]}); if(t[1]!=null)fields.push({k:base+'.terms.'+ti+'.1',lb:'تعريف '+(ti+1),v:t[1]}); });
+        (L.vals||[]).forEach(function(v,vi){ fields.push({k:base+'.vals.'+vi,lb:'قيمة '+(vi+1),v:v}); });
+        (L.q||[]).forEach(function(q,qi){ if(q.q!=null)fields.push({k:base+'.q.'+qi+'.q',lb:'سؤال '+(qi+1),v:q.q}); if(q.a!=null)fields.push({k:base+'.q.'+qi+'.a',lb:'إجابة '+(qi+1),v:q.a}); if(q.why!=null)fields.push({k:base+'.q.'+qi+'.why',lb:'تفسير '+(qi+1),v:q.why}); (q.o||[]).forEach(function(o,oi){ fields.push({k:base+'.q.'+qi+'.o.'+oi,lb:'خيار '+(qi+1)+'-'+(oi+1),v:o}); }); });
+        // فلترة
+        var shown=fields.filter(function(fl){ var cur=_HH_TXT_OVR[fl.k]!=null?_HH_TXT_OVR[fl.k]:fl.v; return !f || String(cur).indexOf(f)!==-1 || fl.lb.indexOf(f)!==-1 || String(L.title||'').indexOf(f)!==-1; });
+        if(!shown.length) return;
+        html+='<div style="margin-bottom:14px;"><div style="font-weight:900;color:#5E0E26;font-size:.85rem;margin-bottom:8px;padding:6px 12px;background:linear-gradient(120deg,#4A0B1E,#5E0E26);color:#F5E6C4;border-radius:9px;">'+esc(U.unit||('الوحدة '+(ui+1)))+' · '+esc(L.title||('الدرس '+(li+1)))+'</div>';
+        shown.forEach(function(fl){
+          var edited=_HH_TXT_OVR[fl.k]!=null;
+          var cur=edited?_HH_TXT_OVR[fl.k]:fl.v;
+          var isLong=String(cur).length>60;
+          html+='<div class="hh-txe-item" data-k="'+esc(fl.k)+'" style="border:1.5px solid '+(edited?'#3D6B53':'#EDE3CE')+';border-radius:11px;padding:9px 11px;margin-bottom:7px;background:'+(edited?'linear-gradient(180deg,#fff,#F3F8F5)':'#fff')+';">'
+            +'<div style="font-size:.64rem;font-weight:900;color:#B8924A;margin-bottom:5px;">'+esc(fl.lb)+(edited?' <span style="color:#3D6B53;">· معدّل ✓</span>':'')+'</div>'
+            +(isLong?'<textarea class="hh-txe-in" style="width:100%;min-height:60px;border:1.5px solid #B8924A;border-radius:8px;padding:7px 9px;font-family:Cairo;font-size:.82rem;color:#3D0918;background:#FDFAF3;box-sizing:border-box;resize:vertical;">'+esc(cur)+'</textarea>':'<input class="hh-txe-in" value="'+esc(cur)+'" style="width:100%;border:1.5px solid #B8924A;border-radius:8px;padding:8px 10px;font-family:Cairo;font-size:.85rem;font-weight:700;color:#3D0918;background:#FDFAF3;box-sizing:border-box;">')
+            +'<div style="display:flex;gap:6px;margin-top:6px;"><button class="hh-txe-save" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حفظ</button>'
+            +(edited?'<button class="hh-txe-rst" style="background:#fff;border:1.5px solid #B8924A;color:#8A6D2E;border-radius:8px;padding:6px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استرجاع الأصل</button>':'')
+            +'<span class="hh-txe-msg" style="font-size:.68rem;font-weight:800;color:#3D6B53;align-self:center;"></span></div>'
+            +'</div>';
+        });
+        html+='</div>';
+      });
+    });
+    document.getElementById('hh-txe-list').innerHTML=html||'<div style="text-align:center;color:#8A7A63;padding:20px;font-weight:700;">لا نتائج</div>';
+    // ربط الأزرار
+    document.querySelectorAll('#hh-txe-list .hh-txe-item').forEach(function(it){
+      var key=it.getAttribute('data-k');
+      var inp=it.querySelector('.hh-txe-in'); var msg=it.querySelector('.hh-txe-msg');
+      it.querySelector('.hh-txe-save').onclick=async function(){ msg.textContent='جارٍ الحفظ…'; var ok=await _hhSaveTextOverride(key, inp.value); msg.textContent=ok?'حُفظ ✓':'حُفظ محلياً'; try{ hhSchRender(); }catch(e){} setTimeout(function(){ renderList(document.getElementById('hh-txe-search').value); },400); };
+      var r=it.querySelector('.hh-txe-rst'); if(r) r.onclick=async function(){ if(!confirm('استرجاع النص الأصلي؟'))return; await _hhResetTextOverride(key); try{ hhSchRender(); }catch(e){} renderList(document.getElementById('hh-txe-search').value); };
+    });
+  }
+  document.querySelectorAll('#hh-txe-terms .hh-txe-term').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-t')===curTerm); b.onclick=function(){ curTerm=b.getAttribute('data-t'); document.querySelectorAll('#hh-txe-terms .hh-txe-term').forEach(function(x){x.classList.toggle('on',x===b);}); renderList(document.getElementById('hh-txe-search').value); }; });
+  document.getElementById('hh-txe-search').oninput=function(){ renderList(this.value); };
+  renderList('');
+};
+
+var _HH_TXT_OVR = {};      // { 'path.to.field': 'النص المصحح' }
+var _HH_TXT_OVR_LOADED = false;
+function _hhTxtKey(){ return 'sch_'+(_hhSchTerm||'t2'); }
+// يطبّق التصحيحات على نسخة من بيانات المدرسة دون المساس بالأصل
+function _hhApplyTextOverrides(S){
+  if(!S || !_HH_TXT_OVR || !Object.keys(_HH_TXT_OVR).length) return S;
+  try{
+    var clone = JSON.parse(JSON.stringify(S));
+    var scope = _hhTxtKey();
+    Object.keys(_HH_TXT_OVR).forEach(function(k){
+      if(k.indexOf(scope+'.')!==0) return;
+      var path = k.slice(scope.length+1).split('.');
+      var node = clone, i;
+      for(i=0;i<path.length-1;i++){ if(node==null) return; node = node[path[i]]; }
+      if(node!=null && path[path.length-1] in node) node[path[path.length-1]] = _HH_TXT_OVR[k];
+    });
+    return clone;
+  }catch(e){ return S; }
+}
+function _hhRawSchData(){
   return (_hhSchTerm === 't1' && window._HH_SCHOOL_T1) ? window._HH_SCHOOL_T1 : window._HH_SCHOOL;
 }
+function hhSchData(){
+  return _hhApplyTextOverrides(_hhRawSchData());
+}
+// تحميل التصحيحات من السحابة مرة واحدة
+async function _hhLoadTextOverrides(){
+  if(_HH_TXT_OVR_LOADED) return;
+  try{
+    var d = await firebase.firestore().collection('platform_settings').doc('text_overrides').get();
+    if(d.exists){ _HH_TXT_OVR = d.data().map || {}; }
+    _HH_TXT_OVR_LOADED = true;
+    try{ localStorage.setItem('hh_txt_ovr', JSON.stringify(_HH_TXT_OVR)); }catch(e){}
+  }catch(e){
+    try{ _HH_TXT_OVR = JSON.parse(localStorage.getItem('hh_txt_ovr')||'{}'); }catch(e2){}
+  }
+}
+async function _hhSaveTextOverride(fullKey, val){
+  _HH_TXT_OVR[fullKey] = val;
+  try{ localStorage.setItem('hh_txt_ovr', JSON.stringify(_HH_TXT_OVR)); }catch(e){}
+  try{
+    await firebase.firestore().collection('platform_settings').doc('text_overrides')
+      .set({ map: _HH_TXT_OVR, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, {merge:true});
+    return true;
+  }catch(e){ return false; }
+}
+async function _hhResetTextOverride(fullKey){
+  delete _HH_TXT_OVR[fullKey];
+  try{ localStorage.setItem('hh_txt_ovr', JSON.stringify(_HH_TXT_OVR)); }catch(e){}
+  try{
+    var upd={}; upd['map.'+fullKey]=firebase.firestore.FieldValue.delete();
+    await firebase.firestore().collection('platform_settings').doc('text_overrides').update(upd);
+    return true;
+  }catch(e){ return false; }
+}
+try{ _hhLoadTextOverrides(); }catch(e){}
 function hhSchSetTerm(t){
   _hhSchTerm = (t === 't1' && window._HH_SCHOOL_T1) ? 't1' : 't2';
   hhSchLoad();
@@ -854,8 +979,7 @@ function hhCampusRole(){
 // مصفوفة البوابات: lock = تظهر للمعلم غير المعتمد مقفلة (عرض فقط + طلب الاعتماد)
 var _HH_CAMPUS_NAV_ALL = [
   {id:'home',        t:'الرئيسة',            grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
-  {id:'school',      t:'المنهج · مدرستي',    grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
-  {id:'quiz',        t:'الاختبارات والقصص',  grp:'المدرسة', ico:'lab',   roles:['student','teacher','approved']},
+  {id:'school',      t:'المنهج والاختبارات', grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
   {id:'lessons',     t:'دروسي الخاصة',       grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
   {id:'myclass',     t:'صفي',                grp:'أنا',     ico:'users', roles:['student']},
   {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
@@ -981,7 +1105,7 @@ function hhSchoolHub(){
 }
 
 function hhCampusSetNav(dest){
-  var crumb={home:'',school:' · المنهج',quiz:' · الاختبارات والقصص',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
+  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
   document.querySelectorAll('#hh-campus-side .hh-campus-nav').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-dest')===dest); });
   var c=document.getElementById('hh-campus-crumb'); if(c) c.textContent=crumb[dest]||'';
   var home=document.getElementById('hh-campus-home'), cls=document.getElementById('hh-campus-classes-pane'), mount=document.getElementById('hh-campus-mount'), note=document.getElementById('hh-campus-notice');
