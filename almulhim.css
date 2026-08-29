@@ -8570,17 +8570,28 @@ body.dark-mode .ms-search-input::placeholder{color:#9B8B6E;}
 .ms-group-header{
   grid-column:1/-1;
   display:flex;align-items:center;gap:10px;
-  padding:8px 12px;margin:4px 0 3px;
-  background:linear-gradient(135deg,#FAFAF8 0%,#F8F8F6 100%);
-  border-right:3px solid var(--mgh-accent,#B8924A);
-  border-radius:8px;
+  padding:7px 14px;margin:10px 0 5px;
+  background:linear-gradient(120deg,#4A0B1E,#5E0E26);
+  border:none;
+  border-radius:11px;
   font-family:'Cairo',sans-serif;
   cursor:pointer;
   user-select:none;
   transition:all .2s ease;
   position:relative;
-  min-height:42px;
+  overflow:hidden;
+  min-height:38px;
+  box-shadow:0 3px 10px rgba(94,14,38,.15);
 }
+.ms-group-header::after{
+  content:'';position:absolute;bottom:0;right:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--mgh-accent,#B8924A),transparent);
+}
+.ms-group-header .ms-group-header-title{color:#FFFDF8 !important;font-weight:900;}
+.ms-group-header .ms-group-header-sub{color:#D4BC85 !important;}
+.ms-group-header .ms-group-header-icon{filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg);opacity:.9;}
+.ms-group-header .ms-group-header-count{background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;color:#3D0918 !important;border:none !important;}
+.ms-group-header .ms-group-header-chevron{color:#EAD9B0;}
 .ms-group-header:hover{
   background:linear-gradient(135deg,#F8F8F6 0%,#fbf3da 100%);
   transform:translateX(-2px);
@@ -8704,9 +8715,11 @@ body.dark-mode .ms-search-input::placeholder{color:#9B8B6E;}
 /* ─── تحسين النصوص داخل البطاقات للحجم الصغير ─── */
 @media (min-width:900px){
   .ms-cat-grid .cat-btn .ci-lbl{
-    font-size:.66rem;
-    padding:7px 5px 6px;
-    min-height:28px;
+    font-size:.7rem;
+    padding:8px 5px 7px;
+    min-height:30px;
+    background:linear-gradient(180deg,transparent,rgba(0,0,0,.35));
+    font-weight:800;
   }
   .ms-cat-qcount{
     font-size:.58rem;
@@ -10103,3 +10116,12 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
   .hh-lcard-bd{grid-template-columns:1fr !important;}
   .hh-lcard-bd > div:last-child{border-right:none !important;border-top:1.5px solid #EDE3CE;}
 }
+
+/* ═══ البطاقة السينمائية: وميض وشريط أفلام (الخيار أ) ═══ */
+@keyframes hhSheen{0%,55%{left:-45%}100%{left:135%}}
+.hh-sheen{position:absolute;top:-60%;left:-45%;width:75%;height:220%;background:linear-gradient(90deg,transparent,rgba(255,253,248,.13),transparent);transform:rotate(18deg);animation:hhSheen 3.6s ease-in-out infinite;pointer-events:none;z-index:1;}
+.hh-stage-cta:hover,.hh-mtile:hover{transform:translateY(-2px);transition:transform .15s;}
+.hh-stage-cta{transition:transform .15s;}
+.hh-mtile{transition:transform .15s;}
+.hh-film{width:13px;height:5px;border-radius:2px;background:rgba(212,188,133,.3);}
+.hh-film.on{background:#EAD9B0;}

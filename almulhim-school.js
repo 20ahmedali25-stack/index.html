@@ -758,8 +758,18 @@ function hhOpenSchool(){
     var badge = st==='done' ? 'أُتقنت '+mastery+'%' : st==='open' ? 'متاحة الآن' : 'مقفلة';
     var lessons = U.lessons.map(function(L, j){
       var qc = (_hhSchProg[L.id+'_quick']||0), fc = (_hhSchProg[L.id+'_full']||0);
-      var CHIP='display:inline-flex;align-items:center;gap:5px;border:1.5px solid #E8DFC9;border-radius:11px;padding:7px 12px;font-family:Cairo;font-size:.78rem;font-weight:800;color:#3D0918;background:linear-gradient(180deg,#fff,#FBF6EC);cursor:pointer;';
-      var CHIPG='display:inline-flex;align-items:center;gap:5px;border:1.5px solid #B8924A;border-radius:11px;padding:7px 12px;font-family:Cairo;font-size:.78rem;font-weight:800;color:#3D0918;background:linear-gradient(160deg,#FBF0D8,#EAD9B0);cursor:pointer;';
+      // بلاطة سينمائية عنابية (الخيار أ)
+      function TILE(onclick, label, svgInner, gold){
+        var bg = gold ? 'linear-gradient(140deg,#EAD9B0,#B8924A)' : 'linear-gradient(140deg,#5E0E26,#3D0918)';
+        var ic = gold ? '#3D0918' : '#EAD9B0';
+        var tx = gold ? '#3D0918' : '#F5E6C4';
+        var iw = gold ? 'rgba(255,255,255,.4)' : 'rgba(212,188,133,.18)';
+        return '<button onclick="'+onclick+'" class="hh-mtile" style="position:relative;overflow:hidden;background:'+bg+';border:1.5px solid #B8924A;border-radius:13px;padding:11px 7px 9px;width:88px;cursor:pointer;font-family:Cairo;box-shadow:0 4px 12px rgba(94,14,38,.2);">'
+          +'<span class="hh-sheen"></span>'
+          +'<span style="position:relative;z-index:2;display:block;width:32px;height:32px;margin:0 auto 5px;border-radius:9px;background:'+iw+';border:1px solid rgba(212,188,133,.4);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="'+ic+'" stroke-width="2">'+svgInner+'</svg></span>'
+          +'<span style="position:relative;z-index:2;display:block;color:'+tx+';font-size:.72rem;font-weight:800;text-align:center;">'+label+'</span>'
+          +'</button>';
+      }
       var qCount=(L.q||[]).length;
       var imgCount=0; try{ imgCount=(L.images||[]).length + (JSON.parse(localStorage.getItem('hh_li_'+L.id)||'[]')).length; }catch(e){}
       var termCount=(L.terms||[]).length;
@@ -772,16 +782,16 @@ function hhOpenSchool(){
           + '</div>';
       }
       // خدمات المنهج
-      var man='<button onclick="hhJourneyOpen('+i+','+j+')" style="'+CHIP+'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2"><path d="M9 20l-5-2.5V5l5 2.5m0 12.5l6-3m-6 3V7.5"/></svg>الرحلة</button>';
-      if(hhStoryAvailable(L.id)) man+='<button onclick="hhStartStory(&quot;'+L.id+'&quot;)" style="'+CHIP+'">القصة</button>';
-      man+='<button onclick="hhSchLesson('+i+','+j+',&quot;summary&quot;)" style="'+CHIP+'">الملخص</button>'
-         + '<button onclick="hhSchLesson('+i+','+j+',&quot;terms&quot;)" style="'+CHIP+'">المصطلحات</button>'
-         + '<button onclick="hhSchLesson('+i+','+j+',&quot;material&quot;)" style="'+CHIP+'">المادة</button>';
-      if(_hhSchRole==='teacher') man+='<button onclick="hhLessonFiles('+i+','+j+')" style="'+CHIPG+'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8A6D2E" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9"/></svg>ملفات الدرس'+(imgCount?' ('+imgCount+')':'')+'</button>';
+      var man='';
+      if(hhStoryAvailable(L.id)) man+=TILE('hhStartStory(&quot;'+L.id+'&quot;)','القصة','<path d="M4 19.5A2.5 2.5 0 016.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/>',false);
+      man+=TILE('hhSchLesson('+i+','+j+',&quot;summary&quot;)','الملخص','<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',false)
+         + TILE('hhSchLesson('+i+','+j+',&quot;terms&quot;)','المصطلحات','<path d="M4 5h16M4 12h16M4 19h10"/>',false)
+         + TILE('hhSchLesson('+i+','+j+',&quot;material&quot;)','المادة','<path d="M12 6.5C10 4.5 7 4 4 5v14c3-1 6-.5 8 1.5 2-2 5-2.5 8-1.5V5c-3-1-6-.5-8 1.5z"/>',false);
+      if(_hhSchRole==='teacher') man+=TILE('hhLessonFiles('+i+','+j+')','ملفات الدرس'+(imgCount?' ('+imgCount+')':''),'<rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9"/>',true);
       // الاختبارات
-      var tst='<button onclick="hhSchTest('+i+','+j+',&quot;quick&quot;)" style="'+CHIP+'">مراجعة سريعة</button>'
-            + '<button onclick="hhSchTest('+i+','+j+',&quot;short&quot;)" style="'+CHIP+'">مختصر</button>'
-            + '<button onclick="hhSchTest('+i+','+j+',&quot;full&quot;)" style="'+CHIPG+'">الشامل</button>';
+      var tst=TILE('hhSchTest('+i+','+j+',&quot;quick&quot;)','مراجعة','<path d="M9 11l3 3 8-8M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>',false)
+            + TILE('hhSchTest('+i+','+j+',&quot;short&quot;)','مختصر','<path d="M9 11l3 3 8-8M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>',false)
+            + TILE('hhSchTest('+i+','+j+',&quot;full&quot;)','الشامل','<path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21 8 13.8 2 9.4h7.6z"/>',true);
       if(isLast) tst+='<button onclick="hhSchTest('+i+',0,&quot;mastery&quot;)" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:11px;padding:7px 12px;font-family:Cairo;font-size:.78rem;font-weight:900;cursor:pointer;">اختبار إتقان الوحدة</button>';
       return '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:18px;overflow:hidden;box-shadow:0 8px 26px rgba(94,14,38,.12);margin-bottom:14px;">'
         // الرأس
@@ -799,7 +809,7 @@ function hhOpenSchool(){
         +     '<div style="display:flex;gap:7px;flex-wrap:wrap;">'+tst+'</div>'
         +   '</div>'
         +   '<div style="background:linear-gradient(160deg,#FBF5E9,#F4EDDE);border-right:1.5px solid #EDE3CE;padding:14px;display:flex;flex-direction:column;gap:11px;">'
-        +     '<button onclick="hhOpenStage('+i+','+j+')" style="background:linear-gradient(120deg,#8A1538,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:14px;padding:13px;font-family:Cairo;font-weight:900;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 20px rgba(94,14,38,.28);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>ابدأ العرض التقديمي</button>'
+        +     '<button onclick="hhOpenStage('+i+','+j+')" class="hh-stage-cta" style="position:relative;overflow:hidden;background:linear-gradient(120deg,#3D0918,#5E0E26 55%,#7A1330);border:1.5px solid #B8924A;border-radius:15px;padding:0;cursor:pointer;font-family:Cairo;box-shadow:0 10px 24px rgba(94,14,38,.32);"><span class="hh-sheen"></span><span style="position:relative;z-index:2;display:flex;align-items:center;gap:11px;padding:13px 15px;"><span style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.3);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3D0918" stroke-width="2.2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span style="flex:1;text-align:right;"><span style="display:block;color:#D4BC85;font-size:.6rem;font-weight:800;letter-spacing:.3px;">المسرح التفاعلي</span><span style="display:block;color:#FFFDF8;font-size:1rem;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.4);">ابدأ العرض التقديمي</span></span><span style="color:#EAD9B0;font-size:1.2rem;">\u2039</span></span><span style="position:relative;z-index:2;display:flex;gap:3px;padding:0 14px 9px;justify-content:center;"><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span></span></button>'
         +     '<div style="background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:11px 13px;"><div style="display:flex;justify-content:space-between;font-size:.7rem;font-weight:800;color:#8A7A63;margin-bottom:7px;font-family:Cairo;"><span>إتقان الدرس</span><b style="color:#3D6B53;">'+_hhLessonMastery(L.id)+'%</b></div><div style="height:9px;background:#ece7dc;border-radius:9px;overflow:hidden;"><div style="height:100%;width:'+_hhLessonMastery(L.id)+'%;background:linear-gradient(90deg,#3D6B53,#2C5340);border-radius:9px;"></div></div></div>'
         +     '<div style="display:flex;gap:8px;"><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+qCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">سؤالاً</span></div><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+imgCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">صور الكتاب</span></div><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+termCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">مصطلحات</span></div></div>'
         +   '</div>'
