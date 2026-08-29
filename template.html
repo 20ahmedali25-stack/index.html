@@ -235,6 +235,34 @@ th{color:var(--mute)}
 .seats{grid-auto-rows:minmax(44px,1fr)}
 @media (max-width:1400px){.body{grid-template-columns:1fr 260px}.seats{grid-template-columns:repeat(3,1fr)}.tools button{font-size:.8rem}}
 @media (max-width:900px){.body{grid-template-columns:1fr}.side{display:none}.el{grid-template-columns:repeat(2,1fr)}.two{columns:1}}
+
+/* المحرر العميق */
+.editing .elpick{outline:2px dashed rgba(184,146,74,.55);outline-offset:3px;border-radius:8px;cursor:pointer}
+.editing .elpick:hover{background:rgba(184,146,74,.06)}
+.editing .elpick.sel{outline:2.5px solid #8A1538;background:rgba(138,21,56,.05)}
+.edpanel{position:absolute;top:14px;left:14px;max-width:calc(100% - 28px);width:210px;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:14px;padding:10px;box-shadow:0 12px 30px rgba(61,9,24,.28);z-index:40;font-size:.72rem}
+.edpanel h5{margin:0 0 8px;color:#5E0E26;font-size:.8rem}
+.edpanel .prow{display:flex;align-items:center;gap:6px;margin:7px 0;font-weight:800;color:#8A6D2E}
+.edpanel input[type=range]{flex:1;accent-color:#8A1538}
+.edpanel .seg{display:flex;gap:3px}
+.edpanel .seg button{border:1px solid #B8924A;background:#fff;border-radius:6px;padding:2px 8px;font-size:.66rem;font-weight:900;color:#8A6D2E;cursor:pointer;font-family:inherit}
+.edpanel .seg button.on{background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918}
+.edpanel .pbtn{width:100%;border:1px solid #8A1538;background:#fff;color:#8A1538;border-radius:8px;padding:5px;font-size:.68rem;font-weight:900;margin-top:4px;cursor:pointer;font-family:inherit}
+.edpanel .pbtn.g{border-color:#3D6B53;color:#3D6B53}
+.ordmode [data-step] .stepno, .ordmode .stepno{transform:scale(1.35);box-shadow:0 0 0 3px rgba(138,21,56,.25)}
+.ordmode .elpick{outline:2px dotted rgba(138,21,56,.5);outline-offset:3px;cursor:crosshair}
+.ordbanner{position:absolute;top:10px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:99px;padding:5px 18px;font-weight:900;font-size:.78rem;z-index:41}
+.mdpanel{position:absolute;top:14px;left:14px;max-width:calc(100% - 28px);width:230px;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:14px;padding:10px;box-shadow:0 12px 30px rgba(61,9,24,.28);z-index:40;font-size:.72rem}
+.mdpanel h5{margin:0 0 8px;color:#5E0E26;font-size:.8rem}
+.mdpanel .pbtn{width:100%;border:1px solid #8A1538;background:#fff;color:#8A1538;border-radius:8px;padding:6px;font-size:.7rem;font-weight:900;margin-top:5px;cursor:pointer;font-family:inherit}
+/* شريط الأيقونات */
+.ibar{display:flex;gap:6px;align-items:center}
+.ibar .ic{width:44px;height:44px;border-radius:11px;background:rgba(212,188,133,.08);border:1px solid rgba(184,146,74,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#8A6D2E;cursor:pointer;position:relative;flex-shrink:0}
+.ibar .ic svg{width:17px;height:17px}
+.ibar .ic i{font-style:normal;font-size:.5rem;font-weight:900;line-height:1}
+.ibar .ic.on{background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border-color:#FFFDF8}
+.ibar .ic .k{position:absolute;top:-6px;left:-5px;background:#8A1538;color:#fff;border-radius:5px;font-size:.5rem;font-weight:900;padding:1px 4px;border:1px solid #FFFDF8}
+@media (max-width:900px){.ibar .ic{width:38px;height:38px}.ibar .ic i{display:none}}
 </style>
 </head>
 <body>
@@ -274,7 +302,18 @@ th{color:var(--mute)}
     <div class="slide" id="slide"></div>
     <div class="nav">
       <button class="btn" onclick="go(-1)">‹ السابق</button>
-      <div><span class="dots">الأسهم ← → للتنقل · F ملء الشاشة</span></div>
+      <div class="ibar" id="ibar">
+        <div class="ic tch" id="ic-e" onclick="toggleEdit()" title="التحرير العميق: نص وخط ومحاذاة وموضع (E)"><span class="k">E</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><i>تحرير</i></div>
+        <div class="ic tch" id="ic-r" onclick="toggleMedia()" title="الوسائط: صور وفيديو (R)"><span class="k">R</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9M14 21l3-4 4 4"/></svg><i>وسائط</i></div>
+        <div class="ic tch" id="ic-m" onclick="toggleOrder()" title="ترتيب ظهور العناصر (M)"><span class="k">M</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h9M4 12h13M4 18h7"/><circle cx="19" cy="6" r="2"/><circle cx="20" cy="18" r="2"/></svg><i>الترتيب</i></div>
+        <div class="ic tch" onclick="toggleSide()" title="الجناح: المقاعد والفرق (S)"><span class="k">S</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="15" width="7" height="5" rx="1.5"/><rect x="14" y="15" width="7" height="5" rx="1.5"/></svg><i>الجناح</i></div>
+        <div class="ic" onclick="timerToggle()" title="المؤقت (T)"><span class="k">T</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><i>المؤقت</i></div>
+        <div class="ic tch" onclick="goldCard()" title="البطاقة الذهبية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg><i>الذهبية</i></div>
+        <div class="ic" onclick="jumpPulse()" title="الانتقال إلى شريحة النبض"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg><i>النبض</i></div>
+        <div class="ic tch" onclick="openHist()" title="سجل الحصص"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h13v18H6a2 2 0 01-2-2zM9 7h8M9 11h8"/></svg><i>السجل</i></div>
+        <div class="ic tch" onclick="homeCard()" title="بطاقة البيت لأولياء الأمور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg><i>بطاقة البيت</i></div>
+        <div class="ic" onclick="toggleFull()" title="ملء الشاشة (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg><i>ملء الشاشة</i></div>
+      </div>
       <button class="btn gold" onclick="go(1)">التالي ›</button>
     </div>
   </div>
@@ -412,7 +451,7 @@ function imgReplace(k){readImg(function(d){OV[i]=OV[i]||{};OV[i].img=OV[i].img||
 function imgRotate(k){var img=document.querySelectorAll('#slide .fig img')[k];if(!img)return;var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=im.height;c.height=im.width;var x=c.getContext('2d');x.translate(c.width/2,c.height/2);x.rotate(Math.PI/2);x.drawImage(im,-im.width/2,-im.height/2);OV[i]=OV[i]||{};OV[i].img=OV[i].img||{};OV[i].img[k]=c.toDataURL('image/jpeg',.82);saveOv();render()};im.src=img.src}
 function imgRemove(k){var f=document.querySelectorAll('#slide .fig')[k];if(!f)return;if(!confirm('حذف الصورة من الشريحة؟'))return;f.remove();commitSlide();T('حُذفت الصورة')}
 function imgAdd(){readImg(function(d){var el=document.getElementById('slide');var fig=document.createElement('figure');fig.className='fig';fig.style.maxWidth='520px';fig.innerHTML='<img src="'+d+'" alt="صورة مضافة"><figcaption contenteditable="true">تعليق الصورة</figcaption>';var add=el.querySelector('.imgadd');el.insertBefore(fig,add);commitSlide();render();T('أُضيفت الصورة · حرّر تعليقها')})}
-function commitSlide(){var el=document.getElementById('slide').cloneNode(true);el.querySelectorAll('.it,.imgadd').forEach(function(x){x.remove()});el.querySelectorAll('[contenteditable]').forEach(function(x){x.removeAttribute('contenteditable')});el.querySelectorAll('[data-step]').forEach(function(x){x.classList.remove('in')});OV[i]=OV[i]||{};OV[i].html=el.innerHTML;saveOv()}
+function commitSlide(){var el=document.getElementById('slide').cloneNode(true);el.querySelectorAll('.it,.imgadd,.edpanel,.mdpanel,.ordbanner').forEach(function(x){x.remove()});el.querySelectorAll('.elpick').forEach(function(x){x.classList.remove('elpick','sel')});el.querySelectorAll('[contenteditable]').forEach(function(x){x.removeAttribute('contenteditable')});el.querySelectorAll('[data-step]').forEach(function(x){x.classList.remove('in')});OV[i]=OV[i]||{};OV[i].html=el.innerHTML;saveOv()}
 var editing=false; var heat=false;
 /* أرقام الخطوات: نقرة على الرقم = تغييره · كل الأرقام تُرقَّم تلقائياً */
 function decorateSteps(el){el.querySelectorAll('[data-step]').forEach(function(x){if(x.querySelector(':scope>.stepno'))return;var n=document.createElement('span');n.className='stepno';n.textContent=x.getAttribute('data-step');n.title='رقم النقرة · انقر لتغييره · 0 = يظهر مع الشريحة';n.onclick=function(ev){ev.stopPropagation();var v=prompt('رقم النقرة لهذا العنصر (0 يظهر مع الشريحة):',x.getAttribute('data-step'));if(v==null)return;v=parseInt(v,10);if(isNaN(v)||v<0)return;if(v===0){x.removeAttribute('data-step');x.classList.add('in')}else x.setAttribute('data-step',v);n.textContent=v;commitSlide();T('رقم النقرة: '+v)};x.appendChild(n)})}
@@ -449,16 +488,121 @@ function homeCard(){var c=document.createElement('canvas');c.width=1080;c.height
   if(PAY.vals&&PAY.vals[0]){lines.push('');lines.push('قيمة الدرس: '+PAY.vals[0]);}
   var y=320;lines.forEach(function(l){x.font=(/^(تعلّمنا|اسأل|قيمة)/.test(l)?'900 42px':'800 32px')+' Cairo, sans-serif';x.fillStyle=/^(تعلّمنا|اسأل|قيمة)/.test(l)?'#B8924A':'#FDF3DD';x.fillText(l,1000,y,920);y+=l?68:36});x.font='800 30px Cairo, sans-serif';x.fillStyle='#D4BC85';x.fillText('منصة المُلهم التعليمي · almulhimedu.org',540,1270);
   var a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='بطاقة_البيت_'+PAY.title.replace(/\s+/g,'_')+'.png';a.click()}
-function toggleEdit(){editing=!editing;var el=document.getElementById('slide');el.classList.toggle('editing',editing);document.querySelector('.stage').classList.toggle('editing',editing);
-  el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.k').forEach(function(x){x.contentEditable=editing?'true':'false'});
-  if(!editing){commitSlide();render();T('حُفظت التعديلات')}else T('وضع التحرير · E للإنهاء')}
+var _mode=null; // null | 'edit' | 'media' | 'order'
+function setMode(m){
+  if(_mode==='order') exitOrder();
+  removeEdPanel(); removeMdPanel();
+  editing=(m==='edit');
+  var el=document.getElementById('slide'); var stg=document.querySelector('.stage');
+  el.classList.toggle('editing', m==='edit'||m==='order');
+  stg.classList.toggle('editing', m==='edit'||m==='order');
+  stg.classList.toggle('ordmode', m==='order');
+  ['ic-e','ic-r','ic-m'].forEach(function(id){var b=document.getElementById(id);if(b)b.classList.remove('on');});
+  el.querySelectorAll('.elpick').forEach(function(x){x.classList.remove('elpick','sel');});
+  if(m){ markPickables(el); }
+  if(m==='edit'){ document.getElementById('ic-e').classList.add('on'); enableTextEdit(el,true); T('التحرير العميق · انقر عنصراً لتنسيقه'); }
+  else if(m==='media'){ document.getElementById('ic-r').classList.add('on'); showMediaPanel(); T('الوسائط · أضف صورة أو فيديو'); }
+  else if(m==='order'){ document.getElementById('ic-m').classList.add('on'); enterOrder(); }
+  else { enableTextEdit(el,false); commitSlide(); render(); T('حُفظت التعديلات'); }
+  _mode=m;
+}
+function toggleEdit(){ setMode(_mode==='edit'?null:'edit'); }
+function toggleMedia(){ setMode(_mode==='media'?null:'media'); }
+function toggleOrder(){ setMode(_mode==='order'?null:'order'); }
+function enableTextEdit(el,on){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note').forEach(function(x){x.contentEditable=on?'true':'false';}); }
+function markPickables(el){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.fig,.term').forEach(function(x){ x.classList.add('elpick'); x.onclick=function(ev){ if(_mode==='edit'){ ev.stopPropagation(); selectEl(x); } }; }); }
+var _sel=null;
+function selectEl(x){ var el=document.getElementById('slide'); el.querySelectorAll('.sel').forEach(function(y){y.classList.remove('sel');}); x.classList.add('sel'); _sel=x; showEdPanel(x); }
+function removeEdPanel(){ var p=document.getElementById('edpanel'); if(p)p.remove(); }
+function _elKey(x){ var el=document.getElementById('slide'); return [].indexOf.call(el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.fig,.term'), x); }
+function showEdPanel(x){
+  removeEdPanel();
+  var stg=document.querySelector('.stage'); var p=document.createElement('div'); p.id='edpanel'; p.className='edpanel';
+  var cur=parseInt((x.style.fontSize||'').replace('%',''))||100;
+  var al=x.style.textAlign||'';
+  p.innerHTML='<h5>تنسيق العنصر</h5>'
+    +'<div class="prow">الخط<input id="ed-fs" type="range" min="60" max="200" value="'+cur+'"><b id="ed-fsv">'+cur+'%</b></div>'
+    +'<div class="prow">محاذاة<span class="seg"><button data-a="right" class="'+(al==='right'?'on':'')+'">يمين</button><button data-a="center" class="'+(al==='center'?'on':'')+'">وسط</button><button data-a="left" class="'+(al==='left'?'on':'')+'">يسار</button></span></div>'
+    +'<div class="prow">اسحب العنصر بالفأرة لتغيير موضعه</div>'
+    +'<button class="pbtn" id="ed-hide">'+(x.style.display==='none'?'إظهار العنصر':'إخفاء من العرض')+'</button>'
+    +'<button class="pbtn g" id="ed-reset">استرجاع أصل الشريحة</button>';
+  stg.appendChild(p);
+  var fs=document.getElementById('ed-fs');
+  fs.oninput=function(){ x.style.fontSize=fs.value+'%'; document.getElementById('ed-fsv').textContent=fs.value+'%'; commitSlide(); };
+  p.querySelectorAll('.seg button').forEach(function(b){ b.onclick=function(){ p.querySelectorAll('.seg button').forEach(function(y){y.classList.remove('on');}); b.classList.add('on'); x.style.textAlign=b.getAttribute('data-a'); commitSlide(); }; });
+  document.getElementById('ed-hide').onclick=function(){ if(x.style.display==='none'){x.style.display='';this.textContent='إخفاء من العرض';}else{x.style.display='none';this.textContent='إظهار العنصر';} commitSlide(); };
+  document.getElementById('ed-reset').onclick=restoreSlide;
+  enableDrag(x);
+}
+function enableDrag(x){
+  x.style.position=x.style.position||'relative';
+  x.onmousedown=function(e){ if(x.isContentEditable&&e.target===x)return; if(e.target.closest('.it,.stepno,button'))return;
+    var sx=e.clientX, sy=e.clientY; var ox=parseFloat(x.style.left||0), oy=parseFloat(x.style.top||0); e.preventDefault();
+    function mv(ev){ x.style.left=(ox+(ev.clientX-sx))+'px'; x.style.top=(oy+(ev.clientY-sy))+'px'; }
+    function up(){ document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); commitSlide(); }
+    document.addEventListener('mousemove',mv); document.addEventListener('mouseup',up);
+  };
+}
+function removeMdPanel(){var p=document.getElementById('mdpanel');if(p)p.remove();}
+function showMediaPanel(){
+  removeMdPanel();
+  var stg=document.querySelector('.stage'); var p=document.createElement('div'); p.id='mdpanel'; p.className='mdpanel';
+  var lib=(PAY.images||[]);
+  p.innerHTML='<h5>وسائط الشريحة</h5>'
+    +'<button class="pbtn" id="md-file">＋ صورة من جهازي</button>'
+    +(lib.length?'<button class="pbtn" id="md-lib">＋ صورة من ملفات الدرس ('+lib.length+')</button>':'')
+    +'<button class="pbtn" id="md-vid">＋ فيديو برابط (YouTube/MP4)</button>'
+    +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:6px;line-height:1.7">تُضاف للشريحة الحالية · حدّد الصورة ثم استبدل/دوّر/احذف من أدواتها · اسحبها في وضع التحرير</div>'
+    +'<input id="md-inp" type="file" accept="image/*" style="display:none">';
+  stg.appendChild(p);
+  document.getElementById('md-file').onclick=function(){ document.getElementById('md-inp').click(); };
+  document.getElementById('md-inp').onchange=function(){ var f=this.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(){ var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); var sc=Math.min(1,1200/img.width); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); addFig(c.toDataURL('image/jpeg',.82)); }; img.src=r.result; }; r.readAsDataURL(f); this.value=''; };
+  var lb=document.getElementById('md-lib'); if(lb) lb.onclick=function(){ pickFromLib(lib); };
+  document.getElementById('md-vid').onclick=function(){ var u=prompt('الصق رابط الفيديو (YouTube أو ملف MP4):'); if(!u)return; addVideo(u.trim()); };
+}
+function pickFromLib(lib){
+  var ov=document.createElement('div'); ov.className='ov'; ov.style.display='flex';
+  ov.innerHTML='<div class="sheet" style="max-width:640px"><div class="sh-h"><b>اختر صورة من ملفات الدرس</b><button onclick="this.closest(\'.ov\').remove()">×</button></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:10px">'+lib.map(function(im,k){return '<img src="'+im.url+'" data-k="'+k+'" style="width:100%;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid #D4BC85;cursor:pointer">';}).join('')+'</div></div>';
+  document.body.appendChild(ov);
+  ov.querySelectorAll('img').forEach(function(im){ im.onclick=function(){ addFig(lib[+im.getAttribute('data-k')].url); ov.remove(); }; });
+}
+function addFig(url){
+  var el=document.getElementById('slide');
+  var fig=document.createElement('figure'); fig.className='fig'; fig.style.maxWidth='640px'; fig.setAttribute('data-step','1');
+  fig.innerHTML='<img src="'+url+'" alt=""><figcaption contenteditable="true">اكتب تعليق الصورة</figcaption>';
+  el.appendChild(fig); commitSlide(); render(); T('أُضيفت الصورة · حددها لأدواتها');
+}
+function addVideo(u){
+  var el=document.getElementById('slide'); var emb='';
+  var yt=u.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
+  if(yt){ emb='<div class="fig" data-step="1" style="max-width:720px"><div style="position:relative;padding-top:56%;"><iframe src="https://www.youtube.com/embed/'+yt[1]+'" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:10px" allowfullscreen></iframe></div></div>'; }
+  else if(/\.mp4($|\?)/i.test(u)){ emb='<figure class="fig" data-step="1" style="max-width:720px"><video controls preload="metadata" style="width:100%;border-radius:10px;background:#000" src="'+u+'"></video></figure>'; }
+  else { T('رابط غير مدعوم · استخدم YouTube أو ملف MP4',true); return; }
+  el.insertAdjacentHTML('beforeend', emb); commitSlide(); render(); T('أُضيف الفيديو');
+}
+
+// ═══ M: وضع الترتيب — نقر متسلسل يرقّم الظهور ═══
+var _ordSeq=0;
+function enterOrder(){
+  var el=document.getElementById('slide'); _ordSeq=0;
+  el.querySelectorAll('[data-step]').forEach(function(x){ x.removeAttribute('data-step'); x.classList.remove('in'); var sn=x.querySelector(':scope>.stepno'); if(sn)sn.remove(); });
+  var bn=document.createElement('div'); bn.className='ordbanner'; bn.id='ordbanner'; bn.textContent='انقر العناصر بترتيب ظهورها · 1 ثم 2 ثم 3…'; document.querySelector('.stage').appendChild(bn);
+  el.querySelectorAll('.elpick').forEach(function(x){ x.onclick=function(ev){ ev.stopPropagation(); if(x.hasAttribute('data-step'))return; _ordSeq++; x.setAttribute('data-step',_ordSeq); var n=document.createElement('span'); n.className='stepno'; n.textContent=_ordSeq; x.appendChild(n); }; });
+}
+function exitOrder(){
+  var bn=document.getElementById('ordbanner'); if(bn)bn.remove();
+  document.querySelector('.stage').classList.remove('ordmode');
+  commitSlide();
+}
+function jumpPulse(){ for(var k=0;k<SLIDES.length;k++){ if((SLIDES[k].tag||'').indexOf('النبض')!==-1){ i=k; render(); return; } } T('لا شريحة نبض'); }
+
 function restoreSlide(){if(!confirm('استعادة أصل هذه الشريحة وحذف تعديلاتك عليها؟'))return;delete OV[i];saveOv();editing=false;render();T('استُعيد الأصل')}
 document.getElementById('slide').addEventListener('input',function(){if(editing){clearTimeout(window._ct);window._ct=setTimeout(commitSlide,600)}});
 function render(){
   var s=SLIDES[i]; var el=document.getElementById('slide'); el.classList.remove('editing'); document.querySelector('.stage').classList.remove('editing'); editing=false; el.innerHTML=slideHTML(); decorateImages(el); decorateSteps(el); el.scrollTop=0; step=0; applyStep(); guideShow();
   el.querySelectorAll('.pulse button').forEach(function(b){b.onclick=function(){pulsePick(b.parentElement.getAttribute('data-when'),+b.getAttribute('data-v'),b)}});
   document.getElementById('dots').textContent=(i+1)+' / '+SLIDES.length; document.getElementById('crumbTag').textContent=s.tag||'';
-  if(s.obj!=null){objDone[s.obj]=1;} renderObj();
+  if(s.obj!=null){objDone[s.obj]=1;} renderObj(); if(_mode&&_mode!=='media'){var _m=_mode;_mode=null;setMode(_m);}
   el.querySelectorAll('.rev').forEach(function(b){b.onclick=function(){var q=b.closest('.q');q.classList.add('open');var l=+(q.getAttribute('data-l')||1);if(sel!=null){curLvl=l;judge(true)}}});
   el.querySelectorAll('.ladder .q').forEach(function(q){q.addEventListener('click',function(){el.querySelectorAll('.ladder .q').forEach(function(x){x.classList.remove('pick')});q.classList.add('pick');setLvl(+q.getAttribute('data-l'))})});
   el.querySelectorAll('.q[data-l]').forEach(function(q){var l=+q.getAttribute('data-l');var t=q.querySelector('.qt');if(t&&!t.querySelector('.lvl'))t.insertAdjacentHTML('afterbegin','<span class="lvl l'+l+'">'+LVL[l]+'</span>')});
