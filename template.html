@@ -237,6 +237,7 @@ th{color:var(--mute)}
 @media (max-width:900px){.body{grid-template-columns:1fr}.side{display:none}.el{grid-template-columns:repeat(2,1fr)}.two{columns:1}}
 
 /* المحرر العميق */
+.freemove{cursor:grab}
 .editing .elpick{outline:2px dashed rgba(184,146,74,.55);outline-offset:3px;border-radius:8px;cursor:pointer}
 .editing .elpick:hover{background:rgba(184,146,74,.06)}
 .editing .elpick.sel{outline:2.5px solid #8A1538;background:rgba(138,21,56,.05)}
@@ -263,16 +264,50 @@ th{color:var(--mute)}
 .ibar .ic.on{background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border-color:#FFFDF8}
 .ibar .ic .k{position:absolute;top:-6px;left:-5px;background:#8A1538;color:#fff;border-radius:5px;font-size:.5rem;font-weight:900;padding:1px 4px;border:1px solid #FFFDF8}
 @media (max-width:900px){.ibar .ic{width:38px;height:38px}.ibar .ic i{display:none}}
+
+/* الطراز 3: خط ذهبي رفيع */
+.top.line3{position:relative;background:linear-gradient(180deg,#4A0B1E,#5E0E26);border-bottom:none;overflow:hidden;padding:9px 20px;gap:14px;align-items:center}
+.top.line3::after{content:'';position:absolute;bottom:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#8A6D2E,#EAD9B0,#8A6D2E)}
+.top.line3 .shield{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:2px solid #FFFDF8;font-size:19px}
+.top.line3 .t1{color:#FFFDF8;font-size:21px;font-weight:900;letter-spacing:.3px;white-space:nowrap}
+.top.line3 .t2{color:#EAD9B0;font-size:10.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:38vw}
+.top.line3 .objc{margin-right:auto;gap:5px;background:none;border:none;padding:0}
+.top.line3 .objc .d{width:11px;height:11px;border-radius:50%;background:rgba(212,188,133,.32);border:none;font-size:0;flex-shrink:0}
+.top.line3 .objc .d.done{background:#EAD9B0;box-shadow:0 0 8px rgba(234,217,176,.85)}
+.top.line3 .objc .cur{font-size:10.5px;color:#EAD9B0;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;margin-right:6px}
+.top.line3 .hdate{color:#EAD9B0;font-size:12px;font-weight:800;white-space:nowrap;padding:0 8px}
+.top.line3 .endbtn{background:rgba(255,253,248,.12);border:1px solid #B8924A;color:#F5E6C4;border-radius:10px;padding:8px 16px;font-weight:900;font-size:12px;cursor:pointer;font-family:inherit}
+.top.line3 .endbtn:hover{background:rgba(255,253,248,.2)}
+
+.nav .navpair{display:flex;border-radius:11px;overflow:hidden;border:1.5px solid var(--g);box-shadow:0 3px 10px rgba(0,0,0,.22)}
+.nav .navpair button{background:var(--cream);border:none;padding:9px 16px;font-family:inherit;font-weight:900;font-size:13px;color:var(--m2);display:flex;align-items:center;gap:6px;cursor:pointer;border-left:1px solid var(--g2)}
+.nav .navpair button:last-child{border-left:none}
+.nav .navpair .next{background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4}
+.nav .navpair svg{width:14px;height:14px}
+.nav .prog{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--m2);font-size:11px;font-weight:800;min-width:56px}
+.nav .prog .track{width:60px;height:5px;background:var(--g2);border-radius:9px;overflow:hidden}
+.nav .prog .fill{height:100%;background:linear-gradient(90deg,#EAD9B0,#B8924A);border-radius:9px;transition:width .3s}
+.ibar .ic.newtool{background:linear-gradient(135deg,#3D6B53,#2C5340);color:#EAF6EF;border-color:#8FBFA6}
+
+/* لوحة الطلاب المطوّرة */
+.seat .fn{font-weight:900;font-size:.92rem;color:var(--ink);line-height:1.15;display:block}
+.seat .ln{font-weight:700;font-size:.66rem;color:var(--mute);line-height:1.1;display:block}
+.seat .crown{position:absolute;top:3px;right:4px;width:15px;height:15px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.seat .absx{position:absolute;top:3px;left:4px;width:16px;height:16px}
+.seat.abs{opacity:.55;background:repeating-linear-gradient(45deg,#f6f4f0,#f6f4f0 5px,#ecebe6 5px,#ecebe6 10px)}
+.seat.msel{outline:3px solid #3D6B53;outline-offset:1px;background:rgba(61,107,83,.08)}
+.seat.lead{box-shadow:inset 0 0 0 2px #B8924A}
+.team .ldr{display:block;font-size:.6rem;color:var(--g3);font-weight:800;margin-top:1px}
+#multibtn.on{background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border-color:#8FBFA6}
 </style>
 </head>
 <body>
-<div class="top">
-  <div class="brand"><div class="shield">ح</div><div><div class="t1" id="hdTitle">الدرس</div><div class="t2"><span id="hdMeta"></span> · <span id="dateInline"></span></div></div></div>
+<div class="top line3">
+  <div class="brand"><div class="shield">ح</div><div><div class="t1" id="hdTitle">الدرس</div><div class="t2"><span id="hdMeta"></span></div></div></div>
   <div class="objc" id="obj" title="أهداف الدرس · تُضاء عند تغطيتها"></div>
+  <div class="hdate" id="dateInline"></div>
   <div class="btns">
-    <button onclick="timerToggle()" id="tmBtn" title="T">المؤقت</button>
-    <button onclick="toggleFull()" title="F">ملء الشاشة</button>
-    <button onclick="endSession()" style="background:linear-gradient(135deg,var(--g3),var(--g));color:var(--ink);border-color:var(--cream)">أنهِ الحصة</button>
+    <button onclick="endSession()" class="endbtn">أنهِ الحصة</button>
     <div class="menu" id="menu"><button class="mbtn" onclick="document.getElementById('menu').classList.toggle('open')" title="المزيد">⋮</button>
       <div class="drop">
         <button onclick="openRoster();menuClose()">أسماء الصف</button>
@@ -301,20 +336,23 @@ th{color:var(--mute)}
     <div class="editbar" id="editbar">وضع التحرير · انقر أي نص لتعديله · مرّر على الصورة لأدواتها <button onclick="restoreSlide()">استعادة أصل الشريحة</button><button onclick="toggleEdit()">إنهاء (E)</button></div>
     <div class="slide" id="slide"></div>
     <div class="nav">
-      <button class="btn" onclick="go(-1)">‹ السابق</button>
+      <div class="navpair">
+        <button class="next" onclick="go(1)">التالي<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button onclick="go(-1)">السابق<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="prog"><span id="progtxt">1 / 1</span><div class="track"><div class="fill" id="progfill"></div></div></div>
       <div class="ibar" id="ibar">
-        <div class="ic tch" id="ic-e" onclick="toggleEdit()" title="التحرير العميق: نص وخط ومحاذاة وموضع (E)"><span class="k">E</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><i>تحرير</i></div>
-        <div class="ic tch" id="ic-r" onclick="toggleMedia()" title="الوسائط: صور وفيديو (R)"><span class="k">R</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9M14 21l3-4 4 4"/></svg><i>وسائط</i></div>
+        <div class="ic tch" id="ic-e" onclick="toggleEdit()" title="التحرير العميق (E)"><span class="k">E</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><i>تحرير</i></div>
+        <div class="ic tch" id="ic-r" onclick="toggleMedia()" title="الوسائط: صور ونص وفيديو (R)"><span class="k">R</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9"/></svg><i>وسائط</i></div>
         <div class="ic tch" id="ic-m" onclick="toggleOrder()" title="ترتيب ظهور العناصر (M)"><span class="k">M</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h9M4 12h13M4 18h7"/><circle cx="19" cy="6" r="2"/><circle cx="20" cy="18" r="2"/></svg><i>الترتيب</i></div>
         <div class="ic tch" onclick="toggleSide()" title="الجناح: المقاعد والفرق (S)"><span class="k">S</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="15" width="7" height="5" rx="1.5"/><rect x="14" y="15" width="7" height="5" rx="1.5"/></svg><i>الجناح</i></div>
         <div class="ic" onclick="timerToggle()" title="المؤقت (T)"><span class="k">T</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><i>المؤقت</i></div>
-        <div class="ic tch" onclick="goldCard()" title="البطاقة الذهبية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg><i>الذهبية</i></div>
-        <div class="ic" onclick="jumpPulse()" title="الانتقال إلى شريحة النبض"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg><i>النبض</i></div>
-        <div class="ic tch" onclick="openHist()" title="سجل الحصص"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 012-2h13v18H6a2 2 0 01-2-2zM9 7h8M9 11h8"/></svg><i>السجل</i></div>
-        <div class="ic tch" onclick="homeCard()" title="بطاقة البيت لأولياء الأمور"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg><i>بطاقة البيت</i></div>
-        <div class="ic" onclick="toggleFull()" title="ملء الشاشة (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg><i>ملء الشاشة</i></div>
+        <div class="ic newtool" onclick="quickPoints()" title="نقاط سريعة: امنح/اخصم للفريق المحدد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 21 12 17l-5.5 4L8 13.5 3 9l6.5-.5z"/></svg><i>نقاط</i></div>
+        <div class="ic newtool" onclick="fairCall()" title="النداء العادل: طالب لم يشارك بعد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg><i>نداء عادل</i></div>
+        <div class="ic newtool" onclick="teamsCompare()" title="مقارنة الفرق: النتائج لحظياً"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20h-20"/></svg><i>مقارنة</i></div>
+        <div class="ic" onclick="toggleFull()" title="ملء الشاشة (F)"><span class="k">F</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg><i>ملء</i></div>
+        <div class="ic tch" onclick="openMore()" title="المزيد: السجل والبطاقة الذهبية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><i>المزيد</i></div>
       </div>
-      <button class="btn gold" onclick="go(1)">التالي ›</button>
     </div>
   </div>
   <div class="side">
@@ -326,7 +364,7 @@ th{color:var(--mute)}
       <div class="tools">
         <button class="ok" onclick="judge(true)" title="Enter">✓ صحيح</button><button onclick="judge(false)" title="Backspace">✗ خطأ</button><button onclick="fairCall()" title="N">النداء</button>
         <button onclick="mark('star')">★</button><button onclick="mark('warn')">!</button><button onclick="toggleAbs()">غياب</button>
-        <button onclick="assignTeam()" class="wide">ضم المحدد إلى الفريق المحدد</button>
+        <button id="multibtn" onclick="toggleMulti()">تحديد متعدد</button><button onclick="assignTeam()" class="wide">ضم المحدد إلى الفريق</button>
       </div>
     </div>
   </div>
@@ -441,10 +479,43 @@ function decorateImages(el){
     var img=f.querySelector('img'); if(!img)return;
     if(OV[i]&&OV[i].img&&OV[i].img[k])img.src=OV[i].img[k];
     var bar=document.createElement('div');bar.className='it';
-    bar.innerHTML='<button onclick="imgReplace('+k+')">استبدل</button><button onclick="imgRotate('+k+')">دوّر</button><button onclick="imgRemove('+k+')">احذف</button>';
+    bar.innerHTML='<button onclick="imgSize('+k+')">الحجم</button><button onclick="imgFree('+k+')">حرّك</button><button onclick="imgReplace('+k+')">استبدل</button><button onclick="imgRotate('+k+')">دوّر</button><button onclick="imgRemove('+k+')">احذف</button>';
     f.appendChild(bar);
+    if(OV[i]&&OV[i].figcss&&OV[i].figcss[k]){ try{ f.setAttribute('style', OV[i].figcss[k]); }catch(e){} }
   });
   if(!el.querySelector('.imgadd')){var b=document.createElement('button');b.className='imgadd';b.textContent='+ أضف صورة إلى هذه الشريحة';b.onclick=imgAdd;el.appendChild(b)}
+}
+function _figSave(k){ var f=document.querySelectorAll('#slide .fig')[k]; if(!f)return; OV[i]=OV[i]||{}; OV[i].figcss=OV[i].figcss||{}; OV[i].figcss[k]=f.getAttribute('style')||''; saveOv(); }
+function imgSize(k){
+  var f=document.querySelectorAll('#slide .fig')[k]; if(!f)return;
+  var ex=f.querySelector('.szrow'); if(ex){ex.remove();return;}
+  var cur=Math.round(parseInt((f.style.maxWidth||'').replace('px',''))||f.getBoundingClientRect().width);
+  var row=document.createElement('div'); row.className='szrow';
+  row.style.cssText='display:flex;align-items:center;gap:8px;background:#FFFDF8;border:1.5px solid #B8924A;border-radius:10px;padding:6px 10px;margin-top:6px;font-size:.72rem;font-weight:800;color:#8A6D2E;z-index:9;position:relative';
+  row.innerHTML='حجم الصورة <input type="range" min="120" max="1000" value="'+cur+'" style="flex:1;accent-color:#8A1538"> <b class="szv">'+cur+'px</b>';
+  f.appendChild(row);
+  var r=row.querySelector('input');
+  r.onmousedown=function(e){e.stopPropagation();};
+  r.oninput=function(){ f.style.maxWidth=r.value+'px'; f.style.width=r.value+'px'; row.querySelector('.szv').textContent=r.value+'px'; };
+  r.onchange=function(){ _figSave(k); };
+}
+function imgFree(k){
+  var f=document.querySelectorAll('#slide .fig')[k]; if(!f)return;
+  if(typeof startFreeDrag==='function') startFreeDrag(f);
+  f.addEventListener('mouseup',function(){ _figSave(k); });
+  T('الصورة حرة الآن · اسحبها لأي مكان، وكبّرها أو صغّرها بزر الحجم');
+}
+function addTextBox(){
+  var el=document.getElementById('slide');
+  var box=document.createElement('div'); box.className='newtext elpick freemove';
+  box.setAttribute('data-step','1');
+  box.style.cssText='position:absolute;left:60px;top:80px;min-width:180px;max-width:70%;background:rgba(255,253,248,.92);border:1.5px dashed #B8924A;border-radius:10px;padding:10px 14px;font-size:clamp(1.1rem,2vw,1.6rem);font-weight:800;color:#3D0918;z-index:6;cursor:text';
+  box.contentEditable='true'; box.textContent='اكتب نصك هنا…';
+  el.appendChild(box);
+  box.onclick=function(ev){ if(_mode==='edit'){ev.stopPropagation(); selectEl(box);} };
+  box.onfocus=function(){ if(box.textContent==='اكتب نصك هنا…') box.textContent=''; };
+  setTimeout(function(){ box.focus(); },50);
+  commitSlide(); T('مربع نص جديد · اكتبه، ونسّقه وحرّكه كأي عنصر (Alt+سحب للتحريك)');
 }
 function readImg(cb){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement('canvas');var sc=Math.min(1,1200/im.width);c.width=im.width*sc;c.height=im.height*sc;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.82))};im.src=r.result};r.readAsDataURL(f)};inp.click()}
 function imgReplace(k){readImg(function(d){OV[i]=OV[i]||{};OV[i].img=OV[i].img||{};OV[i].img[k]=d;saveOv();render();T('استُبدلت الصورة')})}
@@ -510,7 +581,7 @@ function toggleEdit(){ setMode(_mode==='edit'?null:'edit'); }
 function toggleMedia(){ setMode(_mode==='media'?null:'media'); }
 function toggleOrder(){ setMode(_mode==='order'?null:'order'); }
 function enableTextEdit(el,on){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note').forEach(function(x){x.contentEditable=on?'true':'false';}); }
-function markPickables(el){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.fig,.term').forEach(function(x){ x.classList.add('elpick'); x.onclick=function(ev){ if(_mode==='edit'){ ev.stopPropagation(); selectEl(x); } }; }); }
+function markPickables(el){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.fig,.term,.newtext').forEach(function(x){ x.classList.add('elpick'); x.onclick=function(ev){ if(_mode==='edit'){ ev.stopPropagation(); selectEl(x); } }; }); }
 var _sel=null;
 function selectEl(x){ var el=document.getElementById('slide'); el.querySelectorAll('.sel').forEach(function(y){y.classList.remove('sel');}); x.classList.add('sel'); _sel=x; showEdPanel(x); }
 function removeEdPanel(){ var p=document.getElementById('edpanel'); if(p)p.remove(); }
@@ -523,25 +594,38 @@ function showEdPanel(x){
   p.innerHTML='<h5>تنسيق العنصر</h5>'
     +'<div class="prow">الخط<input id="ed-fs" type="range" min="60" max="200" value="'+cur+'"><b id="ed-fsv">'+cur+'%</b></div>'
     +'<div class="prow">محاذاة<span class="seg"><button data-a="right" class="'+(al==='right'?'on':'')+'">يمين</button><button data-a="center" class="'+(al==='center'?'on':'')+'">وسط</button><button data-a="left" class="'+(al==='left'?'on':'')+'">يسار</button></span></div>'
-    +'<div class="prow">اسحب العنصر بالفأرة لتغيير موضعه</div>'
+    +'<div class="prow" style="line-height:1.7">حركة حرة: اسحب العنصر لأي مكان<br><small style="color:#8A7A63">النص: Alt+سحب للتحريك، وبلا Alt للكتابة</small></div>'+'<button class="pbtn" id="ed-free">✥ حرّك هذا العنصر بحرية</button>'
     +'<button class="pbtn" id="ed-hide">'+(x.style.display==='none'?'إظهار العنصر':'إخفاء من العرض')+'</button>'
     +'<button class="pbtn g" id="ed-reset">استرجاع أصل الشريحة</button>';
   stg.appendChild(p);
   var fs=document.getElementById('ed-fs');
   fs.oninput=function(){ x.style.fontSize=fs.value+'%'; document.getElementById('ed-fsv').textContent=fs.value+'%'; commitSlide(); };
   p.querySelectorAll('.seg button').forEach(function(b){ b.onclick=function(){ p.querySelectorAll('.seg button').forEach(function(y){y.classList.remove('on');}); b.classList.add('on'); x.style.textAlign=b.getAttribute('data-a'); commitSlide(); }; });
+  var _ef=document.getElementById('ed-free'); if(_ef) _ef.onclick=function(){ startFreeDrag(x); };
   document.getElementById('ed-hide').onclick=function(){ if(x.style.display==='none'){x.style.display='';this.textContent='إخفاء من العرض';}else{x.style.display='none';this.textContent='إظهار العنصر';} commitSlide(); };
   document.getElementById('ed-reset').onclick=restoreSlide;
   enableDrag(x);
 }
 function enableDrag(x){
-  x.style.position=x.style.position||'relative';
-  x.onmousedown=function(e){ if(x.isContentEditable&&e.target===x)return; if(e.target.closest('.it,.stepno,button'))return;
-    var sx=e.clientX, sy=e.clientY; var ox=parseFloat(x.style.left||0), oy=parseFloat(x.style.top||0); e.preventDefault();
-    function mv(ev){ x.style.left=(ox+(ev.clientX-sx))+'px'; x.style.top=(oy+(ev.clientY-sy))+'px'; }
-    function up(){ document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); commitSlide(); }
-    document.addEventListener('mousemove',mv); document.addEventListener('mouseup',up);
+  x.onmousedown=function(e){
+    if(e.target.closest('.it,.stepno,button,input,textarea'))return;
+    if(x.isContentEditable && !e.altKey) return; // نص: بلا Alt للكتابة · Alt+سحب للتحريك
+    startDragNow(x,e);
   };
+}
+function startDragNow(x,e){
+  var stg=document.getElementById('slide'); var sr=stg.getBoundingClientRect(); var r=x.getBoundingClientRect();
+  if(x.style.position!=='absolute'){ x.style.width=r.width+'px'; x.style.position='absolute'; x.style.left=(r.left-sr.left)+'px'; x.style.top=(r.top-sr.top)+'px'; x.style.margin='0'; x.style.zIndex='6'; x.classList.add('freemove'); }
+  var sx=e.clientX, sy=e.clientY; var ox=parseFloat(x.style.left)||0, oy=parseFloat(x.style.top)||0; e.preventDefault(); x.style.cursor='grabbing';
+  function mv(ev){ x.style.left=(ox+(ev.clientX-sx))+'px'; x.style.top=(oy+(ev.clientY-sy))+'px'; }
+  function up(){ x.style.cursor='grab'; document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); commitSlide(); }
+  document.addEventListener('mousemove',mv); document.addEventListener('mouseup',up);
+}
+function startFreeDrag(x){
+  x.contentEditable='false';
+  var stg=document.getElementById('slide'); var sr=stg.getBoundingClientRect(); var r=x.getBoundingClientRect();
+  if(x.style.position!=='absolute'){ x.style.width=r.width+'px'; x.style.position='absolute'; x.style.left=(r.left-sr.left)+'px'; x.style.top=(r.top-sr.top)+'px'; x.style.margin='0'; x.style.zIndex='6'; x.classList.add('freemove'); }
+  x.style.cursor='grab'; commitSlide(); T('العنصر صار حراً · اسحبه لأي مكان');
 }
 function removeMdPanel(){var p=document.getElementById('mdpanel');if(p)p.remove();}
 function showMediaPanel(){
@@ -549,12 +633,14 @@ function showMediaPanel(){
   var stg=document.querySelector('.stage'); var p=document.createElement('div'); p.id='mdpanel'; p.className='mdpanel';
   var lib=(PAY.images||[]);
   p.innerHTML='<h5>وسائط الشريحة</h5>'
+    +'<button class="pbtn" id="md-text" style="border-color:#3D6B53;color:#3D6B53">＋ مربع نص جديد</button>'
     +'<button class="pbtn" id="md-file">＋ صورة من جهازي</button>'
     +(lib.length?'<button class="pbtn" id="md-lib">＋ صورة من ملفات الدرس ('+lib.length+')</button>':'')
     +'<button class="pbtn" id="md-vid">＋ فيديو برابط (YouTube/MP4)</button>'
     +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:6px;line-height:1.7">تُضاف للشريحة الحالية · حدّد الصورة ثم استبدل/دوّر/احذف من أدواتها · اسحبها في وضع التحرير</div>'
     +'<input id="md-inp" type="file" accept="image/*" style="display:none">';
   stg.appendChild(p);
+  document.getElementById('md-text').onclick=function(){ addTextBox(); };
   document.getElementById('md-file').onclick=function(){ document.getElementById('md-inp').click(); };
   document.getElementById('md-inp').onchange=function(){ var f=this.files[0]; if(!f)return; var r=new FileReader(); r.onload=function(){ var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); var sc=Math.min(1,1200/img.width); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); addFig(c.toDataURL('image/jpeg',.82)); }; img.src=r.result; }; r.readAsDataURL(f); this.value=''; };
   var lb=document.getElementById('md-lib'); if(lb) lb.onclick=function(){ pickFromLib(lib); };
@@ -562,7 +648,7 @@ function showMediaPanel(){
 }
 function pickFromLib(lib){
   var ov=document.createElement('div'); ov.className='ov'; ov.style.display='flex';
-  ov.innerHTML='<div class="sheet" style="max-width:640px"><div class="sh-h"><b>اختر صورة من ملفات الدرس</b><button onclick="this.closest(\'.ov\').remove()">×</button></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:10px">'+lib.map(function(im,k){return '<img src="'+im.url+'" data-k="'+k+'" style="width:100%;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid #D4BC85;cursor:pointer">';}).join('')+'</div></div>';
+  ov.innerHTML='<div class="in" style="max-width:640px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><b style="color:var(--m2)">اختر صورة من ملفات الدرس</b><button class="btn" style="padding:4px 12px" onclick="this.closest(\'.ov\').remove()">✕</button></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:10px">'+lib.map(function(im,k){return '<img src="'+im.url+'" data-k="'+k+'" style="width:100%;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid #D4BC85;cursor:pointer">';}).join('')+'</div></div>';
   document.body.appendChild(ov);
   ov.querySelectorAll('img').forEach(function(im){ im.onclick=function(){ addFig(lib[+im.getAttribute('data-k')].url); ov.remove(); }; });
 }
@@ -594,6 +680,45 @@ function exitOrder(){
   document.querySelector('.stage').classList.remove('ordmode');
   commitSlide();
 }
+function quickPoints(){
+  if(typeof teamOn!=='number'){ T('اختر فريقاً أولاً من الجناح',true); return; }
+  var t=S.teams[teamOn]; if(!t)return;
+  var COL=['#8A1538','#1F4E79','#3D6B53','#b5801f'];
+  var box=document.createElement('div'); box.className='ov on';
+  box.innerHTML='<div class="in" style="max-width:360px;text-align:center;padding:20px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><b style="color:'+COL[teamOn%4]+';font-size:1.1rem">نقاط '+esc(t.n)+'</b><button class="btn" style="padding:4px 12px" onclick="this.closest(\'.ov\').remove()">✕</button></div>'
+    +'<div id="qp-v" style="font-size:3rem;font-weight:900;color:'+COL[teamOn%4]+';line-height:1">'+t.p+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px">'
+    +'<button class="btn" onclick="qpAdd(-50)">−50</button><button class="btn" onclick="qpAdd(-100)">−100</button><button class="btn" onclick="qpAdd(-200)">−200</button>'
+    +'<button class="btn gold" onclick="qpAdd(50)">+50</button><button class="btn gold" onclick="qpAdd(100)">+100</button><button class="btn gold" onclick="qpAdd(200)">+200</button>'
+    +'</div></div>';
+  box.onclick=function(e){ if(e.target===box) box.remove(); };
+  document.body.appendChild(box);
+}
+function qpAdd(n){ if(typeof teamOn!=='number')return; S.teams[teamOn].p=Math.max(0,(S.teams[teamOn].p||0)+n); var v=document.getElementById('qp-v'); if(v)v.textContent=S.teams[teamOn].p; teams(); saveRosterSilent&&saveRosterSilent(); }
+function teamsCompare(){
+  var COL=['#8A1538','#1F4E79','#3D6B53','#b5801f'];
+  var sorted=S.teams.map(function(t,k){return {n:t.n,p:t.p||0,k:k};}).sort(function(a,b){return b.p-a.p;});
+  var mx=Math.max(1,sorted[0].p);
+  var box=document.createElement('div'); box.className='ov on';
+  box.innerHTML='<div class="in" style="max-width:480px;padding:20px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><b style="color:var(--m2);font-size:1.15rem">مقارنة الفرق</b><button class="btn" style="padding:4px 12px" onclick="this.closest(\'.ov\').remove()">✕</button></div>'
+    +'<div style="display:flex;flex-direction:column;gap:14px">'+sorted.map(function(t,rank){return '<div><div style="display:flex;justify-content:space-between;font-weight:900;color:#3D0918;margin-bottom:5px;font-size:1rem"><span>'+(rank===0&&t.p>0?'<svg style="width:15px;height:15px;vertical-align:-2px" viewBox="0 0 24 24" fill="#B8924A"><path d="M2 8l4.5 4L12 4l5.5 8L22 8l-2 11H4z"/></svg> ':'')+esc(t.n)+'</span><span>'+t.p+'</span></div><div style="height:20px;background:#efe9dd;border-radius:10px;overflow:hidden"><div style="height:100%;width:'+Math.round(t.p/mx*100)+'%;background:'+COL[t.k%4]+';border-radius:10px;transition:width .4s;min-width:2px"></div></div></div>';}).join('')+'</div></div>';
+  box.onclick=function(e){ if(e.target===box) box.remove(); };
+  document.body.appendChild(box);
+}
+function openMore(){
+  var box=document.createElement('div'); box.className='ov on';
+  box.innerHTML='<div class="in" style="max-width:340px;padding:20px">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><b style="color:var(--m2);font-size:1.1rem">المزيد</b><button class="btn" style="padding:4px 12px" onclick="this.closest(\'.ov\').remove()">✕</button></div>'
+    +'<div style="display:flex;flex-direction:column;gap:9px">'
+    +'<button class="btn" onclick="this.closest(\'.ov\').remove();jumpPulse()">الانتقال لشريحة النبض</button>'
+    +'<button class="btn" onclick="this.closest(\'.ov\').remove();openHist()">سجل الحصص</button>'
+    +'<button class="btn gold" onclick="this.closest(\'.ov\').remove();goldCard()">★ البطاقة الذهبية</button>'
+    +'</div></div>';
+  box.onclick=function(e){ if(e.target===box) box.remove(); };
+  document.body.appendChild(box);
+}
 function jumpPulse(){ for(var k=0;k<SLIDES.length;k++){ if((SLIDES[k].tag||'').indexOf('النبض')!==-1){ i=k; render(); return; } } T('لا شريحة نبض'); }
 
 function restoreSlide(){if(!confirm('استعادة أصل هذه الشريحة وحذف تعديلاتك عليها؟'))return;delete OV[i];saveOv();editing=false;render();T('استُعيد الأصل')}
@@ -603,6 +728,8 @@ function render(){
   el.querySelectorAll('.pulse button').forEach(function(b){b.onclick=function(){pulsePick(b.parentElement.getAttribute('data-when'),+b.getAttribute('data-v'),b)}});
   document.getElementById('dots').textContent=(i+1)+' / '+SLIDES.length; document.getElementById('crumbTag').textContent=s.tag||'';
   if(s.obj!=null){objDone[s.obj]=1;} renderObj(); if(_mode&&_mode!=='media'){var _m=_mode;_mode=null;setMode(_m);}
+  var pt=document.getElementById('progtxt'); if(pt) pt.textContent=(i+1)+' / '+SLIDES.length;
+  var pf=document.getElementById('progfill'); if(pf) pf.style.width=Math.round((i+1)/SLIDES.length*100)+'%';
   el.querySelectorAll('.rev').forEach(function(b){b.onclick=function(){var q=b.closest('.q');q.classList.add('open');var l=+(q.getAttribute('data-l')||1);if(sel!=null){curLvl=l;judge(true)}}});
   el.querySelectorAll('.ladder .q').forEach(function(q){q.addEventListener('click',function(){el.querySelectorAll('.ladder .q').forEach(function(x){x.classList.remove('pick')});q.classList.add('pick');setLvl(+q.getAttribute('data-l'))})});
   el.querySelectorAll('.q[data-l]').forEach(function(q){var l=+q.getAttribute('data-l');var t=q.querySelector('.qt');if(t&&!t.querySelector('.lvl'))t.insertAdjacentHTML('afterbegin','<span class="lvl l'+l+'">'+LVL[l]+'</span>')});
@@ -630,10 +757,21 @@ function load(){try{var r=JSON.parse(localStorage.getItem('hh_stage_roster')||'n
   try{ var u=new URLSearchParams(location.search); var c=u.get('cls'); if(c) S.name=c; }catch(e){}
   if(!S.roster.length)S.roster=['طالب 1','طالب 2','طالب 3','طالب 4','طالب 5','طالب 6','طالب 7','طالب 8','طالب 9','طالب 10','طالب 11','طالب 12','طالب 13','طالب 14','طالب 15','طالب 16','طالب 17','طالب 18','طالب 19','طالب 20','طالب 21','طالب 22','طالب 23','طالب 24'];
   S.roster.forEach(function(n){S.rec[n]=S.rec[n]||{p:0,c:0,star:0,warn:0,abs:false}});}
-function seats(){var g=document.getElementById('seats');g.innerHTML=S.roster.map(function(n,k){var r=S.rec[n];var lvl=r.p>=3?3:r.p===2?2:r.p===1?1:0;if(heat){var hh=heatOf(n);lvl=hh>=6?3:hh>=3?2:hh>=1?1:0}var t=S.team[n];var dim=(typeof teamFocus==='number' && t!=null && t!==teamFocus);return '<div class="seat h'+lvl+(sel===k?' sel':'')+(r.abs?' abs':'')+(t!=null?' t'+t:'')+(lastGlow===n?' glow':'')+(dim?' dim':'')+'" draggable="true" data-k="'+k+'">'+(r.star||r.warn?'<span class="s">'+(r.star?'★'+r.star:'')+(r.warn?' !'+r.warn:'')+'</span>':'')+'<span>'+esc(n)+'</span>'+(r.p?'<span class="m">'+r.c+'/'+r.p+'</span>':'')+(!r.p&&!r.abs?'<span class="dot" title="لم يشارك بعد"></span>':'')+'</div>'}).join('');
+function splitName(n){ var p=String(n).trim().split(/\s+/); return {fn:p[0]||'', ln:p.slice(1).join(' ')}; }
+function seats(){var g=document.getElementById('seats');g.innerHTML=S.roster.map(function(n,k){var r=S.rec[n];var lvl=r.p>=3?3:r.p===2?2:r.p===1?1:0;if(heat){var hh=heatOf(n);lvl=hh>=6?3:hh>=3?2:hh>=1?1:0}var t=S.team[n];var dim=(typeof teamFocus==='number' && t!=null && t!==teamFocus);var nm=splitName(n);var lead=(t!=null && S.leader && S.leader[t]===n);var multi=(_multi.indexOf(k)!==-1);
+    return '<div class="seat h'+lvl+(sel===k?' sel':'')+(multi?' msel':'')+(r.abs?' abs':'')+(t!=null?' t'+t:'')+(lead?' lead':'')+(lastGlow===n?' glow':'')+(dim?' dim':'')+'" draggable="true" data-k="'+k+'">'
+    +(lead?'<svg class="crown" viewBox="0 0 24 24" fill="#B8924A"><path d="M2 8l4.5 4L12 4l5.5 8L22 8l-2 11H4z"/></svg>':'')
+    +(r.abs?'<svg class="absx" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':'')
+    +(r.star||r.warn?'<span class="s">'+(r.star?'★'+r.star:'')+(r.warn?' !'+r.warn:'')+'</span>':'')
+    +'<span class="fn">'+esc(nm.fn)+'</span>'+(nm.ln?'<span class="ln">'+esc(nm.ln)+'</span>':'')
+    +(r.p?'<span class="m">'+r.c+'/'+r.p+'</span>':'')+(!r.p&&!r.abs?'<span class="dot" title="لم يشارك بعد"></span>':'')+'</div>'}).join('');
   lastGlow=null;
   g.querySelectorAll('.seat').forEach(function(e){
-    e.onclick=function(){sel=+e.dataset.k;document.getElementById('who').textContent=S.roster[sel];suggestLvl();seats()};
+    e.onclick=function(ev){var k=+e.dataset.k;
+      if(ev.ctrlKey||ev.metaKey||_multiMode){ var ix=_multi.indexOf(k); if(ix===-1)_multi.push(k); else _multi.splice(ix,1); seats(); return; }
+      sel=k;document.getElementById('who').textContent=S.roster[sel];suggestLvl();seats()};
+    e.ondblclick=function(){renameStudent(+e.dataset.k)};
+    e.oncontextmenu=function(ev){ev.preventDefault();makeLeader(+e.dataset.k)};
     e.ondragstart=function(ev){ev.dataTransfer.setData('text',e.dataset.k)};
     e.ondragover=function(ev){ev.preventDefault();e.classList.add('drop')};
     e.ondragleave=function(){e.classList.remove('drop')};
@@ -641,10 +779,18 @@ function seats(){var g=document.getElementById('seats');g.innerHTML=S.roster.map
   });
   var pres=S.roster.filter(function(n){return !S.rec[n].abs}).length;document.getElementById('pres').textContent='حاضر '+pres+' / '+S.roster.length;document.getElementById('cls').textContent=S.name}
 var teamFocus=null;
-function teams(){document.getElementById('teams').innerHTML=S.teams.map(function(t,k){var members=S.roster.filter(function(n){return S.team[n]===k}).length;return '<div class="team c'+k+(teamOn===k?' on':'')+'" onclick="pickTeam('+k+')" ondblclick="renameTeam('+k+')" title="'+esc(t.n)+' · '+(members?members+' أعضاء':'بلا أعضاء')+' · نقرة: اختيار وإبراز المقاعد · نقرتان: تسمية"><b>'+t.p+'</b><span class="tn">'+esc(t.n)+'</span></div>'}).join('')+(S.teams.length<4?'<div class="team add" onclick="S.teams.push({n:\'فريق \'+(S.teams.length+1),p:0});teams()" title="فريق جديد" style="flex:0 0 34px">+</div>':'')}
+function teams(){document.getElementById('teams').innerHTML=S.teams.map(function(t,k){var members=S.roster.filter(function(n){return S.team[n]===k}).length;var ld=(S.leader&&S.leader[k])?splitName(S.leader[k]).fn:'';return '<div class="team c'+k+(teamOn===k?' on':'')+'" onclick="pickTeam('+k+')" ondblclick="renameTeam('+k+')" title="'+esc(t.n)+' · '+(members?members+' أعضاء':'بلا أعضاء')+(ld?' · قائد: '+esc(ld):'')+' · نقرة: اختيار وإبراز المقاعد · نقرتان: تسمية"><b>'+t.p+'</b><span class="tn">'+esc(t.n)+'</span></div>'}).join('')+(S.teams.length<4?'<div class="team add" onclick="S.teams.push({n:\'فريق \'+(S.teams.length+1),p:0});teams()" title="فريق جديد" style="flex:0 0 34px">+</div>':'')}
+var _multi=[]; var _multiMode=false;
+S.leader=S.leader||{};
+function renameStudent(k){ var n=prompt('اسم الطالب (الأول والأخير):', S.roster[k]); if(n&&n.trim()){ var old=S.roster[k]; var nn=n.trim(); S.rec[nn]=S.rec[old]; if(old!==nn) delete S.rec[old]; if(S.team[old]!=null){S.team[nn]=S.team[old];delete S.team[old];} for(var t in S.leader){if(S.leader[t]===old)S.leader[t]=nn;} S.roster[k]=nn; seats();teams();saveRosterSilent&&saveRosterSilent(); } }
+function makeLeader(k){ var n=S.roster[k]; var t=S.team[n]; if(t==null){T('اضمم الطالب إلى فريق أولاً',true);return;} S.leader[t]=(S.leader[t]===n?null:n); seats();teams(); T(S.leader[t]?n+' صار قائد '+S.teams[t].n:'أُلغيت القيادة'); saveRosterSilent&&saveRosterSilent(); }
+function toggleMulti(){ _multiMode=!_multiMode; if(!_multiMode)_multi=[]; var b=document.getElementById('multibtn'); if(b)b.classList.toggle('on',_multiMode); seats(); T(_multiMode?'التحديد المتعدد مفعّل · انقر عدة طلاب':'أُلغي التحديد المتعدد'); }
 function pickTeam(k){teamOn=k;teamFocus=(teamFocus===k?null:k);teams();seats()}
 function renameTeam(k){var n=prompt('اسم الفريق:',S.teams[k].n);if(n){S.teams[k].n=n.trim();teams()}}
-function assignTeam(){if(sel==null){T('انقر مقعد الطالب أولاً');return}S.team[S.roster[sel]]=teamOn;T(S.roster[sel]+' ← '+S.teams[teamOn].n);sel=null;seats();teams();saveRosterSilent()}
+function assignTeam(){
+  if(_multi.length){ _multi.forEach(function(k){S.team[S.roster[k]]=teamOn;}); T(_multi.length+' طلاب ← '+S.teams[teamOn].n); _multi=[]; _multiMode=false; var b=document.getElementById('multibtn'); if(b)b.classList.remove('on'); seats();teams();saveRosterSilent();return; }
+  if(sel==null){T('انقر مقعد الطالب (أو فعّل التحديد المتعدد)');return}
+  S.team[S.roster[sel]]=teamOn;T(S.roster[sel]+' ← '+S.teams[teamOn].n);sel=null;seats();teams();saveRosterSilent()}
 function toggleSide(){document.querySelector('.side').classList.toggle('hidden');document.querySelector('.body').classList.toggle('nos')}
 function saveRosterSilent(){try{localStorage.setItem('hh_stage_roster',JSON.stringify({name:S.name,roster:S.roster,team:S.team}))}catch(e){}}
 /* سلّم التفكير: اقتراح الدرجة حسب سجل الطالب */
@@ -671,7 +817,7 @@ function exportAnon(){
   T('صُدّر ملف مجهّل الهوية · مفتاح الرموز يبقى عندك فقط');
 }
 function exportCSV(){var csv='\ufeffالطالب,الحضور,مشاركات,صحيحة,تفكير عالٍ,مستويات الأسئلة,نجوم,تنبيهات\n'+S.roster.map(function(n){var r=S.rec[n];return [n,r.abs?'غائب':'حاضر',r.p,r.c,r.hi||0,(r.lv||[]).map(function(l){return LVL[l]}).join(' / '),r.star,r.warn].join(',')}).join('\n');var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='حصة_'+PAY.title.replace(/\s+/g,'_')+'_'+S.name+'.csv';a.click()}
-(function(){var d=new Date();var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];var el=document.getElementById('dateInline'); if(el) el.textContent=days[d.getDay()]+' '+d.toLocaleDateString('ar-QA-u-nu-latn',{day:'numeric',month:'long'});})();
+(function(){var d=new Date();var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];var el=document.getElementById('dateInline'); if(el) el.textContent=days[d.getDay()]+' '+d.toLocaleDateString('ar-QA-u-nu-latn',{day:'numeric',month:'long',year:'numeric'});})();
 /* ── المؤقت العائم ── */
 var TM={sec:60,left:60,iv:null,run:false};
 function fmt(s){var m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r}
