@@ -13679,7 +13679,7 @@ let _aqCurrentCat = '';
 
 function setAQDiff(d){
   _aqCurrentDiff = d;
-  ['easy','med','hard'].forEach(x=>{
+  ['easy','med','hard','elite'].forEach(x=>{
     const btn = document.getElementById('aq-diff-'+x);
     if(btn){ btn.style.background = x===d?'#8A1538':'#fff'; btn.style.color = x===d?'#fff':'#8A1538'; }
   });
@@ -14113,8 +14113,8 @@ function loadAdminCatQuestions(){
 // عرض قائمة الأسئلة (يستخدم من loadAdminCatQuestions و filterCurrentCategory)
 function renderQuestionsList(qs, cat, highlight){
   const listEl = document.getElementById('aq-questions-list');
-  const diffLabels = {easy:'سهل 200', med:'متوسط 400', hard:'صعب 600'};
-  const diffColors = {easy:'#1a5fa8', med:'#b86a00', hard:'#b01c1c'};
+  const diffLabels = {easy:'سهل 200', med:'متوسط 400', hard:'صعب 600', elite:'نخبة 800'};
+  const diffColors = {easy:'#1a5fa8', med:'#b86a00', hard:'#b01c1c', elite:'#5E0E26'};
   // دالة لتلوين الكلمة المبحوث عنها
   const hl = (text) => {
     if(!highlight) return esc(text);
@@ -14186,7 +14186,7 @@ function globalSearchQuestions(){
     });
   });
   const diffLabels = {easy:'س', med:'م', hard:'ص'};
-  const diffColors = {easy:'#1a5fa8', med:'#b86a00', hard:'#b01c1c'};
+  const diffColors = {easy:'#1a5fa8', med:'#b86a00', hard:'#b01c1c', elite:'#5E0E26'};
   // تمييز الكلمة
   const hl = (text) => {
     try{
