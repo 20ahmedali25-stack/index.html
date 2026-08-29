@@ -6,6 +6,80 @@
 window.HH_STAGE_FILES = window.HH_STAGE_FILES || {
   'عناصر المناخ': 'climate.html'
 };
+// ═══ مرفقات الطلاب: ملفات PDF يرفعها المعلم للطلاب ═══
+async function _hhSfFetch(lid){
+  var out=[];
+  try{
+    var col=firebase.firestore().collection('lesson_files');
+    var ids=[lid]; try{ if(typeof currentUser!=='undefined'&&currentUser) ids.push(lid+'__'+currentUser.uid); }catch(e){}
+    var rs=await Promise.all(ids.map(function(id){ return col.doc(id).get().catch(function(){return null;}); }));
+    rs.forEach(function(d){ if(d&&d.exists){ (d.data().files||[]).forEach(function(f,k){ out.push({name:f.name, url:f.url, size:f.size||0, _doc:d.id, _k:k}); }); } });
+  }catch(e){}
+  try{ localStorage.setItem('hh_lf_'+lid, JSON.stringify(out.map(function(x){return {name:x.name,url:x.url};}))); }catch(e){}
+  return out;
+}
+function _hhFmtSize(b){ if(!b)return''; return b>1048576?(b/1048576).toFixed(1)+' MB':Math.round(b/1024)+' KB'; }
+window.hhStudentFiles=async function(ui,li){
+  var S=hhSchData(); var L=S.units[ui].lessons[li]; var lid=L.id||('u'+ui+'l'+li);
+  var isTeacher=(_hhSchRole==='teacher');
+  var ov=document.createElement('div'); ov.id='hh-sf-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px;';
+  ov.innerHTML='<div style="background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:18px;max-width:600px;width:100%;max-height:88vh;overflow:auto;font-family:Cairo,sans-serif;" onclick="event.stopPropagation()">'
+    +'<div style="background:linear-gradient(120deg,#4A0B1E,#5E0E26);padding:12px 16px;display:flex;align-items:center;gap:10px;"><div style="flex:1;"><b style="color:#F5E6C4;font-size:1rem;">مرفقات الطلاب · '+esc(L.title)+'</b><div style="color:#D4BC85;font-size:.68rem;">'+(isTeacher?'ارفع ملفات PDF للطلاب · يحمّلونها من صفحة الدرس':'ملفات الدرس · اضغط تحميل')+'</div></div><button onclick="document.getElementById(\'hh-sf-ov\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:32px;height:32px;color:#F5E6C4;font-weight:900;cursor:pointer;">×</button></div>'
+    +'<div style="padding:14px 16px;">'
+    +(isTeacher?'<label id="hh-sf-drop" style="display:block;border:2.5px dashed #B8924A;border-radius:14px;padding:18px;text-align:center;background:rgba(184,146,74,.05);font-weight:800;color:#8A6D2E;font-size:.85rem;cursor:pointer;"><b style="display:block;color:#5E0E26;font-size:.95rem;margin-bottom:3px;">اسحب ملفات PDF هنا أو انقر</b>أوراق عمل · مذكرات · واجبات (PDF فقط، حتى 10 ميغا)<input id="hh-sf-inp" type="file" accept="application/pdf" multiple style="display:none;"></label><div id="hh-sf-st" style="font-size:.75rem;font-weight:800;color:#3D6B53;min-height:18px;margin-top:6px;"></div>':'')
+    +'<div id="hh-sf-list" style="display:flex;flex-direction:column;gap:8px;margin-top:'+(isTeacher?'8px':'0')+';"></div>'
+    +'</div></div>';
+  ov.onclick=function(){ ov.remove(); };
+  document.body.appendChild(ov);
+  function st(m,err){ var e=document.getElementById('hh-sf-st'); if(e){ e.textContent=m; e.style.color=err?'#8A1538':'#3D6B53'; } }
+  async function list(){
+    var g=document.getElementById('hh-sf-list'); if(!g)return;
+    g.innerHTML='<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.8rem;padding:10px;">جارٍ التحميل…</div>';
+    var files=await _hhSfFetch(lid);
+    g.innerHTML=files.length? files.map(function(f){
+      return '<div style="display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid #EDE3CE;border-radius:12px;padding:9px 12px;">'
+        +'<div style="width:36px;height:42px;border-radius:6px;background:linear-gradient(160deg,#c0392b,#8e2820);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.55rem;font-weight:900;flex-shrink:0;">PDF</div>'
+        +'<div style="flex:1;min-width:0;"><b style="font-size:.82rem;color:#3D0918;display:block;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(f.name)+'</b><span style="font-size:.66rem;color:#8A7A63;">'+_hhFmtSize(f.size)+'</span></div>'
+        +'<a href="'+esc(f.url)+'" target="_blank" rel="noopener" style="background:#8A1538;color:#F5E6C4;border-radius:8px;padding:7px 14px;font-size:.72rem;font-weight:900;text-decoration:none;">تحميل</a>'
+        +(isTeacher?'<button data-doc="'+esc(f._doc)+'" data-k="'+f._k+'" class="hh-sf-del" style="background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:8px;width:30px;height:30px;font-weight:900;cursor:pointer;">×</button>':'')
+        +'</div>';
+    }).join('') : '<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.8rem;padding:14px;">'+(isTeacher?'لا مرفقات بعد · ارفع أول ملف':'لا مرفقات لهذا الدرس بعد')+'</div>';
+    g.querySelectorAll('.hh-sf-del').forEach(function(b){ b.onclick=async function(){
+      if(!confirm('حذف هذا المرفق؟'))return;
+      try{ var ref=firebase.firestore().collection('lesson_files').doc(b.getAttribute('data-doc')); var d=await ref.get(); var arr=(d.exists&&d.data().files)||[]; arr.splice(+b.getAttribute('data-k'),1); await ref.set({lessonId:lid, files:arr, updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}); st('حُذف المرفق'); list(); try{hhSchRender();}catch(e){} }catch(e){ st('تعذر الحذف: '+e.message,true); }
+    }; });
+  }
+  if(isTeacher){
+    async function upload(files){
+      var docId=lid+'__'+currentUser.uid; try{ if(typeof isAdminUser==='function'&&isAdminUser(currentUser)) docId=lid; }catch(e){}
+      var arr=[].slice.call(files||[]).filter(function(f){ return f.type==='application/pdf'; });
+      if(!arr.length){ st('اختر ملفات PDF فقط',true); return; }
+      for(var n=0;n<arr.length;n++){
+        var f=arr[n];
+        if(f.size>10*1024*1024){ st(f.name+': أكبر من 10 ميغا',true); continue; }
+        st('جارٍ رفع '+(n+1)+' من '+arr.length+'…');
+        try{
+          var path='lesson_files/'+lid+'_'+currentUser.uid+'_'+Date.now()+'_'+n+'.pdf';
+          var ref=firebase.storage().ref(path);
+          var snap=await ref.put(f, {contentType:'application/pdf'});
+          var url=await snap.ref.getDownloadURL();
+          var dref=firebase.firestore().collection('lesson_files').doc(docId);
+          var d=await dref.get(); var list2=(d.exists&&d.data().files)||[]; list2.push({name:f.name, url:url, size:f.size});
+          await dref.set({lessonId:lid, files:list2, updatedAt:firebase.firestore.FieldValue.serverTimestamp(), by:currentUser.uid},{merge:true});
+        }catch(e){ st('تعذر الرفع: '+e.message,true); return; }
+      }
+      st('اكتمل الرفع · الملفات متاحة للطلاب'); list(); try{hhSchRender();}catch(e){}
+    }
+    var inp=document.getElementById('hh-sf-inp'); inp.onchange=function(){ upload(inp.files); inp.value=''; };
+    var dz=document.getElementById('hh-sf-drop');
+    dz.ondragover=function(e){ e.preventDefault(); dz.style.background='rgba(184,146,74,.15)'; };
+    dz.ondragleave=function(){ dz.style.background='rgba(184,146,74,.05)'; };
+    dz.ondrop=function(e){ e.preventDefault(); dz.style.background='rgba(184,146,74,.05)'; upload(e.dataTransfer.files); };
+  }
+  list();
+};
+
 // ═══ ملفات الدرس: رفع صور الكتاب من داخل الدرس · تندمج فوراً في العرض والرحلة ═══
 function _hhLmRole(){
   try{ if(typeof isAdminUser==='function' && typeof currentUser!=='undefined' && isAdminUser(currentUser)) return 'admin'; }catch(e){}
@@ -788,6 +862,8 @@ function hhOpenSchool(){
          + TILE('hhSchLesson('+i+','+j+',&quot;terms&quot;)','المصطلحات','<path d="M4 5h16M4 12h16M4 19h10"/>',false)
          + TILE('hhSchLesson('+i+','+j+',&quot;material&quot;)','المادة','<path d="M12 6.5C10 4.5 7 4 4 5v14c3-1 6-.5 8 1.5 2-2 5-2.5 8-1.5V5c-3-1-6-.5-8 1.5z"/>',false);
       if(_hhSchRole==='teacher') man+=TILE('hhLessonFiles('+i+','+j+')','ملفات الدرس'+(imgCount?' ('+imgCount+')':''),'<rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9"/>',true);
+      var atCount=0; try{ atCount=(JSON.parse(localStorage.getItem('hh_lf_'+L.id)||'[]')).length; }catch(e){}
+      if(_hhSchRole==='teacher' || atCount>0) man+=TILE('hhStudentFiles('+i+','+j+')','مرفقات الطلاب'+(atCount?' ('+atCount+')':''),'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/>',false);
       // الاختبارات
       var tst=TILE('hhSchTest('+i+','+j+',&quot;quick&quot;)','مراجعة','<path d="M9 11l3 3 8-8M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>',false)
             + TILE('hhSchTest('+i+','+j+',&quot;short&quot;)','مختصر','<path d="M9 11l3 3 8-8M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/>',false)
