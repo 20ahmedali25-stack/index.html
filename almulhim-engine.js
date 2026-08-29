@@ -1366,6 +1366,15 @@ try {
   
   auth=firebase.auth();
   db=firebase.firestore();
+  // ═══ العمل دون اتصال: يخزّن البيانات محلياً ويُزامن عند عودة النت ═══
+  try{
+    db.enablePersistence({ synchronizeTabs: true }).then(function(){
+      console.log('العمل دون اتصال مُفعّل');
+    }).catch(function(err){
+      // failed-precondition: عدة تبويبات · unimplemented: متصفح لا يدعم — كلاهما غير ضار
+      console.warn('العمل دون اتصال غير متاح:', err.code);
+    });
+  }catch(e){ console.warn('enablePersistence:', e.message); }
   auth.onAuthStateChanged(async user=>{
     try{ if(user) setTimeout(()=>{ try{ hhLoadNotifications(); }catch(_){} }, 2500); }catch(_e){}
     try{ if(user) setTimeout(()=>{ try{ hhLoadMyRole(); }catch(_){} }, 1800); }catch(_e2){}
@@ -1493,6 +1502,35 @@ async function doLogin(){
   if(OFFLINE_MODE){offlineLogin(email,pass,err);return;}
   try{await auth.signInWithEmailAndPassword(email,pass);}
   catch(e){err.textContent='البريد أو كلمة المرور غير صحيحة';}
+}
+
+async function doGoogleLogin(){
+  const err=document.getElementById('login-err');
+  if(err) err.textContent='';
+  if(OFFLINE_MODE){ if(err) err.textContent='الدخول بجوجل يتطلب اتصالاً بالإنترنت'; return; }
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();
+    const result=await auth.signInWithPopup(provider);
+    const user=result.user;
+    // إنشاء وثيقة المستخدم إن كان جديداً
+    const ref=db.collection('users').doc(user.uid);
+    const snap=await ref.get();
+    if(!snap.exists){
+      await ref.set({
+        name: user.displayName || 'مستخدم',
+        email: user.email || '',
+        phone: '',
+        points: 0,
+        provider: 'google',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  }catch(e){
+    if(e.code==='auth/popup-closed-by-user' || e.code==='auth/cancelled-popup-request'){ return; }
+    if(err) err.textContent = (e.code==='auth/operation-not-allowed')
+      ? 'الدخول بجوجل غير مُفعّل بعد في الإعدادات'
+      : 'تعذر الدخول بجوجل · حاول بالبريد';
+  }
 }
 
 async function doRegister(){
