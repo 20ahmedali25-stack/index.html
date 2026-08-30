@@ -299,6 +299,22 @@ th{color:var(--mute)}
 .seat.lead{box-shadow:inset 0 0 0 2px #B8924A}
 .team .ldr{display:block;font-size:.6rem;color:var(--g3);font-weight:800;margin-top:1px}
 #multibtn.on{background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border-color:#8FBFA6}
+
+#guide .gclose{background:rgba(94,14,38,.12);border:1px solid var(--g,#B8924A);color:var(--m2,#5E0E26);border-radius:8px;width:26px;height:26px;font-weight:900;cursor:pointer;margin-left:6px;font-size:13px;line-height:1;flex-shrink:0}
+#guide .gclose:hover{background:rgba(94,14,38,.22)}
+
+/* ═══ وضع التقديم: عرض نظيف للطلاب ═══ */
+.presentbtn{background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1.5px solid #FFFDF8;border-radius:10px;padding:8px 16px;font-weight:900;font-size:12px;cursor:pointer;font-family:inherit;margin-left:8px}
+.presentbtn:hover{filter:brightness(1.05)}
+.exitpresent{display:none;background:rgba(94,14,38,.9);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:10px;padding:8px 16px;font-weight:900;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+/* في وضع التقديم: */
+body.presenting .top{display:none !important;}                    /* أخفِ الترويسة كاملة */
+body.presenting .ibar .tch{display:none !important;}              /* أخفِ أدوات التحرير E R M S المزيد */
+body.presenting .exitpresent{display:inline-flex !important;align-items:center;}  /* أظهر زر الإنهاء */
+body.presenting .stage{padding-top:10px;}
+body.presenting .editbar{display:none !important;}
+body.presenting .guide{display:none !important;}                  /* الكشف الموجّه أداة معلّم */
+body.presenting .slide{font-size:1.05em;}                        /* الشريحة أكبر قليلاً للعرض */
 </style>
 </head>
 <body>
@@ -307,6 +323,7 @@ th{color:var(--mute)}
   <div class="objc" id="obj" title="أهداف الدرس · تُضاء عند تغطيتها"></div>
   <div class="hdate" id="dateInline"></div>
   <div class="btns">
+    <button onclick="startPresenting()" class="presentbtn" id="presentBtn">▶ ابدأ التقديم</button>
     <button onclick="endSession()" class="endbtn">أنهِ الحصة</button>
     <div class="menu" id="menu"><button class="mbtn" onclick="document.getElementById('menu').classList.toggle('open')" title="المزيد">⋮</button>
       <div class="drop">
@@ -342,6 +359,7 @@ th{color:var(--mute)}
       </div>
       <div class="prog"><span id="progtxt">1 / 1</span><div class="track"><div class="fill" id="progfill"></div></div></div>
       <div class="ibar" id="ibar">
+        <button class="exitpresent" id="exitPresentBtn" onclick="endPresenting()" title="إنهاء التقديم (Esc)">✕ إنهاء التقديم</button>
         <div class="ic tch" id="ic-e" onclick="toggleEdit()" title="التحرير العميق (E)"><span class="k">E</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg><i>تحرير</i></div>
         <div class="ic tch" id="ic-r" onclick="toggleMedia()" title="الوسائط: صور ونص وفيديو (R)"><span class="k">R</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 13l-5-5-9 9"/></svg><i>وسائط</i></div>
         <div class="ic tch" id="ic-m" onclick="toggleOrder()" title="ترتيب ظهور العناصر (M)"><span class="k">M</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h9M4 12h13M4 18h7"/><circle cx="19" cy="6" r="2"/><circle cx="20" cy="18" r="2"/></svg><i>الترتيب</i></div>
@@ -527,11 +545,14 @@ var editing=false; var heat=false;
 /* أرقام الخطوات: نقرة على الرقم = تغييره · كل الأرقام تُرقَّم تلقائياً */
 function decorateSteps(el){el.querySelectorAll('[data-step]').forEach(function(x){if(x.querySelector(':scope>.stepno'))return;var n=document.createElement('span');n.className='stepno';n.textContent=x.getAttribute('data-step');n.title='رقم النقرة · انقر لتغييره · 0 = يظهر مع الشريحة';n.onclick=function(ev){ev.stopPropagation();var v=prompt('رقم النقرة لهذا العنصر (0 يظهر مع الشريحة):',x.getAttribute('data-step'));if(v==null)return;v=parseInt(v,10);if(isNaN(v)||v<0)return;if(v===0){x.removeAttribute('data-step');x.classList.add('in')}else x.setAttribute('data-step',v);n.textContent=v;commitSlide();T('رقم النقرة: '+v)};x.appendChild(n)})}
 /* الكشف الموجّه: يقترح من يجيب ودرجة السلّم قبل الكشف */
-function guideShow(){var g=document.getElementById('guide');var pool=S.roster.map(function(n,k){return k}).filter(function(k){var r=S.rec[S.roster[k]];return !r.abs&&r.p===0});var hasQ=document.querySelector('#slide .q .rev');if(!hasQ||editing){g.classList.remove('on');return}
-  if(sel!=null){g.innerHTML='المحدد: <b>'+esc(S.roster[sel])+'</b><button class="go" onclick="guideReveal()">اكشف وارصد له ✓</button><button onclick="sel=null;seats();guideShow()">إلغاء</button>'}
-  else if(pool.length){var k=pool[Math.floor(Math.random()*pool.length)];var r=S.rec[S.roster[k]];g.innerHTML='لم يشارك بعد: <b>'+esc(S.roster[k])+'</b><button class="go" onclick="sel='+k+';seats();guideShow()">نادِه</button><button onclick="guideShow()">آخر</button>'}
-  else g.innerHTML='الجميع شارك · اكشف الإجابة بحرية';
+function guideShow(){var g=document.getElementById('guide');if(_guideHidden){g.classList.remove('on');return;}var pool=S.roster.map(function(n,k){return k}).filter(function(k){var r=S.rec[S.roster[k]];return !r.abs&&r.p===0});var hasQ=document.querySelector('#slide .q .rev');if(!hasQ||editing){g.classList.remove('on');return}
+  var closeBtn='<button class="gclose" onclick="guideHide()" title="إخفاء">✕</button>';
+  if(sel!=null){g.innerHTML=closeBtn+'المحدد: <b>'+esc(S.roster[sel])+'</b><button class="go" onclick="guideReveal()">اكشف وارصد له ✓</button><button onclick="sel=null;seats();guideShow()">إلغاء</button>'}
+  else if(pool.length){var k=pool[Math.floor(Math.random()*pool.length)];var r=S.rec[S.roster[k]];g.innerHTML=closeBtn+'لم يشارك بعد: <b>'+esc(S.roster[k])+'</b><button class="go" onclick="sel='+k+';seats();guideShow()">نادِه</button><button onclick="guideShow()">آخر</button>'}
+  else g.innerHTML=closeBtn+'الجميع شارك · اكشف الإجابة بحرية';
   g.classList.add('on')}
+var _guideHidden=false;
+function guideHide(){_guideHidden=true;var g=document.getElementById('guide');if(g)g.classList.remove('on');T('أُخفيت لوحة الكشف · تعود مع الشريحة التالية');}
 function guideReveal(){var b=document.querySelector('#slide .q:not(.open) .rev');if(b){b.click()}else T('لا إجابة مخفية في هذه الشريحة');guideShow()}
 /* البطاقة الذهبية */
 var GOLD=[['سؤال ذهبي','الإجابة الصحيحة على السؤال التالي بنقاط مضاعفة (×2)'],['تحدي الفريق','يجيب الفريق كله معاً بصوت واحد · إن أصابوا +20'],['أنت المعلم','الطالب المحدد يختار من يجيب السؤال التالي'],['ثانية واحدة','إجابة في أقل من 5 ثوانٍ تأخذ +15'],['سلسلة ذهبية','ثلاث إجابات صحيحة متتالية للفريق = +30']];
@@ -580,6 +601,23 @@ function setMode(m){
 function toggleEdit(){ setMode(_mode==='edit'?null:'edit'); }
 function toggleMedia(){ setMode(_mode==='media'?null:'media'); }
 function toggleOrder(){ setMode(_mode==='order'?null:'order'); }
+// ═══ وضع التقديم: لوحة تحكم ⟷ عرض نظيف للطلاب ═══
+var _presenting=false;
+function startPresenting(){
+  if(_mode){ setMode(null); }   // اخرج من أي وضع تحرير أولاً (يحفظ)
+  _presenting=true;
+  document.body.classList.add('presenting');
+  try{ enterFull(); }catch(e){}
+  T('وضع التقديم · الشاشة الآن للطلاب · للإنهاء اضغط ✕ أو Esc');
+}
+function endPresenting(){
+  _presenting=false;
+  document.body.classList.remove('presenting');
+  try{ exitFull(); }catch(e){}
+  T('عدت إلى لوحة التحكم');
+}
+function enterFull(){ var el=document.documentElement; if(el.requestFullscreen)el.requestFullscreen().catch(function(){}); }
+function exitFull(){ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function(){}); }
 function enableTextEdit(el,on){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note').forEach(function(x){x.contentEditable=on?'true':'false';}); }
 function markPickables(el){ el.querySelectorAll('h2,p,li,.qt,.ans,.v,figcaption,.note,.fig,.term,.newtext').forEach(function(x){ x.classList.add('elpick'); x.onclick=function(ev){ if(_mode==='edit'){ ev.stopPropagation(); selectEl(x); } }; }); }
 var _sel=null;
@@ -748,9 +786,9 @@ function render(){
 }
 function renderObj(){var cur=''; for(var k=OBJ.length-1;k>=0;k--){ if(objDone[k]){ cur=OBJ[k]; break; } }
   document.getElementById('obj').innerHTML=OBJ.map(function(o,k){return '<span class="d'+(objDone[k]?' done':'')+'" title="'+o+'">'+(k+1)+'</span>'}).join('')+(cur?'<span class="cur">'+cur+'</span>':'<span class="cur">أهداف الدرس</span>')}
-function go(d){if(d>0&&nextStep())return;if(d<0&&prevStep())return;i=Math.max(0,Math.min(SLIDES.length-1,i+d));render()}
+function go(d){if(d>0&&nextStep())return;if(d<0&&prevStep())return;i=Math.max(0,Math.min(SLIDES.length-1,i+d));_guideHidden=false;render()}
 document.getElementById('slide').addEventListener('click',function(e){if(editing)return;if(e.target.closest('button,.q,.chip,.bin,.zone,input,textarea,.el div,.labels span,video,a,.fig'))return;nextStep()});
-document.addEventListener('keydown',function(e){if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;if(e.key==='ArrowLeft'||e.key==='PageDown'||e.key===' ')go(1);else if(e.key==='ArrowRight'||e.key==='PageUp')go(-1);else if(e.key==='f'||e.key==='F')toggleFull();else if(e.key==='s'||e.key==='S')toggleSide();else if(e.key==='e'||e.key==='E')toggleEdit();else if(e.key==='Enter'&&document.getElementById('tm').hidden&&sel!=null)judge(true);else if(e.key==='Backspace'&&sel!=null){e.preventDefault();judge(false)}else if(e.key==='n'||e.key==='N')fairCall()});
+document.addEventListener('keydown',function(e){if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;if(e.key==='Escape'&&_presenting){endPresenting();return;}if(e.key==='ArrowLeft'||e.key==='PageDown'||e.key===' ')go(1);else if(e.key==='ArrowRight'||e.key==='PageUp')go(-1);else if(e.key==='f'||e.key==='F')toggleFull();else if(e.key==='s'||e.key==='S')toggleSide();else if(e.key==='e'||e.key==='E')toggleEdit();else if(e.key==='Enter'&&document.getElementById('tm').hidden&&sel!=null)judge(true);else if(e.key==='Backspace'&&sel!=null){e.preventDefault();judge(false)}else if(e.key==='n'||e.key==='N')fairCall()});
 function toggleFull(){if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();else document.exitFullscreen()}
 /* ── المقاعد ── */
 function load(){try{var r=JSON.parse(localStorage.getItem('hh_stage_roster')||'null');if(r){S.name=r.name||S.name;S.roster=r.roster||[];S.team=r.team||{}}}catch(e){}
