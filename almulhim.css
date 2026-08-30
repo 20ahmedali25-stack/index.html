@@ -8593,9 +8593,9 @@ body.dark-mode .ms-search-input::placeholder{color:#9B8B6E;}
 .ms-group-header .ms-group-header-count{background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;color:#3D0918 !important;border:none !important;}
 .ms-group-header .ms-group-header-chevron{color:#EAD9B0;}
 .ms-group-header:hover{
-  background:linear-gradient(135deg,#F8F8F6 0%,#fbf3da 100%);
+  background:linear-gradient(120deg,#5E0E26,#7A1330);
   transform:translateX(-2px);
-  box-shadow:0 2px 8px rgba(94,14,38,.08);
+  box-shadow:0 3px 10px rgba(94,14,38,.2);
 }
 .ms-group-header:active{transform:translateX(0) scale(.995);}
 
@@ -8615,7 +8615,8 @@ body.dark-mode .ms-search-input::placeholder{color:#9B8B6E;}
 
 /* مؤشر بصري ناعم على الرأس عند الطي */
 .ms-group-header.collapsed{
-  background:linear-gradient(135deg,#FAFAF8 0%,#f5f0e0 100%);
+  background:linear-gradient(120deg,#3D0918,#4A0B1E);
+  opacity:.92;
 }
 .ms-group-header.collapsed .ms-group-header-count{
   background:var(--mgh-accent,#B8924A);
@@ -10143,3 +10144,11 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
   background:linear-gradient(180deg,transparent,var(--hh-gold-pale,#EAD9B0),transparent);
   margin:0 4px;flex-shrink:0;border-radius:9px;align-self:center;
 }
+
+
+/* ═══ ضمان قراءة عناوين المجموعات (عاجي على العنابي في كل الحالات) ═══ */
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-title{color:#FFFDF8 !important;}
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-sub{color:#EAD9B0 !important;}
+.ms-group-header.collapsed:not(.ms-group-header-soon) .ms-group-header-title{color:#FFFDF8 !important;}
+.ms-group-header.collapsed:not(.ms-group-header-soon) .ms-group-header-sub{color:#D4BC85 !important;}
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-icon{filter:brightness(0) invert(1);opacity:.85;}
