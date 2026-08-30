@@ -10136,3 +10136,10 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 .nav-cta-games{
   animation:none !important;
 }
+
+/* ═══ فاصل ذهبي بين ابدأ الآن وألعابي (شريط التاج) ═══ */
+.hh-crown-sep{
+  display:inline-block;width:2px;height:26px;
+  background:linear-gradient(180deg,transparent,var(--hh-gold-pale,#EAD9B0),transparent);
+  margin:0 4px;flex-shrink:0;border-radius:9px;align-self:center;
+}
