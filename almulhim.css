@@ -8569,19 +8569,19 @@ body.dark-mode .ms-search-input::placeholder{color:#9B8B6E;}
 /* ─── عنوان فاصل بين المجموعات داخل التاب الواحد ─── */
 .ms-group-header{
   grid-column:1/-1;
-  display:flex;align-items:center;gap:10px;
-  padding:7px 14px;margin:10px 0 5px;
+  display:flex;align-items:center;gap:11px;
+  padding:9px 15px;margin:12px 0 6px;
   background:linear-gradient(120deg,#4A0B1E,#5E0E26);
   border:none;
-  border-radius:11px;
+  border-radius:12px;
   font-family:'Cairo',sans-serif;
   cursor:pointer;
   user-select:none;
   transition:all .2s ease;
   position:relative;
   overflow:hidden;
-  min-height:38px;
-  box-shadow:0 3px 10px rgba(94,14,38,.15);
+  min-height:44px;
+  box-shadow:0 3px 11px rgba(94,14,38,.18);
 }
 .ms-group-header::after{
   content:'';position:absolute;bottom:0;right:0;left:0;height:2px;
@@ -10151,4 +10151,25 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 .ms-group-header:not(.ms-group-header-soon) .ms-group-header-sub{color:#EAD9B0 !important;}
 .ms-group-header.collapsed:not(.ms-group-header-soon) .ms-group-header-title{color:#FFFDF8 !important;}
 .ms-group-header.collapsed:not(.ms-group-header-soon) .ms-group-header-sub{color:#D4BC85 !important;}
-.ms-group-header:not(.ms-group-header-soon) .ms-group-header-icon{filter:brightness(0) invert(1);opacity:.85;}
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-icon{
+  width:34px;height:34px;border-radius:10px;
+  background:rgba(212,188,133,.18);border:1px solid rgba(212,188,133,.4);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-icon svg,
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-icon img{
+  filter:brightness(0) invert(1);opacity:.9;width:18px;height:18px;
+}
+
+
+/* رأس المجموعة: شارة العدد ذهبية بارزة + خيط ذهبي */
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-count{
+  background:linear-gradient(135deg,#EAD9B0,#B8924A) !important;
+  color:#3D0918 !important;border:none !important;
+  font-weight:900;padding:3px 12px;border-radius:9px;
+}
+.ms-group-header:not(.ms-group-header-soon)::after{
+  content:'';position:absolute;bottom:0;right:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--mgh-accent,#B8924A),transparent);
+}
+.ms-group-header:not(.ms-group-header-soon) .ms-group-header-chevron{color:#EAD9B0;}
