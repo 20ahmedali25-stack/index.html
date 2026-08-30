@@ -1378,6 +1378,7 @@ try {
   auth.onAuthStateChanged(async user=>{
     try{ if(user) setTimeout(()=>{ try{ hhLoadNotifications(); }catch(_){} }, 2500); }catch(_e){}
     try{ if(user) setTimeout(()=>{ try{ hhLoadMyRole(); }catch(_){} }, 1800); }catch(_e2){}
+    try{ if(user) setTimeout(()=>{ try{ _hhSeenCloudLoad(); }catch(_){} }, 2200); else { _HH_SEEN_CLOUD=null; _HH_SEEN_CLOUD_LOADED=false; } }catch(_e3){}
     clearTimeout(_loaderTimeout);
     clearInterval(_barInterval);
     const _bar=document.getElementById('loader-bar');
@@ -3596,6 +3597,8 @@ function startGame(overrideTeams, overrideCats, overrideName){
   }
   try{ if(typeof hhLogActivity==='function') hhLogActivity('game_start', (cats||[]).join('+').slice(0,60)); }catch(_lg){}
   G={teams,scores:teams.map(()=>0),turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:cats,gameName,startTime:Date.now(),sessionLog:[]};
+  // ═══ حفظ اللعبة فور البدء (تبقى في السجل حتى لو انسحب اللاعب) ═══
+  try{ G.gameLocalId = 'g'+Date.now()+'_'+Math.random().toString(36).slice(2,7); hhSaveGameStart(); }catch(_gs){}
   // عداد وقت اللعبة
   clearInterval(window._gameElapsedTimer);
   window._gameElapsedTimer=setInterval(()=>{
@@ -3706,17 +3709,67 @@ function startGame(overrideTeams, overrideCats, overrideName){
 
 // ═══ ذاكرة الأسئلة المطروحة: منع التكرار عبر اللعبات ═══
 var _HH_SEEN_KEY = 'hh_seen_v1';
+var _HH_SEEN_CLOUD = null;      // نسخة الذاكرة السحابية بعد التحميل
+var _HH_SEEN_CLOUD_LOADED = false;
+var _hhSeenSaveTimer = null;
 function _hhQHash(q){
   var s = (q && q.q) ? String(q.q) : '';
   var h = 5381;
   for(var i=0;i<s.length;i++){ h = ((h<<5)+h+s.charCodeAt(i))|0; }
   return 'q'+(h>>>0).toString(36);
 }
+// تحميل الذاكرة السحابية مرة واحدة عند تسجيل الدخول (يدمجها مع المحلي)
+async function _hhSeenCloudLoad(){
+  if(_HH_SEEN_CLOUD_LOADED) return;
+  try{
+    if(typeof OFFLINE_MODE!=='undefined' && OFFLINE_MODE) return;
+    if(typeof currentUser==='undefined' || !currentUser || typeof db==='undefined' || !db) return;
+    var d = await db.collection('user_seen_questions').doc(currentUser.uid).get();
+    _HH_SEEN_CLOUD = (d.exists && d.data().map) ? d.data().map : {};
+    _HH_SEEN_CLOUD_LOADED = true;
+    // دمج: المحلي (من جلسات كزائر) يُرفع للسحابة أول مرة
+    var local = {}; try{ local = JSON.parse(localStorage.getItem(_HH_SEEN_KEY)||'{}')||{}; }catch(e){}
+    var merged = _hhSeenMerge(_HH_SEEN_CLOUD, local);
+    _HH_SEEN_CLOUD = merged;
+    try{ localStorage.setItem(_HH_SEEN_KEY, JSON.stringify(merged)); }catch(e){}
+    _hhSeenCloudSaveDebounced();
+  }catch(e){}
+}
+function _hhSeenMerge(a, b){
+  var out = JSON.parse(JSON.stringify(a||{}));
+  Object.keys(b||{}).forEach(function(cat){
+    out[cat] = out[cat] || {};
+    Object.keys(b[cat]).forEach(function(h){
+      // نحتفظ بأقدم وقت طرح (الأدق للدورة)
+      if(!out[cat][h] || b[cat][h] < out[cat][h]) out[cat][h] = b[cat][h];
+    });
+  });
+  return out;
+}
+function _hhSeenCloudSaveDebounced(){
+  if(_hhSeenSaveTimer) clearTimeout(_hhSeenSaveTimer);
+  _hhSeenSaveTimer = setTimeout(function(){
+    try{
+      if(typeof OFFLINE_MODE!=='undefined' && OFFLINE_MODE) return;
+      if(typeof currentUser==='undefined' || !currentUser || typeof db==='undefined' || !db) return;
+      if(!_HH_SEEN_CLOUD) return;
+      db.collection('user_seen_questions').doc(currentUser.uid).set({
+        map: _HH_SEEN_CLOUD,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, {merge:true});
+    }catch(e){}
+  }, 1500);  // تجميع الكتابات لتقليل الاستدعاءات
+}
 function _hhSeenLoad(){
+  // السحابة إن حُمّلت (حساب مسجّل)، وإلا المحلي (زائر/دون اتصال)
+  if(_HH_SEEN_CLOUD_LOADED && _HH_SEEN_CLOUD) return _HH_SEEN_CLOUD;
   try{ return JSON.parse(localStorage.getItem(_HH_SEEN_KEY)||'{}')||{}; }catch(e){ return {}; }
 }
 function _hhSeenSave(m){
+  // محلي دائماً (فوري وآمن)
   try{ localStorage.setItem(_HH_SEEN_KEY, JSON.stringify(m)); }catch(e){}
+  // وسحابي إن كان الحساب مسجّلاً
+  if(_HH_SEEN_CLOUD_LOADED){ _HH_SEEN_CLOUD = m; _hhSeenCloudSaveDebounced(); }
 }
 // وسم سؤال بأنه طُرح فعلاً (يستدعى عند فتح السؤال)
 function hhMarkSeen(cat, q){
@@ -11212,38 +11265,73 @@ window.openReplayModal = openReplayModal;
 window.closeReplayModal = closeReplayModal;
 window.startReplayGame = startReplayGame;
 
-function saveGameHistory(sorted){
+// حفظ اللعبة فور بدئها · تبقى في السجل حتى لو لم تكتمل
+function hhSaveGameStart(){
   try{
     const gameData = {
+      localId: G.gameLocalId,
       date:new Date().toLocaleDateString('ar-QA'),
       timestamp: Date.now(),
       name:G.gameName||'لعبة بدون اسم',
-      cats:G.selectedCats.slice(0,3).join('، ')+(G.selectedCats.length>3?'...':''),
-      catsArr:G.selectedCats,
-      teamsArr:G.teams,
-      teamCount:G.teams.length,
-      teams:sorted.map(t=>t.name+': '+t.pts).join(' | '),
-      winner:sorted[0].name
+      cats:(G.selectedCats||[]).slice(0,3).join('، ')+((G.selectedCats||[]).length>3?'...':''),
+      catsArr:G.selectedCats||[],
+      teamsArr:G.teams||[],
+      teamCount:(G.teams||[]).length,
+      teams:(G.teams||[]).map(t=>t+': 0').join(' | '),
+      winner:'·',
+      status:'incomplete',      // تُحدَّث إلى complete عند الإنهاء
+      isComp: !!G.isComp
     };
-    
-    // 1) حفظ محلي (سريع وفوري)
+    // محلي
     const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
     hist.unshift(gameData);
-    if(hist.length>50)hist.length=50; // أبقينا 50 محليا
+    if(hist.length>50)hist.length=50;
     localStorage.setItem('hh_game_history',JSON.stringify(hist));
-    
-    // 2) حفظ سحابي (للمستخدم المسجل فقط)
+    // سحابي · نحفظ بمعرّف ثابت (localId) لنحدّثه لاحقاً بدل التكرار
     if(!OFFLINE_MODE && db && currentUser && currentUser.uid){
-      const userId = currentUser.uid;
-      // نضيف اللعبة كمستند منفصل في user_games
-      db.collection('user_games').add({
-        userId: userId,
+      db.collection('user_games').doc(G.gameLocalId).set({
+        userId: currentUser.uid,
         userEmail: currentUser.email || '',
         ...gameData,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(()=>{
-      }).catch(err=>{
-        console.warn('cloud game save:', err);
+      }).catch(()=>{});
+    }
+  }catch(e){ console.warn('hhSaveGameStart:', e); }
+}
+
+function saveGameHistory(sorted){
+  try{
+    const patch = {
+      teams:sorted.map(t=>t.name+': '+t.pts).join(' | '),
+      winner:sorted[0].name,
+      status:'complete',
+      completedAt: Date.now()
+    };
+    // 1) تحديث السجل المحلي (نبحث عن نفس localId)
+    const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
+    let found=false;
+    for(let i=0;i<hist.length;i++){
+      if(hist[i].localId && G.gameLocalId && hist[i].localId===G.gameLocalId){
+        hist[i]=Object.assign({}, hist[i], patch); found=true; break;
+      }
+    }
+    if(!found){
+      // احتياط: لو لم يُحفظ عند البدء لأي سبب، ننشئه الآن كاملاً
+      hist.unshift({
+        localId:G.gameLocalId||('g'+Date.now()),
+        date:new Date().toLocaleDateString('ar-QA'), timestamp:Date.now(),
+        name:G.gameName||'لعبة', cats:(G.selectedCats||[]).slice(0,3).join('، '),
+        catsArr:G.selectedCats||[], teamsArr:G.teams||[], teamCount:(G.teams||[]).length,
+        isComp:!!G.isComp, ...patch
+      });
+    }
+    if(hist.length>50)hist.length=50;
+    localStorage.setItem('hh_game_history',JSON.stringify(hist));
+
+    // 2) تحديث السحابة (نفس المستند بمعرّف localId)
+    if(!OFFLINE_MODE && db && currentUser && currentUser.uid && G.gameLocalId){
+      db.collection('user_games').doc(G.gameLocalId).set(patch, {merge:true}).catch(err=>{
+        console.warn('cloud game update:', err);
       });
     }
   }catch(e){
