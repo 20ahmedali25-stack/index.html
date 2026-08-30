@@ -10996,8 +10996,10 @@ function _hhCatThumb(cat){
   var color = ci && ci.color ? ci.color : '#8A1538';
   var bg = ci && ci.bg ? ci.bg : '#F7EBEE';
   var inner;
-  if(ci && ci.img){
-    inner = '<img src="'+ci.img+'" alt="" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box;">';
+  var validImg = ci && ci.img && typeof ci.img==='string' && (/^(https?:|data:image\/)/.test(ci.img.trim())) && ci.img.length>40;
+  if(validImg){
+    var letter = esc((label||'؟').charAt(0));
+    inner = '<img src="'+ci.img.trim().replace(/"/g,'&quot;')+'" alt="" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box;" onerror="this.parentNode.style.background=\''+color+'\';this.outerHTML=\'<span style=&quot;font-family:Cairo,sans-serif;font-weight:900;font-size:20px;color:#fff&quot;>'+letter+'</span>\'">';
   } else if(ci && ci.emoji && ci.emoji.indexOf('<svg') !== -1){
     inner = '<span style="font-size:20px;color:'+color+';display:flex;align-items:center;justify-content:center;width:100%;height:100%;">'+ci.emoji+'</span>';
   } else if(ci && ci.emoji && ci.emoji.trim()){
@@ -11006,7 +11008,7 @@ function _hhCatThumb(cat){
     // حرف أول الفئة على خلفية ملوّنة
     inner = '<span style="font-family:Cairo,sans-serif;font-weight:900;font-size:20px;color:#fff;">'+esc((label||'؟').charAt(0))+'</span>';
   }
-  var iconBg = (ci && ci.img) ? '#fff' : ((ci && ci.emoji && ci.emoji.trim() && ci.emoji.indexOf('<svg')===-1) ? bg : color);
+  var iconBg = validImg ? '#fff' : ((ci && ci.emoji && ci.emoji.trim() && ci.emoji.indexOf('<svg')===-1) ? bg : color);
   return '<div style="position:relative;border-radius:11px;overflow:hidden;aspect-ratio:1;background:'+iconBg+';display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.1);">' + '<div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;">'+inner+'</div>' + '<div style="width:100%;background:'+color+';color:#fff;font-family:Cairo,sans-serif;font-weight:800;font-size:8.5px;text-align:center;padding:2px 3px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(label)+'</div>' + '</div>';
 }
 

@@ -10125,3 +10125,14 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 .hh-mtile{transition:transform .15s;}
 .hh-film{width:13px;height:5px;border-radius:2px;background:rgba(212,188,133,.3);}
 .hh-film.on{background:#EAD9B0;}
+
+/* ═══ زر ألعابي + الفاصل الذهبي (بجانب ابدأ الآن) ═══ */
+.nav-cta-sep{
+  display:inline-block;width:2px;height:24px;
+  background:linear-gradient(180deg,transparent,#EAD9B0,transparent);
+  margin:0 3px;flex-shrink:0;border-radius:9px;
+}
+/* ألعابي: نفس القالب الذهبي لكن بلا نبض (ثانوي هادئ) */
+.nav-cta-games{
+  animation:none !important;
+}
