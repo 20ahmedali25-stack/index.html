@@ -1126,6 +1126,89 @@ var HH_LEADER_PROGRAMS = [
   // برامج قادمة تُضاف هنا مستقبلاً
 ];
 
+// ═══ إضافة برنامج/ورشة جديدة (للأدمن فقط) ═══
+window.hhAdminAddProgram = function(editId){
+  if(!(typeof hhIsAdmin==='function' && hhIsAdmin())){ return; }
+  var existing = null;
+  if(editId){ try{ existing = (JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[]).find(function(p){return p.id===editId;}); }catch(e){} }
+  var e = existing || {};
+  var ov=document.createElement('div'); ov.id='hh-addprog-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99995;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;padding:18px;';
+  function fld(label, id, val, ph, ta){
+    return '<div style="margin-bottom:13px;"><label style="display:block;color:#5E0E26;font-weight:800;font-size:.78rem;margin-bottom:5px;">'+label+'</label>'
+      +(ta?('<textarea id="'+id+'" placeholder="'+(ph||'')+'" style="width:100%;min-height:70px;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;color:#3D0918;background:#FDFAF3;box-sizing:border-box;resize:vertical;">'+(val||'')+'</textarea>')
+        :('<input id="'+id+'" value="'+(val||'').replace(/"/g,'&quot;')+'" placeholder="'+(ph||'')+'" style="width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;font-weight:700;color:#3D0918;background:#FDFAF3;box-sizing:border-box;">'))
+      +'</div>';
+  }
+  ov.innerHTML='<div style="max-width:600px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:20px;overflow:hidden;">'
+    +'<div style="background:linear-gradient(120deg,#2a0810,#5E0E26);padding:15px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;">'
+    +  '<div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>'
+    +  '<div style="flex:1;"><b style="color:#FFFDF8;font-size:1.1rem;">'+(editId?'تعديل البرنامج':'إضافة برنامج / ورشة')+'</b><div style="color:#D4BC85;font-size:.66rem;">يظهر لك كأدمن · تتحكم بكل تفاصيله</div></div>'
+    +  '<button onclick="document.getElementById(\'hh-addprog-ov\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;font-weight:900;cursor:pointer;">×</button>'
+    +'</div>'
+    +'<div style="padding:18px 20px;">'
+    +  '<div style="display:flex;gap:8px;margin-bottom:14px;">'
+    +    '<button class="hh-ap-type" data-t="program" style="flex:1;border:1.5px solid #B8924A;border-radius:11px;padding:9px;font-family:Cairo;font-weight:800;font-size:.8rem;cursor:pointer;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;">برنامج تدريبي</button>'
+    +    '<button class="hh-ap-type" data-t="workshop" style="flex:1;border:1.5px solid #B8924A;border-radius:11px;padding:9px;font-family:Cairo;font-weight:800;font-size:.8rem;cursor:pointer;background:#fff;color:#8A6D2E;">ورشة</button>'
+    +  '</div>'
+    +  '<input type="hidden" id="ap-type" value="'+(e.type||'program')+'">'
+    +  fld('اسم البرنامج/الورشة *','ap-name',e.name,'مثال: الواثق المُلهِم')
+    +  fld('العنوان الفرعي','ap-sub',e.sub,'مثال: رحلتك في فنّ الإلقاء والحضور')
+    +  fld('الوصف الكامل','ap-desc',e.desc,'اشرح ماذا يقدّم البرنامج للمتدرب…',true)
+    +  '<div style="display:flex;gap:10px;">'
+    +    '<div style="flex:1;">'+fld('عدد المحطات','ap-stations',e.stations,'6')+'</div>'
+    +    '<div style="flex:1;">'+fld('السعر (﷼) · فارغ = مجاني','ap-price',e.price,'150')+'</div>'
+    +  '</div>'
+    +  fld('الركائز الثلاث (افصل بـ +)','ap-pillars',e.pillars,'إبداع + ابتكار + قيادة')
+    +  '<div style="background:#F7ECEF;border:1px solid #E4C4CC;border-radius:11px;padding:11px 13px;margin-bottom:14px;font-size:.72rem;color:#8A1538;font-weight:700;line-height:1.6;">ملاحظة: بعد الحفظ يظهر البرنامج في قائمة البرامج · تقدر تضيف محطاته وكنوزه بالتفصيل من زر «تعديل» على البطاقة</div>'
+    +  '<div style="display:flex;gap:9px;">'
+    +    '<button onclick="hhSaveProgram('+(editId?('\''+editId+'\''):'null')+')" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:12px;padding:13px;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:pointer;">'+(editId?'حفظ التعديلات':'إضافة البرنامج')+'</button>'
+    +    (editId?'<button onclick="hhDeleteProgram(\''+editId+'\')" style="background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:12px;padding:13px 18px;font-family:Cairo;font-weight:800;font-size:.82rem;cursor:pointer;">حذف</button>':'')
+    +  '</div>'
+    +'</div></div>';
+  document.body.appendChild(ov);
+  // تبديل النوع
+  ov.querySelectorAll('.hh-ap-type').forEach(function(b){ b.onclick=function(){
+    ov.querySelectorAll('.hh-ap-type').forEach(function(x){ x.style.background='#fff'; x.style.color='#8A6D2E'; });
+    b.style.background='linear-gradient(135deg,#8A1538,#5E0E26)'; b.style.color='#F5E6C4';
+    document.getElementById('ap-type').value=b.getAttribute('data-t');
+  }; });
+};
+window.hhSaveProgram = function(editId){
+  var name=(document.getElementById('ap-name').value||'').trim();
+  if(!name){ alert('اكتب اسم البرنامج أولاً'); return; }
+  var prog={
+    id: editId || ('prog_'+Date.now()),
+    type: document.getElementById('ap-type').value,
+    name: name,
+    sub: (document.getElementById('ap-sub').value||'').trim(),
+    desc: (document.getElementById('ap-desc').value||'').trim(),
+    stations: parseInt(document.getElementById('ap-stations').value||'0',10)||0,
+    price: (document.getElementById('ap-price').value||'').trim(),
+    pillars: (document.getElementById('ap-pillars').value||'').trim(),
+    updatedAt: Date.now()
+  };
+  var list=[]; try{ list=JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[]; }catch(e){}
+  var ix=list.findIndex(function(p){return p.id===prog.id;});
+  if(ix>=0) list[ix]=prog; else list.push(prog);
+  try{ localStorage.setItem('hh_custom_programs', JSON.stringify(list)); }catch(e){}
+  // سحابي
+  try{ if(typeof firebase!=='undefined' && firebase.firestore && typeof currentUser!=='undefined' && currentUser){
+    firebase.firestore().collection('custom_programs').doc(prog.id).set(Object.assign({by:currentUser.uid}, prog),{merge:true});
+  } }catch(e){}
+  var ov=document.getElementById('hh-addprog-ov'); if(ov) ov.remove();
+  if(typeof hhOpenLeaderPrograms==='function') hhOpenLeaderPrograms();
+};
+window.hhDeleteProgram = function(id){
+  if(!confirm('حذف هذا البرنامج نهائياً؟')) return;
+  var list=[]; try{ list=JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[]; }catch(e){}
+  list=list.filter(function(p){return p.id!==id;});
+  try{ localStorage.setItem('hh_custom_programs', JSON.stringify(list)); }catch(e){}
+  try{ if(typeof firebase!=='undefined' && firebase.firestore) firebase.firestore().collection('custom_programs').doc(id).delete(); }catch(e){}
+  var ov=document.getElementById('hh-addprog-ov'); if(ov) ov.remove();
+  if(typeof hhOpenLeaderPrograms==='function') hhOpenLeaderPrograms();
+};
+
 function hhOpenLeaderPrograms(){
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
   try{ if(typeof hhSpkCheckAccess==='function') hhSpkCheckAccess(); }catch(e){}
@@ -1216,10 +1299,70 @@ function hhOpenLeaderPrograms(){
     + side([
         {t:'طلب التسجيل', svg:I.form, fn:'hhSpkRequestAccess()'},
         {t:'وسام الإتمام', svg:I.medal, fn:'hhLdrStation(26)'}
-      ].concat(isAdm?[{t:'طلبات التسجيل · إدارة', svg:I.grp, fn:'hhAdminProgRegs()'}]:[]))
+      ].concat(isAdm?[{t:'طلبات التسجيل · إدارة', svg:I.grp, fn:'hhAdminProgRegs()'},{t:'➕ إضافة برنامج/ورشة', svg:I.form, fn:'hhAdminAddProgram()'}]:[]))
     +'</div>'
 
     +'<div style="padding:14px 17px 40px;">'
+    + (function(){
+        var HID = 'linear-gradient(160deg,#2a0810,#5E0E26)';  // خلفية الهوية العنابية
+        // ── لحظة الدخول: بانر ترحيب بالهوية ──
+        var hero = '<div style="position:relative;overflow:hidden;background:radial-gradient(ellipse at 75% 0%,#5E0E26,#2a0810 62%);border-radius:20px;padding:26px 22px;margin-bottom:18px;">'
+          +'<div style="position:absolute;top:-70px;left:-40px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(212,188,133,.2),transparent 65%);pointer-events:none;"></div>'
+          +'<div style="position:relative;z-index:2;display:inline-flex;align-items:center;gap:6px;background:rgba(212,188,133,.14);border:1px solid rgba(212,188,133,.4);border-radius:99px;padding:5px 14px;color:#EAD9B0;font-size:.68rem;font-weight:900;margin-bottom:10px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>البرامج التربوية</div>'
+          +'<div style="position:relative;z-index:2;color:#FFFDF8;font-size:1.7rem;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,.4);line-height:1.2;">ارتقِ بمهاراتك القيادية</div>'
+          +'<div style="position:relative;z-index:2;color:#C9A96A;font-size:.82rem;font-weight:700;margin-top:8px;max-width:460px;line-height:1.6;">برامج وورش احترافية معتمدة تصنع منك متحدثاً واثقاً وقائداً مُلهِماً</div>'
+          +'</div>';
+        // ── معرض البرامج المتساوي ──
+        var isAdm2=(typeof hhIsAdmin==='function' && hhIsAdmin());
+        // برنامج الواثق الأساسي كبطاقة
+        function progCard(o){
+          var priceHtml = o.free ? '<span style="font-size:1rem;font-weight:900;color:#B8924A;">مجاني</span><span style="font-size:.66rem;color:#8A7A63;font-weight:700;"> · للجميع</span>'
+                                 : '<span style="font-size:1.4rem;font-weight:900;color:#8A1538;">'+esc(o.price)+'</span><span style="font-size:.68rem;color:#8A6D2E;font-weight:700;"> ﷼ · اشتراك</span>';
+          var badge = o.free ? '<span style="position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,#B8924A,#8A6D2E);color:#FFFDF8;font-size:.55rem;font-weight:900;border-radius:99px;padding:3px 11px;">مجاني</span>'
+                             : '<span style="position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-size:.55rem;font-weight:900;border-radius:99px;padding:3px 11px;">مدفوع · معتمد</span>';
+          function vcell(svg,b,sp){ return '<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;">'+svg+'</svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;line-height:1;">'+b+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+sp+'</span></div>'; }
+          return '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(94,14,38,.08);display:flex;flex-direction:column;">'
+            +'<div style="background:'+HID+';padding:16px;position:relative;overflow:hidden;">'
+            +  '<div style="position:absolute;left:-20px;top:-20px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(212,188,133,.18),transparent 70%);"></div>'
+            +  badge
+            +  '<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#F5E6C4,#B8924A);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.3);position:relative;z-index:2;margin-bottom:10px;"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2">'+o.icon+'</svg></div>'
+            +  '<div style="color:#FFFDF8;font-size:1.05rem;font-weight:900;position:relative;z-index:2;line-height:1.2;">'+esc(o.name)+'</div>'
+            +  '<div style="color:#D4BC85;font-size:.62rem;font-weight:700;position:relative;z-index:2;margin-top:3px;">'+esc(o.sub||'')+'</div>'
+            +'</div>'
+            +'<div style="padding:14px;flex:1;display:flex;flex-direction:column;">'
+            +  '<div style="display:flex;gap:8px;margin-bottom:12px;">'+o.vals+'</div>'
+            +  '<div style="margin-bottom:11px;">'+priceHtml+'</div>'
+            +  '<div onclick="'+o.action+'" style="margin-top:auto;background:'+HID+';color:#F5E6C4;border-radius:12px;padding:11px;text-align:center;font-weight:900;font-size:.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 6px 16px rgba(94,14,38,.25);"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+o.cta+'</div>'
+            +  (isAdm2 && o.editId ? '<button onclick="hhAdminAddProgram(\''+o.editId+'\')" style="margin-top:8px;background:rgba(184,146,74,.12);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">تعديل</button>':'')
+            +'</div></div>';
+        }
+        var cards='';
+        // بطاقة الواثق الثابتة
+        cards += progCard({ name:'الواثِق المُلهِم', sub:'فنّ الإلقاء والحضور', icon:'<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+          vals: '<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">٦</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">محطات</span></div>'
+                +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">وسام</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">معتمد</span></div>'
+                +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">٤ أسابيع</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">المدة</span></div>',
+          price:'150', free:false, cta:'ابدأ الرحلة', action:'hhLdrContinue()' });
+        // البرامج المضافة
+        try{
+          var cp=JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[];
+          cp.forEach(function(p){
+            var vhtml='<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">'+(p.stations||'—')+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"جلسات":"محطات")+'</span></div>'
+              +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 11l3 3L22 4"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">شهادة</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"حضور":"إتمام")+'</span></div>'
+              +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">'+(p.type==="workshop"?"ورشة":"برنامج")+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">النوع</span></div>';
+            cards += progCard({ name:p.name, sub:p.sub, editId:p.id,
+              icon:(p.type==="workshop"?'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>':'<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'),
+              vals:vhtml, price:p.price, free:(!p.price), cta:(p.type==="workshop"?"ابدأ الورشة":"ابدأ الرحلة"), action:'hhLdrContinue()' });
+          });
+        }catch(e){}
+        var gallery = '<div style="display:flex;align-items:center;gap:9px;margin-bottom:15px;">'
+          +'<span style="width:5px;height:20px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;"></span>'
+          +'<b style="color:#3D0918;font-size:1rem;font-weight:900;">اختر رحلتك</b>'
+          +(isAdm2?'<span onclick="hhAdminAddProgram()" style="margin-right:auto;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border-radius:10px;padding:7px 14px;font-size:.68rem;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>إضافة برنامج</span>':'')
+          +'</div>'
+          +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;">'+cards+'</div>';
+        return hero + gallery;
+      })()
     +'<div style="display:flex;align-items:center;gap:7px;color:#8A7A63;font-size:.68rem;font-weight:700;margin-bottom:10px;">البرامج التربوية <span style="color:#B8924A;">‹</span> <b style="color:#8A1538;">الرئيسة</b></div>'
 
     +'<div style="background:linear-gradient(165deg,#5E0E26,#3D0918);border:1px solid rgba(212,188,133,.55);border-radius:18px;padding:17px 19px;position:relative;overflow:hidden;">'

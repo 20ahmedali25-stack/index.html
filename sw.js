@@ -6,7 +6,7 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-zzzzi-cats-redesign';
+const SW_VERSION = 'almulhim-zzzzn-followup';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
@@ -19,6 +19,8 @@ const CORE_ASSETS = [
   '/almulhim-journey.js',
   '/almulhim-mahnadi.js',
   '/almulhim-programs.js',
+  '/almulhim-student-file.js',
+  '/almulhim-followup.js',
   '/almulhim-wathiq.js',
   '/almulhim-school.js',
   '/curriculum-social7.js',

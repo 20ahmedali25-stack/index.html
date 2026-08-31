@@ -10173,3 +10173,7 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
   background:linear-gradient(90deg,var(--mgh-accent,#B8924A),transparent);
 }
 .ms-group-header:not(.ms-group-header-soon) .ms-group-header-chevron{color:#EAD9B0;}
+
+/* ادرس مع مُلهِم */
+.hh-mulhim-cta:hover{transform:translateY(-2px);transition:transform .15s;}
+.hh-mlm-q:hover{background:#8FD0C9 !important;color:#0d2436 !important;}

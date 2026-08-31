@@ -272,7 +272,65 @@ function _hhLessonMastery(lid){
 function hhStageFor(L){
   try{ return HH_STAGE_FILES[L.id] || HH_STAGE_FILES[(L.title||'').trim()] || null; }catch(e){ return null; }
 }
+// ═══ ادرس مع مُلهِم · المساعد الذكي (الواجهة جاهزة · تُربط بـGemini لاحقاً) ═══
+window.HH_MULHIM_ENDPOINT = window.HH_MULHIM_ENDPOINT || ''; // يُملأ برابط الخادم الوسيط لاحقاً
+window.hhOpenMulhimAI = function(ui,li){
+  var S=hhSchData(); var L=S.units[ui].lessons[li]; var lid=L.id||('u'+ui+'l'+li);
+  var ov=document.createElement('div'); ov.id='hh-mulhim-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(13,36,54,.78);z-index:9600;display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,sans-serif;';
+  ov.innerHTML='<div style="background:#FBF6EC;border:2px solid #8FD0C9;border-radius:20px;max-width:440px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;" onclick="event.stopPropagation()">'
+    +'<div style="background:linear-gradient(120deg,#1a3a3a,#0d2436);padding:12px 15px;display:flex;align-items:center;gap:10px;">'
+    +  '<div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#8FD0C9,#3D6B67);display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d2436" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4M8 4h8M9 14h.01M15 14h.01"/></svg></div>'
+    +  '<div style="flex:1;"><b style="color:#FFFDF8;font-size:1rem;">ادرس مع مُلهِم</b><div style="color:#8FD0C9;font-size:.62rem;font-weight:700;">● يجيب من منهج: '+esc(L.title)+'</div></div>'
+    +  '<button onclick="document.getElementById(\'hh-mulhim-ov\').remove()" style="background:rgba(143,208,201,.15);border:1px solid #8FD0C9;border-radius:9px;width:32px;height:32px;color:#8FD0C9;font-weight:900;cursor:pointer;">✕</button>'
+    +'</div>'
+    +'<div id="hh-mulhim-chat" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:11px;background:#FBF6EC;min-height:280px;">'
+    +  '<div style="align-self:center;background:#FBF0D8;border:1px solid #B8924A;color:#8A6D2E;font-size:.66rem;font-weight:800;padding:7px 12px;border-radius:10px;text-align:center;">يجيب من منهج هذا الدرس فقط · لا من مصادر خارجية</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px;background:#FBF6EC;">'
+    +  '<button class="hh-mlm-q" data-q="لخّص لي هذا الدرس باختصار" style="background:#fff;border:1.5px solid #8FD0C9;color:#0d2436;border-radius:99px;padding:6px 13px;font-size:.68rem;font-weight:800;font-family:Cairo;cursor:pointer;">لخّص الدرس</button>'
+    +  '<button class="hh-mlm-q" data-q="اشرح لي مصطلحات هذا الدرس" style="background:#fff;border:1.5px solid #8FD0C9;color:#0d2436;border-radius:99px;padding:6px 13px;font-size:.68rem;font-weight:800;font-family:Cairo;cursor:pointer;">اشرح المصطلحات</button>'
+    +  '<button class="hh-mlm-q" data-q="اختبرني في هذا الدرس بأسئلة" style="background:#fff;border:1.5px solid #8FD0C9;color:#0d2436;border-radius:99px;padding:6px 13px;font-size:.68rem;font-weight:800;font-family:Cairo;cursor:pointer;">اختبرني</button>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;padding:12px 14px;background:#fff;border-top:1.5px solid #EDE3CE;align-items:center;">'
+    +  '<input id="hh-mulhim-input" placeholder="اكتب سؤالك عن الدرس…" style="flex:1;background:#FBF5E9;border:1.5px solid #E4D9C4;border-radius:12px;padding:10px 13px;font-size:.82rem;font-family:Cairo;color:#3D0918;box-sizing:border-box;" onkeydown="if(event.key===\'Enter\')hhMulhimSend()">'
+    +  '<button onclick="hhMulhimSend()" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#1a3a3a,#0d2436);border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#8FD0C9"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>'
+    +'</div></div>';
+  ov.onclick=function(){ ov.remove(); };
+  document.body.appendChild(ov);
+  window._hhMulhimLesson = L;
+  ov.querySelectorAll('.hh-mlm-q').forEach(function(b){ b.onclick=function(){ document.getElementById('hh-mulhim-input').value=b.getAttribute('data-q'); hhMulhimSend(); }; });
+};
+function _hhMulhimBubble(text, who, source){
+  var chat=document.getElementById('hh-mulhim-chat'); if(!chat)return null;
+  var d=document.createElement('div');
+  if(who==='u'){ d.style.cssText='align-self:flex-start;max-width:82%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border-radius:14px;border-bottom-left-radius:4px;padding:10px 13px;font-size:.8rem;font-weight:600;line-height:1.6;'; d.textContent=text; }
+  else { d.style.cssText='align-self:flex-end;max-width:82%;background:#fff;border:1.5px solid #E8DFC9;color:#3D0918;border-radius:14px;border-bottom-right-radius:4px;padding:10px 13px;font-size:.8rem;font-weight:600;line-height:1.6;'; d.innerHTML=esc(text)+(source?'<div style="margin-top:7px;padding-top:7px;border-top:1px dashed #E4D9C4;font-size:.6rem;color:#3D6B53;font-weight:800;">المصدر: '+esc(source)+'</div>':''); }
+  chat.appendChild(d); chat.scrollTop=chat.scrollHeight; return d;
+}
+window.hhMulhimSend = async function(){
+  var inp=document.getElementById('hh-mulhim-input'); if(!inp)return;
+  var q=inp.value.trim(); if(!q)return; inp.value='';
+  _hhMulhimBubble(q,'u');
+  var thinking=_hhMulhimBubble('…','a');
+  // إن لم يُربط الخادم بعد: رسالة توضيحية
+  if(!window.HH_MULHIM_ENDPOINT){
+    if(thinking) thinking.innerHTML='<span style="color:#8A6D2E;">مُلهِم لم يُفعّل بعد. أكمل خطوات الربط (مفتاح Gemini + الخادم) ليجيب من منهجك.</span>';
+    return;
+  }
+  try{
+    var L=window._hhMulhimLesson||{};
+    var res=await fetch(window.HH_MULHIM_ENDPOINT,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ question:q, lessonId:L.id, lessonTitle:L.title }) });
+    var data=await res.json();
+    if(thinking) thinking.remove();
+    _hhMulhimBubble(data.answer||'تعذّر الحصول على إجابة.', 'a', data.source);
+  }catch(e){
+    if(thinking) thinking.innerHTML='<span style="color:#c0392b;">تعذّر الاتصال بمُلهِم. حاول لاحقاً.</span>';
+  }
+};
+
 window.hhOpenStage=function(ui,li){
+
   try{
     var S=hhSchData(); var U=S.units[ui]; var L=U.lessons[li]; var f=hhStageFor(L);
     // حمولة الدرس لقالب العرض المعتمد
@@ -886,6 +944,14 @@ function hhOpenSchool(){
         +   '</div>'
         +   '<div style="background:linear-gradient(160deg,#FBF5E9,#F4EDDE);border-right:1.5px solid #EDE3CE;padding:14px;display:flex;flex-direction:column;gap:11px;">'
         +     '<button onclick="hhOpenStage('+i+','+j+')" class="hh-stage-cta" style="position:relative;overflow:hidden;background:linear-gradient(120deg,#3D0918,#5E0E26 55%,#7A1330);border:1.5px solid #B8924A;border-radius:15px;padding:0;cursor:pointer;font-family:Cairo;box-shadow:0 10px 24px rgba(94,14,38,.32);"><span class="hh-sheen"></span><span style="position:relative;z-index:2;display:flex;align-items:center;gap:11px;padding:13px 15px;"><span style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.3);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3D0918" stroke-width="2.2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span><span style="flex:1;text-align:right;"><span style="display:block;color:#D4BC85;font-size:.6rem;font-weight:800;letter-spacing:.3px;">المسرح التفاعلي</span><span style="display:block;color:#FFFDF8;font-size:1rem;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.4);">ابدأ العرض التقديمي</span></span><span style="color:#EAD9B0;font-size:1.2rem;">\u2039</span></span><span style="position:relative;z-index:2;display:flex;gap:3px;padding:0 14px 9px;justify-content:center;"><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span><span class="hh-film on"></span></span></button>'
+        +     '<button onclick="hhOpenMulhimAI('+i+','+j+')" class="hh-mulhim-cta" style="position:relative;overflow:hidden;background:linear-gradient(120deg,#1a3a3a,#0d2436);border:1.5px solid #8FD0C9;border-radius:15px;padding:0;cursor:pointer;font-family:Cairo;box-shadow:0 8px 20px rgba(13,36,54,.3);margin-top:9px;">'
+        +   '<span class="hh-sheen"></span>'
+        +   '<span style="position:relative;z-index:2;display:flex;align-items:center;gap:11px;padding:13px 15px;">'
+        +     '<span style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#8FD0C9,#3D6B67);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.3);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d2436" stroke-width="2.2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4M8 4h8M9 14h.01M15 14h.01"/></svg></span>'
+        +     '<span style="flex:1;text-align:right;"><span style="display:block;color:#8FD0C9;font-size:.6rem;font-weight:800;letter-spacing:.3px;">مساعدك الذكي · من منهجك فقط</span><span style="display:block;color:#FFFDF8;font-size:1rem;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.4);">ادرس مع مُلهِم</span></span>'
+        +     '<span style="color:#8FD0C9;font-size:1.2rem;">‹</span>'
+        +   '</span>'
+        +   '</button>'
         +     '<div style="background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:11px 13px;"><div style="display:flex;justify-content:space-between;font-size:.7rem;font-weight:800;color:#8A7A63;margin-bottom:7px;font-family:Cairo;"><span>إتقان الدرس</span><b style="color:#3D6B53;">'+_hhLessonMastery(L.id)+'%</b></div><div style="height:9px;background:#ece7dc;border-radius:9px;overflow:hidden;"><div style="height:100%;width:'+_hhLessonMastery(L.id)+'%;background:linear-gradient(90deg,#3D6B53,#2C5340);border-radius:9px;"></div></div></div>'
         +     '<div style="display:flex;gap:8px;"><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+qCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">سؤالاً</span></div><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+imgCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">صور الكتاب</span></div><div style="flex:1;background:#fff;border:1px solid #EDE3CE;border-radius:13px;padding:10px 4px;text-align:center;"><b style="display:block;font-size:1.35rem;font-weight:900;color:#8A1538;line-height:1;font-family:Cairo;">'+termCount+'</b><span style="font-size:.56rem;color:#8A7A63;font-weight:700;font-family:Cairo;">مصطلحات</span></div></div>'
         +   '</div>'
