@@ -69,9 +69,13 @@
       {id:'overview', t:'نظرة عامة'},
       {id:'attendance', t:'الحضور'},
       {id:'grades', t:'الدرجات'},
+      {id:'traits', t:'الشخصية'},
+      {id:'guard', t:'أولياء الأمر'},
+      {id:'contact', t:'التواصل'},
+      {id:'plans', t:'خطة الدعم'},
       {id:'skills', t:'المهارات'},
       {id:'notes', t:'الملاحظات'},
-      {id:'plans', t:'الخطط'}
+      {id:'report', t:'التقرير'}
     ];
     ov.innerHTML='<div style="max-width:760px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);">'
       // ترويسة
@@ -104,7 +108,8 @@
             + 'المستوى الحالي: <b style="color:'+lvl.c+';">'+lvl.t+'</b><br>'
             + 'المهارات المتقنة: <b>'+((rec.skills&&rec.skills.mastered)||[]).length+'</b> · تحتاج تحسيناً: <b>'+((rec.skills&&rec.skills.needs)||[]).length+'</b><br>'
             + 'الملاحظات المسجّلة: <b>'+((rec.notes)||[]).length+'</b>'
-            + '</div>');
+            + '</div>')
+          + (window.hhSf2Extra ? window.hhSf2Extra(rec) : '');
       }
       else if(tab==='attendance'){
         var att=rec.attendance||[];
@@ -135,13 +140,9 @@
               return '<div style="background:#FFFDF8;border:1px solid #EDE3CE;border-radius:11px;padding:11px 13px;"><div style="font-size:.8rem;color:#3D0918;font-weight:600;line-height:1.6;">'+esc2(nt.text||nt)+'</div>'+(nt.date?'<div style="font-size:.6rem;color:#B8AD94;margin-top:4px;">'+esc2(nt.date)+'</div>':'')+'</div>';
             }).join('')+'</div>' : emptyState('لا ملاحظات بعد'));
       }
-      else if(tab==='plans'){
-        var plans=rec.plans||[];
-        body.innerHTML = sectionBox('الخطط العلاجية والإثرائية', plans.length
-          ? '<div style="display:flex;flex-direction:column;gap:8px;">'+plans.map(function(p){
-              return '<div style="background:#FFFDF8;border:1.5px solid '+(p.type==='enrich'?'#3D6B53':'#8A1538')+';border-radius:12px;padding:12px 14px;"><div style="font-size:.68rem;font-weight:900;color:'+(p.type==='enrich'?'#3D6B53':'#8A1538')+';">'+(p.type==='enrich'?'خطة إثرائية':'خطة علاجية')+'</div><div style="font-size:.82rem;color:#3D0918;font-weight:700;margin-top:4px;">'+esc2(p.title||'')+'</div></div>';
-            }).join('')+'</div>'
-          : emptyState('لا خطط بعد · تُنشأ من تحليل النتائج (المرحلة ٤)'));
+      else if(window.hhSf2TabHtml && (tab==='plans'||tab==='traits'||tab==='guard'||tab==='contact'||tab==='report')){
+        body.innerHTML = window.hhSf2TabHtml(tab, rec);
+        if(window.hhSf2AfterRender) window.hhSf2AfterRender(tab);
       }
     }
     // ربط التبويبات
@@ -151,6 +152,8 @@
       renderTab(b.getAttribute('data-tab'));
     }; });
     window._hhSfRec = rec;
+    window._hhSfId = rec.id;
+    window._hhSfRender = renderTab;
     renderTab('overview');
   }
 

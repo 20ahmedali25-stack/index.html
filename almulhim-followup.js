@@ -11,7 +11,15 @@
   function toast2(m,k){ if(typeof toast==='function') toast(m,k||'info'); }
   function todayStr(){ return new Date().toISOString().slice(0,10); }
 
-  var ST = { classCode:'', date:todayStr(), period:'1', students:[], data:{} };
+  var ST = { classCode:'', date:todayStr(), period:'1', students:[], data:{}, undo:[], dirty:false };
+  var ATT6=[['present','حاضر','#3D6B53'],['absent','غائب','#8A1538'],['excabs','بعذر','#1F4E79'],['late','متأخر','#B8924A'],['excused','مستأذن','#8A6D2E'],['left','خرج مبكراً','#7a6a58']];
+  var HW6=[['done','سلّم','#3D6B53'],['hwlate','متأخراً','#B8924A'],['partial','ناقص','#b5801f'],['missing','لم يسلّم','#8A1538'],['hwexc','بعذر','#1F4E79'],['redo','إعادة','#5E0E26']];
+  function cfg(){ return (window._hhDPlusCfg&&window._hhDPlusCfg())||{tpls:[],counters:[]}; }
+  function pushUndo(desc,fn){ ST.undo.push({d:desc,f:fn}); ST.dirty=true; refreshBar(); }
+  function refreshBar(){
+    var u=document.getElementById('sfu-undo'); if(u){ u.disabled=!ST.undo.length; u.style.opacity=ST.undo.length?'1':'.45'; }
+    var ind=document.getElementById('sfu-saveind'); if(ind){ ind.textContent=ST.dirty?'تعديلات غير محفوظة':'محفوظ ✓'; ind.style.color=ST.dirty?'#B8924A':'#3D6B53'; }
+  }
 
   // ═══ فتح الدفتر الذكي ═══
   window.hhOpenSmartFollowup = async function(preCode){
@@ -48,6 +56,7 @@
       +'</div>'
       // المحددات: الفصل · التاريخ · الحصة
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      +  '<button onclick="hhSfuRenameClass()" title="تعديل اسم الفصل" style="border:1.5px solid #B8924A;background:#FDFAF3;color:#8A6D2E;border-radius:10px;width:38px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0;">✎</button>'
       +  '<select id="sfu-class" style="flex:1;min-width:120px;border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+classes.map(function(c){return '<option value="'+esc2(c.code)+'"'+(c.code===ST.classCode?' selected':'')+'>'+esc2(c.name)+(c.subject?' · '+esc2(c.subject):'')+'</option>';}).join('')+'</select>'
       +  '<input id="sfu-date" type="date" value="'+ST.date+'" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:700;font-size:.78rem;background:#FDFAF3;color:#3D0918;">'
       +  '<select id="sfu-period" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+[1,2,3,4,5,6,7].map(function(p){return '<option value="'+p+'">الحصة '+p+'</option>';}).join('')+'</select>'
@@ -57,6 +66,16 @@
       +  '<button onclick="hhSfuBulkAll(\'present\')" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">الجميع حاضرون</button>'
       +  '<button onclick="hhSfuBulkPart()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">+ مشاركة للمحدّدين</button>'
       +  '<button onclick="hhSfuBulkHw()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">أنجز الواجب للمحدّدين</button>'
+      +  '<button id="sfu-undo" onclick="hhSfuUndo()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;opacity:.45;">تراجع</button>'
+      +  '<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
+      +  '<span id="sfu-saveind" style="font-size:.66rem;font-weight:800;color:#3D6B53;align-self:center;">محفوظ ✓</span>'
+      +'</div>'
+      +'<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;">'
+      +  '<button onclick="hhSfuCommand()" style="background:#FFFDF8;border:1px solid #5E0E26;color:#5E0E26;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">مركز القيادة</button>'
+      +  '<button onclick="if(window.hhDPlusClassReport)hhDPlusClassReport(ST.classCode,ST.students)" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">تقرير الصف</button>'
+      +  '<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استيراد Excel</button>'
+      +  '<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">⚙ الإعدادات</button>'
+      +  '<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">حذف كل الطلاب</button>'
       +'</div></div>'
       +'<div id="sfu-list" style="padding:14px 20px 90px;"></div>'
       // شريط الحفظ السفلي
@@ -77,35 +96,52 @@
       var qs=await db().collection('classroom_students').where('classCode','==',ST.classCode).where('active','==',true).get();
       qs.forEach(function(d){ var s=d.data(); ST.students.push({id:d.id, name:s.studentName||s.name||'طالب'}); });
     }catch(e){ console.warn(e); }
-    ST.students.forEach(function(s){ ST.data[s.id]={att:'present', part:0, hw:null, behavior:null, sel:false}; });
+    ST.students.forEach(function(s){ ST.data[s.id]={att:'present', part:0, hw:null, hwOpen:false, behavior:null, stars:0, cust:{}, sel:false}; });
+    ST.undo=[]; ST.dirty=false;
     renderList();
   }
 
   function renderList(){
     var el=document.getElementById('sfu-list'); if(!el)return;
-    if(!ST.students.length){ el.innerHTML='<div style="text-align:center;color:#8A7A63;padding:30px;font-weight:700;background:#FBF5E9;border:1px dashed #D9C79E;border-radius:12px;">لا طلاب في هذا الفصل بعد · أضفهم من «صفوفي وطلابي»</div>'; updateSummary(); return; }
+    if(!ST.students.length){ el.innerHTML='<div style="text-align:center;color:#8A7A63;padding:30px;font-weight:700;background:#FBF5E9;border:1px dashed #D9C79E;border-radius:12px;">لا طلاب في هذا الفصل بعد · أضفهم من «صفوفي وطلابي» أو استوردهم من Excel</div>'; updateSummary(); refreshBar(); return; }
+    var counters=cfg().counters||[];
     el.innerHTML=ST.students.map(function(s){
       var d=ST.data[s.id];
-      var attColors={present:['حاضر','#3D6B53'],absent:['غائب','#8A1538'],late:['متأخر','#B8924A'],excused:['مستأذن','#1F4E79']};
+      var hwSt=HW6.filter(function(x){return x[0]===d.hw;})[0];
+      var hwRow='';
+      if(d.hwOpen){
+        hwRow='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;background:#FBF5E9;border-radius:9px;padding:6px;">'
+          + HW6.map(function(x){ var on=(d.hw===x[0]);
+              return '<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',\''+x[0]+'\')" style="border:1.5px solid '+x[2]+';background:'+(on?x[2]:'transparent')+';color:'+(on?'#fff':x[2])+';border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">'+x[1]+'</button>';
+            }).join('')
+          +'<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',null)" style="border:1.5px solid #b3a08f;background:transparent;color:#b3a08f;border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">مسح</button>'
+          +'</div>';
+      }
+      var custBtns=counters.map(function(cn,ci){
+        var n=d.cust[cn.name]||0;
+        return '<button onclick="hhSfuCust(\''+esc2(s.id)+'\','+ci+')" style="position:relative;border:1.5px solid #8A6D2E;background:'+(n?'#8A6D2E':'transparent')+';color:'+(n?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+esc2(cn.name)+(n?' '+n:'')+'</button>';
+      }).join('');
       return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:11px 13px;margin-bottom:9px;">'
         +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">'
         +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:18px;height:18px;accent-color:#8A1538;flex-shrink:0;">'
-        +  '<div style="flex:1;font-weight:900;color:#3D0918;font-size:.92rem;cursor:pointer;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'
+        +  '<div style="flex:1;font-weight:900;color:#3D0918;font-size:.92rem;cursor:pointer;border-bottom:1px dashed #C9B37E;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'
         +'</div>'
-        // أزرار الحضور
-        +'<div style="display:flex;gap:5px;margin-bottom:8px;">'
-        + ['present','absent','late','excused'].map(function(k){ var m=attColors[k]; var on=(d.att===k);
-            return '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\''+k+'\')" style="flex:1;border:1.5px solid '+m[1]+';background:'+(on?m[1]:'transparent')+';color:'+(on?'#fff':m[1])+';border-radius:9px;padding:6px 4px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">'+m[0]+'</button>';
+        +'<div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;">'
+        + ATT6.map(function(m){ var on=(d.att===m[0]);
+            return '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\''+m[0]+'\')" style="flex:1;min-width:64px;border:1.5px solid '+m[2]+';background:'+(on?m[2]:'transparent')+';color:'+(on?'#fff':m[2])+';border-radius:9px;padding:6px 4px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+m[1]+'</button>';
           }).join('')
         +'</div>'
-        // مشاركة · واجب · سلوك
         +'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">'
         +  '<div style="display:flex;align-items:center;gap:4px;background:#FBF5E9;border-radius:9px;padding:3px;"><button onclick="hhSfuPart(\''+esc2(s.id)+'\',-1)" style="width:26px;height:26px;border:none;background:#e8d9b8;border-radius:7px;font-weight:900;cursor:pointer;color:#5E0E26;">−</button><span style="min-width:44px;text-align:center;font-size:.68rem;font-weight:800;color:#8A6D2E;">مشاركة '+d.part+'</span><button onclick="hhSfuPart(\''+esc2(s.id)+'\',1)" style="width:26px;height:26px;border:none;background:linear-gradient(135deg,#EAD9B0,#B8924A);border-radius:7px;font-weight:900;cursor:pointer;color:#2a0810;">+</button></div>'
-        +  '<button onclick="hhSfuHw(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.hw===true?'#3D6B53':(d.hw===false?'#8A1538':'#B8924A'))+';background:'+(d.hw===true?'#3D6B53':(d.hw===false?'#8A1538':'transparent'))+';color:'+(d.hw!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">واجب '+(d.hw===true?'✓':(d.hw===false?'✗':'—'))+'</button>'
-        +  '<button onclick="hhSfuBehav(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'#B8924A'))+';background:'+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'transparent'))+';color:'+(d.behavior!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">سلوك '+(d.behavior==='good'?'★':(d.behavior==='bad'?'!':'—'))+'</button>'
-        +'</div></div>';
+        +  '<button onclick="hhSfuHwToggle(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(hwSt?hwSt[2]:'#B8924A')+';background:'+(hwSt?hwSt[2]:'transparent')+';color:'+(hwSt?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">واجب'+(hwSt?' · '+hwSt[1]:'')+'</button>'
+        +  '<button onclick="hhSfuBehav(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'#B8924A'))+';background:'+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'transparent'))+';color:'+(d.behavior!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">سلوك '+(d.behavior==='good'?'★':(d.behavior==='bad'?'!':'·'))+'</button>'
+        +  '<button onclick="hhSfuStar(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;background:'+(d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'transparent')+';color:'+(d.stars?'#2a0810':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">تميز ★'+(d.stars?' '+d.stars:'')+'</button>'
+        +  '<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="border:1.5px solid #8A1538;background:transparent;color:#8A1538;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">ملاحظة</button>'
+        +  '<button onclick="hhSfuGrade(\''+esc2(s.id)+'\')" style="border:1.5px solid #1F4E79;background:transparent;color:#1F4E79;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">درجة</button>'
+        +  custBtns
+        +'</div>'+hwRow+'</div>';
     }).join('');
-    updateSummary();
+    updateSummary(); refreshBar();
   }
 
   function updateSummary(){
@@ -115,16 +151,141 @@
     s.textContent = ST.students.length+' طالباً · '+present+' حاضر · '+absent+' غائب'+(sel?' · '+sel+' محدّد':'');
   }
 
-  // إجراءات فردية
-  window.hhSfuSetAtt=function(id,k){ ST.data[id].att=k; renderList(); };
-  window.hhSfuPart=function(id,n){ ST.data[id].part=Math.max(0,ST.data[id].part+n); renderList(); };
-  window.hhSfuHw=function(id){ var d=ST.data[id]; d.hw = d.hw===null?true:(d.hw===true?false:null); renderList(); };
-  window.hhSfuBehav=function(id){ var d=ST.data[id]; d.behavior = d.behavior===null?'good':(d.behavior==='good'?'bad':null); renderList(); };
+  // إجراءات فردية (كلها قابلة للتراجع قبل الحفظ)
+  window.hhSfuSetAtt=function(id,k){ var p=ST.data[id].att; if(p===k)return; ST.data[id].att=k; pushUndo('حضور',function(){ST.data[id].att=p;}); renderList(); };
+  window.hhSfuPart=function(id,n){ var p=ST.data[id].part; var v=Math.max(0,p+n); if(v===p)return; ST.data[id].part=v; pushUndo('مشاركة',function(){ST.data[id].part=p;}); renderList(); };
+  window.hhSfuHwToggle=function(id){ ST.data[id].hwOpen=!ST.data[id].hwOpen; renderList(); };
+  window.hhSfuHwSet=function(id,st){ var p=ST.data[id].hw; ST.data[id].hw=st; ST.data[id].hwOpen=false; if(p!==st) pushUndo('واجب',function(){ST.data[id].hw=p;}); renderList(); };
+  window.hhSfuBehav=function(id){ var p=ST.data[id].behavior; ST.data[id].behavior = p===null?'good':(p==='good'?'bad':null); pushUndo('سلوك',function(){ST.data[id].behavior=p;}); renderList(); };
+  window.hhSfuStar=function(id){ ST.data[id].stars++; pushUndo('تميز',function(){ST.data[id].stars=Math.max(0,ST.data[id].stars-1);}); renderList(); };
+  window.hhSfuCust=function(id,ci){ var c=(cfg().counters||[])[ci]; if(!c)return; var n=ST.data[id].cust[c.name]||0; ST.data[id].cust[c.name]=n+1; pushUndo(c.name,function(){ST.data[id].cust[c.name]=n;}); renderList(); };
   window.hhSfuToggleSel=function(id){ ST.data[id].sel=!ST.data[id].sel; renderList(); };
+  window.hhSfuUndo=function(){ var u=ST.undo.pop(); if(!u)return; u.f(); if(!ST.undo.length) ST.dirty=false; renderList(); toast2('تراجعت عن: '+u.d,'info'); };
+  // ملاحظة سريعة بقوالب المعلم · تُحفظ فوراً في ملف الطالب
+  window.hhSfuNote=function(id){
+    var st=ST.students.filter(function(x){return x.id===id;})[0]; if(!st)return;
+    var tpls=(cfg().tpls&&cfg().tpls.length)?cfg().tpls:[
+      'تفاعل اليوم بشكل ملحوظ وشارك بفاعلية.','لم يحضر الكتاب والأدوات اليوم.',
+      'لم يسلّم الواجب وتمت متابعته وتذكيره.','يُلاحظ تحسن واضح في مستواه مؤخراً.',
+      'يحتاج تواصلاً مع ولي الأمر لمتابعة مستواه.'];
+    var old=document.getElementById('sfu-note'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='sfu-note';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.7);z-index:99996;display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:18px;max-width:430px;width:100%;padding:16px 17px;max-height:88vh;overflow-y:auto;">'
+      +'<div style="font-weight:900;font-size:.9rem;color:#3D0918;margin-bottom:8px;">ملاحظة: '+esc2(st.name)+'</div>'
+      + tpls.map(function(t,ti){ return '<button onclick="document.getElementById(\'sfu-note-txt\').value='+"'"+'\''+"'"+'" data-t="'+ti+'" class="sfu-tpl" style="display:block;width:100%;text-align:right;background:#FBF5E9;border:1px solid #E8DCC2;border-radius:9px;padding:7px 10px;font-family:Cairo;font-weight:700;font-size:.7rem;color:#5a4a30;cursor:pointer;margin-bottom:5px;">'+esc2(t)+'</button>'; }).join('')
+      +'<textarea id="sfu-note-txt" placeholder="نص الملاحظة" style="width:100%;box-sizing:border-box;border:1.5px solid #E8DCC2;border-radius:10px;padding:9px;font-family:Cairo;font-size:.76rem;min-height:64px;margin-top:4px;"></textarea>'
+      +'<div style="display:flex;gap:7px;margin-top:10px;">'
+      +'<button onclick="hhSfuNoteSave(\''+esc2(id)+'\')" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:10px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">حفظ الملاحظة</button>'
+      +'<button onclick="document.getElementById(\'sfu-note\').remove()" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:10px;padding:10px 14px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
+      +'</div></div>';
+    document.body.appendChild(ov);
+    ov.querySelectorAll('.sfu-tpl').forEach(function(b){ b.onclick=function(){ document.getElementById('sfu-note-txt').value=tpls[parseInt(b.getAttribute('data-t'),10)]; }; });
+  };
+  window.hhSfuNoteSave=async function(id){
+    var txt=((document.getElementById('sfu-note-txt')||{}).value||'').trim().slice(0,300);
+    if(!txt){ toast2('اكتب الملاحظة أولاً','info'); return; }
+    try{
+      await db().collection('student_records').doc(id).set({
+        notes: firebase.firestore.FieldValue.arrayUnion({ text:txt, date:ST.date, by:currentUser.uid, at:Date.now() })
+      },{merge:true});
+      toast2('سُجّلت الملاحظة في ملف الطالب','success');
+    }catch(e){ toast2('تعذر الحفظ، تحقق من الاتصال','error'); }
+    var e=document.getElementById('sfu-note'); if(e) e.remove();
+  };
+  // درجة سريعة · تُحفظ فوراً كنسبة مئوية موحدة
+  window.hhSfuGrade=function(id){
+    var st=ST.students.filter(function(x){return x.id===id;})[0]; if(!st)return;
+    var title=prompt('اسم التقييم (مثال: اختبار الوحدة الأولى):'); if(!title||!title.trim())return;
+    var sc=prompt('درجة الطالب:'); if(sc===null)return;
+    var mx=prompt('الدرجة الكاملة:','10'); if(mx===null)return;
+    var score=parseFloat(sc), max=parseFloat(mx);
+    if(isNaN(score)||isNaN(max)||max<=0){ toast2('أدخل أرقاماً صحيحة','error'); return; }
+    var pct=Math.round(score/max*100);
+    db().collection('student_records').doc(id).set({
+      grades: firebase.firestore.FieldValue.arrayUnion({ title:title.trim().slice(0,80), score:pct, raw:score, rawMax:max, date:ST.date, at:Date.now() })
+    },{merge:true}).then(function(){ toast2('رُصدت الدرجة: '+pct+'%','success'); })
+    .catch(function(){ toast2('تعذر الحفظ','error'); });
+  };
   // إجراءات جماعية
-  window.hhSfuBulkAll=function(status){ ST.students.forEach(function(s){ ST.data[s.id].att=status; }); renderList(); toast2('عُيّن الجميع: حاضرون','success'); };
-  window.hhSfuBulkPart=function(){ var n=0; ST.students.forEach(function(s){ if(ST.data[s.id].sel){ ST.data[s.id].part++; n++; } }); renderList(); toast2(n?('+مشاركة لـ'+n+' طلاب'):'حدّد طلاباً أولاً', n?'success':'info'); };
-  window.hhSfuBulkHw=function(){ var n=0; ST.students.forEach(function(s){ if(ST.data[s.id].sel){ ST.data[s.id].hw=true; n++; } }); renderList(); toast2(n?('أُنجز الواجب لـ'+n+' طلاب'):'حدّد طلاباً أولاً', n?'success':'info'); };
+  window.hhSfuBulkAll=function(status){ var prev=ST.students.map(function(s){return ST.data[s.id].att;}); ST.students.forEach(function(s){ ST.data[s.id].att=status; }); pushUndo('الجميع حاضرون',function(){ ST.students.forEach(function(s,i){ ST.data[s.id].att=prev[i]; }); }); renderList(); toast2('عُيّن الجميع: حاضرون','success'); };
+  window.hhSfuBulkPart=function(){ var ids=ST.students.filter(function(s){return ST.data[s.id].sel;}).map(function(s){return s.id;}); if(!ids.length){toast2('حدّد طلاباً أولاً','info');return;} ids.forEach(function(id){ST.data[id].part++;}); pushUndo('مشاركة جماعية',function(){ ids.forEach(function(id){ST.data[id].part=Math.max(0,ST.data[id].part-1);}); }); renderList(); toast2('+مشاركة لـ'+ids.length+' طلاب','success'); };
+  window.hhSfuBulkHw=function(){ var ids=ST.students.filter(function(s){return ST.data[s.id].sel;}).map(function(s){return s.id;}); if(!ids.length){toast2('حدّد طلاباً أولاً','info');return;} var prev={}; ids.forEach(function(id){prev[id]=ST.data[id].hw; ST.data[id].hw='done';}); pushUndo('واجب جماعي',function(){ ids.forEach(function(id){ST.data[id].hw=prev[id];}); }); renderList(); toast2('أُنجز الواجب لـ'+ids.length+' طلاب','success'); };
+  // مركز القيادة · قراءة واحدة لكل طالب عند الطلب
+  window.hhSfuCommand=async function(){
+    var old=document.getElementById('sfu-cc'); if(old){ old.remove(); return; }
+    toast2('جارٍ تحليل سجلات الفصل…','info');
+    var d7=new Date(); d7.setDate(d7.getDate()-7); var s7=d7.toISOString().slice(0,10);
+    var d14=new Date(); d14.setDate(d14.getDate()-14); var s14=d14.toISOString().slice(0,10);
+    var absL=[], hwL=[], praiseL=[];
+    for(var i=0;i<ST.students.length;i++){
+      var st=ST.students[i];
+      try{
+        var snap=await db().collection('student_records').doc(st.id).get();
+        if(!snap.exists) continue;
+        var r=snap.data();
+        var abs=(r.attendance||[]).filter(function(a){return a.date>=s7&&(a.status==='absent'||a.status==='excabs');}).length;
+        var miss=(r.homework||[]).filter(function(h){return h.date>=s14&&(h.status==='missing'||h.status==='partial'||h.done===false);}).length;
+        var pos=(r.achievements||[]).filter(function(x){return x.date>=s7;}).length + (r.participation||[]).filter(function(p){return p.date>=s7;}).length;
+        if(abs>=2) absL.push(st.name);
+        if(miss>=2) hwL.push(st.name);
+        if(pos>=3) praiseL.push(st.name);
+      }catch(e){}
+    }
+    function grp(t,arr,c){ return '<div style="margin-bottom:8px;"><span style="font-weight:900;font-size:.72rem;color:'+c+';">'+t+' ('+arr.length+')</span>'
+      +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
+    var box=document.createElement('div'); box.id='sfu-cc';
+    box.style.cssText='margin:0 20px 12px;background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:11px 14px;';
+    box.innerHTML='<div style="font-weight:900;font-size:.8rem;color:#3D0918;margin-bottom:8px;">مركز القيادة · آخر أسبوعين</div>'
+      + grp('غياب متكرر',absL,'#8A1538') + grp('واجبات متعثرة',hwL,'#B8924A') + grp('يستحق إشادة',praiseL,'#3D6B53')
+      + ((absL.length+hwL.length+praiseL.length)?'':'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;">كل شيء تحت السيطرة</div>');
+    var list=document.getElementById('sfu-list');
+    if(list) list.parentNode.insertBefore(box, list);
+  };
+
+  // ═══ إدارة الفصل: تعديل الاسم وحذف الطلاب ═══
+  window.hhSfuRenameClass=async function(){
+    if(!ST.classCode){ toast2('اختر فصلاً أولاً','info'); return; }
+    var sel=document.getElementById('sfu-class');
+    var cur=sel? sel.options[sel.selectedIndex].text.split(' ·')[0] : '';
+    var n=prompt('الاسم الجديد للفصل:', cur);
+    if(n===null) return;
+    n=n.trim().slice(0,60);
+    if(!n){ toast2('اكتب اسماً صالحاً','info'); return; }
+    try{
+      await db().collection('classrooms').doc(ST.classCode).set({className:n},{merge:true});
+      if(sel) sel.options[sel.selectedIndex].text=n;
+      toast2('عُدّل اسم الفصل إلى: '+n,'success');
+    }catch(e){ toast2('تعذر التعديل، تحقق من الاتصال','error'); }
+  };
+  async function _sfuDeactivate(ids){
+    var ok=0;
+    for(var i=0;i<ids.length;i++){
+      try{ await db().collection('classroom_students').doc(ids[i]).set({active:false, removedAt:Date.now()},{merge:true}); ok++; }
+      catch(e){}
+    }
+    if(ok){
+      try{ await db().collection('classrooms').doc(ST.classCode).set({studentCount:firebase.firestore.FieldValue.increment(-ok)},{merge:true}); }catch(e){}
+    }
+    return ok;
+  }
+  window.hhSfuDeleteSel=async function(){
+    var ids=ST.students.filter(function(s){return ST.data[s.id].sel;}).map(function(s){return s.id;});
+    if(!ids.length){ toast2('حدّد طلاباً أولاً','info'); return; }
+    if(!window.confirm('سيُحذف '+ids.length+' طالباً من هذا الفصل.\nسجلاتهم التاريخية تبقى محفوظة في ملفاتهم.\nهل أنت متأكد؟')) return;
+    var ok=await _sfuDeactivate(ids);
+    toast2('حُذف '+ok+' طالباً من الفصل','success');
+    loadStudents();
+  };
+  window.hhSfuDeleteAll=async function(){
+    if(!ST.students.length){ toast2('لا طلاب في الفصل','info'); return; }
+    if(!window.confirm('تحذير: سيُحذف جميع طلاب الفصل ('+ST.students.length+' طالباً).\nسجلاتهم التاريخية تبقى محفوظة.\nهل أنت متأكد؟')) return;
+    var word=prompt('للتأكيد النهائي اكتب: حذف');
+    if(word!=='حذف'){ toast2('أُلغيت العملية','info'); return; }
+    var ok=await _sfuDeactivate(ST.students.map(function(s){return s.id;}));
+    toast2('حُذف '+ok+' طالباً من الفصل','success');
+    loadStudents();
+  };
 
   // ═══ الحفظ · ينتقل لكل ملف طالب ═══
   window.hhSfuSaveAll=async function(){
@@ -138,10 +299,15 @@
         updates.attendance = firebase.firestore.FieldValue.arrayUnion({ date:date, period:period, status:d.att, at:Date.now() });
         // المشاركة
         if(d.part>0) updates.participation = firebase.firestore.FieldValue.arrayUnion({ date:date, period:period, points:d.part, at:Date.now() });
-        // الواجب
-        if(d.hw!=null) updates.homework = firebase.firestore.FieldValue.arrayUnion({ date:date, done:d.hw, at:Date.now() });
+        // الواجب (سداسي الحالات · مع توافق done القديم)
+        if(d.hw!=null) updates.homework = firebase.firestore.FieldValue.arrayUnion({ date:date, status:d.hw, done:(d.hw==='done'||d.hw==='hwlate'), at:Date.now() });
         // السلوك
         if(d.behavior!=null) updates.behavior = firebase.firestore.FieldValue.arrayUnion({ date:date, type:d.behavior, at:Date.now() });
+        // التميز
+        if(d.stars>0) updates.achievements = firebase.firestore.FieldValue.arrayUnion({ date:date, type:'star', n:d.stars, at:Date.now() });
+        // العدادات المخصصة
+        var custKeys=Object.keys(d.cust||{}).filter(function(k){return d.cust[k]>0;});
+        if(custKeys.length) updates.custom = firebase.firestore.FieldValue.arrayUnion.apply(null, custKeys.map(function(k){ return { date:date, kind:k, n:d.cust[k], at:Date.now() }; }));
         await db().collection('student_records').doc(s.id).set(updates, {merge:true});
         ok++;
       }catch(e){ fail++; console.warn('save student', s.id, e); }
@@ -157,6 +323,7 @@
       });
     }catch(e){}
     if(btn){ btn.disabled=false; btn.textContent='حفظ اليوم'; }
+    if(!fail){ ST.undo=[]; ST.dirty=false; refreshBar(); }
     toast2(fail? ('حُفظ '+ok+' · تعذّر '+fail) : ('حُفظ سجل اليوم ('+ok+' طالب) · انتقل لملفاتهم'), fail?'error':'success');
   };
 

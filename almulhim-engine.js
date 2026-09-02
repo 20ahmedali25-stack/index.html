@@ -8850,7 +8850,9 @@ async function hhAdminTeachers(){
   ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:620px;width:100%;overflow:hidden;margin-bottom:20px;">'
     +'<div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div style="font-weight:900;font-size:.94rem;">اعتماد المعلمين</div>'
-    +'<button onclick="document.getElementById(\'hh-adm-t\').remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>'
+    +'<div style="display:flex;gap:8px;align-items:center;">'
+    +'<button onclick="if(window.hhDPlusAdminSchools)hhDPlusAdminSchools()" style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:9px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">المدارس والطلاب</button>'
+    +'<button onclick="document.getElementById(\'hh-adm-t\').remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div></div>'
     +'<div id="adm-t-body" style="padding:15px 18px;"><div style="text-align:center;color:#8A6D2E;font-weight:800;padding:20px;">جاري التحميل...</div></div></div>';
   document.body.appendChild(ov);
   try{
