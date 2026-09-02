@@ -2120,15 +2120,25 @@ async function hhSchApprovalForm(){
     if(typeof toast==='function') toast('سجّل دخولك أولاً لتقديم طلب الاعتماد','warn');
     return;
   }
+  var prevStatus='';
   try{
     if(db){
       var doc = await db.collection('teacher_requests').doc(currentUser.uid).get();
-      if(doc.exists && doc.data().status==='pending'){
-        if(typeof toast==='function') toast('طلب اعتمادك قيد المراجعة · سنعلمك فور القبول','info');
-        return;
+      if(doc.exists){
+        prevStatus=doc.data().status||'';
+        if(prevStatus==='pending'){
+          if(typeof toast==='function') toast('طلب اعتمادك قيد المراجعة · سنعلمك فور القبول','info');
+          return;
+        }
+        if(prevStatus==='approved'){
+          if(typeof toast==='function') toast('حسابك معتمد معلماً بالفعل','success');
+          try{ _hhMyRole='teacher'; }catch(e){}
+          return;
+        }
       }
     }
   }catch(e){}
+  window._hhApPrevStatus=prevStatus;
   var old=document.getElementById('hh-sch-approve'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-sch-approve';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999992;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;overflow-y:auto;';
@@ -2167,13 +2177,22 @@ async function hhSchSubmitApproval(){
       uid: currentUser.uid, name:name, subject:subject, school:school,
       phone:phone, email:email, status:'pending',
       createdAt: new Date().toISOString()
-    });
+    }, {merge:true});
     var ov=document.getElementById('hh-sch-approve'); if(ov) ov.remove();
     if(typeof toast==='function') toast('أُرسل طلب اعتمادك · ستصلك صلاحية الإضافة فور القبول','success');
     if(typeof hhLogActivity==='function') hhLogActivity('teacher_request', name+' · '+school);
   }catch(e){
     console.error('approval submit', e);
-    if(st){ st.textContent='تعذر الإرسال · تأكد من اتصالك وحاول ثانية'; st.style.color='#c0392b'; }
+    if(st){
+      if(e && e.code==='permission-denied'){
+        st.textContent = (window._hhApPrevStatus==='rejected')
+          ? 'طلبك السابق مرفوض · انشر تحديث القواعد الأخير أو تواصل مع الإدارة لإعادة التقديم'
+          : 'يوجد طلب سابق لهذا الحساب بحالة مختلفة · تواصل مع الإدارة';
+      } else {
+        st.textContent='تعذر الإرسال · تأكد من اتصالك وحاول ثانية';
+      }
+      st.style.color='#c0392b';
+    }
   }
 }
 

@@ -75,6 +75,7 @@
       +  '<button onclick="if(window.hhDPlusClassReport)hhDPlusClassReport(ST.classCode,ST.students)" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">تقرير الصف</button>'
       +  '<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استيراد Excel</button>'
       +  '<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">⚙ الإعدادات</button>'
+      +  '<button onclick="hhSfuAddStudent()" style="background:#FFFDF8;border:1px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إضافة طالب</button>'
       +  '<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">حذف كل الطلاب</button>'
       +'</div></div>'
       +'<div id="sfu-list" style="padding:14px 20px 90px;"></div>'
@@ -244,6 +245,25 @@
   };
 
   // ═══ إدارة الفصل: تعديل الاسم وحذف الطلاب ═══
+  window.hhSfuAddStudent=async function(){
+    if(!ST.classCode){ toast2('اختر فصلاً أولاً','info'); return; }
+    var n=prompt('اسم الطالب:');
+    if(n===null) return;
+    n=n.trim().slice(0,60);
+    if(!n){ toast2('اكتب اسماً صالحاً','info'); return; }
+    var dup=ST.students.some(function(s){ return s.name===n; });
+    if(dup && !window.confirm('يوجد طالب بهذا الاسم في الفصل، أتضيفه رغم ذلك؟')) return;
+    try{
+      await db().collection('classroom_students').add({
+        classCode:ST.classCode, teacherId:currentUser.uid,
+        studentName:n, name:n, active:true,
+        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      try{ await db().collection('classrooms').doc(ST.classCode).set({studentCount:firebase.firestore.FieldValue.increment(1)},{merge:true}); }catch(e){}
+      toast2('أُضيف الطالب: '+n,'success');
+      loadStudents();
+    }catch(e){ toast2('تعذرت الإضافة، تحقق من الاتصال','error'); }
+  };
   window.hhSfuRenameClass=async function(){
     if(!ST.classCode){ toast2('اختر فصلاً أولاً','info'); return; }
     var sel=document.getElementById('sfu-class');

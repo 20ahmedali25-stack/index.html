@@ -7787,7 +7787,7 @@ async function hhShareCardNative(){
 // القصة التعليمية التفاعلية · تعلّم بالسرد واتخاذ القرار
 // ═══════════════════════════════════════════════════════════════════
 var HH_SEAL_KEY = 'hh_platform_seal';
-var _hhSeal = 'classic';   // classic | star | pearl | wave
+var _hhSeal = 'bluenew';   // bluenew | classic | star | pearl | wave
 
 function hhSealLoad(){
   try{ var v=localStorage.getItem(HH_SEAL_KEY); if(v) _hhSeal=v; }catch(e){}
@@ -7889,6 +7889,43 @@ function hhDrawSeal(x, cx, cy, R, color, dark, design){
   var B2 = HH_SEAL_BLUE2;   // #12304d
   var LT = HH_SEAL_LT;      // #5b8fc7
   var F  = function(w,sz){ return w+' '+sz+"px 'Cairo','Tajawal',Arial,sans-serif"; };
+  // ══ الأزرق الموثق: عربية واضحة مستقيمة وشهادة موثقة ══
+  if(design==='bluenew'){
+    x.save();
+    x.textAlign='center'; x.textBaseline='alphabetic';
+    x.lineJoin='round'; x.lineCap='round';
+    x.beginPath(); x.arc(cx,cy,R*0.99,0,Math.PI*2); x.strokeStyle=B2; x.lineWidth=R*0.045; x.stroke();
+    x.beginPath(); x.arc(cx,cy,R*0.93,0,Math.PI*2); x.strokeStyle=B; x.lineWidth=R*0.014; x.stroke();
+    (function(){
+      var n=40;
+      for(var i=0;i<n;i++){
+        var a=(Math.PI*2/n)*i;
+        x.beginPath();
+        x.arc(cx+Math.cos(a)*R*0.958, cy+Math.sin(a)*R*0.958, R*0.013, 0, Math.PI*2);
+        x.fillStyle=(i%3===0)?B2:B; x.globalAlpha=(i%3===0)?1:.7; x.fill();
+      }
+      x.globalAlpha=1;
+    })();
+    x.beginPath(); x.arc(cx,cy,R*0.83,0,Math.PI*2); x.strokeStyle=B; x.lineWidth=R*0.018; x.stroke();
+    x.fillStyle=B2; x.font=F(900, Math.round(R*0.125));
+    x.fillText('منصة المُلهم التعليمية', cx, cy-R*0.48);
+    x.strokeStyle=B; x.lineWidth=R*0.014;
+    x.beginPath(); x.moveTo(cx-R*0.5,cy-R*0.30); x.lineTo(cx-R*0.16,cy-R*0.30); x.stroke();
+    x.beginPath(); x.moveTo(cx+R*0.16,cy-R*0.30); x.lineTo(cx+R*0.5,cy-R*0.30); x.stroke();
+    (function(){
+      x.save(); x.beginPath();
+      for(var i=0;i<10;i++){ var r=i%2?R*0.022:R*0.05, a=Math.PI/5*i-Math.PI/2; x[i?'lineTo':'moveTo'](cx+Math.cos(a)*r, cy-R*0.315+Math.sin(a)*r); }
+      x.closePath(); x.fillStyle=B; x.fill(); x.restore();
+    })();
+    x.fillStyle=B2; x.font=F(900, Math.round(R*0.34));
+    x.fillText('المُلهم', cx, cy+R*0.12);
+    x.fillStyle=B; x.font=F(800, Math.round(R*0.082));
+    x.fillText('AL-MULHIM EDUCATIONAL', cx, cy+R*0.30);
+    x.fillStyle=B2; x.font=F(900, Math.round(R*0.112));
+    x.fillText('شهادة موثقة · دولة قطر', cx, cy+R*0.55);
+    x.restore();
+    return;
+  }
   var FE = function(w,sz){ return w+' '+sz+"px 'Cairo',Georgia,'Times New Roman',serif"; };
   x.save();
   x.textAlign='center'; x.textBaseline='alphabetic';
@@ -7984,6 +8021,7 @@ function hhSealPicker(){
   }
   hhSealLoad();
   var designs=[
+    ['bluenew','الأزرق الموثق','عربية واضحة · شهادة موثقة · دولة قطر'],
     ['classic','الكلاسيكي','حلقتان ونص دائري ونجمة ثمانية'],
     ['star','النجمة','نجمة ثمانية إسلامية محيطة'],
     ['pearl','اللؤلؤة','حلقة لؤلؤية · رمز قطر البحري'],
@@ -8188,7 +8226,7 @@ async function hhTplUpload(input){
       id:'tpl_'+Date.now().toString(36),
       name: nameVal || ('نموذج '+n),
       img:url, w:out.width, h:out.height,
-      sealX:0.30, sealY:0.78, sealR:0.075
+      sealX:0.50, sealY:0.76, sealR:0.075
     };
     _hhCertTemplates.push(tpl);
     await hhTplSaveOne(tpl);
@@ -8287,7 +8325,7 @@ function hhRenderTemplateCert(o, T){
       x.fillText(new Date().toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'}), W*0.30, H*0.855);
       // ═══ الختم إلزامي · لا يمكن تعطيله ═══
       if(typeof hhDrawSeal==='function'){
-        hhDrawSeal(x, W*T.sealX, H*T.sealY, Math.round(Math.min(W,H)*T.sealR), '#B8924A','#8A6D2E','classic');
+        hhDrawSeal(x, W*T.sealX, H*T.sealY, Math.round(Math.min(W,H)*T.sealR), '#B8924A','#8A6D2E',(typeof _hhSeal!=='undefined'?_hhSeal:'classic'));
       }
       if(o.serial){
         x.fillStyle='rgba(94,14,38,.4)'; x.font=F(700,Math.round(H*0.014));
@@ -8668,10 +8706,10 @@ async function hhGenerateCert(){
   // ── المنطقة السفلية: الختم يميناً بمساحته الخاصة · التوقيعان يساراً ووسطاً ──
   var sy = H-176;
 
-  // 1) الختم: ركن يمين سفلي، منطقة محجوزة لا يدخلها أي عنصر آخر
+  // 1) الختم: أسفل المنتصف بين التوقيعين · مساحة محجوزة
   var sealR  = 118;
-  var sealCX = 200;              // الركن الأيسر السفلي · مساحة خاصة
-  var sealCY = H - 212;
+  var sealCX = W/2;
+  var sealCY = H - 226;
   if(typeof hhDrawSeal==='function'){
     hhDrawSeal(x, sealCX, sealCY, sealR, T.color, T.dark, (typeof _hhSeal!=='undefined'?_hhSeal:'classic'));
   }
@@ -8679,7 +8717,7 @@ async function hhGenerateCert(){
   // 2) التوقيعان في النصف الأيسر · لا يقتربان من مساحة الختم
   x.strokeStyle='rgba(94,14,38,.28)'; x.lineWidth=1.5;
   var sigW = 300;
-  var dateCX = W/2 + 40;                 // التاريخ وسط-يمين
+  var dateCX = W/2 - 430;                // التاريخ يسار الختم
   var teachCX = W/2 + 430;               // المعلّم أقصى اليمين
 
   if(teacher){
@@ -8697,7 +8735,7 @@ async function hhGenerateCert(){
 
   // ── التذييل + رقم تحقق ──
   var serial = 'ALM-' + (Date.now().toString(36).toUpperCase().slice(-6));
-  var footCX = W/2 + 190;   // يمين الختم تماماً
+  var footCX = W/2;         // أسفل الختم في المنتصف
   x.fillStyle='rgba(184,146,74,.7)'; x.font=F(700,18);
   x.fillText('almulhimedu.org', footCX, H-84);
   x.fillStyle='rgba(94,14,38,.35)'; x.font=F(700,14);
@@ -8828,6 +8866,15 @@ async function hhSendTeacherRequest(){
   if(!name || !school){ if(st){st.textContent='أدخل الاسم والمدرسة'; st.style.color='#c0392b';} return; }
   if(st){ st.textContent='جاري الإرسال...'; st.style.color='#8A6D2E'; }
   try{
+    var _prev='';
+    try{
+      var _pd=await firebase.firestore().collection('teacher_requests').doc(currentUser.uid).get();
+      if(_pd.exists) _prev=_pd.data().status||'';
+    }catch(e2){}
+    if(_prev==='approved'){
+      if(st){ st.textContent='حسابك معتمد معلماً بالفعل'; st.style.color='#3D6B53'; }
+      return;
+    }
     await firebase.firestore().collection('teacher_requests').doc(currentUser.uid).set({
       uid:currentUser.uid, email:currentUser.email||'', name:name, school:school,
       subject:subject, note:g('tr-note').slice(0,300), status:'pending',
@@ -8837,7 +8884,12 @@ async function hhSendTeacherRequest(){
     if(typeof toast==='function') toast('أُرسل طلب الاعتماد','success');
     setTimeout(function(){ var e=document.getElementById('hh-treq'); if(e) e.remove(); }, 1600);
   }catch(e){
-    if(st){ st.textContent='تعذر الإرسال · تحقق من اتصالك'; st.style.color='#c0392b'; }
+    if(st){
+      st.textContent = (e && e.code==='permission-denied')
+        ? 'يوجد طلب سابق لهذا الحساب · انشر تحديث القواعد أو تواصل مع الإدارة'
+        : 'تعذر الإرسال · تحقق من اتصالك';
+      st.style.color='#c0392b';
+    }
   }
 }
 
