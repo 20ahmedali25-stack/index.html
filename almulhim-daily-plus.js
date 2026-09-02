@@ -269,9 +269,12 @@
     toast2('جارٍ تجهيز تقرير الفصل…','info');
     var rows='', csv=[['الطالب','الانتظام %','التحصيل %','الواجبات %','مشاركات','تميز','ملاحظات']];
     var sumA=0,nA=0,sumG=0,nG=0,sumH=0,nH=0, best=null, support=[];
+    var snaps=await Promise.all(students.map(function(s){
+      return db().collection('student_records').doc(s.id).get().catch(function(){ return null; });
+    }));
     for(var i=0;i<students.length;i++){
       var s=students[i], r={};
-      try{ var snap=await db().collection('student_records').doc(s.id).get(); if(snap.exists) r=snap.data(); }catch(e){}
+      var snap=snaps[i]; if(snap && snap.exists) r=snap.data();
       var st=statsOf(r);
       if(st.attPct!==null){sumA+=st.attPct;nA++;}
       if(st.avg!==null){sumG+=st.avg;nG++; if(!best||st.avg>best.v) best={n:s.name,v:st.avg};}
@@ -391,15 +394,13 @@
               existing[gName]=code; madeCls++;
             }
             var grp=groups2[gName];
-            for(var si=0; si<grp.length; si++){
-              var r=grp[si];
-              await db().collection('classroom_students').add({
+            await Promise.all(grp.map(function(r){
+              return db().collection('classroom_students').add({
                 classCode:code||'', teacherId:currentUser.uid,
                 studentName:r.name, name:r.name, sid:r.sid||'', email:r.email||'',
                 active:true, addedAt: firebase.firestore.FieldValue.serverTimestamp()
-              });
-              added++;
-            }
+              }).then(function(){ added++; });
+            }));
             if(code){
               try{ await db().collection('classrooms').doc(code).set({ studentCount: firebase.firestore.FieldValue.increment(grp.length) },{merge:true}); }catch(e){}
             }
@@ -753,5 +754,49 @@
       rec().plans=(rec().plans||[]).concat([p]);
       toast2('حُفظت خطة الدعم','success'); rerender('plans');
     }).catch(function(){ toast2('تعذر الحفظ','error'); });
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  لوحة تحكم المعلم المعتمد: كل ما يخص مدرستي في مكان واحد
+// ═══════════════════════════════════════════════════════════
+(function(){
+  'use strict';
+  function esc2(s){ return (typeof esc==='function') ? esc(s) : String(s==null?'':s); }
+  function go(fn){ var e=document.getElementById('hh-tpanel'); if(e) e.remove(); fn(); }
+  window.hhTeacherPanel=function(){
+    var isApproved = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') || (typeof hhIsAdmin==='function' && hhIsAdmin());
+    if(!isApproved){ if(typeof toast==='function') toast('لوحة التحكم للمعلم المعتمد','info'); return; }
+    var old=document.getElementById('hh-tpanel'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='hh-tpanel';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99991;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    var tiles=[
+      ['إدارة الصفوف','أنشئ الفصول وشارك أكوادها وأرشفها', '#8A1538', "if(typeof hhCampusGo==='function'){hhCampusGo('classes');}"],
+      ['دفتر المتابعة الذكي','الرصد اليومي وملفات الطلاب والتقارير', '#5E0E26', "if(typeof hhOpenSmartFollowup==='function'){hhOpenSmartFollowup();}"],
+      ['المنهج والدروس','وحدات المنهج ودروسك الخاصة', '#1F4E79', "if(typeof hhCampusGo==='function'){hhCampusGo('school');}"],
+      ['استيراد الطلاب','ملف Excel واحد يوزع الشعب تلقائياً', '#3D6B53', "if(window.hhDPlusImport){hhDPlusImport();}"],
+      ['الشهادات','إصدار شهادات موثقة بختم المنصة', '#8A6D2E', "if(typeof hhCampusGo==='function'){hhCampusGo('certs');}"],
+      ['أدوات الدرجات المتقدمة','استيراد درجات Excel ودرجات مدرستي', '#B8924A', "if(typeof hhOpenGradebook==='function'){hhOpenGradebook();}"],
+      ['إعدادات المتابعة والتقارير','القوالب والعدادات وشعار المدرسة والأسماء', '#7a5a20', "if(window.hhDPlusSettings){hhDPlusSettings();}"],
+      ['دليل الدفتر الذكي','شرح كامل لكل قدرات الدفتر', '#4A0B1E', "if(window.hhSfuGuide){hhSfuGuide();}"]
+    ];
+    if(typeof hhIsAdmin==='function' && hhIsAdmin()){
+      tiles.push(['المدارس والطلاب','لوحة المدير: الأعداد والتفاصيل', '#2a4d3e', "if(window.hhDPlusAdminSchools){hhDPlusAdminSchools();}"]);
+    }
+    var grid=tiles.map(function(t){
+      return '<button onclick="(function(){var e=document.getElementById(\'hh-tpanel\');if(e)e.remove();'+t[3]+'})()" '
+        +'style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-right:5px solid '+t[2]+';border-radius:14px;padding:14px 15px;text-align:right;cursor:pointer;font-family:Cairo;transition:transform .12s;" '
+        +'onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'\'">'
+        +'<div style="font-weight:900;font-size:.86rem;color:#3D0918;margin-bottom:3px;">'+esc2(t[0])+'</div>'
+        +'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;">'+esc2(t[1])+'</div></button>';
+    }).join('');
+    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:22px;max-width:620px;width:100%;overflow:hidden;margin-bottom:24px;">'
+      +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div><div style="font-weight:900;font-size:1.1rem;">لوحة التحكم</div>'
+      +'<div style="font-size:.72rem;opacity:.85;margin-top:2px;">كل ما يخص مدرستك في مكان واحد · للمعلم المعتمد</div></div>'
+      +'<button onclick="document.getElementById(\'hh-tpanel\').remove()" style="background:none;border:none;color:#F5E6C4;font-size:1.2rem;cursor:pointer;">✕</button></div>'
+      +'<div style="padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;">'+grid+'</div>'
+      +'</div>';
+    document.body.appendChild(ov);
   };
 })();

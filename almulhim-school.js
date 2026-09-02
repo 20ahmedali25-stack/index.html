@@ -1130,15 +1130,16 @@ function hhCampusRole(){
 }
 // مصفوفة البوابات: lock = تظهر للمعلم غير المعتمد مقفلة (عرض فقط + طلب الاعتماد)
 var _HH_CAMPUS_NAV_ALL = [
-  {id:'home',        t:'الرئيسة',            grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
-  {id:'school',      t:'المنهج والاختبارات', grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
-  {id:'lessons',     t:'دروسي الخاصة',       grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
-  {id:'myclass',     t:'صفي',                grp:'أنا',     ico:'users', roles:['student']},
-  {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
-  {id:'mycerts',     t:'شهاداتي',            grp:'أنا',     ico:'cert',  roles:['student']},
-  {id:'classes',     t:'صفوفي وطلابي',       grp:'طلابي',   ico:'users', roles:['teacher','approved']},
-  {id:'gradebook',   t:'دفتر المتابعة',      grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
-  {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
+  {id:'home',        t:'الرئيسة',              grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
+  {id:'school',      t:'المنهج الدراسي',       grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
+  {id:'lessons',     t:'دروسي الخاصة',         grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
+  {id:'myclass',     t:'صفي',                  grp:'أنا',     ico:'users', roles:['student']},
+  {id:'achievements',t:'إنجازاتي',             grp:'أنا',     ico:'medal', roles:['student']},
+  {id:'mycerts',     t:'شهاداتي',              grp:'أنا',     ico:'cert',  roles:['student']},
+  {id:'classes',     t:'صفوفي',                grp:'طلابي',   ico:'users', roles:['teacher','approved']},
+  {id:'gradebook',   t:'دفتر المتابعة الذكي',  grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
+  {id:'certs',       t:'الشهادات',             grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']},
+  {id:'tpanel',      t:'لوحة التحكم',          grp:'طلابي',   ico:'cap',   roles:['approved']}
 ];
 var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
 function hhCampusNavFor(role){ return _HH_CAMPUS_NAV_ALL.filter(function(n){ return n.roles.indexOf(role)!==-1; }); }
@@ -1257,7 +1258,7 @@ function hhSchoolHub(){
 }
 
 function hhCampusSetNav(dest){
-  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
+  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة الذكي',tpanel:' · لوحة التحكم',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
   document.querySelectorAll('#hh-campus-side .hh-campus-nav').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-dest')===dest); });
   var c=document.getElementById('hh-campus-crumb'); if(c) c.textContent=crumb[dest]||'';
   var home=document.getElementById('hh-campus-home'), cls=document.getElementById('hh-campus-classes-pane'), mount=document.getElementById('hh-campus-mount'), note=document.getElementById('hh-campus-notice');
@@ -1316,6 +1317,7 @@ function hhHubGo(dest){
   if(dest==='school' || dest==='quiz'){ hhSchSetTerm(_hhSchTerm||'t1'); ok=hhCampusAdopt(function(){ hhOpenSchool(); }); }
   else if(dest==='lessons'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCurriculum==='function') hhOpenCurriculum(); }); }
   else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenSmartFollowup==='function') hhOpenSmartFollowup(); else if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
+  else if(dest==='tpanel'){ ok=hhCampusAdopt(function(){ if(typeof hhTeacherPanel==='function') hhTeacherPanel(); }); }
   else if(dest==='certs' || dest==='mycerts'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
   if(!ok){ hhCampusNotice('هذه الخدمة تحتاج صلاحية المعلم أو ما زالت قيد التجهيز'); }
 }

@@ -53,6 +53,7 @@
       +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:13px;">'
       +  '<button onclick="document.getElementById(\'hh-sfu\').remove()" style="background:rgba(212,188,133,.14);border:1px solid #B8924A;border-radius:10px;width:36px;height:36px;color:#F5E6C4;font-weight:900;cursor:pointer;flex-shrink:0;">→</button>'
       +  '<div style="flex:1;"><div style="color:#FFFDF8;font-weight:900;font-size:1.15rem;">دفتر المتابعة الذكي</div><div style="color:#D4BC85;font-size:.68rem;">إدخال سريع · ينتقل تلقائياً لملف الطالب</div></div>'
+      +  '<button onclick="hhSfuGuide()" title="الدليل الكامل" style="background:rgba(212,188,133,.14);border:1px solid #B8924A;border-radius:10px;padding:7px 13px;color:#F5E6C4;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;flex-shrink:0;">الدليل</button>'
       +'</div>'
       // المحددات: الفصل · التاريخ · الحصة
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
@@ -62,23 +63,32 @@
       +  '<select id="sfu-period" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+[1,2,3,4,5,6,7].map(function(p){return '<option value="'+p+'">الحصة '+p+'</option>';}).join('')+'</select>'
       +'</div></div>'
       // شريط الإجراءات الجماعية
-      +'<div style="padding:12px 20px 0;"><div style="display:flex;gap:7px;flex-wrap:wrap;">'
+      +'<div style="padding:12px 20px 0;">'
+      // مجموعة الرصد الجماعي: تظهر فقط حين يوجد طلاب
+      +'<div id="sfu-bulkbar" style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;">'
       +  '<button onclick="hhSfuBulkAll(\'present\')" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">الجميع حاضرون</button>'
       +  '<button onclick="hhSfuBulkPart()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">+ مشاركة للمحدّدين</button>'
       +  '<button onclick="hhSfuBulkHw()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">أنجز الواجب للمحدّدين</button>'
       +  '<button id="sfu-undo" onclick="hhSfuUndo()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;opacity:.45;">تراجع</button>'
-      +  '<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
       +  '<span id="sfu-saveind" style="font-size:.66rem;font-weight:800;color:#3D6B53;align-self:center;">محفوظ ✓</span>'
       +'</div>'
+      // مجموعة الأدوات الدائمة
       +'<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;">'
-      +  '<button onclick="hhSfuCommand()" style="background:#FFFDF8;border:1px solid #5E0E26;color:#5E0E26;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">مركز القيادة</button>'
-      +  '<button onclick="if(window.hhDPlusClassReport)hhDPlusClassReport(ST.classCode,ST.students)" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">تقرير الصف</button>'
-      +  '<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استيراد Excel</button>'
-      +  '<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">⚙ الإعدادات</button>'
+      +  '<button onclick="hhSfuCommand()" style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:8px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">مركز القيادة</button>'
+      +  '<button onclick="if(window.hhDPlusClassReport)hhDPlusClassReport(ST.classCode,ST.students)" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:8px 14px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">تقرير الصف</button>'
+      +  '<button id="sfu-mngbtn" onclick="hhSfuToggleManage()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:8px 14px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">إدارة الفصل ▾</button>'
+      +  '<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 14px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">⚙ الإعدادات</button>'
+      +'</div>'
+      // لوحة الإدارة المطوية
+      +'<div id="sfu-mng" style="display:none;gap:7px;flex-wrap:wrap;margin-top:8px;background:#FBF5E9;border:1px solid #E8DCC2;border-radius:12px;padding:9px;">'
       +  '<button onclick="hhSfuAddStudent()" style="background:#FFFDF8;border:1px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إضافة طالب</button>'
+      +  '<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استيراد Excel</button>'
+      +  '<button onclick="hhSfuRenameClass()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">تعديل اسم الفصل</button>'
       +  (typeof hhOpenGradebook==='function' ? '<button onclick="hhOpenGradebook()" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">أدوات الدرجات المتقدمة</button>' : '')
+      +  '<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">حذف المحدّدين</button>'
       +  '<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">حذف كل الطلاب</button>'
-      +'</div></div>'
+      +'</div>'
+      +'</div>'
       +'<div id="sfu-list" style="padding:14px 20px 90px;"></div>'
       // شريط الحفظ السفلي
       +'<div style="position:fixed;bottom:0;right:0;left:0;max-width:760px;margin:0 auto;background:#FFFDF8;border-top:2px solid #B8924A;padding:12px 20px;display:flex;gap:10px;align-items:center;box-shadow:0 -4px 14px rgba(94,14,38,.1);">'
@@ -95,9 +105,20 @@
     var list=document.getElementById('sfu-list'); if(list) list.innerHTML='<div style="text-align:center;color:#8A7A63;padding:20px;font-weight:800;">جارٍ تحميل الطلاب…</div>';
     ST.students=[]; ST.data={};
     try{
-      var qs=await db().collection('classroom_students').where('classCode','==',ST.classCode).where('active','==',true).get();
+      var base=db().collection('classroom_students').where('classCode','==',ST.classCode).where('active','==',true);
+      var qs=await base.where('teacherId','==',currentUser.uid).get();
+      if((!qs.docs || !qs.docs.length) && typeof hhIsAdmin==='function' && hhIsAdmin()){
+        try{ qs=await base.get(); }catch(e2){}
+      }
       qs.forEach(function(d){ var s=d.data(); ST.students.push({id:d.id, name:s.studentName||s.name||'طالب'}); });
-    }catch(e){ console.warn(e); }
+    }catch(e){
+      console.warn('sfu load', e);
+      if(list) list.innerHTML='<div style="background:#fff6f4;border:1.5px solid #c0392b;border-radius:14px;padding:18px;text-align:center;">'
+        +'<div style="font-weight:900;color:#8A1538;font-size:.84rem;margin-bottom:8px;">تعذر تحميل طلاب الفصل</div>'
+        +'<div style="color:#8A7A63;font-size:.7rem;font-weight:700;margin-bottom:10px;">تحقق من اتصالك، وإن استمر الأمر فربما تحتاج نشر آخر نسخة من قواعد Firestore</div>'
+        +'<button onclick="hhSfuReload()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">إعادة المحاولة</button></div>';
+      updateSummary(); return;
+    }
     ST.students.forEach(function(s){ ST.data[s.id]={att:'present', part:0, hw:null, hwOpen:false, behavior:null, stars:0, cust:{}, sel:false}; });
     ST.undo=[]; ST.dirty=false;
     renderList();
@@ -105,7 +126,18 @@
 
   function renderList(){
     var el=document.getElementById('sfu-list'); if(!el)return;
-    if(!ST.students.length){ el.innerHTML='<div style="text-align:center;color:#8A7A63;padding:30px;font-weight:700;background:#FBF5E9;border:1px dashed #D9C79E;border-radius:12px;">لا طلاب في هذا الفصل بعد · أضفهم من «صفوفي وطلابي» أو استوردهم من Excel</div>'; updateSummary(); refreshBar(); return; }
+    var bb=document.getElementById('sfu-bulkbar');
+    if(bb) bb.style.display = ST.students.length ? 'flex' : 'none';
+    if(!ST.students.length){
+      el.innerHTML='<div style="background:#FFFDF8;border:1.5px dashed #C9B37E;border-radius:16px;padding:28px 18px;text-align:center;">'
+        +'<div style="font-weight:900;color:#3D0918;font-size:.95rem;margin-bottom:5px;">الفصل جاهز وينتظر طلابه</div>'
+        +'<div style="color:#8A7A63;font-size:.72rem;font-weight:700;margin-bottom:15px;">أضفهم واحداً واحداً، أو استورد ملف Excel وفيه عمود الفصل فتتوزع الشعب تلقائياً</div>'
+        +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
+        +'<button onclick="hhSfuAddStudent()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إضافة طالب</button>'
+        +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #1F4E79;color:#1F4E79;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">استيراد من Excel</button>'
+        +'</div></div>';
+      updateSummary(); refreshBar(); return;
+    }
     var counters=cfg().counters||[];
     el.innerHTML=ST.students.map(function(s){
       var d=ST.data[s.id];
@@ -154,6 +186,14 @@
   }
 
   // إجراءات فردية (كلها قابلة للتراجع قبل الحفظ)
+  window.hhSfuToggleManage=function(){
+    var m=document.getElementById('sfu-mng'), b=document.getElementById('sfu-mngbtn');
+    if(!m) return;
+    var open=m.style.display!=='flex';
+    m.style.display=open?'flex':'none';
+    if(b) b.textContent=open?'إدارة الفصل ▴':'إدارة الفصل ▾';
+  };
+  window.hhSfuReload=function(){ loadStudents(); };
   window.hhSfuSetAtt=function(id,k){ var p=ST.data[id].att; if(p===k)return; ST.data[id].att=k; pushUndo('حضور',function(){ST.data[id].att=p;}); renderList(); };
   window.hhSfuPart=function(id,n){ var p=ST.data[id].part; var v=Math.max(0,p+n); if(v===p)return; ST.data[id].part=v; pushUndo('مشاركة',function(){ST.data[id].part=p;}); renderList(); };
   window.hhSfuHwToggle=function(id){ ST.data[id].hwOpen=!ST.data[id].hwOpen; renderList(); };
@@ -220,20 +260,19 @@
     var d7=new Date(); d7.setDate(d7.getDate()-7); var s7=d7.toISOString().slice(0,10);
     var d14=new Date(); d14.setDate(d14.getDate()-14); var s14=d14.toISOString().slice(0,10);
     var absL=[], hwL=[], praiseL=[];
-    for(var i=0;i<ST.students.length;i++){
-      var st=ST.students[i];
-      try{
-        var snap=await db().collection('student_records').doc(st.id).get();
-        if(!snap.exists) continue;
-        var r=snap.data();
-        var abs=(r.attendance||[]).filter(function(a){return a.date>=s7&&(a.status==='absent'||a.status==='excabs');}).length;
-        var miss=(r.homework||[]).filter(function(h){return h.date>=s14&&(h.status==='missing'||h.status==='partial'||h.done===false);}).length;
-        var pos=(r.achievements||[]).filter(function(x){return x.date>=s7;}).length + (r.participation||[]).filter(function(p){return p.date>=s7;}).length;
-        if(abs>=2) absL.push(st.name);
-        if(miss>=2) hwL.push(st.name);
-        if(pos>=3) praiseL.push(st.name);
-      }catch(e){}
-    }
+    var snaps=await Promise.all(ST.students.map(function(st){
+      return db().collection('student_records').doc(st.id).get().catch(function(){ return null; });
+    }));
+    snaps.forEach(function(snap, i){
+      if(!snap || !snap.exists) return;
+      var st=ST.students[i], r=snap.data();
+      var abs=(r.attendance||[]).filter(function(a){return a.date>=s7&&(a.status==='absent'||a.status==='excabs');}).length;
+      var miss=(r.homework||[]).filter(function(h){return h.date>=s14&&(h.status==='missing'||h.status==='partial'||h.done===false);}).length;
+      var pos=(r.achievements||[]).filter(function(x){return x.date>=s7;}).length + (r.participation||[]).filter(function(p){return p.date>=s7;}).length;
+      if(abs>=2) absL.push(st.name);
+      if(miss>=2) hwL.push(st.name);
+      if(pos>=3) praiseL.push(st.name);
+    });
     function grp(t,arr,c){ return '<div style="margin-bottom:8px;"><span style="font-weight:900;font-size:.72rem;color:'+c+';">'+t+' ('+arr.length+')</span>'
       +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
     var box=document.createElement('div'); box.id='sfu-cc';
@@ -312,8 +351,8 @@
   window.hhSfuSaveAll=async function(){
     var btn=event&&event.target; if(btn){ btn.disabled=true; btn.textContent='جارٍ الحفظ…'; }
     var date=ST.date, period=ST.period, ok=0, fail=0;
-    for(var i=0;i<ST.students.length;i++){
-      var s=ST.students[i], d=ST.data[s.id];
+    var jobs=ST.students.map(function(s){
+      var d=ST.data[s.id];
       try{
         var updates={};
         // الحضور
@@ -329,10 +368,12 @@
         // العدادات المخصصة
         var custKeys=Object.keys(d.cust||{}).filter(function(k){return d.cust[k]>0;});
         if(custKeys.length) updates.custom = firebase.firestore.FieldValue.arrayUnion.apply(null, custKeys.map(function(k){ return { date:date, kind:k, n:d.cust[k], at:Date.now() }; }));
-        await db().collection('student_records').doc(s.id).set(updates, {merge:true});
-        ok++;
-      }catch(e){ fail++; console.warn('save student', s.id, e); }
-    }
+        return db().collection('student_records').doc(s.id).set(updates, {merge:true})
+          .then(function(){ ok++; })
+          .catch(function(e){ fail++; console.warn('save student', s.id, e); });
+      }catch(e){ fail++; return Promise.resolve(); }
+    });
+    await Promise.all(jobs);
     // سجل الحصة في follow_up_sessions (ملخصات)
     try{
       await db().collection('follow_up_sessions').add({
@@ -538,16 +579,61 @@
       +(em?'\nحسابي: '+em:'');
     window.open('https://wa.me/97471776644?text='+encodeURIComponent(msg),'_blank');
   };
-  /* تغليف فتح الدفتر الذكي دون مساس بالأصل */
-  if(typeof window.hhOpenSmartFollowup==='function' && !window._hhSfuOrigOpen){
-    window._hhSfuOrigOpen = window.hhOpenSmartFollowup;
-    window.hhOpenSmartFollowup = function(preCode){
-      if(typeof currentUser==='undefined' || !currentUser){
-        if(typeof toast==='function') toast('يجب تسجيل الدخول أولاً','error');
-        return;
-      }
-      pendingCode = preCode||'';
-      screen();
-    };
-  }
+  /* رمز التحقق أُلغي بقرار المعلم: الدفتر يفتح مباشرة،
+     ودوال القفل تبقى خاملة هنا إن أراد إعادتها يوماً */
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   الدليل الاحترافي الكامل لدفتر المتابعة الذكي
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  function esc3(s){ return (typeof esc==='function') ? esc(s) : String(s==null?'':s); }
+  var GUIDE=[
+    ['البدء في ثلاث ثوانٍ',
+     'اختر الفصل من القائمة العلوية، وحدد التاريخ والحصة، وستجد طلابك أمامك فوراً. زر القلم بجوار القائمة يعدل اسم الفصل متى شئت.'],
+    ['رصد الحضور',
+     'لكل طالب ست حالات بألوانها: حاضر بالأخضر، غائب بالعنابي، غائب بعذر بالأزرق، متأخر بالذهبي، مستأذن، وخرج مبكراً. ضغطة واحدة تكفي، وزر «الجميع حاضرون» يرصد الفصل كله ثم تعدل الاستثناءات فقط.'],
+    ['الواجب بست حالات',
+     'اضغط زر «واجب» فتنسدل الحالات: سلّم، سلّم متأخراً، ناقص، لم يسلّم، بعذر، وإعادة. اختر وتنطوي القائمة، وزر «مسح» يلغي الرصد. وللإسراع حدد مجموعة طلاب بمربعات الاختيار ثم «أنجز الواجب للمحدّدين».'],
+    ['المشاركة والسلوك والتميز',
+     'عداد المشاركة بزري زائد وناقص، والسلوك يتنقل بين إيجابي بالنجمة وسلبي بعلامة التنبيه، وزر «تميز» يمنح نجوماً تتراكم وتظهر في ملف الطالب وتقاريره.'],
+    ['الملاحظات والدرجات الفورية',
+     'زر «ملاحظة» يفتح قوالبك الجاهزة أو كتابة حرة، وتُحفظ فور حفظها في ملف الطالب مباشرة. وزر «درجة» يرصد أي تقييم باسمه ودرجته فيتحول تلقائياً نسبة مئوية موحدة تدخل في متوسط الطالب.'],
+    ['العدادات المخصصة',
+     'أنشئ من الإعدادات أي نوع رصد باسمك أنت: نقطة نظام، حفظ، إحضار الأدوات، أو ما تشاء، فيظهر زراً في بطاقة كل طالب يرصد بضغطة.'],
+    ['التراجع ومؤشر الحفظ',
+     'كل رصد قبل الحفظ قابل للتراجع بزر «تراجع» خطوة خطوة، ومؤشر «تعديلات غير محفوظة» يذكرك، فإذا ضغطت «حفظ اليوم» انتقل كل شيء إلى ملفات الطلاب في السحابة وصار المؤشر «محفوظ».'],
+    ['ملف الطالب الشامل',
+     'اضغط اسم أي طالب يفتح ملفه بعشرة تبويبات: نظرة عامة برأي المعلم التلقائي القابل للتعديل ورسم تطوره ستة أسابيع، ثم الحضور والدرجات والشخصية بنقاط القوة والتطوير، وأولياء الأمر بصفاتهم ودرجات تجاوبهم، وسجل التواصل بجمله المفتاحية، وخطة الدعم بحالاتها الخمس، والمهارات والملاحظات، وتبويب التقرير.'],
+    ['مركز القيادة',
+     'زر واحد يحلل آخر أسبوعين لكل الفصل ويسمي لك: من تكرر غيابه، ومن تعثرت واجباته، ومن يستحق إشادة، فتعرف أين تضع جهدك اليوم.'],
+    ['إدارة الفصل',
+     'زر «إدارة الفصل» يطوي تحته كل شيء: إضافة طالب باسمه، استيراد ملف Excel وإن كان فيه عمود الفصل أنشأ الشعب الناقصة ووزع الطلاب تلقائياً، تعديل اسم الفصل، أدوات الدرجات المتقدمة، وحذف المحددين أو الكل بتأكيد مزدوج، والحذف يخفي الطالب من القوائم وتبقى سجلاته التاريخية محفوظة.'],
+    ['التقارير الجاهزة للتوقيع',
+     'تقرير الصف الجامع بمتوسطاته وجدول طلابه وقائمة من يحتاج دعماً، وتقرير كل طالب بمؤشراته ودرجاته وخطته ورأي معلمه، كلاهما يطبع PDF أو ينزل Excel، وبشعار مدرستك واسمك واسم المنسق وفراغات التوقيع.'],
+    ['الإعدادات تتبعك',
+     'قوالب ملاحظاتك وعداداتك وشعار مدرستك وأسماء التقارير وخيارات إظهارها، كلها تُحفظ في حسابك وتجدها على أي جهاز تدخل منه.']
+  ];
+  window.hhSfuGuide=function(){
+    var old=document.getElementById('hh-sfug'); if(old){ old.remove(); return; }
+    var ov=document.createElement('div'); ov.id='hh-sfug';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99997;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    var secs=GUIDE.map(function(g,i){
+      return '<div style="display:flex;gap:11px;margin-bottom:15px;">'
+        +'<div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</div>'
+        +'<div style="flex:1;"><div style="font-weight:900;font-size:.86rem;color:#3D0918;margin-bottom:3px;">'+esc3(g[0])+'</div>'
+        +'<div style="font-size:.74rem;color:#6a5a48;font-weight:700;line-height:2;">'+esc3(g[1])+'</div></div></div>';
+    }).join('');
+    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:22px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
+      +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div><div style="font-weight:900;font-size:1.1rem;">دليل دفتر المتابعة الذكي</div>'
+      +'<div style="font-size:.72rem;opacity:.85;margin-top:2px;">اثنتا عشرة قدرة بين يديك، من الرصد إلى التقرير الموقع</div></div>'
+      +'<button onclick="document.getElementById(\'hh-sfug\').remove()" style="background:none;border:none;color:#F5E6C4;font-size:1.2rem;cursor:pointer;">✕</button></div>'
+      +'<div style="padding:18px 20px 10px;">'+secs+'</div>'
+      +'<div style="padding:0 20px 18px;text-align:center;">'
+      +'<button onclick="document.getElementById(\'hh-sfug\').remove()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:11px 30px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">فهمت، إلى العمل</button>'
+      +'</div></div>';
+    document.body.appendChild(ov);
+  };
 })();
