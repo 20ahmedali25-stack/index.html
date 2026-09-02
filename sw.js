@@ -6,7 +6,7 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-zzzzo-terms-fix';
+const SW_VERSION = 'almulhim-zo-quotefix';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
@@ -15,17 +15,8 @@ const CORE_ASSETS = [
   '/index.html',
   '/almulhim.css',
   '/almulhim-engine.js',
-  '/almulhim-admin-catalog.js',
-  '/almulhim-journey.js',
-  '/almulhim-mahnadi.js',
-  '/almulhim-programs.js',
-  '/almulhim-student-file.js',
-  '/almulhim-followup.js',
-  '/almulhim-wathiq.js',
-  '/almulhim-school.js',
   '/curriculum-social7.js',
   '/madrasati-social7.js',
-  '/madrasati-social7-t1.js',
   '/questions.js',
   '/maps-questions.js',
   '/flags-questions.js',
@@ -65,10 +56,8 @@ self.addEventListener('install', (event) => {
       );
     })
   );
-  // تفعيل فوري: النسخة الجديدة تحل محل القديمة دون انتظار موافقة.
-  // آمن للحصص الجارية: الصفحة المفتوحة تواصل عملها بذاكرتها الحالية
-  // (لا إعادة تحميل قسرية)، والملفات الجديدة تُستخدم من الفتح التالي.
-  self.skipWaiting();
+  // ملاحظة: لا نستدعي skipWaiting هنا تلقائياً — ننتظر موافقة المستخدم
+  // عبر رسالة SKIP_WAITING القادمة من index.html
 });
 
 // ═══════════════════ التفعيل ═══════════════════
