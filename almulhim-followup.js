@@ -76,6 +76,7 @@
       +  '<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">استيراد Excel</button>'
       +  '<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">⚙ الإعدادات</button>'
       +  '<button onclick="hhSfuAddStudent()" style="background:#FFFDF8;border:1px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إضافة طالب</button>'
+      +  (typeof hhOpenGradebook==='function' ? '<button onclick="hhOpenGradebook()" style="background:#FFFDF8;border:1px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">أدوات الدرجات المتقدمة</button>' : '')
       +  '<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:7px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">حذف كل الطلاب</button>'
       +'</div></div>'
       +'<div id="sfu-list" style="padding:14px 20px 90px;"></div>'

@@ -1044,7 +1044,7 @@ function hhOpenSchool(){
         if(isAdm) services += svc('hhAdminTeachers()','#8A1538','#5E0E26','اعتماد المعلمين','مراجعة طلبات الاعتماد', I.approve);
         if(isTch){
           services += svc('hhOpenClasses()','#1F4E79','#12304d','صفوفي','إنشاء الصفوف وأكواد الدعوة', I.classes);
-          services += svc('hhOpenGradebook()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
+          services += svc('hhOpenSmartFollowup()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
           services += svc('hhOpenCurriculum()','#1F4E79','#12304d','مركز المناهج','رفع الدروس وتوليد المحتوى', I.curriculum);
         } else {
           services += svc('hhJoinClassPrompt()','#3D6B53','#26443A','انضم بكود','ادخل صف معلمك برمز من 6 خانات', I.join);
@@ -1315,7 +1315,7 @@ function hhHubGo(dest){
   var ok=false;
   if(dest==='school' || dest==='quiz'){ hhSchSetTerm(_hhSchTerm||'t1'); ok=hhCampusAdopt(function(){ hhOpenSchool(); }); }
   else if(dest==='lessons'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCurriculum==='function') hhOpenCurriculum(); }); }
-  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
+  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenSmartFollowup==='function') hhOpenSmartFollowup(); else if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
   else if(dest==='certs' || dest==='mycerts'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
   if(!ok){ hhCampusNotice('هذه الخدمة تحتاج صلاحية المعلم أو ما زالت قيد التجهيز'); }
 }
