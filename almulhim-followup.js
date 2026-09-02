@@ -161,3 +161,205 @@
   };
 
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   قفل الدفتر الذكي · رمز رباعي خاص بكل معلم
+   أول دخول: إنشاء الرمز مرتين. كل دخول بعدها: إدخاله.
+   بعد ثلاث محاولات خاطئة: استعادة الرمز أو مراسلة الدعم.
+   الرمز يُخزَّن مُشفَّراً (SHA-256 مملّحاً بمعرف المعلم)
+   محلياً وفي وثيقة المستخدم ليتبعه بين أجهزته.
+   الحماية الفعلية للبيانات تبقى في قواعد Firestore؛
+   هذا قفل شاشة يمنع فتح الدفتر من جهاز بيد غير صاحبه.
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var buf='', stage='enter', first='', fails=0, coolUntil=0, pendingCode='';
+
+  function uid(){ return (typeof currentUser!=='undefined'&&currentUser&&currentUser.uid)?currentUser.uid:'local'; }
+  function key(){ return 'hh_sfu_pin_'+uid(); }
+  function hashPin(pin){
+    var s='almulhim·'+uid()+'·'+pin;
+    if(window.crypto&&crypto.subtle&&crypto.subtle.digest&&window.TextEncoder){
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function(b){
+        return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2);}).join('');
+      });
+    }
+    var h=5381; for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))>>>0; }
+    return Promise.resolve('djb2·'+h.toString(16));
+  }
+  function stored(){ try{ return localStorage.getItem(key())||''; }catch(e){ return ''; } }
+  function store(h){
+    try{ localStorage.setItem(key(), h); }catch(e){}
+    try{
+      if(typeof firebase!=='undefined'&&firebase.firestore&&typeof currentUser!=='undefined'&&currentUser){
+        firebase.firestore().collection('users').doc(currentUser.uid).set({gbPinHash:h},{merge:true}).catch(function(){});
+      }
+    }catch(e){}
+  }
+  function clearPin(){
+    try{ localStorage.removeItem(key()); }catch(e){}
+    try{
+      if(typeof firebase!=='undefined'&&firebase.firestore&&typeof currentUser!=='undefined'&&currentUser){
+        firebase.firestore().collection('users').doc(currentUser.uid).set({gbPinHash:''},{merge:true}).catch(function(){});
+      }
+    }catch(e){}
+  }
+  function syncFromCloud(){
+    try{
+      if(typeof firebase!=='undefined'&&firebase.firestore&&typeof currentUser!=='undefined'&&currentUser&&!stored()){
+        firebase.firestore().collection('users').doc(currentUser.uid).get().then(function(d){
+          var h=(d&&d.exists&&d.data())?(d.data().gbPinHash||''):'';
+          if(h){
+            try{ localStorage.setItem(key(),h); }catch(e){}
+            if(document.getElementById('hh-sfupin') && stage!=='enter'){ stage='enter'; buf=''; first=''; paint(); }
+          }
+        }).catch(function(){});
+      }
+    }catch(e){}
+  }
+  function btnCss(sec){
+    return 'background:'+(sec?'#FBF5E9':'#FFFDF8')+';border:1.5px solid '+(sec?'#C9B37E':'#E8DCC2')
+      +';border-radius:13px;padding:13px 0;font-family:Cairo,sans-serif;font-weight:900;'
+      +'font-size:1.05rem;color:'+(sec?'#8A6D2E':'#3D0918')+';cursor:pointer;user-select:none;';
+  }
+  function screen(){
+    buf=''; first='';
+    stage = stored() ? 'enter' : 'setup1';
+    fails=0; coolUntil=0;
+    var old=document.getElementById('hh-sfupin'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='hh-sfupin';
+    ov.style.cssText='position:fixed;inset:0;background:linear-gradient(160deg,#4A0B1E,#5E0E26);'
+      +'z-index:99995;display:flex;align-items:center;justify-content:center;direction:rtl;'
+      +'font-family:Cairo,sans-serif;padding:16px;';
+    var digits=['١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    var pad='';
+    for(var i=0;i<9;i++){ pad+='<button onclick="window._hhSfuPinPress('+(i+1)+')" style="'+btnCss()+'">'+digits[i]+'</button>'; }
+    pad+='<button onclick="window._hhSfuPinForgot()" style="'+btnCss(true)+'font-size:.58rem;">نسيت<br>الرمز</button>';
+    pad+='<button onclick="window._hhSfuPinPress(0)" style="'+btnCss()+'">٠</button>';
+    pad+='<button onclick="window._hhSfuPinBack()" style="'+btnCss(true)+'">⌫</button>';
+    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:22px;'
+      +'padding:26px 22px 16px;width:100%;max-width:330px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.45);">'
+      +'<svg width="46" height="46" viewBox="0 0 24 24" fill="none" style="margin-bottom:6px;">'
+      +'<rect x="4" y="10" width="16" height="10.5" rx="2.6" stroke="#8A6D2E" stroke-width="1.7"/>'
+      +'<path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#8A6D2E" stroke-width="1.7"/>'
+      +'<circle cx="12" cy="15.2" r="1.7" fill="#8A1538"/></svg>'
+      +'<div id="sfupin-title" style="font-weight:900;font-size:1rem;color:#3D0918;"></div>'
+      +'<div id="sfupin-sub" style="font-size:.72rem;color:#8A6D2E;margin:4px 0 15px;font-weight:700;min-height:16px;"></div>'
+      +'<div id="sfupin-dots" style="display:flex;justify-content:center;gap:15px;margin-bottom:17px;"></div>'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;direction:ltr;">'+pad+'</div>'
+      +'<div id="sfupin-actions" style="display:none;gap:8px;margin-top:13px;">'
+      +'<button onclick="window._hhSfuPinForgot()" style="flex:1;background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;'
+      +'border-radius:11px;padding:9px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">نسيت كلمة السر</button>'
+      +'<button onclick="window._hhSfuPinSupport()" style="flex:1;background:#FFFDF8;border:1.5px solid #3D6B53;color:#3D6B53;'
+      +'border-radius:11px;padding:9px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">التواصل مع الدعم</button>'
+      +'</div>'
+      +'<button onclick="window._hhSfuPinCancel()" style="margin-top:13px;background:none;border:none;color:#b3a08f;'
+      +'font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;">إلغاء والعودة</button>'
+      +'</div>';
+    document.body.appendChild(ov);
+    document.addEventListener('keydown', keyHandler);
+    paint();
+    syncFromCloud();
+  }
+  function paint(msg){
+    var t=document.getElementById('sfupin-title'), s=document.getElementById('sfupin-sub'),
+        d=document.getElementById('sfupin-dots');
+    if(!t||!s||!d) return;
+    if(stage==='setup1'){ t.textContent='أنشئ كلمة السر'; s.textContent=msg||'اختر أربعة أرقام خاصة بك، لن يفتح الدفتر بدونها'; }
+    else if(stage==='setup2'){ t.textContent='تأكيد كلمة السر'; s.textContent=msg||'أعد إدخال الأرقام الأربعة نفسها'; }
+    else { t.textContent='الدفتر الذكي مقفل'; s.textContent=msg||'أدخل كلمة السر المكوّنة من أربعة أرقام'; }
+    var dots='';
+    for(var i=0;i<4;i++){
+      dots+='<span style="width:15px;height:15px;border-radius:50%;display:inline-block;'
+        +(i<buf.length ? 'background:#8A1538;border:2px solid #8A1538;' : 'background:none;border:2px solid #C9B37E;')
+        +'"></span>';
+    }
+    d.innerHTML=dots;
+  }
+  function shake(){
+    var box=document.getElementById('hh-sfupin');
+    if(box&&box.firstChild&&box.firstChild.animate){
+      box.firstChild.animate(
+        [{transform:'translateX(0)'},{transform:'translateX(-9px)'},{transform:'translateX(9px)'},
+         {transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:340});
+    }
+  }
+  function done(msg){
+    cancel();
+    if(msg && typeof toast==='function') toast(msg,'success');
+    if(window._hhSfuOrigOpen) window._hhSfuOrigOpen(pendingCode||undefined);
+  }
+  function cancel(){
+    var e=document.getElementById('hh-sfupin'); if(e) e.remove();
+    document.removeEventListener('keydown', keyHandler);
+  }
+  function keyHandler(ev){
+    if(!document.getElementById('hh-sfupin')) return;
+    if(ev.key>='0'&&ev.key<='9'){ press(parseInt(ev.key,10)); ev.preventDefault(); }
+    else if(ev.key==='Backspace'){ back(); ev.preventDefault(); }
+    else if(ev.key==='Escape'){ cancel(); }
+  }
+  function press(n){
+    if(Date.now()<coolUntil){ paint('محاولات كثيرة، انتظر قليلاً ثم أعد المحاولة'); return; }
+    if(buf.length>=4) return;
+    buf+=String(n); paint();
+    if(buf.length<4) return;
+    var entered=buf;
+    if(stage==='setup1'){
+      first=entered; buf=''; stage='setup2';
+      setTimeout(paint,160); return;
+    }
+    if(stage==='setup2'){
+      if(entered===first){
+        hashPin(entered).then(function(h){ store(h); done('أُنشئت كلمة السر بنجاح'); });
+      } else {
+        buf=''; first=''; stage='setup1'; shake();
+        setTimeout(function(){ paint('الرمزان غير متطابقين، ابدأ من جديد'); },200);
+      }
+      return;
+    }
+    hashPin(entered).then(function(h){
+      if(h===stored()){ fails=0; done(); }
+      else {
+        fails++; buf='';
+        if(fails>=3){ var ac=document.getElementById('sfupin-actions'); if(ac) ac.style.display='flex'; }
+        if(fails>=5){ coolUntil=Date.now()+30000; }
+        shake();
+        setTimeout(function(){
+          paint(Date.now()<coolUntil ? 'محاولات كثيرة، انتظر ثلاثين ثانية'
+            : (fails>=3 ? 'رمز غير صحيح، يمكنك استعادته أو مراسلة الدعم' : 'رمز غير صحيح، حاول مرة أخرى'));
+        },200);
+      }
+    });
+  }
+  function back(){ if(buf.length){ buf=buf.slice(0,-1); paint(); } }
+  window._hhSfuPinPress=press;
+  window._hhSfuPinBack=back;
+  window._hhSfuPinCancel=cancel;
+  window._hhSfuPinForgot=function(){
+    if(stage!=='enter') return;
+    if(!window.confirm('ستُحذف كلمة السر الحالية من حسابك وتُنشئ واحدة جديدة الآن.\nهل أنت متأكد؟')) return;
+    clearPin();
+    fails=0; coolUntil=0;
+    var ac=document.getElementById('sfupin-actions'); if(ac) ac.style.display='none';
+    buf=''; first=''; stage='setup1'; paint();
+  };
+  window._hhSfuPinSupport=function(){
+    var em=(typeof currentUser!=='undefined'&&currentUser&&currentUser.email)?currentUser.email:'';
+    var msg='السلام عليكم، أحتاج مساعدة في استعادة كلمة سر الدفتر الذكي في منصة المُلهم التعليمية.'
+      +(em?'\nحسابي: '+em:'');
+    window.open('https://wa.me/97471776644?text='+encodeURIComponent(msg),'_blank');
+  };
+  /* تغليف فتح الدفتر الذكي دون مساس بالأصل */
+  if(typeof window.hhOpenSmartFollowup==='function' && !window._hhSfuOrigOpen){
+    window._hhSfuOrigOpen = window.hhOpenSmartFollowup;
+    window.hhOpenSmartFollowup = function(preCode){
+      if(typeof currentUser==='undefined' || !currentUser){
+        if(typeof toast==='function') toast('يجب تسجيل الدخول أولاً','error');
+        return;
+      }
+      pendingCode = preCode||'';
+      screen();
+    };
+  }
+})();
