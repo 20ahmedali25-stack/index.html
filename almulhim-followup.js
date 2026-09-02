@@ -318,30 +318,78 @@
       toast2('عُدّل اسم الفصل إلى: '+n,'success');
     }catch(e){ toast2('تعذر التعديل، تحقق من الاتصال','error'); }
   };
+  // ═══ الحذف السريع: نافذة ملكية، تأكيد بالكتابة للجماعي، تقدم حي، ودفعات متوازية ═══
+  function _sfuDelDialog(count, needWord){
+    return new Promise(function(resolve){
+      var old=document.getElementById('sfu-del'); if(old) old.remove();
+      var ov=document.createElement('div'); ov.id='sfu-del';
+      ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:99998;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
+      ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #8A1538;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'
+        +'<div style="font-weight:900;font-size:.95rem;color:#8A1538;margin-bottom:6px;">حذف '+count+' طالباً من الفصل</div>'
+        +'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;line-height:1.9;margin-bottom:12px;">يُخفَون من القوائم وينقص عداد الفصل،<br>وسجلاتهم التاريخية تبقى محفوظة في ملفاتهم.</div>'
+        +(needWord?'<input id="sfu-del-word" placeholder="للتأكيد اكتب: حذف" style="width:100%;box-sizing:border-box;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px;font-family:Cairo;font-weight:800;font-size:.8rem;text-align:center;margin-bottom:12px;">':'')
+        +'<div style="display:flex;gap:8px;">'
+        +'<button id="sfu-del-go" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تأكيد الحذف</button>'
+        +'<button id="sfu-del-no" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
+        +'</div></div>';
+      document.body.appendChild(ov);
+      var inp=document.getElementById('sfu-del-word');
+      if(inp) setTimeout(function(){ inp.focus(); },100);
+      document.getElementById('sfu-del-no').onclick=function(){ ov.remove(); resolve(false); };
+      document.getElementById('sfu-del-go').onclick=function(){
+        if(needWord){
+          var w=(inp&&inp.value||'').trim();
+          if(w!=='حذف'){
+            if(inp){ inp.style.borderColor='#c0392b'; inp.placeholder='اكتب كلمة: حذف'; inp.value=''; }
+            return;
+          }
+        }
+        ov.remove(); resolve(true);
+      };
+    });
+  }
+  function _sfuProgress(total){
+    var p=document.createElement('div'); p.id='sfu-prog';
+    p.style.cssText='position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:14px;padding:11px 22px;z-index:99999;font-family:Cairo;font-weight:900;font-size:.8rem;box-shadow:0 8px 24px rgba(42,8,16,.4);direction:rtl;';
+    p.textContent='جارٍ الحذف… 0 من '+total;
+    document.body.appendChild(p);
+    return {
+      set:function(done){ p.textContent='جارٍ الحذف… '+done+' من '+total; },
+      end:function(){ p.remove(); }
+    };
+  }
   async function _sfuDeactivate(ids){
-    var ok=0;
-    for(var i=0;i<ids.length;i++){
-      try{ await db().collection('classroom_students').doc(ids[i]).set({active:false, removedAt:Date.now()},{merge:true}); ok++; }
-      catch(e){}
+    var total=ids.length, done=0, CH=40;
+    var prog=_sfuProgress(total);
+    for(var i=0;i<ids.length;i+=CH){
+      var slice=ids.slice(i,i+CH);
+      await Promise.all(slice.map(function(id){
+        return db().collection('classroom_students').doc(id)
+          .set({active:false, removedAt:Date.now()},{merge:true})
+          .then(function(){ done++; })
+          .catch(function(){});
+      }));
+      prog.set(done);
     }
-    if(ok){
-      try{ await db().collection('classrooms').doc(ST.classCode).set({studentCount:firebase.firestore.FieldValue.increment(-ok)},{merge:true}); }catch(e){}
+    prog.end();
+    if(done){
+      try{ await db().collection('classrooms').doc(ST.classCode).set({studentCount:firebase.firestore.FieldValue.increment(-done)},{merge:true}); }catch(e){}
     }
-    return ok;
+    return done;
   }
   window.hhSfuDeleteSel=async function(){
     var ids=ST.students.filter(function(s){return ST.data[s.id].sel;}).map(function(s){return s.id;});
     if(!ids.length){ toast2('حدّد طلاباً أولاً','info'); return; }
-    if(!window.confirm('سيُحذف '+ids.length+' طالباً من هذا الفصل.\nسجلاتهم التاريخية تبقى محفوظة في ملفاتهم.\nهل أنت متأكد؟')) return;
+    var yes=await _sfuDelDialog(ids.length, false);
+    if(!yes) return;
     var ok=await _sfuDeactivate(ids);
     toast2('حُذف '+ok+' طالباً من الفصل','success');
     loadStudents();
   };
   window.hhSfuDeleteAll=async function(){
     if(!ST.students.length){ toast2('لا طلاب في الفصل','info'); return; }
-    if(!window.confirm('تحذير: سيُحذف جميع طلاب الفصل ('+ST.students.length+' طالباً).\nسجلاتهم التاريخية تبقى محفوظة.\nهل أنت متأكد؟')) return;
-    var word=prompt('للتأكيد النهائي اكتب: حذف');
-    if(word!=='حذف'){ toast2('أُلغيت العملية','info'); return; }
+    var yes=await _sfuDelDialog(ST.students.length, true);
+    if(!yes) return;
     var ok=await _sfuDeactivate(ST.students.map(function(s){return s.id;}));
     toast2('حُذف '+ok+' طالباً من الفصل','success');
     loadStudents();
