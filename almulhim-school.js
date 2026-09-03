@@ -1044,7 +1044,7 @@ function hhOpenSchool(){
         if(isAdm) services += svc('hhAdminTeachers()','#8A1538','#5E0E26','اعتماد المعلمين','مراجعة طلبات الاعتماد', I.approve);
         if(isTch){
           services += svc('hhOpenClasses()','#1F4E79','#12304d','صفوفي','إنشاء الصفوف وأكواد الدعوة', I.classes);
-          services += svc('hhOpenGradebook()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
+          services += svc("(typeof hhOpenSmartFollowup==='function'?hhOpenSmartFollowup():hhOpenGradebook())",'#8A6D2E','#5E4A1E','دفتر المتابعة الذكي','رصد ذكي وتقارير', I.gradebook);
           services += svc('hhOpenCurriculum()','#1F4E79','#12304d','مركز المناهج','رفع الدروس وتوليد المحتوى', I.curriculum);
         } else {
           services += svc('hhJoinClassPrompt()','#3D6B53','#26443A','انضم بكود','ادخل صف معلمك برمز من 6 خانات', I.join);
@@ -1137,7 +1137,7 @@ var _HH_CAMPUS_NAV_ALL = [
   {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
   {id:'mycerts',     t:'شهاداتي',            grp:'أنا',     ico:'cert',  roles:['student']},
   {id:'classes',     t:'صفوفي وطلابي',       grp:'طلابي',   ico:'users', roles:['teacher','approved']},
-  {id:'gradebook',   t:'دفتر المتابعة',      grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
+  {id:'gradebook',   t:'دفتر المتابعة الذكي', grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
   {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
 ];
 var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
@@ -1257,7 +1257,7 @@ function hhSchoolHub(){
 }
 
 function hhCampusSetNav(dest){
-  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
+  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة الذكي',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
   document.querySelectorAll('#hh-campus-side .hh-campus-nav').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-dest')===dest); });
   var c=document.getElementById('hh-campus-crumb'); if(c) c.textContent=crumb[dest]||'';
   var home=document.getElementById('hh-campus-home'), cls=document.getElementById('hh-campus-classes-pane'), mount=document.getElementById('hh-campus-mount'), note=document.getElementById('hh-campus-notice');
@@ -1315,7 +1315,7 @@ function hhHubGo(dest){
   var ok=false;
   if(dest==='school' || dest==='quiz'){ hhSchSetTerm(_hhSchTerm||'t1'); ok=hhCampusAdopt(function(){ hhOpenSchool(); }); }
   else if(dest==='lessons'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCurriculum==='function') hhOpenCurriculum(); }); }
-  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
+  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenSmartFollowup==='function') hhOpenSmartFollowup(); else if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
   else if(dest==='certs' || dest==='mycerts'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
   if(!ok){ hhCampusNotice('هذه الخدمة تحتاج صلاحية المعلم أو ما زالت قيد التجهيز'); }
 }
