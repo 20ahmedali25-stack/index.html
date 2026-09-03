@@ -189,7 +189,7 @@
     body=body.replace(/<div class="noprint"[\s\S]*?<\/div>\s*(?=<\/div>\s*$|$)/i,'');
     var layer=document.createElement('div');
     layer.id='hh-report-layer';
-    layer.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.55);z-index:100000;display:flex;flex-direction:column;direction:rtl;font-family:Cairo,sans-serif;';
+    layer.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.6);z-index:2147483647;display:flex;flex-direction:column;direction:rtl;font-family:Cairo,sans-serif;';
     layer.innerHTML=
       '<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);padding:11px 16px;display:flex;gap:8px;align-items:center;flex-shrink:0;box-shadow:0 3px 12px rgba(42,8,16,.3);">'
       +'<button onclick="hhReportPrint()" style="background:#B8924A;color:#2a0810;border:none;border-radius:9px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
@@ -200,7 +200,9 @@
       +'<div id="hh-report-scroll" style="flex:1;overflow-y:auto;background:#eee;padding:14px;display:flex;justify-content:center;">'
       +'<div id="hh-report-paper" style="background:#fff;width:100%;max-width:900px;box-shadow:0 6px 24px rgba(0,0,0,.2);"></div>'
       +'</div>';
-    document.body.appendChild(layer);
+    (document.body||document.documentElement).appendChild(layer);
+    // نضمن أنه آخر عنصر في body فيعلو كل شيء
+    try{ document.body.appendChild(layer); }catch(e){}
     // نحقن النمط في الورقة
     var st=document.createElement('style');
     st.textContent='#hh-report-paper{'+'}'+css.replace(/body\s*\{/g,'#hh-report-paper{');
@@ -1036,7 +1038,16 @@
 
   window.hhTeacherPanel=async function(){
     var isApproved = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') || (typeof hhIsAdmin==='function' && hhIsAdmin());
-    if(!isApproved){ toast2('لوحة التحكم للمعلم المعتمد','info'); return; }
+    if(!isApproved){ toast2('هذه الخدمة للمعلم المعتمد','info'); return; }
+    // حُسمت لوحة التحكم: كانت مكررة مع القائمة الجانبية، فصار بندها يفتح
+    // مباشرة إعدادات المدرسة والشعار والتقارير (أهم ما يخص المدرسة)
+    if(window.hhDPlusSettings){ hhDPlusSettings(); }
+    else { toast2('حدّث الصفحة لتحميل الإعدادات','info'); }
+  };
+  // النسخة الكاملة للوحة (متاحة لمن يريدها برمجياً، غير مربوطة بالقائمة)
+  window.hhTeacherPanelFull=async function(){
+    var isApproved = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') || (typeof hhIsAdmin==='function' && hhIsAdmin());
+    if(!isApproved){ toast2('للمعلم المعتمد','info'); return; }
     var old=document.getElementById('hh-tpanel'); if(old) old.remove();
     var ld=document.createElement('div'); ld.id='hh-tpanel';
     ld.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99991;display:flex;align-items:center;justify-content:center;direction:rtl;font-family:Cairo,sans-serif;';
