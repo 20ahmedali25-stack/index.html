@@ -12,9 +12,10 @@
   function today(){ return new Date().toISOString().slice(0,10); }
 
   // ═══ إعدادات المعلم · تُحمَّل مرة وتُحفظ في وثيقته ═══
-  var CFG={ tpls:[], counters:[], report:{ logo:'', teacher:'', coord:'', show:{logo:true,teacher:true,coord:true,opinion:true,sign:true} } };
+  var CFG={ tpls:[], counters:[], report:{ logo:'', school:'', teacher:'', coord:'', show:{logo:true,teacher:true,coord:true,opinion:true,sign:true} } };
   var cfgLoaded=false;
   window._hhDPlusCfg=function(){ return CFG; };
+  window._hhDPlusLoadCfg=function(){ return loadCfg(); };
   async function loadCfg(){
     if(cfgLoaded) return CFG;
     cfgLoaded=true;
@@ -23,7 +24,7 @@
       if(d.exists && d.data().followCfg){
         var c=d.data().followCfg;
         CFG.tpls=c.tpls||[]; CFG.counters=c.counters||[];
-        if(c.report){ CFG.report=Object.assign(CFG.report, c.report); CFG.report.show=Object.assign({logo:true,teacher:true,coord:true,opinion:true,sign:true}, c.report.show||{}); }
+        if(c.report){ CFG.report=Object.assign(CFG.report, c.report); CFG.report.show=Object.assign({logo:true,teacher:true,coord:true,opinion:true,sign:true}, c.report.show||{}); if(CFG.report.school===undefined) CFG.report.school=''; }
       }
     }catch(e){}
     return CFG;
@@ -77,6 +78,7 @@
         +(R.logo?'<b id="dps-dellogo" style="color:#8A1538;cursor:pointer;font-size:.7rem;">إزالة</b>':'')
         +'</div>'
         +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">'
+        +'<input id="dps-school" value="'+esc2(R.school||'')+'" placeholder="اسم المدرسة" style="grid-column:1/3;border:1.5px solid #EDE3CE;border-radius:9px;padding:7px 10px;font-family:Cairo;font-size:.72rem;font-weight:700;">'
         +'<input id="dps-teacher" value="'+esc2(R.teacher)+'" placeholder="اسم المعلم" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px 10px;font-family:Cairo;font-size:.72rem;font-weight:700;">'
         +'<input id="dps-coord" value="'+esc2(R.coord)+'" placeholder="اسم المنسق" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px 10px;font-family:Cairo;font-size:.72rem;font-weight:700;">'
         +'</div>'
@@ -99,6 +101,7 @@
       var dl=ov.querySelector('#dps-dellogo');
       if(dl) dl.onclick=function(){ CFG.report.logo=''; render(); };
       ov.querySelector('#dps-save').onclick=function(){
+        CFG.report.school=((ov.querySelector('#dps-school')||{}).value||'').trim().slice(0,80);
         CFG.report.teacher=(ov.querySelector('#dps-teacher').value||'').trim().slice(0,60);
         CFG.report.coord=(ov.querySelector('#dps-coord').value||'').trim().slice(0,60);
         ov.querySelectorAll('[data-show]').forEach(function(c){ CFG.report.show[c.getAttribute('data-show')]=!!c.checked; });
@@ -903,7 +906,8 @@
   var P={ rooms:[], recorded:{} };
 
   async function fetchData(){
-    P.rooms=[]; P.recorded={};
+    P.rooms=[]; P.recorded={}; P.certN=0;
+    try{ if(window._hhDPlusLoadCfg) await window._hhDPlusLoadCfg(); }catch(e){}
     var qs=await db().collection('classrooms').where('teacherId','==',currentUser.uid).get();
     qs.forEach(function(d){ var c=d.data(); if(c.active===false||c.archived) return; P.rooms.push(Object.assign({code:d.id}, c)); });
     P.rooms.sort(function(a,b){ return (a.className||'').localeCompare(b.className||'','ar'); });
@@ -911,6 +915,10 @@
       var ss=await db().collection('follow_up_sessions').where('teacherId','==',currentUser.uid).where('date','==',today()).get();
       ss.forEach(function(d){ P.recorded[d.data().classCode]=true; });
     }catch(e){}
+    try{
+      var cs=await db().collection('certificates').where('teacherId','==',currentUser.uid).get();
+      P.certN=cs.size||0;
+    }catch(e){ P.certN=0; }
   }
   function statCard(v,l,c){
     return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;">'
@@ -924,51 +932,63 @@
     var old=document.getElementById('hh-tpanel'); if(old) old.remove();
     var totS=P.rooms.reduce(function(a,c){return a+(c.studentCount||0);},0);
     var recN=P.rooms.filter(function(c){return P.recorded[c.code];}).length;
-    var emptyN=P.rooms.filter(function(c){return !(c.studentCount>0);}).length;
+    var R=(window._hhDPlusCfg&&window._hhDPlusCfg().report)||{};
     var ov=document.createElement('div'); ov.id='hh-tpanel';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99991;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    function statCard(v,l,c){ return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;"><div style="font-weight:900;font-size:1.3rem;color:'+c+';">'+v+'</div><div style="font-size:.58rem;color:#8A6D2E;font-weight:800;">'+l+'</div></div>'; }
+    function sech(t){ return '<div style="display:flex;align-items:center;gap:7px;font-weight:900;font-size:.76rem;color:#8A6D2E;margin:14px 0 8px;"><span style="width:4px;height:15px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;"></span>'+t+'</div>'; }
+    function tile(title,sub,col,onclick){ return '<button onclick="'+onclick+'" style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-right:5px solid '+col+';border-radius:13px;padding:11px 13px;text-align:right;cursor:pointer;font-family:Cairo;"><div style="font-weight:900;font-size:.78rem;color:#3D0918;">'+title+'</div><div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+sub+'</div></button>'; }
+    // صفوف الفصول
     var rows=P.rooms.map(function(c){
       var rec=P.recorded[c.code];
-      return '<div style="display:flex;align-items:center;gap:8px;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;padding:10px 12px;margin-bottom:7px;flex-wrap:wrap;">'
-        +'<div style="flex:1;min-width:130px;">'
-        +'<div style="font-weight:900;font-size:.8rem;color:#3D0918;">'+esc2(c.className||'فصل')+'</div>'
-        +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;">'+(c.studentCount||0)+' طالباً · <span dir="ltr">'+esc2(c.code)+'</span>'
-        +(rec?' · <b style="color:#3D6B53;">رُصد اليوم ✓</b>':' · <b style="color:#B8924A;">لم يُرصد بعد</b>')+'</div></div>'
-        +'<button onclick="hhTPGo(\''+esc2(c.code)+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:8px 15px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">الدفتر</button>'
-        +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" title="تعديل الاسم" style="background:#FFFDF8;border:1.5px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:8px 11px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">تعديل</button>'
-        +'<button onclick="hhTPDelete(\''+esc2(c.code)+'\')" title="حذف الفصل" style="background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 11px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>'
+      return '<div style="display:flex;align-items:center;gap:8px;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:12px;padding:9px 12px;margin-bottom:6px;flex-wrap:wrap;">'
+        +'<div style="flex:1;min-width:120px;"><div style="font-weight:900;font-size:.76rem;color:#3D0918;">'+esc2(c.className||'فصل')+'</div>'
+        +'<div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+(c.studentCount||0)+' طالباً · <span dir="ltr">'+esc2(c.code)+'</span> · '+(rec?'<b style="color:#3D6B53;">رُصد اليوم ✓</b>':'<b style="color:#B8924A;">لم يُرصد</b>')+'</div></div>'
+        +'<button onclick="hhTPGo(\''+esc2(c.code)+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 13px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">الدفتر</button>'
+        +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">تعديل</button>'
+        +'<button onclick="hhTPDelete(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #8A1538;color:#8A1538;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">حذف</button>'
         +'</div>';
-    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:18px;background:#FFFDF8;border:1.5px dashed #C9B37E;border-radius:14px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
-    function link(t,fn){ return '<button onclick="'+fn+'" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;text-decoration:underline;">'+t+'</button>'; }
-    var links=[ link('المنهج والدروس',"hhTPNav('school')"), link('الشهادات',"hhTPNav('certs')") ];
-    if(typeof hhOpenGradebook==='function') links.push(link('أدوات الدرجات المتقدمة','var e=document.getElementById(\'hh-tpanel\');if(e)e.remove();hhOpenGradebook();'));
-    if(typeof hhIsAdmin==='function' && hhIsAdmin()) links.push(link('لوحة المدارس والطلاب','if(window.hhDPlusAdminSchools)hhDPlusAdminSchools();'));
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:22px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
-      +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:16px 19px;display:flex;justify-content:space-between;align-items:center;">'
-      +'<div><div style="font-weight:900;font-size:1.08rem;">لوحة التحكم</div>'
-      +'<div style="font-size:.7rem;opacity:.85;margin-top:2px;">مركز عملياتك: كل شيء يُنجز من هنا</div></div>'
+    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFDF8;border:1.5px dashed #C9B37E;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
+    // هوية المدرسة
+    var logoInner = R.logo ? '<img src="'+R.logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">' : '📷<br>شعار<br>المدرسة';
+    var schoolBox='<div style="display:flex;gap:13px;align-items:center;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:15px;padding:13px 15px;">'
+      +'<div style="width:64px;height:64px;border-radius:14px;border:2px '+(R.logo?'solid #B8924A':'dashed #B8924A')+';display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A6D2E;font-size:.52rem;font-weight:900;text-align:center;flex-shrink:0;background:#FBF5E9;overflow:hidden;">'+logoInner+'</div>'
+      +'<div style="flex:1;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+(R.school?esc2(R.school):'اسم مدرستك لم يُضبط بعد')+'</div>'
+      +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:3px;">يظهر الشعار والاسم على كل شهادة وتقرير · المعلم: '+(R.teacher?esc2(R.teacher):'—')+' · المنسق: '+(R.coord?esc2(R.coord):'—')+'</div></div>'
+      +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFDF8;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
+      +'</div>';
+    var isAdmin=(typeof hhIsAdmin==='function' && hhIsAdmin());
+    var links='<button onclick="if(window.hhSfuGuide)hhSfuGuide()" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">الدليل الكامل</button>'
+      +(isAdmin?'<span style="color:#D9C79E;">·</span><button onclick="if(window.hhDPlusAdminSchools)hhDPlusAdminSchools()" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">لوحة المدارس (للمدير)</button>':'');
+    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
+      +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div><div style="font-weight:900;font-size:1.1rem;">لوحة تحكم المدرسة</div><div style="font-size:.66rem;opacity:.85;margin-top:2px;">'+(R.school?esc2(R.school)+' · ':'')+'مركز عملياتك الكامل</div></div>'
       +'<button onclick="document.getElementById(\'hh-tpanel\').remove()" style="background:none;border:none;color:#F5E6C4;font-size:1.2rem;cursor:pointer;">✕</button></div>'
-      +'<div style="padding:14px 16px 6px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">'
-      + statCard(P.rooms.length,'فصولي','#4A0B1E')
-      + statCard(totS,'طلابي','#1F4E79')
-      + statCard(recN+' / '+P.rooms.length,'رُصد اليوم','#3D6B53')
-      + statCard(emptyN,'بلا طلاب','#B8924A')
+      +'<div style="padding:14px 15px 4px;">'
+      + sech('هوية المدرسة والتقارير') + schoolBox
+      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">'
+      + statCard(P.rooms.length,'فصولي','#4A0B1E') + statCard(totS,'طلابي','#1F4E79') + statCard(recN+'/'+P.rooms.length,'رُصد اليوم','#3D6B53') + statCard(P.certN||0,'شهادة صادرة','#8A6D2E')
       +'</div>'
-      +'<div style="padding:8px 16px 4px;display:flex;gap:7px;flex-wrap:wrap;">'
-      + actBtn('+ فصل جديد','#3D6B53,#274a38','hhTPNewClass()',true)
-      + actBtn('استيراد Excel','#1F4E79','if(window.hhDPlusImport)hhDPlusImport()')
-      + actBtn('⚙ الإعدادات والتقارير','#8A6D2E','if(window.hhDPlusSettings)hhDPlusSettings()')
-      + actBtn('الدليل','#4A0B1E','if(window.hhSfuGuide)hhSfuGuide()')
+      + sech('فصولي وإدارتها') + rows
+      +'<button onclick="hhTPNewClass()" style="width:100%;background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;margin-top:3px;">+ إنشاء فصل جديد</button>'
+      + sech('الأدوات والخدمات')
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
+      + tile('استيراد الطلاب','Excel واحد يوزّع الشعب تلقائياً','#3D6B53','if(window.hhDPlusImport){document.getElementById(\'hh-tpanel\').remove();hhDPlusImport();}')
+      + tile('المنهج والدروس','وحدات المنهج ودروسك الخاصة','#1F4E79','hhTPNav(\'school\')')
+      + tile('الشهادات','إصدار موثق بختم المنصة','#8A6D2E','hhTPNav(\'certs\')')
+      + tile('مركز القيادة','تحليل كل الفصول أسبوعياً','#5E0E26','if(window.hhDPlusSettings){}hhTPCommand()')
+      + tile('قوالب الملاحظات والعدادات','خصّص أدوات الرصد','#B8924A','if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}')
+      + (typeof hhOpenGradebook==='function' ? tile('أدوات الدرجات المتقدمة','استيراد ودرجات مدرستي','#8A1538','document.getElementById(\'hh-tpanel\').remove();hhOpenGradebook();') : '')
       +'</div>'
-      +'<div style="padding:10px 16px 4px;">'
-      +'<div style="font-weight:900;font-size:.76rem;color:#8A6D2E;margin-bottom:7px;display:flex;align-items:center;gap:6px;"><span style="width:4px;height:14px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;"></span>فصولي وإدارتها</div>'
-      + rows
+      + sech('إعدادات المتابعة والتقارير')
+      +'<div style="display:grid;grid-template-columns:1fr;gap:8px;">'
+      + tile('الإعدادات وشعار المدرسة والتواقيع','رفع الشعار وأسماء التقارير وخيارات الإظهار','#4A0B1E','if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}')
       +'</div>'
-      +'<div style="padding:6px 16px 14px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;border-top:1px solid #EDE3CE;margin-top:6px;">'
-      + links.join('<span style="color:#D9C79E;">·</span>')
+      +'<div style="padding:12px 0 16px;display:flex;gap:5px;flex-wrap:wrap;justify-content:center;border-top:1px solid #EDE3CE;margin-top:14px;">'+links+'</div>'
       +'</div></div>';
     document.body.appendChild(ov);
   }
+
   window.hhTeacherPanel=async function(){
     var isApproved = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') || (typeof hhIsAdmin==='function' && hhIsAdmin());
     if(!isApproved){ toast2('لوحة التحكم للمعلم المعتمد','info'); return; }
@@ -979,6 +999,14 @@
     document.body.appendChild(ld);
     try{ await fetchData(); }catch(e){}
     render();
+  };
+  window.hhTPCommand=function(){
+    if(!P.rooms.length){ toast2('لا فصول بعد','info'); return; }
+    var e=document.getElementById('hh-tpanel'); if(e) e.remove();
+    if(typeof hhOpenSmartFollowup==='function'){
+      hhOpenSmartFollowup(P.rooms[0].code);
+      setTimeout(function(){ if(typeof hhSfuCommand==='function') hhSfuCommand(); }, 900);
+    }
   };
   window.hhTPGo=function(code){
     var e=document.getElementById('hh-tpanel'); if(e) e.remove();

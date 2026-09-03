@@ -83,7 +83,7 @@
       +  '<button onclick="hhSfuRenameClass()" title="تعديل اسم الفصل" style="border:1.5px solid #B8924A;background:#FDFAF3;color:#8A6D2E;border-radius:10px;width:38px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0;">✎</button>'
       +  '<select id="sfu-class" style="flex:1;min-width:120px;border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+classes.map(function(c){return '<option value="'+esc2(c.code)+'"'+(c.code===ST.classCode?' selected':'')+'>'+esc2(c.name)+(c.subject?' · '+esc2(c.subject):'')+'</option>';}).join('')+'</select>'
       +  '<div id="sfu-datechip" style="display:flex;align-items:center;gap:7px;background:rgba(212,188,133,.16);border:1.5px solid #B8924A;border-radius:10px;padding:7px 11px;">'
-      +    '<span id="sfu-datetxt" style="color:#5E0E26;font-weight:900;font-size:.72rem;">'+arDate(ST.date)+'</span>'
+      +    '<span id="sfu-datetxt" style="color:#FFFFFF;font-weight:900;font-size:.72rem;">'+arDate(ST.date)+'</span>'
       +    '<span id="sfu-dateauto" style="background:#3D6B53;color:#fff;border-radius:8px;padding:1px 7px;font-size:.52rem;font-weight:900;">تلقائي</span>'
       +    '<span onclick="hhSfuDatePick()" style="color:#8A6D2E;font-size:.6rem;font-weight:800;text-decoration:underline;cursor:pointer;">تغيير</span>'
       +    '<input id="sfu-date" type="date" value="'+ST.date+'" style="display:none;">'
@@ -556,7 +556,7 @@
 
   // ═══ الحفظ · ينتقل لكل ملف طالب ═══
   window.hhSfuSaveAll=async function(silent){
-    var btn=event&&event.target; if(btn){ btn.disabled=true; btn.textContent='جارٍ الحفظ…'; }
+    var btn=(!silent&&typeof event!=='undefined'&&event)?event.target:null; if(btn){ btn.disabled=true; btn.textContent='جارٍ الحفظ…'; }
     var date=ST.date, period=ST.period, ok=0, fail=0;
     var jobs=ST.students.map(function(s){
       var d=ST.data[s.id];
@@ -593,7 +593,8 @@
     }catch(e){}
     if(btn){ btn.disabled=false; btn.textContent='حفظ اليوم'; }
     if(!fail){ ST.undo=[]; ST.dirty=false; refreshBar(); }
-    toast2(fail? ('حُفظ '+ok+' · تعذّر '+fail) : ('حُفظ سجل اليوم ('+ok+' طالب) · انتقل لملفاتهم'), fail?'error':'success');
+    if(!silent) toast2(fail? ('حُفظ '+ok+' · تعذّر '+fail) : ('حُفظ سجل اليوم ('+ok+' طالب) · انتقل لملفاتهم'), fail?'error':'success');
+    if(fail && silent) throw new Error('partial');
   };
 
 })();
