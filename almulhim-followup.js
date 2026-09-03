@@ -10,6 +10,11 @@
   function esc2(s){ return (typeof esc==='function') ? esc(s) : String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function toast2(m,k){ if(typeof toast==='function') toast(m,k||'info'); }
   function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function arDate(iso){
+    try{ var d=iso?new Date(iso+'T00:00:00'):new Date();
+      return d.toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long'});
+    }catch(e){ return iso||''; }
+  }
 
   var ST = { classCode:'', date:todayStr(), period:'1', students:[], data:{}, undo:[], dirty:false };
   var ATT6=[['present','حاضر','#3D6B53'],['absent','غائب','#8A1538'],['excabs','بعذر','#1F4E79'],['late','متأخر','#B8924A'],['excused','مستأذن','#8A6D2E'],['left','خرج مبكراً','#7a6a58']];
@@ -59,7 +64,12 @@
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
       +  '<button onclick="hhSfuRenameClass()" title="تعديل اسم الفصل" style="border:1.5px solid #B8924A;background:#FDFAF3;color:#8A6D2E;border-radius:10px;width:38px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0;">✎</button>'
       +  '<select id="sfu-class" style="flex:1;min-width:120px;border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+classes.map(function(c){return '<option value="'+esc2(c.code)+'"'+(c.code===ST.classCode?' selected':'')+'>'+esc2(c.name)+(c.subject?' · '+esc2(c.subject):'')+'</option>';}).join('')+'</select>'
-      +  '<input id="sfu-date" type="date" value="'+ST.date+'" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:700;font-size:.78rem;background:#FDFAF3;color:#3D0918;">'
+      +  '<div id="sfu-datechip" style="display:flex;align-items:center;gap:7px;background:rgba(212,188,133,.16);border:1.5px solid #B8924A;border-radius:10px;padding:7px 11px;">'
+      +    '<span id="sfu-datetxt" style="color:#5E0E26;font-weight:900;font-size:.72rem;">'+arDate(ST.date)+'</span>'
+      +    '<span id="sfu-dateauto" style="background:#3D6B53;color:#fff;border-radius:8px;padding:1px 7px;font-size:.52rem;font-weight:900;">تلقائي</span>'
+      +    '<span onclick="hhSfuDatePick()" style="color:#8A6D2E;font-size:.6rem;font-weight:800;text-decoration:underline;cursor:pointer;">تغيير</span>'
+      +    '<input id="sfu-date" type="date" value="'+ST.date+'" style="display:none;">'
+      +  '</div>'
       +  '<select id="sfu-period" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+[1,2,3,4,5,6,7].map(function(p){return '<option value="'+p+'">الحصة '+p+'</option>';}).join('')+'</select>'
       +'</div></div>'
       // شريط الإجراءات الجماعية
@@ -96,7 +106,17 @@
       +  '<button onclick="hhSfuSaveAll()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px 28px;font-family:Cairo;font-weight:900;font-size:.88rem;cursor:pointer;box-shadow:0 6px 16px rgba(138,21,56,.25);">حفظ اليوم</button>'
       +'</div>';
     document.getElementById('sfu-class').onchange=function(){ ST.classCode=this.value; loadStudents(); };
-    document.getElementById('sfu-date').onchange=function(){ ST.date=this.value; };
+    // التاريخ يصحح نفسه لليوم عند كل فتح
+    ST.date=todayStr();
+    (function(){ var dt=document.getElementById('sfu-datetxt'); if(dt) dt.textContent=arDate(ST.date); var di=document.getElementById('sfu-date'); if(di) di.value=ST.date; })();
+    document.getElementById('sfu-date').onchange=function(){
+      ST.date=this.value;
+      var dt=document.getElementById('sfu-datetxt'); if(dt) dt.textContent=arDate(ST.date);
+      var au=document.getElementById('sfu-dateauto');
+      var isToday=(ST.date===todayStr());
+      if(au){ au.textContent=isToday?'تلقائي':'يوم سابق'; au.style.background=isToday?'#3D6B53':'#B8924A'; }
+      var chip=document.getElementById('sfu-datechip'); if(chip) chip.style.borderColor=isToday?'#B8924A':'#8A1538';
+    };
     document.getElementById('sfu-period').onchange=function(){ ST.period=this.value; };
     loadStudents();
   }
@@ -218,6 +238,11 @@
   window.hhSfuBehav=function(id){ var p=ST.data[id].behavior; ST.data[id].behavior = p===null?'good':(p==='good'?'bad':null); pushUndo('سلوك',function(){ST.data[id].behavior=p;}); renderList(); };
   window.hhSfuStar=function(id){ ST.data[id].stars++; pushUndo('تميز',function(){ST.data[id].stars=Math.max(0,ST.data[id].stars-1);}); renderList(); };
   window.hhSfuCust=function(id,ci){ var c=(cfg().counters||[])[ci]; if(!c)return; var n=ST.data[id].cust[c.name]||0; ST.data[id].cust[c.name]=n+1; pushUndo(c.name,function(){ST.data[id].cust[c.name]=n;}); renderList(); };
+  window.hhSfuDatePick=function(){
+    var di=document.getElementById('sfu-date'); if(!di) return;
+    di.style.display='inline-block';
+    if(di.showPicker){ try{ di.showPicker(); }catch(e){ di.focus(); } } else { di.focus(); }
+  };
   window.hhSfuOpen=function(id){ ST.data[id].open=!ST.data[id].open; renderList(); };
   window.hhSfuToggleSel=function(id){ ST.data[id].sel=!ST.data[id].sel; renderList(); };
   window.hhSfuUndo=function(){ var u=ST.undo.pop(); if(!u)return; u.f(); if(!ST.undo.length) ST.dirty=false; renderList(); toast2('تراجعت عن: '+u.d,'info'); };
