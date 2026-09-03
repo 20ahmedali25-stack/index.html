@@ -203,6 +203,7 @@
         +'<div style="display:flex;align-items:center;gap:9px;">'
         +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:17px;height:17px;accent-color:#8A1538;flex-shrink:0;">'
         +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #C9B37E;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
+        +  '<button onclick="hhSfuStudentReport(\''+esc2(s.id)+'\')" title="التقرير التربوي الفردي" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.64rem;font-family:Cairo;cursor:pointer;flex-shrink:0;">تقرير</button>'
         +  '<span style="display:flex;border-radius:11px;overflow:hidden;border:1.8px solid '+(isP?'#3D6B53':'#8A1538')+';flex-shrink:0;">'
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'present\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#3D6B53':'#fff')+';color:'+(isP?'#fff':'#3D6B53')+';">حاضر</button>'
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'absent\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#fff':'#8A1538')+';color:'+(isP?'#8A1538':'#fff')+';">غائب</button>'
@@ -244,6 +245,32 @@
     if(di.showPicker){ try{ di.showPicker(); }catch(e){ di.focus(); } } else { di.focus(); }
   };
   window.hhSfuOpen=function(id){ ST.data[id].open=!ST.data[id].open; renderList(); };
+  window.hhSfuStudentReport=async function(id){
+    var stu=ST.students.filter(function(x){return x.id===id;})[0]; if(!stu) return;
+    toast2('جارٍ تجهيز التقرير التربوي…','info');
+    var rec={ name:stu.name, classCode:ST.classCode };
+    try{
+      var snap=await db().collection('student_records').doc(id).get();
+      if(snap.exists) rec=Object.assign(rec, snap.data(), {name:stu.name, classCode:ST.classCode});
+    }catch(e){}
+    // متوسطات الفصل للمقارنة (قراءة متوازية خفيفة)
+    var classStats=null;
+    try{
+      var snaps=await Promise.all(ST.students.map(function(x){
+        return db().collection('student_records').doc(x.id).get().catch(function(){return null;});
+      }));
+      var gs=[], hs=[];
+      snaps.forEach(function(sn){
+        if(!sn||!sn.exists) return;
+        var st=window.hhDPlusStats?window.hhDPlusStats(sn.data()):null;
+        if(st){ if(st.avg!==null) gs.push(st.avg); if(st.hwPct!==null) hs.push(st.hwPct); }
+      });
+      classStats={ avgG: gs.length?Math.round(gs.reduce(function(a,c){return a+c;},0)/gs.length):null,
+                   avgH: hs.length?Math.round(hs.reduce(function(a,c){return a+c;},0)/hs.length):null };
+    }catch(e){}
+    if(window.hhDPlusStudentReport) window.hhDPlusStudentReport(rec, classStats);
+    else toast2('تعذر فتح التقرير، حدّث الصفحة','error');
+  };
   window.hhSfuToggleSel=function(id){ ST.data[id].sel=!ST.data[id].sel; renderList(); };
   window.hhSfuUndo=function(){ var u=ST.undo.pop(); if(!u)return; u.f(); if(!ST.undo.length) ST.dirty=false; renderList(); toast2('تراجعت عن: '+u.d,'info'); };
   // ملاحظة سريعة بقوالب المعلم · تُحفظ فوراً في ملف الطالب
