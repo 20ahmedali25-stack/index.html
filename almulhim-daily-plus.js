@@ -178,10 +178,53 @@
     +'.sig div{border-top:1.5px solid #B8924A;padding-top:5px;min-width:150px;text-align:center;}'
     +'@media print{.noprint{display:none;} body{padding:10px 14px;}}'+'.wm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:.045;font-size:210px;font-weight:900;color:#4A0B1E;pointer-events:none;z-index:0;}'+'.mhd{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #B8924A;padding-bottom:12px;position:relative;z-index:1;}'+'.mhd .b1{display:flex;gap:12px;align-items:center;} .mlogo{width:52px;height:52px;border-radius:50%;border:2.5px solid #4A0B1E;display:flex;align-items:center;justify-content:center;font-weight:900;color:#4A0B1E;font-size:.6rem;text-align:center;overflow:hidden;}'+'.mhd h1{margin:0;font-size:1.1rem;color:#4A0B1E;font-weight:900;} .mhd .msub{font-size:.6rem;color:#8A6D2E;font-weight:800;} .mhd .mmeta{text-align:left;font-size:.58rem;font-weight:800;color:#5a4a30;line-height:1.9;}'+'.stub{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#4A0B1E,#5E0E26);border-radius:14px;padding:13px 18px;margin:14px 0;position:relative;z-index:1;}'+'.stub .who{flex:1;} .stub .who b{color:#FFFDF8;font-size:1.05rem;font-weight:900;display:block;} .stub .who span{color:#D4BC85;font-size:.62rem;font-weight:800;}'+'.stub .lvl{border-radius:11px;padding:7px 16px;font-weight:900;font-size:.8rem;text-align:center;color:#2a0810;} .stub .lvl small{display:block;font-size:.5rem;font-weight:800;}'+'.rings{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;position:relative;z-index:1;}'+'.ring{text-align:center;} .rc{width:70px;height:70px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;}'+'.rc .in{width:54px;height:54px;border-radius:50%;background:#FFFDF8;display:flex;flex-direction:column;align-items:center;justify-content:center;}'+'.rc .in b{font-size:.82rem;color:#2b1016;font-weight:900;line-height:1;} .rc .in i{font-style:normal;font-size:.44rem;color:#8A6D2E;font-weight:800;} .ring .rt{font-size:.56rem;font-weight:900;color:#5a4a30;margin-top:4px;}'+'.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;position:relative;z-index:1;} .trend{width:100%;height:auto;display:block;}'+'.cmp{display:flex;flex-direction:column;gap:6px;} .cmp .cr{display:flex;align-items:center;gap:6px;font-size:.58rem;font-weight:800;color:#5a4a30;}'+'.cmp .cbar{flex:1;height:10px;background:#F1EBDF;border-radius:6px;overflow:hidden;} .cmp .cbar span{display:block;height:100%;}'+'.qual{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1;} .tagset{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}'+'.tg{border-radius:12px;padding:3px 10px;font-size:.56rem;font-weight:900;}'+'.opin{background:#FBF7EE;border:1.5px solid #B8924A;border-radius:12px;padding:11px 14px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2;position:relative;z-index:1;}'+'.msig{margin-top:16px;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1;} .msig .s{border-top:1.5px solid #B8924A;padding-top:4px;min-width:120px;text-align:center;font-size:.58rem;font-weight:800;color:#5a4a30;}'+'.ver{text-align:center;font-size:.48rem;color:#8A6D2E;font-weight:800;} .ver .qr{width:40px;height:40px;margin:0 auto 3px;background:conic-gradient(#4A0B1E 25%,#fff 0 50%,#4A0B1E 0 75%,#fff 0);border:2px solid #4A0B1E;border-radius:6px;}'+'.dist{display:flex;align-items:flex-end;gap:9px;height:88px;padding:4px 6px 0;} .dist .d{flex:1;text-align:center;} .dist .bar2{border-radius:6px 6px 0 0;margin:0 auto;width:72%;} .dist .dn{font-size:.6rem;font-weight:900;color:#2b1016;} .dist .dt{font-size:.48rem;font-weight:800;color:#8A6D2E;}'+'.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;} .hcell{height:16px;border-radius:4px;}'+'.exec{background:linear-gradient(135deg,#FBF7EE,#f6efdd);border:1.5px solid #B8924A;border-radius:12px;padding:12px 15px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2.05;position:relative;z-index:1;}'+'.page{position:relative;}';
   function openPrint(html){
-    var w=window.open('','_blank');
-    if(!w){ toast2('اسمح بالنوافذ المنبثقة لعرض التقرير','error'); return; }
-    w.document.open(); w.document.write(html); w.document.close();
+    // نعرض التقرير كطبقة داخل الصفحة (لا نافذة جديدة تُحجب على الهاتف)
+    var old=document.getElementById('hh-report-layer'); if(old) old.remove();
+    // نستخرج جسم <body> ونمط <style> من الـHTML الكامل
+    var styleM=html.match(/<style>([\s\S]*?)<\/style>/i);
+    var bodyM=html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    var css=styleM?styleM[1]:'';
+    var body=bodyM?bodyM[1]:html;
+    // نحذف أزرار الطباعة/التنزيل الأصلية (سنضع شريطاً علوياً ثابتاً بدلها)
+    body=body.replace(/<div class="noprint"[\s\S]*?<\/div>\s*(?=<\/div>\s*$|$)/i,'');
+    var layer=document.createElement('div');
+    layer.id='hh-report-layer';
+    layer.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.55);z-index:100000;display:flex;flex-direction:column;direction:rtl;font-family:Cairo,sans-serif;';
+    layer.innerHTML=
+      '<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);padding:11px 16px;display:flex;gap:8px;align-items:center;flex-shrink:0;box-shadow:0 3px 12px rgba(42,8,16,.3);">'
+      +'<button onclick="hhReportPrint()" style="background:#B8924A;color:#2a0810;border:none;border-radius:9px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
+      +'<button id="hh-report-csv" style="background:rgba(255,253,248,.15);color:#F5E6C4;border:1.5px solid #D4BC85;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تنزيل Excel</button>'
+      +'<div style="flex:1;"></div>'
+      +'<button onclick="var e=document.getElementById(\'hh-report-layer\');if(e)e.remove();" style="background:none;border:none;color:#F5E6C4;font-size:1.3rem;cursor:pointer;font-weight:900;">✕</button>'
+      +'</div>'
+      +'<div id="hh-report-scroll" style="flex:1;overflow-y:auto;background:#eee;padding:14px;display:flex;justify-content:center;">'
+      +'<div id="hh-report-paper" style="background:#fff;width:100%;max-width:900px;box-shadow:0 6px 24px rgba(0,0,0,.2);"></div>'
+      +'</div>';
+    document.body.appendChild(layer);
+    // نحقن النمط في الورقة
+    var st=document.createElement('style');
+    st.textContent='#hh-report-paper{'+'}'+css.replace(/body\s*\{/g,'#hh-report-paper{');
+    layer.appendChild(st);
+    document.getElementById('hh-report-paper').innerHTML=body;
+    // ربط زر التنزيل بآخر دالة CSV مسجّلة
+    var csvBtn=document.getElementById('hh-report-csv');
+    if(csvBtn) csvBtn.onclick=function(){ if(window._hhReportCsvFn) window._hhReportCsvFn(); };
   }
+  // طباعة الورقة وحدها
+  window.hhReportPrint=function(){
+    var paper=document.getElementById('hh-report-paper'); if(!paper) return;
+    var w=window.open('','_blank');
+    if(w){
+      w.document.open();
+      w.document.write('<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>طباعة</title>'
+        + (document.querySelector('#hh-report-layer style')?'<style>'+document.querySelector('#hh-report-layer style').textContent.replace(/#hh-report-paper/g,'body')+'</style>':'')
+        +'</head><body>'+paper.innerHTML+'<scr'+'ipt>window.onload=function(){window.print();};</scr'+'ipt></body></html>');
+      w.document.close();
+    } else {
+      // بديل: طباعة الصفحة مع إخفاء ما عدا الورقة
+      window.print();
+    }
+  };
   function csvDownload(name, rows){
     var csv=rows.map(function(r){ return r.map(function(c){ return '"'+String(c==null?'':c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
     var bl=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
@@ -341,6 +384,7 @@
       +'<button onclick="window.opener&&window.opener.hhDPlusStudentCsv&&window.opener.hhDPlusStudentCsv()" style="background:#fff;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:11px 22px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">تنزيل Excel</button>'
       +'</div></div></body></html>';
     window._hhDPlusLastRec=rec;
+    window._hhReportCsvFn=function(){ if(window.hhDPlusStudentCsv) hhDPlusStudentCsv(); };
     openPrint(html);
   };
   window.hhDPlusStudentCsv=function(){
@@ -393,6 +437,7 @@
       +'<button onclick="window.print()" style="background:#4A0B1E;color:#fff;border:none;border-radius:10px;padding:11px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
       +'<button onclick="window.opener&&window.opener.hhDPlusClassCsvDl&&window.opener.hhDPlusClassCsvDl()" style="background:#fff;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:11px 22px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">تنزيل Excel</button>'
       +'</div></body></html>';
+    window._hhReportCsvFn=function(){ if(window.hhDPlusClassCsvDl) hhDPlusClassCsvDl(); };
     openPrint(html);
   };
   window.hhDPlusClassCsvDl=function(){
