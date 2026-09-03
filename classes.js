@@ -78,10 +78,11 @@ function hhClsCardHTML(c){
     +(arch
       ? '<button type="button" class="hh-campus-btn-line" onclick="hhClsArchive(\''+code+'\',false)">استعادة</button><button type="button" class="hh-campus-btn-line" onclick="hhClsDelete(\''+code+'\')">حذف نهائي</button>'
       : '<button type="button" class="hh-campus-btn-maroon" onclick="hhClsStartSession(\''+code+'\')">'+_hhCampusIco('play',13)+' ابدأ حصة</button>'
-       +'<button type="button" class="hh-campus-btn-line" onclick="hhHubGo(\'gradebook\')">الدفتر</button>'
        +'<button type="button" class="hh-campus-btn-line" onclick="hhOpenSmartFollowup(\''+code+'\')">الدفتر الذكي</button>'
        +'<button type="button" class="hh-campus-btn-line" onclick="hhHubGo(\'certs\')">الشهادات</button>'
        +'<button type="button" class="hh-campus-btn-line" onclick="hhClsToggle(\''+code+'\')">الطلاب '+_hhClsSvg('chev',12)+'</button>'
+       +'<button type="button" class="hh-campus-btn-line" onclick="hhClsRenameCard(\''+code+'\')">تعديل</button>'
+       +'<button type="button" class="hh-campus-btn-line" style="color:#8A1538;border-color:#c9a0ab;" onclick="hhClsDeleteCard(\''+code+'\')">حذف</button>'
        +'<button type="button" class="hh-campus-btn-line" title="أرشفة نهاية الفصل" onclick="hhClsArchive(\''+code+'\',true)">'+_hhClsSvg('archive',13)+'</button>')
     +'</div>'
     +'<div class="hh-cls-fold" id="hh-cls-fold-'+code+'"'+(open?'':' hidden')+'></div>'
@@ -211,3 +212,37 @@ function hhClsBulkPreview(fromFile){
 }
 function hhClsBulkCommit(){ var code=_hhCls.bulk.code; hhClsAddMany(code,_hhCls.bulk.rows).then(function(){ var b=document.getElementById('hh-cls-bulk-'+code); if(b) b.innerHTML=''; }); }
 function hhClsBulkTemplate(){ var csv='\ufeffاسم الطالب,الرقم,البريد\nمحمد الكواري,10234,\nعلي المري,10235,\n'; var a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv); a.download='قالب_طلاب_الصف.csv'; a.click(); }
+
+
+// ═══ تعديل وحذف الفصل من بطاقته مباشرة ═══
+async function hhClsRenameCard(code){
+  var c=_hhCls.all.filter(function(x){ return x._code===code; })[0]; if(!c) return;
+  var name=null;
+  if(window._hhRoyalPrompt){ name=await _hhRoyalPrompt('الاسم الجديد للفصل', c.className||'', 'مثال: السابع (أ)'); }
+  else { name=prompt('الاسم الجديد للفصل:', c.className||''); }
+  if(!name || !name.trim()) return;
+  name=name.trim().slice(0,60);
+  try{
+    await _hhClsDb().collection('classrooms').doc(code).set({className:name},{merge:true});
+    c.className=name;
+    hhCampusRenderClasses();
+    _hhClsToast('عُدّل اسم الفصل إلى: '+name,'success');
+  }catch(e){ _hhClsToast('تعذر التعديل: '+(e.message||''),'error'); }
+}
+async function hhClsDeleteCard(code){
+  var c=_hhCls.all.filter(function(x){ return x._code===code; })[0]; if(!c) return;
+  var yes=false;
+  if(window._hhRoyalConfirm){
+    yes=await _hhRoyalConfirm('حذف فصل «'+esc(c.className||code)+'» نهائياً',
+      'يُحذف الفصل ورمزه من قوائمك.<br>سجلات طلابه التاريخية تبقى محفوظة في ملفاتهم.', true);
+  } else {
+    yes=confirm('حذف الفصل '+code+' نهائياً؟');
+  }
+  if(!yes) return;
+  try{
+    await _hhClsDb().collection('classrooms').doc(code).delete();
+    _hhCls.all=_hhCls.all.filter(function(x){ return x._code!==code; });
+    hhCampusRenderClasses();
+    _hhClsToast('حُذف الفصل','success');
+  }catch(e){ _hhClsToast('تعذر الحذف: '+(e.message||''),'error'); }
+}

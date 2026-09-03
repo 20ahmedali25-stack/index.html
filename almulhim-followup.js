@@ -20,10 +20,28 @@
   var ATT6=[['present','حاضر','#3D6B53'],['absent','غائب','#8A1538'],['excabs','بعذر','#1F4E79'],['late','متأخر','#B8924A'],['excused','مستأذن','#8A6D2E'],['left','خرج مبكراً','#7a6a58']];
   var HW6=[['done','سلّم','#3D6B53'],['hwlate','متأخراً','#B8924A'],['partial','ناقص','#b5801f'],['missing','لم يسلّم','#8A1538'],['hwexc','بعذر','#1F4E79'],['redo','إعادة','#5E0E26']];
   function cfg(){ return (window._hhDPlusCfg&&window._hhDPlusCfg())||{tpls:[],counters:[]}; }
-  function pushUndo(desc,fn){ ST.undo.push({d:desc,f:fn}); ST.dirty=true; refreshBar(); }
+  var _saveTimer=null, _saving=false;
+  function pushUndo(desc,fn){ ST.undo.push({d:desc,f:fn}); ST.dirty=true; refreshBar(); scheduleAutosave(); }
+  function scheduleAutosave(){
+    if(_saveTimer) clearTimeout(_saveTimer);
+    _saveTimer=setTimeout(function(){ autosave(); }, 2000);
+  }
+  async function autosave(){
+    if(_saving || !ST.dirty || !ST.students.length) return;
+    _saving=true; setSaver('saving');
+    try{ await hhSfuSaveAll(true); setSaver('saved'); }
+    catch(e){ setSaver('offline'); }
+    _saving=false;
+  }
+  function setSaver(state){
+    var ind=document.getElementById('sfu-saveind'); if(!ind) return;
+    if(state==='saving'){ ind.textContent='يحفظ…'; ind.style.color='#8A6D2E'; }
+    else if(state==='saved'){ ind.textContent='محفوظ تلقائياً ✓'; ind.style.color='#3D6B53'; }
+    else if(state==='offline'){ ind.textContent='بانتظار الاتصال'; ind.style.color='#c0392b'; }
+  }
   function refreshBar(){
     var u=document.getElementById('sfu-undo'); if(u){ u.disabled=!ST.undo.length; u.style.opacity=ST.undo.length?'1':'.45'; }
-    var ind=document.getElementById('sfu-saveind'); if(ind){ ind.textContent=ST.dirty?'تعديلات غير محفوظة':'محفوظ ✓'; ind.style.color=ST.dirty?'#B8924A':'#3D6B53'; }
+    var ind=document.getElementById('sfu-saveind'); if(ind && !_saving){ ind.textContent=ST.dirty?'يحفظ تلقائياً…':'محفوظ تلقائياً ✓'; ind.style.color=ST.dirty?'#8A6D2E':'#3D6B53'; }
   }
 
   // ═══ فتح الدفتر الذكي ═══
@@ -176,30 +194,48 @@
       /* التفصيل: كل أدوات الرصد عند الطلب */
       var detail='';
       if(d.open){
-        var hwRow='';
-        if(d.hwOpen){
-          hwRow='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;background:#FBF5E9;border-radius:9px;padding:6px;">'
-            + HW6.map(function(x){ var on=(d.hw===x[0]);
-                return '<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',\''+x[0]+'\')" style="border:1.5px solid '+x[2]+';background:'+(on?x[2]:'transparent')+';color:'+(on?'#fff':x[2])+';border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">'+x[1]+'</button>';
-              }).join('')
-            +'<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',null)" style="border:1.5px solid #b3a08f;background:transparent;color:#b3a08f;border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">مسح</button>'
-            +'</div>';
+        // دائرة أداة سريعة
+        function circ(icon,label,color,filled,badge,onclick){
+          return '<div style="text-align:center;cursor:pointer;" onclick="'+onclick+'">'
+            +'<div style="position:relative;width:46px;height:46px;border-radius:50%;border:2px solid '+color+';background:'+(filled||'#fff')+';color:'+(filled?'#fff':color)+';display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;margin:0 auto;">'+icon
+            +(badge?'<span style="position:absolute;top:-5px;left:-4px;background:#8A1538;color:#fff;border-radius:9px;min-width:17px;height:17px;font-size:.56rem;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;">'+badge+'</span>':'')
+            +'</div><div style="font-size:.54rem;font-weight:900;color:#8a7a60;margin-top:3px;">'+label+'</div></div>';
         }
-        var custBtns=counters.map(function(cn,ci){
-          var n=d.cust[cn.name]||0;
-          return '<button onclick="hhSfuCust(\''+esc2(s.id)+'\','+ci+')" style="border:1.5px solid #8A6D2E;background:'+(n?'#8A6D2E':'transparent')+';color:'+(n?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+esc2(cn.name)+(n?' '+n:'')+'</button>';
-        }).join('');
-        detail='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed #EDE3CE;">'
-          +'<div style="display:flex;align-items:center;gap:4px;background:#FBF5E9;border-radius:9px;padding:3px;"><button onclick="hhSfuPart(\''+esc2(s.id)+'\',-1)" style="width:26px;height:26px;border:none;background:#e8d9b8;border-radius:7px;font-weight:900;cursor:pointer;color:#5E0E26;">−</button><span style="min-width:44px;text-align:center;font-size:.68rem;font-weight:800;color:#8A6D2E;">مشاركة '+d.part+'</span><button onclick="hhSfuPart(\''+esc2(s.id)+'\',1)" style="width:26px;height:26px;border:none;background:linear-gradient(135deg,#EAD9B0,#B8924A);border-radius:7px;font-weight:900;cursor:pointer;color:#2a0810;">+</button></div>'
-          +'<button onclick="hhSfuHwToggle(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(hwSt?hwSt[2]:'#B8924A')+';background:'+(hwSt?hwSt[2]:'transparent')+';color:'+(hwSt?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">واجب'+(hwSt?' · '+hwSt[1]:'')+'</button>'
-          +'<button onclick="hhSfuBehav(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'#B8924A'))+';background:'+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'transparent'))+';color:'+(d.behavior!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">سلوك '+(d.behavior==='good'?'★':(d.behavior==='bad'?'!':'·'))+'</button>'
-          +'<button onclick="hhSfuStar(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;background:'+(d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'transparent')+';color:'+(d.stars?'#2a0810':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">تميز ★'+(d.stars?' '+d.stars:'')+'</button>'
-          +'<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="border:1.5px solid #8A1538;background:transparent;color:#8A1538;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">ملاحظة</button>'
-          +'<button onclick="hhSfuGrade(\''+esc2(s.id)+'\')" style="border:1.5px solid #1F4E79;background:transparent;color:#1F4E79;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">درجة</button>'
-          + custBtns
-          +'</div>'+hwRow;
+        var hwIcon = d.hw==='done'||d.hw==='hwlate' ? '✓' : (d.hw==='missing'||d.hw==='partial' ? '✗' : '📋');
+        var hwFill = (d.hw==='done'||d.hw==='hwlate') ? '#3D6B53' : ((d.hw==='missing'||d.hw==='partial') ? '#c0392b' : '');
+        var hwColor= hwFill||'#B8924A';
+        var behFill= d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'');
+        var circles='<div style="display:flex;gap:11px;flex-wrap:wrap;">'
+          + circ('✋','مشاركة','#1F4E79', d.part?'#1F4E79':'', d.part||'', "hhSfuPart('"+esc2(s.id)+"',1)")
+          + circ(hwIcon, d.hw?(HW6.filter(function(x){return x[0]===d.hw;})[0]||['','واجب'])[1]:'واجب', hwColor, hwFill, '', "hhSfuHwQuick('"+esc2(s.id)+"')")
+          + circ('★','تميز','#B8924A', d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'', d.stars||'', "hhSfuStar('"+esc2(s.id)+"')")
+          + circ('👍','سلوك','#3D6B53', behFill, '', "hhSfuBehav('"+esc2(s.id)+"')")
+          + circ('✎','ملاحظة','#8A1538','','', "hhSfuNote('"+esc2(s.id)+"')")
+          + circ('٪','درجة','#1F4E79','','', "hhSfuGrade('"+esc2(s.id)+"')")
+          + (counters||[]).map(function(cn,ci){ var n=d.cust[cn.name]||0;
+              return circ(esc2(cn.name.slice(0,2)), esc2(cn.name), '#8A6D2E', n?'#8A6D2E':'', n||'', "hhSfuCust('"+esc2(s.id)+"',"+ci+")"); }).join('')
+          +'</div>';
+        // قسم الرأي والملاحظات
+        var opText = d.__opdraft!=null ? d.__opdraft : (d.__oprec||'');
+        var opSection='<div style="margin-top:9px;background:#FBF7EE;border:1.5px solid #B8924A;border-radius:12px;padding:9px 11px;">'
+          +'<div style="display:flex;align-items:center;gap:6px;font-weight:900;font-size:.68rem;color:#4A0B1E;margin-bottom:6px;">رأي المعلم <span style="background:#3D6B53;color:#fff;border-radius:7px;padding:1px 7px;font-size:.48rem;font-weight:900;">تلقائي · قابل للتعديل</span></div>'
+          +'<textarea id="sfu-op-'+esc2(s.id)+'" placeholder="يُصاغ تلقائياً، عدّله أو أضف إليه…" style="width:100%;box-sizing:border-box;border:1.4px solid #E3D9C6;border-radius:9px;padding:7px 9px;font-family:Cairo;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:1.85;min-height:52px;background:#fff;">'+esc2(opText)+'</textarea>'
+          +'<div style="display:flex;gap:6px;margin-top:6px;">'
+          +'<button onclick="hhSfuOpSave(\''+esc2(s.id)+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:6px 13px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;">حفظ الرأي</button>'
+          +'<button onclick="hhSfuOpRegen(\''+esc2(s.id)+'\')" style="background:#fff;border:1.4px solid #B8924A;color:#8A6D2E;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:900;font-size:.6rem;cursor:pointer;">↻ إعادة توليد</button>'
+          +'</div>'
+          + (d.__ophist&&d.__ophist.length ? '<div style="margin-top:6px;">'+d.__ophist.slice(-2).reverse().map(function(h){ return '<div style="background:#fff;border:1px solid #EDE3CE;border-radius:8px;padding:5px 9px;margin-top:4px;font-size:.58rem;font-weight:700;color:#5a4a30;">رأي سابق: '+esc2(h.text)+' <span style="color:#a99;font-size:.52rem;">('+esc2(h.date)+')</span></div>'; }).join('')+'</div>':'')
+          +'</div>';
+        var noteSection='<div style="margin-top:8px;background:#fff;border:1.5px solid #c9a0ab;border-radius:12px;padding:9px 11px;">'
+          +'<div style="font-weight:900;font-size:.66rem;color:#8A1538;margin-bottom:5px;">ملاحظات سريعة</div>'
+          +'<div style="display:flex;gap:4px;flex-wrap:wrap;">'
+          +['تفاعل ممتاز اليوم','لم يحضر الأدوات','يحتاج متابعة','تحسّن ملحوظ'].map(function(t){
+             return '<button onclick="hhSfuQuickNote(\''+esc2(s.id)+'\',\''+t+'\')" style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:11px;padding:4px 10px;font-family:Cairo;font-weight:800;font-size:.58rem;color:#5a4a30;cursor:pointer;">'+t+'</button>'; }).join('')
+          +'<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="background:#8A1538;color:#fff;border:none;border-radius:11px;padding:4px 12px;font-family:Cairo;font-weight:800;font-size:.58rem;cursor:pointer;">✎ ملاحظة مطوّلة</button>'
+          +'</div></div>';
+        detail = '<div style="margin-top:9px;padding-top:9px;border-top:1px dashed #EDE3CE;">'+circles+opSection+noteSection+'</div>';
       }
-      return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
+            return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
         +'<div style="display:flex;align-items:center;gap:9px;">'
         +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:17px;height:17px;accent-color:#8A1538;flex-shrink:0;">'
         +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #C9B37E;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
@@ -238,13 +274,66 @@
   window.hhSfuHwSet=function(id,st){ var p=ST.data[id].hw; ST.data[id].hw=st; ST.data[id].hwOpen=false; if(p!==st) pushUndo('واجب',function(){ST.data[id].hw=p;}); renderList(); };
   window.hhSfuBehav=function(id){ var p=ST.data[id].behavior; ST.data[id].behavior = p===null?'good':(p==='good'?'bad':null); pushUndo('سلوك',function(){ST.data[id].behavior=p;}); renderList(); };
   window.hhSfuStar=function(id){ ST.data[id].stars++; pushUndo('تميز',function(){ST.data[id].stars=Math.max(0,ST.data[id].stars-1);}); renderList(); };
+  // الواجب السريع: فارغ ← سلّم ← لم يسلّم ← فارغ
+  window.hhSfuHwQuick=function(id){
+    var cur=ST.data[id].hw, nx = cur==null?'done':(cur==='done'?'missing':null);
+    var p=cur; ST.data[id].hw=nx; if(p!==nx) pushUndo('واجب',function(){ST.data[id].hw=p;}); renderList();
+  };
+  // الملاحظة السريعة بقالب جاهز: حفظ فوري
+  window.hhSfuQuickNote=async function(id,txt){
+    try{
+      await db().collection('student_records').doc(id).set({
+        notes: firebase.firestore.FieldValue.arrayUnion({ text:txt, date:ST.date, by:currentUser.uid, at:Date.now() })
+      },{merge:true});
+      toast2('سُجّلت الملاحظة','success');
+    }catch(e){ toast2('تعذر الحفظ','error'); }
+  };
+  // رأي المعلم: تعديل، حفظ (بسجل)، إعادة توليد
+  window.hhSfuOpSave=async function(id){
+    var el=document.getElementById('sfu-op-'+id); if(!el) return;
+    var txt=(el.value||'').trim().slice(0,700);
+    if(!txt){ toast2('اكتب الرأي أولاً','info'); return; }
+    ST.data[id].__opdraft=txt;
+    try{
+      await db().collection('student_records').doc(id).set({
+        opinion: txt,
+        opinionHistory: firebase.firestore.FieldValue.arrayUnion({ text:txt, date:ST.date, at:Date.now() })
+      },{merge:true});
+      ST.data[id].__oprec=txt;
+      ST.data[id].__ophist=(ST.data[id].__ophist||[]).concat([{text:txt,date:ST.date}]);
+      toast2('حُفظ رأي المعلم في ملف الطالب','success');
+    }catch(e){ toast2('تعذر الحفظ، تحقق من الاتصال','error'); }
+  };
+  window.hhSfuOpRegen=function(id){
+    var stu=ST.students.filter(function(x){return x.id===id;})[0];
+    var rec=ST.data[id].__recCache||{};
+    var draft = window.hhDPlusOpinionDraft ? window.hhDPlusOpinionDraft(rec) : 'تابع الرصد اليومي وسيتكوّن الرأي تلقائياً.';
+    ST.data[id].__opdraft=draft;
+    var el=document.getElementById('sfu-op-'+id); if(el) el.value=draft;
+  };
   window.hhSfuCust=function(id,ci){ var c=(cfg().counters||[])[ci]; if(!c)return; var n=ST.data[id].cust[c.name]||0; ST.data[id].cust[c.name]=n+1; pushUndo(c.name,function(){ST.data[id].cust[c.name]=n;}); renderList(); };
   window.hhSfuDatePick=function(){
     var di=document.getElementById('sfu-date'); if(!di) return;
     di.style.display='inline-block';
     if(di.showPicker){ try{ di.showPicker(); }catch(e){ di.focus(); } } else { di.focus(); }
   };
-  window.hhSfuOpen=function(id){ ST.data[id].open=!ST.data[id].open; renderList(); };
+  window.hhSfuOpen=async function(id){
+    ST.data[id].open=!ST.data[id].open;
+    // أول فتح: اجلب سجل الطالب لتجهيز الرأي التلقائي والملاحظات
+    if(ST.data[id].open && ST.data[id].__oprec===undefined){
+      renderList();
+      try{
+        var snap=await db().collection('student_records').doc(id).get();
+        var rec = snap.exists ? snap.data() : {};
+        var stu=ST.students.filter(function(x){return x.id===id;})[0];
+        rec.name=(stu&&stu.name)||rec.name; 
+        ST.data[id].__recCache=rec;
+        ST.data[id].__oprec = rec.opinion || (window.hhDPlusOpinionDraft?window.hhDPlusOpinionDraft(rec):'');
+        ST.data[id].__ophist = (rec.opinionHistory||[]).map(function(h){return {text:h.text,date:h.date};});
+      }catch(e){ ST.data[id].__oprec=''; ST.data[id].__ophist=[]; }
+    }
+    renderList();
+  };
   window.hhSfuStudentReport=async function(id){
     var stu=ST.students.filter(function(x){return x.id===id;})[0]; if(!stu) return;
     toast2('جارٍ تجهيز التقرير التربوي…','info');
@@ -466,7 +555,7 @@
   };
 
   // ═══ الحفظ · ينتقل لكل ملف طالب ═══
-  window.hhSfuSaveAll=async function(){
+  window.hhSfuSaveAll=async function(silent){
     var btn=event&&event.target; if(btn){ btn.disabled=true; btn.textContent='جارٍ الحفظ…'; }
     var date=ST.date, period=ST.period, ok=0, fail=0;
     var jobs=ST.students.map(function(s){
