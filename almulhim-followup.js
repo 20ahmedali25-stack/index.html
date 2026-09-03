@@ -119,7 +119,7 @@
         +'<button onclick="hhSfuReload()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">إعادة المحاولة</button></div>';
       updateSummary(); return;
     }
-    ST.students.forEach(function(s){ ST.data[s.id]={att:'present', part:0, hw:null, hwOpen:false, behavior:null, stars:0, cust:{}, sel:false}; });
+    ST.students.forEach(function(s){ ST.data[s.id]={att:'present', part:0, hw:null, hwOpen:false, behavior:null, stars:0, cust:{}, sel:false, open:false}; });
     ST.undo=[]; ST.dirty=false;
     renderList();
   }
@@ -142,38 +142,55 @@
     el.innerHTML=ST.students.map(function(s){
       var d=ST.data[s.id];
       var hwSt=HW6.filter(function(x){return x[0]===d.hw;})[0];
-      var hwRow='';
-      if(d.hwOpen){
-        hwRow='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;background:#FBF5E9;border-radius:9px;padding:6px;">'
-          + HW6.map(function(x){ var on=(d.hw===x[0]);
-              return '<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',\''+x[0]+'\')" style="border:1.5px solid '+x[2]+';background:'+(on?x[2]:'transparent')+';color:'+(on?'#fff':x[2])+';border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">'+x[1]+'</button>';
-            }).join('')
-          +'<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',null)" style="border:1.5px solid #b3a08f;background:transparent;color:#b3a08f;border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">مسح</button>'
-          +'</div>';
+      var isP=(d.att!=='absent');
+      var counters=cfg().counters||[];
+      /* شارات ملخص لما رُصد، تُرى والبطاقة مطوية */
+      var hints='';
+      if(d.part>0) hints+='<span style="font-size:.6rem;font-weight:900;color:#1F4E79;">مشاركة '+d.part+'</span>';
+      if(hwSt) hints+='<span style="font-size:.6rem;font-weight:900;color:'+hwSt[2]+';">واجب: '+hwSt[1]+'</span>';
+      if(d.stars>0) hints+='<span style="font-size:.6rem;font-weight:900;color:#B8924A;">★'+d.stars+'</span>';
+      if(d.behavior==='good') hints+='<span style="font-size:.6rem;font-weight:900;color:#3D6B53;">سلوك ★</span>';
+      if(d.behavior==='bad') hints+='<span style="font-size:.6rem;font-weight:900;color:#8A1538;">سلوك !</span>';
+      counters.forEach(function(cn){ var n=d.cust[cn.name]||0; if(n) hints+='<span style="font-size:.6rem;font-weight:900;color:#8A6D2E;">'+esc2(cn.name)+' '+n+'</span>'; });
+      if(hints) hints='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px;">'+hints+'</div>';
+      /* التفصيل: كل أدوات الرصد عند الطلب */
+      var detail='';
+      if(d.open){
+        var hwRow='';
+        if(d.hwOpen){
+          hwRow='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;background:#FBF5E9;border-radius:9px;padding:6px;">'
+            + HW6.map(function(x){ var on=(d.hw===x[0]);
+                return '<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',\''+x[0]+'\')" style="border:1.5px solid '+x[2]+';background:'+(on?x[2]:'transparent')+';color:'+(on?'#fff':x[2])+';border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">'+x[1]+'</button>';
+              }).join('')
+            +'<button onclick="hhSfuHwSet(\''+esc2(s.id)+'\',null)" style="border:1.5px solid #b3a08f;background:transparent;color:#b3a08f;border-radius:8px;padding:5px 9px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;">مسح</button>'
+            +'</div>';
+        }
+        var custBtns=counters.map(function(cn,ci){
+          var n=d.cust[cn.name]||0;
+          return '<button onclick="hhSfuCust(\''+esc2(s.id)+'\','+ci+')" style="border:1.5px solid #8A6D2E;background:'+(n?'#8A6D2E':'transparent')+';color:'+(n?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+esc2(cn.name)+(n?' '+n:'')+'</button>';
+        }).join('');
+        detail='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed #EDE3CE;">'
+          +'<div style="display:flex;align-items:center;gap:4px;background:#FBF5E9;border-radius:9px;padding:3px;"><button onclick="hhSfuPart(\''+esc2(s.id)+'\',-1)" style="width:26px;height:26px;border:none;background:#e8d9b8;border-radius:7px;font-weight:900;cursor:pointer;color:#5E0E26;">−</button><span style="min-width:44px;text-align:center;font-size:.68rem;font-weight:800;color:#8A6D2E;">مشاركة '+d.part+'</span><button onclick="hhSfuPart(\''+esc2(s.id)+'\',1)" style="width:26px;height:26px;border:none;background:linear-gradient(135deg,#EAD9B0,#B8924A);border-radius:7px;font-weight:900;cursor:pointer;color:#2a0810;">+</button></div>'
+          +'<button onclick="hhSfuHwToggle(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(hwSt?hwSt[2]:'#B8924A')+';background:'+(hwSt?hwSt[2]:'transparent')+';color:'+(hwSt?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">واجب'+(hwSt?' · '+hwSt[1]:'')+'</button>'
+          +'<button onclick="hhSfuBehav(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'#B8924A'))+';background:'+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'transparent'))+';color:'+(d.behavior!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">سلوك '+(d.behavior==='good'?'★':(d.behavior==='bad'?'!':'·'))+'</button>'
+          +'<button onclick="hhSfuStar(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;background:'+(d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'transparent')+';color:'+(d.stars?'#2a0810':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">تميز ★'+(d.stars?' '+d.stars:'')+'</button>'
+          +'<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="border:1.5px solid #8A1538;background:transparent;color:#8A1538;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">ملاحظة</button>'
+          +'<button onclick="hhSfuGrade(\''+esc2(s.id)+'\')" style="border:1.5px solid #1F4E79;background:transparent;color:#1F4E79;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">درجة</button>'
+          + custBtns
+          +'</div>'+hwRow;
       }
-      var custBtns=counters.map(function(cn,ci){
-        var n=d.cust[cn.name]||0;
-        return '<button onclick="hhSfuCust(\''+esc2(s.id)+'\','+ci+')" style="position:relative;border:1.5px solid #8A6D2E;background:'+(n?'#8A6D2E':'transparent')+';color:'+(n?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+esc2(cn.name)+(n?' '+n:'')+'</button>';
-      }).join('');
-      return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:11px 13px;margin-bottom:9px;">'
-        +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">'
-        +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:18px;height:18px;accent-color:#8A1538;flex-shrink:0;">'
-        +  '<div style="flex:1;font-weight:900;color:#3D0918;font-size:.92rem;cursor:pointer;border-bottom:1px dashed #C9B37E;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'
+      return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
+        +'<div style="display:flex;align-items:center;gap:9px;">'
+        +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:17px;height:17px;accent-color:#8A1538;flex-shrink:0;">'
+        +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #C9B37E;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
+        +  '<span style="display:flex;border-radius:11px;overflow:hidden;border:1.8px solid '+(isP?'#3D6B53':'#8A1538')+';flex-shrink:0;">'
+        +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'present\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#3D6B53':'#fff')+';color:'+(isP?'#fff':'#3D6B53')+';">حاضر</button>'
+        +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'absent\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#fff':'#8A1538')+';color:'+(isP?'#8A1538':'#fff')+';">غائب</button>'
+        +  '</span>'
+        +  '<button onclick="hhSfuOpen(\''+esc2(s.id)+'\')" style="border:1.5px solid #C9B37E;color:#8A6D2E;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.68rem;background:#FFFDF8;font-family:Cairo;cursor:pointer;flex-shrink:0;">'+(d.open?'▴':'▾')+' التفصيل</button>'
         +'</div>'
-        +'<div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;">'
-        + ATT6.map(function(m){ var on=(d.att===m[0]);
-            return '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\''+m[0]+'\')" style="flex:1;min-width:64px;border:1.5px solid '+m[2]+';background:'+(on?m[2]:'transparent')+';color:'+(on?'#fff':m[2])+';border-radius:9px;padding:6px 4px;font-family:Cairo;font-weight:800;font-size:.66rem;cursor:pointer;">'+m[1]+'</button>';
-          }).join('')
-        +'</div>'
-        +'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">'
-        +  '<div style="display:flex;align-items:center;gap:4px;background:#FBF5E9;border-radius:9px;padding:3px;"><button onclick="hhSfuPart(\''+esc2(s.id)+'\',-1)" style="width:26px;height:26px;border:none;background:#e8d9b8;border-radius:7px;font-weight:900;cursor:pointer;color:#5E0E26;">−</button><span style="min-width:44px;text-align:center;font-size:.68rem;font-weight:800;color:#8A6D2E;">مشاركة '+d.part+'</span><button onclick="hhSfuPart(\''+esc2(s.id)+'\',1)" style="width:26px;height:26px;border:none;background:linear-gradient(135deg,#EAD9B0,#B8924A);border-radius:7px;font-weight:900;cursor:pointer;color:#2a0810;">+</button></div>'
-        +  '<button onclick="hhSfuHwToggle(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(hwSt?hwSt[2]:'#B8924A')+';background:'+(hwSt?hwSt[2]:'transparent')+';color:'+(hwSt?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">واجب'+(hwSt?' · '+hwSt[1]:'')+'</button>'
-        +  '<button onclick="hhSfuBehav(\''+esc2(s.id)+'\')" style="border:1.5px solid '+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'#B8924A'))+';background:'+(d.behavior==='good'?'#3D6B53':(d.behavior==='bad'?'#8A1538':'transparent'))+';color:'+(d.behavior!=null?'#fff':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">سلوك '+(d.behavior==='good'?'★':(d.behavior==='bad'?'!':'·'))+'</button>'
-        +  '<button onclick="hhSfuStar(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;background:'+(d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'transparent')+';color:'+(d.stars?'#2a0810':'#8A6D2E')+';border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">تميز ★'+(d.stars?' '+d.stars:'')+'</button>'
-        +  '<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="border:1.5px solid #8A1538;background:transparent;color:#8A1538;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">ملاحظة</button>'
-        +  '<button onclick="hhSfuGrade(\''+esc2(s.id)+'\')" style="border:1.5px solid #1F4E79;background:transparent;color:#1F4E79;border-radius:9px;padding:6px 11px;font-family:Cairo;font-weight:800;font-size:.68rem;cursor:pointer;">درجة</button>'
-        +  custBtns
-        +'</div>'+hwRow+'</div>';
+        + detail
+        +'</div>';
     }).join('');
     updateSummary(); refreshBar();
   }
@@ -201,6 +218,7 @@
   window.hhSfuBehav=function(id){ var p=ST.data[id].behavior; ST.data[id].behavior = p===null?'good':(p==='good'?'bad':null); pushUndo('سلوك',function(){ST.data[id].behavior=p;}); renderList(); };
   window.hhSfuStar=function(id){ ST.data[id].stars++; pushUndo('تميز',function(){ST.data[id].stars=Math.max(0,ST.data[id].stars-1);}); renderList(); };
   window.hhSfuCust=function(id,ci){ var c=(cfg().counters||[])[ci]; if(!c)return; var n=ST.data[id].cust[c.name]||0; ST.data[id].cust[c.name]=n+1; pushUndo(c.name,function(){ST.data[id].cust[c.name]=n;}); renderList(); };
+  window.hhSfuOpen=function(id){ ST.data[id].open=!ST.data[id].open; renderList(); };
   window.hhSfuToggleSel=function(id){ ST.data[id].sel=!ST.data[id].sel; renderList(); };
   window.hhSfuUndo=function(){ var u=ST.undo.pop(); if(!u)return; u.f(); if(!ST.undo.length) ST.dirty=false; renderList(); toast2('تراجعت عن: '+u.d,'info'); };
   // ملاحظة سريعة بقوالب المعلم · تُحفظ فوراً في ملف الطالب
@@ -641,7 +659,7 @@
     ['البدء في ثلاث ثوانٍ',
      'اختر الفصل من القائمة العلوية، وحدد التاريخ والحصة، وستجد طلابك أمامك فوراً. زر القلم بجوار القائمة يعدل اسم الفصل متى شئت.'],
     ['رصد الحضور',
-     'لكل طالب ست حالات بألوانها: حاضر بالأخضر، غائب بالعنابي، غائب بعذر بالأزرق، متأخر بالذهبي، مستأذن، وخرج مبكراً. ضغطة واحدة تكفي، وزر «الجميع حاضرون» يرصد الفصل كله ثم تعدل الاستثناءات فقط.'],
+     'ضغطة واحدة: حاضر أو غائب. وزر «الجميع حاضرون» يرصد الفصل كله ثم تعدل الغائبين فقط، وكل ما سوى الحضور يسكن خلف زر «التفصيل» فلا يزاحمك.'],
     ['الواجب بست حالات',
      'اضغط زر «واجب» فتنسدل الحالات: سلّم، سلّم متأخراً، ناقص، لم يسلّم، بعذر، وإعادة. اختر وتنطوي القائمة، وزر «مسح» يلغي الرصد. وللإسراع حدد مجموعة طلاب بمربعات الاختيار ثم «أنجز الواجب للمحدّدين».'],
     ['المشاركة والسلوك والتميز',
