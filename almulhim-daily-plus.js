@@ -44,7 +44,7 @@
     await loadCfg();
     var old=document.getElementById('hh-dps'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dps';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:99996;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     function render(){
       var tpls=(CFG.tpls.length?CFG.tpls:[]).map(function(t,i){
         return '<div style="display:flex;align-items:center;gap:6px;background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:6px 10px;margin-bottom:5px;">'
@@ -192,10 +192,10 @@
     layer.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.6);z-index:2147483647;display:flex;flex-direction:column;direction:rtl;font-family:Cairo,sans-serif;';
     layer.innerHTML=
       '<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);padding:11px 16px;display:flex;gap:8px;align-items:center;flex-shrink:0;box-shadow:0 3px 12px rgba(42,8,16,.3);">'
-      +'<button onclick="hhReportPrint()" style="background:#B8924A;color:#2a0810;border:none;border-radius:9px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
-      +'<button id="hh-report-csv" style="background:rgba(255,253,248,.15);color:#F5E6C4;border:1.5px solid #D4BC85;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تنزيل Excel</button>'
+      +'<button onclick="var e=document.getElementById(\'hh-report-layer\');if(e)e.remove();" style="background:rgba(255,253,248,.16);border:1.5px solid #D4BC85;color:#F5E6C4;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">\u25c0 رجوع للدفتر</button>'
       +'<div style="flex:1;"></div>'
-      +'<button onclick="var e=document.getElementById(\'hh-report-layer\');if(e)e.remove();" style="background:none;border:none;color:#F5E6C4;font-size:1.3rem;cursor:pointer;font-weight:900;">✕</button>'
+      +'<button id="hh-report-csv" style="background:rgba(255,253,248,.14);color:#F5E6C4;border:1.5px solid #D4BC85;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تنزيل Excel</button>'
+      +'<button onclick="hhReportPrint()" style="background:#B8924A;color:#2a0810;border:none;border-radius:9px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
       +'</div>'
       +'<div id="hh-report-scroll" style="flex:1;overflow-y:auto;background:#eee;padding:14px;display:flex;justify-content:center;">'
       +'<div id="hh-report-paper" style="background:#fff;width:100%;max-width:900px;box-shadow:0 6px 24px rgba(0,0,0,.2);"></div>'
@@ -213,19 +213,71 @@
     if(csvBtn) csvBtn.onclick=function(){ if(window._hhReportCsvFn) window._hhReportCsvFn(); };
   }
   // طباعة الورقة وحدها
+  // ═══ نافذة إعداد الطباعة · البيانات محفوظة تلقائياً وقابلة للتغيير ═══
   window.hhReportPrint=function(){
+    var R=(window._hhDPlusCfg&&window._hhDPlusCfg().report)||{};
+    R.show=R.show||{logo:true,teacher:true,coord:true,sign:true};
+    var old=document.getElementById('hh-print-dlg'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='hh-print-dlg';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.7);z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
+    function row(key, icon, label, val, actLabel, actFn){
+      var checked = R.show[key]!==false;
+      return '<div style="display:flex;align-items:center;gap:9px;background:#fff;border:1.3px solid #E3D9C6;border-radius:9px;padding:8px 11px;margin-bottom:6px;">'
+        +'<input type="checkbox" data-k="'+key+'" '+(checked?'checked':'')+' style="width:16px;height:16px;accent-color:#3D6B53;flex-shrink:0;">'
+        +'<span style="flex:1;font-size:.72rem;color:#5a4a30;font-weight:800;">'+icon+' '+label+'</span>'
+        +(val?'<span style="font-size:.62rem;color:#8a7a63;font-weight:700;">'+esc2(val)+'</span>':'')
+        +(actLabel?'<button onclick="'+actFn+'" style="font-size:.6rem;color:#1F4E79;font-weight:900;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:Cairo;">'+actLabel+'</button>':'')
+        +'</div>';
+    }
+    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:16px;max-width:400px;width:100%;overflow:hidden;">'
+      +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:12px 15px;">'
+      +'<div style="font-weight:900;font-size:.9rem;">إعداد الطباعة</div>'
+      +'<div style="font-size:.6rem;opacity:.85;font-weight:700;">بياناتك محفوظة · فعّل ما تريد إرفاقه على الورقة</div></div>'
+      +'<div style="padding:13px 15px;">'
+      + row('logo','🖼','شعار المدرسة', R.logo?'مرفوع':'لم يُرفع', R.logo?'تغيير':'رفع', 'hhPrintEditSettings()')
+      + row('school','🏫','اسم المدرسة', R.school||'لم يُضف', 'تعديل', 'hhPrintEditSettings()')
+      + row('teacher','✍','اسم المعلم', R.teacher||'لم يُضف', 'تعديل', 'hhPrintEditSettings()')
+      + row('coord','✍','اسم المنسق', R.coord||'لم يُضف', 'تعديل', 'hhPrintEditSettings()')
+      + row('sign','✒','فراغات التواقيع', '', '', '')
+      +'<div style="display:flex;gap:7px;margin-top:8px;">'
+      +'<button onclick="hhPrintConfirm()" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:11px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">طباعة النسخة النهائية</button>'
+      +'<button onclick="document.getElementById(\'hh-print-dlg\').remove()" style="background:#FFFDF8;border:1.4px solid #ddd;color:#999;border-radius:10px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">إلغاء</button>'
+      +'</div></div></div>';
+    document.body.appendChild(ov);
+  };
+  // زر تعديل البيانات يفتح الإعدادات الكاملة (تُحفظ تلقائياً)
+  window.hhPrintEditSettings=function(){
+    var d=document.getElementById('hh-print-dlg'); if(d) d.remove();
+    if(window.hhDPlusSettings) hhDPlusSettings();
+  };
+  // تأكيد الطباعة · يطبّق خيارات الإظهار ويطبع
+  window.hhPrintConfirm=function(){
+    var dlg=document.getElementById('hh-print-dlg');
+    var show={};
+    if(dlg) dlg.querySelectorAll('input[data-k]').forEach(function(cb){ show[cb.getAttribute('data-k')]=cb.checked; });
+    // نحفظ خيارات الإظهار في إعدادات المعلم (تلقائياً لكل مرة قادمة)
+    try{
+      var cfg=window._hhDPlusCfg&&window._hhDPlusCfg();
+      if(cfg&&cfg.report){ cfg.report.show=Object.assign(cfg.report.show||{}, show);
+        db().collection('users').doc(currentUser.uid).set({followCfg:cfg},{merge:true}).catch(function(){}); }
+    }catch(e){}
+    if(dlg) dlg.remove();
+    // نطبّق الإظهار على الورقة الحالية (إخفاء ما أُلغي)
     var paper=document.getElementById('hh-report-paper'); if(!paper) return;
+    var clone=paper.cloneNode(true);
+    if(show.logo===false) clone.querySelectorAll('.mlogo,.rlogo,img').forEach(function(e){e.style.display='none';});
+    if(show.sign===false) clone.querySelectorAll('.sig,.msig,.rsig').forEach(function(e){e.style.display='none';});
+    // الطباعة
     var w=window.open('','_blank');
     if(w){
+      var st=document.querySelector('#hh-report-layer style');
       w.document.open();
-      w.document.write('<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>طباعة</title>'
-        + (document.querySelector('#hh-report-layer style')?'<style>'+document.querySelector('#hh-report-layer style').textContent.replace(/#hh-report-paper/g,'body')+'</style>':'')
-        +'</head><body>'+paper.innerHTML+'<scr'+'ipt>window.onload=function(){window.print();};</scr'+'ipt></body></html>');
+      w.document.write('<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>طباعة التقرير</title>'
+        +(st?'<style>'+st.textContent.replace(/#hh-report-paper/g,'body')+'</style>':'')
+        +'<style>@page{size:A4 landscape;margin:10mm;}</style>'
+        +'</head><body>'+clone.innerHTML+'<scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},300);};</scr'+'ipt></body></html>');
       w.document.close();
-    } else {
-      // بديل: طباعة الصفحة مع إخفاء ما عدا الورقة
-      window.print();
-    }
+    } else { window.print(); }
   };
   function csvDownload(name, rows){
     var csv=rows.map(function(r){ return r.map(function(c){ return '"'+String(c==null?'':c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
@@ -477,7 +529,7 @@
   window.hhDPlusImport=function(){
     var old=document.getElementById('hh-dpi'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpi';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:99996;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #1F4E79;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
       +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب من Excel</div>'
@@ -559,7 +611,7 @@
     if(!(typeof hhIsAdmin==='function' && hhIsAdmin())){ toast2('هذه اللوحة للمدير فقط','error'); return; }
     var old=document.getElementById('hh-dpa'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpa';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.8);z-index:99996;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.8);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;padding:40px;text-align:center;font-weight:900;color:#8A6D2E;">جارٍ جمع البيانات…</div>';
     document.body.appendChild(ov);
     var teachers={}, rooms=[], counts={};
@@ -903,7 +955,7 @@
   function base(inner){
     var ov=document.createElement('div');
     ov.className='hh-royal-dlg';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:999999;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
     ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'+inner+'</div>';
     document.body.appendChild(ov);
     return ov;
@@ -981,7 +1033,7 @@
     var recN=P.rooms.filter(function(c){return P.recorded[c.code];}).length;
     var R=(window._hhDPlusCfg&&window._hhDPlusCfg().report)||{};
     var ov=document.createElement('div'); ov.id='hh-tpanel';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99991;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     function statCard(v,l,c){ return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;"><div style="font-weight:900;font-size:1.3rem;color:'+c+';">'+v+'</div><div style="font-size:.58rem;color:#8A6D2E;font-weight:800;">'+l+'</div></div>'; }
     function sech(t){ return '<div style="display:flex;align-items:center;gap:7px;font-weight:900;font-size:.76rem;color:#8A6D2E;margin:14px 0 8px;"><span style="width:4px;height:15px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;"></span>'+t+'</div>'; }
     function tile(title,sub,col,onclick){ return '<button onclick="'+onclick+'" style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-right:5px solid '+col+';border-radius:13px;padding:11px 13px;text-align:right;cursor:pointer;font-family:Cairo;"><div style="font-weight:900;font-size:.78rem;color:#3D0918;">'+title+'</div><div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+sub+'</div></button>'; }
@@ -1050,7 +1102,7 @@
     if(!isApproved){ toast2('للمعلم المعتمد','info'); return; }
     var old=document.getElementById('hh-tpanel'); if(old) old.remove();
     var ld=document.createElement('div'); ld.id='hh-tpanel';
-    ld.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99991;display:flex;align-items:center;justify-content:center;direction:rtl;font-family:Cairo,sans-serif;';
+    ld.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147483000;display:flex;align-items:center;justify-content:center;direction:rtl;font-family:Cairo,sans-serif;';
     ld.innerHTML='<div style="background:#F6F1E7;border-radius:18px;padding:26px 40px;font-weight:900;color:#8A6D2E;">جارٍ تجهيز لوحتك…</div>';
     document.body.appendChild(ld);
     try{ await fetchData(); }catch(e){}

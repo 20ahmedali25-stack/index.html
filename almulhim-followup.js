@@ -346,11 +346,15 @@
 
   // تقرير الصف داخل المنصة
   function hhSfuStageReport(stage){
-    stage.innerHTML='<div style="text-align:center;padding:6px 0 12px;">'
-      +'<div style="font-weight:900;font-size:.86rem;color:#4A0B1E;margin-bottom:6px;">تقرير الصف الجامع</div>'
-      +'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;margin-bottom:12px;line-height:1.9;">متوسطات الفصل وجدول كل طالب وقائمة من يحتاج دعماً، بشعار مدرستك وتواقيعها، جاهز للطباعة PDF أو Excel.</div>'
-      +'<button onclick="if(window.hhDPlusClassReport)hhDPlusClassReport(ST.classCode,ST.students)" style="background:linear-gradient(135deg,#8A6D2E,#6a5320);color:#fff;border:none;border-radius:11px;padding:11px 26px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">فتح تقرير الصف</button>'
-      +'</div>';
+    // يفتح التقرير مباشرة بلا بطاقة وسيطة، ونعيد المستخدم لتبويب الرصد
+    stage.innerHTML='<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.74rem;padding:14px;">جارٍ تجهيز تقرير الصف…</div>';
+    if(window.hhDPlusClassReport){
+      hhDPlusClassReport(ST.classCode, ST.students);
+      // نرجع تبويب الرصد نشطاً خلف التقرير حتى إن أُغلق التقرير يبقى الدفتر
+      setTimeout(function(){ if(window.hhSfuTab) hhSfuTab('record'); }, 100);
+    } else {
+      stage.innerHTML='<div style="text-align:center;color:#8A1538;font-weight:800;padding:14px;">تعذر فتح التقرير، حدّث الصفحة</div>';
+    }
   }
   // مركز القيادة داخل المنصة
   function hhSfuStageCommand(stage){
@@ -433,7 +437,7 @@
       'يحتاج تواصلاً مع ولي الأمر لمتابعة مستواه.'];
     var old=document.getElementById('sfu-note'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='sfu-note';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.7);z-index:99996;display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.7);z-index:2147482000;display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,sans-serif;';
     ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:18px;max-width:430px;width:100%;padding:16px 17px;max-height:88vh;overflow-y:auto;">'
       +'<div style="font-weight:900;font-size:.9rem;color:#3D0918;margin-bottom:8px;">ملاحظة: '+esc2(st.name)+'</div>'
       + tpls.map(function(t,ti){ return '<button onclick="document.getElementById(\'sfu-note-txt\').value='+"'"+'\''+"'"+'" data-t="'+ti+'" class="sfu-tpl" style="display:block;width:100%;text-align:right;background:#FBF5E9;border:1px solid #E8DCC2;border-radius:9px;padding:7px 10px;font-family:Cairo;font-weight:700;font-size:.7rem;color:#5a4a30;cursor:pointer;margin-bottom:5px;">'+esc2(t)+'</button>'; }).join('')
@@ -571,7 +575,7 @@
     return new Promise(function(resolve){
       var old=document.getElementById('sfu-del'); if(old) old.remove();
       var ov=document.createElement('div'); ov.id='sfu-del';
-      ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:99998;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
+      ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147482100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
       ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #8A1538;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'
         +'<div style="font-weight:900;font-size:.95rem;color:#8A1538;margin-bottom:6px;">حذف '+count+' طالباً من الفصل</div>'
         +'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;line-height:1.9;margin-bottom:12px;">يُخفَون من القوائم وينقص عداد الفصل،<br>وسجلاتهم التاريخية تبقى محفوظة في ملفاتهم.</div>'
@@ -598,7 +602,7 @@
   }
   function _sfuProgress(total){
     var p=document.createElement('div'); p.id='sfu-prog';
-    p.style.cssText='position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:14px;padding:11px 22px;z-index:99999;font-family:Cairo;font-weight:900;font-size:.8rem;box-shadow:0 8px 24px rgba(42,8,16,.4);direction:rtl;';
+    p.style.cssText='position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;border:1.5px solid #B8924A;border-radius:14px;padding:11px 22px;z-index:2147482500;font-family:Cairo;font-weight:900;font-size:.8rem;box-shadow:0 8px 24px rgba(42,8,16,.4);direction:rtl;';
     p.textContent='جارٍ الحذف… 0 من '+total;
     document.body.appendChild(p);
     return {
@@ -755,7 +759,7 @@
     var old=document.getElementById('hh-sfupin'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-sfupin';
     ov.style.cssText='position:fixed;inset:0;background:linear-gradient(160deg,#4A0B1E,#5E0E26);'
-      +'z-index:99995;display:flex;align-items:center;justify-content:center;direction:rtl;'
+      +'z-index:2147482000;display:flex;align-items:center;justify-content:center;direction:rtl;'
       +'font-family:Cairo,sans-serif;padding:16px;';
     var digits=['١','٢','٣','٤','٥','٦','٧','٨','٩'];
     var pad='';
@@ -915,7 +919,7 @@
   window.hhSfuGuide=function(){
     var old=document.getElementById('hh-sfug'); if(old){ old.remove(); return; }
     var ov=document.createElement('div'); ov.id='hh-sfug';
-    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99997;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147482000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     var secs=GUIDE.map(function(g,i){
       return '<div style="display:flex;gap:11px;margin-bottom:15px;">'
         +'<div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</div>'

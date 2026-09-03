@@ -1044,7 +1044,7 @@ function hhOpenSchool(){
         if(isAdm) services += svc('hhAdminTeachers()','#8A1538','#5E0E26','اعتماد المعلمين','مراجعة طلبات الاعتماد', I.approve);
         if(isTch){
           services += svc('hhOpenClasses()','#1F4E79','#12304d','صفوفي','إنشاء الصفوف وأكواد الدعوة', I.classes);
-          services += svc('hhOpenSmartFollowup()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
+          services += svc('hhOpenGradebook()','#8A6D2E','#5E4A1E','دفتر المتابعة','درجات وحضور وسلوك', I.gradebook);
           services += svc('hhOpenCurriculum()','#1F4E79','#12304d','مركز المناهج','رفع الدروس وتوليد المحتوى', I.curriculum);
         } else {
           services += svc('hhJoinClassPrompt()','#3D6B53','#26443A','انضم بكود','ادخل صف معلمك برمز من 6 خانات', I.join);
@@ -1130,16 +1130,15 @@ function hhCampusRole(){
 }
 // مصفوفة البوابات: lock = تظهر للمعلم غير المعتمد مقفلة (عرض فقط + طلب الاعتماد)
 var _HH_CAMPUS_NAV_ALL = [
-  {id:'home',        t:'الرئيسة',              grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
-  {id:'school',      t:'المنهج الدراسي',       grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
-  {id:'lessons',     t:'دروسي الخاصة',         grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
-  {id:'myclass',     t:'صفي',                  grp:'أنا',     ico:'users', roles:['student']},
-  {id:'achievements',t:'إنجازاتي',             grp:'أنا',     ico:'medal', roles:['student']},
-  {id:'mycerts',     t:'شهاداتي',              grp:'أنا',     ico:'cert',  roles:['student']},
-  {id:'classes',     t:'صفوفي',                grp:'طلابي',   ico:'users', roles:['teacher','approved']},
-  {id:'gradebook',   t:'دفتر المتابعة الذكي',  grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
-  {id:'certs',       t:'الشهادات',             grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']},
-  {id:'tpanel',      t:'لوحة التحكم',          grp:'طلابي',   ico:'cap',   roles:['approved']}
+  {id:'home',        t:'الرئيسة',            grp:'المدرسة', ico:'home',  roles:['student','teacher','approved']},
+  {id:'school',      t:'المنهج والاختبارات', grp:'المدرسة', ico:'cap',   roles:['student','teacher','approved']},
+  {id:'lessons',     t:'دروسي الخاصة',       grp:'المدرسة', ico:'lib',   roles:['teacher','approved'], lock:['teacher']},
+  {id:'myclass',     t:'صفي',                grp:'أنا',     ico:'users', roles:['student']},
+  {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
+  {id:'mycerts',     t:'شهاداتي',            grp:'أنا',     ico:'cert',  roles:['student']},
+  {id:'classes',     t:'صفوفي وطلابي',       grp:'طلابي',   ico:'users', roles:['teacher','approved']},
+  {id:'gradebook',   t:'دفتر المتابعة',      grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
+  {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
 ];
 var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
 function hhCampusNavFor(role){ return _HH_CAMPUS_NAV_ALL.filter(function(n){ return n.roles.indexOf(role)!==-1; }); }
@@ -1258,7 +1257,7 @@ function hhSchoolHub(){
 }
 
 function hhCampusSetNav(dest){
-  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة الذكي',tpanel:' · لوحة التحكم',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
+  var crumb={home:'',school:' · المنهج والاختبارات',quiz:' · المنهج والاختبارات',lessons:' · دروسي الخاصة',classes:' · صفوفي وطلابي',gradebook:' · دفتر المتابعة',certs:' · الشهادات',myclass:' · صفي',achievements:' · إنجازاتي',mycerts:' · شهاداتي'};
   document.querySelectorAll('#hh-campus-side .hh-campus-nav').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-dest')===dest); });
   var c=document.getElementById('hh-campus-crumb'); if(c) c.textContent=crumb[dest]||'';
   var home=document.getElementById('hh-campus-home'), cls=document.getElementById('hh-campus-classes-pane'), mount=document.getElementById('hh-campus-mount'), note=document.getElementById('hh-campus-notice');
@@ -1316,8 +1315,7 @@ function hhHubGo(dest){
   var ok=false;
   if(dest==='school' || dest==='quiz'){ hhSchSetTerm(_hhSchTerm||'t1'); ok=hhCampusAdopt(function(){ hhOpenSchool(); }); }
   else if(dest==='lessons'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCurriculum==='function') hhOpenCurriculum(); }); }
-  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenSmartFollowup==='function') hhOpenSmartFollowup(); else if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
-  else if(dest==='tpanel'){ ok=hhCampusAdopt(function(){ if(typeof hhTeacherPanel==='function') hhTeacherPanel(); }); }
+  else if(dest==='gradebook'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenGradebook==='function') hhOpenGradebook(); }); }
   else if(dest==='certs' || dest==='mycerts'){ ok=hhCampusAdopt(function(){ if(typeof hhOpenCertificates==='function') hhOpenCertificates(); }); }
   if(!ok){ hhCampusNotice('هذه الخدمة تحتاج صلاحية المعلم أو ما زالت قيد التجهيز'); }
 }
@@ -2122,25 +2120,15 @@ async function hhSchApprovalForm(){
     if(typeof toast==='function') toast('سجّل دخولك أولاً لتقديم طلب الاعتماد','warn');
     return;
   }
-  var prevStatus='';
   try{
     if(db){
       var doc = await db.collection('teacher_requests').doc(currentUser.uid).get();
-      if(doc.exists){
-        prevStatus=doc.data().status||'';
-        if(prevStatus==='pending'){
-          if(typeof toast==='function') toast('طلب اعتمادك قيد المراجعة · سنعلمك فور القبول','info');
-          return;
-        }
-        if(prevStatus==='approved'){
-          if(typeof toast==='function') toast('حسابك معتمد معلماً بالفعل','success');
-          try{ _hhMyRole='teacher'; }catch(e){}
-          return;
-        }
+      if(doc.exists && doc.data().status==='pending'){
+        if(typeof toast==='function') toast('طلب اعتمادك قيد المراجعة · سنعلمك فور القبول','info');
+        return;
       }
     }
   }catch(e){}
-  window._hhApPrevStatus=prevStatus;
   var old=document.getElementById('hh-sch-approve'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-sch-approve';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999992;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;overflow-y:auto;';
@@ -2179,22 +2167,13 @@ async function hhSchSubmitApproval(){
       uid: currentUser.uid, name:name, subject:subject, school:school,
       phone:phone, email:email, status:'pending',
       createdAt: new Date().toISOString()
-    }, {merge:true});
+    });
     var ov=document.getElementById('hh-sch-approve'); if(ov) ov.remove();
     if(typeof toast==='function') toast('أُرسل طلب اعتمادك · ستصلك صلاحية الإضافة فور القبول','success');
     if(typeof hhLogActivity==='function') hhLogActivity('teacher_request', name+' · '+school);
   }catch(e){
     console.error('approval submit', e);
-    if(st){
-      if(e && e.code==='permission-denied'){
-        st.textContent = (window._hhApPrevStatus==='rejected')
-          ? 'طلبك السابق مرفوض · انشر تحديث القواعد الأخير أو تواصل مع الإدارة لإعادة التقديم'
-          : 'يوجد طلب سابق لهذا الحساب بحالة مختلفة · تواصل مع الإدارة';
-      } else {
-        st.textContent='تعذر الإرسال · تأكد من اتصالك وحاول ثانية';
-      }
-      st.style.color='#c0392b';
-    }
+    if(st){ st.textContent='تعذر الإرسال · تأكد من اتصالك وحاول ثانية'; st.style.color='#c0392b'; }
   }
 }
 
