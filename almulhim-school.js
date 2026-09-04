@@ -1405,7 +1405,7 @@ async function hhCampusLoadMyClass(){
         +'<div class="hh-campus-card-d">'+(c.schoolName?esc(c.schoolName)+' · ':'')+'المعلم: '+esc(c.teacherName||'—')+' · الرمز <b class="hh-campus-code">'+esc(c.classCode)+'</b></div>'
         +'<div class="hh-campus-card-btns"><button type="button" class="hh-campus-btn-maroon" onclick="hhHubGo(\'school\')">'+_hhCampusIco('play',13)+' تابع رحلتي</button><button type="button" class="hh-campus-btn-line" onclick="hhHubGo(\'achievements\')">إنجازاتي</button></div></div>'; });
     put(h);
-  }catch(e){ put('<div class="hh-campus-empty"><div class="hh-campus-empty-t">تعذر التحقق من صفك — تحقق من الاتصال</div><button type="button" onclick="hhCampusLoadMyClass()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'); }
+  }catch(e){ put('<div class="hh-campus-empty"><div class="hh-campus-empty-t">تعذر التحقق من صفك · تحقق من الاتصال</div><button type="button" onclick="hhCampusLoadMyClass()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'); }
 }
 window.hhCampusJoin=async function(){
   if(typeof joinClassroom!=='function'){ if(typeof toast==='function') toast('الانضمام غير متاح الآن','warn'); return; }
@@ -1446,6 +1446,39 @@ function hhCampusClassCard(c, full){
 // ═══════════════ جناح «صفوفي وطلابي» داخل الحرم (zzzd): إنشاء بخطوة، رمز للمشاركة، طلاب داخل البطاقة، استيراد Excel ═══════════════
 var _hhCls = { all:[], students:{}, open:{}, form:false, schools:null, bulk:{code:null, rows:[]} };
 function _hhClsDb(){ return firebase.firestore(); }
+// ═══ zzzzzy: مصدر واحد لجلب صفوف المعلم · انتظار المصادقة ثم الشبكة ثم الكاش المحلي · سبب الخطأ يظهر للمعلم ═══
+function _hhClsWaitAuth(ms){
+  return new Promise(function(res){
+    try{
+      if(firebase.auth().currentUser) return res(true);
+      var done=false, un=firebase.auth().onAuthStateChanged(function(u){ if(done) return; done=true; try{ un(); }catch(e){} res(!!u); });
+      setTimeout(function(){ if(done) return; done=true; try{ un(); }catch(e){} res(!!firebase.auth().currentUser); }, ms||4000);
+    }catch(e){ res(false); }
+  });
+}
+async function hhClsFetchMine(limitN){
+  await _hhClsWaitAuth(4000);
+  var uid=(firebase.auth().currentUser||{}).uid||(typeof currentUser!=="undefined"&&currentUser&&currentUser.uid);
+  var q=firebase.firestore().collection("classrooms").where("teacherId","==",uid);
+  if(limitN) q=q.limit(limitN);
+  try{ return await q.get(); }
+  catch(e){
+    try{ var c=await q.get({source:"cache"}); if(c && !c.empty){ c._fromCache=true; return c; } }catch(_e){}
+    throw e;
+  }
+}
+function _hhClsErrText(e){
+  var code=(e&&e.code)||"";
+  var m={
+    "permission-denied":"لا صلاحية للقراءة · تأكد من تسجيل الدخول بحساب المعلم",
+    "unauthenticated":"انتهت الجلسة · سجّل الدخول مجدداً",
+    "unavailable":"الخادم غير متاح حالياً · تحقق من الاتصال",
+    "failed-precondition":"الاستعلام يحتاج فهرساً في Firestore · راجع Console"
+  };
+  try{ console.warn("classrooms load failed:", code, e&&e.message); }catch(_e){}
+  return "تعذر تحميل الصفوف · "+(m[code]||("السبب: "+(code||(e&&e.message)||"غير معروف")));
+}
+
 function _hhClsCode(){ return (typeof _generateClassCode==='function') ? _generateClassCode() : ('HH-'+Math.random().toString(36).slice(2,8).toUpperCase()); }
 function _hhClsToast(m,k){ if(typeof toast==='function') toast(m,k||'info'); }
 
@@ -1455,18 +1488,18 @@ async function hhCampusRenderClasses(){
   if(!_hhCls.loaded){
     box.innerHTML='<div class="hh-campus-empty">جارٍ تحميل الصفوف…</div>';
     try{
-      var qs=await _hhClsDb().collection('classrooms').where('teacherId','==',currentUser.uid).get();
+      var qs=await hhClsFetchMine();
       _hhCls.all=[]; qs.forEach(function(d){ var c=d.data(); c._code=d.id; _hhCls.all.push(c); });
       _hhCls.all.sort(function(a,b){ return (b.active?1:0)-(a.active?1:0) || String(a.className||'').localeCompare(String(b.className||''),'ar'); });
       _hhCls.loaded=true; _hhHubClasses=_hhCls.all.filter(function(c){ return c.active!==false; });
-    }catch(e){ box.innerHTML='<div class="hh-campus-empty"><div class="hh-campus-empty-t">تعذر تحميل الصفوف — تحقق من الاتصال</div><button type="button" onclick="_hhCls.loaded=false;hhCampusRenderClasses()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'; return; }
+    }catch(e){ box.innerHTML='<div class="hh-campus-empty"><div class="hh-campus-empty-t">'+_hhClsErrText(e)+'</div><button type="button" onclick="_hhCls.loaded=false;hhCampusRenderClasses()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'; return; }
   }
   var active=_hhCls.all.filter(function(c){ return c.active!==false; }), archived=_hhCls.all.filter(function(c){ return c.active===false; });
   var tot=0; active.forEach(function(c){ tot+=(c.studentCount||0); });
   var h='<div class="hh-campus-crumb-row" style="margin-bottom:8px;"><div><div class="hh-campus-card-t">'+arCountCls(active.length,'صف واحد','صفان','صفوف','صفاً')+' · '+arCountCls(tot,'طالب واحد','طالبان','طلاب','طالباً')+'</div></div>'
     +'<button type="button" class="hh-campus-btn-gold" onclick="hhClsNew()">'+_hhCampusIco('plus',14)+' صف جديد</button></div>'
     +(_hhCls.form?hhClsFormHTML():'')
-    +(active.length?active.map(hhClsCardHTML).join(''):'<div class="hh-campus-empty"><div class="hh-campus-empty-t">مقرّ قيادتك جاهز — ينقصه صفك الأول</div><div style="margin-top:6px;">أنشئ الصف، شارك رمزه مع طلابك، وابدأ الحصة</div></div>')
+    +(active.length?active.map(hhClsCardHTML).join(''):'<div class="hh-campus-empty"><div class="hh-campus-empty-t">مقرّ قيادتك جاهز · ينقصه صفك الأول</div><div style="margin-top:6px;">أنشئ الصف، شارك رمزه مع طلابك، وابدأ الحصة</div></div>')
     +(archived.length?'<div class="hh-campus-sec"><span class="hh-campus-sec-dot"></span>مؤرشفة</div>'+archived.map(hhClsCardHTML).join(''):'');
   box.innerHTML=h;
   Object.keys(_hhCls.open).forEach(function(code){ if(_hhCls.open[code]) hhClsLoadStudents(code); });
@@ -1670,15 +1703,15 @@ async function hhHubLoadClasses(){
   }
   try{
     if(typeof currentUser==='undefined' || !currentUser){ if(sub) sub.textContent='سجّل دخولك لتظهر صفوفك وأدواتك'; empty('صفوفك تنتظرك بعد تسجيل الدخول', false, false); setN('hh-campus-n-classes','0'); setN('hh-campus-n-students','0'); return; }
-    var qs = await firebase.firestore().collection('classrooms').where('teacherId','==',currentUser.uid).limit(9).get();
-    if(qs.empty){ _hhHubClasses=[]; if(sub) sub.textContent='لا صفوف بعد · ابدأ رحلتك بإنشاء صفك الأول'; empty('مقرّ قيادتك جاهز — ينقصه صفك الأول', true, false); setN('hh-campus-n-classes','0'); setN('hh-campus-n-students','0'); hhCampusRenderClasses(); return; }
+    var qs = await hhClsFetchMine(9);
+    if(qs.empty){ _hhHubClasses=[]; if(sub) sub.textContent='لا صفوف بعد · ابدأ رحلتك بإنشاء صفك الأول'; empty('مقرّ قيادتك جاهز · ينقصه صفك الأول', true, false); setN('hh-campus-n-classes','0'); setN('hh-campus-n-students','0'); hhCampusRenderClasses(); return; }
     _hhHubClasses=[]; var totalStud=0;
     qs.forEach(function(d){ var c=d.data(); c._code=d.id; _hhHubClasses.push(c); totalStud += (c.studentCount||0); });
     if(sub) sub.textContent = _hhHubClasses.length+' صفوف · '+totalStud+' طالباً';
     setN('hh-campus-n-classes',_hhHubClasses.length); setN('hh-campus-n-students',totalStud);
     box.innerHTML = _hhHubClasses.map(function(c){ return hhCampusClassCard(c,false); }).join('');
     hhCampusRenderClasses();
-  }catch(e){ if(sub) sub.textContent=''; empty('تعذر تحميل الصفوف — تحقق من الاتصال', false, true); }
+  }catch(e){ if(sub) sub.textContent=''; empty(_hhClsErrText(e), false, true); }
 }
 
 function hhSchWizFinish(term){
@@ -2003,7 +2036,7 @@ function hhSchFinish(){
   var vbg = pct>=80 ? 'rgba(61,107,83,.1)' : pct>=60 ? 'rgba(184,146,74,.15)' : 'rgba(122,19,48,.08)';
   var msg = T.kind==='mastery'
     ? (passed ? 'أحسنت! اجتزت اختبار الإتقان وفُتحت الوحدة التالية.' : 'لم تجتز الإتقان بعد · تحتاج '+S.masteryPass+'%. راجع الملخصات وحاول مجدداً.')
-    : (pct>=80 ? 'أداء متقن يستحق الفخر — واصل التألق.' : pct>=60 ? 'أداء جيد · راجع نقاط الخطأ لتبلغ الإتقان.' : 'لا بأس، التعلم رحلة · راجع الملخص والقيم ثم أعد المحاولة.');
+    : (pct>=80 ? 'أداء متقن يستحق الفخر، واصل التألق.' : pct>=60 ? 'أداء جيد · راجع نقاط الخطأ لتبلغ الإتقان.' : 'لا بأس، التعلم رحلة · راجع الملخص والقيم ثم أعد المحاولة.');
 
   var e=document.getElementById('hh-sch-test'); if(e) e.remove();
   var ov=document.createElement('div'); ov.id='hh-sch-result';
@@ -2026,7 +2059,7 @@ function hhSchFinish(){
               +'<div style="display:flex;align-items:center;gap:5px;font-size:.7rem;color:#3D6B53;font-weight:800;margin-top:2px;">'
               +'<span style="width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;border:1px solid #FDF3DD;">✓</span>الصواب: '+esc(w.a)+'</div></div>';
           }).join('')
-      : '<div style="text-align:center;color:#3D6B53;font-weight:900;font-size:.88rem;padding:10px;">إجابات كاملة بلا خطأ — أداء يليق بالمُلهِمين</div>')
+      : '<div style="text-align:center;color:#3D6B53;font-weight:900;font-size:.88rem;padding:10px;">إجابات كاملة بلا خطأ · أداء يليق بالمُلهِمين</div>')
     +'<div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;">'
     +'<button onclick="hhSchCloseResult(true)" style="flex:1;background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">عودة لمدرستي</button>'
     +(!passed ? '<button onclick="hhSchRetry()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إعادة المحاولة</button>' : '')

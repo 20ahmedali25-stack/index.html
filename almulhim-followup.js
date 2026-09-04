@@ -56,9 +56,9 @@
     // جلب فصول المعلم من classrooms (الموجود)
     var classes=[];
     try{
-      var qs=await db().collection('classrooms').where('teacherId','==',currentUser.uid).get();
+      var qs=(typeof hhClsFetchMine==='function') ? await hhClsFetchMine() : await db().collection('classrooms').where('teacherId','==',currentUser.uid).get();
       qs.forEach(function(d){ var c=d.data(); if(c.active!==false) classes.push({code:d.id, name:c.className||'فصل', subject:c.subject||'', count:c.studentCount||0}); });
-    }catch(e){ console.warn(e); }
+    }catch(e){ console.warn(e); toast2((typeof _hhClsErrText==='function')?_hhClsErrText(e):'تعذر تحميل الفصول','error'); }
     renderShell(ov, classes, preCode);
   };
 
