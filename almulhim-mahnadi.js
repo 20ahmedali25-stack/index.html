@@ -30,8 +30,38 @@
     });
   })();
 
+  // ── zzzzzzg: إزالة النسخة المكررة «مجلس جاسم المهندي» من كل مكان (محلياً وسحابياً) ──
+  var ALIAS='مجلس جاسم المهندي';
+  function purgeAlias(){
+    try{
+      if(typeof QDB==='object'&&QDB&&QDB[ALIAS]) delete QDB[ALIAS];
+      if(typeof window.QDB_ORIGINAL==='object'&&window.QDB_ORIGINAL&&window.QDB_ORIGINAL[ALIAS]) delete window.QDB_ORIGINAL[ALIAS];
+      if(typeof _HH_PARTNER_QUESTIONS==='object'&&_HH_PARTNER_QUESTIONS&&_HH_PARTNER_QUESTIONS[ALIAS]) delete _HH_PARTNER_QUESTIONS[ALIAS];
+      if(typeof CAT_INFO!=='undefined'&&CAT_INFO[ALIAS]) delete CAT_INFO[ALIAS];
+      if(typeof CAT_GROUPS!=='undefined') CAT_GROUPS.forEach(function(g){ if(Array.isArray(g.cats)) g.cats=g.cats.filter(function(c){return c!==ALIAS;}); });
+      var cc=JSON.parse(localStorage.getItem('hh_custom_cats')||'{}'); if(cc[ALIAS]){ delete cc[ALIAS]; localStorage.setItem('hh_custom_cats',JSON.stringify(cc)); }
+      var hid=JSON.parse(localStorage.getItem('hh_hidden_cats')||'[]'); if(hid.indexOf(ALIAS)>-1){ localStorage.setItem('hh_hidden_cats',JSON.stringify(hid.filter(function(c){return c!==ALIAS;}))); }
+      var sel=document.getElementById('aq-cat-select'); if(sel){ Array.prototype.slice.call(sel.options).forEach(function(o){ if(o.value===ALIAS) o.remove(); }); }
+    }catch(e){}
+    // حذف الوثيقة السحابية مرة واحدة بحساب المدير
+    try{
+      if(!localStorage.getItem('hh_mh_alias_purged') && typeof hhIsAdmin==='function' && hhIsAdmin() && typeof firebase!=='undefined' && firebase.firestore){
+        localStorage.setItem('hh_mh_alias_purged','1');
+        firebase.firestore().collection('admin_qdb').doc(ALIAS).delete().then(function(){ console.log('المهندي: حُذفت النسخة المكررة من السحابة'); }).catch(function(){ localStorage.removeItem('hh_mh_alias_purged'); });
+        if(typeof _hh_saveCustomizationsToCloud==='function') try{ _hh_saveCustomizationsToCloud(); }catch(_e){}
+      }
+    }catch(e){}
+  }
+  // تُطهَّر القائمة قبل كل بناء لشاشة الاختيار وقبل قائمة محرر الأسئلة (نمط الحفظ بالمرجع)
+  function hookPurge(){
+    try{ if(typeof window.buildCatSelect==='function' && !window.buildCatSelect._mhHooked){ var _o=window.buildCatSelect; var w=function(){ purgeAlias(); return _o.apply(this,arguments); }; w._mhHooked=true; window.buildCatSelect=w; } }catch(e){}
+    try{ if(typeof window.populateAQCatSelect==='function' && !window.populateAQCatSelect._mhHooked){ var _p=window.populateAQCatSelect; var w2=function(){ purgeAlias(); return _p.apply(this,arguments); }; w2._mhHooked=true; window.populateAQCatSelect=w2; } }catch(e){}
+  }
+  var _purgeTries=0; var _purgeIv=setInterval(function(){ purgeAlias(); hookPurge(); if(++_purgeTries>40) clearInterval(_purgeIv); }, 1500);
+
   function register(){
     try{
+      purgeAlias(); hookPurge();
       if(typeof window._HH_PARTNER_QUESTIONS!=='object'||!window._HH_PARTNER_QUESTIONS) window._HH_PARTNER_QUESTIONS={};
       if(!Array.isArray(window._HH_PARTNER_QUESTIONS[CAT])) window._HH_PARTNER_QUESTIONS[CAT]=BANK[CAT];
       if(typeof window.QDB_ORIGINAL==='object' && window.QDB_ORIGINAL && !Array.isArray(window.QDB_ORIGINAL[CAT])) window.QDB_ORIGINAL[CAT]=JSON.parse(JSON.stringify(BANK[CAT]));
