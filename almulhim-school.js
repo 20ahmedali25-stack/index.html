@@ -1141,6 +1141,14 @@ var _HH_CAMPUS_NAV_ALL = [
   {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
 ];
 var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
+// zzzzzzb: عند وصول الدور من السحابة يُعاد بناء الجناب فوراً إن تغيّر (يزيل الأقفال دون إعادة تحميل)
+document.addEventListener('hh:role',function(){
+  try{
+    var hub=document.getElementById('hh-school-hub'); if(!hub) return;
+    var now=hhCampusRole(); if(now===_hhCampus.role) return;
+    var dest=_hhCampus.dest||'home'; hhSchoolHub(); if(typeof hhHubGo==='function' && dest!=='home') hhHubGo(dest);
+  }catch(e){}
+});
 function hhCampusNavFor(role){ return _HH_CAMPUS_NAV_ALL.filter(function(n){ return n.roles.indexOf(role)!==-1; }); }
 function hhCampusIsLocked(id){ var n=null; _HH_CAMPUS_NAV_ALL.forEach(function(x){ if(x.id===id) n=x; }); return !!(n && n.lock && n.lock.indexOf(_hhCampus.role)!==-1); }
 function _hhCampusIco(name, sz){

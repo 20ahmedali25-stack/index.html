@@ -136,8 +136,10 @@
     var list=document.getElementById('sfu-list'); if(list) list.innerHTML='<div style="text-align:center;color:#8A7A63;padding:20px;font-weight:800;">جارٍ تحميل الطلاب…</div>';
     ST.students=[]; ST.data={};
     try{
+      if(typeof _hhClsWaitAuth==='function') await _hhClsWaitAuth(4000); // zzzzzzb: لا استعلام قبل استعادة الجلسة
+      var _uid=(firebase.auth().currentUser||{}).uid||currentUser.uid;
       var base=db().collection('classroom_students').where('classCode','==',ST.classCode).where('active','==',true);
-      var qs=await base.where('teacherId','==',currentUser.uid).get();
+      var qs=await base.where('teacherId','==',_uid).get();
       if((!qs.docs || !qs.docs.length) && typeof hhIsAdmin==='function' && hhIsAdmin()){
         try{ qs=await base.get(); }catch(e2){}
       }
@@ -146,7 +148,7 @@
       console.warn('sfu load', e);
       if(list) list.innerHTML='<div style="background:#fff6f4;border:1.5px solid #c0392b;border-radius:14px;padding:18px;text-align:center;">'
         +'<div style="font-weight:900;color:#8A1538;font-size:.84rem;margin-bottom:8px;">تعذر تحميل طلاب الفصل</div>'
-        +'<div style="color:#8A7A63;font-size:.7rem;font-weight:700;margin-bottom:10px;">تحقق من اتصالك، وإن استمر الأمر فربما تحتاج نشر آخر نسخة من قواعد Firestore</div>'
+        +'<div style="color:#8A7A63;font-size:.7rem;font-weight:700;margin-bottom:10px;">'+((typeof _hhClsErrText==='function')?_hhClsErrText(e).replace('تعذر تحميل الصفوف · ',''):'تحقق من اتصالك')+'</div>'
         +'<button onclick="hhSfuReload()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">إعادة المحاولة</button></div>';
       updateSummary(); return;
     }
@@ -372,8 +374,17 @@
       +'<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
       +'<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1.5px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف كل الطلاب</button>'
       +'</div>'
+      +'<div id="sfu-mg-panel"></div>'
       +'<div style="font-size:.64rem;color:#8A7A63;font-weight:700;margin-top:10px;line-height:1.8;">تُدار كل شؤون الفصل من هنا. الحذف يخفي الطالب من القوائم وتبقى سجلاته التاريخية محفوظة في ملفه.</div>';
   }
+  // zzzzzzb: لوحة مضمّنة تظهر مباشرة تحت الأزرار بدل نوافذ المتصفح
+  function _sfuMgPanel(html){
+    var p=document.getElementById('sfu-mg-panel');
+    if(!p){ p=document.createElement('div'); p.id='sfu-mg-panel'; var l=document.getElementById('sfu-list'); if(l&&l.parentNode) l.parentNode.insertBefore(p,l); else document.body.appendChild(p); }
+    p.innerHTML=html?('<div style="margin-top:10px;background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+html+'</div>'):'';
+    var inp=p.querySelector('input'); if(inp){ inp.focus(); inp.select&&inp.select(); }
+  }
+  window.hhSfuMgClose=function(){ _sfuMgPanel(''); };
   // الإعدادات داخل المنصة
   function hhSfuStageSettings(stage){
     stage.innerHTML='<div style="text-align:center;padding:6px 0 12px;">'
@@ -463,15 +474,24 @@
   // درجة سريعة · تُحفظ فوراً كنسبة مئوية موحدة
   window.hhSfuGrade=function(id){
     var st=ST.students.filter(function(x){return x.id===id;})[0]; if(!st)return;
-    var title=prompt('اسم التقييم (مثال: اختبار الوحدة الأولى):'); if(!title||!title.trim())return;
-    var sc=prompt('درجة الطالب:'); if(sc===null)return;
-    var mx=prompt('الدرجة الكاملة:','10'); if(mx===null)return;
+    var _i=function(idn,ph,w,type,val){ return '<input id="'+idn+'" type="'+(type||'text')+'" placeholder="'+ph+'" value="'+(val||'')+'" onkeydown="if(event.key===\'Enter\')hhSfuGradeGo(\''+id+'\')" style="width:'+w+';border:1.5px solid #B8924A;border-radius:10px;padding:8px 10px;font-family:Cairo;font-size:.78rem;color:#3D0918;">'; };
+    _sfuMgPanel('<b style="font-size:.76rem;color:#8A1538;">درجة سريعة · '+String(st.name).replace(/</g,'&lt;')+'</b>'
+      +_i('sfu-g-title','اسم التقييم (مثال: اختبار الوحدة الأولى)','min(260px,100%)')
+      +_i('sfu-g-score','الدرجة','90px','number')
+      +_i('sfu-g-max','من','80px','number','10')
+      +'<button onclick="hhSfuGradeGo(\''+id+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.74rem;cursor:pointer;">رصد</button>'
+      +'<button onclick="hhSfuMgClose()" style="background:none;border:1px solid #D9CFB8;color:#8A7A63;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إغلاق</button>');
+  };
+  window.hhSfuGradeGo=function(id){
+    var v=function(x){ var e=document.getElementById(x); return e?String(e.value||''):''; };
+    var title=v('sfu-g-title'); if(!title.trim()){ toast2('اكتب اسم التقييم','info'); return; }
+    var sc=v('sfu-g-score'), mx=v('sfu-g-max');
     var score=parseFloat(sc), max=parseFloat(mx);
     if(isNaN(score)||isNaN(max)||max<=0){ toast2('أدخل أرقاماً صحيحة','error'); return; }
     var pct=Math.round(score/max*100);
     db().collection('student_records').doc(id).set({
       grades: firebase.firestore.FieldValue.arrayUnion({ title:title.trim().slice(0,80), score:pct, raw:score, rawMax:max, date:ST.date, at:Date.now() })
-    },{merge:true}).then(function(){ toast2('رُصدت الدرجة: '+pct+'%','success'); })
+    },{merge:true}).then(function(){ _sfuMgPanel(''); toast2('رُصدت الدرجة: '+pct+'%','success'); })
     .catch(function(){ toast2('تعذر الحفظ','error'); });
   };
   // إجراءات جماعية
@@ -537,10 +557,16 @@
   };
 
   // ═══ إدارة الفصل: تعديل الاسم وحذف الطلاب ═══
-  window.hhSfuAddStudent=async function(){
+  window.hhSfuAddStudent=function(){
     if(!ST.classCode){ toast2('اختر فصلاً أولاً','info'); return; }
-    var n=prompt('اسم الطالب:');
-    if(n===null) return;
+    _sfuMgPanel('<b style="font-size:.76rem;color:#3D6B53;">إضافة طالب</b>'
+      +'<input id="sfu-mg-name" placeholder="اسم الطالب الثلاثي" maxlength="60" onkeydown="if(event.key===\'Enter\')hhSfuAddStudentGo()" style="flex:1;min-width:200px;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.8rem;color:#3D0918;">'
+      +'<button onclick="hhSfuAddStudentGo()" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.74rem;cursor:pointer;">إضافة</button>'
+      +'<button onclick="hhSfuMgClose()" style="background:none;border:1px solid #D9CFB8;color:#8A7A63;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إغلاق</button>'
+      +'<div style="width:100%;font-size:.62rem;color:#8A7A63;font-weight:700;">اكتب الاسم واضغط Enter لإضافة طالب تلو الآخر</div>');
+  };
+  window.hhSfuAddStudentGo=async function(){
+    var inp=document.getElementById('sfu-mg-name'); var n=inp?inp.value:'';
     n=n.trim().slice(0,60);
     if(!n){ toast2('اكتب اسماً صالحاً','info'); return; }
     var dup=ST.students.some(function(s){ return s.name===n; });
@@ -553,20 +579,28 @@
       });
       try{ await db().collection('classrooms').doc(ST.classCode).set({studentCount:firebase.firestore.FieldValue.increment(1)},{merge:true}); }catch(e){}
       toast2('أُضيف الطالب: '+n,'success');
+      if(inp){ inp.value=''; inp.focus(); }
       loadStudents();
     }catch(e){ toast2('تعذرت الإضافة، تحقق من الاتصال','error'); }
   };
-  window.hhSfuRenameClass=async function(){
+  window.hhSfuRenameClass=function(){
     if(!ST.classCode){ toast2('اختر فصلاً أولاً','info'); return; }
     var sel=document.getElementById('sfu-class');
     var cur=sel? sel.options[sel.selectedIndex].text.split(' ·')[0] : '';
-    var n=prompt('الاسم الجديد للفصل:', cur);
-    if(n===null) return;
+    _sfuMgPanel('<b style="font-size:.76rem;color:#8A6D2E;">تعديل اسم الفصل</b>'
+      +'<input id="sfu-mg-cls" value="'+String(cur).replace(/"/g,'&quot;')+'" maxlength="60" onkeydown="if(event.key===\'Enter\')hhSfuRenameClassGo()" style="flex:1;min-width:200px;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.8rem;color:#3D0918;">'
+      +'<button onclick="hhSfuRenameClassGo()" style="background:linear-gradient(135deg,#8A6D2E,#5c4816);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.74rem;cursor:pointer;">حفظ</button>'
+      +'<button onclick="hhSfuMgClose()" style="background:none;border:1px solid #D9CFB8;color:#8A7A63;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;">إغلاق</button>');
+  };
+  window.hhSfuRenameClassGo=async function(){
+    var sel=document.getElementById('sfu-class');
+    var inp=document.getElementById('sfu-mg-cls'); var n=inp?inp.value:'';
     n=n.trim().slice(0,60);
     if(!n){ toast2('اكتب اسماً صالحاً','info'); return; }
     try{
       await db().collection('classrooms').doc(ST.classCode).set({className:n},{merge:true});
       if(sel) sel.options[sel.selectedIndex].text=n;
+      _sfuMgPanel('');
       toast2('عُدّل اسم الفصل إلى: '+n,'success');
     }catch(e){ toast2('تعذر التعديل، تحقق من الاتصال','error'); }
   };

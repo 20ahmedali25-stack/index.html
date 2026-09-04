@@ -1388,7 +1388,9 @@ try {
   }catch(e){ console.warn('enablePersistence:', e.message); }
   auth.onAuthStateChanged(async user=>{
     try{ if(user) setTimeout(()=>{ try{ hhLoadNotifications(); }catch(_){} }, 2500); }catch(_e){}
-    try{ if(user) setTimeout(()=>{ try{ hhLoadMyRole(); }catch(_){} }, 1800); }catch(_e2){}
+    // zzzzzzb: الدور المحفوظ يُطبَّق فوراً ثم يُتحقق منه سحابياً خلال أجزاء من الثانية بدل 1.8 ثانية
+    try{ if(user){ var _rc=JSON.parse(localStorage.getItem('hh_role_cache')||'null'); if(_rc && _rc.uid===user.uid && _rc.role && !hhIsAdmin()){ _hhMyRole=_rc.role; } } }catch(_e3){}
+    try{ if(user) setTimeout(()=>{ try{ hhLoadMyRole(); }catch(_){} }, 250); }catch(_e2){}
     try{ if(user) setTimeout(()=>{ try{ _hhSeenCloudLoad(); }catch(_){} }, 2200); else { _HH_SEEN_CLOUD=null; _HH_SEEN_CLOUD_LOADED=false; } }catch(_e3){}
     clearTimeout(_loaderTimeout);
     clearInterval(_barInterval);
@@ -4600,19 +4602,19 @@ function buildWafaBoard(wrap){
     .wafa-side{ flex:1; min-width:0; display:flex; flex-direction:column; gap:${gap}px; }
     .wafa-cat{ flex:1; min-height:0; display:flex; flex-direction:column; border-radius:14px; overflow:hidden;
       border:2px solid #B8924A; background:#FFFDF8; box-shadow:0 3px 10px rgba(42,8,16,.10); }
-    .wafa-cat .wname{ background:linear-gradient(135deg,#4A0B1E,#5E0E26 55%,#6B1230); color:#EAD9B0; border-bottom:2px solid #B8924A; font-weight:900; text-align:center; position:relative; letter-spacing:.2px; }
-    .wafa-cat .wname::before,.wafa-cat .wname::after{ content:'\\u2756'; position:absolute; top:50%; transform:translateY(-50%); color:#B8924A; font-size:.58rem; }
+    .wafa-cat .wname{ background:linear-gradient(135deg,#4A0B1E,#5E0E26 55%,#6B1230); color:#EAD9B0; border-bottom:2px solid #B8924A; font-weight:900; text-align:center; position:relative; letter-spacing:.2px;
+      padding:${isMobile?'3px':((G.wafaPerSub||2)===3?'3px':'5px')}; font-size:${isMobile?'.8rem':((G.wafaPerSub||2)===3?'.92rem':'1rem')}; font-family:Cairo,sans-serif; flex-shrink:0; }
+    .wafa-cat .wname::before,.wafa-cat .wname::after{ content:'\u2756'; position:absolute; top:50%; transform:translateY(-50%); color:#B8924A; font-size:.58rem; }
     .wafa-cat .wname::before{ right:12px; } .wafa-cat .wname::after{ left:12px; }
     .wafa-cells .qcell.used{ background:#EDE7DA !important; border-color:#D9CFB8 !important; box-shadow:none; cursor:default; position:relative; }
     .wafa-cells .qcell.used .qpts{ color:#B9AE95 !important; }
-    .wafa-cells .qcell.used::before{ content:'\\u2713'; position:absolute; top:2px; left:6px; font-size:.65rem; color:#8A6D2E; }
+    .wafa-cells .qcell.used::before{ content:'\u2713'; position:absolute; top:2px; left:6px; font-size:.65rem; color:#8A6D2E; }
     .wafa-cells .qcell.easy{ --wc:#B8924A; --wbg:#FBF3E1; } .wafa-cells .qcell.easy .qpts{ color:#8A6D2E; }
     .wafa-cells .qcell.med{ --wc:#8A6D2E; --wbg:#8A6D2E; } .wafa-cells .qcell.med .qpts{ color:#fff; }
     .wafa-cells .qcell.hard{ --wc:#8A1538; --wbg:#8A1538; } .wafa-cells .qcell.hard .qpts{ color:#fff; }
     .wafa-cells .qcell{ box-shadow:inset 0 -3px 0 rgba(0,0,0,.12); }
     .wafa-header{ position:relative; }
     .wafa-header .wbadge{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-family:Cairo,sans-serif; font-weight:800; font-size:.68rem; color:#D4BC85; background:rgba(0,0,0,.25); border:1px solid rgba(184,146,74,.5); border-radius:8px; padding:2px 10px; white-space:nowrap; }
-      padding:${isMobile?'3px':((G.wafaPerSub||2)===3?'3px':'5px')}; font-size:${isMobile?'.8rem':((G.wafaPerSub||2)===3?'.92rem':'1rem')}; font-family:Cairo,sans-serif; flex-shrink:0; }
     .wafa-cells{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(${(G.wafaTiers||['easy','med','hard']).length},1fr);
       grid-template-rows:repeat(${(typeof G!=='undefined'&&G.wafaPerSub)||2},minmax(0,1fr));
       gap:${isMobile?4:((G.wafaPerSub||2)===3?5:7)}px; padding:${isMobile?5:((G.wafaPerSub||2)===3?6:8)}px; }
@@ -8978,13 +8980,22 @@ async function hhLoadMyRole(){
     var doc=await db.collection('teacher_requests').doc(currentUser.uid).get();
     if(doc.exists && doc.data().status==='approved'){
       _hhMyTeacherDoc=doc.data(); _hhMyRole='teacher';
+      _hhRoleCacheSave('teacher');
       await hhLoadMyClasses();
       return 'teacher';
     }
-    _hhMyRole='student';
+    _hhMyRole='student'; _hhRoleCacheSave('student');
     await hhLoadMyClasses();
     return 'student';
-  }catch(e){ _hhMyRole='student'; return 'student'; }
+  }catch(e){
+    // فشل الشبكة لا يُنزّل المعلم المعتمد المحفوظ إلى طالب
+    if(_hhMyRole!=='teacher') _hhMyRole='student';
+    return _hhMyRole;
+  }
+}
+function _hhRoleCacheSave(role){
+  try{ localStorage.setItem('hh_role_cache', JSON.stringify({uid:currentUser.uid, role:role, t:Date.now()})); }catch(e){}
+  try{ document.dispatchEvent(new CustomEvent('hh:role',{detail:{role:role}})); }catch(e){}
 }
 
 async function hhLoadMyClasses(){
