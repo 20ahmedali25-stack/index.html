@@ -1127,7 +1127,7 @@ var HH_LEADER_PROGRAMS = [
 ];
 
 // ═══ إضافة برنامج/ورشة جديدة (للأدمن فقط) ═══
-window.hhAdminAddProgram = function(editId){
+window._hhAdminAddProgramLegacy = function(editId){
   if(!(typeof hhIsAdmin==='function' && hhIsAdmin())){ return; }
   var existing = null;
   if(editId){ try{ existing = (JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[]).find(function(p){return p.id===editId;}); }catch(e){} }
@@ -1209,7 +1209,8 @@ window.hhDeleteProgram = function(id){
   if(typeof hhOpenLeaderPrograms==='function') hhOpenLeaderPrograms();
 };
 
-function hhOpenLeaderPrograms(){
+// zzzzzza: الواجهة القديمة (رحلة الواثق ومحطاتها) خاملة وغير مربوطة بأي زر · المدخل الجديد hhPgOpen في آخر الملف
+function _hhOpenLeaderProgramsLegacy(){
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
   try{ if(typeof hhSpkCheckAccess==='function') hhSpkCheckAccess(); }catch(e){}
   var old=document.getElementById('hh-leaders'); if(old) old.remove();
@@ -1531,3 +1532,425 @@ function hhOpenProgram(pid){
 // ═══════════════════════════════════════════════════════════════════
 // أختام المنصة · أربعة تصاميم متجهة بالهوية القطرية
 // ═══════════════════════════════════════════════════════════════════
+
+
+// ═══════════════════════════════════════════════════════════════════
+//  البرامج التربوية · منصة تقديم البرامج (zzzzzza)
+//  كتالوج للأهل والطلاب + نموذج تسجيل + إدارة كاملة للمدير
+//  البيانات: custom_programs (قراءة عامة، كتابة المدير) · program_registrations
+//  الملصقات: Storage → program_images/{programId}
+// ═══════════════════════════════════════════════════════════════════
+var _hhPg = { list: [], loaded: false, regs: {}, i: 0 };
+var HH_PG_STATUS = { upcoming:'برنامج قادم', early:'تسجيل مبكر', open:'التسجيل مفتوح', closed:'التسجيل مغلق' };
+var HH_PG_C = { m:'#4A0B1E', m2:'#5E0E26', r:'#8A1538', g:'#B8924A', g2:'#EAD9B0', gd:'#8A6D2E', iv:'#FFFDF8', ink:'#3D0918', mute:'#8A7A63' };
+
+function _hhPgEsc(s){ return (typeof esc==='function') ? esc(String(s==null?'':s)) : String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function _hhPgToast(m,k){ if(typeof toast==='function') toast(m,k||'info'); else alert(m); }
+function _hhPgAdmin(){ return (typeof hhIsAdmin==='function' && hhIsAdmin()); }
+function _hhPgDb(){ return firebase.firestore(); }
+function _hhPgLines(s){ return String(s||'').split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean); }
+function _hhPgDate(iso){
+  if(!iso) return '';
+  try{ var d=new Date(iso+'T00:00:00'); if(isNaN(d)) return iso;
+    var M=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    return d.getDate()+' '+M[d.getMonth()]+' '+d.getFullYear(); }catch(e){ return iso; }
+}
+function _hhPgDates(p){
+  if(!p.dateFrom && !p.dateTo) return 'الموعد يُعلن لاحقاً';
+  if(p.dateFrom && p.dateTo && p.dateFrom!==p.dateTo) return _hhPgDate(p.dateFrom)+' إلى '+_hhPgDate(p.dateTo);
+  return _hhPgDate(p.dateFrom||p.dateTo);
+}
+function _hhPgFull(p){ var seats=parseInt(p.seats||0,10)||0; var c=parseInt(p.confirmedCount||0,10)||0; return seats>0 && c>=seats; }
+function _hhPgLeft(p){ var seats=parseInt(p.seats||0,10)||0; if(!seats) return null; return Math.max(0, seats-(parseInt(p.confirmedCount||0,10)||0)); }
+function _hhPgIco(n){
+  var P={
+    cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    ppl:'<path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.9"/>',
+    card:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/>',
+    pin:'<path d="M12 22s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/>',
+    tgt:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+    doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+    chk:'<path d="M20 6L9 17l-5-5"/>', star:'<path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8z"/>',
+    back:'<path d="M9 5l7 7-7 7"/>', x:'<path d="M18 6L6 18M6 6l12 12"/>', plus:'<path d="M12 5v14M5 12h14"/>',
+    up:'<path d="M12 16V4M6 10l6-6 6 6M4 20h16"/>', gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+    link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>'
+  };
+  return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(P[n]||'')+'</svg>';
+}
+
+// ── التحميل ──
+async function hhPgLoad(force){
+  if(_hhPg.loaded && !force) return _hhPg.list;
+  var list=[];
+  try{
+    var qs=await _hhPgDb().collection('custom_programs').get();
+    qs.forEach(function(d){ var p=d.data()||{}; p.id=d.id; list.push(p); });
+    try{ localStorage.setItem('hh_custom_programs', JSON.stringify(list)); }catch(e){}
+  }catch(e){
+    try{ list=JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[]; }catch(_e){ list=[]; }
+  }
+  list.sort(function(a,b){ return String(a.dateFrom||'9999').localeCompare(String(b.dateFrom||'9999')) || (b.updatedAt||0)-(a.updatedAt||0); });
+  _hhPg.list=list; _hhPg.loaded=true; return list;
+}
+function _hhPgGet(id){ return _hhPg.list.filter(function(p){return p.id===id;})[0]||null; }
+
+// ── النافذة الرئيسة ──
+function hhPgStyle(){
+  if(document.getElementById('hh-pg-style')) return;
+  var st=document.createElement('style'); st.id='hh-pg-style';
+  st.textContent=
+    '#hh-pg{position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;}'
+   +'#hh-pg .pg-top{background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;box-shadow:0 3px 14px rgba(61,9,24,.3);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;}'
+   +'#hh-pg .pg-btn{background:rgba(212,188,133,.12);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:34px;padding:0 13px;color:#F5E6C4;font-weight:800;font-size:.78rem;cursor:pointer;font-family:Cairo;display:inline-flex;align-items:center;gap:6px;}'
+   +'#hh-pg .pg-btn.gold{background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;color:#2a0810;}'
+   +'#hh-pg .pg-wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}'
+   +'#hh-pg .pg-hero{background:linear-gradient(135deg,#3D0918,#5E0E26 70%,#7A1330);border:2px solid #B8924A;border-radius:18px;padding:18px 20px;color:#EAD9B0;margin-bottom:18px;position:relative;overflow:hidden;}'
+   +'#hh-pg .pg-hero b{display:block;font-size:1.25rem;color:#FFFDF8;} #hh-pg .pg-hero span{font-size:.8rem;font-weight:700;color:#D4BC85;line-height:1.7;}'
+   +'#hh-pg .pg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}'
+   +'#hh-pg .pg-card{background:#FFFDF8;border:1.5px solid #B8924A;border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(94,14,38,.10);display:flex;flex-direction:column;}'
+   +'#hh-pg .pg-poster{position:relative;aspect-ratio:4/3;background:linear-gradient(160deg,#4A0B1E,#7A1330 60%,#5E0E26);display:flex;align-items:center;justify-content:center;color:#EAD9B0;cursor:pointer;}'
+   +'#hh-pg .pg-poster img{width:100%;height:100%;object-fit:cover;display:block;}'
+   +'#hh-pg .pg-poster .ph{text-align:center;font-weight:900;font-size:1.3rem;opacity:.9;padding:10px;}'
+   +'#hh-pg .pg-tag{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-size:.62rem;font-weight:900;border-radius:99px;padding:4px 12px;}'
+   +'#hh-pg .pg-st{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.4);border:1px solid rgba(234,217,176,.6);color:#EAD9B0;font-size:.62rem;font-weight:800;border-radius:99px;padding:4px 12px;}'
+   +'#hh-pg .pg-strip{background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#EAD9B0;padding:8px 14px;font-weight:800;font-size:.78rem;display:flex;align-items:center;gap:8px;border-top:2px solid #B8924A;border-bottom:2px solid #B8924A;}'
+   +'#hh-pg .pg-body{padding:13px 15px 15px;flex:1;display:flex;flex-direction:column;}'
+   +'#hh-pg .pg-name{font-weight:900;font-size:1.1rem;color:#3D0918;} #hh-pg .pg-desc{color:#5b4a3a;font-size:.78rem;line-height:1.85;margin:5px 0 10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
+   +'#hh-pg .pg-meta{display:flex;flex-direction:column;gap:6px;font-size:.76rem;color:#3D0918;font-weight:700;} #hh-pg .pg-meta div{display:flex;align-items:center;gap:8px;} #hh-pg .pg-meta svg{color:#8A1538;flex-shrink:0;}'
+   +'#hh-pg .pg-cta{margin-top:12px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border-radius:14px;padding:11px;text-align:center;font-weight:900;font-size:.88rem;cursor:pointer;box-shadow:0 6px 16px rgba(94,14,38,.25);border:none;font-family:Cairo;width:100%;}'
+   +'#hh-pg .pg-cta.off{background:#EDE7DA;color:#9a8b75;box-shadow:none;cursor:default;}'
+   +'#hh-pg .pg-more{margin-top:7px;background:transparent;border:1px solid #B8924A;color:#8A6D2E;border-radius:11px;padding:8px;font-weight:800;font-size:.72rem;cursor:pointer;font-family:Cairo;width:100%;}'
+   +'#hh-pg .pg-empty{background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:18px;padding:34px 16px;text-align:center;color:#8A6D2E;font-weight:800;line-height:1.9;}'
+   +'#hh-pg .pg-dots{display:none;gap:6px;justify-content:center;margin-top:12px;} #hh-pg .pg-dots i{width:8px;height:8px;border-radius:99px;background:#D9CFB8;transition:all .2s;} #hh-pg .pg-dots i.on{width:26px;background:#5E0E26;}'
+   +'@media (max-width:640px){ #hh-pg .pg-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:2px 2px 6px;scrollbar-width:none;} #hh-pg .pg-grid::-webkit-scrollbar{display:none;} #hh-pg .pg-card{flex:0 0 88%;scroll-snap-align:center;} #hh-pg .pg-dots{display:flex;} }'
+   // النوافذ
+   +'.hh-pg-ov{position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99996;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;padding:16px;}'
+   +'.hh-pg-box{max-width:640px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:20px;overflow:hidden;}'
+   +'.hh-pg-hd{background:linear-gradient(120deg,#2a0810,#5E0E26);padding:13px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:2px solid #B8924A;}'
+   +'.hh-pg-hd b{color:#FFFDF8;font-size:1rem;flex:1;} .hh-pg-hd small{display:block;color:#D4BC85;font-size:.64rem;font-weight:700;}'
+   +'.hh-pg-hd button{background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
+   +'.hh-pg-bd{padding:16px 18px;}'
+   +'.hh-pg-f{margin-bottom:11px;} .hh-pg-f label{display:block;color:#5E0E26;font-weight:800;font-size:.74rem;margin-bottom:4px;}'
+   +'.hh-pg-f input,.hh-pg-f textarea,.hh-pg-f select{width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:9px 12px;font-family:Cairo;font-size:.84rem;color:#3D0918;background:#fff;box-sizing:border-box;}'
+   +'.hh-pg-f textarea{min-height:76px;resize:vertical;} .hh-pg-2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px;}'
+   +'.hh-pg-up{border:1.5px dashed #B8924A;border-radius:12px;padding:12px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.74rem;background:#FDF8EC;cursor:pointer;position:relative;overflow:hidden;}'
+   +'.hh-pg-up img{width:100%;max-height:220px;object-fit:cover;border-radius:9px;display:block;margin-bottom:6px;}'
+   +'.hh-pg-save{width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:pointer;margin-top:6px;}'
+   +'.hh-pg-del{width:100%;background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:12px;padding:10px;font-family:Cairo;font-weight:800;font-size:.8rem;cursor:pointer;margin-top:8px;}'
+   +'.hh-pg-note{background:#F7ECEF;border:1px solid #E4C4CC;border-radius:11px;padding:10px 13px;margin-bottom:12px;font-size:.72rem;color:#8A1538;font-weight:700;line-height:1.7;}'
+   +'.hh-pg-list{display:block;} .hh-pg-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #EAE0CA;border-radius:13px;background:#fff;margin-bottom:8px;font-size:.78rem;flex-wrap:wrap;}'
+   +'.hh-pg-row .th{width:52px;height:52px;border-radius:10px;background:linear-gradient(160deg,#4A0B1E,#7A1330);flex-shrink:0;overflow:hidden;} .hh-pg-row .th img{width:100%;height:100%;object-fit:cover;}'
+   +'.hh-pg-row .nm{font-weight:900;color:#3D0918;} .hh-pg-row .sb{color:#8A7A63;font-size:.66rem;font-weight:700;margin-top:2px;}'
+   +'.hh-pg-row .acts{margin-right:auto;display:flex;gap:5px;flex-wrap:wrap;} .hh-pg-row .acts button{border:1px solid #B8924A;color:#8A6D2E;border-radius:8px;padding:5px 10px;font-size:.66rem;font-weight:800;background:#fff;cursor:pointer;font-family:Cairo;}'
+   +'.hh-pg-row .acts button.p{background:#F7ECEF;color:#8A1538;border-color:#8A1538;} .hh-pg-row .acts button.d{border-color:#c0392b;color:#c0392b;}'
+   +'.hh-pg-pill{border-radius:99px;padding:2px 10px;font-size:.6rem;font-weight:900;} .hh-pg-pill.y{background:#FDF3DD;color:#8A6D2E;} .hh-pg-pill.c{background:#E6F2EA;color:#2C5340;} .hh-pg-pill.h{background:#EDE7DA;color:#8a7a63;}'
+   +'.hh-pg-tbl{width:100%;border-collapse:collapse;font-size:.72rem;} .hh-pg-tbl th{background:#4A0B1E;color:#EAD9B0;padding:7px;font-size:.64rem;} .hh-pg-tbl td{padding:7px 8px;border-bottom:1px solid #EFE6D3;font-weight:700;color:#3D0918;text-align:center;vertical-align:middle;}'
+   +'.hh-pg-tbl td button{border:none;border-radius:8px;padding:4px 10px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;}'
+   +'.hh-pg-sec{font-weight:900;font-size:.86rem;color:#5E0E26;margin:14px 0 7px;display:flex;align-items:center;gap:7px;} .hh-pg-sec::before{content:"";width:5px;height:18px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;}'
+   +'.hh-pg-ul{margin:0;padding:0;list-style:none;} .hh-pg-ul li{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:#3D0918;font-weight:700;line-height:1.7;padding:3px 0;} .hh-pg-ul li svg{color:#B8924A;flex-shrink:0;margin-top:4px;}';
+  document.head.appendChild(st);
+}
+
+async function hhPgOpen(){
+  hhPgStyle();
+  try{ document.body.classList.add('hh-immersive'); }catch(e){}
+  var old=document.getElementById('hh-pg'); if(old) old.remove();
+  var ov=document.createElement('div'); ov.id='hh-pg';
+  var isAdm=_hhPgAdmin();
+  ov.innerHTML=
+    '<div class="pg-top">'
+   +  '<button class="pg-btn" onclick="hhPgClose()">'+_hhPgIco('back')+' رجوع</button>'
+   +  '<span style="color:#F5E6C4;font-weight:900;font-size:1rem;">البرامج التربوية</span>'
+   +  (isAdm?'<button class="pg-btn gold" onclick="hhPgAdmin()">'+_hhPgIco('gear')+' إدارة البرامج</button>':'<span style="width:90px;"></span>')
+   +'</div>'
+   +'<div class="pg-wrap">'
+   +  '<div class="pg-hero"><b>برامجنا وورشنا التربوية</b><span>برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر من هذه الصفحة.</span></div>'
+   +  '<div id="hh-pg-grid" class="pg-grid"><div class="pg-empty">جارٍ تحميل البرامج…</div></div>'
+   +  '<div id="hh-pg-dots" class="pg-dots"></div>'
+   +'</div>';
+  document.body.appendChild(ov);
+  await hhPgLoad(true);
+  hhPgRender();
+}
+function hhPgClose(){ var e=document.getElementById('hh-pg'); if(e) e.remove(); try{ document.body.classList.remove('hh-immersive'); }catch(e){} }
+
+function hhPgCard(p){
+  var full=_hhPgFull(p), left=_hhPgLeft(p);
+  var st=(p.status==='closed')?'closed':(full?'full':(p.status||'upcoming'));
+  var stTxt=(st==='full')?'اكتمل العدد':(HH_PG_STATUS[st]||'برنامج قادم');
+  var fee=(p.price&&String(p.price).trim())?'يوجد رسوم':'بلا رسوم';
+  var canReg=(st==='open'||st==='early') && !full && (p.regMode==='external'?!!p.regLink:true);
+  var feeLine=(p.price&&String(p.price).trim())?(_hhPgEsc(p.price)+' ﷼'):'بلا رسوم';
+  if(left!==null) feeLine+=' · '+(full?'اكتمل العدد':(left+' مقعداً متبقياً'));
+  return '<div class="pg-card" data-id="'+_hhPgEsc(p.id)+'">'
+   +'<div class="pg-poster" onclick="hhPgDetail(\''+_hhPgEsc(p.id)+'\')">'
+   +  (p.img?'<img src="'+_hhPgEsc(p.img)+'" alt="'+_hhPgEsc(p.name)+'" loading="lazy">':'<div class="ph">'+_hhPgEsc(p.name||'')+'</div>')
+   +  '<span class="pg-tag">'+(p.type==='workshop'?'ورشة':'برنامج')+'</span>'
+   +  '<span class="pg-st">'+_hhPgEsc(stTxt)+' · '+fee+'</span>'
+   +'</div>'
+   +'<div class="pg-strip">'+_hhPgIco(p.type==='workshop'?'doc':'tgt')+(p.type==='workshop'?'ورشة تدريبية':'برنامج تربوي')+'</div>'
+   +'<div class="pg-body">'
+   +  '<div class="pg-name">'+_hhPgEsc(p.name||'')+'</div>'
+   +  '<div class="pg-desc">'+_hhPgEsc(p.desc||'')+'</div>'
+   +  '<div class="pg-meta">'
+   +    '<div>'+_hhPgIco('cal')+'<span>'+_hhPgEsc(_hhPgDates(p))+'</span></div>'
+   +    '<div>'+_hhPgIco('ppl')+'<span>'+_hhPgEsc([p.audience,p.ages].filter(Boolean).join(' · ')||'الفئة تُعلن لاحقاً')+'</span></div>'
+   +    (p.place?'<div>'+_hhPgIco('pin')+'<span>'+_hhPgEsc(p.place)+'</span></div>':'')
+   +    '<div>'+_hhPgIco('card')+'<span>'+feeLine+'</span></div>'
+   +  '</div>'
+   +  '<button class="pg-cta'+(canReg?'':' off')+'" onclick="'+(canReg?('hhPgRegister(\''+_hhPgEsc(p.id)+'\')'):'')+'">'+(canReg?(st==='early'?'تسجيل مبكر':'تسجيل'):_hhPgEsc(stTxt))+'</button>'
+   +  '<button class="pg-more" onclick="hhPgDetail(\''+_hhPgEsc(p.id)+'\')">التفاصيل والمميزات والأهداف</button>'
+   +'</div></div>';
+}
+function hhPgRender(){
+  var g=document.getElementById('hh-pg-grid'); if(!g) return;
+  var isAdm=_hhPgAdmin();
+  var vis=_hhPg.list.filter(function(p){ return isAdm || !p.hidden; });
+  if(!vis.length){ g.innerHTML='<div class="pg-empty" style="grid-column:1/-1;">لا برامج معلنة حالياً.<br>تابعنا، الجديد قريب.'+(isAdm?'<br><small style="font-size:.68rem;color:#8A7A63;">(أنت المدير: أضف أول برنامج من زر إدارة البرامج)</small>':'')+'</div>'; return; }
+  g.innerHTML=vis.map(hhPgCard).join('');
+  // نقاط التنقل على الجوال
+  var dots=document.getElementById('hh-pg-dots');
+  if(dots){
+    dots.innerHTML=vis.map(function(_,i){ return '<i'+(i===0?' class="on"':'')+'></i>'; }).join('');
+    g.onscroll=function(){ try{ var cards=g.querySelectorAll('.pg-card'); var mid=g.scrollLeft+g.clientWidth/2; var best=0,bd=1e9;
+      cards.forEach(function(c,i){ var cm=c.offsetLeft+c.offsetWidth/2; var d=Math.abs(cm-mid); if(d<bd){bd=d;best=i;} });
+      dots.querySelectorAll('i').forEach(function(d,i){ d.className=(i===best)?'on':''; }); }catch(e){} };
+  }
+}
+
+// ── التفاصيل ──
+function _hhPgBox(title, sub, bodyHtml, id){
+  var ov=document.createElement('div'); ov.className='hh-pg-ov'; ov.id=id||('hh-pg-ov-'+Date.now());
+  ov.innerHTML='<div class="hh-pg-box"><div class="hh-pg-hd"><b>'+_hhPgEsc(title)+(sub?'<small>'+_hhPgEsc(sub)+'</small>':'')+'</b>'
+   +'<button onclick="this.closest(\'.hh-pg-ov\').remove()">'+_hhPgIco('x')+'</button></div><div class="hh-pg-bd">'+bodyHtml+'</div></div>';
+  ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
+  document.body.appendChild(ov); return ov;
+}
+function hhPgDetail(id){
+  var p=_hhPgGet(id); if(!p) return;
+  var feats=_hhPgLines(p.features), goals=_hhPgLines(p.goals);
+  var full=_hhPgFull(p); var st=(p.status==='closed')?'closed':(full?'full':(p.status||'upcoming'));
+  var canReg=(st==='open'||st==='early') && !full && (p.regMode==='external'?!!p.regLink:true);
+  var html=(p.img?'<img src="'+_hhPgEsc(p.img)+'" style="width:100%;border-radius:14px;border:1.5px solid #B8924A;display:block;margin-bottom:12px;">':'')
+   +'<div style="font-size:.84rem;color:#3D0918;line-height:1.9;font-weight:700;white-space:pre-line;">'+_hhPgEsc(p.desc||'')+'</div>'
+   +(feats.length?'<div class="hh-pg-sec">مميزات البرنامج</div><ul class="hh-pg-ul">'+feats.map(function(f){return '<li>'+_hhPgIco('star')+'<span>'+_hhPgEsc(f)+'</span></li>';}).join('')+'</ul>':'')
+   +(goals.length?'<div class="hh-pg-sec">أهداف البرنامج</div><ul class="hh-pg-ul">'+goals.map(function(f){return '<li>'+_hhPgIco('chk')+'<span>'+_hhPgEsc(f)+'</span></li>';}).join('')+'</ul>':'')
+   +'<div class="hh-pg-sec">التفاصيل</div><div class="pg-meta" style="display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:700;color:#3D0918;">'
+   +  '<div style="display:flex;gap:8px;align-items:center;color:#3D0918;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('cal')+'</span>'+_hhPgEsc(_hhPgDates(p))+'</div>'
+   +  '<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('ppl')+'</span>'+_hhPgEsc([p.audience,p.ages].filter(Boolean).join(' · ')||'الفئة تُعلن لاحقاً')+'</div>'
+   +  (p.place?'<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('pin')+'</span>'+_hhPgEsc(p.place)+'</div>':'')
+   +  '<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('card')+'</span>'+((p.price&&String(p.price).trim())?(_hhPgEsc(p.price)+' ﷼'):'بلا رسوم')+'</div>'
+   +'</div>'
+   +'<button class="pg-cta'+(canReg?'':' off')+'" style="margin-top:16px;background:'+(canReg?'linear-gradient(135deg,#8A1538,#5E0E26)':'#EDE7DA')+';color:'+(canReg?'#F5E6C4':'#9a8b75')+';border:none;border-radius:14px;padding:12px;width:100%;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:'+(canReg?'pointer':'default')+';" onclick="'+(canReg?('this.closest(\'.hh-pg-ov\').remove();hhPgRegister(\''+_hhPgEsc(p.id)+'\')'):'')+'">'+(canReg?(st==='early'?'تسجيل مبكر':'تسجيل الآن'):_hhPgEsc(full?'اكتمل العدد':(HH_PG_STATUS[st]||'برنامج قادم')))+'</button>';
+  _hhPgBox(p.name||'', (p.type==='workshop'?'ورشة تدريبية':'برنامج تربوي'), html, 'hh-pg-detail');
+}
+
+// ── التسجيل ──
+async function hhPgRegister(id){
+  var p=_hhPgGet(id); if(!p) return;
+  if(p.regMode==='external'){ if(p.regLink){ window.open(p.regLink,'_blank','noopener'); } return; }
+  var u=(typeof firebase!=='undefined' && firebase.auth) ? firebase.auth().currentUser : null;
+  if(!u){
+    _hhPgToast('سجّل الدخول بحساب Google لإكمال التسجيل','info');
+    try{
+      if(typeof doGoogleLogin==='function'){ await doGoogleLogin(); }
+      u=firebase.auth().currentUser;
+    }catch(e){}
+    if(!u){ return; }
+  }
+  hhPgForm(id);
+}
+function hhPgForm(id){
+  var p=_hhPgGet(id); if(!p) return;
+  var u=firebase.auth().currentUser||{};
+  function f(label,idn,ph,type){ return '<div class="hh-pg-f"><label>'+label+'</label><input id="'+idn+'" type="'+(type||'text')+'" placeholder="'+(ph||'')+'"></div>'; }
+  var html='<div class="hh-pg-note">'+_hhPgEsc(p.name)+' · '+_hhPgEsc(_hhPgDates(p))+' · '+((p.price&&String(p.price).trim())?(_hhPgEsc(p.price)+' ﷼'):'بلا رسوم')+'<br>يُحفظ طلبك بحالة «بانتظار التأكيد» ثم يتواصل معك فريق المُلهم لتأكيد المقعد'+((p.price&&String(p.price).trim())?' وسداد الرسوم':'')+'.</div>'
+   +f('اسم الطالب الثلاثي *','pgr-student','كما في السجل المدرسي')
+   +'<div class="hh-pg-2">'+f('الصف *','pgr-grade','مثال: الثامن')+f('المدرسة *','pgr-school','اسم المدرسة')+'</div>'
+   +f('اسم ولي الأمر *','pgr-parent','')
+   +'<div class="hh-pg-2">'+f('رقم الجوال *','pgr-phone','5xxxxxxx','tel')+'<div class="hh-pg-f"><label>صلة القرابة</label><select id="pgr-rel"><option>الأب</option><option>الأم</option><option>أخرى</option></select></div></div>'
+   +'<div class="hh-pg-f"><label>البريد الإلكتروني</label><input id="pgr-email" type="email" value="'+_hhPgEsc(u.email||'')+'"></div>'
+   +'<div class="hh-pg-f"><label>ملاحظات أو احتياجات خاصة</label><textarea id="pgr-notes" placeholder="اختياري"></textarea></div>'
+   +'<label style="display:flex;gap:8px;align-items:flex-start;font-size:.74rem;color:#3D0918;font-weight:700;line-height:1.7;margin-bottom:8px;"><input type="checkbox" id="pgr-consent" style="margin-top:4px;"> أقرّ بصحة البيانات وأوافق على التواصل معي بشأن هذا البرنامج.</label>'
+   +'<button class="hh-pg-save" onclick="hhPgSubmit(\''+_hhPgEsc(id)+'\')">إرسال طلب التسجيل</button>';
+  _hhPgBox('التسجيل في البرنامج', p.name, html, 'hh-pg-form');
+}
+async function hhPgSubmit(id){
+  var p=_hhPgGet(id); if(!p) return;
+  var v=function(x){ var e=document.getElementById(x); return e?String(e.value||'').trim():''; };
+  var d={ programId:p.id, programName:p.name||'', studentName:v('pgr-student'), grade:v('pgr-grade'), school:v('pgr-school'), parentName:v('pgr-parent'), phone:v('pgr-phone'), relation:v('pgr-rel'), email:v('pgr-email'), notes:v('pgr-notes') };
+  if(!d.studentName||!d.grade||!d.school||!d.parentName||!d.phone){ _hhPgToast('أكمل الحقول الإلزامية المعلّمة بنجمة','error'); return; }
+  if(!document.getElementById('pgr-consent').checked){ _hhPgToast('يلزم الإقرار بصحة البيانات','error'); return; }
+  var u=firebase.auth().currentUser; if(!u){ _hhPgToast('انتهت الجلسة، سجّل الدخول مجدداً','error'); return; }
+  d.uid=u.uid; d.status='pending'; d.createdAt=Date.now();
+  var btn=document.querySelector('#hh-pg-form .hh-pg-save'); if(btn){ btn.disabled=true; btn.textContent='جارٍ الإرسال…'; }
+  try{
+    await _hhPgDb().collection('program_registrations').add(d);
+    var ov=document.getElementById('hh-pg-form'); if(ov) ov.remove();
+    _hhPgBox('تم استلام طلبك', p.name, '<div style="text-align:center;padding:10px 0 4px;color:#3D0918;font-weight:800;line-height:2;font-size:.9rem;">'
+      +'<div style="width:64px;height:64px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;color:#2a0810;">'+_hhPgIco('chk')+'</div>'
+      +'سُجّل طلب '+_hhPgEsc(d.studentName)+' بحالة «بانتظار التأكيد».<br>سيتواصل معك فريق المُلهم على '+_hhPgEsc(d.phone)+' لتأكيد المقعد.</div>'
+      +'<button class="hh-pg-save" onclick="this.closest(\'.hh-pg-ov\').remove()">حسناً</button>', 'hh-pg-done');
+  }catch(e){
+    if(btn){ btn.disabled=false; btn.textContent='إرسال طلب التسجيل'; }
+    _hhPgToast('تعذر إرسال الطلب · '+((e&&e.code)||'تحقق من الاتصال'),'error');
+  }
+}
+
+// ── الإدارة ──
+async function hhPgAdmin(){
+  if(!_hhPgAdmin()) return;
+  await hhPgLoad(true);
+  var rows=_hhPg.list.map(function(p){
+    var full=_hhPgFull(p); var left=_hhPgLeft(p);
+    var st=p.hidden?'<span class="hh-pg-pill h">مخفي</span>':(full?'<span class="hh-pg-pill y">اكتمل العدد</span>':(p.status==='open'||p.status==='early')?'<span class="hh-pg-pill c">'+_hhPgEsc(HH_PG_STATUS[p.status])+'</span>':'<span class="hh-pg-pill y">'+_hhPgEsc(HH_PG_STATUS[p.status]||'برنامج قادم')+'</span>');
+    var seats=parseInt(p.seats||0,10)||0;
+    return '<div class="hh-pg-row" style="'+(p.hidden?'opacity:.6;':'')+'">'
+     +'<div class="th">'+(p.img?'<img src="'+_hhPgEsc(p.img)+'">':'')+'</div>'
+     +'<div style="min-width:0;flex:1;"><div class="nm">'+_hhPgEsc(p.name||'')+'</div><div class="sb">'+_hhPgEsc(_hhPgDates(p))+' · '+((p.price&&String(p.price).trim())?(_hhPgEsc(p.price)+' ﷼'):'بلا رسوم')+(seats?(' · '+(parseInt(p.confirmedCount||0,10)||0)+' من '+seats+' مقعداً'):'')+(p.regMode==='external'?' · تسجيل خارجي':'')+'</div></div>'
+     +st
+     +'<div class="acts">'
+     +  (p.regMode==='external'?'':'<button class="p" onclick="hhPgRegs(\''+_hhPgEsc(p.id)+'\')">الطلبات</button>')
+     +  '<button onclick="hhPgEdit(\''+_hhPgEsc(p.id)+'\')">تعديل</button>'
+     +  '<button onclick="hhPgToggleHide(\''+_hhPgEsc(p.id)+'\')">'+(p.hidden?'إظهار':'إخفاء')+'</button>'
+     +  '<button class="d" onclick="hhPgDelete(\''+_hhPgEsc(p.id)+'\')">حذف</button>'
+     +'</div></div>';
+  }).join('');
+  var html='<button class="hh-pg-save" style="margin:0 0 12px;background:linear-gradient(135deg,#8A1538,#5E0E26);" onclick="hhPgEdit(null)">+ إضافة برنامج جديد</button>'
+   +(rows||'<div class="pg-empty" style="background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:14px;padding:22px;text-align:center;color:#8A6D2E;font-weight:800;">لا برامج بعد.</div>')
+   +'<div class="hh-pg-list">'+rows+'</div>';
+  var old=document.getElementById('hh-pg-admin'); if(old) old.remove();
+  _hhPgBox('إدارة البرامج', _hhPg.list.length+' برامج · مدير المنصة', html, 'hh-pg-admin');
+}
+function hhPgEdit(id){
+  if(!_hhPgAdmin()) return;
+  var p=(id?_hhPgGet(id):null)||{};
+  var nid=id||('prog_'+Date.now());
+  function f(label,idn,val,ph,type){ return '<div class="hh-pg-f"><label>'+label+'</label><input id="'+idn+'" type="'+(type||'text')+'" value="'+_hhPgEsc(val||'')+'" placeholder="'+(ph||'')+'"></div>'; }
+  function ta(label,idn,val,ph){ return '<div class="hh-pg-f"><label>'+label+'</label><textarea id="'+idn+'" placeholder="'+(ph||'')+'">'+_hhPgEsc(val||'')+'</textarea></div>'; }
+  function sel(label,idn,opts,val){ return '<div class="hh-pg-f"><label>'+label+'</label><select id="'+idn+'">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></div>'; }
+  var html='<input type="hidden" id="pge-img" value="'+_hhPgEsc(p.img||'')+'">'
+   +'<div class="hh-pg-f"><label>ملصق البرنامج (مربع أو 4:3 · أقل من 3MB)</label><div class="hh-pg-up" onclick="document.getElementById(\'pge-file\').click()" id="pge-up">'+(p.img?'<img src="'+_hhPgEsc(p.img)+'">الملصق الحالي · اضغط لاستبداله':_hhPgIco('up')+' اضغط لرفع الملصق')+'</div><input type="file" id="pge-file" accept="image/*" style="display:none" onchange="hhPgPickImg(this,\''+_hhPgEsc(nid)+'\')"></div>'
+   +'<div class="hh-pg-2">'+sel('النوع','pge-type',[['program','برنامج'],['workshop','ورشة']],p.type||'program')+sel('حالة التسجيل','pge-status',[['upcoming','برنامج قادم'],['early','تسجيل مبكر'],['open','التسجيل مفتوح'],['closed','التسجيل مغلق']],p.status||'upcoming')+'</div>'
+   +f('اسم البرنامج *','pge-name',p.name,'')
+   +ta('الوصف *','pge-desc',p.desc,'ماذا يقدّم البرنامج ولمن')
+   +ta('مميزات البرنامج (سطر لكل ميزة)','pge-features',p.features,'مثال:\nشهادة معتمدة\nمدرب متخصص\nحقيبة تدريبية')
+   +ta('أهداف البرنامج (سطر لكل هدف)','pge-goals',p.goals,'')
+   +'<div class="hh-pg-2">'+f('من تاريخ','pge-from',p.dateFrom,'','date')+f('إلى تاريخ','pge-to',p.dateTo,'','date')+'</div>'
+   +f('المكان','pge-place',p.place,'مثال: مركز أجيال التربوي، الدوحة')
+   +'<div class="hh-pg-2">'+f('الفئة','pge-aud',p.audience,'الطلاب والطالبات')+f('العمر أو الصف','pge-ages',p.ages,'12 إلى 15 سنة')+'</div>'
+   +'<div class="hh-pg-2">'+f('الرسوم بالريال (فارغ = بلا رسوم)','pge-price',p.price,'150')+f('عدد المقاعد (فارغ = بلا حد)','pge-seats',p.seats,'30','number')+'</div>'
+   +'<div class="hh-pg-2">'+sel('طريقة التسجيل','pge-regmode',[['internal','نموذج المنصة'],['external','رابط خارجي (Google Form أو غيره)']],p.regMode||'internal')+f('الرابط الخارجي','pge-reglink',p.regLink,'https://forms.gle/…','url')+'</div>'
+   +'<button class="hh-pg-save" onclick="hhPgSave(\''+_hhPgEsc(nid)+'\','+(id?'true':'false')+')">'+(id?'حفظ التعديلات':'إضافة البرنامج')+'</button>'
+   +(id?'<button class="hh-pg-del" onclick="hhPgDelete(\''+_hhPgEsc(id)+'\')">حذف البرنامج نهائياً</button>':'');
+  var old=document.getElementById('hh-pg-edit'); if(old) old.remove();
+  _hhPgBox(id?'تعديل البرنامج':'إضافة برنامج جديد', p.name||'', html, 'hh-pg-edit');
+}
+async function hhPgPickImg(input, nid){
+  var file=input.files&&input.files[0]; if(!file) return;
+  if(!/^image\//.test(file.type)){ _hhPgToast('اختر ملف صورة','error'); return; }
+  if(file.size>3*1024*1024){ _hhPgToast('حجم الصورة يتجاوز 3MB','error'); return; }
+  var up=document.getElementById('pge-up'); if(up) up.textContent='جارٍ رفع الملصق…';
+  try{
+    var ref=firebase.storage().ref('program_images/'+nid);
+    await ref.put(file,{contentType:file.type});
+    var url=await ref.getDownloadURL();
+    document.getElementById('pge-img').value=url;
+    if(up) up.innerHTML='<img src="'+_hhPgEsc(url)+'">تم الرفع · اضغط لاستبداله';
+  }catch(e){ if(up) up.textContent='تعذر الرفع · '+((e&&e.code)||''); _hhPgToast('تعذر رفع الملصق','error'); }
+}
+async function hhPgSave(nid, isEdit){
+  if(!_hhPgAdmin()) return;
+  var v=function(x){ var e=document.getElementById(x); return e?String(e.value||'').trim():''; };
+  var name=v('pge-name'), desc=v('pge-desc');
+  if(!name||!desc){ _hhPgToast('الاسم والوصف إلزاميان','error'); return; }
+  var regMode=v('pge-regmode'), regLink=v('pge-reglink');
+  if(regMode==='external' && !/^https?:\/\//.test(regLink)){ _hhPgToast('أدخل رابط تسجيل صحيحاً يبدأ بـ https','error'); return; }
+  var prev=_hhPgGet(nid)||{};
+  var prog={ id:nid, type:v('pge-type'), status:v('pge-status'), name:name, desc:desc, features:v('pge-features'), goals:v('pge-goals'),
+    dateFrom:v('pge-from'), dateTo:v('pge-to'), place:v('pge-place'), audience:v('pge-aud'), ages:v('pge-ages'),
+    price:v('pge-price'), seats:parseInt(v('pge-seats')||'0',10)||0, regMode:regMode, regLink:regLink, img:v('pge-img'),
+    hidden:!!prev.hidden, confirmedCount:parseInt(prev.confirmedCount||0,10)||0, updatedAt:Date.now(), createdAt:prev.createdAt||Date.now() };
+  try{
+    var u=firebase.auth().currentUser; if(u) prog.by=u.uid;
+    await _hhPgDb().collection('custom_programs').doc(nid).set(prog,{merge:true});
+    _hhPgToast(isEdit?'حُفظت التعديلات':'أُضيف البرنامج','success');
+    var ov=document.getElementById('hh-pg-edit'); if(ov) ov.remove();
+    await hhPgLoad(true); hhPgRender(); hhPgAdmin();
+  }catch(e){ _hhPgToast('تعذر الحفظ · '+((e&&e.code)||''),'error'); }
+}
+async function hhPgToggleHide(id){
+  var p=_hhPgGet(id); if(!p) return;
+  try{ await _hhPgDb().collection('custom_programs').doc(id).set({hidden:!p.hidden, updatedAt:Date.now()},{merge:true}); await hhPgLoad(true); hhPgRender(); hhPgAdmin(); }
+  catch(e){ _hhPgToast('تعذر التحديث','error'); }
+}
+async function hhPgDelete(id){
+  var p=_hhPgGet(id); if(!p) return;
+  if(!confirm('حذف «'+(p.name||'')+'» نهائياً مع ملصقه؟ لا يمكن التراجع.')) return;
+  try{
+    await _hhPgDb().collection('custom_programs').doc(id).delete();
+    try{ if(p.img) await firebase.storage().ref('program_images/'+id).delete(); }catch(_e){}
+    ['hh-pg-edit','hh-pg-detail'].forEach(function(x){ var e=document.getElementById(x); if(e) e.remove(); });
+    await hhPgLoad(true); hhPgRender(); hhPgAdmin(); _hhPgToast('حُذف البرنامج','success');
+  }catch(e){ _hhPgToast('تعذر الحذف · '+((e&&e.code)||''),'error'); }
+}
+async function hhPgRegs(id){
+  if(!_hhPgAdmin()) return;
+  var p=_hhPgGet(id); if(!p) return;
+  var regs=[];
+  try{ var qs=await _hhPgDb().collection('program_registrations').where('programId','==',id).get(); qs.forEach(function(d){ var r=d.data(); r.id=d.id; regs.push(r); }); }
+  catch(e){ _hhPgToast('تعذر تحميل الطلبات · '+((e&&e.code)||''),'error'); return; }
+  regs.sort(function(a,b){ return (a.createdAt||0)-(b.createdAt||0); });
+  _hhPg.regs[id]=regs;
+  var conf=regs.filter(function(r){return r.status==='confirmed';}).length;
+  var rows=regs.map(function(r){
+    return '<tr><td style="text-align:right;">'+_hhPgEsc(r.studentName)+'<div style="font-size:.6rem;color:#8A7A63;">'+_hhPgEsc(r.school||'')+'</div></td><td>'+_hhPgEsc(r.grade||'')+'</td><td style="text-align:right;">'+_hhPgEsc(r.parentName||'')+'<div style="font-size:.6rem;color:#8A7A63;">'+_hhPgEsc(r.relation||'')+'</div></td><td dir="ltr">'+_hhPgEsc(r.phone||'')+'</td>'
+     +'<td>'+(r.status==='confirmed'?'<span class="hh-pg-pill c">مؤكد</span>':'<span class="hh-pg-pill y">بانتظار التأكيد</span>')+'</td>'
+     +'<td>'+(r.status==='confirmed'?'<button style="background:#EDE7DA;color:#8a7a63;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'pending\')">إلغاء</button>':'<button style="background:#E6F2EA;color:#2C5340;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'confirmed\')">تأكيد</button>')
+     +' <button style="background:#fff;border:1px solid #c0392b !important;color:#c0392b;" onclick="hhPgDelReg(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\')">حذف</button></td></tr>';
+  }).join('');
+  var html='<div class="hh-pg-note">'+regs.length+' طلباً · '+conf+' مؤكد'+(p.seats?(' · '+p.seats+' مقعداً'):'')+'<br>التأكيد يحجز المقعد ويُحدّث العدّاد على البطاقة.</div>'
+   +'<button class="hh-pg-save" style="margin:0 0 12px;background:linear-gradient(135deg,#8A6D2E,#5c4816);" onclick="hhPgCSV(\''+_hhPgEsc(id)+'\')">تصدير القائمة CSV</button>'
+   +(regs.length?'<div style="overflow-x:auto;"><table class="hh-pg-tbl"><thead><tr><th>الطالب</th><th>الصف</th><th>ولي الأمر</th><th>الجوال</th><th>الحالة</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+     :'<div style="text-align:center;color:#8A6D2E;font-weight:800;padding:18px;">لا طلبات بعد.</div>')
+   +(regs.some(function(r){return r.notes||r.email;})?'<div class="hh-pg-sec">ملاحظات وبريد</div>'+regs.filter(function(r){return r.notes||r.email;}).map(function(r){return '<div style="font-size:.72rem;color:#3D0918;font-weight:700;padding:5px 0;border-bottom:1px solid #EFE6D3;"><b>'+_hhPgEsc(r.studentName)+'</b>'+(r.email?' · <span dir="ltr">'+_hhPgEsc(r.email)+'</span>':'')+(r.notes?'<div style="color:#8A7A63;">'+_hhPgEsc(r.notes)+'</div>':'')+'</div>';}).join(''):'');
+  var old=document.getElementById('hh-pg-regs'); if(old) old.remove();
+  _hhPgBox('طلبات التسجيل', p.name, html, 'hh-pg-regs');
+}
+async function hhPgSetStatus(pid, rid, status){
+  if(!_hhPgAdmin()) return;
+  var p=_hhPgGet(pid); if(!p) return;
+  var regs=_hhPg.regs[pid]||[]; var r=regs.filter(function(x){return x.id===rid;})[0]; if(!r) return;
+  if(status==='confirmed' && _hhPgFull(p)){ if(!confirm('المقاعد مكتملة. تأكيد فوق العدد؟')) return; }
+  try{
+    var db=_hhPgDb(); var batch=db.batch();
+    batch.set(db.collection('program_registrations').doc(rid),{status:status, confirmedAt:(status==='confirmed'?Date.now():null)},{merge:true});
+    var delta=(status==='confirmed'?1:0)-(r.status==='confirmed'?1:0);
+    if(delta){ batch.set(db.collection('custom_programs').doc(pid),{confirmedCount:firebase.firestore.FieldValue.increment(delta)},{merge:true}); }
+    await batch.commit();
+    await hhPgLoad(true); hhPgRender(); hhPgRegs(pid);
+  }catch(e){ _hhPgToast('تعذر التحديث · '+((e&&e.code)||''),'error'); }
+}
+async function hhPgDelReg(pid, rid){
+  if(!_hhPgAdmin()) return;
+  var regs=_hhPg.regs[pid]||[]; var r=regs.filter(function(x){return x.id===rid;})[0]; if(!r) return;
+  if(!confirm('حذف طلب '+(r.studentName||'')+'؟')) return;
+  try{
+    var db=_hhPgDb(); var batch=db.batch();
+    batch.delete(db.collection('program_registrations').doc(rid));
+    if(r.status==='confirmed') batch.set(db.collection('custom_programs').doc(pid),{confirmedCount:firebase.firestore.FieldValue.increment(-1)},{merge:true});
+    await batch.commit(); await hhPgLoad(true); hhPgRender(); hhPgRegs(pid);
+  }catch(e){ _hhPgToast('تعذر الحذف','error'); }
+}
+function hhPgCSV(pid){
+  var p=_hhPgGet(pid)||{}; var regs=_hhPg.regs[pid]||[];
+  var head=['الطالب','الصف','المدرسة','ولي الأمر','صلة القرابة','الجوال','البريد','الحالة','ملاحظات','تاريخ الطلب'];
+  var q=function(s){ return '"'+String(s==null?'':s).replace(/"/g,'""')+'"'; };
+  var lines=[head.map(q).join(',')].concat(regs.map(function(r){ return [r.studentName,r.grade,r.school,r.parentName,r.relation,r.phone,r.email,(r.status==='confirmed'?'مؤكد':'بانتظار التأكيد'),r.notes,(r.createdAt?new Date(r.createdAt).toLocaleDateString('ar-QA'):'')].map(q).join(','); }));
+  var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='تسجيلات-'+(p.name||'برنامج').replace(/[\\/:*?"<>|]/g,' ')+'.csv'; document.body.appendChild(a); a.click(); setTimeout(function(){ a.remove(); URL.revokeObjectURL(a.href); },500);
+}
+
+// ── المدخل الموحد: زر «البرامج التربوية» في index.html يستدعي hhOpenLeaderPrograms() ──
+window.hhOpenLeaderPrograms = function(){ hhPgOpen(); };
+window.hhAdminAddProgram = function(editId){ if(!_hhPgAdmin()) return; hhPgOpen().then(function(){ hhPgEdit(editId||null); }); };
