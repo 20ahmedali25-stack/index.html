@@ -208,11 +208,23 @@ window.hhLvCSV=function(){
 function playerBoot(){
   var m=location.search.match(/[?&]join=([A-Za-z0-9]{4,8})/); if(!m) return;
   var code=m[1].toUpperCase(); style();
-  L.code=code; L.pid=localStorage.getItem('hh_lv_pid_'+code)||('p_'+Math.random().toString(36).slice(2,10)); L.pname=localStorage.getItem('hh_lv_name')||'';
+  L.code=code; L.pname=localStorage.getItem('hh_lv_name')||'';
   var ov=document.createElement('div'); ov.id='hh-pl'; document.body.appendChild(ov);
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
   playerRender('join');
-  try{ if(firebase.auth&&!firebase.auth().currentUser) firebase.auth().signInAnonymously().catch(function(){}); }catch(e){}
+  ensureAnon();
+}
+// تُرجِع هوية اللاعب (مجهولة) بعد اكتمال تسجيل الدخول · معرّف اللاعب = uid حتى تقبله القاعدة
+function ensureAnon(){
+  return new Promise(function(res){
+    try{
+      var cu=firebase.auth().currentUser; if(cu){ L.pid=cu.uid; return res(cu); }
+      var done=false;
+      firebase.auth().onAuthStateChanged(function(u){ if(u&&!done){ done=true; L.pid=u.uid; res(u); } });
+      firebase.auth().signInAnonymously().catch(function(e){ console.warn('anon sign-in:', e&&e.code); if(!done){ done=true; res(null); } });
+      setTimeout(function(){ if(!done){ done=true; var c=firebase.auth().currentUser; if(c) L.pid=c.uid; res(c||null); } }, 5000);
+    }catch(e){ res(null); }
+  });
 }
 function playerRender(mode, extra){
   var ov=document.getElementById('hh-pl'); if(!ov) return; var s=L.sess;
@@ -236,15 +248,25 @@ function playerRender(mode, extra){
 function playerRankHidden(){ var s=L.sess; if(!s) return true; var S=s.settings||{}; if(S.hideRank==='always') return true; if(S.hideRank==='last') return (s.total-(s.qIndex+1)) < (S.hideLastN||5); return false; }
 window.hhPlJoin=async function(){
   var nm=(document.getElementById('pl-name').value||'').trim().slice(0,30); if(!nm){ toastX('اكتب اسمك','info'); return; }
-  L.pname=nm; localStorage.setItem('hh_lv_name',nm); localStorage.setItem('hh_lv_pid_'+L.code,L.pid);
+  var btn=document.querySelector('#hh-pl .go'); if(btn){ btn.disabled=true; btn.textContent='جارٍ الانضمام…'; }
+  var u=await ensureAnon();
+  if(!u||!u.uid){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } toastX('تعذّر تجهيز الجلسة · فعّل الدخول المجهول في Firebase','error'); return; }
+  L.pid=u.uid; L.pname=nm; localStorage.setItem('hh_lv_name',nm);
   try{
-    var ref=db().collection('game_sessions').doc(L.code); var d=await ref.get(); if(!d.exists){ toastX('الرمز غير صحيح','error'); return; }
+    var ref=db().collection('game_sessions').doc(L.code); var d=await ref.get();
+    if(!d.exists){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } toastX('الرمز غير صحيح','error'); return; }
     if(d.data().state==='ended'){ playerRender('wait','انتهت هذه الجولة'); return; }
     await ref.collection('players').doc(L.pid).set({name:nm, joinedAt:Date.now()},{merge:true});
     playerRender('wait');
     if(L.unsub) L.unsub();
-    L.unsub=ref.onSnapshot(function(snap){ var prev=L.sess; L.sess=snap.data(); L.sess.code=L.code; playerOnState(prev); }, function(e){ playerRender('wait','انقطع الاتصال، أعد تحميل الصفحة'); });
-  }catch(e){ toastX('تعذر الانضمام · '+((e&&e.code)||''),'error'); }
+    L.unsub=ref.onSnapshot(function(snap){ if(!snap.exists) return; var prev=L.sess; L.sess=snap.data(); L.sess.code=L.code; playerOnState(prev); }, function(e){ playerRender('wait','انقطع الاتصال، أعد تحميل الصفحة'); });
+  }catch(e){
+    if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; }
+    var code=(e&&e.code)||''; var msg='تعذر الانضمام';
+    if(code.indexOf('permission')>-1) msg='تعذر الانضمام · تأكد من نشر قاعدة Firestore (zzzzzzk) وتفعيل الدخول المجهول';
+    else if(code) msg='تعذر الانضمام · '+code;
+    toastX(msg,'error'); playerRender('join'); var e2=document.getElementById('pl-name'); if(e2) e2.value=nm;
+  }
 }
 function playerOnState(prev){
   var s=L.sess; var key=s.state+':'+s.qIndex+':'+(s.qStartedAt||0);
