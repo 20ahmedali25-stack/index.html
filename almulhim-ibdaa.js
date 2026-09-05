@@ -61,14 +61,16 @@ function persist(g, now){
   g.updatedAt=Date.now(); saveLocal(); markDirty();
   clearTimeout(_ib.saveT);
   var doIt=async function(){
-    try{ var u=uid(); if(!u){ var e0=document.getElementById('ib-save'); if(e0){ e0.textContent='حُفظ محلياً · سجّل الدخول للمزامنة'; e0.style.color='#D4BC85'; } return; } g.ownerUid=u; try{ g.ownerEmail=firebase.auth().currentUser.email||''; }catch(e){}
+    var u=uid();
+    if(!u){ var e0=document.getElementById('ib-save'); if(e0){ e0.textContent='حُفظ على الجهاز · سجّل الدخول للمزامنة'; e0.style.color='#8A6D2E'; } return; }
+    try{ g.ownerUid=u; try{ g.ownerEmail=firebase.auth().currentUser.email||''; }catch(e){}
       await db().collection('games').doc(g.id).set(g,{merge:false}); markSaved(); }
-    catch(e){ markSaved(true); }
+    catch(e){ markSaved(true, (e&&e.code)); }
   };
   if(now) doIt(); else _ib.saveT=setTimeout(doIt, 500);
 }
 function markDirty(){ var e=document.getElementById('ib-save'); if(e){ e.textContent='جارٍ الحفظ…'; e.style.color='#8A6D2E'; } }
-function markSaved(err){ var e=document.getElementById('ib-save'); if(e){ e.textContent=err?'حُفظ محلياً · تعذّرت المزامنة':'حُفظ ✓'; e.style.color=err?'#c0392b':'#3D6B53'; } }
+function markSaved(err, code){ var e=document.getElementById('ib-save'); if(e){ e.textContent=err?('حُفظ على الجهاز · تعذّرت المزامنة'+(code&&code.indexOf('permission')>-1?' (انشر قاعدة Firestore)':'')):'حُفظ ✓'; e.style.color=err?'#c0392b':'#3D6B53'; } }
 
 /* ── الأنماط ── */
 function style(){
@@ -188,7 +190,7 @@ function undoBar(msg, onUndo, onCommit){
   d.querySelector('button').onclick=function(){ if(done) return; done=true; clearTimeout(t); d.remove(); onUndo&&onUndo(); };
   var host=document.getElementById('hh-ib'); if(host) host.appendChild(d);
 }
-window.hhIbRun=function(id){ var g=getGame(id); if(!g||!(g.questions||[]).length){ toastX('أضف أسئلة أولاً','info'); return; } if(typeof hhLiveHost==='function'){ close(); hhLiveHost(g); } else toastX('وحدة التشغيل المباشر غير محمّلة','error'); };
+window.hhIbRun=function(id){ var g=getGame(id); if(!g||!(g.questions||[]).length){ toastX('أضف أسئلة أولاً','info'); return; } if(!uid()){ toastX('سجّل الدخول بحساب المعلم لبدء جولة مباشرة','error'); return; } if(typeof hhLiveHost==='function'){ close(); hhLiveHost(g); } else toastX('وحدة التشغيل المباشر غير محمّلة · تأكد من رفع almulhim-live.js','error'); };
 
 /* ── المحرر ── */
 var LET=['أ','ب','ج','د']; var OC=['#8A1538','#3D6B53','#8A6D2E','#1F4E79']; var OS=['◆','●','▲','■'];
@@ -207,6 +209,7 @@ function renderEditor(){
   var left='<div class="pane"><div class="ph"><span>الأسئلة · '+qs.length+'</span><span style="display:flex;gap:6px;"><button class="tb" style="height:28px;padding:0 10px;font-size:.7rem;" onclick="hhIbImport()">'+ico('import',13)+' استيراد</button><button class="tb gold" style="height:28px;padding:0 10px;font-size:.7rem;" onclick="hhIbAddQ()">'+ico('plus',13)+' سؤال</button></span></div><div class="ql">'+(list||'<div class="hint" style="padding:10px;">لا أسئلة بعد</div>')+'</div></div>';
   var head='<div class="pane" style="margin-bottom:12px;"><div class="ph"><span>اللعبة</span><span style="display:flex;gap:6px;"><button class="tb" style="height:28px;padding:0 10px;font-size:.7rem;" onclick="hhIbSettings()">'+ico('gear',13)+' الإعدادات</button><button class="tb gold" style="height:28px;padding:0 10px;font-size:.7rem;" onclick="hhIbRun(\''+g.id+'\')">'+ico('play',13)+' تشغيل مباشر</button></span></div><div style="padding:12px 14px;"><div class="f" style="margin:0;"><label>عنوان اللعبة</label><input id="ibg-title" value="'+esc(g.title||'')+'"></div>'
     +'<div id="ibg-settings" style="display:none;margin-top:12px;border-top:1px dashed #EAD9B0;padding-top:12px;">'
+    +(g.template==='race'?'<div class="f"><label>نمط اللعبة</label><select id="ibs-mode"><option value="classic"'+((S.mode||'classic')==='classic'?' selected':'')+'>سباق كلاسيكي (نقاط بالسرعة)</option><option value="market"'+(S.mode==='market'?' selected':'')+'>السوق · اقتصاد (عملات وتعزيزات: مضاعف، درع، سطو)</option></select><div class="hint">في نمط السوق يفتح بين الأسئلة سوقٌ يشتري فيه اللاعب بعملاته: مضاعف ×2، درع يصدّ السطو، أو سطو 15% من محفظة المتصدر.</div></div>':'')
     +'<div class="g3"><div class="f"><label>الترتيب</label><select id="ibs-hide"><option value="never"'+(S.hideRank==='never'?' selected':'')+'>يظهر بعد كل سؤال</option><option value="last"'+(S.hideRank==='last'?' selected':'')+'>يُخفى في الأسئلة الأخيرة</option><option value="always"'+(S.hideRank==='always'?' selected':'')+'>مخفي حتى النهاية</option></select></div>'
     +'<div class="f"><label>عدد الأسئلة الأخيرة المخفية</label><input id="ibs-n" type="number" min="1" max="20" value="'+(S.hideLastN||5)+'"></div>'
     +'<div class="f"><label>النقاط</label><select id="ibs-scoring"><option value="speed"'+(S.scoring==='speed'?' selected':'')+'>بالسرعة (حتى 1000)</option><option value="fixed"'+(S.scoring==='fixed'?' selected':'')+'>ثابتة (1000 للصحيح)</option></select></div></div>'
@@ -234,7 +237,7 @@ function bindEditor(){
   var g=getGame(_ib.gameId); if(!g) return; var q=(g.questions||[])[_ib.qIdx];
   var on=function(id,ev,fn){ var e=document.getElementById(id); if(e) e.addEventListener(ev,fn); };
   on('ibg-title','input',function(e){ g.title=e.target.value; persist(g); });
-  ['ibs-hide','ibs-n','ibs-scoring','ibs-shq','ibs-sho','ibs-show'].forEach(function(id){ on(id,'change',function(){ readSettings(g); persist(g); }); });
+  ['ibs-hide','ibs-n','ibs-scoring','ibs-shq','ibs-sho','ibs-show','ibs-mode'].forEach(function(id){ on(id,'change',function(){ readSettings(g); persist(g); }); });
   if(!q) return;
   on('ibq-text','input',function(e){ q.q=e.target.value; persist(g); syncListItem(); });
   on('ibq-text','keydown',function(e){ if(e.ctrlKey&&e.key==='Enter'){ e.preventDefault(); addQuestion(); } });
@@ -244,7 +247,7 @@ function bindEditor(){
   on('ibq-flash','change',function(e){ q.flash=e.target.value==='1'; persist(g); syncListItem(); });
   on('ibq-note','input',function(e){ q.note=e.target.value; persist(g); });
 }
-function readSettings(g){ var v=function(id){ var e=document.getElementById(id); return e?e.value:null; }; g.settings=g.settings||{}; g.settings.hideRank=v('ibs-hide')||'last'; g.settings.hideLastN=parseInt(v('ibs-n')||'5',10)||5; g.settings.scoring=v('ibs-scoring')||'speed'; g.settings.shuffleQ=v('ibs-shq')==='1'; g.settings.shuffleOpts=v('ibs-sho')!=='0'; g.settings.showAnswerEach=v('ibs-show')!=='0'; }
+function readSettings(g){ var v=function(id){ var e=document.getElementById(id); return e?e.value:null; }; g.settings=g.settings||{}; g.settings.hideRank=v('ibs-hide')||'last'; g.settings.hideLastN=parseInt(v('ibs-n')||'5',10)||5; g.settings.scoring=v('ibs-scoring')||'speed'; g.settings.shuffleQ=v('ibs-shq')==='1'; g.settings.shuffleOpts=v('ibs-sho')!=='0'; g.settings.showAnswerEach=v('ibs-show')!=='0'; if(v('ibs-mode')!==null) g.settings.mode=v('ibs-mode'); }
 function syncListItem(){ var g=getGame(_ib.gameId); var q=g.questions[_ib.qIdx]; var items=document.querySelectorAll('#hh-ib .qi'); var it=items[_ib.qIdx]; if(!it) return; it.querySelector('.tx').textContent=q.q||'(سؤال فارغ)'; var tags=it.querySelectorAll('.tg'); tags.forEach(function(t){ t.remove(); }); if(q.mult>1){ var s=document.createElement('span'); s.className='tg x2'; s.textContent='×'+q.mult; it.appendChild(s); } if(q.flash){ var s2=document.createElement('span'); s2.className='tg'; s2.textContent='برق'; it.appendChild(s2); } var s3=document.createElement('span'); s3.className='tg'; s3.textContent=(q.type==='tf'?'صح/خطأ':'اختيار'); it.appendChild(s3); }
 window.hhIbQType=function(t){ var g=getGame(_ib.gameId); var q=g.questions[_ib.qIdx]; q.type=t; if(t==='tf'){ q.opts=['صح','خطأ']; q.correct=[(q.correct||[0])[0]<2?(q.correct||[0])[0]:0]; if(!q.time||q.time>15) q.time=10; } else { if(!q.opts||q.opts.length<4) q.opts=['','','','']; } persist(g); render(); };
 window.hhIbSettings=function(){ var e=document.getElementById('ibg-settings'); if(e) e.style.display=(e.style.display==='none')?'block':'none'; };
@@ -283,17 +286,23 @@ window.hhIbImportGo=function(){
 };
 
 /* ── زر «إبداع» في الشاشة الرئيسة والتنقل السفلي ── */
+var IB_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 5.3 5.8.5-4.4 3.8 1.3 5.7L12 14.3 7.1 17.3l1.3-5.7L4 7.8l5.8-.5z"/><path d="M5 21l2-2M19 21l-2-2"/></svg>';
 function injectEntry(){
   try{
-    if(document.getElementById('hh-ib-entry')) return;
-    var ref=document.querySelector('.hh-crown-btn[onclick="hhOpenLeaderPrograms()"]');
-    if(ref){ var b=document.createElement('button'); b.className='hh-crown-btn'; b.id='hh-ib-entry'; b.setAttribute('onclick','hhIbOpen()'); b.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 5.3 5.8.5-4.4 3.8 1.3 5.7L12 14.3 7.1 17.3l1.3-5.7L4 7.8l5.8-.5z"/><path d="M5 21l2-2M19 21l-2-2"/></svg><span>إبداع</span>'; ref.insertAdjacentElement('afterend',b); }
-    var nav=document.querySelector('.hh-nav-item[onclick="hhOpenLeaderPrograms()"]');
-    if(nav && !document.getElementById('hh-ib-nav')){ var n=nav.cloneNode(true); n.id='hh-ib-nav'; n.setAttribute('onclick','hhIbOpen()'); var sp=n.querySelector('span'); if(sp) sp.textContent='إبداع'; nav.insertAdjacentElement('afterend',n); }
+    // شريط الشاشة الرئيسة: زر إبداع مستقل بجانب البرامج التربوية (لكلٍّ بابه)
+    if(!document.getElementById('hh-ib-entry')){
+      var ref=document.querySelector('.hh-crown-btn[onclick="hhOpenLeaderPrograms()"]') || document.querySelector('.hh-crown-btn[onclick="hhSchoolEntry()"]');
+      if(ref){ var b=document.createElement('button'); b.className='hh-crown-btn'; b.id='hh-ib-entry'; b.setAttribute('onclick','hhIbOpen()'); b.innerHTML=IB_ICON+'<span>إبداع</span>'; ref.insertAdjacentElement('afterend',b); }
+    }
+    // شريط التنقل السفلي
+    if(!document.getElementById('hh-ib-nav')){
+      var nav=document.querySelector('.hh-nav-item[onclick="hhOpenLeaderPrograms()"]');
+      if(nav){ var n=nav.cloneNode(true); n.id='hh-ib-nav'; n.setAttribute('onclick','hhIbOpen()'); var sp=n.querySelector('.hh-nav-label,span:last-child'); if(sp) sp.textContent='إبداع'; var ic=n.querySelector('.hh-nav-icon'); if(ic) ic.innerHTML=IB_ICON; nav.insertAdjacentElement('afterend',n); }
+    }
   }catch(e){}
 }
+var _ibTries=0; var _ibIv=setInterval(function(){ injectEntry(); if((document.getElementById('hh-ib-entry')&&document.getElementById('hh-ib-nav')) || ++_ibTries>30) clearInterval(_ibIv); }, 800);
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', injectEntry); else injectEntry();
-setTimeout(injectEntry, 1500);
 
 window.hhIbOpen=function(v,id){ open(v,id); };
 window.hhIbRefresh=function(){ _ib.loaded=false; if(document.getElementById('hh-ib')) open(_ib.view); };
