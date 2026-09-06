@@ -214,16 +214,24 @@ function playerBoot(){
   playerRender('join');
   ensureAnon();
 }
-// تُرجِع هوية اللاعب (مجهولة) بعد اكتمال تسجيل الدخول · معرّف اللاعب = uid حتى تقبله القاعدة
+// هوية جهاز محلية ثابتة (تعمل على آيفون وكل جهاز حتى لو حُجب الدخول المجهول)
+function deviceId(){
+  var k='hh_lv_device';
+  try{ var v=localStorage.getItem(k); if(v) return v; v='d_'+Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem(k,v); return v; }
+  catch(e){ if(!window.__hhDev) window.__hhDev='d_'+Math.random().toString(36).slice(2,12); return window.__hhDev; }
+}
+// يجهّز الهوية دون أن يعلّق أبداً: يحاول الدخول المجهول بمهلة قصيرة، وإلا هوية الجهاز
 function ensureAnon(){
   return new Promise(function(res){
+    var done=function(pid){ if(res){ var r=res; res=null; L.pid=pid; r(pid); } };
     try{
-      var cu=firebase.auth().currentUser; if(cu){ L.pid=cu.uid; return res(cu); }
-      var done=false;
-      firebase.auth().onAuthStateChanged(function(u){ if(u&&!done){ done=true; L.pid=u.uid; res(u); } });
-      firebase.auth().signInAnonymously().catch(function(e){ console.warn('anon sign-in:', e&&e.code); if(!done){ done=true; res(null); } });
-      setTimeout(function(){ if(!done){ done=true; var c=firebase.auth().currentUser; if(c) L.pid=c.uid; res(c||null); } }, 5000);
-    }catch(e){ res(null); }
+      var cu=firebase.auth().currentUser; if(cu&&cu.uid){ return done(cu.uid); }
+      var settled=false;
+      try{ firebase.auth().onAuthStateChanged(function(u){ if(u&&u.uid&&!settled){ settled=true; done(u.uid); } }); }catch(e){}
+      try{ firebase.auth().signInAnonymously().then(function(c){ if(c&&c.user&&!settled){ settled=true; done(c.user.uid); } }).catch(function(e){ console.warn('anon sign-in blocked (iOS/Safari?):', e&&e.code); }); }catch(e){}
+      // مهلة قصيرة: إن لم تجهز هوية مجهولة، انضم بهوية الجهاز فوراً
+      setTimeout(function(){ if(!settled){ settled=true; var c=firebase.auth().currentUser; done((c&&c.uid)||deviceId()); } }, 2000);
+    }catch(e){ done(deviceId()); }
   });
 }
 function playerRender(mode, extra){
@@ -249,9 +257,8 @@ function playerRankHidden(){ var s=L.sess; if(!s) return true; var S=s.settings|
 window.hhPlJoin=async function(){
   var nm=(document.getElementById('pl-name').value||'').trim().slice(0,30); if(!nm){ toastX('اكتب اسمك','info'); return; }
   var btn=document.querySelector('#hh-pl .go'); if(btn){ btn.disabled=true; btn.textContent='جارٍ الانضمام…'; }
-  var u=await ensureAnon();
-  if(!u||!u.uid){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } toastX('تعذّر تجهيز الجلسة · فعّل الدخول المجهول في Firebase','error'); return; }
-  L.pid=u.uid; L.pname=nm; localStorage.setItem('hh_lv_name',nm);
+  var pid=await ensureAnon();
+  L.pid=pid||deviceId(); L.pname=nm; try{ localStorage.setItem('hh_lv_name',nm); }catch(e){}
   try{
     var ref=db().collection('game_sessions').doc(L.code); var d=await ref.get();
     if(!d.exists){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } toastX('الرمز غير صحيح','error'); return; }
