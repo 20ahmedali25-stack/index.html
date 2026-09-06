@@ -208,11 +208,10 @@ window.hhLvCSV=function(){
 function playerBoot(){
   var m=location.search.match(/[?&]join=([A-Za-z0-9]{4,8})/); if(!m) return;
   var code=m[1].toUpperCase(); style();
-  L.code=code; L.pname=localStorage.getItem('hh_lv_name')||'';
+  L.code=code; L.pname=localStorage.getItem('hh_lv_name')||''; L.pid=deviceId();
   var ov=document.createElement('div'); ov.id='hh-pl'; document.body.appendChild(ov);
   try{ document.body.classList.add('hh-immersive'); }catch(e){}
   playerRender('join');
-  ensureAnon();
 }
 // هوية جهاز محلية ثابتة (تعمل على آيفون وكل جهاز حتى لو حُجب الدخول المجهول)
 function deviceId(){
@@ -220,20 +219,8 @@ function deviceId(){
   try{ var v=localStorage.getItem(k); if(v) return v; v='d_'+Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem(k,v); return v; }
   catch(e){ if(!window.__hhDev) window.__hhDev='d_'+Math.random().toString(36).slice(2,12); return window.__hhDev; }
 }
-// يجهّز الهوية دون أن يعلّق أبداً: يحاول الدخول المجهول بمهلة قصيرة، وإلا هوية الجهاز
-function ensureAnon(){
-  return new Promise(function(res){
-    var done=function(pid){ if(res){ var r=res; res=null; L.pid=pid; r(pid); } };
-    try{
-      var cu=firebase.auth().currentUser; if(cu&&cu.uid){ return done(cu.uid); }
-      var settled=false;
-      try{ firebase.auth().onAuthStateChanged(function(u){ if(u&&u.uid&&!settled){ settled=true; done(u.uid); } }); }catch(e){}
-      try{ firebase.auth().signInAnonymously().then(function(c){ if(c&&c.user&&!settled){ settled=true; done(c.user.uid); } }).catch(function(e){ console.warn('anon sign-in blocked (iOS/Safari?):', e&&e.code); }); }catch(e){}
-      // مهلة قصيرة: إن لم تجهز هوية مجهولة، انضم بهوية الجهاز فوراً
-      setTimeout(function(){ if(!settled){ settled=true; var c=firebase.auth().currentUser; done((c&&c.uid)||deviceId()); } }, 2000);
-    }catch(e){ done(deviceId()); }
-  });
-}
+// لا مصادقة في مسار اللاعب: الانضمام بهوية الجهاز فقط (يعمل على آيفون بلا تعليق)
+function ensureAnon(){ return Promise.resolve(L.pid||deviceId()); }
 function playerRender(mode, extra){
   var ov=document.getElementById('hh-pl'); if(!ov) return; var s=L.sess;
   var top='<div class="top"><b>'+esc(L.pname||'سباق المُلهم المباشر')+'</b><span>'+(s?(esc(s.title)+' · الرمز '+esc(L.code)+(s.scores&&s.scores[L.pid]!=null&&!playerRankHidden()?' · '+s.scores[L.pid].toLocaleString('en-US')+' نقطة':'')):'انضم بالرمز '+esc(L.code))+'</span></div>';
@@ -257,20 +244,23 @@ function playerRankHidden(){ var s=L.sess; if(!s) return true; var S=s.settings|
 window.hhPlJoin=async function(){
   var nm=(document.getElementById('pl-name').value||'').trim().slice(0,30); if(!nm){ toastX('اكتب اسمك','info'); return; }
   var btn=document.querySelector('#hh-pl .go'); if(btn){ btn.disabled=true; btn.textContent='جارٍ الانضمام…'; }
-  var pid=await ensureAnon();
-  L.pid=pid||deviceId(); L.pname=nm; try{ localStorage.setItem('hh_lv_name',nm); }catch(e){}
+  L.pid=deviceId(); L.pname=nm; try{ localStorage.setItem('hh_lv_name',nm); }catch(e){}
+  var reset=function(){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } };
+  // حارس صارم: إن لم تكتمل الكتابة خلال 8 ثوانٍ، لا نبقى معلّقين
+  var guard=setTimeout(function(){ reset(); toastX('الاتصال بطيء · تأكد من الإنترنت وحاول ثانية','error'); playerRender('join'); var e0=document.getElementById('pl-name'); if(e0) e0.value=nm; }, 8000);
   try{
-    var ref=db().collection('game_sessions').doc(L.code); var d=await ref.get();
-    if(!d.exists){ if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; } toastX('الرمز غير صحيح','error'); return; }
-    if(d.data().state==='ended'){ playerRender('wait','انتهت هذه الجولة'); return; }
+    var ref=db().collection('game_sessions').doc(L.code);
+    // نكتب المستند مباشرة (upsert) دون قراءة مسبقة تتطلب مصادقة
     await ref.collection('players').doc(L.pid).set({name:nm, joinedAt:Date.now()},{merge:true});
+    clearTimeout(guard);
     playerRender('wait');
     if(L.unsub) L.unsub();
-    L.unsub=ref.onSnapshot(function(snap){ if(!snap.exists) return; var prev=L.sess; L.sess=snap.data(); L.sess.code=L.code; playerOnState(prev); }, function(e){ playerRender('wait','انقطع الاتصال، أعد تحميل الصفحة'); });
+    L.unsub=ref.onSnapshot(function(snap){ if(!snap.exists){ return; } var prev=L.sess; L.sess=snap.data(); L.sess.code=L.code; playerOnState(prev); }, function(e){ playerRender('wait','انقطع الاتصال، أعد تحميل الصفحة'); });
   }catch(e){
-    if(btn){ btn.disabled=false; btn.textContent='انضم إلى السباق'; }
+    clearTimeout(guard); reset();
     var code=(e&&e.code)||''; var msg='تعذر الانضمام';
-    if(code.indexOf('permission')>-1) msg='تعذر الانضمام · تأكد من نشر قاعدة Firestore (zzzzzzk) وتفعيل الدخول المجهول';
+    if(code.indexOf('permission')>-1) msg='تعذر الانضمام · انشر قاعدة Firestore الأخيرة (zzzzzzm)';
+    else if(code.indexOf('not-found')>-1) msg='الرمز غير صحيح';
     else if(code) msg='تعذر الانضمام · '+code;
     toastX(msg,'error'); playerRender('join'); var e2=document.getElementById('pl-name'); if(e2) e2.value=nm;
   }
