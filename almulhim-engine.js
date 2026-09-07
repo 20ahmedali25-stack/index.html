@@ -1382,11 +1382,12 @@ try {
   db=firebase.firestore();
   // ═══ العمل دون اتصال: يخزّن البيانات محلياً ويُزامن عند عودة النت ═══
   try{
-    db.enablePersistence({ synchronizeTabs: true }).then(function(){
+    // zzzzzzr: بلا synchronizeTabs · هو المسبّب الموثّق لـ INTERNAL ASSERTION FAILED عند تعدد الاستعلامات
+    db.enablePersistence().then(function(){
       _hhLog('العمل دون اتصال مُفعّل');
     }).catch(function(err){
-      // failed-precondition: عدة تبويبات · unimplemented: متصفح لا يدعم — كلاهما غير ضار
-      console.warn('العمل دون اتصال غير متاح:', err.code);
+      // failed-precondition: عدة تبويبات مفتوحة · unimplemented: متصفح لا يدعم · كلاهما غير ضار
+      _hhLog('العمل دون اتصال غير متاح:', err.code);
     });
   }catch(e){ console.warn('enablePersistence:', e.message); }
   auth.onAuthStateChanged(async user=>{
@@ -6601,7 +6602,7 @@ async function hhLoadTeacherDirectory(){
     var csnap=await db.collection('classes').limit(200).get();
     var classes=[]; csnap.forEach(function(d){ classes.push(Object.assign({id:d.id}, d.data())); });
     // النشاط
-    var asnap=await db.collection('platform_activity').orderBy('createdAt','desc').limit(400).get();
+    var asnap=await db.collection('platform_activity').limit(400).get();
     var acts=[]; asnap.forEach(function(d){ acts.push(d.data()); });
     // الشهادات
     var certs=[];
@@ -12662,9 +12663,9 @@ async function loadHomeReviews(){
   const defaultReview={id:'founder',name:'أحمد',stars:5,comment:'منصة رائعة جدا بارك الله جهدك',date:'20/4/2026',ts:0};
   try{
     if(!OFFLINE_MODE&&db){
-      const snapR = await db.collection('reviews').orderBy('ts','desc').limit(50).get();
+      const snapR = await db.collection('reviews').limit(50).get();
       const snapU = await db.collection('users').get();
-      reviews=snapR.docs.map(d=>({id:d.id,...d.data()}));
+      reviews=snapR.docs.map(d=>({id:d.id,...d.data()})); reviews.sort((a,b)=>(b.ts||0)-(a.ts||0));
       userCount=snapU.size;
     }else{
       reviews=JSON.parse(localStorage.getItem('hh_reviews')||'[]');
@@ -15707,12 +15708,13 @@ async function loadPermissionsPanel(){
   listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;font-family:Cairo;">جاري التحميل…</div>';
   try{
     const [snap, tSnap] = await Promise.all([
-      db.collection('users').orderBy('name').get(),
+      db.collection('users').get(),
       db.collection('teacher_requests').get().catch(()=>null)
     ]);
     const teachers = {};
     if(tSnap) tSnap.docs.forEach(d=>{ teachers[d.id] = (d.data()||{}).status || ''; });
     const users = snap.docs.map(d=>({id:d.id,...d.data()}));
+    users.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')); // zzzzzzr: الترتيب محلياً بدل orderBy (يتفادى انهيار Firestore عند غياب الحقل)
     window._hhPermUsers = users; window._hhPermTeachers = teachers;
     const editors  = users.filter(u=>u.canEditQuestions===true).length;
     const partners = users.filter(u=>u.canViewPartners===true).length;
@@ -16225,7 +16227,7 @@ async function renderProblemReports(filter){
   try{
     let reports = [];
     if(typeof firebase !== 'undefined' && firebase.firestore){
-      let q = firebase.firestore().collection('problem_reports').orderBy('createdAt','desc').limit(100);
+      let q = firebase.firestore().collection('problem_reports').limit(100);
       const snap = await q.get();
       snap.forEach(doc => reports.push({id: doc.id, ...doc.data()}));
     }
@@ -17546,8 +17548,8 @@ async function loadAdminPanel(){
       // تحميل التقييمات (للربط مع المستخدمين) · فشلها لا يمنع عرض المستخدمين
       let reviews=[];
       try{
-        const revSnap=await db.collection('reviews').orderBy('ts','desc').get();
-        reviews=revSnap.docs.map(d=>({id:d.id,...d.data()}));
+        const revSnap=await db.collection('reviews').get();
+        reviews=revSnap.docs.map(d=>({id:d.id,...d.data()})); reviews.sort((a,b)=>(b.ts||0)-(a.ts||0));
       }catch(eR){ _hhAdminShowLoadError('reviews', eR); }
       const _asRev = document.getElementById('as-reviews');
       if(_asRev) _asRev.textContent=reviews.length;
