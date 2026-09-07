@@ -278,7 +278,7 @@ function playerOnState(prev){
   else if(s.state==='rank'){ var sc=s.scores||{}; var arr=Object.keys(sc).sort(function(x,y){ return sc[y]-sc[x]; }); playerRender('rank',{hidden:playerRankHidden(), rank:arr.indexOf(L.pid)+1, n:arr.length, pts:sc[L.pid]||0}); }
   else if(s.state==='shop'){ playerRender('shop'); }
   else if(s.state==='paused') playerRender('paused');
-  else if(s.state==='ended'){ var sc2=s.scores||{}; var arr2=Object.keys(sc2).sort(function(x,y){ return sc2[y]-sc2[x]; }); playerRender('ended',{rank:arr2.indexOf(L.pid)+1||'—', n:arr2.length, pts:sc2[L.pid]||0}); }
+  else if(s.state==='ended'){ var sc2=s.scores||{}; var arr2=Object.keys(sc2).sort(function(x,y){ return sc2[y]-sc2[x]; }); playerRender('ended',{rank:arr2.indexOf(L.pid)+1||'·', n:arr2.length, pts:sc2[L.pid]||0}); }
 }
 window.hhPlBuy=async function(k){
   var s=L.sess; if(!s||s.state!=='shop') return; var target=s.qIndex+1; if(L.myShop[target]) return;

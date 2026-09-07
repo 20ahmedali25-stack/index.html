@@ -1053,7 +1053,7 @@
     var schoolBox='<div style="display:flex;gap:13px;align-items:center;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:15px;padding:13px 15px;">'
       +'<div style="width:64px;height:64px;border-radius:14px;border:2px '+(R.logo?'solid #B8924A':'dashed #B8924A')+';display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A6D2E;font-size:.52rem;font-weight:900;text-align:center;flex-shrink:0;background:#FBF5E9;overflow:hidden;">'+logoInner+'</div>'
       +'<div style="flex:1;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+(R.school?esc2(R.school):'اسم مدرستك لم يُضبط بعد')+'</div>'
-      +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:3px;">يظهر الشعار والاسم على كل شهادة وتقرير · المعلم: '+(R.teacher?esc2(R.teacher):'—')+' · المنسق: '+(R.coord?esc2(R.coord):'—')+'</div></div>'
+      +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:3px;">يظهر الشعار والاسم على كل شهادة وتقرير · المعلم: '+(R.teacher?esc2(R.teacher):'··')+' · المنسق: '+(R.coord?esc2(R.coord):'··')+'</div></div>'
       +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFDF8;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
       +'</div>';
     var isAdmin=(typeof hhIsAdmin==='function' && hhIsAdmin());

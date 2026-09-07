@@ -37,7 +37,7 @@
 
   // مستوى الطالب من المتوسط
   function levelOf(avg){
-    if(avg==null) return {t:'—',c:'#8A7A63'};
+    if(avg==null) return {t:'··',c:'#8A7A63'};
     if(avg>=85) return {t:'متميّز',c:'#3D6B53'};
     if(avg>=70) return {t:'جيد',c:'#8A6D2E'};
     if(avg>=50) return {t:'متوسط',c:'#B8924A'};
@@ -98,8 +98,8 @@
       var body=document.getElementById('hh-sf-body'); if(!body)return;
       if(tab==='overview'){
         body.innerHTML='<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px;">'
-          + statCard('المعدّل', stats.avg!=null?stats.avg+'%':'—', 'الدرجات', lvl.c)
-          + statCard('الحضور', stats.attRate!=null?stats.attRate+'%':'—', 'نسبة', '#3D6B53')
+          + statCard('المعدّل', stats.avg!=null?stats.avg+'%':'··', 'الدرجات', lvl.c)
+          + statCard('الحضور', stats.attRate!=null?stats.attRate+'%':'··', 'نسبة', '#3D6B53')
           + statCard('المشاركة', stats.participationCount, 'مرة', '#8A6D2E')
           + statCard('الاختبارات', stats.examCount, 'اختبار', '#1F4E79')
           +'</div>'
@@ -115,7 +115,7 @@
         var att=rec.attendance||[];
         body.innerHTML = sectionBox('سجل الحضور', att.length
           ? '<div style="display:flex;flex-direction:column;gap:7px;">'+att.slice(-20).reverse().map(function(a){
-              var m={present:['حاضر','#3D6B53'],absent:['غائب','#8A1538'],late:['متأخر','#B8924A'],excused:['مستأذن','#1F4E79']}[a.status]||['—','#8A7A63'];
+              var m={present:['حاضر','#3D6B53'],absent:['غائب','#8A1538'],late:['متأخر','#B8924A'],excused:['مستأذن','#1F4E79']}[a.status]||['··','#8A7A63'];
               return '<div style="display:flex;justify-content:space-between;align-items:center;background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:9px 12px;"><span style="font-size:.78rem;color:#5E0E26;font-weight:700;">'+esc2(a.date||'')+'</span><span style="font-size:.72rem;font-weight:900;color:'+m[1]+';">'+m[0]+'</span></div>';
             }).join('')+'</div>'
           : emptyState('لا سجل حضور بعد · يُسجَّل من دفتر المتابعة'));

@@ -67,11 +67,15 @@ async function loadGranted(){
     try{ var d=await db().collection('private_banks').doc(it.id).get(); if(d.exists){ var doc=d.data(); doc.id=it.id; register(doc,'grant'); } }catch(e){ /* لا صلاحية: لا أثر */ }
   }
 }
+async function refreshAll(){ await loadList(); await loadGranted(); scrub();
+  try{ if(typeof buildCatSelect==='function' && document.getElementById('cat-select')) buildCatSelect(); }catch(e){}
+}
 async function boot(){
   await loadList(); scrub();
   await loadGranted(); scrub();
-  try{ firebase.auth().onAuthStateChanged(function(u){ if(u){ loadGranted().then(scrub); } else { unregisterAll(); scrub(); } }); }catch(e){}
-  setTimeout(scrub, 3000); setTimeout(scrub, 8000);
+  // إعادة المحاولة عند وصول الجلسة (المصادقة غير متزامنة) وبعد فترات قصيرة لضمان الظهور
+  try{ firebase.auth().onAuthStateChanged(function(u){ if(u){ refreshAll(); } else { unregisterAll(); scrub(); } }); }catch(e){}
+  setTimeout(refreshAll, 1500); setTimeout(refreshAll, 4000); setTimeout(scrub, 8000);
   injectCodeButton(); injectAdminEntry();
 }
 
@@ -166,7 +170,7 @@ window.hhPrivImport=function(){
       // تنظيف النسخ القديمة من الفئات العامة والكاش المحلي
       try{ items.forEach(function(it){ if(typeof QDB==='object') delete QDB[it.cat]; }); if(typeof saveQDBToCloud==='function') await saveQDBToCloud(); }catch(e){}
       try{ var cc=JSON.parse(localStorage.getItem('hh_custom_cats')||'{}'); items.forEach(function(it){ delete cc[it.cat]; }); localStorage.setItem('hh_custom_cats',JSON.stringify(cc)); }catch(e){}
-      P.list=items; P.loaded={}; await loadGranted(); toastX('اكتمل الترحيل: '+items.length+' مسابقة خاصة','success'); hhPrivAdmin();
+      P.list=items; P.loaded={}; await refreshAll(); toastX('اكتمل الترحيل: '+items.length+' مسابقة خاصة · ظهرت الآن في المسابقات','success'); hhPrivAdmin();
     }catch(e){ toastX('تعذر الاستيراد · '+((e&&e.message)||''),'error'); }
   }; r.readAsText(f);
 };

@@ -1,4 +1,6 @@
 
+// zzzzzzo: تسجيل تشخيصي صامت في الإنتاج · يظهر فقط عند ضبط localStorage.hh_debug=1
+var _hhLog=(function(){ try{ return localStorage.getItem('hh_debug')==='1'; }catch(e){ return false; } })() ? console.log.bind(console) : function(){};
 var SUPER_ADMIN_EMAILS = ["20ahmedali25@gmail.com"]; // أضف بريد أدمن احتياطي هنا وفي قواعد Firestore معاً
 var SUPER_ADMIN_EMAIL = SUPER_ADMIN_EMAILS[0];
 
@@ -312,7 +314,7 @@ function _loadQDB(){
       localStorage.removeItem('hh_qdb_override');
       localStorage.removeItem('hh_qdb_modified_at');
       localStorage.setItem('hh_qdb_version', CURRENT_VERSION);
-      console.log('تم تحديث قاعدة الأسئلة للنسخة:', CURRENT_VERSION);
+      _hhLog('تم تحديث قاعدة الأسئلة للنسخة:', CURRENT_VERSION);
       return _hhApplyExtOverrides(JSON.parse(JSON.stringify(QDB_ORIGINAL)));
     }
     
@@ -614,7 +616,7 @@ function _hh_initQDB(){
               return;
             }
             // أي تعديل من Firestore → نعيد التحميل
-            console.log('تحديث الأسئلة من السحابة...');
+            _hhLog('تحديث الأسئلة من السحابة...');
             Promise.resolve(typeof _hhLoadExtOverridesFromCloud==='function' ? _hhLoadExtOverridesFromCloud() : null).then(()=> loadQDBFromCloud().then(updated => {
               if(updated){
                 if(typeof buildCatSelect === 'function'){
@@ -1370,7 +1372,7 @@ try {
         new firebase.appCheck.ReCaptchaV3Provider(APP_CHECK_SITE_KEY),
         true // isTokenAutoRefreshEnabled
       );
-      console.log('App Check مُفعّل');
+      _hhLog('App Check مُفعّل');
     }
   } catch(e) {
     console.warn('App Check تعذر تفعيله:', e.message);
@@ -1381,7 +1383,7 @@ try {
   // ═══ العمل دون اتصال: يخزّن البيانات محلياً ويُزامن عند عودة النت ═══
   try{
     db.enablePersistence({ synchronizeTabs: true }).then(function(){
-      console.log('العمل دون اتصال مُفعّل');
+      _hhLog('العمل دون اتصال مُفعّل');
     }).catch(function(err){
       // failed-precondition: عدة تبويبات · unimplemented: متصفح لا يدعم — كلاهما غير ضار
       console.warn('العمل دون اتصال غير متاح:', err.code);
@@ -7302,7 +7304,7 @@ async function hhGBSchoolScores(){
     if(!rows) rows='<div style="text-align:center;color:#8A7A63;font-weight:800;font-size:.82rem;padding:16px;">لا درجات اختبارات مسجلة بعد</div>';
     var head='<div style="display:grid;grid-template-columns:1fr 74px 74px;gap:6px;padding:0 11px 6px;color:#8A6D2E;font-weight:900;font-size:.66rem;"><span>الدرس</span><span style="text-align:center;">سريع</span><span style="text-align:center;">شامل</span></div>';
     hhGBScoresModal('درجات مدرستي · '+esc(s.name), head+rows);
-  }catch(e){ if(typeof toast==='function') toast('تعذر الجلب — تحقق من الاتصال والصلاحيات','warn'); }
+  }catch(e){ if(typeof toast==='function') toast('تعذر الجلب · تحقق من الاتصال والصلاحيات','warn'); }
 }
 function hhGBScoresModal(title, html){
   if(typeof hhSchModal==='function'){ hhSchModal(title, html, '#8A1538'); return; }
@@ -14637,7 +14639,7 @@ async function hhHandleImageUpload(event){
     const sizeKB = Math.round(compressed.length * 0.75 / 1024);
     document.getElementById('aq-image-size').textContent = viaStorage ? ('✓ Storage · '+sizeKB+' KB') : (sizeKB + ' KB');
     
-    if(typeof toast === 'function') toast(viaStorage ? 'رُفعت الصورة إلى Storage · حُفظ الرابط فقط' : 'تم حفظ الصورة (مضغوطة محلياً — فعّل Storage للأفضل)', 'success');
+    if(typeof toast === 'function') toast(viaStorage ? 'رُفعت الصورة إلى Storage · حُفظ الرابط فقط' : 'تم حفظ الصورة (مضغوطة محلياً · فعّل Storage للأفضل)', 'success');
   }catch(e){
     console.error('خطأ في معالجة الصورة:', e);
     if(typeof toast === 'function') toast('تعذرت معالجة الصورة: ' + e.message, 'error');
@@ -18415,7 +18417,7 @@ async function _hh_saveCustomizationsToCloud(){
       updated_at: Date.now()
     };
     await db.collection('platform_settings').doc('admin_customizations').set(payload);
-    console.log(' مزامنة: حُفظت التخصيصات في السحابة بنجاح', payload.cat_colors);
+    _hhLog(' مزامنة: حُفظت التخصيصات في السحابة بنجاح', payload.cat_colors);
     if(typeof toast === 'function') toast('✓ تمت المزامنة للسحابة','success');
     return true;
   }catch(e){
@@ -18437,7 +18439,7 @@ async function loadCustomizationsFromCloud(){
     if(!doc.exists){ console.warn(' تحميل: لا توجد تخصيصات في السحابة بعد (لم يحفظ الأدمن شيئاً)'); return; }
     const data = doc.data();
     if(!data){ console.warn(' تحميل: الوثيقة فارغة'); return; }
-    console.log(' تحميل: وصلت التخصيصات من السحابة', data.cat_colors);
+    _hhLog(' تحميل: وصلت التخصيصات من السحابة', data.cat_colors);
     // تطبيق الفئات المخفية
     if(Array.isArray(data.hidden_cats)){
       localStorage.setItem('hh_hidden_cats', JSON.stringify(data.hidden_cats));
@@ -21911,3 +21913,29 @@ var _origPopulateAQ_g = populateAQCatSelect;
 populateAQCatSelect = function(){ _hhAQEnsureControls(); return _origPopulateAQ_g.apply(this, arguments); };
 var _origLoadAQ_g = loadAdminCatQuestions;
 loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); try{ _hhAQEnsureControls(); _hhAQRefreshSubs(_aqCurrentCat); }catch(e){} return r; };
+
+// ═══════════════════════════════════════════════════════════════════
+//  مؤشر الاتصال (zzzzzzo) · شريط لطيف يظهر عند انقطاع النت ويختفي بعودته
+//  يحوّل الأخطاء الصامتة إلى إشارة مرئية للمستخدم بهوية المُلهم
+// ═══════════════════════════════════════════════════════════════════
+(function(){
+  if(window._hhNetInit) return; window._hhNetInit=true;
+  function bar(){
+    var b=document.getElementById('hh-net-bar');
+    if(!b){ b=document.createElement('div'); b.id='hh-net-bar';
+      b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:100000;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#EAD9B0;font-family:Cairo,sans-serif;font-weight:800;font-size:.8rem;text-align:center;padding:8px 14px;box-shadow:0 3px 12px rgba(42,8,16,.35);border-bottom:2px solid #B8924A;transform:translateY(-100%);transition:transform .3s;display:flex;align-items:center;justify-content:center;gap:8px;';
+      b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 1l22 22M16.7 11.3a6 6 0 0 0-3-1.6M5 12.5a10 10 0 0 1 5.2-2.7M2 8.8a15 15 0 0 1 4.2-2.5M8.5 16.4a5 5 0 0 1 7 0M12 20h.01"/></svg><span>لا يوجد اتصال بالإنترنت · بعض الميزات تعمل محلياً حتى عودة الشبكة</span>';
+      document.body.appendChild(b);
+    }
+    return b;
+  }
+  function show(){ var b=bar(); requestAnimationFrame(function(){ b.style.transform='translateY(0)'; }); }
+  function hide(){ var b=document.getElementById('hh-net-bar'); if(b) b.style.transform='translateY(-100%)'; }
+  window.addEventListener('offline', show);
+  window.addEventListener('online', function(){
+    var b=bar(); b.style.background='linear-gradient(135deg,#3D6B53,#2C5340)';
+    b.querySelector('span').textContent='عاد الاتصال · تتم المزامنة الآن';
+    show(); setTimeout(function(){ hide(); setTimeout(function(){ b.style.background='linear-gradient(135deg,#8A1538,#5E0E26)'; b.querySelector('span').textContent='لا يوجد اتصال بالإنترنت · بعض الميزات تعمل محلياً حتى عودة الشبكة'; },400); }, 2200);
+  });
+  if(navigator && navigator.onLine===false) setTimeout(show, 1200);
+})();

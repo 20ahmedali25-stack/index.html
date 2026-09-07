@@ -1218,14 +1218,14 @@ function hhSchoolHub(){
     +    '<div id="hh-hub-sub" class="hh-campus-sub">'+(role==='student'?'كل درس رحلة على الخريطة · وكل مفهوم تُتقنه راية على قلعتك':'جارٍ تحميل صفوفك…')+'</div>'
     +    (role==='student'
         ? '<div class="hh-campus-stats">'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">—</div></div>'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">نقاط الرحلات</div><div class="hh-campus-stat-n" id="hh-campus-n-pts">—</div></div>'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">رايات مرفوعة</div><div class="hh-campus-stat-n" id="hh-campus-n-flags">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">··</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">نقاط الرحلات</div><div class="hh-campus-stat-n" id="hh-campus-n-pts">··</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">رايات مرفوعة</div><div class="hh-campus-stat-n" id="hh-campus-n-flags">··</div></div>'
           +'</div>'
         : '<div class="hh-campus-stats">'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">صفوف حية</div><div class="hh-campus-stat-n" id="hh-campus-n-classes">—</div></div>'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">طلاب مرتبطون</div><div class="hh-campus-stat-n" id="hh-campus-n-students">—</div></div>'
-          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">—</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">صفوف حية</div><div class="hh-campus-stat-n" id="hh-campus-n-classes">··</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">طلاب مرتبطون</div><div class="hh-campus-stat-n" id="hh-campus-n-students">··</div></div>'
+          +'<div class="hh-campus-stat"><div class="hh-campus-stat-l">وحدات متقنة</div><div class="hh-campus-stat-n" id="hh-campus-n-units">··</div></div>'
           +'</div>')
     +    '<div id="hh-campus-resume"></div>'
     +    (role==='student'
@@ -1359,7 +1359,7 @@ function hhCampusResume(){
 }
 function hhCampusRenderUnits(){
   var n=document.getElementById('hh-campus-n-units'); if(!n) return;
-  try{ var S=hhSchData(); hhSchLoad(); var done=0; if(S&&S.units) S.units.forEach(function(u,i){ if(hhSchUnitState(i)==='done') done++; }); n.textContent=done+(S&&S.units?' / '+S.units.length:''); }catch(e){ n.textContent='—'; }
+  try{ var S=hhSchData(); hhSchLoad(); var done=0; if(S&&S.units) S.units.forEach(function(u,i){ if(hhSchUnitState(i)==='done') done++; }); n.textContent=done+(S&&S.units?' / '+S.units.length:''); }catch(e){ n.textContent='··'; }
 }
 
 // ═══ معاينة الأدوات المقفلة للمعلم غير المعتمد (عرض فقط) ═══
@@ -1410,7 +1410,7 @@ async function hhCampusLoadMyClass(){
     if(qs.empty){ put(joinForm()); return; }
     var h=''; qs.forEach(function(d){ var c=d.data();
       h+='<div class="hh-campus-card hh-campus-class"><div class="hh-campus-card-t">'+esc(c.className||c.classCode)+'</div>'
-        +'<div class="hh-campus-card-d">'+(c.schoolName?esc(c.schoolName)+' · ':'')+'المعلم: '+esc(c.teacherName||'—')+' · الرمز <b class="hh-campus-code">'+esc(c.classCode)+'</b></div>'
+        +'<div class="hh-campus-card-d">'+(c.schoolName?esc(c.schoolName)+' · ':'')+'المعلم: '+esc(c.teacherName||'غير محدد')+' · الرمز <b class="hh-campus-code">'+esc(c.classCode)+'</b></div>'
         +'<div class="hh-campus-card-btns"><button type="button" class="hh-campus-btn-maroon" onclick="hhHubGo(\'school\')">'+_hhCampusIco('play',13)+' تابع رحلتي</button><button type="button" class="hh-campus-btn-line" onclick="hhHubGo(\'achievements\')">إنجازاتي</button></div></div>'; });
     put(h);
   }catch(e){ put('<div class="hh-campus-empty"><div class="hh-campus-empty-t">تعذر التحقق من صفك · تحقق من الاتصال</div><button type="button" onclick="hhCampusLoadMyClass()" class="hh-campus-btn-line" style="margin-top:10px;">'+_hhCampusIco('refresh',13)+' أعد المحاولة</button></div>'); }
