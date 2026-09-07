@@ -1380,16 +1380,10 @@ try {
   
   auth=firebase.auth();
   db=firebase.firestore();
-  // ═══ العمل دون اتصال: يخزّن البيانات محلياً ويُزامن عند عودة النت ═══
-  try{
-    // zzzzzzr: بلا synchronizeTabs · هو المسبّب الموثّق لـ INTERNAL ASSERTION FAILED عند تعدد الاستعلامات
-    db.enablePersistence().then(function(){
-      _hhLog('العمل دون اتصال مُفعّل');
-    }).catch(function(err){
-      // failed-precondition: عدة تبويبات مفتوحة · unimplemented: متصفح لا يدعم · كلاهما غير ضار
-      _hhLog('العمل دون اتصال غير متاح:', err.code);
-    });
-  }catch(e){ console.warn('enablePersistence:', e.message); }
+  // ═══ zzzzzzs: أُزيل enablePersistence نهائياً ═══
+  // كان المسبّب الجذري لخطأ FIRESTORE INTERNAL ASSERTION FAILED الذي يُعطّل لوحة التحكم
+  // والإعدادات السحابية واللعب المباشر والمسابقات الخاصة عند تعدد الاستعلامات.
+  // المنصة تعمل أونلاين مباشرةً؛ لا تخزين محلي لطبقة Firestore (لا حاجة له في بيئة مدرسية متصلة).
   auth.onAuthStateChanged(async user=>{
     try{ if(user) setTimeout(()=>{ try{ hhLoadNotifications(); }catch(_){} }, 2500); }catch(_e){}
     // zzzzzzb: الدور المحفوظ يُطبَّق فوراً ثم يُتحقق منه سحابياً خلال أجزاء من الثانية بدل 1.8 ثانية
@@ -21940,4 +21934,23 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     show(); setTimeout(function(){ hide(); setTimeout(function(){ b.style.background='linear-gradient(135deg,#8A1538,#5E0E26)'; b.querySelector('span').textContent='لا يوجد اتصال بالإنترنت · بعض الميزات تعمل محلياً حتى عودة الشبكة'; },400); }, 2200);
   });
   if(navigator && navigator.onLine===false) setTimeout(show, 1200);
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+//  حارس Firestore (zzzzzzs) · يمنع خطأ INTERNAL ASSERTION من تعطيل الجلسة
+//  إن ظهر الخطأ الداخلي (نادر) نُنهي المستمعين ونعيد التهيئة بدل انهيار الصفحة
+// ═══════════════════════════════════════════════════════════════════
+(function(){
+  if(window._hhFsGuard) return; window._hhFsGuard=true;
+  window.addEventListener('unhandledrejection', function(ev){
+    try{
+      var m=(ev && ev.reason && (ev.reason.message||String(ev.reason)))||'';
+      if(m.indexOf('INTERNAL ASSERTION')>-1 || m.indexOf('Unexpected state')>-1){
+        console.warn('Firestore assertion caught · محاولة تعافٍ');
+        ev.preventDefault && ev.preventDefault();
+        // إعادة تهيئة مرجع db دون إعادة تحميل الصفحة
+        try{ if(window.firebase && firebase.firestore){ window.db=firebase.firestore(); } }catch(e){}
+      }
+    }catch(e){}
+  });
 })();
