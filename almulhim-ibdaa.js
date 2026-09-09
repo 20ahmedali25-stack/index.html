@@ -16,8 +16,8 @@ var TEMPLATES=[
   {id:'race', name:'سباق المُلهم المباشر', kind:'live', ready:true, ico:'bolt', bg:'linear-gradient(135deg,#8A1538,#5E0E26)', desc:'باركود وهواتف الطلاب، نقاط بالسرعة، سؤال بدرجة مضاعفة، إخفاء الترتيب حتى النهاية.'},
   {id:'tf', name:'صح أم خطأ السريع', kind:'live', ready:true, ico:'check', bg:'linear-gradient(135deg,#3D6B53,#2C5340)', desc:'جولات خاطفة من عبارات صح أو خطأ، زمن قصير، مناسبة لتهيئة الحصة.'},
   {id:'weekly', name:'تحدي الأسبوع', kind:'async', ready:false, ico:'target', bg:'linear-gradient(135deg,#4A0B1E,#2A0810)', desc:'اختبار برابط ومهلة، يُحل من البيت، والنتائج تدخل ملف الطالب ودفتر المتابعة.'},
-  {id:'cloud', name:'سحابة الكلمات', kind:'live', ready:false, ico:'cloud', bg:'linear-gradient(135deg,#8A6D2E,#5c4816)', desc:'سؤال مفتوح تتجمع إجاباته سحابةً على الشاشة. للعصف الذهني والتقويم القبلي.'},
-  {id:'order', name:'رتّب وصنّف', kind:'live', ready:false, ico:'sort', bg:'linear-gradient(135deg,#1F4E79,#132f4a)', desc:'سحب العناصر لترتيب زمني أو تصنيف في مجموعات. للتاريخ والجغرافيا.'},
+  {id:'cloud', name:'سحابة الكلمات', kind:'live', ready:true, ico:'cloud', bg:'linear-gradient(135deg,#8A6D2E,#5c4816)', desc:'سؤال مفتوح تتجمع إجاباته سحابةً على الشاشة. للعصف الذهني والتقويم القبلي.'},
+  {id:'order', name:'رتّب وصنّف', kind:'live', ready:true, ico:'sort', bg:'linear-gradient(135deg,#1F4E79,#132f4a)', desc:'سحب العناصر لترتيب زمني أو تصنيف في مجموعات. للتاريخ والجغرافيا.'},
   {id:'cards', name:'بطاقات المراجعة', kind:'async', ready:false, ico:'grid', bg:'linear-gradient(135deg,#7A1330,#4A0B1E)', desc:'بطاقات مصطلحات من الدرس يراجعها الطالب بنظام التكرار المتباعد.'}
 ];
 
@@ -194,7 +194,11 @@ window.hhIbRun=function(id){ var g=getGame(id); if(!g||!(g.questions||[]).length
 
 /* ── المحرر ── */
 var LET=['أ','ب','ج','د']; var OC=['#8A1538','#3D6B53','#8A6D2E','#1F4E79']; var OS=['◆','●','▲','■'];
-function blankQ(g){ var tf=(g.template==='tf'); return { id:newId('q'), type:tf?'tf':'mcq', q:'', opts:tf?['صح','خطأ']:['','','',''], correct:[0], time:(g.settings&&g.settings.defaultTime)||20, mult:1, flash:false, note:'' }; }
+function blankQ(g){
+  if(g.template==='cloud'){ return { id:newId('q'), type:'poll', q:'', opts:[], correct:[], time:(g.settings&&g.settings.defaultTime)||30, mult:1, flash:false, note:'' }; }
+  if(g.template==='order'){ return { id:newId('q'), type:'order', q:'', opts:['','',''], correct:[0,1,2], time:(g.settings&&g.settings.defaultTime)||30, mult:1, flash:false, note:'' }; }
+  var tf=(g.template==='tf'); return { id:newId('q'), type:tf?'tf':'mcq', q:'', opts:tf?['صح','خطأ']:['','','',''], correct:[0], time:(g.settings&&g.settings.defaultTime)||20, mult:1, flash:false, note:'' };
+}
 function addQuestion(){ var g=getGame(_ib.gameId); if(!g) return; g.questions=g.questions||[]; g.questions.push(blankQ(g)); _ib.qIdx=g.questions.length-1; persist(g); render(); setTimeout(function(){ var e=document.getElementById('ibq-text'); if(e) e.focus(); },50); }
 window.hhIbAddQ=addQuestion;
 window.hhIbSel=function(i){ _ib.qIdx=i; render(); };
@@ -220,11 +224,21 @@ function renderEditor(){
   var body;
   if(!q){ body='<div class="empty">أضف أول سؤال من الزر أعلاه.</div>'; }
   else{
-    var opts=(q.type==='tf')?['صح','خطأ']:(q.opts||['','','','']);
+    var isPoll=(q.type==='poll'), isOrder=(q.type==='order');
+    var opts=(q.type==='tf')?['صح','خطأ']:(q.opts||(isPoll?['']:['','','','']));
+    var optLabel = isPoll ? 'إجابات مقترحة (اختياري · تظهر كتلميح فقط)' : isOrder ? 'العناصر بالترتيب الصحيح (اسحبها لاحقاً على الشاشة)' : 'البدائل · علّم الصحيح (يمكن أكثر من واحد)';
     body='<div class="pane"><div class="ph"><span>السؤال '+(_ib.qIdx+1)+'</span><span style="display:flex;gap:6px;"><button class="tb" style="height:28px;padding:0 8px;" title="أعلى" onclick="hhIbMove('+_ib.qIdx+',-1)">'+ico('up',13)+'</button><button class="tb" style="height:28px;padding:0 8px;" title="أسفل" onclick="hhIbMove('+_ib.qIdx+',1)">'+ico('down',13)+'</button><button class="tb" style="height:28px;padding:0 8px;" title="نسخ" onclick="hhIbDupQ('+_ib.qIdx+')">'+ico('copy',13)+'</button><button class="tb" style="height:28px;padding:0 8px;color:#f5b7b1;" title="حذف" onclick="hhIbDelQ('+_ib.qIdx+')">'+ico('trash',13)+'</button></span></div><div style="padding:12px 14px;">'
-    +'<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;"><span class="chip '+(q.type==='mcq'?'on':'')+'" onclick="hhIbQType(\'mcq\')">اختيار من متعدد</span><span class="chip '+(q.type==='tf'?'on':'')+'" onclick="hhIbQType(\'tf\')">صح أم خطأ</span></div>'
+    +((isPoll||isOrder)?'<div style="display:flex;gap:6px;margin-bottom:10px;"><span class="chip on">'+(isPoll?'سحابة كلمات (سؤال مفتوح)':'رتّب العناصر')+'</span></div>':'<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;"><span class="chip '+(q.type==='mcq'?'on':'')+'" onclick="hhIbQType(\'mcq\')">اختيار من متعدد</span><span class="chip '+(q.type==='tf'?'on':'')+'" onclick="hhIbQType(\'tf\')">صح أم خطأ</span></div>')
     +'<div class="f"><label>نص السؤال</label><textarea id="ibq-text" placeholder="اكتب السؤال كما سيظهر على الشاشة">'+esc(q.q||'')+'</textarea></div>'
-    +'<div class="f"><label>البدائل · علّم الصحيح (يمكن أكثر من واحد)</label>'+opts.map(function(o,i){ return '<div class="opt"><i style="background:'+OC[i]+'">'+OS[i]+'</i><input type="text" id="ibq-o'+i+'" value="'+esc(o)+'" placeholder="البديل '+LET[i]+'" '+(q.type==='tf'?'readonly':'')+'><label class="ok"><input type="checkbox" id="ibq-c'+i+'" '+((q.correct||[]).indexOf(i)>-1?'checked':'')+'> صحيح</label></div>'; }).join('')+'</div>'
+    +'<div class="f"><label>'+optLabel+'</label>'+ (function(){
+      var arr = (isPoll ? (opts.length?opts:['']) : opts);
+      return arr.map(function(o,i){
+        var num = isOrder ? ('<i style="background:linear-gradient(135deg,#1F4E79,#132f4a)">'+(i+1)+'</i>') : ('<i style="background:'+OC[i]+'">'+OS[i]+'</i>');
+        var chk = (isPoll||isOrder) ? '' : '<label class="ok"><input type="checkbox" id="ibq-c'+i+'" '+((q.correct||[]).indexOf(i)>-1?'checked':'')+'> صحيح</label>';
+        var ph = isPoll ? ('إجابة مقترحة '+(i+1)) : isOrder ? ('العنصر '+(i+1)) : ('البديل '+LET[i]);
+        return '<div class="opt"><span></span>'.replace('<span></span>',num)+'<input type="text" id="ibq-o'+i+'" value="'+esc(o)+'" placeholder="'+ph+'" '+(q.type==='tf'?'readonly':'')+'>'+chk+'</div>';
+      }).join('') + ((isPoll||isOrder)?'<button onclick="hhIbAddOpt()" style="margin-top:4px;background:#fff;border:1.5px solid #B8924A;color:#8A6D2E;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">+ عنصر</button>':'');
+    })()+'</div>'
     +'<div class="g3"><div class="f"><label>الزمن (ثانية)</label><select id="ibq-time">'+[5,8,10,15,20,30,45,60,90,120].map(function(t){ return '<option value="'+t+'"'+(q.time==t?' selected':'')+'>'+t+'</option>'; }).join('')+'</select></div>'
     +'<div class="f"><label>مضاعف النقاط</label><select id="ibq-mult"><option value="1"'+(q.mult==1?' selected':'')+'>عادي ×1</option><option value="2"'+(q.mult==2?' selected':'')+'>مضاعف ×2</option><option value="3"'+(q.mult==3?' selected':'')+'>ثلاثي ×3</option></select></div>'
     +'<div class="f"><label>سؤال البرق</label><select id="ibq-flash"><option value="0"'+(!q.flash?' selected':'')+'>لا</option><option value="1"'+(q.flash?' selected':'')+'>نعم · نصف الزمن وضعف النقاط</option></select></div></div>'
@@ -249,6 +263,7 @@ function bindEditor(){
 }
 function readSettings(g){ var v=function(id){ var e=document.getElementById(id); return e?e.value:null; }; g.settings=g.settings||{}; g.settings.hideRank=v('ibs-hide')||'last'; g.settings.hideLastN=parseInt(v('ibs-n')||'5',10)||5; g.settings.scoring=v('ibs-scoring')||'speed'; g.settings.shuffleQ=v('ibs-shq')==='1'; g.settings.shuffleOpts=v('ibs-sho')!=='0'; g.settings.showAnswerEach=v('ibs-show')!=='0'; if(v('ibs-mode')!==null) g.settings.mode=v('ibs-mode'); }
 function syncListItem(){ var g=getGame(_ib.gameId); var q=g.questions[_ib.qIdx]; var items=document.querySelectorAll('#hh-ib .qi'); var it=items[_ib.qIdx]; if(!it) return; it.querySelector('.tx').textContent=q.q||'(سؤال فارغ)'; var tags=it.querySelectorAll('.tg'); tags.forEach(function(t){ t.remove(); }); if(q.mult>1){ var s=document.createElement('span'); s.className='tg x2'; s.textContent='×'+q.mult; it.appendChild(s); } if(q.flash){ var s2=document.createElement('span'); s2.className='tg'; s2.textContent='برق'; it.appendChild(s2); } var s3=document.createElement('span'); s3.className='tg'; s3.textContent=(q.type==='tf'?'صح/خطأ':'اختيار'); it.appendChild(s3); }
+window.hhIbAddOpt=function(){ var g=getGame(_ib.gameId); var q=g.questions[_ib.qIdx]; q.opts=q.opts||[]; if(q.opts.length>=8){ toastX('الحد ثماني عناصر','info'); return; } q.opts.push(''); if(q.type==='order') q.correct=q.opts.map(function(_,i){return i;}); persist(g); render(); };
 window.hhIbQType=function(t){ var g=getGame(_ib.gameId); var q=g.questions[_ib.qIdx]; q.type=t; if(t==='tf'){ q.opts=['صح','خطأ']; q.correct=[(q.correct||[0])[0]<2?(q.correct||[0])[0]:0]; if(!q.time||q.time>15) q.time=10; } else { if(!q.opts||q.opts.length<4) q.opts=['','','','']; } persist(g); render(); };
 window.hhIbSettings=function(){ var e=document.getElementById('ibg-settings'); if(e) e.style.display=(e.style.display==='none')?'block':'none'; };
 

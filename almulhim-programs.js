@@ -1731,10 +1731,12 @@ function hhPgDetail(id){
   var feats=_hhPgLines(p.features), goals=_hhPgLines(p.goals);
   var full=_hhPgFull(p); var st=(p.status==='closed')?'closed':(full?'full':(p.status||'upcoming'));
   var canReg=(st==='open'||st==='early') && !full && (p.regMode==='external'?!!p.regLink:true);
-  var html=(p.img?'<img src="'+_hhPgEsc(p.img)+'" style="width:100%;border-radius:14px;border:1.5px solid #B8924A;display:block;margin-bottom:12px;">':'')
+  var html=(p.img?'<div style="position:relative;border-radius:14px;overflow:hidden;border:1.5px solid #B8924A;margin-bottom:12px;"><img src="'+_hhPgEsc(p.img)+'" style="width:100%;display:block;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(42,8,16,.85),rgba(74,11,30,.05));"></div><div style="position:absolute;bottom:12px;right:14px;left:14px;color:#FFFDF8;font-weight:900;font-size:1.3rem;text-shadow:0 2px 12px rgba(0,0,0,.6);">'+_hhPgEsc(p.name||'')+'</div></div>':'')
    +'<div style="font-size:.84rem;color:#3D0918;line-height:1.9;font-weight:700;white-space:pre-line;">'+_hhPgEsc(p.desc||'')+'</div>'
    +(feats.length?'<div class="hh-pg-sec">مميزات البرنامج</div><ul class="hh-pg-ul">'+feats.map(function(f){return '<li>'+_hhPgIco('star')+'<span>'+_hhPgEsc(f)+'</span></li>';}).join('')+'</ul>':'')
    +(goals.length?'<div class="hh-pg-sec">أهداف البرنامج</div><ul class="hh-pg-ul">'+goals.map(function(f){return '<li>'+_hhPgIco('chk')+'<span>'+_hhPgEsc(f)+'</span></li>';}).join('')+'</ul>':'')
+   +(function(){ var ach=_hhPgLines(p.achievements); return ach.length?('<div class="hh-pg-sec">أثر البرنامج وإنجازاته</div><ul class="hh-pg-ul">'+ach.map(function(f){return '<li>'+_hhPgIco('ppl')+'<span>'+_hhPgEsc(f)+'</span></li>';}).join('')+'</ul>'):''; })()
+   +(function(){ var g=(p.gallery&&p.gallery.length)?p.gallery:[]; if(!g.length) return ''; return '<div class="hh-pg-sec">معرض الإنجازات</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">'+g.map(function(u){return '<img src="'+_hhPgEsc(u)+'" onclick="hhPgLightbox(\''+_hhPgEsc(u)+'\')" style="width:100%;height:90px;object-fit:cover;border-radius:10px;border:1.5px solid #EAD9B0;cursor:pointer;">';}).join('')+'</div>'; })()
    +'<div class="hh-pg-sec">التفاصيل</div><div class="pg-meta" style="display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:700;color:#3D0918;">'
    +  '<div style="display:flex;gap:8px;align-items:center;color:#3D0918;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('cal')+'</span>'+_hhPgEsc(_hhPgDates(p))+'</div>'
    +  '<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('ppl')+'</span>'+_hhPgEsc([p.audience,p.ages].filter(Boolean).join(' · ')||'الفئة تُعلن لاحقاً')+'</div>'
@@ -1798,6 +1800,7 @@ async function hhPgSubmit(id){
 }
 
 // ── الإدارة ──
+window.hhPgLightbox=function(u){ var ov=document.createElement('div'); ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out;'; ov.onclick=function(){ ov.remove(); }; ov.innerHTML='<img src="'+_hhPgEsc(u)+'" style="max-width:96%;max-height:96%;border-radius:12px;border:2px solid #B8924A;">'; document.body.appendChild(ov); };
 async function hhPgAdmin(){
   if(!_hhPgAdmin()) return;
   await hhPgLoad(true);
@@ -1836,6 +1839,9 @@ function hhPgEdit(id){
    +ta('الوصف *','pge-desc',p.desc,'ماذا يقدّم البرنامج ولمن')
    +ta('مميزات البرنامج (سطر لكل ميزة)','pge-features',p.features,'مثال:\nشهادة معتمدة\nمدرب متخصص\nحقيبة تدريبية')
    +ta('أهداف البرنامج (سطر لكل هدف)','pge-goals',p.goals,'')
+   +ta('أثر البرنامج وإنجازاته (سطر لكل إنجاز · يظهر بأيقونات)','pge-ach',p.achievements,'مثال:\nتدرّب أكثر من 28 طالباً على الإلقاء\nحفل ختامي وتكريم بشهادات معتمدة')
+   +'<input type="hidden" id="pge-gallery" value='+'"'+_hhPgEsc(JSON.stringify(p.gallery||[]))+'"'+'>'
+   +'<div class="hh-pg-f"><label>معرض الإنجازات (صور متعددة · يمكن رفع أكثر من صورة)</label><div id="pge-gal-wrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;"></div><div class="hh-pg-up" onclick="document.getElementById(\'pge-gal-file\').click()">'+_hhPgIco('up')+' اضغط لإضافة صور للمعرض</div><input type="file" id="pge-gal-file" accept="image/*" multiple style="display:none" onchange="hhPgAddGallery(this,\''+_hhPgEsc(nid)+'\')"></div>'
    +'<div class="hh-pg-2">'+f('من تاريخ','pge-from',p.dateFrom,'','date')+f('إلى تاريخ','pge-to',p.dateTo,'','date')+'</div>'
    +f('المكان','pge-place',p.place,'مثال: مركز أجيال التربوي، الدوحة')
    +'<div class="hh-pg-2">'+f('الفئة','pge-aud',p.audience,'الطلاب والطالبات')+f('العمر أو الصف','pge-ages',p.ages,'12 إلى 15 سنة')+'</div>'
@@ -1845,7 +1851,32 @@ function hhPgEdit(id){
    +(id?'<button class="hh-pg-del" onclick="hhPgDelete(\''+_hhPgEsc(id)+'\')">حذف البرنامج نهائياً</button>':'');
   var old=document.getElementById('hh-pg-edit'); if(old) old.remove();
   _hhPgBox(id?'تعديل البرنامج':'إضافة برنامج جديد', p.name||'', html, 'hh-pg-edit');
+  _hhPgRenderGalleryThumbs();
 }
+function _hhPgRenderGalleryThumbs(){
+  try{
+    var wrap=document.getElementById('pge-gal-wrap'); var inp=document.getElementById('pge-gallery'); if(!wrap||!inp) return;
+    var arr=[]; try{ arr=JSON.parse(inp.value||'[]')||[]; }catch(e){ arr=[]; }
+    wrap.innerHTML=arr.map(function(u,i){ return '<div style="position:relative;width:64px;height:48px;border-radius:8px;overflow:hidden;border:1.5px solid #B8924A;"><img src="'+_hhPgEsc(u)+'" style="width:100%;height:100%;object-fit:cover;"><button onclick="hhPgRemoveGalleryImg('+i+')" style="position:absolute;top:1px;left:1px;background:rgba(138,21,56,.9);color:#fff;border:none;border-radius:6px;width:18px;height:18px;font-size:.7rem;cursor:pointer;line-height:1;">×</button></div>'; }).join('');
+  }catch(e){}
+}
+window.hhPgAddGallery=async function(input, nid){
+  var files=input.files; if(!files||!files.length) return;
+  var inp=document.getElementById('pge-gallery'); var arr=[]; try{ arr=JSON.parse(inp.value||'[]')||[]; }catch(e){ arr=[]; }
+  var wrap=document.getElementById('pge-gal-wrap');
+  for(var i=0;i<files.length;i++){ (function(){})();
+    var file=files[i]; if(!/^image\//.test(file.type)) continue; if(file.size>3*1024*1024){ _hhPgToast('صورة تتجاوز 3MB · تُخطّى','info'); continue; }
+    if(arr.length>=12){ _hhPgToast('الحد 12 صورة','info'); break; }
+    try{
+      var key='program_images/'+nid+'/gallery/'+Date.now()+'_'+i;
+      var ref=firebase.storage().ref(key);
+      await ref.put(file,{contentType:file.type});
+      var url=await ref.getDownloadURL(); arr.push(url); inp.value=JSON.stringify(arr); _hhPgRenderGalleryThumbs();
+    }catch(e){ _hhPgToast('تعذر رفع صورة · '+((e&&e.code)||''),'error'); }
+  }
+  input.value='';
+};
+window.hhPgRemoveGalleryImg=function(i){ var inp=document.getElementById('pge-gallery'); var arr=[]; try{ arr=JSON.parse(inp.value||'[]')||[]; }catch(e){ arr=[]; } arr.splice(i,1); inp.value=JSON.stringify(arr); _hhPgRenderGalleryThumbs(); };
 async function hhPgPickImg(input, nid){
   var file=input.files&&input.files[0]; if(!file) return;
   if(!/^image\//.test(file.type)){ _hhPgToast('اختر ملف صورة','error'); return; }
@@ -1870,6 +1901,7 @@ async function hhPgSave(nid, isEdit){
   var prog={ id:nid, type:v('pge-type'), status:v('pge-status'), name:name, desc:desc, features:v('pge-features'), goals:v('pge-goals'),
     dateFrom:v('pge-from'), dateTo:v('pge-to'), place:v('pge-place'), audience:v('pge-aud'), ages:v('pge-ages'),
     price:v('pge-price'), seats:parseInt(v('pge-seats')||'0',10)||0, regMode:regMode, regLink:regLink, img:v('pge-img'),
+    achievements:v('pge-ach'), gallery:(function(){ try{ return JSON.parse((document.getElementById('pge-gallery')||{}).value||'[]')||[]; }catch(e){ return []; } })(),
     hidden:!!prev.hidden, confirmedCount:parseInt(prev.confirmedCount||0,10)||0, updatedAt:Date.now(), createdAt:prev.createdAt||Date.now() };
   try{
     var u=firebase.auth().currentUser; if(u) prog.by=u.uid;

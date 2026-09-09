@@ -53,7 +53,7 @@ function style(){
 window.hhLiveHost=async function(game){
   if(!uid()){ toastX('سجّل الدخول أولاً','error'); return; }
   style();
-  var qs=(game.questions||[]).filter(function(q){ return q.q && (q.correct||[]).length; });
+  var qs=(game.questions||[]).filter(function(q){ return q.q && ((q.correct||[]).length || q.type==='poll' || q.type==='order'); });
   if(!qs.length){ toastX('لا أسئلة صالحة في اللعبة','error'); return; }
   var S=game.settings||{}; var order=qs.map(function(_,i){ return i; }); if(S.shuffleQ) order.sort(function(){ return Math.random()-.5; });
   var code=code5();

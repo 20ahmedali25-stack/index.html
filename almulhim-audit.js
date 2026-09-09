@@ -8,6 +8,20 @@
 (function(){
 'use strict';
 if(window._hhAuditInit) return; window._hhAuditInit=true;
+// ═══ zzzzzzu · تنظيف المستخدمين الأشباح (بلا اسم ولا بريد ولا جوال ولا دور) ═══
+window.hhCleanGhosts=async function(){
+  if(!isAdm()){ toastX('للمدير فقط','error'); return; }
+  var ghosts=[];
+  try{ var qs=await db().collection('users').get(); qs.forEach(function(d){ var u=d.data()||{}; if(!u.name && !u.email && !u.phone && !u.role){ ghosts.push(d.id); } }); }
+  catch(e){ toastX('تعذّر الفحص · '+((e&&e.code)||''),'error'); return; }
+  if(!ghosts.length){ toastX('لا يوجد مستخدمون أشباح · القائمة نظيفة','success'); return; }
+  if(!confirm('حذف '+ghosts.length+' مستخدماً بلا أي بيانات (أشباح)؟ لا يمكن التراجع.')) return;
+  var done=0;
+  for(var i=0;i<ghosts.length;i++){ try{ await db().collection('users').doc(ghosts[i]).delete(); done++; }catch(e){} }
+  try{ log('clean_ghosts','حذف '+done+' مستخدماً شبحاً'); }catch(e){}
+  toastX('نُظّف '+done+' مستخدماً شبحاً','success');
+};
+
 function db(){ return firebase.firestore(); }
 function me(){ try{ return firebase.auth().currentUser; }catch(e){ return null; } }
 function isAdm(){ return (typeof hhIsAdmin==='function' && hhIsAdmin()); }
@@ -64,6 +78,7 @@ window.hhAuditPanel=async function(){
 function injectBtn(){
   var tries=0; var iv=setInterval(function(){ tries++; if(tries>30){ clearInterval(iv); return; } if(!isAdm()) return; if(document.getElementById('hh-audit-btn')){ clearInterval(iv); return; }
     var ref=document.getElementById('hh-priv-admin-btn')||document.getElementById('hh-ib-entry'); if(!ref) return;
+    var g=document.createElement('button'); g.className='hh-crown-btn'; g.id='hh-clean-ghosts-btn'; g.setAttribute('onclick','hhCleanGhosts()'); g.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9a3 3 0 0 1 6 0v6l-2-1.5L11 15l-2-1.5V9z"/><path d="M12 2a7 7 0 0 0-7 7v12l2-1.5L9 21l3-2 3 2 2-1.5L19 21V9a7 7 0 0 0-7-7z"/></svg><span>تنظيف الأشباح</span>'; ref.insertAdjacentElement('afterend',g);
     var b=document.createElement('button'); b.className='hh-crown-btn'; b.id='hh-audit-btn'; b.setAttribute('onclick','hhAuditPanel()'); b.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg><span>سجلّ المراجعة</span>'; ref.insertAdjacentElement('afterend',b); clearInterval(iv); },1000);
 }
 
