@@ -251,7 +251,7 @@ function hhCohortsHTML(){
             ? '<span style="font-size:.72rem;color:#aaa;font-weight:800;">التسجيل مغلق</span>'
             : (full
                ? '<button onclick="hhEnroll(\''+C.id+'\',\'waitlist\')" style="background:linear-gradient(135deg,#b5801f,#8A6D2E);color:#fff;border:none;border-radius:10px;padding:8px 18px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">انضم لقائمة الانتظار</button>'
-               : '<button onclick="hhEnroll(\''+C.id+'\',\'enrolled\')" style="background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">تسجيل أساسي</button>')))
+               : '<button onclick="hhEnroll(\''+C.id+'\',\'enrolled\')" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">تسجيل أساسي</button>')))
       +'</div></div>';
   }).join('');
 }
@@ -312,7 +312,7 @@ async function hhCohortsAdmin(){
       +'</div></div></div>';
   }).join('');
 
-  var html='<div style="background:#fff;border:1.5px solid #C9B37E;border-radius:12px;padding:13px;margin-bottom:13px;">'
+  var html='<div style="background:#fff;border:1.5px solid #B8924A;border-radius:12px;padding:13px;margin-bottom:13px;">'
     +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:9px;">دورة جديدة</div>'
     +'<input id="coh-title" placeholder="اسم الدورة (الدفعة الأولى · خريف 2026)" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:8px;">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
@@ -330,7 +330,7 @@ async function hhCohortsAdmin(){
     +'<select id="coh-mode" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<option>حضوري</option><option>عن بُعد</option><option>مدمج</option></select>'
     +'</div>'
-    +'<button onclick="hhCohortAdd()" style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إضافة الدورة</button>'
+    +'<button onclick="hhCohortAdd()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إضافة الدورة</button>'
     +'</div>'
     +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:7px;">الدورات المعلنة ('+_HH_COHORTS.length+')</div>'
     + (list || '<div style="color:#999;font-size:.78rem;text-align:center;padding:14px;">لا دورات بعد</div>');
@@ -493,7 +493,7 @@ function hhSpkEditor(){
   };
 
   ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #1F4E79;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
-    +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">محرر البرنامج</div>'
     +'<div style="font-size:.73rem;opacity:.85;margin-top:2px;">عدّل كل شيء · يُحفظ سحابياً ويسري على الجميع</div></div>'
     +'<button onclick="hhSpkCloseEd()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
@@ -507,7 +507,7 @@ function hhSpkEditor(){
     +'</div>'
     +'<div id="sped-body"></div>'
     +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;border-top:1.5px solid #E3D9C6;padding-top:13px;">'
-    +'<button onclick="hhSpkApplyAll()" style="flex:1;min-width:140px;background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ كل التعديلات</button>'
+    +'<button onclick="hhSpkApplyAll()" style="flex:1;min-width:140px;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ كل التعديلات</button>'
     +'<button onclick="hhSpkExportJSON()" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير</button>'
     +'<button onclick="hhSpkImportJSON()" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استيراد</button>'
     +'<button onclick="hhSpkResetOverride()" style="background:#fff;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استعادة الأصل</button>'
@@ -802,7 +802,7 @@ function hhSpkRender(hasAccess){
     '<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');color:#fff;border-radius:14px;padding:16px;margin-bottom:14px;text-align:center;">'
     +'<div style="font-weight:900;font-size:.95rem;margin-bottom:6px;">هذا البرنامج يتطلّب صلاحية وصول</div>'
     +'<div style="font-size:.79rem;opacity:.9;line-height:1.9;margin-bottom:11px;">المحتوى والتمارين والاختبارات متاحة للمشتركين فقط. للاشتراك تواصل مع إدارة المنصة.</div>'
-    +'<div style="font-size:1.6rem;font-weight:900;color:#EAD9A8;">'+P.price+' <span style="font-size:.8rem;">'+esc(P.currency)+'</span></div>'
+    +'<div style="font-size:1.6rem;font-weight:900;color:#EAD9B0;">'+P.price+' <span style="font-size:.8rem;">'+esc(P.currency)+'</span></div>'
     +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:11px;">'
     +'<button onclick="hhWathiqOpen()" style="background:linear-gradient(135deg,#F5E6C4,#B8924A);color:#16283F;border:1px solid #FDF3DD;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">ادخل الاستوديو</button>'
     +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">طلب التسجيل</button>'
@@ -954,9 +954,9 @@ async function hhAdminGrantProg(reqId, uid, email){
 async function hhSpkAdminAccess(){
   if(!(typeof hhIsAdmin==='function' && hhIsAdmin())) return;
   var html='<div style="font-size:.77rem;color:#666;line-height:1.85;margin-bottom:10px;">امنح صلاحية الوصول لبريد المشترك بعد تأكيد الدفع.</div>'
-    +'<input id="spk-email" placeholder="بريد المشترك" style="width:100%;border:1.5px solid #C9B37E;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;margin-bottom:9px;">'
+    +'<input id="spk-email" placeholder="بريد المشترك" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;margin-bottom:9px;">'
     +'<div style="display:flex;gap:8px;margin-bottom:12px;">'
-    +'<button onclick="hhSpkGrant(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">منح الوصول</button>'
+    +'<button onclick="hhSpkGrant(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">منح الوصول</button>'
     +'<button onclick="hhSpkGrant(false)" style="background:#fff;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">سحب</button>'
     +'</div>'
     +'<div id="spk-adm-status" style="font-size:.75rem;font-weight:800;min-height:16px;margin-bottom:10px;"></div>'
@@ -1054,7 +1054,7 @@ function hhSpkQRender(){
     +'<div style="background:#FDF8EC;border:2px solid '+HH_SPEAK_PROGRAM.color+';border-radius:16px;padding:20px;margin-bottom:14px;">'
     +'<div style="font-size:1.02rem;font-weight:900;color:'+HH_SPEAK_PROGRAM.dark+';line-height:1.85;">'+esc(q.q)+'</div></div>'
     +'<div id="spkq-opts" style="display:flex;flex-direction:column;gap:8px;">'
-    + opts.map(function(o,k){ return '<button onclick="hhSpkAnswer('+k+',this)" data-opt="'+esc(o)+'" style="background:#fff;border:1.5px solid #C9B37E;border-radius:12px;padding:12px 15px;font-family:Cairo;font-weight:800;font-size:.86rem;color:#333;cursor:pointer;text-align:right;line-height:1.7;">'+esc(o)+'</button>'; }).join('')
+    + opts.map(function(o,k){ return '<button onclick="hhSpkAnswer('+k+',this)" data-opt="'+esc(o)+'" style="background:#fff;border:1.5px solid #B8924A;border-radius:12px;padding:12px 15px;font-family:Cairo;font-weight:800;font-size:.86rem;color:#333;cursor:pointer;text-align:right;line-height:1.7;">'+esc(o)+'</button>'; }).join('')
     +'</div>'
     +'<button onclick="hhSpkQuit()" style="background:none;border:none;color:#bbb;font-family:Cairo;font-weight:800;font-size:.76rem;cursor:pointer;margin-top:14px;">إنهاء</button></div>';
   document.body.appendChild(ov);

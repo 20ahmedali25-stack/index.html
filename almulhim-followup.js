@@ -163,7 +163,7 @@
     var inRecord = (window._sfuTab||'record')==='record';
     if(bb) bb.style.display = (inRecord && ST.students.length) ? 'flex' : 'none';
     if(!ST.students.length){
-      el.innerHTML='<div style="background:#FFFDF8;border:1.5px dashed #C9B37E;border-radius:16px;padding:28px 18px;text-align:center;">'
+      el.innerHTML='<div style="background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:16px;padding:28px 18px;text-align:center;">'
         +'<div style="font-weight:900;color:#3D0918;font-size:.95rem;margin-bottom:5px;">الفصل جاهز وينتظر طلابه</div>'
         +'<div style="color:#8A7A63;font-size:.72rem;font-weight:700;margin-bottom:15px;">أضفهم واحداً واحداً، أو استورد ملف Excel وفيه عمود الفصل فتتوزع الشعب تلقائياً</div>'
         +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
@@ -234,13 +234,13 @@
             return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
         +'<div style="display:flex;align-items:center;gap:9px;">'
         +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:17px;height:17px;accent-color:#8A1538;flex-shrink:0;">'
-        +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #C9B37E;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
+        +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #B8924A;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
         +  '<button onclick="hhSfuStudentReport(\''+esc2(s.id)+'\')" title="التقرير التربوي الفردي" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.64rem;font-family:Cairo;cursor:pointer;flex-shrink:0;">تقرير</button>'
         +  '<span style="display:flex;border-radius:11px;overflow:hidden;border:1.8px solid '+(isP?'#3D6B53':'#8A1538')+';flex-shrink:0;">'
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'present\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#3D6B53':'#fff')+';color:'+(isP?'#fff':'#3D6B53')+';">حاضر</button>'
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'absent\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#fff':'#8A1538')+';color:'+(isP?'#8A1538':'#fff')+';">غائب</button>'
         +  '</span>'
-        +  '<button onclick="hhSfuOpen(\''+esc2(s.id)+'\')" style="border:1.5px solid #C9B37E;color:#8A6D2E;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.68rem;background:#FFFDF8;font-family:Cairo;cursor:pointer;flex-shrink:0;">'+(d.open?'▴':'▾')+' التفصيل</button>'
+        +  '<button onclick="hhSfuOpen(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;color:#8A6D2E;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.68rem;background:#FFFDF8;font-family:Cairo;cursor:pointer;flex-shrink:0;">'+(d.open?'▴':'▾')+' التفصيل</button>'
         +'</div>'
         + detail
         +'</div>';
@@ -782,7 +782,7 @@
     }catch(e){}
   }
   function btnCss(sec){
-    return 'background:'+(sec?'#FBF5E9':'#FFFDF8')+';border:1.5px solid '+(sec?'#C9B37E':'#E8DCC2')
+    return 'background:'+(sec?'#FBF5E9':'#FFFDF8')+';border:1.5px solid '+(sec?'#B8924A':'#E8DCC2')
       +';border-radius:13px;padding:13px 0;font-family:Cairo,sans-serif;font-weight:900;'
       +'font-size:1.05rem;color:'+(sec?'#8A6D2E':'#3D0918')+';cursor:pointer;user-select:none;';
   }
@@ -835,7 +835,7 @@
     var dots='';
     for(var i=0;i<4;i++){
       dots+='<span style="width:15px;height:15px;border-radius:50%;display:inline-block;'
-        +(i<buf.length ? 'background:#8A1538;border:2px solid #8A1538;' : 'background:none;border:2px solid #C9B37E;')
+        +(i<buf.length ? 'background:#8A1538;border:2px solid #8A1538;' : 'background:none;border:2px solid #B8924A;')
         +'"></span>';
     }
     d.innerHTML=dots;

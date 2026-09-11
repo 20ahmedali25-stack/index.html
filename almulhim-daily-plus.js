@@ -321,7 +321,7 @@
     var core=[b.attPct,b.avg,b.hwPct].filter(function(x){return x!==null;});
     var overall = core.length?Math.round(core.reduce(function(a,c){return a+c;},0)/core.length):null;
     b.level = overall===null?'قيد الرصد':(overall>=85?'متقدم':overall>=70?'ممكّن':overall>=55?'نامٍ':'يحتاج دعماً');
-    b.levelColor = overall===null?'#8A6D2E':(overall>=85?'#3D6B53':overall>=70?'#7ba98f':overall>=55?'#C9B37E':'#c77');
+    b.levelColor = overall===null?'#8A6D2E':(overall>=85?'#3D6B53':overall>=70?'#7ba98f':overall>=55?'#B8924A':'#c77');
     return b;
   }
   // اتجاه التحصيل عبر أسبوعين
@@ -389,9 +389,9 @@
       function cbar(lbl,val,cls,col){ var w=Math.max(0,Math.min(100,val||0)); return '<div class="cr"><span style="width:56px;">'+lbl+'</span><span class="cbar"><span style="width:'+w+'%;background:'+col+';"></span></span><b>'+(val===null?'·':val+(cls?'%':''))+'</b></div>'; }
       cmpHtml='<div class="box"><h2 style="margin-top:0;">موقعه من فصله</h2><div class="cmp">'
         + cbar('التحصيل', st.avg, true, '#3D6B53')
-        + cbar('متوسط الفصل', classStats.avgG, true, '#C9B37E')
+        + cbar('متوسط الفصل', classStats.avgG, true, '#B8924A')
         + cbar('الواجبات', st.hwPct, true, '#1F4E79')
-        + cbar('متوسط الفصل', classStats.avgH, true, '#C9B37E')
+        + cbar('متوسط الفصل', classStats.avgH, true, '#B8924A')
         +'</div>'
         + (st.avg!==null&&classStats.avgG!==null ? '<div style="font-size:.56rem;font-weight:900;color:'+(st.avg>=classStats.avgG?'#3D6B53':'#8A1538')+';margin-top:7px;">'+(st.avg>=classStats.avgG?'أعلى من متوسط الفصل بـ'+(st.avg-classStats.avgG)+' نقطة':'دون متوسط الفصل بـ'+(classStats.avgG-st.avg)+' نقطة، ومرشح للدعم')+'</div>':'')
         +'</div>';
@@ -531,7 +531,7 @@
     var ov=document.createElement('div'); ov.id='hh-dpi';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #1F4E79;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
-      +'<div style="background:linear-gradient(135deg,#1F4E79,#12304d);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب من Excel</div>'
       +'<div style="font-size:.7rem;opacity:.86;">عمود «الفصل» في الملف ينشئ الفصول تلقائياً</div></div>'
       +'<button onclick="document.getElementById(\'hh-dpi\').remove()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
@@ -560,7 +560,7 @@
         return '<div style="background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:8px 11px;margin-bottom:6px;">'
           +'<b style="font-size:.74rem;color:#1F4E79;">'+esc2(g)+'</b> <span style="font-size:.66rem;color:#8A7A63;font-weight:800;">'+groups[g].length+' طالباً</span></div>';
       }).join('')
-      +'<button id="dpi-go" style="width:100%;background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">استيراد '+rowsCache.length+' طالباً الآن</button>';
+      +'<button id="dpi-go" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">استيراد '+rowsCache.length+' طالباً الآن</button>';
       document.getElementById('dpi-go').onclick=async function(){
         this.disabled=true; this.textContent='جارٍ الاستيراد…';
         var groups2={};
@@ -804,7 +804,7 @@
           +'<select id="sf2-grel" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.74rem;font-weight:800;background:#fff;">'+rel+'</select>'
           +'<select id="sf2-gdisp" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.74rem;font-weight:800;background:#fff;">'+disp+'</select></div>'
           +'<input id="sf2-gname" placeholder="الاسم (اختياري)" style="width:100%;box-sizing:border-box;border:1.5px solid #EDE3CE;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.75rem;font-weight:700;margin-bottom:8px;">'
-          +'<button onclick="hhSf2GuardAdd()" style="background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">حفظ</button></div>');
+          +'<button onclick="hhSf2GuardAdd()" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">حفظ</button></div>');
     }
     if(tab==='contact'){
       var cs=(r.contacts||[]).slice().reverse();
@@ -965,7 +965,7 @@
       var ov=base('<div style="font-weight:900;font-size:.95rem;color:'+(danger?'#8A1538':'#3D0918')+';margin-bottom:6px;">'+title+'</div>'
         +(sub?'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;line-height:1.9;margin-bottom:13px;">'+sub+'</div>':'<div style="height:8px;"></div>')
         +'<div style="display:flex;gap:8px;">'
-        +'<button class="rc-ok" style="flex:1;background:linear-gradient(135deg,'+(danger?'#8A1538,#5E0E26':'#3D6B53,#274a38')+');color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تأكيد</button>'
+        +'<button class="rc-ok" style="flex:1;background:linear-gradient(135deg,'+(danger?'#8A1538,#5E0E26':'#3D6B53,#2C5340')+');color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تأكيد</button>'
         +'<button class="rc-no" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button></div>');
       ov.querySelector('.rc-ok').onclick=function(){ ov.remove(); res(true); };
       ov.querySelector('.rc-no').onclick=function(){ ov.remove(); res(false); };
@@ -1047,7 +1047,7 @@
         +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">تعديل</button>'
         +'<button onclick="hhTPDelete(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #8A1538;color:#8A1538;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">حذف</button>'
         +'</div>';
-    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFDF8;border:1.5px dashed #C9B37E;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
+    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
     // هوية المدرسة
     var logoInner = R.logo ? '<img src="'+R.logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">' : '📷<br>شعار<br>المدرسة';
     var schoolBox='<div style="display:flex;gap:13px;align-items:center;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:15px;padding:13px 15px;">'
@@ -1069,7 +1069,7 @@
       + statCard(P.rooms.length,'فصولي','#4A0B1E') + statCard(totS,'طلابي','#1F4E79') + statCard(recN+'/'+P.rooms.length,'رُصد اليوم','#3D6B53') + statCard(P.certN||0,'شهادة صادرة','#8A6D2E')
       +'</div>'
       + sech('فصولي وإدارتها') + rows
-      +'<button onclick="hhTPNewClass()" style="width:100%;background:linear-gradient(135deg,#3D6B53,#274a38);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;margin-top:3px;">+ إنشاء فصل جديد</button>'
+      +'<button onclick="hhTPNewClass()" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;margin-top:3px;">+ إنشاء فصل جديد</button>'
       + sech('الأدوات والخدمات')
       +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
       + tile('استيراد الطلاب','Excel واحد يوزّع الشعب تلقائياً','#3D6B53','if(window.hhDPlusImport){document.getElementById(\'hh-tpanel\').remove();hhDPlusImport();}')
