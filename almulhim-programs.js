@@ -1746,6 +1746,9 @@ function hhPgDetail(id){
    +  '<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('ppl')+'</span>'+_hhPgEsc([p.audience,p.ages].filter(Boolean).join(' · ')||'الفئة تُعلن لاحقاً')+'</div>'
    +  (p.place?'<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('pin')+'</span>'+_hhPgEsc(p.place)+'</div>':'')
    +  '<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('card')+'</span>'+((p.price&&String(p.price).trim())?(_hhPgEsc(p.price)+' ﷼'):'بلا رسوم')+'</div>'
+   +  (p.instructor?'<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('ppl')+'</span>المدرب: '+_hhPgEsc(p.instructor)+'</div>':'')
+   +  (p.duration?'<div style="display:flex;gap:8px;align-items:center;"><span style="color:#8A1538;display:inline-flex;">'+_hhPgIco('cal')+'</span>'+_hhPgEsc(p.duration)+'</div>':'')
+   +  (p.cert==='yes'?'<div style="display:flex;gap:8px;align-items:center;color:#2C5340;"><span style="color:#3D6B53;display:inline-flex;">'+_hhPgIco('chk')+'</span>شهادة معتمدة عند إتمام البرنامج</div>':'')
    +'</div>'
    +'<button class="pg-cta'+(canReg?'':' off')+'" style="margin-top:16px;background:'+(canReg?'linear-gradient(135deg,#8A1538,#5E0E26)':'#EDE7DA')+';color:'+(canReg?'#F5E6C4':'#9a8b75')+';border:none;border-radius:14px;padding:12px;width:100%;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:'+(canReg?'pointer':'default')+';" onclick="'+(canReg?('this.closest(\'.hh-pg-ov\').remove();hhPgRegister(\''+_hhPgEsc(p.id)+'\')'):'')+'">'+(canReg?(st==='early'?'تسجيل مبكر':'تسجيل الآن'):_hhPgEsc(full?'اكتمل العدد':(HH_PG_STATUS[st]||'برنامج قادم')))+'</button>';
   _hhPgBox(p.name||'', (p.type==='workshop'?'ورشة تدريبية':'برنامج تربوي'), html, 'hh-pg-detail');
@@ -1838,7 +1841,7 @@ function hhPgEdit(id){
   function sel(label,idn,opts,val){ return '<div class="hh-pg-f"><label>'+label+'</label><select id="'+idn+'">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></div>'; }
   var html='<input type="hidden" id="pge-img" value="'+_hhPgEsc(p.img||'')+'">'
    +'<div class="hh-pg-f"><label>ملصق البرنامج (مربع أو 4:3 · أقل من 3MB)</label><div class="hh-pg-up" onclick="document.getElementById(\'pge-file\').click()" id="pge-up">'+(p.img?'<img src="'+_hhPgEsc(p.img)+'">الملصق الحالي · اضغط لاستبداله':_hhPgIco('up')+' اضغط لرفع الملصق')+'</div><input type="file" id="pge-file" accept="image/*" style="display:none" onchange="hhPgPickImg(this,\''+_hhPgEsc(nid)+'\')"></div>'
-   +'<div class="hh-pg-2">'+sel('النوع','pge-type',[['program','برنامج'],['workshop','ورشة']],p.type||'program')+sel('حالة التسجيل','pge-status',[['upcoming','برنامج قادم'],['early','تسجيل مبكر'],['open','التسجيل مفتوح'],['closed','التسجيل مغلق']],p.status||'upcoming')+'</div>'
+   +'<div class="hh-pg-2">'+sel('النوع','pge-type',[['program','برنامج'],['workshop','ورشة']],p.type||'program')+sel('حالة التسجيل','pge-status',[['upcoming','برنامج قادم'],['early','تسجيل مبكر'],['open','التسجيل مفتوح'],['closed','التسجيل مغلق'],['done','مُنجز']],p.status||'upcoming')+'</div>'
    +f('اسم البرنامج *','pge-name',p.name,'')
    +ta('الوصف *','pge-desc',p.desc,'ماذا يقدّم البرنامج ولمن')
    +ta('مميزات البرنامج (سطر لكل ميزة)','pge-features',p.features,'مثال:\nشهادة معتمدة\nمدرب متخصص\nحقيبة تدريبية')
@@ -1848,6 +1851,8 @@ function hhPgEdit(id){
    +'<div class="hh-pg-f"><label>معرض الإنجازات (صور متعددة · يمكن رفع أكثر من صورة)</label><div id="pge-gal-wrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;"></div><div class="hh-pg-up" onclick="document.getElementById(\'pge-gal-file\').click()">'+_hhPgIco('up')+' اضغط لإضافة صور للمعرض</div><input type="file" id="pge-gal-file" accept="image/*" multiple style="display:none" onchange="hhPgAddGallery(this,\''+_hhPgEsc(nid)+'\')"></div>'
    +'<div class="hh-pg-2">'+f('من تاريخ','pge-from',p.dateFrom,'','date')+f('إلى تاريخ','pge-to',p.dateTo,'','date')+'</div>'
    +f('المكان','pge-place',p.place,'مثال: مركز أجيال التربوي، الدوحة')
+   +'<div class="hh-pg-2">'+f('المدرب أو المقدّم','pge-instructor',p.instructor,'اسم المدرب')+f('المدة أو الوقت','pge-duration',p.duration,'مثال: 5 أيام · 4 ساعات يومياً')+'</div>'
+   +'<div class="hh-pg-2">'+f('رقم التواصل (واتساب)','pge-contact',p.contact,'974xxxxxxxx')+sel('شهادة معتمدة','pge-cert',[['yes','نعم · بشهادة'],['no','بلا شهادة']],p.cert||'yes')+'</div>'
    +'<div class="hh-pg-2">'+f('الفئة','pge-aud',p.audience,'الطلاب والطالبات')+f('العمر أو الصف','pge-ages',p.ages,'12 إلى 15 سنة')+'</div>'
    +'<div class="hh-pg-2">'+f('الرسوم بالريال (فارغ = بلا رسوم)','pge-price',p.price,'150')+f('عدد المقاعد (فارغ = بلا حد)','pge-seats',p.seats,'30','number')+'</div>'
    +'<div class="hh-pg-2">'+sel('طريقة التسجيل','pge-regmode',[['internal','نموذج المنصة'],['external','رابط خارجي (Google Form أو غيره)']],p.regMode||'internal')+f('الرابط الخارجي','pge-reglink',p.regLink,'https://forms.gle/…','url')+'</div>'
@@ -1905,6 +1910,7 @@ async function hhPgSave(nid, isEdit){
   var prog={ id:nid, type:v('pge-type'), status:v('pge-status'), name:name, desc:desc, features:v('pge-features'), goals:v('pge-goals'),
     dateFrom:v('pge-from'), dateTo:v('pge-to'), place:v('pge-place'), audience:v('pge-aud'), ages:v('pge-ages'),
     price:v('pge-price'), seats:parseInt(v('pge-seats')||'0',10)||0, regMode:regMode, regLink:regLink, img:v('pge-img'),
+    instructor:v('pge-instructor'), duration:v('pge-duration'), contact:v('pge-contact'), cert:v('pge-cert'),
     achievements:v('pge-ach'), gallery:(function(){ try{ return JSON.parse((document.getElementById('pge-gallery')||{}).value||'[]')||[]; }catch(e){ return []; } })(),
     hidden:!!prev.hidden, confirmedCount:parseInt(prev.confirmedCount||0,10)||0, updatedAt:Date.now(), createdAt:prev.createdAt||Date.now() };
   try{

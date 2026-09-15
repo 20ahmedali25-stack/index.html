@@ -149,6 +149,15 @@ function hostRender(){
       +'<div class="opts">'+(q.opts||[]).map(function(o,i){ return '<div class="opt" style="background:linear-gradient(135deg,'+OC[i]+',#1a0308)"><span>'+OS[i]+'</span>'+esc(o)+'</div>'; }).join('')+'</div>'
       +'<div class="ft"><span>الرمز <b dir="ltr">'+esc(s.code)+'</b></span><div class="bar2"><i style="width:'+Math.round((s.qIndex)/s.total*100)+'%"></i></div><span id="lv-ans">أجاب '+answered+' من '+n+'</span></div>';
     L.timer=setInterval(function(){ var ms=q.time*1000-(Date.now()-(s.qStartedAt||Date.now())); var sec=Math.max(0,Math.ceil(ms/1000)); var e=document.getElementById('lv-left'); var r=document.getElementById('lv-ring'); if(e) e.textContent=sec; if(r) r.style.setProperty('--p',Math.max(0,ms/(q.time*1000)*100)+'%'); if(ms<=0){ clearInterval(L.timer); if(L.sess&&L.sess.state==='question') window.hhLvReveal(); } },250);
+  } else if(s.state==='reveal'&&q&&q.type==='poll'){
+    var words={}; var total=0;
+    Object.keys(L.players).forEach(function(pid){ var a=(L.players[pid].a||{})[s.qIndex]; if(a&&a.text){ var w=String(a.text).trim(); if(w){ words[w]=(words[w]||0)+1; total++; } } });
+    var arr=Object.keys(words).map(function(w){ return {w:w,c:words[w]}; }).sort(function(a,b){ return b.c-a.c; });
+    var maxC=arr.length?arr[0].c:1;
+    var cloud=arr.map(function(x){ var sz=1+(x.c/maxC)*2.2; var op=0.55+(x.c/maxC)*0.45; return '<span style="display:inline-block;margin:6px 10px;font-weight:900;font-size:'+sz.toFixed(2)+'rem;color:#5E0E26;opacity:'+op.toFixed(2)+';">'+esc(x.w)+(x.c>1?'<sub style="font-size:.5em;color:#B8924A;"> '+x.c+'</sub>':'')+'</span>'; }).join('');
+    main.innerHTML='<div class="q">'+esc(q.q)+'</div>'
+      +'<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:16px;padding:24px;margin:12px 0;min-height:180px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;text-align:center;">'+(cloud||'<span style="color:#8A7A63;font-weight:800;">بانتظار الإجابات...</span>')+'</div>'
+      +'<div class="ft"><span>'+total+' إجابة · '+arr.length+' كلمة مختلفة</span><div class="bar2"><i style="width:'+Math.round((s.qIndex+1)/s.total*100)+'%"></i></div><span>'+(s.qIndex+1)+' / '+s.total+'</span></div>';
   } else if(s.state==='reveal'&&q){
     var cnt=[0,0,0,0]; var tot=0; Object.keys(L.players).forEach(function(pid){ var a=(L.players[pid].a||{})[s.qIndex]; if(a&&a.c){ a.c.forEach(function(c){ cnt[c]=(cnt[c]||0)+1; }); tot++; } });
     main.innerHTML='<div class="q">'+esc(q.q)+'</div><div style="text-align:center;margin-bottom:10px;"><span class="pill" style="background:#EAD9B0;color:#2a0810;border:none;font-size:.9rem;">الإجابة الصحيحة: '+(q.correct||[]).map(function(i){ return OS[i]+' '+esc(q.opts[i]); }).join(' · ')+'</span>'+(q.note?'<div style="margin-top:8px;color:#D4BC85;font-weight:700;font-size:.85rem;">'+esc(q.note)+'</div>':'')+'</div>'
@@ -227,9 +236,15 @@ function playerRender(mode, extra){
   var body='';
   if(mode==='join') body='<div class="center"><b>سباق المُلهم المباشر</b><p>اكتب اسمك أو اسم فريقك كما تريد أن يظهر على الشاشة</p><input id="pl-name" maxlength="30" value="'+esc(L.pname)+'" placeholder="اسمك"><button class="go" onclick="hhPlJoin()">انضم إلى السباق</button></div>';
   else if(mode==='wait') body='<div class="center"><b>'+esc(extra||'انتظر بدء السباق')+'</b><p>عيناك على الشاشة الرئيسة، والأزرار ستظهر هنا مع كل سؤال</p></div>';
+  else if(mode==='question' && L.curQ && L.curQ.type==='poll'){ var q=L.curQ;
+    body='<div class="bar"><i id="pl-bar" style="width:100%"></i></div>'
+      +'<div class="center" style="flex:0;padding:6px;"><p>'+esc(q.q)+'</p></div>'
+      +'<div style="padding:0 6px;"><input id="pl-poll-in" placeholder="اكتب إجابتك بكلمة أو كلمتين" maxlength="30" style="width:100%;border:2px solid #B8924A;border-radius:12px;padding:14px;font-family:Cairo;font-size:1rem;text-align:center;margin-bottom:10px;">'
+      +'<button class="go" onclick="hhPlPoll()" style="width:100%;">إرسال</button></div>'; }
   else if(mode==='question'){ var q=L.curQ; var two=(q.opts||[]).length===2; var order=L.optOrder;
     body='<div class="bar"><i id="pl-bar" style="width:100%"></i></div><div class="center" style="flex:0;padding:4px;"><p>السؤال '+(s.qIndex+1)+' من '+s.total+(q.mult>1?' · النقاط ×'+q.mult:'')+'</p></div><div class="ans '+(two?'two':'')+'">'+order.map(function(i){ return '<button style="background:linear-gradient(135deg,'+OC[i]+',#1a0308)" onclick="hhPlAnswer('+i+')"><span>'+OS[i]+'</span>'+esc(q.opts[i])+'</button>'; }).join('')+'</div>'; }
   else if(mode==='answered') body='<div class="center"><b>تم استلام إجابتك</b><p>انتظر الكشف على الشاشة</p></div>';
+  else if(mode==='polldone') body='<div class="center"><div class="em">✓</div><b>شكراً لمشاركتك</b><p>إجابتك ظهرت في السحابة على الشاشة</p></div>';
   else if(mode==='reveal'){ var r=extra||{}; body='<div class="center"><div class="big '+(r.ok?'okc':'badc')+'">'+(r.ok?'✓':'✗')+'</div><b>'+(r.ok?'إجابة صحيحة':(r.none?'لم تُجب':'إجابة خاطئة'))+'</b>'+(r.ok?'<p>+'+r.pts.toLocaleString('en-US')+(isMarket()?' عملة':' نقطة')+'</p>':'')+(r.showAns?'<p>الإجابة: '+esc(r.ans)+'</p>':'')+'</div>'; }
   else if(mode==='rank'){ body='<div class="center">'+(extra.hidden?'<b>الترتيب مخفي حتى النهاية</b><p>تابع السباق، كل سؤال يغيّر كل شيء</p>':'<b>ترتيبك: '+extra.rank+' من '+extra.n+'</b><p>'+extra.pts.toLocaleString('en-US')+' نقطة</p>')+'</div>'; }
   else if(mode==='shop'){ var bal=(s.scores||{})[L.pid]||0; var mine=L.myShop[s.qIndex+1];
@@ -272,6 +287,7 @@ function playerOnState(prev){
   else if(s.state==='question'){ var oi=(s.order||[])[s.qIndex]; var q=s.questions[oi==null?s.qIndex:oi]; L.curQ=q; L.qReceivedAt=Date.now(); var n=(q.opts||[]).length; L.optOrder=[]; for(var i=0;i<n;i++) L.optOrder.push(i); if((s.settings||{}).shuffleOpts!==false && n>2) L.optOrder.sort(function(){ return Math.random()-.5; });
     if(L.myAns[s.qIndex]) { playerRender('answered'); return; }
     playerRender('question'); clearInterval(L.timer); L.timer=setInterval(function(){ var ms=q.time*1000-(Date.now()-L.qReceivedAt); var b=document.getElementById('pl-bar'); if(b) b.style.width=Math.max(0,ms/(q.time*1000)*100)+'%'; if(ms<=0){ clearInterval(L.timer); var btns=document.querySelectorAll('#hh-pl .ans button'); btns.forEach(function(x){ x.disabled=true; }); } },200); }
+  else if(s.state==='reveal' && (L.curQ&&L.curQ.type==='poll')){ clearInterval(L.timer); playerRender('polldone'); }
   else if(s.state==='reveal'){ clearInterval(L.timer); var q2=L.curQ||s.questions[(s.order||[])[s.qIndex]]; var a=L.myAns[s.qIndex]; var ok=false; if(a&&q2){ ok=(q2.correct||[]).slice().sort().join(',')===(a.c||[]).slice().sort().join(','); }
     var pts=0; if(ok&&q2){ var S=s.settings||{}; var base=1000; if((S.scoring||'speed')==='speed'){ var frac=Math.min(1,Math.max(0,(a.t||0)/(q2.time*1000))); base=Math.round(1000*(1-frac/2)); } pts=base*(q2.mult||1); }
     playerRender('reveal',{ok:ok,none:!a,pts:pts,showAns:(s.settings||{}).showAnswerEach!==false,ans:q2?(q2.correct||[]).map(function(i){ return q2.opts[i]; }).join(' · '):''}); }
@@ -285,6 +301,13 @@ window.hhPlBuy=async function(k){
   var bal=(s.scores||{})[L.pid]||0; if(k!=='save' && (!SHOP[k] || bal<SHOP[k].cost)){ toastX('عملاتك لا تكفي','info'); return; }
   L.myShop[target]=k; playerRender('shop');
   try{ var o={}; o[target]={buy:k, t:Date.now()}; await db().collection('game_sessions').doc(L.code).collection('players').doc(L.pid).set({shop:o, name:L.pname},{merge:true}); }catch(e){ toastX('تعذر إرسال الاختيار','error'); }
+};
+window.hhPlPoll=async function(){
+  var s=L.sess; if(!s||s.state!=='question') return; if(L.myAns[s.qIndex]) return;
+  var inp=document.getElementById('pl-poll-in'); var val=(inp&&inp.value||'').trim().slice(0,30);
+  if(!val){ toastX('اكتب إجابتك','info'); return; }
+  var ans={ text:val, t:Date.now()-L.qReceivedAt }; L.myAns[s.qIndex]=ans; playerRender('answered');
+  try{ var o={}; o[s.qIndex]=ans; await db().collection('game_sessions').doc(L.code).collection('players').doc(L.pid).set({a:o, name:L.pname},{merge:true}); }catch(e){ toastX('تعذّر الإرسال','error'); L.myAns[s.qIndex]=null; playerRender('question'); }
 };
 window.hhPlAnswer=async function(i){
   var s=L.sess; if(!s||s.state!=='question') return; if(L.myAns[s.qIndex]) return;

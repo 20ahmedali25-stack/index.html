@@ -37,7 +37,7 @@ window.hhMissionOpen=function(){
    +'</div>'
    +'<div style="padding:26px 30px;">'
    +'<div style="background:'+GD+'(135deg,'+C.m+','+C.m2+');color:'+C.g2+';border-radius:16px;padding:20px 24px;text-align:center;margin-bottom:24px;border:1.5px solid '+C.g+';">'
-   +'<div style="font-family:\'Noto Naskh Arabic\',serif;font-size:1.3rem;color:'+C.iv+';line-height:2;margin-bottom:6px;">«إِنَّمَا العُلَمَاءُ وَرَثَةُ الأَنْبِيَاءِ»</div>'
+   +'<div style="font-family:Amiri,\'Noto Naskh Arabic\',serif;font-size:1.3rem;color:'+C.iv+';line-height:2;margin-bottom:6px;">«إِنَّمَا العُلَمَاءُ وَرَثَةُ الأَنْبِيَاءِ»</div>'
    +'<small style="color:#D4BC85;font-weight:800;font-size:.72rem;">حديث شريف · رواه أبو داود والترمذي</small></div>'
    +'<div style="font-weight:900;font-size:1.15rem;color:'+C.m2+';margin:6px 0 12px;display:flex;align-items:center;gap:9px;"><span style="width:6px;height:24px;background:'+GD+'('+C.g2+','+C.g+');border-radius:9px;"></span>رسالتنا</div>'
    +'<p style="font-size:.92rem;line-height:2;color:'+C.ink+';font-weight:600;margin-bottom:8px;">نؤمن أن تعليم النشء أمانةٌ وعبادةٌ قبل أن يكون مهنة، وأن المعلم يحمل إرث الأنبياء في نشر العلم النافع. بنينا المُلهم بجهد فردي وعطاء خالص، لنجعل التعلّم تجربة تبني العقل والخُلق معاً، ونقدّمه مجاناً لكل معلم وطالب وولي أمر، احتساباً للأجر وخدمةً لمجتمعنا.</p>'
