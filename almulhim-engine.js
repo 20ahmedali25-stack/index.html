@@ -3674,7 +3674,9 @@ function startGame(overrideTeams, overrideCats, overrideName){
         G.wafaTiers=_tiers;
         const _subKeys=[...new Set(_allQ.map(q=>(q.sub!==undefined)?q.sub:0))].sort((a,b)=>a-b);
         const _rich=_subKeys.length>0 && _tiers.every(d=> _subKeys.every(k=> _allQ.filter(q=>q.diff===d && ((q.sub!==undefined)?q.sub:0)===k).length>=3));
-        const perSub=_rich?3:2;
+        // zzzzzzat: مسابقة الحياة الطيبة تعرض خلية واحدة لكل مستوى (لوحة نظيفة 20 خلية)
+        var _oneCell = (cat === 'مسابقة مركز الحياة الطيبة');
+        const perSub = _oneCell ? 1 : (_rich?3:2);
         G.wafaPerSub=perSub;
         _tiers.forEach(diff=>{
           const all=_allQ.filter(q=>q.diff===diff);
