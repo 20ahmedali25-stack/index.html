@@ -1888,21 +1888,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
         </button>
         <div class="main-nav-logo" onclick="navGoTo('home')">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="navShieldBg" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#8A1538"/>
-                <stop offset="100%" stop-color="#5E0E26"/>
-              </linearGradient>
-              <linearGradient id="navGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#e8c968"/>
-                <stop offset="100%" stop-color="#B8924A"/>
-              </linearGradient>
-            </defs>
-            <path d="M100 10 L175 30 L175 100 Q175 155 100 190 Q25 155 25 100 L25 30 Z" fill="url(#navShieldBg)" stroke="url(#navGoldGrad)" stroke-width="6"/>
-            <path d="M100 10 L175 30 L175 50 L25 50 L25 30 Z" fill="#8A1538"/>
-            <text x="100" y="145" text-anchor="middle" font-family="Cairo,Arial" font-weight="900" font-size="105" fill="url(#navGoldGrad)">ح</text>
-          </svg>
+          <img class="hh-logo-img" data-logo="ivory" alt="المُلهم" style="width:100%;height:100%;object-fit:contain">
         </div>
         <div class="main-nav-title" onclick="navGoTo('home')">
           <span class="main-nav-name">الملهم</span>
@@ -2420,7 +2406,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         </button>
         <div class="ms-header-title">
           <span id="ms-step-title">ماذا نلعب اليوم؟</span>
-          <span class="ms-header-logo">م</span>
+          <span class="ms-header-logo"><img class="hh-logo-img" data-logo="ivory" alt="المُلهم" style="height:48px;vertical-align:middle"></span>
         </div>
       </div>
       <div class="ms-header-progress">
@@ -3197,7 +3183,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <aside class="mc-sidebar">
         <div class="mc-sidebar-fixed">
           <div class="mc-brand">
-            <div class="mc-brand-logo">م</div>
+            <div class="mc-brand-logo" style="background:#fff;padding:4px;display:flex;align-items:center;justify-content:center;"><img class="hh-logo-img" data-logo="maroon" alt="المُلهم" style="height:38px"></div>
             <div class="mc-brand-text">
               <div class="mc-brand-title">لوحة التحكم</div>
               <div class="mc-brand-sub">منصة الملهم</div>
@@ -5696,6 +5682,24 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 <script src="almulhim-partners.js" charset="utf-8"></script>
 <script src="almulhim-reveal.js" charset="utf-8"></script>
 <script src="almulhim-welcome.js" charset="utf-8"></script>
+<script>
+/* zzzzzzaz · تعيين شعار المُلهم المعتمد في كل المواضع */
+(function(){
+  function setLogos(){
+    try{
+      var iv=window._HH_LOGO_IVORY, mr=window._HH_LOGO_MAROON;
+      document.querySelectorAll('.hh-logo-img').forEach(function(img){
+        var want=img.getAttribute('data-logo');
+        var src=(want==='maroon')?mr:iv;
+        if(src && img.src!==src) img.src=src;
+      });
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setLogos); else setLogos();
+  setTimeout(setLogos,600); setTimeout(setLogos,2000);
+  window.hhSetLogos=setLogos;
+})();
+</script>
 <script src="almulhim-ibdaa.js" charset="utf-8"></script>
 <script src="almulhim-live.js" charset="utf-8"></script>
 <script src="almulhim-programs.js" charset="utf-8"></script>
