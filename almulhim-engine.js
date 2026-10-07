@@ -1557,20 +1557,25 @@ async function doGoogleLogin(){
 
 async function doRegister(){
   const name=document.getElementById('reg-name').value.trim();
-  const phone=document.getElementById('reg-phone').value.trim();
+  const _phoneEl=document.getElementById('reg-phone');
+  const phone=_phoneEl?_phoneEl.value.trim():'';
   const email=document.getElementById('reg-email').value.trim();
   const pass=document.getElementById('reg-pass').value;
-  const pass2=document.getElementById('reg-pass2').value;
+  const _p2El=document.getElementById('reg-pass2');
+  // تأكيد كلمة المرور اختياري الآن (الحقل المختصر) · إن غاب نعتبره مطابقاً
+  const pass2=(_p2El && _p2El.value) ? _p2El.value : pass;
   const err=document.getElementById('reg-err');
-  if(!name||!phone||!email||!pass){err.textContent='يرجى إكمال جميع الحقول';return;}
-  if(phone.length!==8){err.textContent='رقم الجوال يجب أن يكون 8 أرقام';return;}
+  // الحقول الأساسية فقط: الاسم والبريد وكلمة المرور
+  if(!name||!email||!pass){err.textContent='أكمل الاسم والبريد وكلمة المرور';return;}
+  // رقم الجوال اختياري · لكن إن أُدخل يجب أن يكون 8 أرقام
+  if(phone && phone.length!==8){err.textContent='رقم الجوال يجب أن يكون 8 أرقام';return;}
   if(pass!==pass2){err.textContent='كلمتا المرور غير متطابقتين';return;}
   if(pass.length<6){err.textContent='كلمة المرور 6 أحرف على الأقل';return;}
   err.textContent='';
   if(OFFLINE_MODE){offlineRegister(name,email,pass,phone,err);return;}
   try{
     const cred=await auth.createUserWithEmailAndPassword(email,pass);
-    await db.collection('users').doc(cred.user.uid).set({name,email,phone:'+974'+phone,points:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await db.collection('users').doc(cred.user.uid).set({name,email,phone:phone?('+974'+phone):'',points:0,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
     // إرسال بريد التحقق
     try{ await cred.user.sendEmailVerification(); }catch(ev){}
     toast('تم إرسال رابط التحقق لبريدك · تفقد صندوقك','info');
@@ -11195,7 +11200,27 @@ function loadScript(src){
 window._screenHistory = window._screenHistory || [];
 
 var HH_IMMERSIVE_SCREENS = ['screen-board'];
+// ═══ تبويبا الدخول/الحساب الجديد (zzzzzzbc) ═══
+function showAuthTab(tab){
+  var isReg = (tab==='reg');
+  var tl=document.getElementById('auth-tab-login'), tr=document.getElementById('auth-tab-reg');
+  var pl=document.getElementById('auth-panel-login'), pr=document.getElementById('auth-panel-reg');
+  if(tl) tl.classList.toggle('on',!isReg);
+  if(tr) tr.classList.toggle('on',isReg);
+  if(pl) pl.style.display=isReg?'none':'block';
+  if(pr) pr.style.display=isReg?'block':'none';
+}
+function hhToggleRegExtra(){
+  var ex=document.getElementById('reg-extra'), tg=document.getElementById('reg-extra-toggle');
+  if(!ex) return;
+  var show=(ex.style.display==='none');
+  ex.style.display=show?'block':'none';
+  if(tg) tg.style.display=show?'none':'block';
+}
+
 function showScreen(id){
+  // شاشة التسجيل القديمة دُمجت في تبويب داخل الدخول (zzzzzzbc)
+  if(id==='screen-register'){ id='screen-login'; try{ setTimeout(()=>showAuthTab('reg'),0); }catch(e){} }
   // اللعب الغامر: شاشات اللعب تُخفي أشرطة المنصة وإطارها
   try{ document.body.classList.toggle('hh-immersive', HH_IMMERSIVE_SCREENS.indexOf(id)!==-1); }catch(e){}
   // أضف الشاشة الحالية للسجل قبل الانتقال
