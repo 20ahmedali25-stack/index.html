@@ -4700,6 +4700,11 @@ function buildWafaBoard(wrap){
   const stageH    = totalH - pad*2 - headerH - gap;
   const frameSide = stacked ? centerW : Math.max(150, Math.min(centerW, stageH - nameH - gap - topShift));
 
+  // جوال عمودي + 5 مستويات أو أكثر: نمرّر الأعمدة أفقياً بدل زحمها (iPhone fix)
+  const _nTiers = (G.wafaTiers||['easy','med','hard']).length;
+  const _hScroll = stacked && _nTiers >= 5;
+  const _cellMinW = _hScroll ? Math.max(58, Math.floor((window.innerWidth - centerW - pad*4) / 3.2)) : 0;
+
   let style = document.getElementById('wafa-board-dynamic-style');
   if(!style){ style = document.createElement('style'); style.id='wafa-board-dynamic-style'; document.head.appendChild(style); }
   style.textContent = `
@@ -4729,9 +4734,12 @@ function buildWafaBoard(wrap){
     .wafa-cells .qcell{ box-shadow:inset 0 -3px 0 rgba(0,0,0,.12); }
     .wafa-header{ position:relative; }
     .wafa-header .wbadge{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-family:Cairo,sans-serif; font-weight:800; font-size:.68rem; color:#D4BC85; background:rgba(0,0,0,.25); border:1px solid rgba(184,146,74,.5); border-radius:8px; padding:2px 10px; white-space:nowrap; }
-    .wafa-cells{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(${(G.wafaTiers||['easy','med','hard']).length},1fr);
+    .wafa-cells{ flex:1; min-height:0; display:grid;
+      grid-template-columns:${_hScroll ? `repeat(${_nTiers},minmax(${_cellMinW}px,1fr))` : `repeat(${_nTiers},1fr)`};
       grid-template-rows:repeat(${(typeof G!=='undefined'&&G.wafaPerSub)||2},minmax(0,1fr));
-      gap:${isMobile?4:((G.wafaPerSub||2)===3?5:7)}px; padding:${isMobile?5:((G.wafaPerSub||2)===3?6:8)}px; }
+      gap:${isMobile?4:((G.wafaPerSub||2)===3?5:7)}px; padding:${isMobile?5:((G.wafaPerSub||2)===3?6:8)}px;
+      ${_hScroll ? 'overflow-x:auto; overflow-y:hidden; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:thin;' : ''} }
+    ${_hScroll ? '.wafa-cells .qcell{ scroll-snap-align:start; } .wafa-cells::-webkit-scrollbar{ height:4px; } .wafa-cells::-webkit-scrollbar-thumb{ background:#B8924A; border-radius:4px; }' : ''}
     .wafa-cells .qcell{ display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none;
       border:2px solid var(--wc); border-radius:${(G.wafaPerSub||2)===3?9:11}px; background:var(--wbg); min-height:0; min-width:0;
       box-shadow:inset 0 -2px 0 rgba(61,9,24,.06);
