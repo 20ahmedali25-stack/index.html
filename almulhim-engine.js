@@ -1403,6 +1403,7 @@ try {
     const _st=document.getElementById('loader-status');
     if(_st) _st.textContent = user ? 'مرحبا '+((user.displayName||user.email||'').split('@')[0]) + ' ' : 'جاري التحضير...';
     currentUser=user;
+    try{ hhUpdateAuthBtn(); }catch(_e){}
     if(user){
       // أنتقل للقائمة فوراً · تفاصيل المستخدم تُجلب في الخلفية
       showScreen('screen-menu');
@@ -1492,7 +1493,8 @@ try {
         }catch(e){}
       })();
     }else{
-      showScreen('screen-landing');
+      try{ hhUpdateAuthBtn(); }catch(_e){}
+      hhRouteGuest();
       hideLoader();
     }
   });
@@ -1503,6 +1505,7 @@ try {
   if(sess){
     const u=JSON.parse(sess);
     currentUser=u;
+    try{ hhUpdateAuthBtn(); }catch(_e){}
     document.getElementById('ub-name').textContent=u.name;
     showScreen('screen-menu');
     showAdminBtn();
@@ -1511,7 +1514,7 @@ try {
       if(!_currentUserRole) setTimeout(()=>showRoleModal(), 400);
     });
   }
-  else showScreen('screen-landing');
+  else { try{ hhUpdateAuthBtn(); }catch(_e){} hhRouteGuest(); }
   hideLoader();
 }
 
@@ -1583,7 +1586,7 @@ async function doRegister(){
 }
 
 async function doLogout(){
-  if(OFFLINE_MODE){localStorage.removeItem('hh_sess');showScreen('screen-login');return;}
+  if(OFFLINE_MODE){localStorage.removeItem('hh_sess');currentUser=null;try{hhUpdateAuthBtn();}catch(_e){}showScreen('screen-landing');return;}
   await auth.signOut();
 }
 
@@ -12587,6 +12590,29 @@ function setAvatarInitials(letter){
 function setAvatarPhoto(url){
   const img=document.getElementById('profile-img');
   if(img){img.src=url;img.style.display='block';}
+}
+
+// توجيه الزائر غير المسجّل: البوابة تظهر مرة واحدة فقط ثم القائمة (zzzzzzbe)
+function hhRouteGuest(){
+  var seen=false;
+  try{ seen = localStorage.getItem('hh_gate_seen')==='1'; }catch(e){}
+  if(seen){
+    // شوهدت البوابة سابقاً · ادخل كزائر مباشرة · زر الدخول متاح في الأعلى
+    try{ if(!_currentUserRole){ _currentUserRole='guest'; localStorage.setItem('hh_user_role','guest'); } }catch(e){}
+    showScreen('screen-menu');
+  } else {
+    try{ localStorage.setItem('hh_gate_seen','1'); }catch(e){}
+    showScreen('screen-landing');
+  }
+}
+
+// زر الدخول العلوي للزائر · الملف الشخصي للمسجّل (zzzzzzbe)
+function hhUpdateAuthBtn(){
+  var loggedIn = (typeof currentUser!=='undefined' && !!currentUser);
+  var lb=document.getElementById('nav-login-btn');
+  var pb=document.getElementById('nav-profile-btn');
+  if(lb) lb.style.display = loggedIn ? 'none' : 'inline-flex';
+  if(pb) pb.style.display = loggedIn ? 'inline-flex' : 'none';
 }
 
 function updateNavAvatar(name,photoURL){
