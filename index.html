@@ -12905,6 +12905,22 @@ body.hh-immersive #hh-bottom-nav{ display:none !important; }
   .gate-dots{ margin:0 10px; }
 }
 
+/* ═══ إصلاح عرض الإجابة في لعبة الفئات (zzzzzzbb) · ظهور مضمون ونص كامل ═══ */
+#answer-box.answer-box{ display:none; }
+#answer-box.answer-box.show{
+  display:block !important;
+  background:linear-gradient(135deg,#EBF2EE,#DCEAE1) !important;
+  border:2px solid #3D6B53 !important; border-radius:14px !important;
+  padding:14px 16px !important; margin:10px 0 !important;
+  color:#2C5340 !important; font-family:'Cairo','Tajawal',sans-serif !important;
+  font-weight:900 !important; font-size:1.05rem !important; line-height:1.7 !important;
+  text-align:center !important;
+  white-space:normal !important; word-break:break-word !important; overflow-wrap:anywhere !important;
+  max-height:40vh !important; overflow-y:auto !important;
+  box-shadow:0 4px 14px rgba(61,107,83,.18) !important;
+}
+@media (max-width:480px){ #answer-box.answer-box.show{ font-size:1rem !important; padding:12px !important; } }
+
 /* ═══ ترقية أقسام «اكتشف المزيد» (zzzzzzbb) · تناسق مع هوية البوابة ═══ */
 .lp-stat-card, .lp-tool-card{ border-top:3px solid #B8924A !important; }
 .lp-section-title{ font-family:'Cairo',sans-serif !important; }

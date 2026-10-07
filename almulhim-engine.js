@@ -3418,7 +3418,7 @@ function toggleCat(el){
   if(typeof setupActionUpdate === 'function') setupActionUpdate();
 }
 
-let G={teams:[],scores:[],turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:[]};
+let G={teams:[],scores:[],turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:[],used:{}};
 let teamCount=2;
 let timerMult=1; // معامل ضرب وقت المؤقت
 
@@ -3654,7 +3654,7 @@ function startGame(overrideTeams, overrideCats, overrideName){
     }
   }
   try{ if(typeof hhLogActivity==='function') hhLogActivity('game_start', (cats||[]).join('+').slice(0,60)); }catch(_lg){}
-  G={teams,scores:teams.map(()=>0),turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:cats,gameName,startTime:Date.now(),sessionLog:[]};
+  G={teams,scores:teams.map(()=>0),turn:0,answered:false,timer:null,timerSec:0,timerTotal:0,curQ:null,curKey:'',boardData:{},selectedCats:cats,gameName,startTime:Date.now(),sessionLog:[],used:{}};
   // ═══ حفظ اللعبة فور البدء (تبقى في السجل حتى لو انسحب اللاعب) ═══
   try{ G.gameLocalId = 'g'+Date.now()+'_'+Math.random().toString(36).slice(2,7); hhSaveGameStart(); }catch(_gs){}
   // عداد وقت اللعبة
@@ -4807,7 +4807,7 @@ function buildWafaBoard(wrap){
       const el=document.createElement('div');
       if(!q){ el.className='qcell used'; cells.appendChild(el); return; }
       const key=cat+'__'+diff+'__'+idx;
-      el.id='cell_'+key; el.className='qcell '+diff;
+      el.id='cell_'+key; el.className='qcell '+diff+((G.used&&G.used[key])?' used':'');
       el.innerHTML='<div class="qpts">'+DIFF_MAP[diff].pts+'</div>';
       el.addEventListener('click',()=>{
         if(el.classList.contains('used')) return;
@@ -4965,7 +4965,7 @@ function buildCompBoard(wrap){
 function makeCompCell(lvl, q, key){
   const el = document.createElement('div');
   el.id = 'cell_' + key;
-  el.className = 'qcell ' + lvl.diff;
+  el.className = 'qcell ' + lvl.diff + ((G.used&&G.used[key])?' used':'');
   el.style.cssText = `border:2.5px solid ${lvl.border};background:${lvl.bg};border-radius:14px;box-shadow:0 2px 0 ${lvl.border};`;
   el.innerHTML = `<div class="qpts" style="color:${lvl.text}">${lvl.pts}</div>`;
   el.addEventListener('click', () => {
@@ -4989,7 +4989,7 @@ function makeQCell({diff,q,key,catIdx=0,side='left',isLegend=false}){
   // easy → 600 (نخبوي معروف) | med → 800 (يحتاج تخصص) | hard → 1000 (أسطوري)
   const legendPtsMap = {easy:600, med:800, hard:1000};
   const shownPts = isLegend ? legendPtsMap[diff] : d.pts;
-  el.className='qcell '+diff;
+  el.className='qcell '+diff+((G.used&&G.used[key])?' used':'');
   const r=side==='left'?'6px 20px 20px 6px':'20px 6px 6px 20px';
   if(diff==='easy'){
     el.style.cssText=`border:2px solid ${p[1]};background:${p[0]};border-radius:${r};box-shadow:0 2px 0 ${p[1]};`;
@@ -5661,6 +5661,9 @@ function closeModal(){
   clearInterval(G.timer);
   const cell=document.getElementById('cell_'+G.curKey);
   if(cell)cell.classList.add('used');
+  // مصدر الحقيقة: نخزّن الخلية المستخدمة حتى لا تعود بعد إعادة بناء اللوح (دوران/تغيّر حجم)
+  if(!G.used) G.used={};
+  if(G.curKey) G.used[G.curKey]=true;
   PU.armed=null;
   G.turn=(G.turn+1)%G.teams.length;
   updateBoardUI();checkDone();
