@@ -3239,7 +3239,7 @@ function openStudentCertificate(){
   else if(pct >= 80) grade = 'جيد جدا';
   document.getElementById('cert-score-grade').textContent = grade;
   const now = new Date();
-  const dateStr = now.toLocaleDateString('ar-QA', {year:'numeric', month:'long', day:'numeric'});
+  const dateStr = now.toLocaleDateString('ar-QA-u-nu-latn', {year:'numeric', month:'long', day:'numeric'});
   document.getElementById('cert-date').textContent = dateStr;
   document.getElementById('cert-overlay').classList.add('active');
   document.body.style.overflow = 'hidden';

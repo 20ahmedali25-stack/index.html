@@ -12,7 +12,7 @@
   function todayStr(){ return new Date().toISOString().slice(0,10); }
   function arDate(iso){
     try{ var d=iso?new Date(iso+'T00:00:00'):new Date();
-      return d.toLocaleDateString('ar',{weekday:'long',day:'numeric',month:'long'});
+      return d.toLocaleDateString('ar-u-nu-latn',{weekday:'long',day:'numeric',month:'long'});
     }catch(e){ return iso||''; }
   }
 

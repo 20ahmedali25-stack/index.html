@@ -3610,12 +3610,12 @@ function startGame(overrideTeams, overrideCats, overrideName){
     const err=document.getElementById('setup-err');
     //  فئة مسابقة منفردة: يُسمح ببدئها وحدها
     const _compSoloStart = (cats.length === 1) && (typeof _HH_COMP_CATS !== 'undefined') && _HH_COMP_CATS.has(cats[0]);
-    if(cats.length<2 && !_compSoloStart){
+    if(cats.length<4 && !_compSoloStart){ // zzzzzzbj: الحد الأدنى 4 فئات
       if(err){
-        err.innerHTML='<span style="color:#c0392b;font-weight:900;">يجب اختيار فئتين على الأقل</span>';
+        err.innerHTML='<span style="color:#c0392b;font-weight:900;">يجب اختيار 4 فئات على الأقل</span>';
         err.scrollIntoView({behavior:'smooth',block:'center'});
       }
-      if(typeof toast==='function') toast('اختر فئتين على الأقل لبدء اللعبة', 'warn');
+      if(typeof toast==='function') toast('اختر 4 فئات على الأقل لبدء اللعبة', 'warn');
       return;
     }
     if(cats.length>6){
@@ -5351,7 +5351,7 @@ function hhOpenThanksComposer(reportId){
   ov.onclick=ev=>{ if(ev.target===ov) ov.remove(); };
   const defTitle=' شكر وتقدير من إدارة المُلهِم';
   const defBody='أخي الكريم '+toName+'،\nشكراً جزيلاً على تصويبك الدقيق · بمثل حرصك تزداد المنصة جودةً وموثوقية. تم اعتماد ملاحظتك وستجد أثرها قريباً.\nمع خالص التقدير ';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:460px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;" onclick="event.stopPropagation()">' +'<div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;"> إرسال شكر وتقدير إلى: '+esc(toName)+'</div>' +'<div style="padding:16px 18px;">' +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">العنوان</div>' +'<input id="th-title" type="text" value="'+defTitle+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;margin-bottom:10px;">' +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">نص الرسالة</div>' +'<textarea id="th-body" rows="5" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px 12px;font-family:Cairo;font-size:.85rem;line-height:1.9;resize:vertical;box-sizing:border-box;">'+defBody+'</textarea>' +'<div style="display:flex;gap:9px;margin-top:11px;">' +'<button id="th-send" style="background:linear-gradient(135deg,#3D6B53,#2a4d3a);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-weight:900;font-size:.84rem;cursor:pointer;">إرسال الشكر</button>' +'<button onclick="document.getElementById(\'hh-thanks-overlay\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:10px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:460px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;" onclick="event.stopPropagation()">' +'<div style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;"> إرسال شكر وتقدير إلى: '+esc(toName)+'</div>' +'<div style="padding:16px 18px;">' +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">العنوان</div>' +'<input id="th-title" type="text" value="'+defTitle+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;margin-bottom:10px;">' +'<div style="font-weight:800;font-size:.76rem;color:#5E0E26;margin-bottom:5px;">نص الرسالة</div>' +'<textarea id="th-body" rows="5" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px 12px;font-family:Cairo;font-size:.85rem;line-height:1.9;resize:vertical;box-sizing:border-box;">'+defBody+'</textarea>' +'<div style="display:flex;gap:9px;margin-top:11px;">' +'<button id="th-send" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-weight:900;font-size:.84rem;cursor:pointer;">إرسال الشكر</button>' +'<button onclick="document.getElementById(\'hh-thanks-overlay\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:10px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
   document.body.appendChild(ov);
   document.getElementById('th-send').onclick=async function(){
     this.disabled=true; this.textContent='جار الإرسال...';
@@ -5395,7 +5395,7 @@ function hhToggleNotifPanel(){
     list.innerHTML='<div style="text-align:center;color:#999;font-family:Cairo;font-weight:700;font-size:.82rem;padding:22px 10px;">لا إشعارات بعد </div>';
   } else {
     list.innerHTML=_hhNotifs.map(n=>{
-      const d=n.createdAt&&n.createdAt.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('ar-QA',{day:'numeric',month:'long'}):'';
+      const d=n.createdAt&&n.createdAt.seconds?new Date(n.createdAt.seconds*1000).toLocaleDateString('ar-QA-u-nu-latn',{day:'numeric',month:'long'}):'';
       return '<div style="background:'+(n.read?'#fff':'#FBF6EA')+';border:1.5px solid '+(n.read?'#eee':'#E3D9C6')+';border-radius:12px;padding:11px 13px;margin-bottom:8px;">' +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px;">' +'<div style="font-family:Cairo;font-weight:900;font-size:.82rem;color:#5E0E26;">'+esc(n.title||'')+'</div>' +(d?'<div style="font-size:.66rem;color:#aaa;font-family:Cairo;white-space:nowrap;">'+d+'</div>':'')
         +'</div>' +'<div style="font-family:Cairo;font-weight:700;font-size:.78rem;color:#555;line-height:1.9;white-space:pre-wrap;">'+esc(n.body||'')+'</div>' +'<div style="font-size:.66rem;color:#B8924A;font-family:Cairo;font-weight:800;margin-top:5px;">· '+esc(n.from||'إدارة المُلهِم')+'</div>' +'</div>';
     }).join('');
@@ -5731,7 +5731,7 @@ var _testQueue    = [];
 function hhStartTestMode(){
   const overlay=document.createElement('div');
   overlay.id='hh-test-setup'; overlay.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999990;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;';
-  overlay.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;display:flex;align-items:center;gap:8px;"> وضع الاختبار التربوي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">الفئات (نفس اللعبة الحالية)</div>' +'<div style="font-size:.78rem;color:#555;background:#E9EEF8;border-radius:8px;padding:8px 12px;margin-bottom:12px;">'+((G.selectedCats||[]).join(' · ')||'اختر فئات أولاً')+'</div>' +'<div style="font-size:.8rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">عدد الأسئلة لكل طالب</div>' +'<input id="hh-test-qcount" type="number" min="5" max="30" value="10" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.9rem;margin-bottom:12px;box-sizing:border-box;">' +'<div style="font-size:.8rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">أكواد الطلاب (سطر لكل طالب · كود أو رقم)</div>' +'<textarea id="hh-test-students" rows="5" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;" placeholder="مثال: 1 أو أحمد"></textarea>' +'<div style="display:flex;gap:9px;margin-top:10px;">' +'<button onclick="hhInitTest()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px 22px;font-weight:900;font-size:.84rem;cursor:pointer;flex:1;">ابدأ الاختبار</button>' +'<button onclick=\"hhCloseTestSetup()\" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
+  overlay.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;display:flex;align-items:center;gap:8px;"> وضع الاختبار التربوي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">الفئات (نفس اللعبة الحالية)</div>' +'<div style="font-size:.78rem;color:#555;background:#FBF3E2;border-radius:8px;padding:8px 12px;margin-bottom:12px;">'+((G.selectedCats||[]).join(' · ')||'اختر فئات أولاً')+'</div>' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">عدد الأسئلة لكل طالب</div>' +'<input id="hh-test-qcount" type="number" min="5" max="30" value="10" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.9rem;margin-bottom:12px;box-sizing:border-box;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">أكواد الطلاب (سطر لكل طالب · كود أو رقم)</div>' +'<textarea id="hh-test-students" rows="5" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;" placeholder="مثال: 1 أو أحمد"></textarea>' +'<div style="display:flex;gap:9px;margin-top:10px;">' +'<button onclick="hhInitTest()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 22px;font-weight:900;font-size:.84rem;cursor:pointer;flex:1;">ابدأ الاختبار</button>' +'<button onclick=\"hhCloseTestSetup()\" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
   document.body.appendChild(overlay);
 }
 
@@ -5762,8 +5762,8 @@ function hhNextTestQ(){
   const ov=document.createElement('div'); ov.id='hh-test-q';
   ov.style.cssText='position:fixed;inset:0;background:#fff;z-index:999985;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
   const pct=Math.round(_testQueueIdx/(_testQueue.length||1)*100);
-  ov.innerHTML='<div style="max-width:540px;width:100%;">' +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +'<span style="background:#1F4E79;color:#fff;border-radius:8px;padding:4px 12px;font-weight:900;font-size:.78rem;">طالب: '+esc(st.name)+'</span>' +'<span style="font-size:.76rem;color:#999;">'+(_testQueueIdx+1)+' / '+_testQueue.length+'</span>' +'</div>' +'<div style="background:#e9eef8;border-radius:99px;height:8px;margin-bottom:18px;"><div style="background:#1F4E79;border-radius:99px;height:8px;width:'+pct+'%"></div></div>' +'<div style="background:#F7FBFF;border:2px solid #1F4E79;border-radius:16px;padding:22px;margin-bottom:16px;">' +'<div style="font-size:.7rem;color:#8A6D2E;font-weight:800;margin-bottom:8px;">'+esc(q._cat||'')+' •  '+({easy:'سهل',med:'متوسط',hard:'صعب'}[q.diff]||q.diff||'')+'</div>' +'<div style="font-size:1.15rem;font-weight:900;color:#1F4E79;line-height:1.7;">'+esc(q.q||'')+'</div>' +(q.img?'<img src="'+q.img+'" style="max-height:140px;margin-top:10px;border-radius:10px;display:block;">':'')
-    +'</div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhRecordTest(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> صحيحة</button>' +'<button onclick="hhRecordTest(false)" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> خاطئة</button>' +'</div>' +'<button onclick="hhRevealTestAnswer()" id="hh-test-show-ans" style="width:100%;margin-top:9px;background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:9px;font-weight:900;font-size:.82rem;cursor:pointer;"> اعرض الجواب</button>' +'<div id="hh-test-ans-box" style="display:none;background:#EBF2EE;border:2px solid #3D6B53;border-radius:10px;padding:11px;margin-top:8px;font-weight:900;color:#3D6B53;text-align:center;font-size:.95rem;">'+esc(q.a||'')+'</div>' +'</div>';
+  ov.innerHTML='<div style="max-width:540px;width:100%;">' +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +'<span style="background:#5E0E26;color:#fff;border-radius:8px;padding:4px 12px;font-weight:900;font-size:.78rem;">طالب: '+esc(st.name)+'</span>' +'<span style="font-size:.76rem;color:#999;">'+(_testQueueIdx+1)+' / '+_testQueue.length+'</span>' +'</div>' +'<div style="background:#e9eef8;border-radius:99px;height:8px;margin-bottom:18px;"><div style="background:#5E0E26;border-radius:99px;height:8px;width:'+pct+'%"></div></div>' +'<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:16px;padding:22px;margin-bottom:16px;">' +'<div style="font-size:.7rem;color:#8A6D2E;font-weight:800;margin-bottom:8px;">'+esc(q._cat||'')+' •  '+({easy:'سهل',med:'متوسط',hard:'صعب'}[q.diff]||q.diff||'')+'</div>' +'<div style="font-size:1.15rem;font-weight:900;color:#5E0E26;line-height:1.7;">'+esc(q.q||'')+'</div>' +(q.img?'<img src="'+q.img+'" style="max-height:140px;margin-top:10px;border-radius:10px;display:block;">':'')
+    +'</div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhRecordTest(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> صحيحة</button>' +'<button onclick="hhRecordTest(false)" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> خاطئة</button>' +'</div>' +'<button onclick="hhRevealTestAnswer()" id="hh-test-show-ans" style="width:100%;margin-top:9px;background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:9px;font-weight:900;font-size:.82rem;cursor:pointer;"> اعرض الجواب</button>' +'<div id="hh-test-ans-box" style="display:none;background:#EBF2EE;border:2px solid #3D6B53;border-radius:10px;padding:11px;margin-top:8px;font-weight:900;color:#3D6B53;text-align:center;font-size:.95rem;">'+esc(q.a||'')+'</div>' +'</div>';
   document.body.appendChild(ov);
 }
 function hhRevealTestAnswer(){
@@ -5830,9 +5830,9 @@ function hhShowSessionReport(testData, isTest){
     const bySt={};
     log.forEach(r=>{ if(!bySt[r.student]) bySt[r.student]={total:0,correct:0};
       bySt[r.student].total++; if(r.correct) bySt[r.student].correct++; });
-    studentTable='<div style="margin-top:16px;">' +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin-bottom:8px;"> نتائج الطلاب</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;">' +'<thead><tr style="background:#1F4E79;color:#fff;">' +'<th style="padding:7px 10px;text-align:right;">الطالب</th>' +'<th style="padding:7px;text-align:center;">الصحيح</th>' +'<th style="padding:7px;text-align:center;">الإجمالي</th>' +'<th style="padding:7px;text-align:center;">النسبة</th></tr></thead><tbody>' +Object.entries(bySt).map(([st,d],i)=>{
+    studentTable='<div style="margin-top:16px;">' +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;"> نتائج الطلاب</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;">' +'<thead><tr style="background:#5E0E26;color:#fff;">' +'<th style="padding:7px 10px;text-align:right;">الطالب</th>' +'<th style="padding:7px;text-align:center;">الصحيح</th>' +'<th style="padding:7px;text-align:center;">الإجمالي</th>' +'<th style="padding:7px;text-align:center;">النسبة</th></tr></thead><tbody>' +Object.entries(bySt).map(([st,d],i)=>{
         const p=Math.round(d.correct/d.total*100);
-        const bg=i%2?'#E9EEF8':'#fff';
+        const bg=i%2?'#FBF7F0':'#fff';
         const cl=p>=70?'#3D6B53':p>=50?'#b5801f':'#c0392b';
         return '<tr style="background:'+bg+';">' +'<td style="padding:7px 10px;font-weight:800;">'+esc(st)+'</td>' +'<td style="padding:7px;text-align:center;color:#3D6B53;font-weight:900;">'+d.correct+'</td>' +'<td style="padding:7px;text-align:center;">'+d.total+'</td>' +'<td style="padding:7px;text-align:center;font-weight:900;color:'+cl+';">'+p+'%</td></tr>';
       }).join('')
@@ -5841,21 +5841,21 @@ function hhShowSessionReport(testData, isTest){
   // جدول الأسئلة
   const _sid = G.startTime || Date.now();
   const qRows=log.map((r,i)=>{
-    const bg=i%2?'#F7FBFF':'#fff';
+    const bg=i%2?'#FBF7F0':'#fff';
     const icon=r.correct?'':'';
     const winner=r.winners&&r.winners.length?r.winners.join('/'):(r.student||r.team||'·');
     return '<tr style="background:'+bg+';">' +'<td style="padding:6px 8px;text-align:center;font-weight:900;">'+icon+'</td>' +'<td style="padding:6px 8px;font-weight:700;max-width:190px;">'+esc(r.q||'').slice(0,55)+(r.q&&r.q.length>55?'…':'')+'</td>' +'<td style="padding:6px 8px;color:#3D6B53;font-weight:800;">'+esc(r.a||'').slice(0,25)+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;color:#8A6D2E;">' +esc(r.cat||r._cat||'')
-        +(r.subCat?'<br><span style="color:#1F4E79;font-size:.65rem;font-weight:900;">'+esc(r.subCat)+'</span>':'')+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;">'+esc(winner)+'</td>' +'<td style="padding:4px 6px;min-width:110px;"><input type="text" id="hh-note-'+_sid+'-'+i+'" value="'+esc(r.note||'')+'" placeholder="ملاحظة..." onchange="hhSaveNote(this,'+i+','+(!isTest)+')" style="width:100%;border:1px solid #E3D9C6;border-radius:6px;padding:4px 6px;font-family:Cairo,Tajawal,sans-serif;font-size:.72rem;"></td>' +'</tr>';
+        +(r.subCat?'<br><span style="color:#5E0E26;font-size:.65rem;font-weight:900;">'+esc(r.subCat)+'</span>':'')+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;">'+esc(winner)+'</td>' +'<td style="padding:4px 6px;min-width:110px;"><input type="text" id="hh-note-'+_sid+'-'+i+'" value="'+esc(r.note||'')+'" placeholder="ملاحظة..." onchange="hhSaveNote(this,'+i+','+(!isTest)+')" style="width:100%;border:1px solid #E3D9C6;border-radius:6px;padding:4px 6px;font-family:Cairo,Tajawal,sans-serif;font-size:.72rem;"></td>' +'</tr>';
   }).join('');
   const catRows=Object.entries(byCat).map(([c,d],i)=>{
     const p=Math.round(d.correct/d.total*100);
     const cl=p>=70?'#3D6B53':p>=50?'#b5801f':'#c0392b';
-    return '<tr style="background:'+(i%2?'#E9EEF8':'#fff')+';">' +'<td style="padding:7px 10px;font-weight:800;">'+esc(c)+'</td>' +'<td style="padding:7px;text-align:center;color:#3D6B53;font-weight:900;">'+d.correct+'</td>' +'<td style="padding:7px;text-align:center;">'+d.total+'</td>' +'<td style="padding:7px;text-align:center;font-weight:900;color:'+cl+';">'+p+'%</td></tr>';
+    return '<tr style="background:'+(i%2?'#FBF7F0':'#fff')+';">' +'<td style="padding:7px 10px;font-weight:800;">'+esc(c)+'</td>' +'<td style="padding:7px;text-align:center;color:#3D6B53;font-weight:900;">'+d.correct+'</td>' +'<td style="padding:7px;text-align:center;">'+d.total+'</td>' +'<td style="padding:7px;text-align:center;font-weight:900;color:'+cl+';">'+p+'%</td></tr>';
   }).join('');
-  const dateStr=new Date().toLocaleDateString('ar-QA',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  const dateStr=new Date().toLocaleDateString('ar-QA-u-nu-latn',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   const pctCl=pct>=70?'#3D6B53':pct>=50?'#b5801f':'#c0392b';
-  ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#E9EEF8;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#1F4E79;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#1F4E79;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
-    +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#E9EEF8;color:#1F4E79;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +'<button onclick=\"hhSaveSessionDialog('+(isTest?'true':'false')+')\" style=\"background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>'
+  ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#FBF3E2;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
+    +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#FBF3E2;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +'<button onclick=\"hhSaveSessionDialog('+(isTest?'true':'false')+')\" style=\"background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>'
     +'<button onclick=\"hhShowImpact()\" style=\"background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> تقرير الأثر</button>'
     +(!isTest?'<button onclick=\"hhShowAnalytics()\" style=\"background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> التحليلات التراكمية</button>':'')
     +'<button onclick="hhCloseSessionReport()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
@@ -5865,7 +5865,7 @@ function hhPrintReport(){
   const html=document.getElementById('hh-report-inner');
   if(!html) return;
   const w=window.open('','_blank');
-  w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>تقرير المُلهِم</title>' +'<style>body{font-family:Cairo,Tajawal,Arial,sans-serif;padding:20px;direction:rtl;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px 10px;}th{background:#1F4E79;color:#fff;}@media print{button{display:none}}</style></head><body>');
+  w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>تقرير المُلهِم</title>' +'<style>body{font-family:Cairo,Tajawal,Arial,sans-serif;padding:20px;direction:rtl;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px 10px;}th{background:#5E0E26;color:#fff;}@media print{button{display:none}}</style></head><body>');
   w.document.write(html.innerHTML);
   w.document.write('<script>window.print();setTimeout(()=>window.close(),1000);</script></body></html>');
   w.document.close();
@@ -5889,7 +5889,7 @@ function hhSaveCurrentSession(phase, groupName, logOverride){
   // logOverride: نتائج وضع الاختبار (طلاب أفراد) بدل سجل اللعبة (zzzzzzbg)
   var srcLog = (logOverride && logOverride.length) ? logOverride : G.sessionLog;
   if(!srcLog||!srcLog.length){ if(typeof toast==='function') toast('لا توجد بيانات جلسة للحفظ','warn'); return; }
-  var snap={ id:(logOverride?Date.now():(G.startTime||Date.now())), date:new Date().toLocaleDateString('ar-QA',{month:'short',day:'numeric'}),
+  var snap={ id:(logOverride?Date.now():(G.startTime||Date.now())), date:new Date().toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'}),
     iso:new Date().toISOString().slice(0,10),
     gameName:(logOverride?'اختبار':(G.gameName||'جلسة')), cats:(G.selectedCats||[]).join(' · '),
     phase: phase||'تجريبي', group: groupName||'المجموعة التجريبية',
@@ -5916,9 +5916,9 @@ function hhShowCompare(){
       var bc=p>=70?'#3D6B53':p>=50?'#b5801f':'#c0392b';
       return '<div style="margin-bottom:4px;"><div style="display:flex;justify-content:space-between;font-size:.7rem;font-weight:800;"><span>'+esc(c)+'</span><span style="color:'+bc+';">'+p+'%</span></div>' +'<div style="background:#eee;border-radius:4px;height:7px;"><div style="background:'+bc+';border-radius:4px;height:7px;width:'+p+'%;"></div></div></div>';
     }).join('');
-    return '<div style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;flex:1;min-width:180px;">' +'<div style="font-weight:900;font-size:.8rem;color:#1F4E79;margin-bottom:3px;">'+esc(sess.gameName)+'</div>' +'<div style="font-size:.7rem;color:#999;margin-bottom:10px;">'+esc(sess.date)+' · '+esc(sess.cats)+'</div>' +'<div style="display:flex;gap:8px;margin-bottom:12px;">' +'<div style="text-align:center;flex:1;background:#E9EEF8;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:'+cl+';">'+pct+'%</div>' +'<div style="font-size:.65rem;color:#555;">النسبة</div></div>' +'<div style="text-align:center;flex:1;background:#EBF2EE;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:#3D6B53;">'+cor+'/'+tot+'</div>' +'<div style="font-size:.65rem;color:#555;">الصحيح</div></div></div>' +catBars+'</div>';
+    return '<div style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;flex:1;min-width:180px;">' +'<div style="font-weight:900;font-size:.8rem;color:#5E0E26;margin-bottom:3px;">'+esc(sess.gameName)+'</div>' +'<div style="font-size:.7rem;color:#999;margin-bottom:10px;">'+esc(sess.date)+' · '+esc(sess.cats)+'</div>' +'<div style="display:flex;gap:8px;margin-bottom:12px;">' +'<div style="text-align:center;flex:1;background:#FBF3E2;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:'+cl+';">'+pct+'%</div>' +'<div style="font-size:.65rem;color:#555;">النسبة</div></div>' +'<div style="text-align:center;flex:1;background:#EBF2EE;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:#3D6B53;">'+cor+'/'+tot+'</div>' +'<div style="font-size:.65rem;color:#555;">الصحيح</div></div></div>' +catBars+'</div>';
   }).join('');
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:860px;width:100%;overflow:hidden;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> التحليلات التراكمية ('+sessions.length+')</div>' +'<button onclick="document.getElementById(&quot;hh-compare-overlay&quot;).remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;display:flex;gap:12px;flex-wrap:wrap;">'+rows+'</div>' +'<div style="padding:0 18px 16px;display:flex;gap:9px;">' +'<button onclick="hhExportCompareCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:9px 18px;font-weight:900;font-size:.82rem;cursor:pointer;"> تصدير مقارنة CSV</button>' +'<button onclick="hhClearSessions()" style="background:#F3F0F1;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:9px 16px;font-weight:900;font-size:.82rem;cursor:pointer;"> مسح</button>' +'</div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:860px;width:100%;overflow:hidden;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> التحليلات التراكمية ('+sessions.length+')</div>' +'<button onclick="document.getElementById(&quot;hh-compare-overlay&quot;).remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;display:flex;gap:12px;flex-wrap:wrap;">'+rows+'</div>' +'<div style="padding:0 18px 16px;display:flex;gap:9px;">' +'<button onclick="hhExportCompareCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:9px 18px;font-weight:900;font-size:.82rem;cursor:pointer;"> تصدير مقارنة CSV</button>' +'<button onclick="hhClearSessions()" style="background:#F3F0F1;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:9px 16px;font-weight:900;font-size:.82rem;cursor:pointer;"> مسح</button>' +'</div></div>';
   document.body.appendChild(ov);
 }
 function hhClearSessions(){_savedSessions=[];try{localStorage.removeItem('hh_saved_sessions');}catch(e){}var ov=document.getElementById('hh-compare-overlay');if(ov)ov.remove();if(typeof toast==='function')toast('مُسحت الجلسات المحفوظة','info');}
@@ -5948,7 +5948,7 @@ function hhSaveSessionDialog(isTest){
   var old=document.getElementById('hh-savesess'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-savesess';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.65);z-index:999992;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:420px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> حفظ الجلسة للتحليل البحثي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">مرحلة البحث</div>' +'<select id="ss-phase" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;margin-bottom:12px;box-sizing:border-box;">' +'<option value="قبلي">اختبار قبلي (قبل التدخل)</option>' +'<option value="تجريبي" selected>جلسة تجريبية (أثناء التدخل)</option>' +'<option value="بعدي">اختبار بعدي (بعد التدخل)</option>' +'<option value="تذكّر">اختبار تذكّر (بعد أسبوعين)</option>' +'</select>' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">المجموعة</div>' +'<input id="ss-group" list="ss-group-list" value="'+esc(_hhLastGroup())+'" placeholder="مثلاً: 7/2 أو المجموعة الضابطة" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:16px;margin-bottom:14px;box-sizing:border-box;">' +'<datalist id="ss-group-list">'+_hhGroupOptions()+'</datalist>' +'<div style="display:flex;gap:9px;">' +'<button onclick="hhConfirmSaveSession()" style="flex:1;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhCloseSaveDialog()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.85rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:420px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> حفظ الجلسة للتحليل البحثي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">مرحلة البحث</div>' +'<select id="ss-phase" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;margin-bottom:12px;box-sizing:border-box;">' +'<option value="قبلي">اختبار قبلي (قبل التدخل)</option>' +'<option value="تجريبي" selected>جلسة تجريبية (أثناء التدخل)</option>' +'<option value="بعدي">اختبار بعدي (بعد التدخل)</option>' +'<option value="تذكّر">اختبار تذكّر (بعد أسبوعين)</option>' +'</select>' +'<div style="font-size:.78rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">المجموعة</div>' +'<input id="ss-group" list="ss-group-list" value="'+esc(_hhLastGroup())+'" placeholder="مثلاً: 7/2 أو المجموعة الضابطة" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:16px;margin-bottom:14px;box-sizing:border-box;">' +'<datalist id="ss-group-list">'+_hhGroupOptions()+'</datalist>' +'<div style="display:flex;gap:9px;">' +'<button onclick="hhConfirmSaveSession()" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhCloseSaveDialog()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.85rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
   document.body.appendChild(ov);
 }
 function hhCloseSaveDialog(){ var e=document.getElementById('hh-savesess'); if(e) e.remove(); }
@@ -6185,7 +6185,7 @@ function hhShowAnalytics(){
   var groupRows=Object.keys(byGroup).map(function(g,i){
     var d=byGroup[g]; var pc=d.t?Math.round(d.c/d.t*100):0;
     var col=pc>=70?'#3D6B53':pc>=50?'#b5801f':'#c0392b';
-    return '<tr style="background:'+(i%2?'#E9EEF8':'#fff')+';">' +'<td style="padding:7px 10px;font-weight:800;">'+esc(g)+'</td>' +'<td style="padding:7px;text-align:center;">'+d.n+'</td>' +'<td style="padding:7px;text-align:center;">'+d.t+'</td>' +'<td style="padding:7px;text-align:center;font-weight:900;color:'+col+';">'+pc+'%</td></tr>';
+    return '<tr style="background:'+(i%2?'#FBF7F0':'#fff')+';">' +'<td style="padding:7px 10px;font-weight:800;">'+esc(g)+'</td>' +'<td style="padding:7px;text-align:center;">'+d.n+'</td>' +'<td style="padding:7px;text-align:center;">'+d.t+'</td>' +'<td style="padding:7px;text-align:center;font-weight:900;color:'+col+';">'+pc+'%</td></tr>';
   }).join('');
   var catAgg={};
   S.forEach(function(x){ x.log.forEach(function(r){
@@ -6204,20 +6204,20 @@ function hhShowAnalytics(){
     var pc=t?Math.round(c/t*100):0;
     var col=pc>=70?'#3D6B53':pc>=50?'#b5801f':'#c0392b';
     var phCol=x.phase==='قبلي'?'#c0392b':x.phase==='بعدي'?'#3D6B53':x.phase==='تذكّر'?'#1F4E79':'#B8924A';
-    return '<tr style="background:'+(i%2?'#F7FBFF':'#fff')+';">' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:#999;">'+(i+1)+'</td>' +'<td style="padding:6px 8px;font-weight:800;">'+esc(x.gameName)+'</td>' +'<td style="padding:6px 8px;text-align:center;"><span style="background:'+phCol+';color:#fff;border-radius:7px;padding:1px 8px;font-size:.66rem;font-weight:900;">'+esc(x.phase||'·')+'</span></td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;">'+esc(x.group||'·')+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;color:#888;">'+esc(x.date)+'</td>' +'<td style="padding:6px 8px;text-align:center;">'+t+'</td>' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:'+col+';">'+pc+'%</td></tr>';
+    return '<tr style="background:'+(i%2?'#FBF7F0':'#fff')+';">' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:#999;">'+(i+1)+'</td>' +'<td style="padding:6px 8px;font-weight:800;">'+esc(x.gameName)+'</td>' +'<td style="padding:6px 8px;text-align:center;"><span style="background:'+phCol+';color:#fff;border-radius:7px;padding:1px 8px;font-size:.66rem;font-weight:900;">'+esc(x.phase||'·')+'</span></td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;">'+esc(x.group||'·')+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;color:#888;">'+esc(x.date)+'</td>' +'<td style="padding:6px 8px;text-align:center;">'+t+'</td>' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:'+col+';">'+pc+'%</td></tr>';
   }).join('');
-  ov.innerHTML='<div id="hh-analytics-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:760px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> لوحة التحليلات التراكمية</div>' +'<button onclick="hhCloseAnalytics()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">' +'<div style="background:#E9EEF8;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#1F4E79;">'+S.length+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">جلسة</div></div>' +'<div style="background:#FDF3DD;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#B8924A;">'+totQ+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">سؤال</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+overall+'%</div><div style="font-size:.7rem;color:#555;font-weight:800;">المعدل العام</div></div>' +'</div>' +'<div style="font-weight:900;font-size:.86rem;color:#1F4E79;margin-bottom:6px;"> منحنى التطور عبر الجلسات</div>' +'<div style="background:#FAFBFD;border:1.5px solid #E3D9C6;border-radius:12px;padding:8px;margin-bottom:14px;">'+chart
-    +'<div style="text-align:center;font-size:.64rem;color:#999;margin-top:2px;">الخط المتقطع = عتبة الإتقان 70%</div></div>' +(phaseCards?'<div style="font-weight:900;font-size:.86rem;color:#1F4E79;margin-bottom:6px;"> الأداء حسب مرحلة البحث</div><div style="display:flex;gap:9px;flex-wrap:wrap;">'+phaseCards+'</div>':'')
+  ov.innerHTML='<div id="hh-analytics-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:760px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> لوحة التحليلات التراكمية</div>' +'<button onclick="hhCloseAnalytics()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">' +'<div style="background:#FBF3E2;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+S.length+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">جلسة</div></div>' +'<div style="background:#FDF3DD;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#B8924A;">'+totQ+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">سؤال</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+overall+'%</div><div style="font-size:.7rem;color:#555;font-weight:800;">المعدل العام</div></div>' +'</div>' +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> منحنى التطور عبر الجلسات</div>' +'<div style="background:#FAFBFD;border:1.5px solid #E3D9C6;border-radius:12px;padding:8px;margin-bottom:14px;">'+chart
+    +'<div style="text-align:center;font-size:.64rem;color:#999;margin-top:2px;">الخط المتقطع = عتبة الإتقان 70%</div></div>' +(phaseCards?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> الأداء حسب مرحلة البحث</div><div style="display:flex;gap:9px;flex-wrap:wrap;">'+phaseCards+'</div>':'')
     + gainBox
-    +'<div style="font-weight:900;font-size:.86rem;color:#1F4E79;margin:12px 0 6px;"> مقارنة المجموعات</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#1F4E79;color:#fff;"><th style="padding:7px 10px;text-align:right;">المجموعة</th><th style="padding:7px;text-align:center;">جلسات</th><th style="padding:7px;text-align:center;">أسئلة</th><th style="padding:7px;text-align:center;">النسبة</th></tr></thead>' +'<tbody>'+groupRows+'</tbody></table>' +(weakRows?'<div style="font-weight:900;font-size:.86rem;color:#1F4E79;margin-bottom:6px;"> الفئات الأضعف (تحتاج تعزيزاً)</div><div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:11px;margin-bottom:14px;">'+weakRows+'</div>':'')
-    +'<div style="font-weight:900;font-size:.86rem;color:#1F4E79;margin-bottom:6px;"> سجل الجلسات</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#E9EEF8;color:#1F4E79;font-weight:900;">' +'<th style="padding:6px 8px;">#</th><th style="padding:6px 8px;text-align:right;">الجلسة</th><th style="padding:6px 8px;">المرحلة</th><th style="padding:6px 8px;">المجموعة</th><th style="padding:6px 8px;">التاريخ</th><th style="padding:6px 8px;">أسئلة</th><th style="padding:6px 8px;">النسبة</th></tr></thead>' +'<tbody>'+sessRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhPrintAnalytics()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة التقرير</button>' +'<button onclick="hhExportAnalyticsCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير بيانات البحث</button>' +'<button onclick="hhCloseAnalytics()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
+    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin:12px 0 6px;"> مقارنة المجموعات</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">المجموعة</th><th style="padding:7px;text-align:center;">جلسات</th><th style="padding:7px;text-align:center;">أسئلة</th><th style="padding:7px;text-align:center;">النسبة</th></tr></thead>' +'<tbody>'+groupRows+'</tbody></table>' +(weakRows?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> الفئات الأضعف (تحتاج تعزيزاً)</div><div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:11px;margin-bottom:14px;">'+weakRows+'</div>':'')
+    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> سجل الجلسات</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#FBF3E2;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;">#</th><th style="padding:6px 8px;text-align:right;">الجلسة</th><th style="padding:6px 8px;">المرحلة</th><th style="padding:6px 8px;">المجموعة</th><th style="padding:6px 8px;">التاريخ</th><th style="padding:6px 8px;">أسئلة</th><th style="padding:6px 8px;">النسبة</th></tr></thead>' +'<tbody>'+sessRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhPrintAnalytics()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة التقرير</button>' +'<button onclick="hhExportAnalyticsCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير بيانات البحث</button>' +'<button onclick="hhCloseAnalytics()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
 }
 function hhCloseAnalytics(){ var e=document.getElementById('hh-analytics'); if(e) e.remove(); }
 function hhPrintAnalytics(){
   var el=document.getElementById('hh-analytics-inner'); if(!el) return;
   var w=window.open('','_blank');
-  w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>تقرير التحليلات</title>' +'<style>body{font-family:Cairo,Tajawal,Arial,sans-serif;padding:20px;direction:rtl;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px 10px;}th{background:#1F4E79;color:#fff;}button{display:none}</style></head><body>');
+  w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>تقرير التحليلات</title>' +'<style>body{font-family:Cairo,Tajawal,Arial,sans-serif;padding:20px;direction:rtl;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #ddd;padding:6px 10px;}th{background:#5E0E26;color:#fff;}button{display:none}</style></head><body>');
   w.document.write(el.innerHTML);
   w.document.write('</body></html>');
   w.document.close();
@@ -6594,7 +6594,7 @@ function hhRenderAI(kind, d, lesson){
           return '<div style="margin-bottom:9px;padding-bottom:8px;border-bottom:1px dashed #eee;">' + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:3px;">' +   '<span style="background:#EBF2EE;color:#3D6B53;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.type||'')+'</span>' +   '<span style="background:#FDF3DD;color:#8A6D2E;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.bloom||'')+'</span>' +   '<span style="color:#aaa;font-size:.62rem;font-weight:900;">('+(x.marks||2)+' درجة)</span>' + '</div>' + '<div style="font-weight:800;color:#333;font-size:.8rem;">'+(x.n||'')+'. '+esc(x.q||'')+'</div>' + (x.opts&&x.opts.length?'<div style="font-size:.72rem;color:#666;margin-top:3px;">'+x.opts.map(function(o){return '◻ '+esc(o);}).join(' ')+'</div>':'')
             + '<div style="font-size:.72rem;color:#3D6B53;font-weight:800;margin-top:3px;">✓ '+esc(x.a||'')+'</div></div>';
         }).join('')
-      + '<button onclick="hhPrintGen()" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-top:6px;"> طباعة الاختبار</button>' + '</div>';
+      + '<button onclick="hhPrintGen()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-top:6px;"> طباعة الاختبار</button>' + '</div>';
   }
   if(kind==='summary'){
     return '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:10px;padding:13px;">' + '<div style="font-weight:900;color:#8A6D2E;margin-bottom:6px;"> '+esc(d.title||lesson.lesson)+'</div>' + (d.idea?'<div style="background:#fff;border-right:3px solid #B8924A;border-radius:8px;padding:9px 11px;margin-bottom:9px;font-weight:800;color:#5E0E26;font-size:.82rem;"> '+esc(d.idea)+'</div>':'')
@@ -6676,7 +6676,7 @@ function hhAISettings(){
   var cur = hhGetAIEndpoint();
   var ov=document.createElement('div'); ov.id='hh-aiset';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999996;display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl;';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:520px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> إعدادات التوليد الذكي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;color:#555;line-height:1.9;margin-bottom:10px;">الصق رابط الوسيط السحابي (Cloud Function). بعد حفظه سيعمل التوليد الذكي لك ولكل من يستخدم المنصة.</div>' +'<input id="ai-url" type="text" value="'+esc(cur)+'" placeholder="https://us-central1-اسم-مشروعك.cloudfunctions.net/generateContent" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:monospace;font-size:.76rem;box-sizing:border-box;margin-bottom:10px;direction:ltr;text-align:left;">' +'<div id="ai-set-status" style="font-size:.74rem;font-weight:800;min-height:16px;margin-bottom:8px;"></div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhSaveAIEndpoint()" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.83rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhTestAIEndpoint()" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">اختبار الاتصال</button>' +'<button onclick="document.getElementById(\'hh-aiset\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">إغلاق</button>' +'</div>' +'<div style="font-size:.7rem;color:#999;margin-top:10px;line-height:1.7;">لم تنشئ الوسيط بعد؟ راجع ملف firebase-functions-index.js · التركيب لا يتجاوز 10 دقائق.</div>' +'</div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:520px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> إعدادات التوليد الذكي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;color:#555;line-height:1.9;margin-bottom:10px;">الصق رابط الوسيط السحابي (Cloud Function). بعد حفظه سيعمل التوليد الذكي لك ولكل من يستخدم المنصة.</div>' +'<input id="ai-url" type="text" value="'+esc(cur)+'" placeholder="https://us-central1-اسم-مشروعك.cloudfunctions.net/generateContent" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:monospace;font-size:.76rem;box-sizing:border-box;margin-bottom:10px;direction:ltr;text-align:left;">' +'<div id="ai-set-status" style="font-size:.74rem;font-weight:800;min-height:16px;margin-bottom:8px;"></div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhSaveAIEndpoint()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.83rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhTestAIEndpoint()" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">اختبار الاتصال</button>' +'<button onclick="document.getElementById(\'hh-aiset\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">إغلاق</button>' +'</div>' +'<div style="font-size:.7rem;color:#999;margin-top:10px;line-height:1.7;">لم تنشئ الوسيط بعد؟ راجع ملف firebase-functions-index.js · التركيب لا يتجاوز 10 دقائق.</div>' +'</div></div>';
   document.body.appendChild(ov);
 }
 function hhSaveAIEndpoint(){
@@ -6818,10 +6818,10 @@ function hhGuideChooser(){
     +'<div style="color:#D4BC85;font-weight:900;font-size:1.5rem;margin-bottom:8px;">دليل الاستخدام</div>'
     +'<div style="color:rgba(255,255,255,.7);font-size:.88rem;font-weight:700;margin-bottom:24px;">لنعرض لك ما يناسبك · من أنت؟</div>'
     +'<div style="display:flex;gap:13px;flex-wrap:wrap;justify-content:center;">'
-    +'<button onclick="hhGuidePick(\'student\')" style="flex:1;min-width:190px;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:18px;padding:26px 18px;font-family:Cairo;font-weight:900;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);">'
+    +'<button onclick="hhGuidePick(\'student\')" style="flex:1;min-width:190px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:18px;padding:26px 18px;font-family:Cairo;font-weight:900;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);">'
     +'<svg viewBox="0 0 24 24" fill="currentColor" style="width:38px;height:38px;display:block;margin:0 auto 9px;"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>'
     +'أنا طالب<div style="font-size:.73rem;font-weight:700;opacity:.85;margin-top:4px;">أتعلّم وألعب وأتقدّم</div></button>'
-    +'<button onclick="hhGuidePick(\'teacher\')" style="flex:1;min-width:190px;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:18px;padding:26px 18px;font-family:Cairo;font-weight:900;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);">'
+    +'<button onclick="hhGuidePick(\'teacher\')" style="flex:1;min-width:190px;background:linear-gradient(135deg,#8A6D2E,#6B5222);color:#fff;border:none;border-radius:18px;padding:26px 18px;font-family:Cairo;font-weight:900;font-size:1.05rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);">'
     +'<svg viewBox="0 0 24 24" fill="currentColor" style="width:38px;height:38px;display:block;margin:0 auto 9px;"><path d="M20 6h-2.18A3 3 0 0015 3a3 3 0 00-3 3 3 3 0 00-3-3 3 3 0 00-2.82 3H4a2 2 0 00-2 2v11a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2zm-8 13H4v-2h8v2zm0-4H4v-2h8v2zm8 4h-6v-6h6v6z"/></svg>'
     +'أنا معلم<div style="font-size:.73rem;font-weight:700;opacity:.85;margin-top:4px;">أدير صفي وأتابع طلابي</div></button>'
     +'</div>'
@@ -7143,7 +7143,7 @@ function hhTeacherProfile(i){
     + recs.map(function(r){
         return '<div style="background:#FDF8EC;border-right:3px solid #B8924A;border-radius:10px;padding:9px 12px;margin-bottom:6px;font-size:.78rem;color:#555;line-height:1.85;">'+esc(r)+'</div>';
       }).join('')
-    +'<button onclick="hhDirNotifyOne(\''+t.uid+'\',\''+esc(t.name)+'\')" style="width:100%;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:9px;">إرسال رسالة تشجيع</button>';
+    +'<button onclick="hhDirNotifyOne(\''+t.uid+'\',\''+esc(t.name)+'\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:9px;">إرسال رسالة تشجيع</button>';
   if(typeof hhSchModal==='function') hhSchModal('تحليل: '+t.name, html, col);
 }
 
@@ -7286,7 +7286,7 @@ async function hhAdmLoadActivity(){
             +'<td style="padding:6px 10px;font-size:.74rem;font-weight:800;">'+esc(names[x.type]||x.type||'')+'</td>'
             +'<td style="padding:6px 10px;font-size:.74rem;">'+esc(x.detail||'')+'</td>'
             +'<td style="padding:6px;font-size:.7rem;color:#777;">'+esc(x.user||'')+'</td>'
-            +'<td style="padding:6px;font-size:.68rem;color:#aaa;white-space:nowrap;">'+(d?d.toLocaleDateString('ar-QA',{month:'short',day:'numeric'}):'·')+'</td></tr>';
+            +'<td style="padding:6px;font-size:.68rem;color:#aaa;white-space:nowrap;">'+(d?d.toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'}):'·')+'</td></tr>';
         }).join('')
       +'</tbody></table></div>';
   }catch(e){
@@ -7342,7 +7342,7 @@ function hhBulkImportStudents(){
     return '<option value="'+esc(C.id)+'">'+esc(C.name||'صف')+'</option>';
   }).join('');
   ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #1F4E79;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:22px;">'
-    +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب</div>'
     +'<div style="font-size:.73rem;opacity:.86;margin-top:2px;">من Excel أو CSV أو لصق مباشر · بضغطة واحدة</div></div>'
     +'<button onclick="hhCloseBulk()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
@@ -7430,7 +7430,7 @@ function hhBulkPreview(){
     +'<th style="padding:7px 9px;text-align:right;">الاسم</th><th style="padding:7px;text-align:right;">البريد</th><th style="padding:7px;text-align:right;">الرقم</th></tr></thead>'
     +'<tbody>'+rows+'</tbody></table></div>'
     + (_hhBulkRows.length>25?'<div style="font-size:.71rem;color:#aaa;text-align:center;margin-top:5px;">و'+(_hhBulkRows.length-25)+' آخرين...</div>':'')
-    +'<button onclick="hhBulkConfirm()" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.86rem;cursor:pointer;margin-top:12px;">استيراد '+(_hhBulkRows.length-dups)+' طالباً الآن</button>';
+    +'<button onclick="hhBulkConfirm()" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.86rem;cursor:pointer;margin-top:12px;">استيراد '+(_hhBulkRows.length-dups)+' طالباً الآن</button>';
 }
 
 async function hhBulkConfirm(){
@@ -7913,7 +7913,7 @@ function hhGBStudentCard(i){
             +(n.text?'<div style="font-size:.74rem;color:#666;margin-top:3px;">'+esc(n.text)+'</div>':'')+'</div>';
         }).join('');
   }
-  html+='<button onclick="hhGBParentMsg('+i+')" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:12px;">إعداد رسالة لولي الأمر</button>';
+  html+='<button onclick="hhGBParentMsg('+i+')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:12px;">إعداد رسالة لولي الأمر</button>';
   if(typeof hhSchModal==='function') hhSchModal('بطاقة '+s.name, html, '#1F4E79');
 }
 function hhGBParentMsg(i){
@@ -7933,7 +7933,7 @@ function hhGBParentMsg(i){
   msg+='\nنشكر تعاونكم ومتابعتكم.\nمعلم المادة';
   var html='<textarea id="gb-parent-msg" rows="10" style="width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo,Tajawal,sans-serif;font-size:.82rem;line-height:1.9;box-sizing:border-box;resize:vertical;">'+esc(msg)+'</textarea>'
     +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">'
-    +'<button onclick="hhGBCopyParent()" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">نسخ الرسالة</button>'
+    +'<button onclick="hhGBCopyParent()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">نسخ الرسالة</button>'
     +'<button onclick="hhGBWhatsApp()" style="background:#25d366;color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إرسال واتساب</button>'
     +'</div>';
   if(typeof hhSchModal==='function') hhSchModal('رسالة ولي الأمر · '+s.name, html, '#3D6B53');
@@ -8339,7 +8339,7 @@ async function hhShareCard(i){
   x.fillStyle=GOLD_LT; x.font=F(800,26);
   x.fillText('almulhimedu.org', W/2, fy);
   x.fillStyle='rgba(255,255,255,.45)'; x.font=F(700,19);
-  x.fillText(new Date().toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'}), W/2, fy+36);
+  x.fillText(new Date().toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'}), W/2, fy+36);
 
   var url=c.toDataURL('image/png');
   window._hhCardURL=url; window._hhCardName=s.name;
@@ -8838,7 +8838,7 @@ function hhTplEdit(id){
     +'<input id="te-r" type="number" min="3" max="25" value="'+Math.round(T.sealR*100)+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:8px;padding:6px 9px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;"></div>'
     +'</div>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-    +'<button onclick="hhTplSavePos(\''+id+'\')" style="flex:1;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">حفظ</button>'
+    +'<button onclick="hhTplSavePos(\''+id+'\')" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">حفظ</button>'
     +'<button onclick="hhTplPreview(\''+id+'\')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">معاينة</button>'
     +'</div>';
   if(typeof hhSchModal==='function') hhSchModal('ضبط: '+(T.name||''), html, '#1F4E79');
@@ -8886,7 +8886,7 @@ function hhRenderTemplateCert(o, T){
       if(o.score){ x.fillStyle='#8A6D2E'; x.font=F(900,Math.round(H*0.034)); x.fillText(o.score+'%', W/2, H*0.635); }
       if(o.teacher){ x.fillStyle='#5E0E26'; x.font=F(800,Math.round(H*0.021)); x.fillText(o.teacher, W*0.76, H*0.855); }
       x.fillStyle='rgba(94,14,38,.75)'; x.font=F(700,Math.round(H*0.019));
-      x.fillText(new Date().toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'}), W*0.30, H*0.855);
+      x.fillText(new Date().toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'}), W*0.30, H*0.855);
       // ═══ الختم إلزامي · لا يمكن تعطيله ═══
       if(typeof hhDrawSeal==='function'){
         hhDrawSeal(x, W*T.sealX, H*T.sealY, Math.round(Math.min(W,H)*T.sealR), '#B8924A','#8A6D2E','classic');
@@ -9259,7 +9259,7 @@ async function hhGenerateCert(){
   var _dateCX=W/2-340;
   x.beginPath(); x.moveTo(_dateCX-_sigW/2,_sy); x.lineTo(_dateCX+_sigW/2,_sy); x.stroke();
   x.fillStyle=MAROON; x.font=F(800,20);
-  x.fillText(new Date().toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'}), _dateCX, _sy-14);
+  x.fillText(new Date().toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'}), _dateCX, _sy-14);
   x.fillStyle=GOLD2; x.font=F(700,15); x.fillText('التاريخ', _dateCX, _sy+23);
 
   if(typeof hhDrawSeal==='function'){
@@ -9506,7 +9506,7 @@ async function hhOpenClasses(){
   }).join('') : '<div style="text-align:center;color:#999;font-weight:700;padding:18px;font-size:.82rem;">لم تنشئ صفوفاً بعد</div>';
 
   ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:18px;max-width:600px;width:100%;overflow:hidden;margin-bottom:20px;">'
-    +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div style="font-weight:900;font-size:.94rem;">صفوفي</div>'
     +'<button onclick="document.getElementById(\'hh-classes\').remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:15px 18px;">'
@@ -9516,7 +9516,7 @@ async function hhOpenClasses(){
     +'<input id="cls-name" placeholder="اسم الصف (مثال: السابع/2)" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<input id="cls-subject" placeholder="المادة" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'</div>'
-    +'<button onclick="hhCreateClass()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إنشاء الصف</button>'
+    +'<button onclick="hhCreateClass()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إنشاء الصف</button>'
     +'<button onclick="hhBulkImportStudents()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">استيراد طلاب</button>'
     +'</div>'
     + cards
@@ -9575,13 +9575,13 @@ function hhJoinClassPrompt(){
   var ov=document.createElement('div'); ov.id='hh-join';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:999995;display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
   ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:400px;width:100%;overflow:hidden;">'
-    +'<div style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;padding:14px 18px;font-weight:900;font-size:.92rem;">الانضمام لصف معلمك</div>'
+    +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;font-weight:900;font-size:.92rem;">الانضمام لصف معلمك</div>'
     +'<div style="padding:16px 18px;">'
     +'<div style="font-size:.78rem;color:#666;line-height:1.9;margin-bottom:10px;">اكتب الكود الذي أعطاك إياه معلمك (6 خانات).</div>'
     +'<input id="join-code" maxlength="6" placeholder="ABC123" style="width:100%;border:2px solid #B8924A;border-radius:12px;padding:12px;font-family:monospace;font-size:1.4rem;font-weight:900;text-align:center;letter-spacing:6px;box-sizing:border-box;text-transform:uppercase;">'
     +'<div id="join-status" style="font-size:.76rem;font-weight:800;min-height:18px;margin:7px 0;text-align:center;"></div>'
     +'<div style="display:flex;gap:9px;">'
-    +'<button onclick="hhJoinClass()" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">انضمام</button>'
+    +'<button onclick="hhJoinClass()" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">انضمام</button>'
     +'<button onclick="document.getElementById(\'hh-join\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.85rem;cursor:pointer;">إلغاء</button>'
     +'</div></div></div>';
   document.body.appendChild(ov);
@@ -9635,7 +9635,7 @@ function hhShowUsageStats(){
   }).join('');
   var recent = log.slice(-14).reverse().map(function(r,i){
     var d = new Date(r.ts);
-    return '<tr style="background:'+(i%2?'#F7FBFF':'#fff')+';">' + '<td style="padding:5px 8px;font-size:.72rem;">'+esc(names[r.t]||r.t)+'</td>' + '<td style="padding:5px 8px;font-size:.72rem;font-weight:700;">'+esc(r.d||'·')+'</td>' + '<td style="padding:5px 8px;font-size:.68rem;color:#888;">'+esc(r.u||'')+'</td>' + '<td style="padding:5px 8px;font-size:.66rem;color:#aaa;white-space:nowrap;">'+d.toLocaleDateString('ar-QA',{month:'short',day:'numeric'})+'</td></tr>';
+    return '<tr style="background:'+(i%2?'#F7FBFF':'#fff')+';">' + '<td style="padding:5px 8px;font-size:.72rem;">'+esc(names[r.t]||r.t)+'</td>' + '<td style="padding:5px 8px;font-size:.72rem;font-weight:700;">'+esc(r.d||'·')+'</td>' + '<td style="padding:5px 8px;font-size:.68rem;color:#888;">'+esc(r.u||'')+'</td>' + '<td style="padding:5px 8px;font-size:.66rem;color:#aaa;white-space:nowrap;">'+d.toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'})+'</td></tr>';
   }).join('');
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999994;display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto;direction:rtl;';
@@ -9986,8 +9986,8 @@ function toggleGameStats(){
 function hhExportGameResults(){
   try{
     const date = new Date();
-    const dateStr = date.toLocaleDateString('ar-QA');
-    const timeStr = date.toLocaleTimeString('ar-QA');
+    const dateStr = date.toLocaleDateString('ar-QA-u-nu-latn');
+    const timeStr = date.toLocaleTimeString('ar-QA-u-nu-latn');
     
     // 1) معلومات اللعبة العامة
     let csv = '\uFEFF'; // BOM لدعم UTF-8 في Excel
@@ -11389,7 +11389,7 @@ async function sharePDFAchievements(){
         </div> `).join('')}
     </div>
     <div style="margin-top:40px;padding-top:20px;border-top:2px solid #e8f2ec;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#6b7c8e;">
-      <div>تاريخ الإصدار: ${new Date().toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'})}</div>
+      <div>تاريخ الإصدار: ${new Date().toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'})}</div>
       <div>alhalhali.com</div>
     </div> `;
 
@@ -11536,7 +11536,8 @@ function updateRoyalGreeting(){
   try{
     const greetEl=document.getElementById('royal-greeting-time');
     const nameEl=document.getElementById('royal-username-text');
-    if(greetEl){
+    const _sm=document.getElementById('screen-menu');
+    if(greetEl && !(_sm && _sm.classList.contains('hv2'))){ // الرئيسية الجديدة تعرض اليوم والتاريخ (zzzzzzbj)
       const h=new Date().getHours();
       let greeting='مرحبا';
       if(h>=4 && h<12)       greeting='صباح الخير';
@@ -11873,7 +11874,7 @@ function hhSaveGameStart(){
   try{
     const gameData = {
       localId: G.gameLocalId,
-      date:new Date().toLocaleDateString('ar-QA'),
+      date:new Date().toLocaleDateString('ar-QA-u-nu-latn'),
       timestamp: Date.now(),
       name:G.gameName||'لعبة بدون اسم',
       cats:(G.selectedCats||[]).slice(0,3).join('، ')+((G.selectedCats||[]).length>3?'...':''),
@@ -11925,7 +11926,7 @@ function saveGameHistory(sorted){
       // احتياط: لو لم يُحفظ عند البدء لأي سبب، ننشئه الآن كاملاً
       hist.unshift({
         localId:G.gameLocalId||('g'+Date.now()),
-        date:new Date().toLocaleDateString('ar-QA'), timestamp:Date.now(),
+        date:new Date().toLocaleDateString('ar-QA-u-nu-latn'), timestamp:Date.now(),
         name:G.gameName||'لعبة', cats:(G.selectedCats||[]).slice(0,3).join('، '),
         catsArr:G.selectedCats||[], teamsArr:G.teams||[], teamCount:(G.teams||[]).length,
         isComp:!!G.isComp, ...patch
@@ -12999,7 +13000,7 @@ async function submitRating(){
     ease:ratingData.ease,
     recommend:ratingData.recommend,
     comment:document.getElementById('rate-comment').value.trim(),
-    date:new Date().toLocaleDateString('ar-QA'),
+    date:new Date().toLocaleDateString('ar-QA-u-nu-latn'),
     ts:Date.now(),
     uid:currentUser?(currentUser.uid||currentUser.id||''):('guest_'+Date.now()),
     // بصمة الجهاز · تحفظ فقط إذا وافق المستخدم
@@ -13056,7 +13057,7 @@ async function openAddTestimonialModal(){
     name: name.trim(),
     comment: comment.trim(),
     stars: stars,
-    date: new Date().toLocaleDateString('ar'),
+    date: new Date().toLocaleDateString('ar-u-nu-latn'),
     ts: Date.now(),
     manual: true
   };
@@ -13600,7 +13601,7 @@ async function loadMyClassrooms(){
 
 function _renderClassroomCard(c){
   const created = c.createdAt?.toDate?.() 
-    ? c.createdAt.toDate().toLocaleDateString('ar-QA', {year:'numeric',month:'short',day:'numeric'})
+    ? c.createdAt.toDate().toLocaleDateString('ar-QA-u-nu-latn', {year:'numeric',month:'short',day:'numeric'})
     : '·';
   const safeCode = esc(c.code);
   const safeName = esc(c.className || '');
@@ -13774,7 +13775,7 @@ async function loadClassStudents(){
       const firstLetter = (s.studentName || '?').trim().charAt(0);
       const joined = !!s.userId;
       const added = s.addedAt?.toDate?.()
-        ? s.addedAt.toDate().toLocaleDateString('ar-QA',{month:'short',day:'numeric'})
+        ? s.addedAt.toDate().toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'})
         : '';
       return `
         <div class="student-item" data-id="${esc(s.id)}">
@@ -15234,7 +15235,7 @@ function hhOpenAIGen(){
         <div id="hh-ai-after-buttons" style="display:none;gap:10px;">
           <button onclick="document.getElementById('hh-ai-modal').remove();" style="flex:1;padding:12px;background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.92rem;cursor:pointer;">رفض</button>
           <button onclick="hhAIRegenerate()" style="flex:1;padding:12px;background:#F8F8F6;color:#5E0E26;border:1.5px solid #B8924A;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.92rem;cursor:pointer;">توليد مرة أخرى</button>
-          <button onclick="hhAIAccept()" style="flex:2;padding:12px;background:linear-gradient(135deg,#3D6B53,#2D5544);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.95rem;cursor:pointer;box-shadow:0 4px 12px rgba(61,107,83,.35);display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+          <button onclick="hhAIAccept()" style="flex:2;padding:12px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.95rem;cursor:pointer;box-shadow:0 4px 12px rgba(61,107,83,.35);display:inline-flex;align-items:center;justify-content:center;gap:6px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> قبول وحفظ الكل
           </button>
         </div>
@@ -16094,7 +16095,7 @@ function _updateQDBStatusBanner(){
   const modifiedAt = localStorage.getItem('hh_qdb_modified_at');
   if(modifiedAt){
     const d = new Date(parseInt(modifiedAt));
-    const dateStr = d.toLocaleDateString('ar-QA',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString('ar-QA',{hour:'2-digit',minute:'2-digit'});
+    const dateStr = d.toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString('ar-QA-u-nu-latn',{hour:'2-digit',minute:'2-digit'});
     statusText.innerHTML = '<strong>فيه تعديلات محلية</strong> · آخر حفظ: ' + dateStr;
     if(banner){
       banner.style.background = 'linear-gradient(135deg,#f0e5b8,#fdfaf0)';
@@ -16386,7 +16387,7 @@ function renderCompAdmin(){
 
   // أزرار الحفظ والاستعادة
   const bar=mk('div','display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;');
-  const save=mk('button','padding:11px 26px;background:linear-gradient(135deg,#3D6B53,#2a4d3a);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;',' حفظ ومزامنة للجميع');
+  const save=mk('button','padding:11px 26px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;',' حفظ ومزامنة للجميع');
   save.onclick=saveCompAdmin;
   const reset=mk('button','padding:11px 22px;background:#fff;color:#c0392b;border:2px solid #c0392b;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;','↩ استعادة الافتراضي لهذه المسابقة');
   reset.onclick=()=>{ if(!confirm('استعادة الإعدادات والأسئلة الافتراضية لهذه المسابقة؟')) return;
@@ -17251,7 +17252,7 @@ function renderWhatsNewAdmin(){
   list.innerHTML = '';
   items.forEach(it => {
     const cat = WN_CATEGORIES[it.category] || WN_CATEGORIES.feature;
-    const date = new Date(it.updatedAt||it.createdAt||Date.now()).toLocaleDateString('ar-EG', {year:'numeric', month:'short', day:'numeric'});
+    const date = new Date(it.updatedAt||it.createdAt||Date.now()).toLocaleDateString('ar-EG-u-nu-latn', {year:'numeric', month:'short', day:'numeric'});
     const card = document.createElement('div');
     card.style.cssText = 'background:#fff;border:1.5px solid #ecf0f1;border-right:4px solid '+cat.color+';border-radius:10px;padding:12px;margin-bottom:8px;'+(it.published?'':'opacity:.55;');
     card.innerHTML = '' + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">' +   '<div style="flex:1;min-width:160px;">' +     '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">' +       '<span style="background:'+cat.bg+';color:'+cat.color+';padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.68rem;">'+cat.icon+' '+cat.label+'</span>' +       (it.published?'':'<span style="background:#fde8e8;color:#c0392b;padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.65rem;"> مسودة</span>')
@@ -17669,7 +17670,7 @@ async function loadBackupPanel(){
   if(lastEl){
     if(lastExport){
       const d = new Date(parseInt(lastExport));
-      lastEl.textContent = d.toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('ar-QA',{hour:'2-digit',minute:'2-digit'});
+      lastEl.textContent = d.toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'}) + ' · ' + d.toLocaleTimeString('ar-QA-u-nu-latn',{hour:'2-digit',minute:'2-digit'});
     } else {
       lastEl.textContent = 'لم يتم التصدير بعد';
     }
@@ -17805,7 +17806,7 @@ function handleBackupFileSelect(event){
       btn.disabled = false;
 
       // عرض معلومات الملف
-      const exportedAt = new Date(content._meta.exportedAt).toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'});
+      const exportedAt = new Date(content._meta.exportedAt).toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'});
       const counts = [];
       if(content.data?.users) counts.push(content.data.users.length + ' مستخدم');
       if(content.data?.reviews) counts.push(content.data.reviews.length + ' تقييم');
@@ -18655,7 +18656,7 @@ async function runHealthCheck(){
       const doc = await db.collection('platform_settings').doc('admin_customizations').get();
       if(doc.exists){
         const d = doc.data();
-        const when = d.updated_at ? new Date(d.updated_at).toLocaleString('ar') : 'غير معروف';
+        const when = d.updated_at ? new Date(d.updated_at).toLocaleString('ar-u-nu-latn') : 'غير معروف';
         add('ok', 'التخصيصات في السحابة', 'موجودة. آخر تحديث: '+when);
       } else {
         add('warn', 'التخصيصات في السحابة', 'لا توجد تخصيصات محفوظة بعد. غيّر لوناً أو أخفِ فئة لإنشائها.');
@@ -18740,7 +18741,7 @@ async function runHealthCheck(){
         if(snap.exists){
           const cloud = JSON.parse(snap.data().data||'{}');
           const cloudCats = Object.keys(cloud||{}).length;
-          const when = snap.data().updatedAt && snap.data().updatedAt.toDate ? snap.data().updatedAt.toDate().toLocaleString('ar') : 'غير معروف';
+          const when = snap.data().updatedAt && snap.data().updatedAt.toDate ? snap.data().updatedAt.toDate().toLocaleString('ar-u-nu-latn') : 'غير معروف';
           add('ok', 'تعديلات الخرائط في السحابة', cloudCats+' فئة منشورة للمستخدمين. آخر تحديث: '+when);
         } else if(extLocalCats > 0){
           add('warn', 'تعديلات الخرائط في السحابة', 'لديك تعديلات محلية لم تُنشر بعد للمستخدمين. افتح فئة خرائط واضغط حفظ وأنت أدمن متصل.');
@@ -19793,7 +19794,7 @@ function getCertSignatures(){
 
 // ═══ جمع بيانات النشاط ═══
 function collectActivityData(){
-  const today = new Date().toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' });
+  const today = new Date().toLocaleDateString('ar-EG-u-nu-latn', { year:'numeric', month:'long', day:'numeric' });
   // الشعار: إما من ACTIVITY_GEN.logoDataUrl أو من المحفوظ
   let logo = ACTIVITY_GEN.logoDataUrl;
   if(!logo){
@@ -20863,7 +20864,7 @@ function exportGraderPDF(){
   // بناء HTML للـ PDF
   const teacherName = (document.getElementById('ag-teacher-name')||{}).value || '';
   const schoolName = (document.getElementById('ag-school-name')||{}).value || '';
-  const dateStr = new Date().toLocaleDateString('ar-EG');
+  const dateStr = new Date().toLocaleDateString('ar-EG-u-nu-latn');
   
   const html = `
     <div style="font-family:Tajawal,sans-serif;padding:30px;direction:rtl;color:#1a1a2e;background:#fff;min-height:842px;">
@@ -21113,8 +21114,8 @@ function renderBagItems(){
 
   list.innerHTML = bag.map(item => {
     const date = new Date(item.createdAt);
-    const dateStr = date.toLocaleDateString('ar-EG', { year:'numeric', month:'short', day:'numeric' });
-    const timeStr = date.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
+    const dateStr = date.toLocaleDateString('ar-EG-u-nu-latn', { year:'numeric', month:'short', day:'numeric' });
+    const timeStr = date.toLocaleTimeString('ar-EG-u-nu-latn', { hour:'2-digit', minute:'2-digit' });
     const tplInfo = {
       worksheet: { icon:'', label:'ورقة عمل', color:'#3D6B53', bg:'#e8f2ec' },
       quiz: { icon:'<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M5 9.2h3v9H5zM10.6 5h2.8v13h-2.8zM16.2 13h2.8v5h-2.8z"/></svg>', label:'اختبار', color:'#8A1538', bg:'#f5e1e7' },
@@ -21151,7 +21152,7 @@ function renderBagItems(){
           <div style="font-size:.74rem;color:#777;font-weight:500;">${preview}${item.data.subject?' • '+escAG(item.data.subject):''}</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">
-          <button onclick="reuseBagItem('${escAttr(item.id)}')" title="إعادة استخدام" style="padding:6px 10px;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;display:flex;align-items:center;gap:4px;">
+          <button onclick="reuseBagItem('${escAttr(item.id)}')" title="إعادة استخدام" style="padding:6px 10px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;display:flex;align-items:center;gap:4px;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> استخدم
           </button>
           <button onclick="deleteBagItem('${escAttr(item.id)}')" title="حذف" style="padding:6px 10px;background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.7rem;cursor:pointer;"> حذف
@@ -22499,6 +22500,9 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       n=n.trim();
       t.textContent=(!n || n==='أيها الملهم' || n==='أهلا') ? 'أهلاً بك، جاهز لتجربة مُلهِمة؟' : ('أهلاً '+n+'، جاهز لتجربة مُلهِمة؟');
     }
+    // السطر الصغير: اليوم والتاريخ بأرقام 123 (zzzzzzbj)
+    var gt=document.getElementById('royal-greeting-time');
+    if(gt){ try{ gt.textContent=new Date().toLocaleDateString('ar-QA-u-nu-latn',{weekday:'long',day:'numeric',month:'long'}); }catch(_d){} }
     var h=hist();
     var res=document.getElementById('hv2-resume');
     if(res){
@@ -22517,6 +22521,8 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       else{
         wk.style.display='';
         var parts=['<b>'+games+'</b> '+(games===1?'لعبة':'ألعاب')];
+        var uc={}; h.forEach(function(x){ if((x.timestamp||0)>=since) (x.catsArr||[]).forEach(function(c){uc[c]=1;}); }); var nc=Object.keys(uc).length;
+        if(nc) parts.push('<b>'+nc+'</b> '+(nc===1?'فئة':(nc===2?'فئتان':'فئات مختلفة')));
         if(qa){ parts.push('<b>'+qa+'</b> سؤالاً'); parts.push('<b>'+Math.round(qc/qa*100)+'%</b> إجابات صحيحة'); }
         wk.innerHTML='<span class="hv2-wi">'+IC.chart+'</span><span><b class="hv2-wt">إنجازك هذا الأسبوع</b><span class="hv2-wv">'+parts.join(' · ')+'</span></span>';
       }
@@ -22668,4 +22674,432 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
   function boot(){ window.hhHomeV2Refresh(); window.hhSetupV2Sync(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   setTimeout(boot, 1500);
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+//  zzzzzzbj · لوحتا اللعب الجديدتان (الفئات + المسابقات الـ13) + قاعدة 4 فئات
+//  • نفس عقد اللعب: cell_{cat__diff__i} + openQ + G.used (لا تغيير في منطق التحكيم)
+//  • ألوان المستويات الموحّدة: 200 كريمي · 400 ذهبي · 600 أخضر · 800 عنابي · 1000 داكن بإطار ذهبي · 1200 بنفسجي ملكي
+//  • الشاشات العريضة: النقاط في الأعلى والوسائل رموزاً بين الفريقين
+// ═══════════════════════════════════════════════════════════════════
+(function(){
+  var MIN_CATS=4;
+  window.HH_MIN_CATS=MIN_CATS;
+  var PTS2LV={200:'lv200',400:'lv400',600:'lv600',800:'lv800',1000:'lv1000',1200:'lv1200'};
+  var ACC=[['#7A1636','#4A0B1E'],['#2F6A4E','#1F4A36'],['#B07A1E','#8A5E12'],['#3D4A7A','#283357'],['#5A3A8E','#3D2557'],['#0F6E6E','#0A4A4A']];
+  var TEAMC=['#1E7B45','#1F4E79','#B07A1E','#7A1636','#5A3A8E','#0F6E6E','#C0392B','#3D4A7A'];
+  var LEG_PTS={easy:600,med:800,hard:1000};
+  function E(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function wide(){ return window.innerWidth>=900; }
+  function portrait(){ return !wide(); } // شاشة ضيقة (جوال عمودي أو أفقي): لوحات متراصة بتمرير عمودي
+  function landscapeSmall(){ return !wide() && window.innerWidth>window.innerHeight; }
+  function isComp(c){ return c && c.length===1 && typeof _HH_COMP_CATS!=='undefined' && _HH_COMP_CATS.has(c[0]); }
+  function lbl(c){ return (typeof CAT_INFO!=='undefined' && CAT_INFO[c] && CAT_INFO[c].label) || c; }
+  function shortName(c){ return String(lbl(c)).replace(/^مسابقة\s+/,'').trim(); }
+  function teamName(i){ return (G && G.teams && G.teams[i]) || ('الفريق '+(i+1)); }
+
+  // ── خلية سؤال موحّدة ──
+  function ptsOf(diff,isLegend){ return isLegend ? LEG_PTS[diff] : ((DIFF_MAP[diff]||{pts:200}).pts); }
+  function usedLabel(key){
+    var u=G.usedBy && G.usedBy[key];
+    if(!u) return '';
+    if(!u.length) return '<small style="color:#9A8F7C">لا أحد</small>';
+    return '<small style="color:'+TEAMC[u[0]%TEAMC.length]+'">'+E(u.map(teamName).join(' و '))+'</small>';
+  }
+  function paintCell(el){
+    var pts=el.getAttribute('data-pts'), key=el.getAttribute('data-key');
+    if(el.classList.contains('used')) el.innerHTML='<b class="qpts">'+pts+'</b>'+usedLabel(key);
+    else el.innerHTML='<span class="qpts">'+pts+'</span>'+(pts==1000?'<i class="bv-star">★</i>':(pts==1200?'<i class="bv-star">★★</i>':''));
+  }
+  function mkCell(cat,diff,idx,q,isLegend){
+    var el=document.createElement('div');
+    if(!q){ el.className='qcell bv-cell bv-empty used'; el.innerHTML='<b class="qpts">—</b>'; return el; }
+    var key=cat+'__'+diff+'__'+idx, pts=ptsOf(diff,isLegend);
+    el.id='cell_'+key;
+    el.className='qcell bv-cell '+diff+' '+(PTS2LV[pts]||'lv200')+((G.used&&G.used[key])?' used':'');
+    el.setAttribute('data-key',key); el.setAttribute('data-pts',pts); el.setAttribute('data-cat',cat);
+    el.setAttribute('role','button'); el.setAttribute('aria-label',pts+' نقطة');
+    paintCell(el);
+    el.addEventListener('click',function(){
+      if(el.classList.contains('used')) return;
+      el.classList.add('popping'); setTimeout(function(){el.classList.remove('popping');},300);
+      openQ(q,diff,key,!!isLegend);
+    });
+    return el;
+  }
+
+  // ── صورة الفئة (نفس أولويات اللوحة السابقة) ──
+  function artHTML(cat){
+    var ci=(typeof CAT_INFO!=='undefined' && CAT_INFO[cat]) || {label:cat};
+    var partner=(cat.indexOf('بيرف آب')!==-1 || cat.indexOf('طموح')!==-1 || cat.indexOf('قنوان')!==-1);
+    var saved=null; try{ saved=localStorage.getItem('cat_img_'+cat); }catch(e){}
+    var svg=(typeof CAT_SVG!=='undefined') ? CAT_SVG[cat] : null;
+    if(partner && svg) return {html:svg, white:true};
+    if(saved) return {html:'<img src="'+saved+'" alt="'+E(ci.label)+'">', white:true, img:true};
+    if(svg) return {html:svg};
+    if(ci.img) return {html:'<img src="'+ci.img+'" alt="'+E(ci.label)+'">', white:true, img:true};
+    if(ci.emoji && String(ci.emoji).trim()) return {html:'<span class="bv-emoji">'+ci.emoji+'</span>'};
+    var ch=String(ci.label||cat||'؟').charAt(0);
+    return {html:'<svg viewBox="0 0 100 100" width="100%" height="100%"><text x="50" y="66" text-anchor="middle" font-size="52" font-family="Cairo,sans-serif" font-weight="900" fill="#F5E6C4">'+E(ch)+'</text></svg>'};
+  }
+
+  function measure(wrap){
+    var r=wrap.getBoundingClientRect(), cs=getComputedStyle(wrap);
+    var pv=(parseFloat(cs.paddingTop)||0)+(parseFloat(cs.paddingBottom)||0), ph=(parseFloat(cs.paddingLeft)||0)+(parseFloat(cs.paddingRight)||0);
+    var h=(r.height>100)?Math.floor(r.height-pv-4):Math.floor(window.innerHeight-160);
+    return {w:Math.floor((r.width||window.innerWidth)-ph), h:h};
+  }
+  function fitText(root){
+    // حجم الأرقام حسب الارتفاع الفعلي للخلايا
+    requestAnimationFrame(function(){ try{
+      var c=root.querySelector('.bv-cell:not(.bv-empty)')||root.querySelector('.bv-cell'); if(!c) return;
+      var r=c.getBoundingClientRect();
+      var fs=Math.max(13,Math.min(46, Math.min(r.height*0.42, r.width*0.30)));
+      root.style.setProperty('--bv-fs', fs.toFixed(1)+'px');
+      root.style.setProperty('--bv-sfs', Math.max(9,Math.min(13,fs*0.36)).toFixed(1)+'px');
+    }catch(e){} });
+  }
+
+  // ═══ لوحة الفئات ═══
+  function buildCats(wrap){
+    var cats=G.selectedCats, n=cats.length, P=portrait();
+    var cols=P?1:(n<=4?Math.min(2,n):3), rows=P?n:Math.ceil(n/cols);
+    var M=measure(wrap);
+    wrap.style.overflowY=P?'auto':'hidden';
+    var root=document.createElement('div');
+    root.className='bv-board bv-cats'+(P?' bv-portrait':'')+(n>4?' bv-dense':'');
+    if(!P){ root.style.height=M.h+'px'; root.style.gridTemplateColumns='repeat('+cols+',minmax(0,1fr))'; root.style.gridTemplateRows='repeat('+rows+',minmax(0,1fr))'; }
+    else root.style.gridTemplateColumns=landscapeSmall()?'repeat(2,minmax(0,1fr))':'minmax(0,1fr)';
+    cats.forEach(function(cat,gi){
+      var isLegend=(typeof _LEGENDARY_CATS_SET!=='undefined') ? _LEGENDARY_CATS_SET.has(cat) : (cat==='الأساطير'||cat.indexOf('أساطير')===0);
+      var ac=ACC[gi%ACC.length];
+      var pan=document.createElement('div'); pan.className='bv-pan'+(isLegend?' bv-legend':''); pan.setAttribute('data-cat',cat);
+      pan.style.setProperty('--ac',ac[0]); pan.style.setProperty('--ac2',ac[1]);
+      var h=document.createElement('div'); h.className='bv-h';
+      h.innerHTML='<span class="bv-hn">'+E(lbl(cat))+'</span><small class="bv-hc" data-count-cat="'+E(cat)+'"></small>';
+      pan.appendChild(h);
+      var body=document.createElement('div'); body.className='bv-cb';
+      var colR=document.createElement('div'); colR.className='bv-col';
+      var colL=document.createElement('div'); colL.className='bv-col';
+      ['easy','med','hard'].forEach(function(diff){
+        var qs=(G.boardData[cat]&&G.boardData[cat][diff])||[];
+        colR.appendChild(mkCell(cat,diff,0,qs[0]||null,isLegend));
+        colL.appendChild(mkCell(cat,diff,1,qs[1]||null,isLegend));
+      });
+      var a=artHTML(cat);
+      var art=document.createElement('div'); art.className='bv-art'+(a.white?' bv-white':'')+(a.img?' bv-img':'');
+      art.innerHTML=a.html;
+      body.appendChild(colR); body.appendChild(art); body.appendChild(colL);
+      pan.appendChild(body);
+      root.appendChild(pan);
+    });
+    wrap.appendChild(root);
+    // الصورة مربعة: أصغر من ارتفاع جسم اللوحة و40% من عرضها
+    if(!P){
+      requestAnimationFrame(function(){ try{
+        root.querySelectorAll('.bv-cb').forEach(function(b){
+          var r=b.getBoundingClientRect(), cs=getComputedStyle(b);
+          var ih=r.height-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+          var side=Math.floor(Math.max(40,Math.min(ih, r.width*0.40)));
+          var art=b.querySelector('.bv-art'); art.style.width=side+'px'; art.style.height=side+'px';
+        });
+        fitText(root);
+      }catch(e){} });
+    } else fitText(root);
+    refreshCounts();
+  }
+  function refreshCounts(){
+    try{
+      document.querySelectorAll('#board-grid [data-count-cat]').forEach(function(s){
+        var cat=s.getAttribute('data-count-cat');
+        var all=document.querySelectorAll('#board-grid .bv-cell[data-cat="'+(window.CSS&&CSS.escape?CSS.escape(cat):cat)+'"]');
+        var used=0; all.forEach(function(c){ if(c.classList.contains('used')) used++; });
+        s.textContent=used+' من '+all.length;
+      });
+    }catch(e){}
+  }
+
+  // ═══ مركز المسابقة: شعار + اسم بعرض الشعار ═══
+  function emblem(cat){
+    var who=(cat.indexOf('من أنا')!==-1);
+    var glyph=who?'؟':(cat.indexOf('القرآن')!==-1?'':String(shortName(cat)).charAt(0));
+    var book='<path d="M28 34c8-4 16-4 22 1v34c-6-5-14-5-22-1z M72 34c-8-4-16-4-22 1v34c6-5 14-5 22-1z" fill="none" stroke="#EAD9B0" stroke-width="3" stroke-linejoin="round"/>';
+    return '<svg class="bv-emb" viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true"><defs><radialGradient id="bvemb" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#7A1636"/><stop offset="1" stop-color="#3D0918"/></radialGradient></defs>'+
+      '<rect width="100" height="100" fill="url(#bvemb)"/><g fill="none" stroke="#B8924A" stroke-opacity=".35" stroke-width=".8"><path d="M50 12l9 22 22 9-22 9-9 22-9-22-22-9 22-9z"/><circle cx="50" cy="50" r="34"/></g>'+
+      (glyph?'<text x="50" y="'+(who?67:64)+'" text-anchor="middle" font-family="Cairo,sans-serif" font-weight="900" font-size="'+(who?54:44)+'" fill="#EAD9B0">'+E(glyph)+'</text>':book)+
+      '<path d="M30 84h40" stroke="#B8924A" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  }
+  function centerBlock(cat, img, n1, n2, contain){
+    var c=document.createElement('div'); c.className='bv-mid';
+    var logo=document.createElement('div'); logo.className='bv-logo';
+    if(img){
+      var im=document.createElement('img'); im.src=img; im.alt=n1||shortName(cat);
+      if(contain) logo.classList.add('bv-contain');
+      im.onerror=function(){ logo.innerHTML=emblem(cat); logo.classList.add('bv-emblem'); };
+      logo.appendChild(im);
+    } else { logo.innerHTML=emblem(cat); logo.classList.add('bv-emblem'); }
+    var nm=document.createElement('div'); nm.className='bv-cn';
+    nm.innerHTML='<b>'+E(n1||shortName(cat))+'</b>'+(n2?'<span>'+E(n2)+'</span>':'');
+    c.appendChild(logo); c.appendChild(nm);
+    return c;
+  }
+  function sizeCenter(root, stage, mid, P){
+    requestAnimationFrame(function(){ try{
+      var logo=mid.querySelector('.bv-logo'), nm=mid.querySelector('.bv-cn');
+      if(P){ fitText(root); return; }
+      var sr=stage.getBoundingClientRect();
+      var colW=mid.getBoundingClientRect().width;
+      var side=Math.floor(Math.min(colW, sr.height - nm.getBoundingClientRect().height - 16));
+      side=Math.max(120,side);
+      logo.style.width=side+'px'; logo.style.height=side+'px'; nm.style.width=side+'px';
+      fitText(root);
+    }catch(e){} });
+  }
+  var AXIS=[['#7A1636','#4A0B1E'],['#2F6A4E','#1F4A36'],['#B07A1E','#8A5E12'],['#3D4A7A','#283357']];
+  function stageFrame(wrap, cat, img, n1, n2, contain, panels){
+    var P=portrait(), M=measure(wrap);
+    wrap.style.overflowY=P?'auto':'hidden';
+    var root=document.createElement('div'); root.className='bv-board bv-comp'+(P?' bv-portrait':'');
+    if(!P) root.style.height=M.h+'px';
+    var stage=document.createElement('div'); stage.className='bv-stage';
+    if(!P){ var cw=Math.max(220,Math.min(Math.floor(M.w*0.21),400)); stage.style.gridTemplateColumns='minmax(0,1fr) '+cw+'px minmax(0,1fr)'; }
+    var sideR=document.createElement('div'); sideR.className='bv-side';
+    var sideL=document.createElement('div'); sideL.className='bv-side';
+    var mid=centerBlock(cat,img,n1,n2,contain);
+    panels.forEach(function(p,i){ (i<2?sideR:sideL).appendChild(p); });
+    if(P){ stage.appendChild(mid); stage.appendChild(sideR); stage.appendChild(sideL); }
+    else { stage.appendChild(sideR); stage.appendChild(mid); stage.appendChild(sideL); }
+    root.appendChild(stage); wrap.appendChild(root);
+    sizeCenter(root,stage,mid,P);
+  }
+  function compPanel(title, ac, sub, cols, rows, cells, P){
+    var pan=document.createElement('div'); pan.className='bv-pan';
+    pan.style.setProperty('--ac',ac[0]); pan.style.setProperty('--ac2',ac[1]);
+    var h=document.createElement('div'); h.className='bv-h';
+    h.innerHTML='<span class="bv-hn">'+E(title)+'</span>'+(sub?'<small class="bv-hc">'+E(sub)+'</small>':'');
+    pan.appendChild(h);
+    var g=document.createElement('div'); g.className='bv-grid';
+    var scroll=P && cols>=5;
+    g.style.gridTemplateColumns=scroll?('repeat('+cols+',minmax(58px,1fr))'):('repeat('+cols+',minmax(0,1fr))');
+    g.style.gridTemplateRows=P?('repeat('+rows+',48px)'):('repeat('+rows+',minmax(0,1fr))');
+    if(scroll) g.classList.add('bv-scroll');
+    cells.forEach(function(c){ g.appendChild(c); });
+    pan.appendChild(g);
+    return pan;
+  }
+
+  // ═══ لوحة المسابقات ذات المحاور (12 مسابقة) ═══
+  function buildWafa(wrap){
+    var cat=G.selectedCats[0];
+    var cc=(typeof _HH_CHAR_COMPS!=='undefined' && _HH_CHAR_COMPS[cat])||null;
+    var self=(typeof _HH_WAFA_CAT!=='undefined' && cat===_HH_WAFA_CAT);
+    var ov=(typeof _HH_COMP_OVR!=='undefined' && _HH_COMP_OVR[cat])||{};
+    var img=self?_HH_WAFA_IMG:(ov.img||(cc?cc.img:''));
+    var n1=self?_HH_WAFA_NAME1:(ov.name1||(cc?cc.name1:''));
+    var n2=self?_HH_WAFA_NAME2:((ov.name2!==undefined)?ov.name2:(cc?cc.name2:''));
+    var subs=self?_HH_WAFA_SUBS:((cc?cc.subs:[]).map(function(sb,i){ return (ov.subs&&ov.subs[i])?Object.assign({},sb,{label:ov.subs[i]}):sb; }));
+    if(!img && typeof CAT_SVG!=='undefined' && CAT_SVG[cat] && /^data:|^https?:/.test(CAT_SVG[cat])) img=CAT_SVG[cat];
+    var tiers=G.wafaTiers||['easy','med','hard'], per=G.wafaPerSub||2, P=portrait();
+    var panels=[];
+    for(var si=0;si<4;si++){
+      var sub=subs[si]||{label:'المحور '+(si+1)};
+      var cells=[];
+      for(var k=0;k<per;k++){
+        tiers.forEach(function(diff){
+          var idx=si*per+k;
+          var q=(G.boardData[cat]&&G.boardData[cat][diff]&&G.boardData[cat][diff][idx])||null;
+          cells.push(mkCell(cat,diff,idx,q,false));
+        });
+      }
+      panels.push(compPanel(sub.label, AXIS[si], (tiers.length*per)+' سؤالاً', tiers.length, per, cells, P));
+    }
+    stageFrame(wrap, cat, img, n1, n2, !self, panels);
+  }
+
+  // ═══ لوحة مسابقة القرآن: 4 مستويات × 8 أسئلة حول الشعار ═══
+  var QLV=[['easy',['#8A6D2E','#6B5222']],['med',['#B07A1E','#8A5E12']],['hard',['#2F6A4E','#1F4A36']],['elite',['#7A1636','#4A0B1E']]];
+  function buildQuran(wrap){
+    var cat=G.selectedCats[0], P=portrait();
+    var ci=(typeof CAT_INFO!=='undefined' && CAT_INFO[cat])||{};
+    var ov=(typeof _HH_COMP_OVR!=='undefined' && _HH_COMP_OVR[cat])||{};
+    var img=ov.img||ci.img||'';
+    var panels=QLV.map(function(x){
+      var diff=x[0], qs=(G.boardData[cat]&&G.boardData[cat][diff])||[], cells=[];
+      for(var i=0;i<8;i++) cells.push(mkCell(cat,diff,i,qs[i]||null,false));
+      var d=DIFF_MAP[diff];
+      return compPanel(d.label+' · '+d.pts, x[1], '8 أسئلة', 4, 2, cells, P);
+    });
+    stageFrame(wrap, cat, img, ov.name1||shortName(cat), ov.name2||'', true, panels);
+  }
+
+  // ═══ الشريط العلوي: الاسم + الوصف + التقدّم (الشاشات العريضة) ═══
+  function totals(){
+    var all=document.querySelectorAll('#board-grid .bv-cell:not(.bv-empty)').length;
+    var used=document.querySelectorAll('#board-grid .bv-cell.used:not(.bv-empty)').length;
+    return {all:all, used:used};
+  }
+  function headInfo(){
+    var t=totals(), cats=G.selectedCats||[];
+    var title, sub;
+    if(G.isComp){
+      var cat=cats[0], cc=(typeof _HH_CHAR_COMPS!=='undefined' && _HH_CHAR_COMPS[cat])||null;
+      var ov=(typeof _HH_COMP_OVR!=='undefined' && _HH_COMP_OVR[cat])||{};
+      title='مسابقة '+((ov.name1||(cc&&cc.name1))||shortName(cat));
+      var lv=(G.compKind==='wafa')?(G.wafaTiers||[]).length:4;
+      sub=t.all+' سؤالاً · '+lv+' مستويات · '+t.used+' من '+t.all+' مُجاب';
+    } else {
+      title=G.gameName||'لعبة المُلهِم';
+      sub=cats.length+' فئات · '+t.all+' سؤالاً · '+t.used+' من '+t.all+' مُجاب';
+    }
+    return {title:title, sub:sub, pct:t.all?Math.round(t.used*100/t.all):0};
+  }
+  function ensureHead(){
+    var tb=document.getElementById('board-top-bar'); if(!tb) return null;
+    var hd=document.getElementById('bv-head');
+    if(!hd){
+      hd=document.createElement('div'); hd.id='bv-head';
+      hd.innerHTML='<span class="bv-brand">المُلهِم</span><span class="bv-sep"></span><div class="bv-tt"><div class="bv-title" id="bv-title"></div><div class="bv-sub" id="bv-sub"></div></div><div class="bv-prog"><i id="bv-prog"></i></div>';
+      tb.insertBefore(hd, tb.firstChild);
+    }
+    return hd;
+  }
+  function refreshHead(){
+    try{
+      if(!G || !G.selectedCats || !G.selectedCats.length) return;
+      if(!ensureHead()) return;
+      var h=headInfo();
+      var t=document.getElementById('bv-title'), s=document.getElementById('bv-sub'), p=document.getElementById('bv-prog');
+      if(t) t.textContent=h.title; if(s) s.textContent=h.sub; if(p) p.style.width=h.pct+'%';
+    }catch(e){}
+  }
+  // نقل الوسائل بين الشريط العلوي (جوال) وشريط النقاط (شاشة عريضة)
+  function puBox(){
+    var b=document.getElementById('bv-pu');
+    if(!b){ var w=document.querySelector('#board-top-bar .pu-wrap'); if(w&&w.parentElement){ b=w.parentElement; b.id='bv-pu'; } }
+    return b;
+  }
+  function layout(){
+    var W=wide();
+    document.body.classList.toggle('bv2', W);
+    var b=puBox(), bb=document.getElementById('board-bottom-bar'), tb=document.getElementById('board-top-bar');
+    if(b && bb && tb){
+      if(W && b.parentElement!==bb) bb.appendChild(b);
+      if(!W && b.parentElement!==tb) tb.appendChild(b);
+    }
+    paintTeams();
+  }
+  function paintTeams(){
+    try{
+      var cards=document.querySelectorAll('#b-scores-row .team-score-card');
+      cards.forEach(function(c,i){ c.style.setProperty('--tc',TEAMC[i%TEAMC.length]); c.setAttribute('data-i',i); });
+    }catch(e){}
+  }
+
+  // ═══ ربط الدوال ═══
+  var _build=window.buildBoard;
+  window.buildBoard=function(){
+    var wrap=document.getElementById('board-grid');
+    if(!wrap || !G || !G.selectedCats || !G.selectedCats.length) return _build.apply(this,arguments);
+    try{
+      layout();
+      wrap.innerHTML='';
+      if(G.isComp){ if(G.compKind==='wafa') buildWafa(wrap); else buildQuran(wrap); }
+      else buildCats(wrap);
+      refreshHead();
+    }catch(e){
+      console.warn('board v2',e);
+      document.body.classList.remove('bv2');
+      return _build.apply(this,arguments);
+    }
+  };
+  var _judge=window.judgeAnswer;
+  window.judgeAnswer=function(winners){
+    try{
+      G.usedBy=G.usedBy||{};
+      var wi=(winners==='none'||!winners||winners.length===0)?[]:(Array.isArray(winners)?winners:[parseInt(winners)]);
+      if(G.curKey) G.usedBy[G.curKey]=wi.map(function(x){return parseInt(x);});
+    }catch(e){}
+    return _judge.apply(this,arguments);
+  };
+  var _close=window.closeModal;
+  window.closeModal=function(){
+    var k=G&&G.curKey;
+    var r=_close.apply(this,arguments);
+    try{ var el=k&&document.getElementById('cell_'+k); if(el&&el.classList.contains('bv-cell')) paintCell(el); refreshCounts(); refreshHead(); }catch(e){}
+    return r;
+  };
+  var _ui=window.updateBoardUI;
+  window.updateBoardUI=function(){
+    var r=_ui.apply(this,arguments);
+    paintTeams(); refreshHead();
+    return r;
+  };
+  // اختيار صاحب الدور بالنقر على اسم الفريق (للحكم)
+  document.addEventListener('click',function(ev){
+    var n=ev.target && ev.target.closest && ev.target.closest('body.bv2 #b-scores-row .team-name');
+    if(!n) return;
+    var card=n.closest('.team-score-card'); var i=parseInt(card&&card.getAttribute('data-i'));
+    if(isNaN(i) || !G || i===G.turn) return;
+    if(document.getElementById('q-modal').classList.contains('open')){ if(typeof toast==='function') toast('أغلق السؤال أولاً ثم بدّل الدور','warn'); return; }
+    G.turn=i; updateBoardUI(); if(typeof toast==='function') toast('الدور الآن: '+G.teams[i],'info');
+  });
+  var _show=window.showScreen;
+  if(typeof _show==='function'){
+    window.showScreen=function(id){
+      var r=_show.apply(this,arguments);
+      try{ if(id!=='screen-board') document.body.classList.remove('bv2'); }catch(e){}
+      return r;
+    };
+  }
+
+  // ═══ قاعدة «4 فئات على الأقل» في كل مداخل اللعب ═══
+  function openSetupWith(cats, teams){
+    cats=(cats||[]).filter(function(c){ return c && typeof QDB!=='undefined' && QDB[c] && QDB[c].length; });
+    try{ localStorage.setItem('hh_saved_cats', JSON.stringify(cats)); }catch(e){}
+    if(typeof closeGameOptionsModal==='function'){ try{ closeGameOptionsModal(); }catch(e){} }
+    showScreen('screen-setup');
+    setTimeout(function(){
+      try{
+        try{ localStorage.setItem('hh_saved_cats', JSON.stringify(cats)); }catch(e){}
+        document.querySelectorAll('#ms-cat-grid .cat-btn').forEach(function(b){ b.classList.toggle('active', cats.indexOf(b.dataset.cat)!==-1); });
+        if(Array.isArray(teams) && teams.length>=2 && typeof setTeamCount==='function'){
+          setTeamCount(teams.length);
+          setTimeout(function(){ teams.forEach(function(t,i){ var el=document.getElementById('tm-'+i); if(el) el.value=t; }); },60);
+        }
+        if(typeof updateCatHint==='function') updateCatHint();
+        if(typeof setupActionUpdate==='function') setupActionUpdate();
+      }catch(e){}
+    },120);
+    var need=MIN_CATS-cats.length;
+    var has=(cats.length===1?'فئة واحدة':(cats.length===2?'فئتان':cats.length+' فئات'));
+    var add=(need===1?'فئة واحدة':(need===2?'فئتين':need+' فئات'));
+    if(typeof toast==='function') toast('في هذه اللعبة '+has+' فقط · أضف '+add+' أو أكثر للبدء (الحد الأدنى 4)','warn');
+  }
+  window.hhOpenSetupWithCats=openSetupWith;
+  var _start=window.startGame;
+  window.startGame=function(t,c,n){
+    try{
+      if(t && c){
+        if(!isComp(c) && c.length<MIN_CATS){ openSetupWith(c,t); return; }
+      } else {
+        var s=[]; try{ s=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]'); }catch(e){}
+        var setupOn=document.getElementById('screen-setup') && document.getElementById('screen-setup').classList.contains('active');
+        if(Array.isArray(s) && s.length>0 && s.length<MIN_CATS && !isComp(s) && !setupOn){ openSetupWith(s); return; }
+      }
+    }catch(e){}
+    return _start.apply(this,arguments);
+  };
+  // نص الشريط السفلي في شاشة الإعداد
+  var _bar=window.hhSetupV2Bar;
+  if(typeof _bar==='function'){
+    window.hhSetupV2Bar=function(){
+      var r=_bar.apply(this,arguments);
+      try{
+        var s=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]'), sub=document.getElementById('sv2-cnt-sub');
+        if(sub && !isComp(s) && s.length<MIN_CATS){ var k=MIN_CATS-s.length; sub.textContent= s.length===0 ? 'اختر 4 فئات على الأقل للبدء' : ('أضف '+(k===1?'فئة واحدة':(k===2?'فئتين':k+' فئات'))+' للبدء · الحد الأدنى 4'); }
+      }catch(e){}
+      return r;
+    };
+  }
+  window.addEventListener('resize',function(){ try{ if(document.getElementById('screen-board').classList.contains('active')) layout(); }catch(e){} });
 })();

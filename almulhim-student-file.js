@@ -182,7 +182,7 @@
   window.hhSfAddNote = async function(studentId){
     var inp=document.getElementById('hh-sf-note-in'); if(!inp)return;
     var text=(inp.value||'').trim(); if(!text) return;
-    var note={ text:text, date:new Date().toLocaleDateString('ar-QA'), by:(typeof currentUser!=='undefined'&&currentUser)?currentUser.uid:'' , at:Date.now()};
+    var note={ text:text, date:new Date().toLocaleDateString('ar-QA-u-nu-latn'), by:(typeof currentUser!=='undefined'&&currentUser)?currentUser.uid:'' , at:Date.now()};
     try{
       await db().collection('student_records').doc(studentId).set({
         notes: firebase.firestore.FieldValue.arrayUnion(note)

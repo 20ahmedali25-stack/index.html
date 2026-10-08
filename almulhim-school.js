@@ -2265,7 +2265,7 @@ function hhAddLesson(){
     unit:    g('cl-unit')    || 'غير محدد',
     lesson:  lesson,
     text:    text.slice(0, 40000),
-    date:    new Date().toLocaleDateString('ar-QA',{month:'short',day:'numeric'}),
+    date:    new Date().toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'}),
     ts:      Date.now()
   });
   if(hhSaveLessons()){

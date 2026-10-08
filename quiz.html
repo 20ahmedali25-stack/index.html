@@ -2766,7 +2766,7 @@ function submitQuiz(){
 
   saveQuizStat({cat:Q.quizCat,correct,total,pct,elapsed,
     studentName:Q.studentName||'',
-    date:new Date().toLocaleDateString('ar-QA')});
+    date:new Date().toLocaleDateString('ar-QA-u-nu-latn')});
   buildReview();
   // تحضير شهادة التفوق إذا كانت النسبة 80%+
   prepareCertificate({
@@ -3232,7 +3232,7 @@ function createTeacherQuiz(){
   const gradeLabel=GRADE_LABELS[grade]||grade;
   const quiz={id,name,cat,grade,gradeLabel,count,timer,privacy,
     createdBy:currentUser?.uid||'offline',
-    createdAt:new Date().toLocaleDateString('ar-QA')};
+    createdAt:new Date().toLocaleDateString('ar-QA-u-nu-latn')};
   const key='hh_teacher_quizzes_'+(currentUser?.uid||currentUser?.email||'guest');
   const list=JSON.parse(localStorage.getItem(key)||'[]');
   list.unshift(quiz);
@@ -3319,7 +3319,7 @@ function addCustomGradeGroup(){
   const semLabel=semester==='1'?'فصل أول':'فصل ثاني';
   const grp={id:'cg_'+Date.now(),name:catFullName,grade,gradeLabel:GRADE_LABELS[grade]||grade,
     subject,semester,semLabel,isPublic,cats:[catFullName],
-    createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA')};
+    createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA-u-nu-latn')};
   if(!QUIZ_DB[catFullName])QUIZ_DB[catFullName]=[];
   list.unshift(grp);
   localStorage.setItem(key,JSON.stringify(list));
@@ -3446,7 +3446,7 @@ function addCustomQ(finish=false){
     const exists=grpList.find(g=>g.grade===grade&&g.cats.includes(newCatName));
     if(!exists){
       grpList.unshift({id:'cg_'+Date.now(),name:newCatName,grade,gradeLabel:GRADE_LABELS[grade]||grade,
-        isPublic:false,cats:[newCatName],createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA')});
+        isPublic:false,cats:[newCatName],createdBy:uid,createdAt:new Date().toLocaleDateString('ar-QA-u-nu-latn')});
       localStorage.setItem(grpKey,JSON.stringify(grpList));
       syncCustomGroupsToApp();
     }
@@ -3862,7 +3862,7 @@ function openCertificate(){
   document.getElementById('cert-score-grade').textContent = grade;
   // التاريخ الهجري/الميلادي
   const now = new Date();
-  const dateStr = now.toLocaleDateString('ar-QA', {year:'numeric', month:'long', day:'numeric'});
+  const dateStr = now.toLocaleDateString('ar-QA-u-nu-latn', {year:'numeric', month:'long', day:'numeric'});
   document.getElementById('cert-date').textContent = dateStr;
   // إظهار
   document.getElementById('cert-overlay').classList.add('active');

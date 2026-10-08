@@ -148,7 +148,7 @@
   // ═══ رأس التقرير وتواقيعه ═══
   function repHead(sub){
     var R=CFG.report;
-    var d=new Date().toLocaleDateString('ar',{year:'numeric',month:'long',day:'numeric'});
+    var d=new Date().toLocaleDateString('ar-u-nu-latn',{year:'numeric',month:'long',day:'numeric'});
     var logo=(R.show.logo&&R.logo)?'<img src="'+R.logo+'" style="height:52px;max-width:120px;object-fit:contain;">':'';
     var who=[];
     if(R.show.teacher&&R.teacher) who.push('المعلم: '+esc2(R.teacher));
@@ -368,7 +368,7 @@
     var st=statsPlus(rec);
     var trend=gradeTrend(rec);
     function pv(v,suf){ return v===null?'·':v+(suf||''); }
-    var R=CFG.report, d=new Date().toLocaleDateString('ar',{year:'numeric',month:'long',day:'numeric'});
+    var R=CFG.report, d=new Date().toLocaleDateString('ar-u-nu-latn',{year:'numeric',month:'long',day:'numeric'});
     var logo=(R.show.logo&&R.logo)?'<img src="'+R.logo+'" style="width:100%;height:100%;object-fit:contain;">':'شعار<br>المدرسة';
     var totalRecords=((rec.attendance||[]).length+(rec.grades||[]).length+(rec.homework||[]).length+(rec.participation||[]).length+(rec.achievements||[]).length);
     // الحلقات الست

@@ -208,7 +208,7 @@ function hhFmtDate(iso){
   if(!iso) return '';
   try{
     var d=new Date(iso+'T00:00:00');
-    return d.toLocaleDateString('ar-QA',{year:'numeric',month:'long',day:'numeric'});
+    return d.toLocaleDateString('ar-QA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'});
   }catch(e){ return iso; }
 }
 
@@ -1988,7 +1988,7 @@ function hhPgCSV(pid){
   var p=_hhPgGet(pid)||{}; var regs=_hhPg.regs[pid]||[];
   var head=['الطالب','الصف','المدرسة','ولي الأمر','صلة القرابة','الجوال','البريد','الحالة','ملاحظات','تاريخ الطلب'];
   var q=function(s){ return '"'+String(s==null?'':s).replace(/"/g,'""')+'"'; };
-  var lines=[head.map(q).join(',')].concat(regs.map(function(r){ return [r.studentName,r.grade,r.school,r.parentName,r.relation,r.phone,r.email,(r.status==='confirmed'?'مؤكد':'بانتظار التأكيد'),r.notes,(r.createdAt?new Date(r.createdAt).toLocaleDateString('ar-QA'):'')].map(q).join(','); }));
+  var lines=[head.map(q).join(',')].concat(regs.map(function(r){ return [r.studentName,r.grade,r.school,r.parentName,r.relation,r.phone,r.email,(r.status==='confirmed'?'مؤكد':'بانتظار التأكيد'),r.notes,(r.createdAt?new Date(r.createdAt).toLocaleDateString('ar-QA-u-nu-latn'):'')].map(q).join(','); }));
   var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='تسجيلات-'+(p.name||'برنامج').replace(/[\\/:*?"<>|]/g,' ')+'.csv'; document.body.appendChild(a); a.click(); setTimeout(function(){ a.remove(); URL.revokeObjectURL(a.href); },500);
 }

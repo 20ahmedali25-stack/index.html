@@ -9920,9 +9920,9 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 .hh-bottom-nav .hh-nav-icon::before, .hh-bottom-nav .hh-nav-item::before{ display:none !important; }
 
 
-/* ═══ الصفحة الخارجية: خط Baloo Bhaijaan 2 الاحترافي المدور ═══ */
+/* ═══ الصفحة الخارجية: خط الهوية Cairo (zzzzzzbj: أُلغي Baloo) ═══ */
 #screen-landing, #screen-landing *:not(svg):not(path){
-  font-family:'Baloo Bhaijaan 2','Cairo','Tajawal',sans-serif !important;
+  font-family:'Cairo','Tajawal',sans-serif !important;
   letter-spacing:0 !important;
 }
 #screen-landing .landing-eyebrow, #screen-landing .lp-section-eyebrow{
