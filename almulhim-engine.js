@@ -2424,6 +2424,7 @@ function applyCatSearch(query){
     // إعادة كل شيء طبيعي
     btns.forEach(b => b.style.display = '');
     headers.forEach(h => h.style.display = '');
+    grid.classList.remove('ms-searching');
     return;
   }
 
@@ -2436,6 +2437,8 @@ function applyCatSearch(query){
 
   // إخفاء عناوين المجموعات (لأن البحث يكسر التجميع)
   headers.forEach(h => h.style.display = 'none');
+  // البحث يشمل الأقسام المطوية أيضاً (zzzzzzbi)
+  grid.classList.add('ms-searching');
 }
 
 /**
@@ -11442,6 +11445,10 @@ function hhToggleRegExtra(){
 function showScreen(id){
   // شاشة التسجيل القديمة دُمجت في تبويب داخل الدخول (zzzzzzbc)
   if(id==='screen-register'){ id='screen-login'; try{ setTimeout(()=>showAuthTab('reg'),0); }catch(e){} }
+  // الرئيسية وشاشة الإعداد الجديدتان (zzzzzzbi)
+  try{ document.body.classList.toggle('hv2-wide', id==='screen-menu' || id==='screen-setup'); }catch(_w){}
+  try{ if(id==='screen-menu' && typeof hhHomeV2Refresh==='function') setTimeout(hhHomeV2Refresh,0);
+       if(id==='screen-setup' && typeof hhSetupV2Sync==='function') setTimeout(hhSetupV2Sync,0); }catch(_v2){}
   // اللعب الغامر: شاشات اللعب تُخفي أشرطة المنصة وإطارها
   try{ document.body.classList.toggle('hh-immersive', HH_IMMERSIVE_SCREENS.indexOf(id)!==-1); }catch(e){}
   // أضف الشاشة الحالية للسجل قبل الانتقال
@@ -11559,6 +11566,7 @@ function updateRoyalGreeting(){
       }
       nameEl.textContent = name;
     }
+    try{ if(typeof hhHomeV2Refresh==='function') hhHomeV2Refresh(); }catch(_h){}
   }catch(e){}
 }
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
@@ -11900,7 +11908,10 @@ function saveGameHistory(sorted){
       teams:sorted.map(t=>t.name+': '+t.pts).join(' | '),
       winner:sorted[0].name,
       status:'complete',
-      completedAt: Date.now()
+      completedAt: Date.now(),
+      // للوحة «إنجازك هذا الأسبوع» في الرئيسية (zzzzzzbi)
+      qAnswered: (G.sessionLog||[]).length,
+      qCorrect: (G.sessionLog||[]).filter(function(r){ return r && r.correct; }).length
     };
     // 1) تحديث السجل المحلي (نبحث عن نفس localId)
     const hist=JSON.parse(localStorage.getItem('hh_game_history')||'[]');
@@ -22384,4 +22395,277 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       }
     }catch(e){}
   });
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+//  الرئيسية الجديدة + شاشة «ماذا نلعب اليوم؟» (zzzzzzbi)
+//  طبقة تنظيم فوق العناصر الموجودة: لا تُعاد كتابة أي وظيفة، بل تُنقل
+//  العناصر وتُستدعى أزرارها الأصلية (للحفاظ على كل الوحدات المضافة)
+// ═══════════════════════════════════════════════════════════════════
+(function(){
+  var SV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">';
+  var IC={
+    grid:SV+'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+    chart:SV+'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+    clock:SV+'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    arrow:SV+'<path d="M15 6l-6 6 6 6"/></svg>',
+    nav:SV+'<path d="M4 6h16M4 12h10M4 18h6"/></svg>',
+    star:SV+'<path d="M12 3l2.8 5.9 6.2.9-4.5 4.4 1 6.3L12 17.6 6.5 20.5l1-6.3L3 9.8l6.2-.9z"/></svg>',
+    x:SV+'<path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+  var DESC={
+    'hhSchoolEntry()':'مسار الصف السابع وبوابات الإتقان',
+    'hhOpenLeaderPrograms()':'الواثق المُلهِم وبرامج القادة',
+    'hhMissionOpen()':'رسالة المنصة ورؤيتها',
+    'hhIbOpen()':'أعمال الطلاب ومشاركاتهم',
+    'hhPrivAdmin()':'مسابقات الشركاء والمناسبات',
+    'hhPartnersAdmin()':'الرعاة والمراكز الشريكة',
+    'hhAuditPanel()':'مراجعة الأسئلة والبلاغات',
+    'hhCleanGhosts()':'تنظيف السجلات المعلّقة'
+  };
+  var TONES=['#1F4E79','#8A6D2E','#7A1230','#3D6B53','#5A3A8E','#B5801F','#3D4A7A','#0F6E56'];
+  function mk(tag,cls,html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+  function esc2(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function hist(){ try{ var h=JSON.parse(localStorage.getItem('hh_game_history')||'[]'); return Array.isArray(h)?h:[]; }catch(e){ return []; } }
+  function ago(ts){
+    if(!ts) return '';
+    var d=Math.floor((Date.now()-ts)/864e5);
+    if(d<=0) return 'اليوم'; if(d===1) return 'أمس'; if(d===2) return 'قبل يومين';
+    if(d<11) return 'قبل '+d+' أيام'; return 'قبل '+d+' يوماً';
+  }
+
+  // ─────────────── الرئيسية ───────────────
+  function homeBuild(){
+    var menu=document.querySelector('#screen-menu .royal-menu');
+    if(!menu || document.getElementById('hv2-top')) return !!menu;
+    var greet=menu.querySelector('.royal-greeting'); if(!greet) return false;
+    var quote=document.getElementById('daily-quote-card');
+    var top=mk('div','hv2-top'); top.id='hv2-top';
+    var side=mk('div','hv2-side');
+    greet.parentNode.insertBefore(top, greet);
+    top.appendChild(greet); top.appendChild(side);
+    if(quote) side.appendChild(quote);
+    var week=mk('div','hv2-week'); week.id='hv2-week'; side.appendChild(week);
+    var g=greet.querySelector('.hh-crown-greet');
+    if(g){ var t=mk('div','hv2-title'); t.id='hv2-title'; g.appendChild(t);
+           g.appendChild(mk('div','hv2-sub','ابدأ لعبة لطلابك في أقل من دقيقة، أو أكمل من حيث توقفت.')); }
+    var tray=greet.querySelector('.hh-crown-tray');
+    if(tray){
+      var p1=tray.querySelector('.hh-crown-primary:not(.hh-crown-games) span'); if(p1) p1.textContent='ابدأ لعبة الآن';
+      var p2=tray.querySelector('.hh-crown-games span'); if(p2) p2.textContent='ألعابي المحفوظة';
+      new MutationObserver(function(){ clearTimeout(homeBuild._t); homeBuild._t=setTimeout(homeTiles,40); })
+        .observe(tray,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+    }
+    var res=mk('div','hv2-resume'); res.id='hv2-resume'; greet.appendChild(res);
+    greet.appendChild(mk('div','hv2-stats',
+      '<div><b><bdi>+1,000</bdi></b>سؤال نخبوي</div><div><b>40</b>فئة متنوعة</div><div><b>6</b>فرق في اللعبة</div><div><b>100%</b>مجاني بالكامل</div>'));
+    var sc=mk('section','hv2-sc'); sc.id='hv2-sc';
+    sc.innerHTML='<div class="hv2-sec"><h2>اختصاراتك</h2><span>كل ما تحتاجه في مكان واحد</span></div><div class="hv2-tiles" id="hv2-tiles"></div>';
+    top.parentNode.insertBefore(sc, top.nextSibling);
+    document.getElementById('screen-menu').classList.add('hv2');
+    return true;
+  }
+  function homeTiles(){
+    var box=document.getElementById('hv2-tiles'); if(!box) return;
+    var tray=document.querySelector('#screen-menu .hh-crown-tray');
+    var items=[{icon:IC.grid,name:'ألعابي المحفوظة',desc:'تشكيلاتك السابقة جاهزة بضغطة',prim:true,run:function(){ if(typeof hhNavigate==='function') hhNavigate('screen-mygames'); }}];
+    if(tray){
+      tray.querySelectorAll('.hh-crown-btn:not(.hh-crown-primary)').forEach(function(b){
+        if(b.style.display==='none') return;
+        var sp=b.querySelector('span'); var name=(sp?sp.textContent:b.textContent).trim(); if(!name) return;
+        var svg=b.querySelector('svg');
+        items.push({icon:svg?svg.outerHTML:IC.star,name:name,desc:DESC[b.getAttribute('onclick')]||'',run:function(){ b.click(); }});
+      });
+    }
+    if(typeof currentUser!=='undefined' && currentUser && typeof hhShowImpact==='function'){
+      items.push({icon:IC.chart,name:'تقرير الأثر',desc:'قبلي وبعدي · مجموعة ضابطة',run:function(){ hhShowImpact(); }});
+    }
+    var sig=items.map(function(i){return i.name;}).join('|');
+    if(box.dataset.sig===sig) return;
+    box.dataset.sig=sig; box.innerHTML='';
+    items.forEach(function(it,i){
+      var c=it.prim?'#5E0E26':TONES[(i-1)%TONES.length];
+      var el=mk('button','hv2-tile'+(it.prim?' prim':''));
+      el.type='button';
+      el.innerHTML='<span class="hv2-ti" style="--tc:'+c+'">'+it.icon+'</span><span class="hv2-tx"><b>'+esc2(it.name)+'</b>'+(it.desc?'<small>'+esc2(it.desc)+'</small>':'')+'</span>'+(it.prim?'<span class="hv2-go">'+IC.arrow+'</span>':'');
+      el.onclick=it.run;
+      box.appendChild(el);
+    });
+  }
+  function homeData(){
+    var t=document.getElementById('hv2-title');
+    if(t){
+      var n=(document.getElementById('royal-username-text')||{}).textContent||'';
+      n=n.trim();
+      t.textContent=(!n || n==='أيها الملهم' || n==='أهلا') ? 'أهلاً بك، جاهز لتجربة مُلهِمة؟' : ('أهلاً '+n+'، جاهز لتجربة مُلهِمة؟');
+    }
+    var h=hist();
+    var res=document.getElementById('hv2-resume');
+    if(res){
+      var last=h[0];
+      if(last){
+        res.style.display='';
+        res.innerHTML=IC.clock+'<span class="hv2-rt">آخر لعبة: <b>'+esc2(last.name||'لعبة')+'</b> · '+ago(last.timestamp)+(last.teamCount?' · '+last.teamCount+' فرق':'')+'</span><button type="button" class="hv2-again">العب مجدداً '+IC.arrow+'</button>';
+        res.querySelector('.hv2-again').onclick=function(){ try{ openGameOptionsModal(0); }catch(e){ if(typeof hhNavigate==='function') hhNavigate('screen-mygames'); } };
+      } else { res.style.display='none'; res.innerHTML=''; }
+    }
+    var wk=document.getElementById('hv2-week');
+    if(wk){
+      var since=Date.now()-7*864e5, games=0, qa=0, qc=0;
+      h.forEach(function(x){ if((x.timestamp||0)>=since){ games++; qa+=(x.qAnswered||0); qc+=(x.qCorrect||0); } });
+      if(!games){ wk.style.display='none'; wk.innerHTML=''; }
+      else{
+        wk.style.display='';
+        var parts=['<b>'+games+'</b> '+(games===1?'لعبة':'ألعاب')];
+        if(qa){ parts.push('<b>'+qa+'</b> سؤالاً'); parts.push('<b>'+Math.round(qc/qa*100)+'%</b> إجابات صحيحة'); }
+        wk.innerHTML='<span class="hv2-wi">'+IC.chart+'</span><span><b class="hv2-wt">إنجازك هذا الأسبوع</b><span class="hv2-wv">'+parts.join(' · ')+'</span></span>';
+      }
+    }
+    homeTiles();
+  }
+  window.hhHomeV2Refresh=function(){ try{ if(homeBuild()) homeData(); }catch(e){ console.warn('home v2',e); } };
+
+  // ─────────────── ماذا نلعب اليوم؟ ───────────────
+  var MAXC=6;
+  function saved(){ try{ var s=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]'); return Array.isArray(s)?s:[]; }catch(e){ return []; } }
+  function setupBuild(){
+    var cats=document.getElementById('ms-step-cats');
+    if(!cats) return false;
+    if(document.getElementById('sv2-lay')) return true;
+    var lay=mk('div','sv2-lay'); lay.id='sv2-lay';
+    var side=mk('aside','sv2-side'); side.id='sv2-side';
+    var main=mk('div','sv2-main'); main.id='sv2-main';
+    while(cats.firstChild) main.appendChild(cats.firstChild);
+    side.innerHTML='<div class="sv2-sh">'+IC.grid+'<span>مصدر الأسئلة</span></div><div id="sv2-tabs"></div>'
+      +'<div class="sv2-sh sv2-jh">'+IC.nav+'<span>انتقل إلى</span></div><div class="sv2-jl" id="sv2-jl"></div>'
+      +'<div class="sv2-tip">'+IC.star+'<div><b>نصيحة</b>اختر 4 إلى 6 فئات من الدرس الحالي لأفضل تجربة.</div></div>';
+    lay.appendChild(side); lay.appendChild(main); cats.appendChild(lay);
+    // الخطوات + البحث في الترويسة
+    var hdr=document.querySelector('#screen-setup .ms-header');
+    if(hdr){
+      var st=mk('div','sv2-steps'); st.id='sv2-steps';
+      st.innerHTML='<span class="sv2-s" data-s="1"><i>1</i>اختر الفئات</span><span class="sv2-ln"></span><span class="sv2-s" data-s="2"><i>2</i>الفرق وبدء اللعبة</span>';
+      hdr.appendChild(st);
+      var sr=mk('div','sv2-search'); sr.id='sv2-search'; hdr.appendChild(sr);
+    }
+    var s2=document.getElementById('ms-step-settings');
+    if(s2) new MutationObserver(setupSteps).observe(s2,{attributes:true,attributeFilter:['hidden']});
+    var cs=document.getElementById('cat-select');
+    if(cs) new MutationObserver(function(){ clearTimeout(setupBuild._t); setupBuild._t=setTimeout(setupSync,30); })
+      .observe(cs,{childList:true,subtree:true});
+    document.getElementById('screen-setup').classList.add('sv2');
+    // شريط الاختيار السفلي: خانات + أسماء الفئات المختارة
+    var bar=document.getElementById('setup-action-bar');
+    if(bar && !document.getElementById('sv2-picked')){
+      var info=bar.querySelector('.setup-action-info');
+      var pk=mk('div','sv2-picked'); pk.id='sv2-picked';
+      pk.innerHTML='<div class="sv2-cnt"><b id="sv2-cnt">اخترت 0 من 6</b><small id="sv2-cnt-sub"></small></div><div class="sv2-slots" id="sv2-slots"></div><div class="sv2-chips" id="sv2-chips"></div>';
+      if(info) info.parentNode.insertBefore(pk, info.nextSibling); else bar.insertBefore(pk, bar.firstChild);
+    }
+    return true;
+  }
+  function setupSteps(){
+    var s2=document.getElementById('ms-step-settings'); var two=s2 && !s2.hidden;
+    var scr=document.getElementById('screen-setup'); if(scr) scr.classList.toggle('sv2-step2', !!two);
+    document.querySelectorAll('#sv2-steps .sv2-s').forEach(function(e){ var n=+e.dataset.s; e.classList.toggle('on', two? n===2 : n===1); e.classList.toggle('done', two && n===1); });
+  }
+  function setupSync(){
+    if(!setupBuild()) return;
+    var cs=document.getElementById('cat-select'); if(!cs) return;
+    var tw=cs.querySelector('.ms-tabs-wrap'), slot=document.getElementById('sv2-tabs');
+    if(tw && slot){ slot.innerHTML=''; slot.appendChild(tw); }
+    var sw=cs.querySelector('#ms-search-wrap'), ss=document.getElementById('sv2-search');
+    if(sw && ss){ ss.innerHTML=''; ss.appendChild(sw); sw.classList.add('active');
+      var inp=sw.querySelector('input'); if(inp) inp.placeholder='ابحث عن فئة أو درس...'; }
+    // «اختر الكل» داخل كل ترويسة مجموعة
+    var grid=document.getElementById('ms-cat-grid');
+    if(grid){
+      // رسوم الفئات بألوانها الأصلية (الصنف القديم يعيد تلوينها بخطوط ذهبية)
+      grid.querySelectorAll('.cat-btn:not(.cat-btn-logo) > .ci-svg:not(.ci-svg-logo)').forEach(function(c){ c.className='ci-svg2'; });
+      grid.querySelectorAll('.ms-group-header:not(.ms-group-header-soon)').forEach(function(h){
+        if(h.querySelector('.sv2-all')) return;
+        var b=mk('button','sv2-all','اختر الكل'); b.type='button';
+        b.onclick=function(ev){ ev.stopPropagation(); selectAll(h); };
+        h.appendChild(b);
+      });
+    }
+    setupJump(); setupSteps(); hhSetupV2Bar();
+  }
+  function selectAll(h){
+    var gid=h.dataset.groupId; var grid=document.getElementById('ms-cat-grid'); if(!grid) return;
+    if(h.classList.contains('collapsed')) h.click();
+    var cards=[].slice.call(grid.querySelectorAll('.cat-btn[data-group="'+gid+'"]')).filter(function(c){ return !c.classList.contains('locked') && c.style.display!=='none'; });
+    var todo=cards.filter(function(c){ return !c.classList.contains('active'); });
+    if(!todo.length){ if(typeof toast==='function') toast('كل فئات هذا القسم مختارة','info'); return; }
+    var room=MAXC-saved().length;
+    if(room<=0){ if(typeof toast==='function') toast('الحد الأقصى 6 فئات','error'); return; }
+    todo.slice(0,room).forEach(function(c){ toggleCat(c); });
+    if(todo.length>room && typeof toast==='function') toast('اخترت '+room+' فقط · الحد الأقصى 6 فئات','warn');
+  }
+  function setupJump(){
+    var jl=document.getElementById('sv2-jl'), grid=document.getElementById('ms-cat-grid'); if(!jl||!grid) return;
+    var hs=[].slice.call(grid.querySelectorAll('.ms-group-header:not(.ms-group-header-soon)'));
+    var jh=document.querySelector('#sv2-side .sv2-jh');
+    if(hs.length<2){ jl.innerHTML=''; jl.style.display='none'; if(jh) jh.style.display='none'; return; }
+    jl.style.display=''; if(jh) jh.style.display='';
+    var html=hs.map(function(h){
+      var gid=h.dataset.groupId;
+      var t=(h.querySelector('.ms-group-header-title')||{}).textContent||'';
+      var n=grid.querySelectorAll('.cat-btn[data-group="'+gid+'"]').length;
+      var s=grid.querySelectorAll('.cat-btn.active[data-group="'+gid+'"]').length;
+      return '<button type="button" class="sv2-j'+(s?' has':'')+'" data-g="'+esc2(gid)+'"><span>'+esc2(t)+'</span>'+(s?'<em>'+s+' مختارة</em>':'')+'<small>'+n+'</small></button>';
+    }).join('');
+    if(jl.dataset.h===html) return;
+    jl.dataset.h=html; jl.innerHTML=html;
+    jl.querySelectorAll('.sv2-j').forEach(function(b){
+      b.onclick=function(){
+        var h=grid.querySelector('.ms-group-header[data-group-id="'+b.dataset.g+'"]'); if(!h) return;
+        if(h.classList.contains('collapsed')) h.click();
+        jl.querySelectorAll('.sv2-j').forEach(function(x){ x.classList.toggle('on', x===b); });
+        try{ h.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){ h.scrollIntoView(); }
+      };
+    });
+  }
+  window.hhSetupV2Bar=function(){
+    try{
+      if(!document.getElementById('sv2-picked')) return;
+      // ارتفاع شريط التنقل السفلي حتى يعلوه شريط الاختيار
+      var bn=document.getElementById('hh-bottom-nav');
+      var bh=(bn && getComputedStyle(bn).display!=='none') ? Math.round(bn.getBoundingClientRect().height) : 0;
+      document.documentElement.style.setProperty('--sv2-nav', bh+'px');
+      var s=saved(), n=s.length;
+      var cnt=document.getElementById('sv2-cnt'), sub=document.getElementById('sv2-cnt-sub'), sl=document.getElementById('sv2-slots'), ch=document.getElementById('sv2-chips');
+      var solo=(n===1) && (typeof _HH_COMP_CATS!=='undefined') && _HH_COMP_CATS.has(s[0]);
+      if(cnt) cnt.textContent=solo?'مسابقة خاصة':'اخترت '+n+' من '+MAXC;
+      var lbl=function(c){ return (typeof CAT_INFO!=='undefined' && CAT_INFO[c] && CAT_INFO[c].label) || c; };
+      if(sub) sub.textContent= solo ? 'تُلعب منفردة بلوحة مخصصة' : (n<2 ? 'اختر فئتين على الأقل للبدء' : s.slice(0,2).map(lbl).join('، ')+(n>2?' +'+(n-2):''));
+      if(sl){ var h=''; for(var i=0;i<MAXC;i++) h+='<i'+(i<n?' class="f"':'')+'></i>'; sl.innerHTML=h; sl.style.display=solo?'none':''; }
+      if(ch){
+        ch.innerHTML=s.map(function(c){ return '<span class="sv2-chip">'+esc2(lbl(c))+'<button type="button" data-c="'+esc2(c)+'" aria-label="إزالة">'+IC.x+'</button></span>'; }).join('');
+        ch.querySelectorAll('button').forEach(function(b){ b.onclick=function(){ unpick(b.dataset.c); }; });
+      }
+      setupJump();
+    }catch(e){}
+  };
+  function unpick(c){
+    var el=null;
+    document.querySelectorAll('#ms-cat-grid .cat-btn').forEach(function(x){ if(x.dataset.cat===c) el=x; });
+    if(el){ toggleCat(el); return; }
+    var s=saved(); if(s.length<=1){ if(typeof toast==='function') toast('يجب اختيار فئة واحدة على الأقل','error'); return; }
+    s.splice(s.indexOf(c),1); localStorage.setItem('hh_saved_cats',JSON.stringify(s));
+    if(typeof updateCatHint==='function') updateCatHint();
+    if(typeof setupActionUpdate==='function') setupActionUpdate();
+  }
+  window.hhSetupV2Sync=function(){ try{ setupSync(); setupTop(); }catch(e){ console.warn('setup v2',e); } };
+  // مسافة أعلى شاشة الإعداد بقدر الشريط العلوي الثابت
+  function setupTop(){
+    var nav=document.querySelector('.main-nav'); if(!nav) return;
+    var r=nav.getBoundingClientRect(); var cs=getComputedStyle(nav);
+    var h=(cs.position==='fixed'||cs.position==='sticky') ? Math.round(r.bottom) : 0;
+    document.documentElement.style.setProperty('--sv2-top', (h+18)+'px');
+  }
+
+  function boot(){ window.hhHomeV2Refresh(); window.hhSetupV2Sync(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  setTimeout(boot, 1500);
 })();
