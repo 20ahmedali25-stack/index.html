@@ -3924,6 +3924,10 @@ function buildBoard(){
   } else {
     perRow = 2; chunks = [G.selectedCats.slice(0,1), G.selectedCats.slice(1,2)];
   }
+  // جوال عمودي: كل فئة بطاقة أفقية مستقلة، والتمرير عمودي (zzzzzzbh)
+  // كان 3 فئات جنباً إلى جنب فيضيق عمود الأرقام (~34px) فتتداخل «200» مع جارتها
+  const isPortraitMobile = isMobile && !isLandscape;
+  if(isPortraitMobile){ perRow = 1; chunks = G.selectedCats.map(c=>[c]); }
   const nRows  = chunks.length;
 
   // ── أبعاد دقيقة ──
@@ -3938,7 +3942,7 @@ function buildBoard(){
   // label: ارتفاع ثابت يدعم سطرين
   const labelBarH= isMobile ? (isLandscape ? 22 : 30) : 34;
   const usableH  = rowH - labelBarH - cellGap*4;
-  const cellH    = Math.max(16, Math.floor(usableH / 3));
+  const cellH    = isPortraitMobile ? 52 : Math.max(16, Math.floor(usableH / 3));
 
   // عرض اللوحة الفعلي (محدود بـ max-width:1200px) لا عرض النافذة الكامل
   // هذا يمنع تجاوز الخلايا لحدود اللوحة وقصّها عند الأطراف على الشاشات العريضة
@@ -4045,6 +4049,38 @@ function buildBoard(){
     }
     .cat-center .cc-img-wrap .cc-emoji{ font-size:${emojiS}rem; }
   `;
+  if(isPortraitMobile){
+    // بطاقة لكل فئة: الصورة والاسم يميناً · 200/400/600 في صفّين (zzzzzzbh)
+    style.textContent = `
+    #board-grid{ overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0; height:100%; }
+    .board-rows-wrap{ display:flex; flex-direction:column; gap:8px; width:100%; height:auto; padding:8px 8px 14px; box-sizing:border-box; }
+    .board-cat-group{ display:block; height:auto; flex-shrink:0; overflow:visible; }
+    .cat-row{
+      display:grid; grid-template-columns:92px repeat(3,minmax(0,1fr)); grid-template-rows:52px 52px;
+      gap:6px; align-items:stretch; background:#fff; border:1.5px solid #E3D4B2; border-radius:14px; padding:6px;
+    }
+    body.dark-mode .cat-row{ background:#1a2230; border-color:#2d3a4a; }
+    .cat-col{ display:contents; }
+    .cat-row > .cat-col:first-child > :nth-child(1){ grid-row:1; grid-column:2; }
+    .cat-row > .cat-col:first-child > :nth-child(2){ grid-row:1; grid-column:3; }
+    .cat-row > .cat-col:first-child > :nth-child(3){ grid-row:1; grid-column:4; }
+    .cat-row > .cat-col:last-child  > :nth-child(1){ grid-row:2; grid-column:2; }
+    .cat-row > .cat-col:last-child  > :nth-child(2){ grid-row:2; grid-column:3; }
+    .cat-row > .cat-col:last-child  > :nth-child(3){ grid-row:2; grid-column:4; }
+    .qcell{ height:auto; min-height:44px; flex-shrink:0; border-radius:11px; }
+    .qcell .qpts{ font-size:1.2rem; }
+    .cat-center{ grid-column:1; grid-row:1 / span 2; height:auto; margin:0 !important; display:flex; flex-direction:column; overflow:hidden; border-radius:12px; }
+    .cat-center .cc-img-wrap{ flex:1 1 auto; height:auto; min-height:0; max-height:none; overflow:hidden; }
+    .cat-center .cc-img-wrap svg{ width:100%; height:100%; }
+    .cat-center .cc-label-bar{
+      font-size:.72rem !important; line-height:1.2 !important; white-space:normal !important; word-break:break-word !important;
+      height:auto !important; min-height:30px; max-height:none !important; flex:none !important; padding:3px 4px !important;
+      display:flex !important; align-items:center !important; justify-content:center !important; text-align:center !important;
+      border-radius:0 0 10px 10px !important; overflow:hidden !important;
+    }
+    .cat-center .cc-img-wrap .cc-emoji{ font-size:1.8rem; }
+    `;
+  }
 
   // ── بناء اللوح ──
   const outerWrap = document.createElement('div');
@@ -5184,6 +5220,8 @@ function openQ(q,diff,key,isLegend){
   document.getElementById('qm-diff').textContent = isLegend ? legendLabels[diff] : d.label;
   document.getElementById('qm-diff').className='qm-badge '+diff;
   document.getElementById('qm-cat').textContent=ci.label||'';
+  // اسم الفريق صاحب الدور في رأس النافذة (zzzzzzbh)
+  try{ var _qt=document.getElementById('qm-turn'); if(_qt) _qt.textContent = (G.teams&&G.teams.length) ? 'الدور: '+(G.teams[G.turn]||'') : ''; }catch(_e){}
   // أيقونة الفئة في الـ modal
   const catIcon=document.getElementById('qm-cat-icon');
   if(catIcon){
@@ -5814,7 +5852,8 @@ function hhShowSessionReport(testData, isTest){
   const dateStr=new Date().toLocaleDateString('ar-QA',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   const pctCl=pct>=70?'#3D6B53':pct>=50?'#b5801f':'#c0392b';
   ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#E9EEF8;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#1F4E79;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#1F4E79;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
-    +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#E9EEF8;color:#1F4E79;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +(!isTest?'<button onclick=\"hhSaveSessionDialog()\" style=\"background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>':'')
+    +'<div style="font-weight:900;font-size:.88rem;color:#1F4E79;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#E9EEF8;color:#1F4E79;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +'<button onclick=\"hhSaveSessionDialog('+(isTest?'true':'false')+')\" style=\"background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>'
+    +'<button onclick=\"hhShowImpact()\" style=\"background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> تقرير الأثر</button>'
     +(!isTest?'<button onclick=\"hhShowAnalytics()\" style=\"background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> التحليلات التراكمية</button>':'')
     +'<button onclick="hhCloseSessionReport()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
@@ -5843,13 +5882,16 @@ function hhSaveNote(input, idx, isGame){
 var _savedSessions=[];
 try{ var _ss=localStorage.getItem('hh_saved_sessions'); if(_ss) _savedSessions=JSON.parse(_ss)||[]; }catch(e){}
 
-function hhSaveCurrentSession(phase, groupName){
-  if(!G.sessionLog||!G.sessionLog.length){ if(typeof toast==='function') toast('لا توجد بيانات جلسة للحفظ','warn'); return; }
-  var snap={ id:G.startTime||Date.now(), date:new Date().toLocaleDateString('ar-QA',{month:'short',day:'numeric'}),
+function hhSaveCurrentSession(phase, groupName, logOverride){
+  // logOverride: نتائج وضع الاختبار (طلاب أفراد) بدل سجل اللعبة (zzzzzzbg)
+  var srcLog = (logOverride && logOverride.length) ? logOverride : G.sessionLog;
+  if(!srcLog||!srcLog.length){ if(typeof toast==='function') toast('لا توجد بيانات جلسة للحفظ','warn'); return; }
+  var snap={ id:(logOverride?Date.now():(G.startTime||Date.now())), date:new Date().toLocaleDateString('ar-QA',{month:'short',day:'numeric'}),
     iso:new Date().toISOString().slice(0,10),
-    gameName:G.gameName||'جلسة', cats:(G.selectedCats||[]).join(' · '),
+    gameName:(logOverride?'اختبار':(G.gameName||'جلسة')), cats:(G.selectedCats||[]).join(' · '),
     phase: phase||'تجريبي', group: groupName||'المجموعة التجريبية',
-    log:JSON.parse(JSON.stringify(G.sessionLog)) };
+    isTest: !!logOverride,
+    log:JSON.parse(JSON.stringify(srcLog)) };
   _savedSessions.push(snap);
   try{ localStorage.setItem('hh_saved_sessions',JSON.stringify(_savedSessions.slice(-30))); }catch(e){}
   if(typeof toast==='function') toast(' حُفظت الجلسة ('+snap.gameName+') للمقارنة','success');
@@ -5892,20 +5934,196 @@ function hhExportCompareCSV(){
 // ═══════════════════════════════════════════════════════════════════
 //  لوحة التحليلات التراكمية · تطور الأداء عبر الجلسات (للبحث التربوي)
 // ═══════════════════════════════════════════════════════════════════
-function hhSaveSessionDialog(){
-  if(!G.sessionLog||!G.sessionLog.length){ if(typeof toast==='function') toast('لا توجد بيانات جلسة','warn'); return; }
+// اسم المجموعة: حقل نصي يتذكر الأسماء السابقة (zzzzzzbg)
+function _hhLastGroup(){ var l=_savedSessions[_savedSessions.length-1]; return (l&&l.group)||'المجموعة التجريبية'; }
+function _hhGroupOptions(){ var g={'المجموعة التجريبية':1,'المجموعة الضابطة':1}; _savedSessions.forEach(function(x){ if(x.group) g[x.group]=1; });
+  return Object.keys(g).map(function(k){ return '<option value="'+esc(k)+'"></option>'; }).join(''); }
+function hhSaveSessionDialog(isTest){
+  window._hhSaveIsTest = !!isTest;
+  var _srcLog = isTest ? _testAnswers : G.sessionLog;
+  if(!_srcLog||!_srcLog.length){ if(typeof toast==='function') toast('لا توجد بيانات جلسة','warn'); return; }
   var old=document.getElementById('hh-savesess'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-savesess';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.65);z-index:999992;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:420px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> حفظ الجلسة للتحليل البحثي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">مرحلة البحث</div>' +'<select id="ss-phase" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;margin-bottom:12px;box-sizing:border-box;">' +'<option value="قبلي">اختبار قبلي (قبل التدخل)</option>' +'<option value="تجريبي" selected>جلسة تجريبية (أثناء التدخل)</option>' +'<option value="بعدي">اختبار بعدي (بعد التدخل)</option>' +'<option value="تذكّر">اختبار تذكّر (بعد أسبوعين)</option>' +'</select>' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">المجموعة</div>' +'<select id="ss-group" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;margin-bottom:14px;box-sizing:border-box;">' +'<option value="المجموعة التجريبية" selected>المجموعة التجريبية</option>' +'<option value="المجموعة الضابطة">المجموعة الضابطة</option>' +'</select>' +'<div style="display:flex;gap:9px;">' +'<button onclick="hhConfirmSaveSession()" style="flex:1;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhCloseSaveDialog()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.85rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:420px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> حفظ الجلسة للتحليل البحثي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">مرحلة البحث</div>' +'<select id="ss-phase" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;margin-bottom:12px;box-sizing:border-box;">' +'<option value="قبلي">اختبار قبلي (قبل التدخل)</option>' +'<option value="تجريبي" selected>جلسة تجريبية (أثناء التدخل)</option>' +'<option value="بعدي">اختبار بعدي (بعد التدخل)</option>' +'<option value="تذكّر">اختبار تذكّر (بعد أسبوعين)</option>' +'</select>' +'<div style="font-size:.78rem;font-weight:800;color:#1F4E79;margin-bottom:5px;">المجموعة</div>' +'<input id="ss-group" list="ss-group-list" value="'+esc(_hhLastGroup())+'" placeholder="مثلاً: 7/2 أو المجموعة الضابطة" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:16px;margin-bottom:14px;box-sizing:border-box;">' +'<datalist id="ss-group-list">'+_hhGroupOptions()+'</datalist>' +'<div style="display:flex;gap:9px;">' +'<button onclick="hhConfirmSaveSession()" style="flex:1;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhCloseSaveDialog()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.85rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
   document.body.appendChild(ov);
 }
 function hhCloseSaveDialog(){ var e=document.getElementById('hh-savesess'); if(e) e.remove(); }
 function hhConfirmSaveSession(){
   var ph=(document.getElementById('ss-phase')||{}).value||'تجريبي';
-  var gr=(document.getElementById('ss-group')||{}).value||'المجموعة التجريبية';
-  hhSaveCurrentSession(ph, gr);
+  var gr=((document.getElementById('ss-group')||{}).value||'').trim()||'المجموعة التجريبية';
+  hhSaveCurrentSession(ph, gr, window._hhSaveIsTest ? _testAnswers : null);
+  window._hhSaveIsTest = false;
   hhCloseSaveDialog();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  تقرير الأثر · قبل وبعد (zzzzzzbg)
+//  يقارن الاختبار القبلي بالبعدي للمجموعة نفسها، حسب الدرس/الفئة،
+//  مع مجموعة ضابطة اختيارية · من الجلسات المحفوظة (hh_saved_sessions)
+// ═══════════════════════════════════════════════════════════════════
+var _impSel = { exp:'', ctl:'' };
+function hhImpAgg(group, phase){
+  var S=_savedSessions.filter(function(s){ return (s.group||'')===group && (s.phase||'')===phase; });
+  if(!S.length) return null;
+  var t=0,c=0,by={},studs={},isos=[];
+  S.forEach(function(s){
+    if(s.iso) isos.push(s.iso);
+    (s.log||[]).forEach(function(r){
+      t++; if(r.correct) c++;
+      var k=r.subCat||r.cat||r._cat||'متنوع';
+      if(!by[k]) by[k]={t:0,c:0};
+      by[k].t++; if(r.correct) by[k].c++;
+      if(r.student) studs[r.student]=1;
+    });
+  });
+  return { n:S.length, t:t, c:c, pct:t?Math.round(c/t*100):0, by:by, students:Object.keys(studs).length, isos:isos };
+}
+function hhImpGroups(){
+  var g={}; _savedSessions.forEach(function(s){ g[s.group||'المجموعة التجريبية']=1; });
+  return Object.keys(g);
+}
+function hhImpData(){
+  var exp=_impSel.exp, ctl=_impSel.ctl;
+  var d={ exp:exp, ctl:ctl, pre:hhImpAgg(exp,'قبلي'), post:hhImpAgg(exp,'بعدي'),
+          cpre:ctl?hhImpAgg(ctl,'قبلي'):null, cpost:ctl?hhImpAgg(ctl,'بعدي'):null };
+  if(d.pre && d.post){
+    d.gain=d.post.pct-d.pre.pct;
+    var keys={}; Object.keys(d.pre.by).forEach(function(k){keys[k]=1;}); Object.keys(d.post.by).forEach(function(k){keys[k]=1;});
+    d.rows=Object.keys(keys).map(function(k){
+      var a=d.pre.by[k], b=d.post.by[k];
+      var pa=a?Math.round(a.c/a.t*100):null, pb=b?Math.round(b.c/b.t*100):null;
+      return { k:k, pre:pa, post:pb, delta:(pa!==null&&pb!==null)?pb-pa:null };
+    }).sort(function(x,y){ return (y.delta===null?-999:y.delta)-(x.delta===null?-999:x.delta); });
+    var all=d.pre.isos.concat(d.post.isos).sort();
+    if(all.length){
+      d.from=all[0]; d.to=all[all.length-1];
+      d.weeks=Math.max(1,Math.round((new Date(d.to)-new Date(d.from))/(7*864e5)));
+    }
+    d.sessions=_savedSessions.filter(function(s){ return (s.group||'')===exp; }).length;
+    if(d.cpre && d.cpost){ d.cgain=d.cpost.pct-d.cpre.pct; d.diff=d.gain-d.cgain; }
+  }
+  return d;
+}
+function hhShowImpact(){
+  var old=document.getElementById('hh-impact'); if(old) old.remove();
+  var groups=hhImpGroups();
+  if(!_impSel.exp || groups.indexOf(_impSel.exp)===-1){
+    // اختيار تلقائي: أول مجموعة لديها قبلي وبعدي
+    _impSel.exp = groups.filter(function(g){ return hhImpAgg(g,'قبلي') && hhImpAgg(g,'بعدي'); })[0] || groups[0] || '';
+  }
+  if(_impSel.ctl===_impSel.exp || groups.indexOf(_impSel.ctl)===-1) _impSel.ctl='';
+  var d=hhImpData();
+  var ov=document.createElement('div'); ov.id='hh-impact';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.68);z-index:999980;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;';
+  ov.onclick=function(e){ if(e.target===ov) hhCloseImpact(); };
+
+  var selStyle='width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:8px 10px;font-family:Cairo,sans-serif;font-weight:800;font-size:.8rem;color:#5E0E26;background:#fff;';
+  var opts=function(cur, allowNone){
+    return (allowNone?'<option value="">بدون مجموعة ضابطة</option>':'')
+      + groups.map(function(g){ return '<option value="'+esc(g)+'"'+(g===cur?' selected':'')+'>'+esc(g)+'</option>'; }).join('');
+  };
+  var pickers='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">'
+    +'<label style="flex:1;min-width:180px;font-size:.68rem;font-weight:800;color:#8A7A63;">المجموعة التجريبية (استخدمت الألعاب)'
+    +'<select id="imp-exp" onchange="_impSel.exp=this.value;hhShowImpact()" style="'+selStyle+'margin-top:3px;">'+opts(_impSel.exp,false)+'</select></label>'
+    +'<label style="flex:1;min-width:180px;font-size:.68rem;font-weight:800;color:#8A7A63;">المجموعة الضابطة (اختياري)'
+    +'<select id="imp-ctl" onchange="_impSel.ctl=this.value;hhShowImpact()" style="'+selStyle+'margin-top:3px;">'+opts(_impSel.ctl,true)+'</select></label>'
+    +'</div>';
+
+  var body='';
+  if(!groups.length || !d.pre || !d.post){
+    var miss=[];
+    if(!groups.length) miss.push('لا توجد جلسات محفوظة بعد.');
+    else {
+      if(!d.pre) miss.push('ينقص اختبار <b>قبلي</b> للمجموعة «'+esc(_impSel.exp)+'».');
+      if(!d.post) miss.push('ينقص اختبار <b>بعدي</b> للمجموعة «'+esc(_impSel.exp)+'».');
+    }
+    body=(groups.length?pickers:'')
+      +'<div id="imp-empty" style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:.84rem;font-weight:700;color:#3D0918;line-height:1.9;">'+miss.join('<br>')+'</div>'
+      +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;">كيف تبني تقرير الأثر</div>'
+      +'<ol style="margin:0;padding-right:20px;font-size:.82rem;font-weight:700;color:#3D0918;line-height:2;">'
+      +'<li>قبل البدء بالوحدة: نفّذ اختباراً أو لعبة، ثم من التقرير اضغط «احفظ للبحث» واختر <b>اختبار قبلي</b> واكتب اسم الشعبة (مثلاً 7/2).</li>'
+      +'<li>طبّق الألعاب على الشعبة خلال الوحدة.</li>'
+      +'<li>في نهاية الوحدة: كرّر الاختبار نفسه واحفظه <b>اختبار بعدي</b> بالاسم نفسه.</li>'
+      +'<li>للمقارنة: اختبر شعبة لم تستخدم الألعاب قبلي وبعدي باسمها، واخترها مجموعةً ضابطة.</li>'
+      +'</ol>'
+      +'<div style="font-size:.7rem;color:#999;margin-top:10px;">الجلسات تُحفظ على هذا الجهاز (آخر 30 جلسة).</div>';
+  } else {
+    var card=function(lbl,val,bg,bd,col){ return '<div style="flex:1;min-width:120px;background:'+bg+';border:2px solid '+bd+';border-radius:14px;padding:12px;text-align:center;">'
+      +'<div style="font-size:.74rem;font-weight:800;color:'+col+';">'+lbl+'</div><div style="font-size:2rem;font-weight:900;line-height:1.2;color:'+col+';direction:ltr;">'+val+'</div></div>'; };
+    var gainCol=d.gain>=0?'#8A6D2E':'#c0392b';
+    var meta=[ esc(d.exp), (d.pre.students||d.post.students)?Math.max(d.pre.students,d.post.students)+' طالباً':null,
+               d.sessions+' جلسات', d.weeks?d.weeks+' أسابيع':null ].filter(Boolean).join(' · ');
+    var rowsHtml=d.rows.map(function(r){
+      var dc=r.delta===null?'#999':(r.delta>=0?'#3D6B53':'#c0392b');
+      return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:.76rem;font-weight:800;color:#3D0918;">'
+        +'<div style="width:38%;min-width:110px;">'+esc(r.k)+'</div>'
+        +'<div style="flex:1;">'
+        +'<div title="قبل '+(r.pre===null?'—':r.pre+'%')+'" style="height:9px;border-radius:5px;margin:2px 0;background:#d9a3ad;width:'+(r.pre||0)+'%;"></div>'
+        +'<div title="بعد '+(r.post===null?'—':r.post+'%')+'" style="height:9px;border-radius:5px;margin:2px 0;background:#3D6B53;width:'+(r.post||0)+'%;"></div></div>'
+        +'<div style="width:44px;text-align:left;direction:ltr;color:'+dc+';">'+(r.delta===null?'—':(r.delta>0?'+':'')+r.delta)+'</div></div>';
+    }).join('');
+    var ctlHtml='';
+    if(d.ctl){
+      ctlHtml = (d.cpre && d.cpost)
+        ? '<div style="background:#fff;border:1.5px solid #E3D9C6;border-right:4px solid #B8924A;border-radius:12px;padding:11px 14px;font-size:.8rem;font-weight:700;color:#3D0918;line-height:1.9;margin-top:6px;">'
+          +'<b>مقارنة بالمجموعة الضابطة «'+esc(d.ctl)+'»:</b> من '+d.cpre.pct+'% إلى '+d.cpost.pct+'% ('+(d.cgain>0?'+':'')+d.cgain+').<br>'
+          +'الفرق لصالح '+(d.diff>=0?'الألعاب':'المجموعة الضابطة')+': <b style="color:'+(d.diff>=0?'#3D6B53':'#c0392b')+';">'+Math.abs(d.diff)+' نقطة</b>.</div>'
+        : '<div style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:12px;padding:10px 14px;font-size:.78rem;font-weight:700;color:#3D0918;margin-top:6px;">المجموعة الضابطة «'+esc(d.ctl)+'» ينقصها '+(!d.cpre?'اختبار قبلي':'اختبار بعدي')+'.</div>';
+    }
+    var small=(d.pre.t<10||d.post.t<10)?'<div style="font-size:.72rem;font-weight:800;color:#b5801f;margin-top:8px;">تنبيه: عدد الأسئلة قليل (أقل من 10 في أحد الاختبارين)، فالنتيجة مؤشر أولي فقط.</div>':'';
+    body=pickers
+      +'<div id="imp-report">'
+      +'<div style="font-size:.78rem;font-weight:800;color:#8A7A63;margin-bottom:10px;">'+meta+(d.from?' · من <bdi dir="ltr">'+d.from+'</bdi> إلى <bdi dir="ltr">'+d.to+'</bdi>':'')+'</div>'
+      +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">'
+      +card('الاختبار القبلي',d.pre.pct+'%','#F7ECEF','#c0392b','#c0392b')
+      +card('الاختبار البعدي',d.post.pct+'%','#EBF2EE','#3D6B53','#3D6B53')
+      +card('مقدار التحسن',(d.gain>0?'+':'')+d.gain,'#FDF3DD','#B8924A',gainCol)
+      +'</div>'
+      +'<div style="font-size:.72rem;font-weight:700;color:#8A7A63;margin:-6px 0 12px;">قبلي: '+d.pre.c+' صحيحة من '+d.pre.t+' · بعدي: '+d.post.c+' صحيحة من '+d.post.t+'</div>'
+      +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin:4px 0 6px;">التحسن حسب الدرس / الفئة</div>'
+      +'<div style="display:flex;gap:14px;font-size:.7rem;font-weight:800;color:#8A7A63;margin-bottom:8px;"><span><i style="display:inline-block;width:12px;height:8px;border-radius:3px;background:#d9a3ad;margin-left:4px;"></i>قبل</span><span><i style="display:inline-block;width:12px;height:8px;border-radius:3px;background:#3D6B53;margin-left:4px;"></i>بعد</span></div>'
+      +rowsHtml+ctlHtml+small
+      +'</div>'
+      +'<div style="display:flex;gap:9px;margin-top:15px;flex-wrap:wrap;">'
+      +'<button onclick="hhPrintImpact()" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">طباعة لملف المسابقة</button>'
+      +'<button onclick="hhExportImpactCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير Excel</button>'
+      +'<button onclick="hhCloseImpact()" style="background:#eee;color:#666;border:none;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إغلاق</button>'
+      +'</div>';
+  }
+  ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;margin-bottom:20px;">'
+    +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
+    +'<span style="font-weight:900;font-size:1.02rem;">تقرير الأثر · قبل وبعد</span>'
+    +'<button onclick="hhCloseImpact()" aria-label="إغلاق" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;min-width:44px;min-height:44px;">✕</button></div>'
+    +'<div style="padding:18px;">'+body+'</div></div>';
+  document.body.appendChild(ov);
+  window._hhLastImpact=d;
+}
+function hhCloseImpact(){ var e=document.getElementById('hh-impact'); if(e) e.remove(); }
+function hhPrintImpact(){
+  var el=document.getElementById('imp-report'); if(!el) return;
+  var w=window.open('','_blank'); if(!w) return;
+  w.document.write('<html dir="rtl"><head><meta charset="utf-8"><title>تقرير الأثر · المُلهِم</title>'
+    +'<style>body{font-family:Cairo,Tajawal,sans-serif;padding:24px;color:#3D0918;-webkit-print-color-adjust:exact;print-color-adjust:exact;}h1{font-size:1.3rem;color:#5E0E26;margin:0 0 4px;}</style></head><body>'
+    +'<h1>تقرير الأثر · قبل وبعد</h1><div style="font-size:.8rem;color:#8A7A63;margin-bottom:14px;">منصة المُلهِم · almulhimedu.org</div>');
+  w.document.write(el.innerHTML);
+  w.document.write('</body></html>');
+  w.document.close();
+  setTimeout(function(){ try{ w.print(); }catch(e){} }, 600);
+}
+function hhExportImpactCSV(){
+  var d=window._hhLastImpact; if(!d||!d.pre||!d.post) return;
+  var rows=[['المجموعة','المرحلة','عدد الأسئلة','الصحيح','النسبة%']];
+  rows.push([d.exp,'قبلي',d.pre.t,d.pre.c,d.pre.pct]);
+  rows.push([d.exp,'بعدي',d.post.t,d.post.c,d.post.pct]);
+  if(d.cpre) rows.push([d.ctl,'قبلي',d.cpre.t,d.cpre.c,d.cpre.pct]);
+  if(d.cpost) rows.push([d.ctl,'بعدي',d.cpost.t,d.cpost.c,d.cpost.pct]);
+  rows.push([]); rows.push(['الدرس / الفئة','قبل%','بعد%','التحسن']);
+  d.rows.forEach(function(r){ rows.push([r.k, r.pre===null?'':r.pre, r.post===null?'':r.post, r.delta===null?'':r.delta]); });
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var bl=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(bl);
+  a.download='impact_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
 }
 function hhShowAnalytics(){
   if(!_savedSessions.length){ if(typeof toast==='function') toast('لا جلسات محفوظة بعد · احفظ جلسة أولاً','warn'); return; }
