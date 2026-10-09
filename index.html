@@ -1128,7 +1128,7 @@ body.dark-mode .hh-nav-new-badge{ border-color:#0f1f18; }
 .ref-hero{
   display:flex; align-items:center; gap:14px;
   background:linear-gradient(135deg,#fafaf5 0%,#e8eef5 100%);
-  border:2px solid #1F4E79;
+  border:2px solid #B8924A;
   border-right:5px solid #0e3d60;
   border-radius:16px;
   padding:18px 16px;
@@ -1144,7 +1144,7 @@ body.dark-mode .hh-nav-new-badge{ border-color:#0f1f18; }
 }
 .ref-hero-icon{
   width:54px; height:54px; flex-shrink:0;
-  background:linear-gradient(135deg,#1F4E79,#0e3d60);
+  background:linear-gradient(135deg,#5E0E26,#3D0918);
   color:#fff; border-radius:14px;
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 4px 10px rgba(30,58,95,.30), inset 0 -2px 0 rgba(0,0,0,.18);
@@ -1164,7 +1164,7 @@ body.dark-mode .hh-nav-new-badge{ border-color:#0f1f18; }
   box-shadow:0 2px 4px rgba(0,0,0,.04);
 }
 .ref-card:hover{
-  border-color:#1F4E79;
+  border-color:#B8924A;
   box-shadow:0 6px 16px rgba(30,58,95,.15);
   transform:translateY(-1px);
 }
@@ -1178,9 +1178,9 @@ body.dark-mode .hh-nav-new-badge{ border-color:#0f1f18; }
 .ref-card-name{ font-weight:900; font-size:.95rem; color:#1a1a2e; line-height:1.2; }
 .ref-card-desc{ font-size:.74rem; color:#777; font-weight:600; margin-top:3px; line-height:1.4; }
 .ref-card-arrow{ color:#bbb; flex-shrink:0; transition:transform .2s ease; }
-.ref-card:hover .ref-card-arrow{ color:#1F4E79; transform:translateX(-3px); }
+.ref-card:hover .ref-card-arrow{ color:#5E0E26; transform:translateX(-3px); }
 
-body.dark-mode .ref-hero{ background:linear-gradient(135deg,#0a1828 0%,#0e2540 100%); border-color:#1F4E79; }
+body.dark-mode .ref-hero{ background:linear-gradient(135deg,#0a1828 0%,#0e2540 100%); border-color:#B8924A; }
 body.dark-mode .ref-hero-title{ color:#7eb6e8; }
 body.dark-mode .ref-hero-sub{ color:#5ba3e8; }
 body.dark-mode .ref-card{ background:#1a2e24; border-color:#2d5544; }
@@ -2509,12 +2509,10 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       </div>
 
       <!-- صف اسم اللعبة -->
-      <div class="ms-name-row">
-        <svg class="ms-name-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 2l-4 5-4-5"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
-        <input type="text" id="game-name" class="ms-name-input" placeholder="اسم اللعبة (اختياري)" maxlength="60">
-        <button type="button" class="ms-name-refresh" onclick="autoGameName()" title="توليد اسم تلقائي">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> جدّد
-        </button>
+      <div class="ms-name-row gn2">
+        <div class="gn-lbl"><label for="game-name">اسم اللعبة</label> <em>إلزامي</em></div>
+        <input type="text" id="game-name" class="ms-name-input" placeholder="مثال: مراجعة الوحدة الأولى · 7/2" maxlength="60" required autocomplete="off">
+        <div class="gn-hint">يظهر الاسم في «ألعابي» وتقرير الجلسة والنتائج</div>
       </div>
 
       <!-- صف ميتا · عدد الفرق + المؤقت في عمودين -->
@@ -2635,7 +2633,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <span style="font-weight:900;color:#8A1538;"> حفرة</span><div>خصم نقاط من فريق منافس</div>
       <span style="font-weight:900;color:#B8924A;"> ضاعف</span><div>مضاعفة نقاط السؤال</div>
       <span style="font-weight:900;color:#3D6B53;"> منع</span><div>منع فريق من الإجابة</div>
-      <span style="font-weight:900;color:#1F4E79;"> جوابين</span><div>حق تقديم إجابتين</div>
+      <span style="font-weight:900;color:#5E0E26;"> جوابين</span><div>حق تقديم إجابتين</div>
       <span style="font-weight:900;color:#c0392b;"> الفخ</span><div>إجبار الفريق التالي على الإجابة · إن أخطأ خُصمت منه</div>
     </div>
 
@@ -3809,7 +3807,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <span>مسار الطالب</span>
           <span style="background:rgba(255,255,255,.18);padding:2px 8px;border-radius:8px;font-size:.7rem;color:#fff;margin-right:auto;">7 خدمات</span>
         </div>
-        <div id="admin-student-services" style="background:#fff;border:1.5px solid #1F4E79;border-top:none;border-radius:0 0 10px 10px;padding:8px;">
+        <div id="admin-student-services" style="background:#fff;border:1.5px solid #B8924A;border-top:none;border-radius:0 0 10px 10px;padding:8px;">
           <div style="text-align:center;padding:20px;color:#888;font-size:.85rem;">جار التحميل...</div>
         </div>
       </div>
@@ -3879,7 +3877,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <div style="margin-bottom:12px;">
           <label style="font-size:.78rem;font-weight:900;color:#8A1538;display:block;margin-bottom:6px;">النوع:</label>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button class="ann-type-btn ann-type-active" data-type="info" onclick="setAnnType('info')" style="padding:6px 14px;border:1.5px solid #1F4E79;background:#1F4E79;color:#fff;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span> معلومة</button>
+            <button class="ann-type-btn ann-type-active" data-type="info" onclick="setAnnType('info')" style="padding:6px 14px;border:1.5px solid #B8924A;background:#5E0E26;color:#fff;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span> معلومة</button>
             <button class="ann-type-btn" data-type="success" onclick="setAnnType('success')" style="padding:6px 14px;border:1.5px solid #3D6B53;background:#fff;color:#3D6B53;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span> نجاح</button>
             <button class="ann-type-btn" data-type="warning" onclick="setAnnType('warning')" style="padding:6px 14px;border:1.5px solid #B8924A;background:#fff;color:#8A6D2E;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span> تنبيه</button>
             <button class="ann-type-btn" data-type="celebration" onclick="setAnnType('celebration')" style="padding:6px 14px;border:1.5px solid #8A1538;background:#fff;color:#8A1538;border-radius:18px;font-family:Cairo;font-weight:800;font-size:.74rem;cursor:pointer;"><span class="hh-icon" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:inherit;"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 22l3-9 6 6-9 3zm6.5-7.5L2 22l7.5-3.5-1-3.5-3.5 1L2 22m11.5-13L22 2.5l-1 3-3-3-2.5 6.5"/></svg></span> احتفال</button>
@@ -4032,7 +4030,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
       <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
         <button onclick="hhAdmLoadTeachers('pending')" style="background:#b5801f;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">قيد المراجعة</button>
         <button onclick="hhAdmLoadTeachers('approved')" style="background:#3D6B53;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">المعتمدون</button>
-        <button onclick="hhAdmLoadTeachers('all')" style="background:#1F4E79;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">الكل</button>
+        <button onclick="hhAdmLoadTeachers('all')" style="background:#5E0E26;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">الكل</button>
       </div>
       <div id="adm-teachers-list"><div style="text-align:center;color:#999;padding:24px;font-family:Cairo;font-weight:700;">اضغط أحد الأزرار أعلاه للتحميل</div></div>
     </div>
@@ -4043,7 +4041,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <h3 style="margin:0 0 6px;font-family:Cairo;font-weight:900;font-size:1.05rem;">دليل المعلمين المعتمدين</h3>
         <p style="margin:0;font-size:.8rem;opacity:.85;line-height:1.8;">تحليل نشاط كل معلم: صفوفه وطلابه واستخدامه للأدوات · مع مؤشر نشاط وتوصيات متابعة.</p>
       </div>
-      <button onclick="hhLoadTeacherDirectory()" style="background:#1F4E79;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-bottom:14px;">تحميل الدليل والتحليل</button>
+      <button onclick="hhLoadTeacherDirectory()" style="background:#5E0E26;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-bottom:14px;">تحميل الدليل والتحليل</button>
       <div id="adm-dir-list"></div>
     </div>
 
@@ -4053,7 +4051,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
         <h3 style="margin:0 0 6px;font-family:Cairo;font-weight:900;font-size:1.05rem;">الصفوف والطلاب</h3>
         <p style="margin:0;font-size:.8rem;opacity:.85;line-height:1.8;">كل صف أنشأه معلم، وكوده، وعدد طلابه · رقابة كاملة على المجتمعات الخاصة داخل منصتك.</p>
       </div>
-      <button onclick="hhAdmLoadClasses()" style="background:#1F4E79;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-bottom:14px;">تحميل الصفوف</button>
+      <button onclick="hhAdmLoadClasses()" style="background:#5E0E26;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-bottom:14px;">تحميل الصفوف</button>
       <div id="adm-classes-list"></div>
     </div>
 
@@ -4070,7 +4068,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           مدرستي<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">المسار المتدرج وبوابات الإتقان</div></button>
         <button onclick="hhAISettings()" style="background:#fff;border:2px solid #3D6B53;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#3D6B53;cursor:pointer;text-align:right;">
           إعدادات التوليد الذكي<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">ربط الوسيط السحابي</div></button>
-        <button onclick="hhShowAnalytics()" style="background:#fff;border:2px solid #1F4E79;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#1F4E79;cursor:pointer;text-align:right;">
+        <button onclick="hhShowAnalytics()" style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#5E0E26;cursor:pointer;text-align:right;">
           التحليلات التراكمية<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">تطور الأداء عبر الجلسات</div></button>
         <button onclick="hhShowImpact()" style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:16px;font-family:Cairo;font-weight:900;font-size:.85rem;color:#8A6D2E;cursor:pointer;text-align:right;">
           تقرير الأثر<div style="font-size:.7rem;font-weight:700;color:#999;margin-top:4px;">قبلي وبعدي · مجموعة ضابطة</div></button>
@@ -6665,7 +6663,7 @@ window.submitProblemReport = async function(){
 
       <!-- البريد -->
       <div style="margin-bottom:14px;">
-        <label style="display:flex;align-items:center;gap:6px;font-family:Cairo;font-weight:900;font-size:.82rem;color:#1F4E79;margin-bottom:6px;">
+        <label style="display:flex;align-items:center;gap:6px;font-family:Cairo;font-weight:900;font-size:.82rem;color:#5E0E26;margin-bottom:6px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> البريد الإلكتروني
         </label>
         <input type="email" id="ce-email" placeholder="example@email.com"
@@ -6764,7 +6762,7 @@ window.submitProblemReport = async function(){
         <button onclick="showScreen('screen-setup');setTimeout(()=>{document.body.classList.add('admin-edit-mode');const lbl=document.getElementById('cat-edit-mode-label');if(lbl)lbl.textContent='إنهاء التحرير';if(typeof toast==='function')toast(' التحرير مفعل','success');},300);" type="button" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:#fff;border:1.5px solid #3D6B53;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.7rem;color:#2C5340;cursor:pointer;transition:all .2s;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#3D6B53"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"/></svg> إدارة الفئات
         </button>
-        <button onclick="showScreen('screen-admin');loadAdminPanel();setTimeout(()=>adminTab('paths'),100);" type="button" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:#fff;border:1.5px solid #1F4E79;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.7rem;color:#1F4E79;cursor:pointer;transition:all .2s;">
+        <button onclick="showScreen('screen-admin');loadAdminPanel();setTimeout(()=>adminTab('paths'),100);" type="button" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:#fff;border:1.5px solid #B8924A;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.7rem;color:#5E0E26;cursor:pointer;transition:all .2s;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#1F4E79"><path d="M3 9h4v6H3zm6-4h4v14H9zm6 8h4v6h-4z"/></svg> إدارة المسارات
         </button>
         <button onclick="showScreen('screen-admin');loadAdminPanel();" type="button" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:linear-gradient(135deg,#8A1538,#5E0E26);border:1.5px solid #B8924A;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.7rem;color:#D4BC85;cursor:pointer;transition:all .2s;">
@@ -6810,7 +6808,7 @@ window.submitProblemReport = async function(){
 
         <!-- الحصة التفاعلية -->
         <button class="tbx-tool" onclick="hhSchoolEntry()">
-          <div class="tbx-tool-icon" style="background:linear-gradient(135deg,#1F4E79,#0e3d60);">
+          <div class="tbx-tool-icon" style="background:linear-gradient(135deg,#5E0E26,#3D0918);">
             <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M3 3h18v2H3zm0 16h18v2H3z"/></svg>
           </div>
           <div class="tbx-tool-info">
@@ -6860,7 +6858,7 @@ window.submitProblemReport = async function(){
 
         <!-- فصولي -->
         <button class="tbx-tool" onclick="hhOpenClasses()">
-          <div class="tbx-tool-icon" style="background:linear-gradient(135deg,#1F4E79,#0e3d60);">
+          <div class="tbx-tool-icon" style="background:linear-gradient(135deg,#5E0E26,#3D0918);">
             <svg viewBox="0 0 24 24" fill="#fff" width="22" height="22"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm-1 15.18L4 14.27v-3.27L11 14.5v3.68zM13 18.18v-3.68L20 11v3.27l-7 3.91z"/></svg>
           </div>
           <div class="tbx-tool-info">
@@ -6960,7 +6958,7 @@ window.submitProblemReport = async function(){
 
   <button class="hh-nav-item" onclick="hhOpenLeaderPrograms()" type="button">
     <span class="hh-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg></span>
-    <span class="hh-nav-label">البرامج التربوية</span>
+    <span class="hh-nav-label"><span class="hh-lbl-l">البرامج التربوية</span><span class="hh-lbl-s">البرامج</span></span>
   </button>
 
   <button class="hh-nav-item" id="hh-nav-more" onclick="hhToggleMoreSheet()" type="button" aria-expanded="false" aria-controls="hh-more-sheet">
@@ -8697,7 +8695,7 @@ function _hh_esc(s){
         <button onclick="cemSetColor('#B8924A')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#B8924A;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="ذهبي"></button>
         <button onclick="cemSetColor('#3D6B53')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#3D6B53;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="أخضر"></button>
         <button onclick="cemSetColor('#8A1538')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#8A1538;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="عنابي"></button>
-        <button onclick="cemSetColor('#1F4E79')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#1F4E79;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="أزرق"></button>
+        <button onclick="cemSetColor('#1F4E79')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#5E0E26;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="أزرق"></button>
         <button onclick="cemSetColor('#9b59b6')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#9b59b6;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="بنفسجي"></button>
         <button onclick="cemSetColor('#e67e22')" type="button" style="width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:#e67e22;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" title="برتقالي"></button>
       </div>
@@ -9970,7 +9968,7 @@ function startGameFromBar(){
     _msStep=(n===2)?2:1;
     if(_msStep===2){
       const inp=document.getElementById('game-name');
-      if(inp && !inp.value.trim() && typeof autoGameName==='function'){ try{ autoGameName(); }catch(e){} }
+      if(inp && !inp.value.trim()){ setTimeout(function(){ try{ inp.focus(); }catch(e){} },350); } // zzzzzzbn: لا توليد تلقائي
     }
     try{ setupActionUpdate(); }catch(e){ msSyncStepUI(); }
     try{ const w=document.querySelector('.ms-wrapper'); if(w) w.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
@@ -10127,7 +10125,13 @@ function msQuickStartLaunch(){
   }
 
   // اسم لعبة تلقائي
-  if(typeof autoGameName === 'function') autoGameName();
+  // zzzzzzbn: اسم اللعبة إلزامي · ننتقل لخطوة الفرق ليكتبه المعلم
+  try{ localStorage.setItem('hh_saved_cats', JSON.stringify(cats)); }catch(e){}
+  const _gn=document.getElementById('game-name');
+  if(!_gn || !_gn.value.trim()){
+    setTimeout(()=>{ try{ if(typeof msGoStep==='function') msGoStep(2); if(typeof hhGameNameError==='function') hhGameNameError(); }catch(e){} }, 120);
+    return;
+  }
 
   // تشغيل اللعبة بعد frame واحد لضمان استقرار الفرق
   setTimeout(() => {
@@ -11195,9 +11199,9 @@ window.hhOpenPersonalStats = function(){
             <div style="font-size:1.8rem;font-weight:900;color:#3D6B53;font-family:Cairo;line-height:1;">${stats.new_category||0}</div>
             <div style="font-size:.78rem;color:#3D6B53;font-weight:700;margin-top:4px;">فئة منشأة</div>
           </div>
-          <div style="background:linear-gradient(135deg,#E8EEF7,#fff);border:1.5px solid #1F4E79;border-radius:12px;padding:14px;text-align:center;">
-            <div style="font-size:1.8rem;font-weight:900;color:#1F4E79;font-family:Cairo;line-height:1;">${stats.image_question||0}</div>
-            <div style="font-size:.78rem;color:#1F4E79;font-weight:700;margin-top:4px;">سؤال بصورة</div>
+          <div style="background:linear-gradient(135deg,#FBF3E2,#fff);border:1.5px solid #B8924A;border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:1.8rem;font-weight:900;color:#5E0E26;font-family:Cairo;line-height:1;">${stats.image_question||0}</div>
+            <div style="font-size:.78rem;color:#5E0E26;font-weight:700;margin-top:4px;">سؤال بصورة</div>
           </div>
         </div>
         
@@ -13540,6 +13544,82 @@ body.dark-mode.bv2 #board-bottom-bar .team-score{ color:#EAD9B0 !important; }
   #screen-toolbox .tbx-grid{ display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px !important; }
   #screen-toolbox .tbx-grid > *{ margin:0 !important; }
 }
+
+/* ═══════════ الشريطان العلوي والسفلي: قياس واحد ومساحات واضحة (zzzzzzbn) ═══════════ */
+:root{ --hh-bar:80px; --hh-bar-b:80px; --hh-tile:40px; --hh-ico:20px; --hh-lbl:15px; --hh-ctl:44px; }
+html body #main-nav{ height:var(--hh-bar) !important; min-height:var(--hh-bar) !important; padding:0 !important; border-bottom:2px solid #B8924A !important; box-shadow:0 4px 16px rgba(30,6,15,.18) !important; }
+html body #main-nav .main-nav-inner{ height:100% !important; max-width:1400px !important; margin:0 auto !important; padding:0 24px !important; display:flex !important; align-items:center !important; gap:26px !important; }
+html body #main-nav .main-nav-brand{ gap:10px !important; align-items:center !important; flex-shrink:0 !important; }
+html body #main-nav .main-nav-logo{ width:44px !important; height:44px !important; }
+html body #main-nav .main-nav-title{ display:flex !important; flex-direction:column !important; justify-content:center !important; gap:2px !important; }
+html body #main-nav .main-nav-name{ font-family:'Cairo',sans-serif !important; font-weight:800 !important; font-size:22px !important; line-height:1.25 !important; background:none !important; -webkit-text-fill-color:#F5E6C4 !important; color:#F5E6C4 !important; }
+html body #main-nav .main-nav-tag{ font-family:'Tajawal',sans-serif !important; font-weight:500 !important; font-size:12.5px !important; line-height:1.3 !important; color:#D4BC85 !important; }
+html body #main-nav .main-nav-links{ gap:12px !important; align-items:center !important; flex:0 0 auto !important; }
+html body #main-nav .nav-search-container{ width:260px !important; max-width:260px !important; flex:0 1 260px !important; }
+html body #main-nav .nav-search-wrap{ width:100% !important; }
+html body #main-nav .nav-link{ flex-direction:column !important; align-items:center !important; gap:5px !important; padding:0 4px !important; min-width:84px !important; height:auto !important; background:none !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
+html body #main-nav .nav-link > svg{ width:var(--hh-tile) !important; height:var(--hh-tile) !important; padding:10px !important; box-sizing:border-box !important; border-radius:12px !important; border:1px solid rgba(234,217,176,.35) !important; background:rgba(255,253,248,.06) !important; color:#EAD9B0 !important; transition:all .18s ease !important; }
+html body #main-nav .nav-link > span{ font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:var(--hh-lbl) !important; line-height:1.25 !important; color:#EAD9B0 !important; white-space:nowrap !important; }
+html body #main-nav .nav-link:hover > svg, html body #main-nav .nav-link.active > svg, html body #main-nav .nav-link.nav-link-active > svg{ background:linear-gradient(135deg,#F5E6C4,#B8924A) !important; border-color:#F5E6C4 !important; color:#3D0918 !important; }
+html body #main-nav .nav-link:hover > span, html body #main-nav .nav-link.active > span{ color:#FFFDF8 !important; }
+html body #main-nav .nav-search-wrap{ height:var(--hh-ctl) !important; border-radius:12px !important; }
+html body #main-nav .nav-search-input{ font-family:'Tajawal',sans-serif !important; font-size:15px !important; }
+html body #main-nav .main-nav-actions{ gap:12px !important; align-items:center !important; }
+html body #main-nav .nav-quick-group{ gap:8px !important; background:none !important; border:0 !important; padding:0 !important; box-shadow:none !important; height:auto !important; }
+html body #main-nav .nav-icon-btn{ width:var(--hh-ctl) !important; height:var(--hh-ctl) !important; border-radius:12px !important; border:1px solid rgba(234,217,176,.35) !important; background:rgba(255,253,248,.06) !important; color:#EAD9B0 !important; }
+html body #main-nav .nav-icon-btn svg{ width:var(--hh-ico) !important; height:var(--hh-ico) !important; }
+html body #main-nav .nav-login-btn, html body #main-nav .nav-profile-btn{ height:var(--hh-ctl) !important; min-height:var(--hh-ctl) !important; border-radius:12px !important; font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:15px !important; padding-top:0 !important; padding-bottom:0 !important; display:inline-flex !important; align-items:center !important; }
+
+html body #hh-bottom-nav{ height:var(--hh-bar-b) !important; padding:0 !important; justify-content:center !important; align-items:center !important; gap:34px !important; border-top:2px solid #B8924A !important; box-shadow:0 -4px 16px rgba(30,6,15,.18) !important; }
+html body #hh-bottom-nav #hh-nav-ind{ display:none !important; }
+html body #hh-bottom-nav .hh-nav-item, html body #hh-bottom-nav .hh-nav-item.hh-nav-mihbara, html body #hh-bottom-nav .hh-nav-item.hh-nav-center{ width:112px !important; min-width:112px !important; flex:0 0 112px !important; max-width:none !important; height:auto !important; padding:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:5px !important; }
+html body #hh-bottom-nav .hh-nav-icon, html body #hh-bottom-nav .hh-nav-mihbara .hh-nav-icon, html body #hh-bottom-nav .hh-nav-center .hh-nav-icon{ width:var(--hh-tile) !important; height:var(--hh-tile) !important; margin:0 !important; border-radius:12px !important; border:1px solid rgba(234,217,176,.35) !important; background:rgba(255,253,248,.06) !important; color:#EAD9B0 !important; display:flex !important; align-items:center !important; justify-content:center !important; }
+html body #hh-bottom-nav .hh-nav-icon svg{ width:var(--hh-ico) !important; height:var(--hh-ico) !important; }
+html body #hh-bottom-nav .hh-nav-label, html body #hh-bottom-nav .hh-nav-mihbara .hh-nav-label{ font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:var(--hh-lbl) !important; line-height:1.25 !important; margin:0 !important; color:#EAD9B0 !important; white-space:nowrap !important; }
+html body #hh-bottom-nav .hh-nav-item.active .hh-nav-icon{ background:linear-gradient(135deg,#F5E6C4,#B8924A) !important; border-color:#F5E6C4 !important; color:#3D0918 !important; }
+html body #hh-bottom-nav .hh-nav-item.active .hh-nav-label{ color:#FFFDF8 !important; }
+html body #hh-bottom-nav .hh-nav-item:hover .hh-nav-icon{ border-color:#EAD9B0 !important; }
+html body #hh-bottom-nav .hh-lbl-s{ display:none; }
+@media (min-width:901px){ body::before, body::after{ top:var(--hh-bar) !important; bottom:var(--hh-bar-b) !important; } }
+@media (max-width:1500px){ html body #main-nav .nav-search-container{ width:210px !important; max-width:210px !important; flex-basis:210px !important; } html body #main-nav .main-nav-links{ gap:6px !important; } html body #main-nav .nav-link{ min-width:76px !important; } html body #main-nav .main-nav-inner{ gap:18px !important; } :root{ --hh-lbl:14px; } }
+@media (max-width:1180px) and (min-width:701px){ html body #main-nav .nav-search-container{ display:none !important; } }
+@media (max-width:700px){
+  :root{ --hh-bar:60px; --hh-bar-b:70px; --hh-tile:34px; --hh-ico:18px; --hh-lbl:12.5px; --hh-ctl:38px; }
+  html body #main-nav .main-nav-inner{ padding:0 10px !important; gap:8px !important; }
+  html body #main-nav .main-nav-logo{ width:36px !important; height:36px !important; }
+  html body #main-nav .main-nav-name{ font-size:18px !important; }
+  html body #main-nav .main-nav-tag, html body #main-nav .nav-cta-sep{ display:none !important; }
+  html body #main-nav .main-nav-actions{ gap:6px !important; }
+  html body #main-nav .nav-quick-group{ gap:6px !important; }
+  html body #main-nav .nav-quick-group > .nav-icon-btn:not(#nav-notif-btn){ display:none !important; }
+  html body #main-nav .nav-profile-btn, html body #main-nav .nav-login-btn{ font-size:13px !important; padding-inline:8px !important; max-width:120px !important; }
+  html body #hh-bottom-nav{ gap:0 !important; padding:0 4px env(safe-area-inset-bottom,0) !important; justify-content:space-around !important; }
+  html body #hh-bottom-nav .hh-nav-item, html body #hh-bottom-nav .hh-nav-item.hh-nav-mihbara, html body #hh-bottom-nav .hh-nav-item.hh-nav-center{ width:auto !important; min-width:0 !important; flex:1 1 0 !important; }
+  html body #hh-bottom-nav .hh-lbl-l{ display:none; } html body #hh-bottom-nav .hh-lbl-s{ display:inline; }
+}
+
+/* ═══ اسم اللعبة الإلزامي (zzzzzzbn) ═══ */
+#screen-setup .ms-name-row.gn2{ flex-wrap:wrap !important; align-items:center !important; gap:8px 12px !important; border:2px solid #B8924A !important; background:#fff !important; padding:14px 18px !important; border-radius:16px !important; }
+#screen-setup .ms-name-row.gn2 .gn-lbl{ flex-basis:100%; display:flex; align-items:center; gap:8px; font-family:Cairo,sans-serif; font-weight:800; font-size:1rem; color:#5E0E26; }
+#screen-setup .ms-name-row.gn2 .gn-lbl em{ font-style:normal; font-family:Tajawal,sans-serif; font-weight:700; font-size:.78rem; color:#fff; background:#8A1538; border-radius:8px; padding:1px 8px; }
+#screen-setup .ms-name-row.gn2 input{ flex:1 1 100%; font-size:1.15rem !important; font-family:Cairo,sans-serif !important; font-weight:700 !important; border:1.5px solid #E7DAC0 !important; border-radius:12px !important; padding:12px 14px !important; background:#FBF7F0 !important; min-height:50px; color:#2A1A0E !important; }
+#screen-setup .ms-name-row.gn2 input::placeholder{ color:#A89A80; font-weight:500; font-family:Tajawal,sans-serif; }
+#screen-setup .ms-name-row.gn2 .gn-hint{ flex-basis:100%; font-family:Tajawal,sans-serif; font-size:.85rem; color:#8A7A63; }
+#screen-setup .ms-name-row.gn2.gn-err{ border-color:#C0392B !important; box-shadow:0 0 0 4px rgba(192,57,43,.12); animation:gnshake .35s; }
+#screen-setup .ms-name-row.gn2.gn-err input{ border-color:#C0392B !important; background:#FDF1EF !important; }
+#screen-setup .ms-name-row.gn2.gn-err .gn-hint{ color:#C0392B; font-weight:700; }
+#screen-setup .ms-name-row.gn2.gn-ok input{ border-color:#3D6B53 !important; background:#fff !important; }
+#screen-setup .ms-name-row.gn2.gn-ok .gn-hint{ color:#3D6B53; font-weight:700; }
+#screen-setup.ms-in-step2:has(#game-name:placeholder-shown) #setup-action-btn{ opacity:.55 !important; filter:grayscale(.3); }
+@keyframes gnshake{ 0%,100%{ transform:none; } 25%{ transform:translateX(-6px); } 75%{ transform:translateX(6px); } }
+
+/* ═══ الهوية · المرحلة الأخيرة (zzzzzzbn): أيقونات المحبرة والأزرار ═══ */
+#screen-toolbox .tbx-tool-icon{ background:linear-gradient(135deg,#6E1029,#3D0918) !important; border:1.5px solid #B8924A !important; box-shadow:0 4px 10px rgba(61,9,24,.18) !important; }
+#screen-toolbox .tbx-tool-icon svg{ fill:#EAD9B0 !important; color:#EAD9B0 !important; }
+#screen-toolbox .tbx-tool:hover .tbx-tool-icon{ background:linear-gradient(135deg,#F5E6C4,#B8924A) !important; }
+#screen-toolbox .tbx-tool:hover .tbx-tool-icon svg{ fill:#3D0918 !important; color:#3D0918 !important; }
+.btn{ border-radius:12px !important; font-family:'Cairo',sans-serif !important; font-weight:700 !important; }
+.btn:not(.btn-sm):not(.btn-xs){ min-height:44px; }
 </style>
 </body>
 </html>

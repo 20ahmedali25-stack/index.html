@@ -298,22 +298,22 @@ async function hhCohortsAdmin(){
   await hhCohortsLoad();
   var dayBoxes=HH_DAY_NAMES.map(function(n,i){
     return '<label style="display:inline-flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #E3D9C6;border-radius:8px;padding:4px 9px;margin:0 4px 5px 0;cursor:pointer;font-size:.73rem;font-weight:800;">'
-      +'<input type="checkbox" class="coh-day" value="'+i+'" style="width:15px;height:15px;accent-color:#1F4E79;cursor:pointer;">'+esc(n)+'</label>';
+      +'<input type="checkbox" class="coh-day" value="'+i+'" style="width:15px;height:15px;accent-color:#5E0E26;cursor:pointer;">'+esc(n)+'</label>';
   }).join('');
   var list=_HH_COHORTS.map(function(C){
     return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:11px;padding:11px 13px;margin-bottom:7px;">'
       +'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;">'
-      +'<div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:.82rem;color:#1F4E79;">'+esc(C.title||'')+'</div>'
+      +'<div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:.82rem;color:#5E0E26;">'+esc(C.title||'')+'</div>'
       +'<div style="font-size:.7rem;color:#888;">'+esc(hhFmtDate(C.start))+' · '+esc(C.time||'')+' · '
       + (C.enrolled||0)+'/'+(C.seats||0)+' مسجّل · '+(C.waitlist||0)+' انتظار</div></div>'
       +'<div style="display:flex;gap:5px;flex-wrap:wrap;">'
-      +'<button onclick="hhCohortRoster(\''+C.id+'\')" style="background:#E9EEF8;color:#1F4E79;border:1px solid #1F4E79;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">المسجّلون</button>'
+      +'<button onclick="hhCohortRoster(\''+C.id+'\')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">المسجّلون</button>'
       +'<button onclick="hhCohortDelete(\''+C.id+'\')" style="background:#fff;color:#c0392b;border:1px solid #e0c0c0;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">حذف</button>'
       +'</div></div></div>';
   }).join('');
 
   var html='<div style="background:#fff;border:1.5px solid #B8924A;border-radius:12px;padding:13px;margin-bottom:13px;">'
-    +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:9px;">دورة جديدة</div>'
+    +'<div style="font-weight:900;font-size:.85rem;color:#5E0E26;margin-bottom:9px;">دورة جديدة</div>'
     +'<input id="coh-title" placeholder="اسم الدورة (الدفعة الأولى · خريف 2026)" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:8px;">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
     +'<div><div style="font-size:.72rem;font-weight:800;color:#8A6D2E;margin-bottom:3px;">تاريخ البداية</div>'
@@ -330,9 +330,9 @@ async function hhCohortsAdmin(){
     +'<select id="coh-mode" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;">'
     +'<option>حضوري</option><option>عن بُعد</option><option>مدمج</option></select>'
     +'</div>'
-    +'<button onclick="hhCohortAdd()" style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إضافة الدورة</button>'
+    +'<button onclick="hhCohortAdd()" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إضافة الدورة</button>'
     +'</div>'
-    +'<div style="font-weight:900;font-size:.85rem;color:#1F4E79;margin-bottom:7px;">الدورات المعلنة ('+_HH_COHORTS.length+')</div>'
+    +'<div style="font-weight:900;font-size:.85rem;color:#5E0E26;margin-bottom:7px;">الدورات المعلنة ('+_HH_COHORTS.length+')</div>'
     + (list || '<div style="color:#999;font-size:.78rem;text-align:center;padding:14px;">لا دورات بعد</div>');
   if(typeof hhSchModal==='function') hhSchModal('إدارة دورات البرنامج', html, '#1F4E79');
 }
@@ -492,15 +492,15 @@ function hhSpkEditor(){
       +'<textarea id="'+id+'" rows="'+(rows||3)+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.82rem;line-height:1.9;box-sizing:border-box;resize:vertical;">'+esc(String(val==null?'':val))+'</textarea></div>';
   };
 
-  ov.innerHTML='<div style="background:#FAFBFD;border:2px solid #1F4E79;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
-    +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
+  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
+    +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">محرر البرنامج</div>'
     +'<div style="font-size:.73rem;opacity:.85;margin-top:2px;">عدّل كل شيء · يُحفظ سحابياً ويسري على الجميع</div></div>'
     +'<button onclick="hhSpkCloseEd()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:16px 18px;">'
     // تبويبات
     +'<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">'
-    +'<button onclick="hhSpkEdTab(\'info\')" id="sped-info" style="flex:1;min-width:78px;background:#1F4E79;color:#fff;border:none;border-radius:9px;padding:8px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">الأساسيات</button>'
+    +'<button onclick="hhSpkEdTab(\'info\')" id="sped-info" style="flex:1;min-width:78px;background:#5E0E26;color:#fff;border:none;border-radius:9px;padding:8px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">الأساسيات</button>'
     +'<button onclick="hhSpkEdTab(\'goals\')" id="sped-goals" style="flex:1;min-width:78px;background:#fff;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:9px;padding:8px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">الأهداف</button>'
     +'<button onclick="hhSpkEdTab(\'units\')" id="sped-units" style="flex:1;min-width:78px;background:#fff;color:#8A1538;border:1.5px solid #8A1538;border-radius:9px;padding:8px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">الوحدات</button>'
     +'<button onclick="hhSpkEdTab(\'rubric\')" id="sped-rubric" style="flex:1;min-width:78px;background:#fff;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:9px;padding:8px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">المعايير</button>'
@@ -508,7 +508,7 @@ function hhSpkEditor(){
     +'<div id="sped-body"></div>'
     +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;border-top:1.5px solid #E3D9C6;padding-top:13px;">'
     +'<button onclick="hhSpkApplyAll()" style="flex:1;min-width:140px;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ كل التعديلات</button>'
-    +'<button onclick="hhSpkExportJSON()" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير</button>'
+    +'<button onclick="hhSpkExportJSON()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير</button>'
     +'<button onclick="hhSpkImportJSON()" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استيراد</button>'
     +'<button onclick="hhSpkResetOverride()" style="background:#fff;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استعادة الأصل</button>'
     +'</div></div></div>';
@@ -738,7 +738,7 @@ function hhOpenSpeakProgram(){
   var old=document.getElementById('hh-spk'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-spk';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999970;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
-  ov.innerHTML='<div id="spk-box" style="background:#FAFBFD;border:2px solid '+P.color+';border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div id="spk-box" style="background:#FBF7F0;border:2px solid '+P.color+';border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');color:#fff;padding:18px;">'
     +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
     +'<div><div style="font-weight:900;font-size:1.15rem;">'+esc(P.name)+'</div>'
@@ -810,11 +810,11 @@ function hhSpkRender(hasAccess){
     +'</div>';
 
   var adminBar = (typeof hhIsAdmin==='function' && hhIsAdmin())
-    ? '<div style="background:#E9EEF8;border:1.5px solid #1F4E79;border-radius:11px;padding:10px 12px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
-      +'<span style="font-size:.76rem;font-weight:800;color:#1F4E79;">أنت مدير · الوصول مفتوح · تدير الصلاحيات من هنا</span>'
+    ? '<div style="background:#FBF3E2;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
+      +'<span style="font-size:.76rem;font-weight:800;color:#5E0E26;">أنت مدير · الوصول مفتوح · تدير الصلاحيات من هنا</span>'
       +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
       +'<button onclick="hhSpkEditor()" style="background:#8A1538;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">تحرير البرنامج</button>'
-      +'<button onclick="hhSpkAdminAccess()" style="background:#1F4E79;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">إدارة المشتركين</button></div></div>'
+      +'<button onclick="hhSpkAdminAccess()" style="background:#5E0E26;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">إدارة المشتركين</button></div></div>'
     : '';
 
   var rubric = hasAccess
@@ -830,7 +830,7 @@ function hhSpkRender(hasAccess){
   var cohortsBlock = '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px;">'
     + '<span style="font-weight:900;font-size:.88rem;color:'+P.dark+';">مواعيد الدورات والتسجيل</span>'
     + ((typeof hhIsAdmin==='function' && hhIsAdmin())
-       ? '<button onclick="hhCohortsAdmin()" style="background:#1F4E79;color:#fff;border:none;border-radius:8px;padding:5px 13px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">إدارة الدورات</button>' : '')
+       ? '<button onclick="hhCohortsAdmin()" style="background:#5E0E26;color:#fff;border:none;border-radius:8px;padding:5px 13px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">إدارة الدورات</button>' : '')
     + '</div>'
     + (typeof hhCohortsHTML==='function' ? hhCohortsHTML() : '');
 
@@ -960,7 +960,7 @@ async function hhSpkAdminAccess(){
     +'<button onclick="hhSpkGrant(false)" style="background:#fff;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">سحب</button>'
     +'</div>'
     +'<div id="spk-adm-status" style="font-size:.75rem;font-weight:800;min-height:16px;margin-bottom:10px;"></div>'
-    +'<div style="font-weight:900;font-size:.82rem;color:#1F4E79;margin-bottom:6px;">طلبات الاشتراك</div>'
+    +'<div style="font-weight:900;font-size:.82rem;color:#5E0E26;margin-bottom:6px;">طلبات الاشتراك</div>'
     +'<div id="spk-reqs" style="font-size:.78rem;color:#999;">جاري التحميل...</div>';
   if(typeof hhSchModal==='function') hhSchModal('إدارة مشتركي البرنامج', html, '#1F4E79');
   try{
@@ -1491,7 +1491,7 @@ function hhOpenProgram(pid){
       +'<td style="padding:7px;text-align:center;font-size:.71rem;color:#888;">'+esc(r.cls)+'</td>'
       +'<td style="padding:7px;text-align:center;font-weight:900;color:'+r.color+';font-size:.8rem;">'+r.score+'</td>'
       +'<td style="padding:7px;text-align:center;font-size:.7rem;color:'+r.color+';font-weight:800;">'+esc(r.level)+'</td>'
-      +'<td style="padding:4px;text-align:center;"><button onclick="hhShowDiagnosis('+r.i+')" style="background:#E9EEF8;color:#1F4E79;border:1px solid #1F4E79;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تشخيص</button></td></tr>';
+      +'<td style="padding:4px;text-align:center;"><button onclick="hhShowDiagnosis('+r.i+')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تشخيص</button></td></tr>';
   }).join('') : '';
 
   var html='<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');border-radius:14px;padding:15px;color:#fff;margin-bottom:14px;">'
@@ -1517,7 +1517,7 @@ function hhOpenProgram(pid){
         +'<tbody>'+rows+'</tbody></table></div>'
       : '<div style="text-align:center;color:#999;padding:20px;font-weight:700;font-size:.82rem;line-height:1.9;">'
         +'لا بيانات كافية بعد.<br>ارصد درجات وحضوراً وملاحظات في دفتر المتابعة ليظهر الترتيب تلقائياً.</div>')
-    +'<div style="background:#E9EEF8;border-radius:11px;padding:11px 13px;margin-top:13px;font-size:.74rem;color:#1F4E79;font-weight:700;line-height:1.85;">'
+    +'<div style="background:#FBF3E2;border-radius:11px;padding:11px 13px;margin-top:13px;font-size:.74rem;color:#5E0E26;font-weight:700;line-height:1.85;">'
     +'تُحدَّث لوحة الترتيب تلقائياً من دفتر المتابعة · كلما رصدت بيانات أدق، صار الترشيح أعدل.</div>';
 
   if(typeof hhSchModal==='function') hhSchModal(P.name, html, P.color);

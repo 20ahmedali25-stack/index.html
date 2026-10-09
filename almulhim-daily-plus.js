@@ -72,7 +72,7 @@
         +'<div style="font-weight:900;font-size:.78rem;color:#3D0918;margin:13px 0 6px;">إعدادات التقارير</div>'
         +'<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">'
         +(R.logo?'<img src="'+R.logo+'" style="height:38px;max-width:80px;object-fit:contain;border:1px solid #EDE3CE;border-radius:8px;background:#fff;padding:2px;">':'')
-        +'<label style="background:#FFFDF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">'
+        +'<label style="background:#FFFDF8;color:#5E0E26;border:1.5px solid #B8924A;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">'
         +(R.logo?'تغيير شعار المدرسة':'رفع شعار المدرسة')
         +'<input type="file" id="dps-logo" accept="image/*" style="display:none;"></label>'
         +(R.logo?'<b id="dps-dellogo" style="color:#8A1538;cursor:pointer;font-size:.7rem;">إزالة</b>':'')
@@ -226,7 +226,7 @@
         +'<input type="checkbox" data-k="'+key+'" '+(checked?'checked':'')+' style="width:16px;height:16px;accent-color:#3D6B53;flex-shrink:0;">'
         +'<span style="flex:1;font-size:.72rem;color:#5a4a30;font-weight:800;">'+icon+' '+label+'</span>'
         +(val?'<span style="font-size:.62rem;color:#8a7a63;font-weight:700;">'+esc2(val)+'</span>':'')
-        +(actLabel?'<button onclick="'+actFn+'" style="font-size:.6rem;color:#1F4E79;font-weight:900;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:Cairo;">'+actLabel+'</button>':'')
+        +(actLabel?'<button onclick="'+actFn+'" style="font-size:.6rem;color:#5E0E26;font-weight:900;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:Cairo;">'+actLabel+'</button>':'')
         +'</div>';
     }
     ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:16px;max-width:400px;width:100%;overflow:hidden;">'
@@ -405,7 +405,7 @@
     var strengths=(tr.strength||[]).map(function(t){return '<span class="tg" style="background:#3D6B53;color:#fff;">'+esc2(t)+'</span>';}).join('');
     var growths=(tr.growth||[]).map(function(t){return '<span class="tg" style="border:1.3px solid #8A1538;color:#8A1538;">'+esc2(t)+'</span>';}).join('');
     var plan=(rec.plans||[]).slice(-1)[0];
-    var planHtml=plan&&plan.reason ? '<div class="box"><b style="font-size:.62rem;color:#1F4E79;">خطة الدعم النشطة</b><div style="font-size:.6rem;font-weight:700;color:#5a4a30;line-height:1.9;margin-top:4px;">'
+    var planHtml=plan&&plan.reason ? '<div class="box"><b style="font-size:.62rem;color:#5E0E26;">خطة الدعم النشطة</b><div style="font-size:.6rem;font-weight:700;color:#5a4a30;line-height:1.9;margin-top:4px;">'
       +'السبب: '+esc2(plan.reason)
       +(plan.goal?'<br>الهدف: '+esc2(plan.goal):'')
       +(plan.action?'<br>الإجراء: '+esc2(plan.action):'')
@@ -530,8 +530,8 @@
     var old=document.getElementById('hh-dpi'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpi';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #1F4E79;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
-      +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
+    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
+      +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب من Excel</div>'
       +'<div style="font-size:.7rem;opacity:.86;">عمود «الفصل» في الملف ينشئ الفصول تلقائياً</div></div>'
       +'<button onclick="document.getElementById(\'hh-dpi\').remove()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
@@ -539,7 +539,7 @@
       +'<input type="file" id="dpi-file" accept=".csv,.txt,text/csv" style="width:100%;font-family:Cairo;font-size:.77rem;margin-bottom:6px;">'
       +'<div style="font-size:.66rem;color:#8A7A63;line-height:1.8;margin-bottom:8px;">من Excel: ملف ← حفظ باسم ← CSV UTF-8 · الأعمدة: الاسم، الرقم، الفصل</div>'
       +'<textarea id="dpi-text" rows="7" placeholder="أو الصق هنا: الاسم، الرقم، الفصل&#10;أحمد محمد,10201,السابع (أ)&#10;سارة علي,10202,السابع (ب)" style="width:100%;border:1.5px solid #EDE3CE;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.78rem;line-height:1.9;box-sizing:border-box;resize:vertical;"></textarea>'
-      +'<button id="dpi-prev" style="background:#1F4E79;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;margin-top:9px;">معاينة</button>'
+      +'<button id="dpi-prev" style="background:#5E0E26;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;margin-top:9px;">معاينة</button>'
       +'<div id="dpi-preview" style="margin-top:10px;"></div>'
       +'</div></div>';
     document.body.appendChild(ov);
@@ -558,7 +558,7 @@
       rowsCache.forEach(function(r){ var g=r.cls||'بدون فصل'; (groups[g]=groups[g]||[]).push(r); });
       box.innerHTML=Object.keys(groups).map(function(g){
         return '<div style="background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:8px 11px;margin-bottom:6px;">'
-          +'<b style="font-size:.74rem;color:#1F4E79;">'+esc2(g)+'</b> <span style="font-size:.66rem;color:#8A7A63;font-weight:800;">'+groups[g].length+' طالباً</span></div>';
+          +'<b style="font-size:.74rem;color:#5E0E26;">'+esc2(g)+'</b> <span style="font-size:.66rem;color:#8A7A63;font-weight:800;">'+groups[g].length+' طالباً</span></div>';
       }).join('')
       +'<button id="dpi-go" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">استيراد '+rowsCache.length+' طالباً الآن</button>';
       document.getElementById('dpi-go').onclick=async function(){
@@ -1044,7 +1044,7 @@
         +'<div style="flex:1;min-width:120px;"><div style="font-weight:900;font-size:.76rem;color:#3D0918;">'+esc2(c.className||'فصل')+'</div>'
         +'<div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+(c.studentCount||0)+' طالباً · <span dir="ltr">'+esc2(c.code)+'</span> · '+(rec?'<b style="color:#3D6B53;">رُصد اليوم ✓</b>':'<b style="color:#B8924A;">لم يُرصد</b>')+'</div></div>'
         +'<button onclick="hhTPGo(\''+esc2(c.code)+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 13px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">الدفتر</button>'
-        +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">تعديل</button>'
+        +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #B8924A;color:#5E0E26;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">تعديل</button>'
         +'<button onclick="hhTPDelete(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #8A1538;color:#8A1538;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">حذف</button>'
         +'</div>';
     }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
@@ -1054,7 +1054,7 @@
       +'<div style="width:64px;height:64px;border-radius:14px;border:2px '+(R.logo?'solid #B8924A':'dashed #B8924A')+';display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A6D2E;font-size:.52rem;font-weight:900;text-align:center;flex-shrink:0;background:#FBF5E9;overflow:hidden;">'+logoInner+'</div>'
       +'<div style="flex:1;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+(R.school?esc2(R.school):'اسم مدرستك لم يُضبط بعد')+'</div>'
       +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:3px;">يظهر الشعار والاسم على كل شهادة وتقرير · المعلم: '+(R.teacher?esc2(R.teacher):'··')+' · المنسق: '+(R.coord?esc2(R.coord):'··')+'</div></div>'
-      +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFDF8;border:1.4px solid #1F4E79;color:#1F4E79;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
+      +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFDF8;border:1.4px solid #B8924A;color:#5E0E26;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
       +'</div>';
     var isAdmin=(typeof hhIsAdmin==='function' && hhIsAdmin());
     var links='<button onclick="if(window.hhSfuGuide)hhSfuGuide()" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">الدليل الكامل</button>'

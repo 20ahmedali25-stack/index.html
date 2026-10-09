@@ -1060,7 +1060,7 @@ function hhOpenSchool(){
       })()
     +   cards
     +   ((_hhMyRole==='teacher'||(typeof hhIsAdmin==='function'&&hhIsAdmin()))
-        ? '<button onclick="hhSchTeacherPanel()" style="width:100%;background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">لوحة متابعة الصف</button>'
+        ? '<button onclick="hhSchTeacherPanel()" style="width:100%;background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">لوحة متابعة الصف</button>'
         : '')
     + '</div></div>';
   document.body.appendChild(ov);
@@ -1832,7 +1832,7 @@ function hhSchWizRender(){
       + '</div>';
   }
 
-  ov.innerHTML = '<div style="background:#FAFBFD;border:2px solid #B8924A;border-radius:22px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,.4);">'
+  ov.innerHTML = '<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:22px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,.4);">'
     + '<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:16px 18px;">'
     +   '<div style="display:flex;justify-content:space-between;align-items:center;">'
     +     backBtn
@@ -1858,7 +1858,7 @@ function hhSchSupport(i){
       + '<div style="font-weight:900;font-size:.82rem;color:#8A6D2E;margin-bottom:5px;">'+esc(L.title)+'</div>'
       + L.summary.map(function(s){ return '<div style="font-size:.77rem;color:#444;line-height:1.9;margin-bottom:4px;">• '+esc(s)+'</div>'; }).join('')
       + (L.terms&&L.terms.length ? '<div style="margin-top:6px;padding-top:6px;border-top:1px solid #eee;">'
-          + L.terms.map(function(t){ return '<div style="font-size:.75rem;"><b style="color:#1F4E79;">'+esc(t[0])+':</b> '+esc(t[1])+'</div>'; }).join('')
+          + L.terms.map(function(t){ return '<div style="font-size:.75rem;"><b style="color:#5E0E26;">'+esc(t[0])+':</b> '+esc(t[1])+'</div>'; }).join('')
           + '</div>' : '')
       + '</div>';
   }).join('');
@@ -2100,7 +2100,7 @@ function hhSchTeacherPanel(){
         +'<td style="padding:5px;text-align:center;font-size:.74rem;font-weight:800;color:'+(f>=80?'#3D6B53':f?'#b5801f':'#ccc')+';">'+(f?f+'%':'·')+'</td>'
         +'<td style="padding:5px;text-align:center;font-size:.7rem;color:#ccc;">·</td></tr>';
     }).join('');
-    return '<tr style="background:#E9EEF8;"><td style="padding:7px 9px;font-weight:900;font-size:.78rem;">'+esc(U.unit)+'</td>'
+    return '<tr style="background:#FBF3E2;"><td style="padding:7px 9px;font-weight:900;font-size:.78rem;">'+esc(U.unit)+'</td>'
       +'<td style="padding:7px;text-align:center;font-size:.72rem;font-weight:900;">'+(st==='done'?'أُتقنت':st==='open'?'متاحة':'مقفلة')+'</td>'
       +'<td style="padding:7px;text-align:center;font-weight:900;color:'+col+';font-size:.78rem;">'+(m?m+'%':'·')+'</td>'
       +'<td style="padding:7px;text-align:center;font-size:.74rem;">'+at+'</td></tr>'
@@ -2110,7 +2110,7 @@ function hhSchTeacherPanel(){
   var html='<div style="font-size:.76rem;color:#777;margin-bottom:9px;font-weight:700;line-height:1.8;">'
     +'متابعة تقدّم الطالب في المسار. عند نشر المنصة، تجمع لوحة الإدارة بيانات كل الطلاب سحابياً.</div>'
     +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">'
-    +'<thead><tr style="background:#1F4E79;color:#fff;font-weight:900;font-size:.74rem;">'
+    +'<thead><tr style="background:#5E0E26;color:#fff;font-weight:900;font-size:.74rem;">'
     +'<th style="padding:7px 9px;text-align:right;">الوحدة / الدرس</th>'
     +'<th style="padding:7px;">الحالة / سريع</th>'
     +'<th style="padding:7px;">الإتقان / شامل</th>'
@@ -2366,7 +2366,7 @@ function hhViewLesson(i){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999994;display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl;';
   ov.onclick=function(){ ov.remove(); };
-  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:620px;width:100%;max-height:80vh;overflow:hidden;display:flex;flex-direction:column;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#1F4E79,#173A5A);color:#fff;padding:12px 16px;font-weight:900;font-size:.9rem;">'+esc(L.lesson)+'</div>' +'<div style="padding:14px 16px;overflow-y:auto;font-size:.82rem;line-height:2;color:#333;white-space:pre-wrap;">'+esc(L.text)+'</div></div>';
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:620px;width:100%;max-height:80vh;overflow:hidden;display:flex;flex-direction:column;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:12px 16px;font-weight:900;font-size:.9rem;">'+esc(L.lesson)+'</div>' +'<div style="padding:14px 16px;overflow-y:auto;font-size:.82rem;line-height:2;color:#333;white-space:pre-wrap;">'+esc(L.text)+'</div></div>';
   document.body.appendChild(ov);
 }
 
@@ -2376,7 +2376,7 @@ function hhGenerateFromLesson(i){
   hhLogActivity('generate', L.lesson);
   var ov=document.createElement('div'); ov.id='hh-gen';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999993;display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl;';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:460px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> توليد من: '+esc(L.lesson)+'</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;color:#555;line-height:1.9;margin-bottom:12px;">اختر ما تريد توليده من هذا الدرس:</div>' +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">' +'<button onclick="hhGenRun('+i+',\'questions\')" style="background:#E9EEF8;color:#1F4E79;border:1.5px solid #1F4E79;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> فئة أسئلة</button>' +'<button onclick="hhGenRun('+i+',\'quiz\')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> اختبار مطبوع</button>' +'<button onclick="hhGenRun('+i+',\'summary\')" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> ملخص الدرس</button>' +'<button onclick="hhGenRun('+i+',\'strategies\')" style="background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> استراتيجيات</button>' +'<button onclick="hhGenRun('+i+',\'challenge\')" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> تحدي صفي</button>' +'<button onclick="hhAISettings()" style="background:#F3F0F1;color:#666;border:1.5px solid #ddd;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> إعدادات التوليد</button>' +'</div>' +'<div id="hh-gen-out" style="font-size:.78rem;color:#666;line-height:1.9;max-height:260px;overflow-y:auto;"></div>' +'<button onclick="document.getElementById(\'hh-gen\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:10px;">إغلاق</button>' +'</div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:460px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> توليد من: '+esc(L.lesson)+'</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;color:#555;line-height:1.9;margin-bottom:12px;">اختر ما تريد توليده من هذا الدرس:</div>' +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">' +'<button onclick="hhGenRun('+i+',\'questions\')" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> فئة أسئلة</button>' +'<button onclick="hhGenRun('+i+',\'quiz\')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> اختبار مطبوع</button>' +'<button onclick="hhGenRun('+i+',\'summary\')" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> ملخص الدرس</button>' +'<button onclick="hhGenRun('+i+',\'strategies\')" style="background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> استراتيجيات</button>' +'<button onclick="hhGenRun('+i+',\'challenge\')" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> تحدي صفي</button>' +'<button onclick="hhAISettings()" style="background:#F3F0F1;color:#666;border:1.5px solid #ddd;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;"> إعدادات التوليد</button>' +'</div>' +'<div id="hh-gen-out" style="font-size:.78rem;color:#666;line-height:1.9;max-height:260px;overflow-y:auto;"></div>' +'<button onclick="document.getElementById(\'hh-gen\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:10px;">إغلاق</button>' +'</div></div>';
   document.body.appendChild(ov);
 }
 
@@ -2402,7 +2402,7 @@ async function hhGenRun(i, kind){
   }
   setTimeout(function(){
     out.innerHTML = hhLocalGenerate(L, kind)
-      + '<div style="background:#E9EEF8;border:1px solid #1F4E79;border-radius:9px;padding:9px 11px;margin-top:9px;font-size:.73rem;color:#1F4E79;font-weight:800;line-height:1.8;">' + ' لتوليد أسئلة احترافية بمستويات بلوم، فعّل التوليد الذكي ' + '<button onclick="hhAISettings()" style="background:#1F4E79;color:#fff;border:none;border-radius:7px;padding:4px 11px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;margin-right:4px;">الإعدادات</button></div>';
+      + '<div style="background:#FBF3E2;border:1px solid #B8924A;border-radius:9px;padding:9px 11px;margin-top:9px;font-size:.73rem;color:#5E0E26;font-weight:800;line-height:1.8;">' + ' لتوليد أسئلة احترافية بمستويات بلوم، فعّل التوليد الذكي ' + '<button onclick="hhAISettings()" style="background:#5E0E26;color:#fff;border:none;border-radius:7px;padding:4px 11px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;margin-right:4px;">الإعدادات</button></div>';
   }, 350);
 }
 
@@ -2436,7 +2436,7 @@ function hhLocalGenerate(L, kind){
   });
   if(!qs.length) return '<div style="color:#c0392b;font-weight:800;">تعذر توليد أسئلة من هذا النص</div>';
   var title = kind==='quiz' ? ' اختبار مطبوع' : ' أسئلة مولّدة';
-  return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:10px;padding:12px;">' + '<div style="font-weight:900;color:#1F4E79;margin-bottom:8px;">'+title+' · '+esc(L.lesson)+'</div>' + qs.map(function(x,i){
+  return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:10px;padding:12px;">' + '<div style="font-weight:900;color:#5E0E26;margin-bottom:8px;">'+title+' · '+esc(L.lesson)+'</div>' + qs.map(function(x,i){
         return '<div style="margin-bottom:9px;padding-bottom:8px;border-bottom:1px dashed #eee;">' + '<div style="font-weight:800;color:#333;">'+(i+1)+'. '+esc(x.q)+'</div>' + '<div style="font-size:.72rem;color:#3D6B53;font-weight:800;margin-top:3px;">الإجابة: '+esc(x.a)+'</div></div>';
       }).join('')
     + '<div style="font-size:.7rem;color:#999;margin-top:8px;line-height:1.7;"> هذه توليدات أولية بقواعد نصية. عند ربط النموذج اللغوي ستصبح أسئلة متدرجة بمستويات بلوم مع خيارات متعددة.</div>' + '</div>';

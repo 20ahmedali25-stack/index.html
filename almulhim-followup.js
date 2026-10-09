@@ -168,7 +168,7 @@
         +'<div style="color:#8A7A63;font-size:.72rem;font-weight:700;margin-bottom:15px;">أضفهم واحداً واحداً، أو استورد ملف Excel وفيه عمود الفصل فتتوزع الشعب تلقائياً</div>'
         +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
         +'<button onclick="hhSfuAddStudent()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إضافة طالب</button>'
-        +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #1F4E79;color:#1F4E79;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">استيراد من Excel</button>'
+        +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#5E0E26;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">استيراد من Excel</button>'
         +'</div></div>';
       updateSummary(); refreshBar(); return;
     }
@@ -180,7 +180,7 @@
       var counters=cfg().counters||[];
       /* شارات ملخص لما رُصد، تُرى والبطاقة مطوية */
       var hints='';
-      if(d.part>0) hints+='<span style="font-size:.6rem;font-weight:900;color:#1F4E79;">مشاركة '+d.part+'</span>';
+      if(d.part>0) hints+='<span style="font-size:.6rem;font-weight:900;color:#5E0E26;">مشاركة '+d.part+'</span>';
       if(hwSt) hints+='<span style="font-size:.6rem;font-weight:900;color:'+hwSt[2]+';">واجب: '+hwSt[1]+'</span>';
       if(d.stars>0) hints+='<span style="font-size:.6rem;font-weight:900;color:#B8924A;">★'+d.stars+'</span>';
       if(d.behavior==='good') hints+='<span style="font-size:.6rem;font-weight:900;color:#3D6B53;">سلوك ★</span>';
@@ -368,7 +368,7 @@
   function hhSfuStageManage(stage){
     stage.innerHTML='<div style="display:flex;gap:7px;flex-wrap:wrap;">'
       +'<button onclick="hhSfuAddStudent()" style="background:#FFFDF8;border:1.5px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">إضافة طالب</button>'
-      +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #1F4E79;color:#1F4E79;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">استيراد Excel</button>'
+      +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#5E0E26;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">استيراد Excel</button>'
       +'<button onclick="hhSfuRenameClass()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">تعديل اسم الفصل</button>'
       +(typeof hhOpenGradebook==='function' ? '<button onclick="hhOpenGradebook()" style="background:#FFFDF8;border:1.5px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">أدوات الدرجات المتقدمة</button>' : '')
       +'<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
