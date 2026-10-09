@@ -12888,6 +12888,7 @@ function hhUpdateAuthBtn(){
   var pb=document.getElementById('nav-profile-btn');
   if(lb) lb.style.display = loggedIn ? 'none' : 'inline-flex';
   if(pb) pb.style.display = loggedIn ? 'inline-flex' : 'none';
+  try{ document.body.classList.toggle('hh-authed', loggedIn); }catch(e){} // zzzzzzbo: زر واحد فقط
 }
 
 function updateNavAvatar(name,photoURL){
@@ -21907,9 +21908,9 @@ const HH_SEARCH_INDEX = [
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v18l4-2 4 2 4-2 4 2V4c0-1.1-.9-2-2-2z"/></svg>' },
   { title:'عن الملهم', desc:'من نحن ولماذا أنشأنا الملهم', kw:'about عن المنصة قيم رسالة', screen:'screen-about',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12" stroke="#fff" stroke-width="2"/><line x1="12" y1="8" x2="12.01" y2="8" stroke="#fff" stroke-width="2"/></svg>' },
-  { title:'الرعاة والداعمون', desc:'شكرا لمن أسهم في الرحلة', kw:'sponsors رعاة داعمين', screen:'screen-sponsors',
+  { title:'الشركاء', desc:'شكرا لمن أسهم في الرحلة', kw:'sponsors رعاة داعمين الرعاة والداعمون شركاء', screen:'screen-sponsors',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' },
-  { title:'شخصيات مؤثرة', desc:'النخبة الذين أسهموا في رحلتنا', kw:'influencers شخصيات مؤثرة نخبة influences', screen:'screen-influencers',
+  { title:'الملهمون', desc:'النخبة الذين أسهموا في رحلتنا', kw:'influencers شخصيات مؤثرة الملهمون نخبة influences', screen:'screen-influencers',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.27 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>' },
   { title:'قيمنا', desc:'المبادئ التي نؤمن بها', kw:'values قيم مبادئ', screen:'screen-about',
     icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>' },

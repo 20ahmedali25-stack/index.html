@@ -28,7 +28,7 @@ function db(){ return firebase.firestore(); }
 function canUse(){ try{ return (typeof hhIsAdmin==='function'&&hhIsAdmin()) || (typeof _hhMyRole!=='undefined'&&_hhMyRole==='teacher'); }catch(e){ return false; } }
 function newId(p){ return (p||'g')+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function ico(n,sz){
-  var P={bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',check:'<path d="M20 6L9 17l-5-5"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+  var P={clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',check:'<path d="M20 6L9 17l-5-5"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
     cloud:'<path d="M7 18a4 4 0 0 1-.5-8 6 6 0 0 1 11.5 2h.5a3 3 0 0 1 0 6z"/>',sort:'<path d="M8 4v16M8 20l-3-3M8 20l3-3M16 20V4M16 4l-3 3M16 4l3 3"/>',grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
     plus:'<path d="M12 5v14M5 12h14"/>',back:'<path d="M9 5l7 7-7 7"/>',play:'<path d="M6 4l14 8-14 8z"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
     trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',up:'<path d="M12 19V5M5 12l7-7 7 7"/>',down:'<path d="M12 5v14M19 12l-7 7-7-7"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
@@ -110,31 +110,38 @@ function style(){
 /* ── الفتح ── */
 async function open(view, gameId){
   style();
-  try{ document.body.classList.add('hh-immersive'); }catch(e){}
+  try{ document.body.classList.remove('hh-immersive'); }catch(e){} // zzzzzzbo: داخل إطار المنصة
   if(!canUse()){ toastX('إبداع متاح للمعلم المعتمد والمدير بعد تسجيل الدخول','info'); }
   var old=document.getElementById('hh-ib'); if(old) old.remove();
-  var ov=document.createElement('div'); ov.id='hh-ib';
-  ov.innerHTML='<div class="top"><button class="tb" onclick="hhIbBack()">'+ico('back')+' رجوع</button><div style="text-align:center;"><b>إبداع · استوديو الألعاب التعليمية</b><small>أنشئ لعبة من القوالب، اضبطها، شغّلها مباشرة</small></div><span id="ib-save" style="font-size:.7rem;font-weight:800;color:#D4BC85;min-width:90px;text-align:left;"></span></div><div class="wrap" id="ib-body"></div>';
+  var ov=document.createElement('div'); ov.id='hh-ib'; ov.className='ib2';
+  ov.innerHTML='<div class="ib2-hero"><span class="ib2-hi">'+ico('star',30)+'</span><div style="position:relative;z-index:1"><h1>إبداع · استوديو الألعاب التعليمية</h1><p>أنشئ لعبة من القوالب، اضبطها، وشغّلها مباشرة في حصتك</p></div><div class="ib2-hx"><button class="ib2-btn g" onclick="hhIbView(\'mine\')">'+ico('play',16)+' ألعابي الجاهزة</button></div></div><div class="top"><button class="tb" onclick="hhIbBack()">'+ico('back')+' رجوع</button><div style="text-align:center;"><b>إبداع · استوديو الألعاب التعليمية</b><small>أنشئ لعبة من القوالب، اضبطها، شغّلها مباشرة</small></div><span id="ib-save" style="font-size:.7rem;font-weight:800;color:#D4BC85;min-width:90px;text-align:left;"></span></div><div class="wrap" id="ib-body"></div>';
   document.body.appendChild(ov);
+  try{ if(window.hhNavMark) hhNavMark('ib'); }catch(e){}
   loadLocal();
   _ib.view=view||'rack'; _ib.gameId=gameId||null;
   render();
   if(!_ib.loaded){ await loadCloud(); _ib.loaded=true; render(); }
 }
-function close(){ var e=document.getElementById('hh-ib'); if(e) e.remove(); try{ document.body.classList.remove('hh-immersive'); }catch(e){} }
+function close(){ var e=document.getElementById('hh-ib'); if(e) e.remove(); try{ document.body.classList.remove('hh-immersive'); }catch(e){} try{ if(window.hhNavMark) hhNavMark(null); }catch(e){} }
+window.hhIbClose=close;
 window.hhIbBack=function(){ if(_ib.view==='editor'){ _ib.view='mine'; render(); } else close(); };
 
 function render(){
   var b=document.getElementById('ib-body'); if(!b) return;
-  var tabs='<div class="tabs">'+[['rack','القوالب'],['mine','ألعابي'],['live','مباشرة'],['async','غير مباشرة']].map(function(t){ return '<button class="'+(_ib.view===t[0]?'on':'')+'" onclick="hhIbView(\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div>';
+  var _ov=document.getElementById('hh-ib'); if(_ov) _ov.classList.toggle('ib-editing', _ib.view==='editor');
+  var _cnt={rack:TEMPLATES.length, mine:_ib.games.length};
+  var tabs='<div class="tabs ib2-seg">'+[['rack','القوالب'],['mine','ألعابي'],['live',ico('bolt',15)+' مباشرة'],['async',ico('clock',15)+' غير مباشرة']].map(function(t){ return '<button class="'+(_ib.view===t[0]?'on':'')+'" onclick="hhIbView(\''+t[0]+'\')">'+t[1]+(_cnt[t[0]]!=null?' <em>'+_cnt[t[0]]+'</em>':'')+'</button>'; }).join('')+'</div>';
   if(_ib.view==='editor'){ b.innerHTML=renderEditor(); bindEditor(); return; }
   if(_ib.view==='mine'){ b.innerHTML=tabs+renderMine(); return; }
   var kind=(_ib.view==='live')?'live':(_ib.view==='async')?'async':null;
-  b.innerHTML=tabs+'<div class="grid">'+TEMPLATES.filter(function(t){ return !kind||t.kind===kind; }).map(function(t){
-    return '<div class="card"><div class="hd" style="background:'+t.bg+'"><small>'+(t.kind==='live'?'مباشرة':'غير مباشرة')+'</small>'+ico(t.ico,40)+'</div><div class="bd"><b>'+esc(t.name)+'</b><p>'+esc(t.desc)+'</p><div class="row">'
-      +(t.ready?'<button class="btn p" onclick="hhIbCreate(\''+t.id+'\')">'+ico('plus',14)+' إنشاء</button>':'<button class="btn" disabled>المرحلة القادمة</button>')
+  var shown=TEMPLATES.filter(function(t){ return !kind||t.kind===kind; });
+  var rd=shown.filter(function(t){ return t.ready; }).length, sn=shown.length-rd;
+  var how=(_ib.view==='rack')?'<div class="ib2-how"><div><b>1</b>اختر قالباً</div><div><b>2</b>أضف أسئلتك أو استوردها من الفئات</div><div><b>3</b>اعرض الباركود ويلعب الطلاب من هواتفهم</div></div>':'';
+  b.innerHTML=tabs+how+'<div class="ib2-sec"><h2>'+(kind==='live'?'قوالب مباشرة':kind==='async'?'قوالب غير مباشرة':'القوالب')+'</h2><small>'+rd+' جاهزة الآن'+(sn?' · '+sn+' قريباً':'')+'</small></div><div class="grid ib2-grid">'+shown.map(function(t){
+    return '<div class="card ib2-tp'+(t.ready?'':' off')+'"><div class="hd" style="background:'+t.bg+'"><span class="md">'+ico(t.kind==='live'?'bolt':'clock',13)+' '+(t.kind==='live'?'مباشرة':'غير مباشرة')+'</span>'+(t.ready?'':'<span class="rb">قريباً</span>')+ico(t.ico,44)+'</div><div class="bd"><b>'+esc(t.name)+'</b><p>'+esc(t.desc)+'</p><div class="row">'
+      +(t.ready?'<button class="btn p" onclick="hhIbCreate(\''+t.id+'\')">'+ico('plus',16)+' أنشئ لعبة</button>':'<button class="btn" disabled>'+ico('clock',16)+' المرحلة القادمة</button>')
       +'</div></div></div>';
-  }).join('')+'<div class="card"><div class="hd" style="background:repeating-linear-gradient(45deg,#EFE7D6,#EFE7D6 10px,#F6F1E7 10px,#F6F1E7 20px);border-bottom:2px dashed #B8924A;color:#8A6D2E;">'+ico('plus',40)+'</div><div class="bd"><b>قالب جديد</b><p>مساحة للأفكار القادمة: ألغاز الخريطة، البحث عن الكنز، الجدار التعاوني.</p><div class="row"><button class="btn" onclick="hhIbSuggest()">اقترح فكرة</button></div></div></div></div>';
+  }).join('')+'<div class="card ib2-new"><span class="si">'+ico('plus',28)+'</span><b>عندك فكرة قالب؟</b><p>ألغاز الخريطة، البحث عن الكنز، الجدار التعاوني…</p><button class="btn" onclick="hhIbSuggest()">اقترح فكرة</button></div></div>';
 }
 window.hhIbView=function(v){ _ib.view=v; render(); };
 window.hhIbSuggest=function(){ toastX('أرسل فكرتك لفريق المُلهم من صفحة التواصل، وستُضاف كقالب عند نضجها','info'); };

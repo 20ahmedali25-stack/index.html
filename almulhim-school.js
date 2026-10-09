@@ -2443,3 +2443,78 @@ function hhLocalGenerate(L, kind){
 }
 
 // ── لوحة إحصاءات الاستخدام ──
+
+
+/* ═══════════ المدرسة · اختيار المسار في صفحة واحدة + الحرم داخل إطار المنصة (zzzzzzbo) ═══════════ */
+(function(){
+  function SV(p,s){ return '<svg width="'+(s||20)+'" height="'+(s||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
+  var IC={ school:'<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M10 20v-5h4v5"/>', book:'<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 17h13"/>', path:'<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/>', arrow:'<path d="M15 6l-6 6 6 6"/>', swap:'<path d="M4 7h13l-3-3M20 17H7l3 3"/>' };
+  var GR=[['5','الخامس'],['6','السادس'],['7','السابع'],['8','الثامن'],['9','التاسع']];
+  function t1ok(){ return !!window._HH_SCHOOL_T1; }
+  function unitsFor(t){
+    try{ if(t==='t1' && window._HH_SCHOOL_T1 && _HH_SCHOOL_T1.units) return _HH_SCHOOL_T1.units.length; }catch(e){}
+    try{ var keep=_hhSchTerm; _hhSchTerm=t; var S=hhSchData(); _hhSchTerm=keep; if(S&&S.units) return S.units.length; }catch(e){}
+    return 6;
+  }
+  function termName(t){ return t==='t1'?'الفصل الأول':'الفصل الثاني'; }
+
+  window.hhSchWizRender=function(){
+    var w=_hhSchWiz; if(!w.term) w.term=(function(){ try{ var s=localStorage.getItem('hh_sch_term'); if(s==='t1'||s==='t2') return (s==='t1'&&!t1ok())?'t2':s; }catch(e){} return t1ok()?'t1':'t2'; })();
+    var old=document.getElementById('hh-sch-wiz'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='hh-sch-wiz'; ov.className='sp2';
+    var grades=GR.map(function(g){ var on=g[0]==='7'; return '<button type="button" class="sp2-gr'+(on?' on':' off')+'" '+(on?'aria-pressed="true"':'onclick="hhSchWizSoon()"')+'><b>'+g[0]+'</b><span>'+g[1]+'</span>'+(on?'':'<i>قريباً</i>')+'</button>'; }).join('');
+    var subj='<button type="button" class="sp2-chip on" aria-pressed="true">'+SV(IC.book,16)+' الدراسات الاجتماعية</button><button type="button" class="sp2-chip dim" onclick="hhSchWizSoon()">العلوم · قريباً</button>';
+    var terms=[['t1','الفصل الأول',t1ok()],['t2','الفصل الثاني',true]].map(function(t){ return '<button type="button" class="sp2-chip'+(w.term===t[0]?' on':'')+(t[2]?'':' dim')+'" onclick="'+(t[2]?('hhSchPickTerm(\''+t[0]+'\')'):'hhSchWizSoon()')+'">'+t[1]+(t[2]?'':' · قريباً')+'</button>'; }).join('');
+    ov.innerHTML='<div class="sp2-wrap">'
+      +'<div class="sp2-hero"><span class="sp2-hi">'+SV(IC.school,30)+'</span><div style="position:relative;z-index:1"><h1>المدرسة</h1><p>اختر مسارك مرة واحدة، ونحفظه لك في كل زيارة</p></div></div>'
+      +'<div class="sp2-pick">'
+      +  '<div class="sp2-card"><h3><b>1</b> الصف</h3><p>المسار المتاح الآن: الصف السابع كاملاً</p><div class="sp2-grades">'+grades+'</div></div>'
+      +  '<div class="sp2-card"><h3><b>2</b> المادة والفصل</h3><p>اختر المادة ثم الفصل الدراسي</p><div class="sp2-row">'+subj+'</div><div class="sp2-row" style="margin-top:10px">'+terms+'</div></div>'
+      +'</div>'
+      +'<div class="sp2-go">'+SV(IC.path,22)+'<span>الصف السابع · الدراسات الاجتماعية · '+termName(w.term)+' — '+unitsFor(w.term)+' وحدات</span><button type="button" class="sp2-btn" onclick="hhSchWizFinish(\''+w.term+'\')">ادخل المسار '+SV(IC.arrow,18)+'</button></div>'
+      +'</div>';
+    document.body.appendChild(ov);
+    try{ hhNavMark('school'); }catch(e){}
+  };
+  window.hhSchPickTerm=function(t){ _hhSchWiz.term=t; hhSchWizRender(); };
+  var _wc=window.hhSchWizClose; window.hhSchWizClose=function(){ if(_wc) _wc.apply(this,arguments); else { var e=document.getElementById('hh-sch-wiz'); if(e) e.remove(); } if(!document.getElementById('hh-school-hub')){ try{ hhNavMark(null); }catch(e){} } };
+  var _wf=window.hhSchWizFinish; window.hhSchWizFinish=function(t){ try{ localStorage.setItem('hh_sch_term', t||'t2'); }catch(e){} return _wf.apply(this,arguments); };
+
+  // الحرم داخل الإطار + رأس المسار والتقدم
+  var _hub=window.hhSchoolHub;
+  window.hhSchoolHub=function(){
+    try{ var st=localStorage.getItem('hh_sch_term'); if((st==='t1'||st==='t2') && st!==_hhSchTerm) hhSchSetTerm(st); }catch(e){}
+    var r=_hub.apply(this,arguments);
+    try{ document.body.classList.remove('hh-immersive'); }catch(e){}
+    var ov=document.getElementById('hh-school-hub'); if(!ov) return r;
+    ov.classList.add('sh2');
+    var role=_hhCampus.role, body=ov.querySelector('.hh-campus-body');
+    var done=0,total=0; try{ var S=hhSchData(); hhSchLoad(); if(S&&S.units){ total=S.units.length; S.units.forEach(function(u,i){ if(hhSchUnitState(i)==='done') done++; }); } }catch(e){}
+    var pct=total?Math.round(done/total*100):0;
+    var roleTxt=(document.getElementById('hh-hub-role')||{}).textContent||'';
+    var hero=document.createElement('div'); hero.className='sh2-hero';
+    hero.innerHTML='<span class="sp2-hi">'+SV(IC.school,30)+'</span>'
+      +'<div class="sh2-hx"><h1>'+(role==='student'?'رحلتك في المدرسة':'حرمك المدرسي')+' <span class="sh2-role">'+roleTxt+'</span></h1>'
+      +'<p>الصف السابع · الدراسات الاجتماعية · '+termName(_hhSchTerm)+' <button type="button" class="sh2-chg" onclick="hhSchChangePath()">'+SV(IC.swap,14)+' تغيير المسار</button></p>'
+      +(total?'<div class="sh2-prog"><div class="sh2-bar"><i style="width:'+pct+'%"></i></div><b>'+done+' من '+total+' وحدات متقنة</b></div>':'')
+      +'</div>';
+    var cta=ov.querySelector('.hh-campus-crumb-row .hh-campus-btn-gold'); if(cta){ cta.classList.add('sh2-cta'); hero.appendChild(cta); }
+    if(body) body.parentNode.insertBefore(hero, body);
+    try{ hhNavMark('school'); }catch(e){}
+    return r;
+  };
+  window.hhSchoolCloseFramed=function(){
+    var e=document.getElementById('hh-school-hub'); if(e) e.remove();
+    try{ if(_hhCampus.obs){ _hhCampus.obs.disconnect(); _hhCampus.obs=null; } }catch(e2){}
+    var w=document.getElementById('hh-sch-wiz'); if(w) w.remove();
+    try{ document.body.classList.remove('hh-immersive'); }catch(e3){}
+    try{ hhNavMark(null); }catch(e4){}
+  };
+  var _hc=window.hhHubClose; window.hhHubClose=function(){ try{ hhNavMark(null); }catch(e){} return _hc.apply(this,arguments); };
+  window.hhSchChangePath=function(){
+    var e=document.getElementById('hh-school-hub'); if(e) e.remove();
+    try{ if(_hhCampus.obs){ _hhCampus.obs.disconnect(); _hhCampus.obs=null; } }catch(e2){}
+    _hhSchWiz={ step:'pick', role:_hhSchRole, term:_hhSchTerm };
+    hhSchWizRender();
+  };
+})();
