@@ -14094,6 +14094,164 @@ html body #hv2-sc.sc2 .sc2-adm .hv2-tile{ all:unset; box-sizing:border-box; curs
   #hv2-sc.sc2 .sc2-adm{ grid-template-columns:1fr 1fr; gap:10px; }
   #hv2-sc.sc2 .sc2-count{ display:none; }
 }
+
+/* ═══════════ لوحة التحكم · مساحة عمل جديدة (zzzzzzbp) ═══════════ */
+#screen-admin{ --ad-line:#E7DAC0; --ad-soft:#EFE6D3; --ad-cream:#FBF3E2; --ad-card:#FFFFFF; --ad-ink:#2A1A0E; --ad-head:#3D0918; --ad-mute:#7A6A54; --ad-gold:#B8924A; --ad-gold7:#8A6D2E; --ad-m:#5E0E26; --ad-m3:#8A1538; }
+body.hh-admin #hh-bottom-nav{ display:none !important; }
+body.hh-admin::before, body.hh-admin::after, body.hh-admin [id^="hh-fin-"]{ display:none !important; }
+html body #screen-admin.active{ padding:calc(var(--hh-bar) + 24px) 0 40px !important; justify-content:flex-start !important; }
+#screen-admin > .top-bar{ display:none !important; }
+#screen-admin > div:not(.top-bar){ margin-top:0 !important; padding:0 24px !important; max-width:1440px !important; width:100% !important; margin-inline:auto !important; box-sizing:border-box; }
+html body #screen-admin .mc-shell{ display:grid !important; grid-template-columns:272px minmax(0,1fr) !important; gap:24px !important; align-items:start !important; padding:0 !important; max-width:none !important; background:none !important; border:0 !important; box-shadow:none !important; }
+/* الشريط الجانبي */
+html body #screen-admin .mc-sidebar{ display:block !important; position:sticky !important; top:calc(var(--hh-bar) + 24px) !important; max-height:calc(100vh - var(--hh-bar) - 48px) !important; overflow:auto !important; background:var(--ad-card) !important; border:1.5px solid var(--ad-line) !important; border-radius:20px !important; padding:14px !important; box-shadow:none !important; min-height:0 !important; width:auto !important; }
+#screen-admin .mc-sidebar-fixed{ position:static !important; background:none !important; padding:0 !important; border:0 !important; }
+#screen-admin .mc-sidebar-scroll{ overflow:visible !important; max-height:none !important; padding:0 !important; }
+#screen-admin .mc-brand{ display:flex !important; align-items:center !important; gap:10px !important; padding:4px 4px 12px !important; border-bottom:1px solid var(--ad-soft) !important; margin:0 !important; background:none !important; }
+#screen-admin .mc-brand-logo{ width:40px !important; height:40px !important; border-radius:12px !important; background:#fff !important; border:1.5px solid var(--ad-line) !important; padding:4px !important; }
+#screen-admin .mc-brand-logo img{ height:30px !important; }
+#screen-admin .mc-brand-title{ font-family:'Cairo',sans-serif !important; font-weight:800 !important; font-size:17px !important; color:var(--ad-head) !important; line-height:22px !important; }
+#screen-admin .mc-brand-sub{ font-size:12.5px !important; color:var(--ad-mute) !important; }
+#screen-admin .mc-cmd-trigger{ display:flex !important; align-items:center !important; gap:8px !important; width:100% !important; height:40px !important; border:1.5px solid var(--ad-line) !important; border-radius:12px !important; padding:0 12px !important; margin:12px 0 6px !important; background:#FBF7F0 !important; color:var(--ad-mute) !important; font-size:14px !important; box-shadow:none !important; }
+#screen-admin .mc-cmd-trigger svg{ width:16px !important; height:16px !important; }
+#screen-admin .mc-cmd-kbd{ margin-inline-start:auto !important; font-family:'Cairo',sans-serif !important; font-size:11px !important; font-weight:700 !important; border:1px solid var(--ad-line) !important; border-radius:6px !important; padding:0 6px !important; background:#fff !important; color:var(--ad-m) !important; }
+#screen-admin .mc-back-site{ display:none !important; }
+#screen-admin .ad2-gl{ font-family:'Cairo',sans-serif; font-weight:800; font-size:12px; color:var(--ad-gold7); margin:14px 10px 6px; letter-spacing:.3px; }
+html body #screen-admin .ad2-nav .mc-item{ all:unset; box-sizing:border-box; display:flex !important; align-items:center; gap:10px; width:100%; height:40px; padding:0 10px; border-radius:11px; color:#3D2A16; font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px; position:relative; cursor:pointer; transition:background .15s ease; }
+#screen-admin .ad2-nav .mc-item .mc-item-icon{ width:18px; height:18px; color:var(--ad-gold7); flex-shrink:0; }
+#screen-admin .ad2-nav .mc-item .mc-item-label{ display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+#screen-admin .ad2-nav .mc-item .hhc-badge{ display:none; }
+#screen-admin .ad2-nav .mc-item .ad2-n{ margin-inline-start:auto; font-style:normal; font-size:11.5px; font-weight:800; background:var(--ad-cream); color:var(--ad-gold7); border-radius:99px; padding:0 8px; line-height:20px; }
+#screen-admin .ad2-nav .mc-item:hover{ background:var(--ad-cream); }
+#screen-admin .ad2-nav .mc-item:focus-visible{ outline:2px solid var(--ad-gold); outline-offset:1px; }
+#screen-admin .ad2-nav .mc-item.active{ background:var(--ad-m); color:#F5E6C4; }
+#screen-admin .ad2-nav .mc-item.active .mc-item-icon{ color:#EAD9B0; }
+#screen-admin .ad2-nav .mc-item.active .ad2-n{ background:rgba(245,230,196,.2); color:#F5E6C4; }
+#screen-admin .ad2-nav .mc-item.active::before{ content:""; position:absolute; right:-14px; top:8px; bottom:8px; width:4px; border-radius:4px; background:var(--ad-gold); }
+#screen-admin .ad2-nav .mc-item > *:not(.mc-item-icon):not(.mc-item-label):not(.ad2-n){ display:none !important; }
+#screen-admin .mc-mobile-bar{ display:none !important; }
+/* المحتوى */
+html body #screen-admin .mc-content{ min-width:0 !important; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important; max-width:none !important; }
+#screen-admin .mc-content-header{ display:none !important; }
+.ad2-ph{ display:flex; align-items:flex-end; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+.ad2-ph .ad2-mob{ display:none; }
+.ad2-cr{ font-family:'Cairo',sans-serif; font-weight:700; font-size:13px; color:var(--ad-mute); margin-bottom:4px; }
+.ad2-cr b{ color:var(--ad-m3); }
+.ad2-ph h1{ margin:0; font-family:'Cairo',sans-serif; font-weight:800; font-size:28px; line-height:36px; color:var(--ad-head); }
+.ad2-ph p{ margin:4px 0 0; color:var(--ad-mute); font-size:15px; font-family:'Tajawal',sans-serif; }
+.ad2-ac{ margin-inline-start:auto; display:flex; gap:10px; flex-wrap:wrap; }
+.ad2-b{ display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 18px; border-radius:12px; font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px; border:1.5px solid var(--ad-line); background:#fff; color:var(--ad-m); white-space:nowrap; cursor:pointer; }
+.ad2-b--p{ background:linear-gradient(135deg,var(--ad-m3),var(--ad-m)); color:#fff; border-color:transparent; }
+.ad2-b--s{ height:38px; padding:0 12px; font-size:13.5px; border-radius:10px; }
+.ad2-b:focus-visible, .ad2-k:focus-visible, .ad2-task:focus-visible, .ad2-qa button:focus-visible{ outline:2px solid var(--ad-gold); outline-offset:2px; }
+/* النظرة العامة */
+#admin-home-panel.ad2-home-on > *:not(#ad2-home){ display:none !important; }
+.ad2-kp{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+.ad2-k{ all:unset; box-sizing:border-box; cursor:pointer; position:relative; display:flex; flex-direction:column; gap:6px; padding:18px 20px; background:#fff; border:1.5px solid var(--ad-line); border-radius:18px; transition:border-color .15s ease, box-shadow .15s ease; }
+.ad2-k:hover{ border-color:var(--ad-gold); box-shadow:0 10px 22px rgba(61,9,24,.08); }
+.ad2-kl{ display:flex; align-items:center; gap:8px; font-family:'Cairo',sans-serif; font-weight:700; font-size:14px; color:var(--ad-mute); }
+.ad2-kl i{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:color-mix(in srgb,var(--a) 12%,#fff); color:var(--a); font-style:normal; }
+.ad2-k b{ font-family:'Cairo',sans-serif; font-weight:800; font-size:32px; line-height:40px; color:var(--ad-ink); font-variant-numeric:tabular-nums; }
+.ad2-k small{ font-size:13px; color:var(--ad-mute); font-family:'Tajawal',sans-serif; }
+.ad2-k small.u{ color:#2F6A4E; font-weight:700; } .ad2-k small.w{ color:#C0392B; font-weight:700; }
+.ad2-rg{ position:absolute; left:18px; top:18px; }
+.ad2-row{ display:grid; gap:16px; margin-top:16px; } .ad2-r21{ grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); }
+.ad2-cd{ background:#fff; border:1.5px solid var(--ad-line); border-radius:18px; padding:18px 20px; min-width:0; }
+.ad2-cd h3{ border:0 !important; padding:0 !important; background:none !important; margin:0 0 8px; font-family:'Cairo',sans-serif; font-weight:800; font-size:17px; color:var(--ad-head); display:flex; align-items:center; gap:8px; }
+.ad2-cd h3 em{ margin-inline-start:auto; font-style:normal; font-family:'Tajawal',sans-serif; font-weight:500; font-size:13px; color:var(--ad-mute); }
+.ad2-lnk{ margin-inline-start:auto; background:none; border:0; color:var(--ad-m3); font-family:'Cairo',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+.ad2-bars{ position:relative; display:flex; align-items:flex-end; gap:14px; height:170px; padding:10px 4px 0; border-bottom:1.5px solid var(--ad-line); }
+.ad2-bc{ flex:1; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:4px; }
+.ad2-bv{ font-family:'Cairo',sans-serif; font-weight:800; font-size:12px; color:var(--ad-head); min-height:16px; }
+.ad2-bar{ width:100%; max-width:40px; border-radius:8px 8px 3px 3px; background:var(--ad-soft); }
+.ad2-bar.on{ background:linear-gradient(180deg,var(--ad-m3),var(--ad-m)); }
+.ad2-bx{ display:flex; gap:14px; padding:6px 4px 0; }
+.ad2-bx span{ flex:1; text-align:center; font-family:'Cairo',sans-serif; font-weight:700; font-size:12.5px; color:var(--ad-mute); }
+.ad2-emp{ position:absolute; inset:0 0 24px 0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; color:var(--ad-mute); font-family:'Cairo',sans-serif; font-weight:700; font-size:14px; text-align:center; }
+.ad2-emp svg{ color:var(--ad-gold); }
+.ad2-emp--s{ position:static; padding:28px 0; }
+.ad2-emp small{ font-family:'Tajawal',sans-serif; font-weight:500; }
+.ad2-task{ all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; gap:12px; width:100%; padding:12px 0; border-bottom:1px dashed var(--ad-line); }
+.ad2-task:last-child{ border-bottom:0; }
+.ad2-task i{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:color-mix(in srgb,var(--a) 12%,#fff); color:var(--a); font-style:normal; flex-shrink:0; }
+.ad2-task span b{ display:block; font-family:'Cairo',sans-serif; font-weight:700; font-size:15px; color:var(--ad-ink); }
+.ad2-task span small{ color:var(--ad-mute); font-size:13px; }
+.ad2-task em{ margin-inline-start:auto; font-style:normal; font-family:'Cairo',sans-serif; font-weight:800; font-size:18px; color:var(--a); }
+.ad2-task em.sm{ font-size:14px; }
+.ad2-go{ color:#B8AE9A; display:flex; }
+.ad2-task:hover .ad2-go{ color:var(--ad-m3); }
+.ad2-qa{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.ad2-qa button{ display:flex; align-items:center; gap:8px; height:52px; padding:0 10px; font-size:14px !important; border:1.5px solid var(--ad-line); border-radius:14px; font-family:'Cairo',sans-serif; font-weight:700; font-size:14.5px; color:#3D2A16; background:#FBF7F0; white-space:nowrap; cursor:pointer; overflow:hidden; text-overflow:ellipsis; }
+.ad2-qa button:hover{ border-color:var(--ad-gold); background:#fff; }
+.ad2-qa i{ width:32px; height:32px; border-radius:9px; background:#fff; border:1px solid var(--ad-line); color:var(--ad-m3); display:flex; align-items:center; justify-content:center; font-style:normal; flex-shrink:0; }
+.ad2-log{ display:flex; gap:12px; padding:10px 0; border-bottom:1px dashed var(--ad-line); font-size:14px; }
+.ad2-log:last-child{ border:0; }
+.ad2-dot{ width:8px; height:8px; border-radius:50%; background:var(--ad-gold); margin-top:7px; flex-shrink:0; }
+.ad2-log b{ font-family:'Cairo',sans-serif; font-weight:700; color:var(--ad-ink); }
+.ad2-log small{ display:block; color:var(--ad-mute); }
+/* الأقسام: توحيد العناصر الموروثة */
+#screen-admin .admin-section{ font-family:'Tajawal',sans-serif; }
+#screen-admin .admin-section > div[style*="gradient(135deg,#fdfaf0"], #screen-admin .admin-section > div[style*="gradient(135deg, rgb(253, 250, 240)"]{ background:#fff !important; border:1.5px solid var(--ad-line) !important; border-radius:18px !important; padding:16px !important; box-shadow:none !important; }
+#screen-admin .admin-section input[type="text"], #screen-admin .admin-section input[type="search"], #screen-admin .admin-section input[type="number"], #screen-admin .admin-section input[type="email"], #screen-admin .admin-section input[type="url"], #screen-admin .admin-section select, #screen-admin .admin-section textarea{ border:1.5px solid var(--ad-line) !important; border-radius:12px !important; background:#fff !important; font-family:'Tajawal',sans-serif !important; font-size:14.5px !important; color:var(--ad-ink) !important; }
+#screen-admin .admin-section input[type="text"], #screen-admin .admin-section input[type="search"], #screen-admin .admin-section input[type="number"], #screen-admin .admin-section input[type="email"], #screen-admin .admin-section input[type="url"], #screen-admin .admin-section select{ min-height:44px !important; padding:0 14px !important; }
+#screen-admin .admin-section input:focus, #screen-admin .admin-section select:focus, #screen-admin .admin-section textarea:focus{ border-color:var(--ad-gold) !important; box-shadow:0 0 0 3px rgba(184,146,74,.25) !important; outline:0 !important; }
+#screen-admin .admin-section label{ font-family:'Cairo',sans-serif !important; }
+/* الأسئلة */
+#admin-questions-panel #qdb-status-banner{ background:var(--ad-cream) !important; border:1.5px solid var(--ad-line) !important; border-radius:14px !important; }
+#admin-questions-panel #qdb-status-banner *{ color:var(--ad-gold7) !important; }
+#admin-questions-panel > div[style*="gradient(135deg,#fff8e8"]{ background:#fff !important; border:1.5px solid var(--ad-line) !important; border-radius:18px !important; padding:14px !important; }
+/* الفئات */
+#admin-categories-list > div{ border:1.5px solid var(--ad-line) !important; border-radius:14px !important; padding:10px 14px !important; margin-bottom:8px !important; background:#fff !important; transition:background .15s ease; }
+#admin-categories-list > div:hover{ background:#FFFBF3 !important; }
+#admin-categories-list > div > div:first-child{ width:44px !important; height:44px !important; border-radius:12px !important; }
+#admin-categories-list button, #admin-categories-list label{ height:36px !important; padding:0 12px !important; border:1.5px solid var(--ad-line) !important; border-radius:10px !important; font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:13px !important; color:var(--ad-gold7) !important; background:#fff !important; }
+#admin-categories-list button:hover, #admin-categories-list label:hover{ border-color:var(--ad-gold) !important; }
+#admin-cat-filter .acat-filter{ height:38px !important; padding:0 14px !important; border-radius:10px !important; font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:13.5px !important; }
+/* المستخدمون: الفلاتر في أسطر مضغوطة */
+#admin-users-panel > div:first-child > div{ display:flex !important; flex-wrap:wrap !important; align-items:center !important; gap:8px !important; margin-bottom:10px !important; }
+#admin-users-panel > div:first-child > div > div:first-child[style*="font-size:.7rem"]{ min-width:84px; font-size:13px !important; color:var(--ad-mute) !important; margin:0 !important; }
+#admin-users-panel .uf-btn{ height:36px !important; padding:0 14px !important; border-radius:10px !important; font-size:13px !important; font-weight:700 !important; }
+/* الإحصائيات: بطاقات موحدة بلا حواف ملونة */
+#admin-stats-grid > div{ grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important; gap:14px !important; }
+#admin-stats-grid > div > div{ border:1.5px solid var(--ad-line) !important; border-radius:18px !important; padding:18px !important; text-align:start !important; background:#fff !important; }
+#admin-stats-grid > div > div > div:nth-child(2){ font-size:30px !important; color:var(--ad-ink) !important; font-weight:800 !important; }
+#admin-stats-grid > div > div > div:nth-child(3){ font-size:13.5px !important; color:var(--ad-mute) !important; }
+#admin-stats-grid > div > div > div:first-child{ display:inline-flex; width:34px; height:34px; align-items:center; justify-content:center; border-radius:10px; background:var(--ad-cream); color:var(--ad-gold7); font-size:18px !important; }
+#admin-stats-panel > div:first-child, #admin-categories-panel > div:first-child{ display:none !important; }
+/* المسابقات: قائمة جانبية + محرر */
+#admin-competitions-panel > div:first-child{ display:none !important; }
+@media (min-width:1100px){
+  #comp-admin-body{ display:grid !important; grid-template-columns:300px minmax(0,1fr) !important; gap:16px !important; align-items:start !important; }
+  #comp-admin-body > div:first-child{ grid-row:1 / span 60; position:sticky; top:calc(var(--hh-bar) + 24px); flex-direction:column !important; flex-wrap:nowrap !important; gap:2px !important; background:#fff; border:1.5px solid var(--ad-line); border-radius:18px; padding:8px !important; margin:0 !important; max-height:calc(100vh - var(--hh-bar) - 48px); overflow:auto; }
+  #comp-admin-body > *:not(:first-child){ grid-column:2; }
+}
+#comp-admin-body > div:first-child > button{ text-align:start !important; border:0 !important; border-radius:12px !important; background:transparent !important; color:#3D2A16 !important; font-weight:700 !important; font-size:14px !important; padding:10px 12px !important; }
+#comp-admin-body > div:first-child > button[style*="background: rgb(138, 21, 56)"], #comp-admin-body > div:first-child > button[style*="background:#8A1538"]{ background:var(--ad-m) !important; color:#F5E6C4 !important; }
+#comp-admin-body > div:first-child > button:hover{ background:var(--ad-cream) !important; }
+/* الجوال */
+@media (max-width:900px){
+  html body #screen-admin.active{ padding-top:calc(var(--hh-bar) + 14px) !important; }
+  #screen-admin > div:not(.top-bar){ padding:0 12px !important; }
+  html body #screen-admin .mc-shell{ grid-template-columns:1fr !important; gap:12px !important; }
+  html body #screen-admin .mc-sidebar{ position:fixed !important; top:0 !important; bottom:0 !important; right:0 !important; width:300px !important; max-width:86vw !important; max-height:none !important; z-index:4001 !important; border-radius:0 !important; transform:translateX(105%); transition:transform .22s ease; box-shadow:-20px 0 50px rgba(30,6,15,.25) !important; }
+  body.ad2-drawer #screen-admin .mc-sidebar{ transform:none; }
+  body.ad2-drawer::before{ content:""; position:fixed; inset:0; background:rgba(30,6,15,.4); z-index:4000; }
+  .ad2-ph .ad2-mob{ display:flex; width:100%; }
+  .ad2-ph h1{ font-size:22px; line-height:30px; }
+  .ad2-ac{ margin:0; width:100%; } .ad2-ac .ad2-b{ flex:1 1 auto; justify-content:center; }
+  .ad2-kp{ grid-template-columns:1fr 1fr; gap:10px; }
+  .ad2-k{ padding:14px; } .ad2-k b{ font-size:24px; line-height:30px; } .ad2-rg{ display:none; }
+  .ad2-r21{ grid-template-columns:1fr; }
+  .ad2-qa{ grid-template-columns:1fr 1fr; }
+  .ad2-bx span{ font-size:11px; }
+  .ad2-cd h3 em{ display:none; }
+  html body #screen-admin .mc-content, #screen-admin .admin-section{ min-width:0 !important; max-width:100% !important; overflow-x:hidden; }
+  #screen-admin .admin-section div[style*="display:flex"], #screen-admin .admin-section div[style*="display: flex"]{ flex-wrap:wrap !important; }
+  #screen-admin .admin-section select, #screen-admin .admin-section input{ min-width:0 !important; max-width:100% !important; }
+}
+@media (prefers-reduced-motion:reduce){ #screen-admin .mc-sidebar{ transition:none !important; } }
+/* الهوية: نص ثانوي بتباين كافٍ (4.69:1) */
+.tb2-search, .tb2-recent b, #screen-toolbox.tb2 .tbx-tool-desc, .pg2 .p2-fact small, .pg2 .p2-past small, .sp2-card p, #hh-more-sheet.ms2 .ms2-tx small, #hh-ib.ib2 .ib2-sec small, .pg2 .p2-sec small, #screen-toolbox.tb2 .tbx-section-desc{ color:#7A6A54 !important; }
 </style>
 
 <script>
@@ -14254,6 +14412,168 @@ html body #hv2-sc.sc2 .sc2-adm .hv2-tile{ all:unset; box-sizing:border-box; curs
     setTimeout(function(){ sc.classList.add('sc2-in'); }, 2500);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+
+</script>
+<script>
+
+/* ═══════════ لوحة التحكم · مساحة عمل جديدة (zzzzzzbp) ═══════════
+   قائمة جانبية بست مجموعات وعدّادات · رأس موحّد لكل قسم · نظرة عامة جديدة
+   البيانات كما هي من المصادر الأصلية (QDB · mc_review_cache · users · admin_audit · teacher_requests) */
+(function(){
+'use strict';
+if(window._hhAd2) return; window._hhAd2=true;
+function SV(p,s){ return '<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
+var P={home:'<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>',pulse:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+ q:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/><path d="M12 17h.01"/>',check:'<path d="M20 6L9 17l-5-5"/>',grid:'<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',
+ route:'<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/>',trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6"/>',
+ school:'<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M10 20v-5h4v5"/>',book:'<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 17h13"/>',doc:'<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20a7 7 0 0 1 14 0"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14a5 5 0 0 1 5 5"/>',
+ pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',badge:'<circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/>',star:'<path d="M12 3l2.8 5.9 6.2.9-4.5 4.4 1 6.3L12 17.6 6.5 20.5l1-6.3L3 9.8l6.2-.9z"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ mega:'<path d="M3 11v2a2 2 0 0 0 2 2h2l5 4V5L7 9H5a2 2 0 0 0-2 2z"/><path d="M16 9a4 4 0 0 1 0 6"/>',spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',layout:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7M8 21v-7h8v7"/>',plus:'<path d="M12 5v14M5 12h14"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',alert:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',arrow:'<path d="M15 6l-6 6 6 6"/>',refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>',menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',back:'<path d="M9 5l7 7-7 7"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>'};
+var NAV=[['عام',[['home','home'],['activity','pulse'],['healthcheck','shield']]],
+ ['المحتوى',[['questions','q'],['review','check'],['categories','grid'],['paths','route'],['competitions','trophy']]],
+ ['التعليم',[['schools','school'],['curricula','book'],['curriculum','doc'],['classes','users'],['toolbox','pen']]],
+ ['الناس',[['users','user'],['teachers','badge'],['directory','book'],['permissions','shield'],['reviews','star'],['reports','flag']]],
+ ['التواصل',[['announcements','mega'],['whatsnew','spark'],['sponsors','heart'],['landing','layout']]],
+ ['النظام',[['stats','chart'],['backup','save']]]];
+var META={home:['عام','نظرة عامة',''],activity:['عام','سجل النشاط','كل تعديل على المنصة بالوقت ومنفّذه'],healthcheck:['عام','فحص المنصة','اختبار سريع للاتصال والبيانات والإعدادات'],
+ questions:['المحتوى','الأسئلة',''],review:['المحتوى','المراجعة','سؤال واحد، تركيز كامل، حكم سريع'],categories:['المحتوى','الفئات','تحكم بالصورة واللون والظهور · تُحفظ التعديلات سحابياً تلقائياً'],paths:['المحتوى','المسارات','مسارات التعلم وترتيب محطاتها'],competitions:['المحتوى','المسابقات','اسم المسابقة والشخصية وصورتها والفئات الفرعية وجميع الأسئلة'],
+ schools:['التعليم','المدارس','المدارس المسجلة وصفوفها'],curricula:['التعليم','المناهج','المناهج التربوية ووحداتها'],curriculum:['التعليم','مركز المنهج','الدروس والملخصات والاختبارات'],classes:['التعليم','الصفوف والطلاب','الصفوف الحية والطلاب المرتبطون'],toolbox:['التعليم','محبرة المعلم','الأدوات الظاهرة للمعلمين وحالتها'],
+ users:['الناس','المستخدمون','صنّفهم وتابع نشاطهم وتقييمهم للمنصة'],teachers:['الناس','اعتماد المعلمين','طلبات الاعتماد والمعلمون المعتمدون'],directory:['الناس','دليل المعلمين','المعلمون المسجلون وبيانات التواصل'],permissions:['الناس','الصلاحيات','من يملك ماذا في المنصة'],reviews:['الناس','التقييمات','آراء المستخدمين في المنصة'],reports:['الناس','البلاغات','بلاغات الأسئلة والمحتوى'],
+ announcements:['التواصل','الإعلانات','شريط الإعلان أعلى المنصة'],whatsnew:['التواصل','ماذا الجديد','سجل التحديثات الظاهر للمستخدمين'],sponsors:['التواصل','الشركاء','الرعاة والمراكز الشريكة وشعاراتهم'],landing:['التواصل','صفحة الهبوط','محتوى الصفحة الأولى للزوار'],
+ stats:['النظام','الإحصائيات','نظرة شاملة على نشاط المنصة من بياناتها الفعلية'],backup:['النظام','النسخ الاحتياطي','نسخ واستعادة بيانات المنصة']};
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function fmt(n){ return (Number(n)||0).toLocaleString('en-US'); }
+function db(){ return firebase.firestore(); }
+
+/* ── القائمة الجانبية ── */
+function buildNav(){
+  var sb=document.querySelector('#screen-admin .mc-sidebar-scroll'); if(!sb || sb.querySelector('.ad2-nav')) return;
+  var nav=document.createElement('div'); nav.className='ad2-nav';
+  var used={};
+  NAV.forEach(function(g){
+    var lab=document.createElement('div'); lab.className='ad2-gl'; lab.textContent=g[0]; nav.appendChild(lab);
+    g[1].forEach(function(it){
+      var b=sb.querySelector('.mc-item[data-tab="'+it[0]+'"]'); if(!b) return; used[it[0]]=1;
+      var oldIc=b.querySelector('.mc-item-icon'); if(oldIc){ var w=document.createElement('span'); w.innerHTML=SV(P[it[1]],18); var n=w.firstChild; n.setAttribute('class','mc-item-icon'); oldIc.replaceWith(n); }
+      if(META[it[0]]){ var lb=b.querySelector('.mc-item-label'); if(lb){ var badge=lb.querySelector('.hhc-badge'); lb.textContent=META[it[0]][1]; if(badge) lb.appendChild(badge); } }
+      if(!b.querySelector('.ad2-n')){ var em=document.createElement('em'); em.className='ad2-n'; em.hidden=true; b.appendChild(em); }
+      nav.appendChild(b);
+    });
+  });
+  var rest=[].slice.call(sb.querySelectorAll('.mc-group .mc-item[data-tab]')).filter(function(b){ return !used[b.dataset.tab]; });
+  if(rest.length){ var l=document.createElement('div'); l.className='ad2-gl'; l.textContent='أخرى'; nav.appendChild(l); rest.forEach(function(b){ nav.appendChild(b); }); }
+  sb.insertBefore(nav, sb.firstChild);
+  sb.querySelectorAll('.mc-group').forEach(function(g){ g.style.display='none'; });
+}
+function setCount(tab,n){ var b=document.querySelector('#screen-admin .mc-item[data-tab="'+tab+'"] .ad2-n'); if(!b) return; b.hidden=!n; b.textContent=fmt(n); }
+function counts(){
+  var qs=0,cats=0; try{ cats=Object.keys(QDB||{}).length; Object.keys(QDB||{}).forEach(function(k){ qs+=(QDB[k]||[]).length; }); }catch(e){}
+  var rev=0; try{ var c=JSON.parse(localStorage.getItem('mc_review_cache')||'{}'); Object.keys(c).forEach(function(k){ if(c[k]==='reviewed'||c[k]==='needs') rev++; }); }catch(e){}
+  var rep=0; try{ rep=(window._allReports||[]).filter(function(r){ return !r.resolved; }).length; }catch(e){}
+  setCount('questions',qs); setCount('review',Math.max(0,qs-rev)); setCount('categories',cats); setCount('reports',rep);
+  return {qs:qs,cats:cats,rev:rev,pending:Math.max(0,qs-rev),rep:rep};
+}
+
+/* ── رأس الصفحة الموحد ── */
+function header(tab){
+  var host=document.querySelector('#screen-admin .mc-content'); if(!host) return;
+  var ph=document.getElementById('ad2-ph');
+  if(!ph){ ph=document.createElement('div'); ph.id='ad2-ph'; ph.className='ad2-ph'; host.insertBefore(ph, host.firstChild); }
+  var m=META[tab]||['',(document.querySelector('#screen-admin .mc-item[data-tab="'+tab+'"] .mc-item-label')||{}).textContent||'',''];
+  var mob='<div class="ad2-mob"><button type="button" class="ad2-b ad2-b--s" onclick="hhAd2Drawer(true)">'+SV(P.menu,16)+' الأقسام</button></div>';
+  if(tab==='home'){
+    var now=new Date(), h=now.getHours(), g=h<12?'صباح الخير':(h<17?'طاب يومك':'مساء الخير');
+    var nm=''; try{ nm=(currentUser&&(currentUser.displayName||'').split(' ')[0])||''; }catch(e){}
+    var d=''; try{ d=now.toLocaleDateString('ar-QA-u-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); var hj=now.toLocaleDateString('ar-SA-u-ca-islamic-nu-latn',{day:'numeric',month:'long',year:'numeric'}); d+=' · '+hj.replace(/\s*هـ$/,'')+' هـ'; }catch(e){}
+    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>عام · نظرة عامة</b></div><h1>'+g+(nm?'، '+esc(nm):'')+'</h1><p>'+esc(d)+'</p></div><div class="ad2-ac"><button type="button" class="ad2-b" onclick="hhAd2Home(true)">'+SV(P.refresh)+' تحديث</button><button type="button" class="ad2-b ad2-b--p" onclick="adminTab(\'questions\')">'+SV(P.plus)+' سؤال جديد</button></div>';
+  } else {
+    var sub=m[2]; var c=counts();
+    if(tab==='questions') sub=fmt(c.qs)+' سؤالاً في '+c.cats+' فئة';
+    if(tab==='categories') sub=c.cats+' فئة · '+m[2];
+    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>'+esc(m[0]?m[0]+' · '+m[1]:m[1])+'</b></div><h1>'+esc(m[1])+'</h1>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</div>';
+  }
+}
+
+/* ── نظرة عامة ── */
+var _homeData=null;
+async function loadHomeData(force){
+  if(_homeData && !force) return _homeData;
+  var d={users:0,teachers:0,students:0,audit:[],treq:0,ok:{users:false,audit:false,treq:false}};
+  try{ var us=await db().collection('users').get(); us.forEach(function(x){ var u=x.data()||{}; d.users++; if(u.role==='teacher') d.teachers++; if(u.role==='student') d.students++; }); d.ok.users=true; }catch(e){}
+  try{ var au=await db().collection('admin_audit').limit(60).get(); au.forEach(function(x){ d.audit.push(x.data()||{}); }); d.audit.sort(function(a,b){ return (b.at||0)-(a.at||0); }); d.ok.audit=true; }catch(e){}
+  try{ var tr=await db().collection('teacher_requests').limit(100).get(); tr.forEach(function(x){ var r=x.data()||{}; if(!r.status||r.status==='pending') d.treq++; }); d.ok.treq=true; }catch(e){}
+  _homeData=d; return d;
+}
+function rel(t){ if(!t) return ''; var m=Math.floor((Date.now()-t)/60000); if(m<1) return 'الآن'; if(m<60) return 'قبل '+m+' د'; var h=Math.floor(m/60); if(h<24) return 'قبل '+h+' س'; return 'قبل '+Math.floor(h/24)+' يوم'; }
+function ring(p){ var C=2*Math.PI*22; return '<svg class="ad2-ring" viewBox="0 0 56 56" width="56" height="56" aria-hidden="true"><circle cx="28" cy="28" r="22" fill="none" stroke="var(--ad-soft)" stroke-width="6"/><circle cx="28" cy="28" r="22" fill="none" stroke="#B8924A" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-p/100)).toFixed(1)+'" transform="rotate(-90 28 28)"/></svg>'; }
+window.hhAd2Home=async function(force){
+  var panel=document.getElementById('admin-home-panel'); if(!panel) return;
+  panel.classList.add('ad2-home-on');
+  var box=document.getElementById('ad2-home');
+  if(!box){ box=document.createElement('div'); box.id='ad2-home'; panel.insertBefore(box, panel.firstChild); }
+  if(force){ header('home'); }
+  var c=counts(), pct=c.qs?Math.round(c.rev/c.qs*100):0;
+  function render(d){
+    var users=d?d.users:null;
+    var kpi=function(a,icn,l,v,s,cls,tab){ return '<button type="button" class="ad2-k" style="--a:'+a+'" onclick="adminTab(\''+tab+'\')"><span class="ad2-kl"><i>'+SV(P[icn])+'</i>'+l+'</span><b>'+v+'</b><small class="'+(cls||'')+'">'+s+'</small></button>'; };
+    var lastB=0; try{ lastB=parseInt(localStorage.getItem('hh_last_backup_at')||'0',10)||0; }catch(e){}
+    var task=function(a,icn,t,s,n,tab,ncls){ return '<button type="button" class="ad2-task" style="--a:'+a+'" onclick="'+tab+'"><i>'+SV(P[icn])+'</i><span><b>'+t+'</b><small>'+s+'</small></span><em class="'+(ncls||'')+'">'+n+'</em><span class="ad2-go">'+SV(P.arrow,16)+'</span></button>'; };
+    var days=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'], now=new Date(), B=[0,0,0,0,0,0,0], L=[];
+    for(var i=6;i>=0;i--){ var dt=new Date(now); dt.setDate(now.getDate()-i); L.push(days[dt.getDay()]); }
+    (d&&d.audit||[]).forEach(function(a){ if(!a.at) return; var df=Math.floor((now-a.at)/864e5); if(df>=0&&df<7) B[6-df]++; });
+    var mx=Math.max.apply(null,B), any=mx>0;
+    var bars=B.map(function(v,i){ return '<div class="ad2-bc"><span class="ad2-bv">'+(any?v:'')+'</span><span class="ad2-bar'+(v?' on':'')+'" style="height:'+(any?Math.max(4,Math.round(v/mx*100)):4)+'%"></span></div>'; }).join('');
+    var acts=(d&&d.audit||[]).slice(0,5).map(function(a){ return '<div class="ad2-log"><span class="ad2-dot"></span><div><b>'+esc(a.detail||a.action||'')+'</b><small>'+esc(a.by||'')+(a.by?' · ':'')+rel(a.at)+'</small></div></div>'; }).join('');
+    var QA=[['plus','سؤال جديد',"adminTab('questions')"],['grid','فئة جديدة',"(typeof hhOpenNewCategoryModal==='function')?hhOpenNewCategoryModal():adminTab('categories')"],['mega','إعلان جديد',"adminTab('announcements')"],['save','نسخة احتياطية',"(typeof exportBackup==='function')?exportBackup():adminTab('backup')"],['users','المستخدمون',"adminTab('users')"],['shield','الصلاحيات',"adminTab('permissions')"],['flag','البلاغات',"adminTab('reports')"],['trophy','المسابقات',"adminTab('competitions')"]];
+    box.innerHTML=
+      '<div class="ad2-kp">'
+      + kpi('#7A1636','users','المستخدمون', users==null?'…':fmt(users), d?(d.ok.users?(d.teachers+' معلم · '+d.students+' طالب'):'تعذّر جلب العدد'):'جارٍ الجلب…','', 'users')
+      + kpi('#2F6A4E','q','الأسئلة المتاحة', fmt(c.qs), 'في '+c.cats+' فئة','', 'questions')
+      + '<button type="button" class="ad2-k" style="--a:#8A6D2E" onclick="adminTab(\'review\')"><span class="ad2-kl"><i>'+SV(P.check)+'</i>المراجعة</span><b>'+pct+'%</b><small>'+fmt(c.rev)+' مُراجَع من '+fmt(c.qs)+'</small><span class="ad2-rg">'+ring(pct)+'</span></button>'
+      + kpi('#C0392B','flag','بلاغات مفتوحة', fmt(c.rep), c.rep?'تحتاج متابعتك':'لا شيء يحتاج تدخلك', c.rep?'w':'u','reports')
+      + '</div>'
+      + '<div class="ad2-row ad2-r21">'
+      +   '<div class="ad2-cd"><h3>'+SV(P.chart)+' النشاط الأسبوعي <em>من سجل المراجعة · آخر 7 أيام</em></h3><div class="ad2-bars">'+bars+(any?'':'<div class="ad2-emp">'+SV(P.chart,26)+'<span>لا نشاط مسجّل هذا الأسبوع · يظهر هنا عند أول تعديل</span></div>')+'</div><div class="ad2-bx">'+L.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>'
+      +   '<div class="ad2-cd"><h3>'+SV(P.alert)+' تحتاج انتباهك</h3>'
+      +     task('#8A6D2E','check','أسئلة بانتظار المراجعة', c.pending?'ابدأ من الفئات الأكثر استخداماً':'كل الأسئلة مُراجَعة', fmt(c.pending), "adminTab('review')")
+      +     task('#7A1636','badge','طلبات اعتماد معلمين', d&&d.ok.treq?(d.treq?'بانتظار قرارك':'لا طلبات معلقة'):'افتح القسم للتحقق', d&&d.ok.treq?fmt(d.treq):'—', "adminTab('teachers')")
+      +     task('#C0392B','flag','بلاغات على أسئلة', c.rep?'افتح البلاغات وراجعها':'لا بلاغات مفتوحة', fmt(c.rep), "adminTab('reports')")
+      +     task('#2F6A4E','save','آخر نسخة احتياطية', lastB?('أُخذت '+rel(lastB)):'لم تُؤخذ نسخة بعد · يُنصح بنسخة أسبوعية', lastB?'✓':'الآن', "(typeof exportBackup==='function')?exportBackup():adminTab('backup')", lastB?'':'sm')
+      +   '</div>'
+      + '</div>'
+      + '<div class="ad2-row ad2-r21">'
+      +   '<div class="ad2-cd"><h3>'+SV(P.spark)+' إجراءات سريعة</h3><div class="ad2-qa">'+QA.map(function(q){ return '<button type="button" onclick="'+q[2]+'"><i>'+SV(P[q[0]],16)+'</i>'+q[1]+'</button>'; }).join('')+'</div></div>'
+      +   '<div class="ad2-cd"><h3>'+SV(P.clock)+' أحدث الإجراءات <button type="button" class="ad2-lnk" onclick="adminTab(\'activity\')">عرض السجل</button></h3>'+(acts||'<div class="ad2-emp ad2-emp--s">'+SV(P.clock,26)+'<span>لا إجراءات مسجّلة بعد<br><small>كل تعديل تقوم به يظهر هنا بالوقت</small></span></div>')+'</div>'
+      + '</div>';
+  }
+  render(_homeData);
+  try{ var d=await loadHomeData(force); render(d); }catch(e){}
+};
+
+/* ── الجوال: درج الأقسام ── */
+window.hhAd2Drawer=function(open){ document.body.classList.toggle('ad2-drawer', !!open); };
+
+/* ── الربط ── */
+function onTab(tab){
+  try{ buildNav(); counts(); header(tab); }catch(e){}
+  if(tab==='home'){ setTimeout(function(){ try{ hhAd2Home(); }catch(e){} }, 30); }
+  document.body.classList.remove('ad2-drawer');
+  try{ var sc=document.getElementById('screen-admin'); sc.setAttribute('data-ad2-tab', tab); }catch(e){}
+  try{ window.scrollTo(0,0); }catch(e){}
+}
+function hook(){
+  if(typeof window.adminTab!=='function' || window.adminTab._ad2) return !!(window.adminTab&&window.adminTab._ad2);
+  var o=window.adminTab; var w=function(tab){ var r=o.apply(this,arguments); onTab(tab); return r; }; w._ad2=true; w._ovHooked=true; window.adminTab=w; return true;
+}
+var _n=0, iv=setInterval(function(){ if(hook() || ++_n>40) clearInterval(iv); }, 500);
+hook();
+var _ss=window.showScreen;
+if(typeof _ss==='function'){ window.showScreen=function(id){ var r=_ss.apply(this,arguments); document.body.classList.toggle('hh-admin', id==='screen-admin'); if(id==='screen-admin'){ setTimeout(function(){ var t='home'; try{ var a=document.querySelector('#screen-admin .mc-item.active[data-tab]'); if(a) t=a.dataset.tab; }catch(e){} onTab(t); },60); } return r; }; }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') document.body.classList.remove('ad2-drawer'); });
+// النظرة العامة القديمة تُستبدل بالجديدة
+window.hhBuildOverview=function(){ return hhAd2Home(); };
 })();
 
 </script>
