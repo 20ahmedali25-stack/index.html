@@ -79,10 +79,10 @@ function render(){
     body+='<button onclick="hhPtAddP('+ti+')" style="'+_b+'background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;padding:7px 14px;margin-top:4px;">+ شريك في «'+esc(t.name)+'»</button>';
     body+='</div>';
   });
-  body+='<div style="display:flex;gap:8px;justify-content:flex-start;position:sticky;bottom:0;background:linear-gradient(180deg,transparent,#FBF5E9 40%);padding-top:10px;">'
+  body+='<div style="display:flex;gap:8px;justify-content:flex-start;position:sticky;bottom:0;background:linear-gradient(180deg,transparent,#F5F3F0 40%);padding-top:10px;">'
     +'<button onclick="hhPtSave()" style="'+_b+'background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;padding:11px 24px;font-size:.85rem;">حفظ كل التغييرات</button>'
     +'<button onclick="document.getElementById(\'hh-partners-admin\').remove()" style="'+_b+'background:#fff;border:1.5px solid #B8924A;color:#8A6D2E;padding:11px 20px;">إغلاق</button></div>';
-  ov.innerHTML='<div style="max-width:720px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:20px;overflow:hidden;"><div style="background:linear-gradient(120deg,#2a0810,#5E0E26);padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #B8924A;"><b style="color:#FFFDF8;font-size:1rem;flex:1;">إدارة الشركاء</b><button onclick="document.getElementById(\'hh-partners-admin\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;cursor:pointer;">✕</button></div><div style="padding:16px 18px;color:#3D0918;">'+body+'</div></div>';
+  ov.innerHTML='<div style="max-width:720px;margin:0 auto;background:linear-gradient(180deg,#FFFFFF,#F5F3F0);border:2px solid #B8924A;border-radius:20px;overflow:hidden;"><div style="background:linear-gradient(120deg,#2a0810,#5E0E26);padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #B8924A;"><b style="color:#FFFDF8;font-size:1rem;flex:1;">إدارة الشركاء</b><button onclick="document.getElementById(\'hh-partners-admin\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;cursor:pointer;">✕</button></div><div style="padding:16px 18px;color:#3D0918;">'+body+'</div></div>';
   ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
   document.body.appendChild(ov);
 }

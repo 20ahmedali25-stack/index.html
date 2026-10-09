@@ -4814,12 +4814,12 @@ function buildWafaBoard(wrap){
     .wafa-stage{ flex:1; min-height:0; display:flex; flex-direction:${stacked?'column':'row'}; gap:${gap}px; }
     .wafa-side{ flex:1; min-width:0; display:flex; flex-direction:column; gap:${gap}px; }
     .wafa-cat{ flex:1; min-height:0; display:flex; flex-direction:column; border-radius:14px; overflow:hidden;
-      border:2px solid #B8924A; background:#FFFDF8; box-shadow:0 3px 10px rgba(42,8,16,.10); }
+      border:2px solid #B8924A; background:#FFFFFF; box-shadow:0 3px 10px rgba(42,8,16,.10); }
     .wafa-cat .wname{ background:linear-gradient(135deg,#4A0B1E,#5E0E26 55%,#6B1230); color:#EAD9B0; border-bottom:2px solid #B8924A; font-weight:900; text-align:center; position:relative; letter-spacing:.2px;
       padding:${isMobile?'3px':'6px'}; font-size:${isMobile?'.85rem':'1.25rem'}; font-family:Cairo,sans-serif; flex-shrink:0; }
     .wafa-cat .wname::before,.wafa-cat .wname::after{ content:'\u2756'; position:absolute; top:50%; transform:translateY(-50%); color:#B8924A; font-size:.58rem; }
     .wafa-cat .wname::before{ right:12px; } .wafa-cat .wname::after{ left:12px; }
-    .wafa-cells .qcell.used{ background:#EDE7DA !important; border-color:#D9CFB8 !important; box-shadow:none; cursor:default; position:relative; }
+    .wafa-cells .qcell.used{ background:#ECE8E3 !important; border-color:#D9CFB8 !important; box-shadow:none; cursor:default; position:relative; }
     .wafa-cells .qcell.used .qpts{ color:#B9AE95 !important; }
     .wafa-cells .qcell.used::before{ content:'\u2713'; position:absolute; top:2px; left:6px; font-size:.65rem; color:#8A6D2E; }
     .wafa-cells .qcell.easy{ --wc:#B8924A; --wbg:#FBF3E1; } .wafa-cells .qcell.easy .qpts{ color:#8A6D2E; }
@@ -4855,7 +4855,7 @@ function buildWafaBoard(wrap){
       ${stacked?'order:-1;':''} }
     .wafa-frame{ width:${frameSide}px; height:${frameSide}px; flex-shrink:0;
       border-radius:18px; background:${CC_FBG}; border:5px solid transparent;
-      background-image:linear-gradient(${CC_FBG},${CC_FBG}),linear-gradient(135deg,#B8924A,#EAD9B0,#B8924A); background-origin:border-box; background-clip:content-box,border-box;
+      background-image:linear-gradient(${CC_FBG},${CC_FBG}),#FFFFFF; background-origin:border-box; background-clip:content-box,border-box;
       box-shadow:inset 0 0 0 3px #4A0B1E, 0 8px 24px rgba(42,8,16,.28);
       display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .wafa-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -5778,7 +5778,7 @@ var _testQueue    = [];
 function hhStartTestMode(){
   const overlay=document.createElement('div');
   overlay.id='hh-test-setup'; overlay.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999990;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;';
-  overlay.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;display:flex;align-items:center;gap:8px;"> وضع الاختبار التربوي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">الفئات (نفس اللعبة الحالية)</div>' +'<div style="font-size:.78rem;color:#555;background:#FBF3E2;border-radius:8px;padding:8px 12px;margin-bottom:12px;">'+((G.selectedCats||[]).join(' · ')||'اختر فئات أولاً')+'</div>' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">عدد الأسئلة لكل طالب</div>' +'<input id="hh-test-qcount" type="number" min="5" max="30" value="10" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.9rem;margin-bottom:12px;box-sizing:border-box;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">أكواد الطلاب (سطر لكل طالب · كود أو رقم)</div>' +'<textarea id="hh-test-students" rows="5" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;" placeholder="مثال: 1 أو أحمد"></textarea>' +'<div style="display:flex;gap:9px;margin-top:10px;">' +'<button onclick="hhInitTest()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 22px;font-weight:900;font-size:.84rem;cursor:pointer;flex:1;">ابدأ الاختبار</button>' +'<button onclick=\"hhCloseTestSetup()\" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
+  overlay.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:480px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.95rem;display:flex;align-items:center;gap:8px;"> وضع الاختبار التربوي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">الفئات (نفس اللعبة الحالية)</div>' +'<div style="font-size:.78rem;color:#555;background:#F5F3F0;border-radius:8px;padding:8px 12px;margin-bottom:12px;">'+((G.selectedCats||[]).join(' · ')||'اختر فئات أولاً')+'</div>' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">عدد الأسئلة لكل طالب</div>' +'<input id="hh-test-qcount" type="number" min="5" max="30" value="10" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.9rem;margin-bottom:12px;box-sizing:border-box;">' +'<div style="font-size:.8rem;font-weight:800;color:#5E0E26;margin-bottom:5px;">أكواد الطلاب (سطر لكل طالب · كود أو رقم)</div>' +'<textarea id="hh-test-students" rows="5" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:8px 12px;font-family:Cairo;font-size:.84rem;box-sizing:border-box;" placeholder="مثال: 1 أو أحمد"></textarea>' +'<div style="display:flex;gap:9px;margin-top:10px;">' +'<button onclick="hhInitTest()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 22px;font-weight:900;font-size:.84rem;cursor:pointer;flex:1;">ابدأ الاختبار</button>' +'<button onclick=\"hhCloseTestSetup()\" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إلغاء</button>' +'</div></div></div>';
   document.body.appendChild(overlay);
 }
 
@@ -5809,8 +5809,8 @@ function hhNextTestQ(){
   const ov=document.createElement('div'); ov.id='hh-test-q';
   ov.style.cssText='position:fixed;inset:0;background:#fff;z-index:999985;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
   const pct=Math.round(_testQueueIdx/(_testQueue.length||1)*100);
-  ov.innerHTML='<div style="max-width:540px;width:100%;">' +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +'<span style="background:#5E0E26;color:#fff;border-radius:8px;padding:4px 12px;font-weight:900;font-size:.78rem;">طالب: '+esc(st.name)+'</span>' +'<span style="font-size:.76rem;color:#999;">'+(_testQueueIdx+1)+' / '+_testQueue.length+'</span>' +'</div>' +'<div style="background:#FBF3E2;border-radius:99px;height:8px;margin-bottom:18px;"><div style="background:#5E0E26;border-radius:99px;height:8px;width:'+pct+'%"></div></div>' +'<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:16px;padding:22px;margin-bottom:16px;">' +'<div style="font-size:.7rem;color:#8A6D2E;font-weight:800;margin-bottom:8px;">'+esc(q._cat||'')+' •  '+({easy:'سهل',med:'متوسط',hard:'صعب'}[q.diff]||q.diff||'')+'</div>' +'<div style="font-size:1.15rem;font-weight:900;color:#5E0E26;line-height:1.7;">'+esc(q.q||'')+'</div>' +(q.img?'<img src="'+q.img+'" style="max-height:140px;margin-top:10px;border-radius:10px;display:block;">':'')
-    +'</div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhRecordTest(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> صحيحة</button>' +'<button onclick="hhRecordTest(false)" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> خاطئة</button>' +'</div>' +'<button onclick="hhRevealTestAnswer()" id="hh-test-show-ans" style="width:100%;margin-top:9px;background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:9px;font-weight:900;font-size:.82rem;cursor:pointer;"> اعرض الجواب</button>' +'<div id="hh-test-ans-box" style="display:none;background:#EBF2EE;border:2px solid #3D6B53;border-radius:10px;padding:11px;margin-top:8px;font-weight:900;color:#3D6B53;text-align:center;font-size:.95rem;">'+esc(q.a||'')+'</div>' +'</div>';
+  ov.innerHTML='<div style="max-width:540px;width:100%;">' +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +'<span style="background:#5E0E26;color:#fff;border-radius:8px;padding:4px 12px;font-weight:900;font-size:.78rem;">طالب: '+esc(st.name)+'</span>' +'<span style="font-size:.76rem;color:#999;">'+(_testQueueIdx+1)+' / '+_testQueue.length+'</span>' +'</div>' +'<div style="background:#F5F3F0;border-radius:99px;height:8px;margin-bottom:18px;"><div style="background:#5E0E26;border-radius:99px;height:8px;width:'+pct+'%"></div></div>' +'<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:16px;padding:22px;margin-bottom:16px;">' +'<div style="font-size:.7rem;color:#8A6D2E;font-weight:800;margin-bottom:8px;">'+esc(q._cat||'')+' •  '+({easy:'سهل',med:'متوسط',hard:'صعب'}[q.diff]||q.diff||'')+'</div>' +'<div style="font-size:1.15rem;font-weight:900;color:#5E0E26;line-height:1.7;">'+esc(q.q||'')+'</div>' +(q.img?'<img src="'+q.img+'" style="max-height:140px;margin-top:10px;border-radius:10px;display:block;">':'')
+    +'</div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhRecordTest(true)" style="flex:1;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> صحيحة</button>' +'<button onclick="hhRecordTest(false)" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:12px;font-weight:900;font-size:.9rem;cursor:pointer;"> خاطئة</button>' +'</div>' +'<button onclick="hhRevealTestAnswer()" id="hh-test-show-ans" style="width:100%;margin-top:9px;background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:9px;font-weight:900;font-size:.82rem;cursor:pointer;"> اعرض الجواب</button>' +'<div id="hh-test-ans-box" style="display:none;background:#EBF2EE;border:2px solid #3D6B53;border-radius:10px;padding:11px;margin-top:8px;font-weight:900;color:#3D6B53;text-align:center;font-size:.95rem;">'+esc(q.a||'')+'</div>' +'</div>';
   document.body.appendChild(ov);
 }
 function hhRevealTestAnswer(){
@@ -5842,7 +5842,7 @@ function hhOfferSessionReport(){
     var bar=document.createElement('div'); bar.id='hh-sr-offer';
     bar.style.cssText='position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:999979;background:linear-gradient(175deg,#4A0B1E,#5E0E26);border:1.5px solid #B8924A;border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(30,6,15,.4);direction:rtl;';
     bar.innerHTML='<span style="color:#F5E6C4;font-weight:800;font-size:.85rem;">انتهت الجلسة · تقرير الأداء جاهز</span>'
-      +'<button onclick="hhCloseOfferSR();hhShowSessionReport(null,false)" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:9px;padding:7px 14px;font-weight:800;font-size:.8rem;cursor:pointer;">عرض التقرير</button>'
+      +'<button onclick="hhCloseOfferSR();hhShowSessionReport(null,false)" style="background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:9px;padding:7px 14px;font-weight:800;font-size:.8rem;cursor:pointer;">عرض التقرير</button>'
       +'<button onclick="hhCloseOfferSR()" aria-label="إخفاء" style="background:rgba(255,255,255,.1);color:#EAD9B0;border:1px solid rgba(212,188,133,.5);border-radius:9px;width:30px;height:30px;font-weight:800;cursor:pointer;">✕</button>';
     document.body.appendChild(bar);
     setTimeout(hhCloseOfferSR, 12000);
@@ -5901,9 +5901,9 @@ function hhShowSessionReport(testData, isTest){
   }).join('');
   const dateStr=new Date().toLocaleDateString('ar-QA-u-nu-latn',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
   const pctCl=pct>=70?'#3D6B53':pct>=50?'#b5801f':'#c0392b';
-  ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#FBF3E2;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
-    +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#FBF3E2;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +'<button onclick=\"hhSaveSessionDialog('+(isTest?'true':'false')+')\" style=\"background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>'
-    +'<button onclick=\"hhShowImpact()\" style=\"background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> تقرير الأثر</button>'
+  ov.innerHTML='<div id="hh-report-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> '+(isTest?'تقرير الاختبار التربوي':'تقرير جلسة المُلهِم')+'</div>' +'<div style="font-size:.72rem;opacity:.8;">'+dateStr+'</div></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">' +'<div style="background:#F5F3F0;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+total+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">أسئلة</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+correct+'</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">صحيحة</div></div>' +'<div style="background:'+(pct>=70?'#EBF2EE':pct>=50?'#FDF3DD':'#F7ECEF')+';border-radius:12px;padding:10px;text-align:center;">' +'<div style="font-size:1.5rem;font-weight:900;color:'+pctCl+';">'+pct+'%</div>' +'<div style="font-size:.72rem;color:#555;font-weight:800;">النسبة</div></div></div>' +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;"> الأداء حسب الفئة</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">الفئة</th><th style="padding:7px;text-align:center;">صحيح</th><th style="padding:7px;text-align:center;">إجمالي</th><th style="padding:7px;text-align:center;">نسبة</th></tr></thead>' +'<tbody>'+catRows+'</tbody></table>' +studentTable
+    +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin:14px 0 8px;"> تفاصيل الأسئلة</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#F5F3F0;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;text-align:center;">النتيجة</th>' +'<th style="padding:6px 8px;text-align:right;">السؤال</th>' +'<th style="padding:6px 8px;text-align:right;">الجواب</th>' +'<th style="padding:6px 8px;text-align:center;">الفئة / الفئة الفرعية</th>' +'<th style="padding:6px 8px;text-align:center;">'+(isTest?'الطالب':'الفريق')+'</th>' +'<th style="padding:6px 8px;text-align:center;">ملاحظة المعلم</th></tr></thead>' +'<tbody>'+qRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhShowInsight(null)" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(94,14,38,.25);"> التقرير التربوي الذكي</button>' +'<button onclick="hhPrintReport()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة</button>' +'<button onclick="hhExportCSV('+(isTest?'true':'false')+')" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير CSV</button>' +'<button onclick=\"hhSaveSessionDialog('+(isTest?'true':'false')+')\" style=\"background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> احفظ للبحث</button>'
+    +'<button onclick=\"hhShowImpact()\" style=\"background:#F5F3F0;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> تقرير الأثر</button>'
     +(!isTest?'<button onclick=\"hhShowAnalytics()\" style=\"background:#F5E9EE;color:#8A1538;border:1.5px solid #8A1538;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;\"> التحليلات التراكمية</button>':'')
     +'<button onclick="hhCloseSessionReport()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
@@ -5963,7 +5963,7 @@ function hhShowCompare(){
       var bc=p>=70?'#3D6B53':p>=50?'#b5801f':'#c0392b';
       return '<div style="margin-bottom:4px;"><div style="display:flex;justify-content:space-between;font-size:.7rem;font-weight:800;"><span>'+esc(c)+'</span><span style="color:'+bc+';">'+p+'%</span></div>' +'<div style="background:#eee;border-radius:4px;height:7px;"><div style="background:'+bc+';border-radius:4px;height:7px;width:'+p+'%;"></div></div></div>';
     }).join('');
-    return '<div style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;flex:1;min-width:180px;">' +'<div style="font-weight:900;font-size:.8rem;color:#5E0E26;margin-bottom:3px;">'+esc(sess.gameName)+'</div>' +'<div style="font-size:.7rem;color:#999;margin-bottom:10px;">'+esc(sess.date)+' · '+esc(sess.cats)+'</div>' +'<div style="display:flex;gap:8px;margin-bottom:12px;">' +'<div style="text-align:center;flex:1;background:#FBF3E2;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:'+cl+';">'+pct+'%</div>' +'<div style="font-size:.65rem;color:#555;">النسبة</div></div>' +'<div style="text-align:center;flex:1;background:#EBF2EE;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:#3D6B53;">'+cor+'/'+tot+'</div>' +'<div style="font-size:.65rem;color:#555;">الصحيح</div></div></div>' +catBars+'</div>';
+    return '<div style="background:#fff;border:2px solid #B8924A;border-radius:14px;padding:14px;flex:1;min-width:180px;">' +'<div style="font-weight:900;font-size:.8rem;color:#5E0E26;margin-bottom:3px;">'+esc(sess.gameName)+'</div>' +'<div style="font-size:.7rem;color:#999;margin-bottom:10px;">'+esc(sess.date)+' · '+esc(sess.cats)+'</div>' +'<div style="display:flex;gap:8px;margin-bottom:12px;">' +'<div style="text-align:center;flex:1;background:#F5F3F0;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:'+cl+';">'+pct+'%</div>' +'<div style="font-size:.65rem;color:#555;">النسبة</div></div>' +'<div style="text-align:center;flex:1;background:#EBF2EE;border-radius:10px;padding:8px;">' +'<div style="font-size:1.3rem;font-weight:900;color:#3D6B53;">'+cor+'/'+tot+'</div>' +'<div style="font-size:.65rem;color:#555;">الصحيح</div></div></div>' +catBars+'</div>';
   }).join('');
   ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:860px;width:100%;overflow:hidden;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.95rem;"> التحليلات التراكمية ('+sessions.length+')</div>' +'<button onclick="document.getElementById(&quot;hh-compare-overlay&quot;).remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;display:flex;gap:12px;flex-wrap:wrap;">'+rows+'</div>' +'<div style="padding:0 18px 16px;display:flex;gap:9px;">' +'<button onclick="hhExportCompareCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:9px 18px;font-weight:900;font-size:.82rem;cursor:pointer;"> تصدير مقارنة CSV</button>' +'<button onclick="hhClearSessions()" style="background:#F3F0F1;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:9px 16px;font-weight:900;font-size:.82rem;cursor:pointer;"> مسح</button>' +'</div></div>';
   document.body.appendChild(ov);
@@ -6089,7 +6089,7 @@ function hhShowImpact(){
       if(!d.post) miss.push('ينقص اختبار <b>بعدي</b> للمجموعة «'+esc(_impSel.exp)+'».');
     }
     body=(groups.length?pickers:'')
-      +'<div id="imp-empty" style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:.84rem;font-weight:700;color:#3D0918;line-height:1.9;">'+miss.join('<br>')+'</div>'
+      +'<div id="imp-empty" style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:.84rem;font-weight:700;color:#3D0918;line-height:1.9;">'+miss.join('<br>')+'</div>'
       +'<div style="font-weight:900;font-size:.88rem;color:#5E0E26;margin-bottom:8px;">كيف تبني تقرير الأثر</div>'
       +'<ol style="margin:0;padding-right:20px;font-size:.82rem;font-weight:700;color:#3D0918;line-height:2;">'
       +'<li>قبل البدء بالوحدة: نفّذ اختباراً أو لعبة، ثم من التقرير اضغط «احفظ للبحث» واختر <b>اختبار قبلي</b> واكتب اسم الشعبة (مثلاً 7/2).</li>'
@@ -6119,7 +6119,7 @@ function hhShowImpact(){
         ? '<div style="background:#fff;border:1.5px solid #E3D9C6;border-right:4px solid #B8924A;border-radius:12px;padding:11px 14px;font-size:.8rem;font-weight:700;color:#3D0918;line-height:1.9;margin-top:6px;">'
           +'<b>مقارنة بالمجموعة الضابطة «'+esc(d.ctl)+'»:</b> من '+d.cpre.pct+'% إلى '+d.cpost.pct+'% ('+(d.cgain>0?'+':'')+d.cgain+').<br>'
           +'الفرق لصالح '+(d.diff>=0?'الألعاب':'المجموعة الضابطة')+': <b style="color:'+(d.diff>=0?'#3D6B53':'#c0392b')+';">'+Math.abs(d.diff)+' نقطة</b>.</div>'
-        : '<div style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:12px;padding:10px 14px;font-size:.78rem;font-weight:700;color:#3D0918;margin-top:6px;">المجموعة الضابطة «'+esc(d.ctl)+'» ينقصها '+(!d.cpre?'اختبار قبلي':'اختبار بعدي')+'.</div>';
+        : '<div style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:12px;padding:10px 14px;font-size:.78rem;font-weight:700;color:#3D0918;margin-top:6px;">المجموعة الضابطة «'+esc(d.ctl)+'» ينقصها '+(!d.cpre?'اختبار قبلي':'اختبار بعدي')+'.</div>';
     }
     var small=(d.pre.t<10||d.post.t<10)?'<div style="font-size:.72rem;font-weight:800;color:#b5801f;margin-top:8px;">تنبيه: عدد الأسئلة قليل (أقل من 10 في أحد الاختبارين)، فالنتيجة مؤشر أولي فقط.</div>':'';
     body=pickers
@@ -6141,7 +6141,7 @@ function hhShowImpact(){
       +'<button onclick="hhCloseImpact()" style="background:#eee;color:#666;border:none;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">إغلاق</button>'
       +'</div>';
   }
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;margin-bottom:20px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;margin-bottom:20px;">'
     +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<span style="font-weight:900;font-size:1.02rem;">تقرير الأثر · قبل وبعد</span>'
     +'<button onclick="hhCloseImpact()" aria-label="إغلاق" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;min-width:44px;min-height:44px;">✕</button></div>'
@@ -6253,11 +6253,11 @@ function hhShowAnalytics(){
     var phCol=x.phase==='قبلي'?'#c0392b':x.phase==='بعدي'?'#3D6B53':x.phase==='تذكّر'?'#1F4E79':'#B8924A';
     return '<tr style="background:'+(i%2?'#FBF7F0':'#fff')+';">' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:#999;">'+(i+1)+'</td>' +'<td style="padding:6px 8px;font-weight:800;">'+esc(x.gameName)+'</td>' +'<td style="padding:6px 8px;text-align:center;"><span style="background:'+phCol+';color:#fff;border-radius:7px;padding:1px 8px;font-size:.66rem;font-weight:900;">'+esc(x.phase||'·')+'</span></td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;">'+esc(x.group||'·')+'</td>' +'<td style="padding:6px 8px;text-align:center;font-size:.7rem;color:#888;">'+esc(x.date)+'</td>' +'<td style="padding:6px 8px;text-align:center;">'+t+'</td>' +'<td style="padding:6px 8px;text-align:center;font-weight:900;color:'+col+';">'+pc+'%</td></tr>';
   }).join('');
-  ov.innerHTML='<div id="hh-analytics-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:760px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> لوحة التحليلات التراكمية</div>' +'<button onclick="hhCloseAnalytics()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">' +'<div style="background:#FBF3E2;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+S.length+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">جلسة</div></div>' +'<div style="background:#FDF3DD;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#B8924A;">'+totQ+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">سؤال</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+overall+'%</div><div style="font-size:.7rem;color:#555;font-weight:800;">المعدل العام</div></div>' +'</div>' +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> منحنى التطور عبر الجلسات</div>' +'<div style="background:#FBF7F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:8px;margin-bottom:14px;">'+chart
+  ov.innerHTML='<div id="hh-analytics-inner" style="background:#fff;border:2px solid #B8924A;border-radius:20px;max-width:760px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> لوحة التحليلات التراكمية</div>' +'<button onclick="hhCloseAnalytics()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">' +'<div style="background:#F5F3F0;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+S.length+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">جلسة</div></div>' +'<div style="background:#F5F3F0;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#B8924A;">'+totQ+'</div><div style="font-size:.7rem;color:#555;font-weight:800;">سؤال</div></div>' +'<div style="background:#EBF2EE;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+overall+'%</div><div style="font-size:.7rem;color:#555;font-weight:800;">المعدل العام</div></div>' +'</div>' +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> منحنى التطور عبر الجلسات</div>' +'<div style="background:#FFFFFF;border:1.5px solid #E3D9C6;border-radius:12px;padding:8px;margin-bottom:14px;">'+chart
     +'<div style="text-align:center;font-size:.64rem;color:#999;margin-top:2px;">الخط المتقطع = عتبة الإتقان 70%</div></div>' +(phaseCards?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> الأداء حسب مرحلة البحث</div><div style="display:flex;gap:9px;flex-wrap:wrap;">'+phaseCards+'</div>':'')
     + gainBox
-    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin:12px 0 6px;"> مقارنة المجموعات</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">المجموعة</th><th style="padding:7px;text-align:center;">جلسات</th><th style="padding:7px;text-align:center;">أسئلة</th><th style="padding:7px;text-align:center;">النسبة</th></tr></thead>' +'<tbody>'+groupRows+'</tbody></table>' +(weakRows?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> الفئات الأضعف (تحتاج تعزيزاً)</div><div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:11px;margin-bottom:14px;">'+weakRows+'</div>':'')
-    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> سجل الجلسات</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#FBF3E2;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;">#</th><th style="padding:6px 8px;text-align:right;">الجلسة</th><th style="padding:6px 8px;">المرحلة</th><th style="padding:6px 8px;">المجموعة</th><th style="padding:6px 8px;">التاريخ</th><th style="padding:6px 8px;">أسئلة</th><th style="padding:6px 8px;">النسبة</th></tr></thead>' +'<tbody>'+sessRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhPrintAnalytics()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة التقرير</button>' +'<button onclick="hhExportAnalyticsCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير بيانات البحث</button>' +'<button onclick="hhCloseAnalytics()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
+    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin:12px 0 6px;"> مقارنة المجموعات</div>' +'<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;">' +'<thead><tr style="background:#5E0E26;color:#fff;"><th style="padding:7px 10px;text-align:right;">المجموعة</th><th style="padding:7px;text-align:center;">جلسات</th><th style="padding:7px;text-align:center;">أسئلة</th><th style="padding:7px;text-align:center;">النسبة</th></tr></thead>' +'<tbody>'+groupRows+'</tbody></table>' +(weakRows?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> الفئات الأضعف (تحتاج تعزيزاً)</div><div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:11px;margin-bottom:14px;">'+weakRows+'</div>':'')
+    +'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:6px;"> سجل الجلسات</div>' +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#F5F3F0;color:#5E0E26;font-weight:900;">' +'<th style="padding:6px 8px;">#</th><th style="padding:6px 8px;text-align:right;">الجلسة</th><th style="padding:6px 8px;">المرحلة</th><th style="padding:6px 8px;">المجموعة</th><th style="padding:6px 8px;">التاريخ</th><th style="padding:6px 8px;">أسئلة</th><th style="padding:6px 8px;">النسبة</th></tr></thead>' +'<tbody>'+sessRows+'</tbody></table></div>' +'<div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;">' +'<button onclick="hhPrintAnalytics()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة التقرير</button>' +'<button onclick="hhExportAnalyticsCSV()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-weight:900;font-size:.84rem;cursor:pointer;"> تصدير بيانات البحث</button>' +'<button onclick="hhCloseAnalytics()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
 }
 function hhCloseAnalytics(){ var e=document.getElementById('hh-analytics'); if(e) e.remove(); }
@@ -6629,7 +6629,7 @@ function hhRenderAI(kind, d, lesson){
     var dl={easy:'سهل',med:'متوسط',hard:'صعب'};
     return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:10px;padding:12px;">' + '<div style="font-weight:900;color:#5E0E26;margin-bottom:9px;"> '+qs.length+' سؤالاً مولّداً · '+esc(lesson.lesson)+'</div>' + qs.map(function(q,i){
           var col=q.diff==='hard'?'#c0392b':q.diff==='med'?'#b5801f':'#3D6B53';
-          return '<div style="margin-bottom:10px;padding-bottom:9px;border-bottom:1px dashed #eee;">' + '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:3px;">' +   '<span style="background:'+col+';color:#fff;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+(dl[q.diff]||q.diff||'')+'</span>' +   (q.bloom?'<span style="background:#FBF3E2;color:#5E0E26;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(q.bloom)+'</span>':'')
+          return '<div style="margin-bottom:10px;padding-bottom:9px;border-bottom:1px dashed #eee;">' + '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:3px;">' +   '<span style="background:'+col+';color:#fff;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+(dl[q.diff]||q.diff||'')+'</span>' +   (q.bloom?'<span style="background:#F5F3F0;color:#5E0E26;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(q.bloom)+'</span>':'')
             + '</div>' + '<div style="font-weight:800;color:#333;font-size:.8rem;">'+(i+1)+'. '+esc(q.q||'')+'</div>' + '<div style="font-size:.73rem;color:#3D6B53;font-weight:800;margin-top:3px;">✓ '+esc(q.a||'')+'</div>' + (q.opts&&q.opts.length?'<div style="font-size:.68rem;color:#999;margin-top:2px;">خيارات: '+q.opts.map(function(o){return esc(o);}).join(' · ')+'</div>':'')
             + '</div>';
         }).join('')
@@ -6638,13 +6638,13 @@ function hhRenderAI(kind, d, lesson){
   if(kind==='quiz'){
     var it=d.items||[];
     return '<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:10px;padding:12px;">' + '<div style="font-weight:900;color:#3D6B53;margin-bottom:4px;"> '+esc(d.title||'اختبار')+'</div>' + '<div style="font-size:.7rem;color:#888;margin-bottom:9px;">الدرجة الكلية: '+(d.total||20)+'</div>' + it.map(function(x){
-          return '<div style="margin-bottom:9px;padding-bottom:8px;border-bottom:1px dashed #eee;">' + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:3px;">' +   '<span style="background:#EBF2EE;color:#3D6B53;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.type||'')+'</span>' +   '<span style="background:#FDF3DD;color:#8A6D2E;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.bloom||'')+'</span>' +   '<span style="color:#aaa;font-size:.62rem;font-weight:900;">('+(x.marks||2)+' درجة)</span>' + '</div>' + '<div style="font-weight:800;color:#333;font-size:.8rem;">'+(x.n||'')+'. '+esc(x.q||'')+'</div>' + (x.opts&&x.opts.length?'<div style="font-size:.72rem;color:#666;margin-top:3px;">'+x.opts.map(function(o){return '◻ '+esc(o);}).join(' ')+'</div>':'')
+          return '<div style="margin-bottom:9px;padding-bottom:8px;border-bottom:1px dashed #eee;">' + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:3px;">' +   '<span style="background:#EBF2EE;color:#3D6B53;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.type||'')+'</span>' +   '<span style="background:#F5F3F0;color:#8A6D2E;border-radius:6px;padding:1px 7px;font-size:.62rem;font-weight:900;">'+esc(x.bloom||'')+'</span>' +   '<span style="color:#aaa;font-size:.62rem;font-weight:900;">('+(x.marks||2)+' درجة)</span>' + '</div>' + '<div style="font-weight:800;color:#333;font-size:.8rem;">'+(x.n||'')+'. '+esc(x.q||'')+'</div>' + (x.opts&&x.opts.length?'<div style="font-size:.72rem;color:#666;margin-top:3px;">'+x.opts.map(function(o){return '◻ '+esc(o);}).join(' ')+'</div>':'')
             + '<div style="font-size:.72rem;color:#3D6B53;font-weight:800;margin-top:3px;">✓ '+esc(x.a||'')+'</div></div>';
         }).join('')
       + '<button onclick="hhPrintGen()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-top:6px;"> طباعة الاختبار</button>' + '</div>';
   }
   if(kind==='summary'){
-    return '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:10px;padding:13px;">' + '<div style="font-weight:900;color:#8A6D2E;margin-bottom:6px;"> '+esc(d.title||lesson.lesson)+'</div>' + (d.idea?'<div style="background:#fff;border-right:3px solid #B8924A;border-radius:8px;padding:9px 11px;margin-bottom:9px;font-weight:800;color:#5E0E26;font-size:.82rem;"> '+esc(d.idea)+'</div>':'')
+    return '<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:10px;padding:13px;">' + '<div style="font-weight:900;color:#8A6D2E;margin-bottom:6px;"> '+esc(d.title||lesson.lesson)+'</div>' + (d.idea?'<div style="background:#fff;border-right:3px solid #B8924A;border-radius:8px;padding:9px 11px;margin-bottom:9px;font-weight:800;color:#5E0E26;font-size:.82rem;"> '+esc(d.idea)+'</div>':'')
       + ((d.points||[]).length?'<div style="font-weight:900;font-size:.78rem;color:#8A6D2E;margin-bottom:4px;">النقاط الرئيسة</div>' + (d.points||[]).map(function(p){return '<div style="font-size:.79rem;margin-bottom:4px;color:#444;">• '+esc(p)+'</div>';}).join(''):'')
       + ((d.terms||[]).length?'<div style="font-weight:900;font-size:.78rem;color:#8A6D2E;margin:9px 0 4px;">المصطلحات</div>' + (d.terms||[]).map(function(t){return '<div style="font-size:.76rem;margin-bottom:3px;"><b style="color:#5E0E26;">'+esc(t.term)+':</b> '+esc(t.def)+'</div>';}).join(''):'')
       + (d.conclusion?'<div style="margin-top:9px;padding-top:8px;border-top:1px solid #eee2c8;font-size:.79rem;color:#555;font-weight:700;">'+esc(d.conclusion)+'</div>':'')
@@ -6662,7 +6662,7 @@ function hhRenderAI(kind, d, lesson){
       + '</div>';
   }
   if(kind==='challenge'){
-    return '<div style="background:linear-gradient(135deg,#FDF3DD,#f7e9c9);border:2px solid #B8924A;border-radius:12px;padding:14px;">' + '<div style="font-weight:900;color:#8A6D2E;margin-bottom:6px;"> تحدي الدرس ('+(d.points||600)+' نقطة)</div>' + '<div style="font-size:.88rem;font-weight:800;color:#5E0E26;line-height:1.9;margin-bottom:8px;">'+esc(d.challenge||'')+'</div>' + ((d.hints||[]).length?'<div style="font-size:.74rem;color:#777;margin-bottom:6px;"> تلميحات: '+(d.hints||[]).map(function(h){return esc(h);}).join(' · ')+'</div>':'')
+    return '<div style="background:linear-gradient(135deg,#F5F3F0,#f7e9c9);border:2px solid #B8924A;border-radius:12px;padding:14px;">' + '<div style="font-weight:900;color:#8A6D2E;margin-bottom:6px;"> تحدي الدرس ('+(d.points||600)+' نقطة)</div>' + '<div style="font-size:.88rem;font-weight:800;color:#5E0E26;line-height:1.9;margin-bottom:8px;">'+esc(d.challenge||'')+'</div>' + ((d.hints||[]).length?'<div style="font-size:.74rem;color:#777;margin-bottom:6px;"> تلميحات: '+(d.hints||[]).map(function(h){return esc(h);}).join(' · ')+'</div>':'')
       + '<div style="background:#fff;border-radius:8px;padding:9px 11px;font-size:.78rem;color:#3D6B53;font-weight:800;">✓ '+esc(d.answer||'')+'</div>' + (d.skill?'<div style="font-size:.7rem;color:#999;margin-top:5px;">المهارة: '+esc(d.skill)+'</div>':'')
       + '</div>';
   }
@@ -6723,7 +6723,7 @@ function hhAISettings(){
   var cur = hhGetAIEndpoint();
   var ov=document.createElement('div'); ov.id='hh-aiset';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999996;display:flex;align-items:center;justify-content:center;padding:18px;direction:rtl;';
-  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:520px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> إعدادات التوليد الذكي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;color:#555;line-height:1.9;margin-bottom:10px;">الصق رابط الوسيط السحابي (Cloud Function). بعد حفظه سيعمل التوليد الذكي لك ولكل من يستخدم المنصة.</div>' +'<input id="ai-url" type="text" value="'+esc(cur)+'" placeholder="https://us-central1-اسم-مشروعك.cloudfunctions.net/generateContent" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:monospace;font-size:.76rem;box-sizing:border-box;margin-bottom:10px;direction:ltr;text-align:left;">' +'<div id="ai-set-status" style="font-size:.74rem;font-weight:800;min-height:16px;margin-bottom:8px;"></div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhSaveAIEndpoint()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.83rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhTestAIEndpoint()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">اختبار الاتصال</button>' +'<button onclick="document.getElementById(\'hh-aiset\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">إغلاق</button>' +'</div>' +'<div style="font-size:.7rem;color:#999;margin-top:10px;line-height:1.7;">لم تنشئ الوسيط بعد؟ راجع ملف firebase-functions-index.js · التركيب لا يتجاوز 10 دقائق.</div>' +'</div></div>';
+  ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:520px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> إعدادات التوليد الذكي</div>' +'<div style="padding:16px 18px;">' +'<div style="font-size:.78rem;color:#555;line-height:1.9;margin-bottom:10px;">الصق رابط الوسيط السحابي (Cloud Function). بعد حفظه سيعمل التوليد الذكي لك ولكل من يستخدم المنصة.</div>' +'<input id="ai-url" type="text" value="'+esc(cur)+'" placeholder="https://us-central1-اسم-مشروعك.cloudfunctions.net/generateContent" style="width:100%;border:1.5px solid #B8924A;border-radius:10px;padding:9px 12px;font-family:monospace;font-size:.76rem;box-sizing:border-box;margin-bottom:10px;direction:ltr;text-align:left;">' +'<div id="ai-set-status" style="font-size:.74rem;font-weight:800;min-height:16px;margin-bottom:8px;"></div>' +'<div style="display:flex;gap:9px;flex-wrap:wrap;">' +'<button onclick="hhSaveAIEndpoint()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.83rem;cursor:pointer;">حفظ</button>' +'<button onclick="hhTestAIEndpoint()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">اختبار الاتصال</button>' +'<button onclick="document.getElementById(\'hh-aiset\').remove()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.83rem;cursor:pointer;">إغلاق</button>' +'</div>' +'<div style="font-size:.7rem;color:#999;margin-top:10px;line-height:1.7;">لم تنشئ الوسيط بعد؟ راجع ملف firebase-functions-index.js · التركيب لا يتجاوز 10 دقائق.</div>' +'</div></div>';
   document.body.appendChild(ov);
 }
 function hhSaveAIEndpoint(){
@@ -6905,14 +6905,14 @@ function hhGuideRender(role){
     return '<div style="font-size:.79rem;color:#555;line-height:1.9;margin-bottom:5px;">• '+esc(t)+'</div>';
   }).join('');
 
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid '+G.color+';border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid '+G.color+';border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(135deg,'+G.color+','+G.dark+');color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1.05rem;">'+esc(G.title)+'</div>'
     +'<div style="font-size:.76rem;opacity:.88;margin-top:3px;">'+esc(G.intro)+'</div></div>'
     +'<button onclick="hhCloseGuide()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:16px 18px;">'
     + steps
-    +'<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:13px;padding:13px;margin-top:13px;">'
+    +'<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:13px;padding:13px;margin-top:13px;">'
     +'<div style="font-weight:900;font-size:.85rem;color:#8A6D2E;margin-bottom:7px;">نصائح تختصر عليك الطريق</div>'+tips+'</div>'
     +'<button onclick="hhGuidePick(\''+other+'\')" style="width:100%;background:#fff;color:'+G.dark+';border:1.5px solid '+G.color+';border-radius:12px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:12px;">عرض '+esc(otherLbl)+' بدلاً منه</button>'
     +'</div></div>';
@@ -7092,13 +7092,13 @@ function hhRenderTeacherDir(){
   var avgScore=Math.round(D.reduce(function(a,t){return a+t.score;},0)/D.length);
 
   var cards='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;">'
-    +'<div style="background:#FBF3E2;border-radius:12px;padding:11px;text-align:center;">'
+    +'<div style="background:#F5F3F0;border-radius:12px;padding:11px;text-align:center;">'
     +'<div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+D.length+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">معلم معتمد</div></div>'
     +'<div style="background:#EBF2EE;border-radius:12px;padding:11px;text-align:center;">'
     +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+active+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">نشط هذا الأسبوع</div></div>'
     +'<div style="background:#F7ECEF;border-radius:12px;padding:11px;text-align:center;">'
     +'<div style="font-size:1.5rem;font-weight:900;color:#c0392b;">'+idle+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">خامل / لم يبدأ</div></div>'
-    +'<div style="background:#FDF3DD;border-radius:12px;padding:11px;text-align:center;">'
+    +'<div style="background:#F5F3F0;border-radius:12px;padding:11px;text-align:center;">'
     +'<div style="font-size:1.5rem;font-weight:900;color:#B8924A;">'+totStudents+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">طالب</div></div>'
     +'<div style="background:#F5E9EE;border-radius:12px;padding:11px;text-align:center;">'
     +'<div style="font-size:1.5rem;font-weight:900;color:#8A1538;">'+totClasses+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">صف</div></div>'
@@ -7136,7 +7136,7 @@ function hhRenderTeacherDir(){
       +'<td style="padding:6px;text-align:center;font-size:.74rem;">'+t.certs+'</td>'
       +'<td style="padding:6px;text-align:center;">'+bar+' <span style="font-size:.72rem;font-weight:900;color:'+col+';">'+t.score+'</span></td>'
       +'<td style="padding:6px;text-align:center;"><span style="background:'+col+';color:#fff;border-radius:7px;padding:2px 9px;font-size:.64rem;font-weight:900;">'+esc(t.state)+'</span></td>'
-      +'<td style="padding:4px;text-align:center;"><button onclick="hhTeacherProfile('+i+')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تحليل</button></td></tr>';
+      +'<td style="padding:4px;text-align:center;"><button onclick="hhTeacherProfile('+i+')" style="background:#F5F3F0;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تحليل</button></td></tr>';
   }).join('');
 
   box.innerHTML = cards + alertHTML
@@ -7148,7 +7148,7 @@ function hhRenderTeacherDir(){
     +'<tbody>'+rows+'</tbody></table></div>'
     +'<div style="display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;">'
     +'<button onclick="hhDirExportCSV()" style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير الدليل CSV</button>'
-    +'<button onclick="hhDirNotifyIdle()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تنبيه الخاملين</button>'
+    +'<button onclick="hhDirNotifyIdle()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تنبيه الخاملين</button>'
     +'</div>';
 }
 
@@ -7169,9 +7169,9 @@ function hhTeacherProfile(i){
     +'<div style="background:'+col+';color:#fff;border-radius:13px;padding:14px;text-align:center;flex:1;min-width:110px;">'
     +'<div style="font-size:1.8rem;font-weight:900;">'+t.score+'</div><div style="font-size:.68rem;opacity:.9;">مؤشر النشاط</div>'
     +'<div style="font-size:.72rem;font-weight:900;margin-top:3px;">'+esc(t.state)+'</div></div>'
-    +'<div style="background:#FBF3E2;border-radius:13px;padding:14px;text-align:center;flex:1;min-width:90px;">'
+    +'<div style="background:#F5F3F0;border-radius:13px;padding:14px;text-align:center;flex:1;min-width:90px;">'
     +'<div style="font-size:1.6rem;font-weight:900;color:#5E0E26;">'+t.students+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">طالباً</div></div>'
-    +'<div style="background:#FDF3DD;border-radius:13px;padding:14px;text-align:center;flex:1;min-width:90px;">'
+    +'<div style="background:#F5F3F0;border-radius:13px;padding:14px;text-align:center;flex:1;min-width:90px;">'
     +'<div style="font-size:1.6rem;font-weight:900;color:#B8924A;">'+t.acts+'</div><div style="font-size:.68rem;color:#666;font-weight:800;">نشاطاً</div></div>'
     +'</div>'
     +'<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:12px;padding:12px;margin-bottom:12px;">'
@@ -7188,7 +7188,7 @@ function hhTeacherProfile(i){
     +'</div>'
     +'<div style="font-weight:900;font-size:.84rem;color:#5E0E26;margin-bottom:7px;">توصيات المتابعة</div>'
     + recs.map(function(r){
-        return '<div style="background:#FDF8EC;border-right:3px solid #B8924A;border-radius:10px;padding:9px 12px;margin-bottom:6px;font-size:.78rem;color:#555;line-height:1.85;">'+esc(r)+'</div>';
+        return '<div style="background:#F5F3F0;border-right:3px solid #B8924A;border-radius:10px;padding:9px 12px;margin-bottom:6px;font-size:.78rem;color:#555;line-height:1.85;">'+esc(r)+'</div>';
       }).join('')
     +'<button onclick="hhDirNotifyOne(\''+t.uid+'\',\''+esc(t.name)+'\')" style="width:100%;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#fff;border:none;border-radius:11px;padding:10px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:9px;">إرسال رسالة تشجيع</button>';
   if(typeof hhSchModal==='function') hhSchModal('تحليل: '+t.name, html, col);
@@ -7256,7 +7256,7 @@ async function hhAdmLoadTeachers(filter){
         +' <span style="background:'+col+';color:#fff;border-radius:7px;padding:2px 9px;font-size:.63rem;">'+lbl+'</span></div>'
         +'<div style="font-size:.75rem;color:#777;margin-top:3px;">'+esc(t.school||'')+' · '+esc(t.subject||'')+'</div>'
         +'<div style="font-size:.7rem;color:#aaa;margin-top:1px;">'+esc(t.email||'')+'</div>'
-        +(t.note?'<div style="font-size:.74rem;color:#666;margin-top:5px;background:#FDF8EC;border-radius:8px;padding:6px 9px;">'+esc(t.note)+'</div>':'')
+        +(t.note?'<div style="font-size:.74rem;color:#666;margin-top:5px;background:#F5F3F0;border-radius:8px;padding:6px 9px;">'+esc(t.note)+'</div>':'')
         +'</div>'
         +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
         +(st!=='approved'?'<button onclick="hhSetTeacherStatus(\''+t.id+'\',\'approved\');setTimeout(function(){hhAdmLoadTeachers(\'all\');},900)" style="background:#3D6B53;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">اعتماد</button>':'')
@@ -7279,7 +7279,7 @@ async function hhAdmLoadClasses(){
     }
     var totalStudents=items.reduce(function(a,c){ return a+((c.studentUids||[]).length); },0);
     box.innerHTML='<div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">'
-      +'<div style="background:#FBF3E2;border-radius:12px;padding:11px 16px;text-align:center;flex:1;min-width:110px;font-family:Cairo;">'
+      +'<div style="background:#F5F3F0;border-radius:12px;padding:11px 16px;text-align:center;flex:1;min-width:110px;font-family:Cairo;">'
       +'<div style="font-size:1.5rem;font-weight:900;color:#5E0E26;">'+items.length+'</div><div style="font-size:.7rem;color:#666;font-weight:800;">صف</div></div>'
       +'<div style="background:#EBF2EE;border-radius:12px;padding:11px 16px;text-align:center;flex:1;min-width:110px;font-family:Cairo;">'
       +'<div style="font-size:1.5rem;font-weight:900;color:#3D6B53;">'+totalStudents+'</div><div style="font-size:.7rem;color:#666;font-weight:800;">طالب منضم</div></div>'
@@ -7295,7 +7295,7 @@ async function hhAdmLoadClasses(){
           +'<div style="font-size:.72rem;color:#3D6B53;font-weight:800;margin-top:3px;">'+n+' طالباً'+(names?' · '+names+(n>6?' ...':''):'')+'</div>'
           +'</div>'
           +'<div style="text-align:center;">'
-          +'<div style="background:#FDF3DD;border:1.5px dashed #B8924A;border-radius:9px;padding:5px 14px;font-family:monospace;font-weight:900;font-size:1rem;color:#8A6D2E;letter-spacing:2px;">'+esc(C.code||'')+'</div>'
+          +'<div style="background:#F5F3F0;border:1.5px dashed #B8924A;border-radius:9px;padding:5px 14px;font-family:monospace;font-weight:900;font-size:1rem;color:#8A6D2E;letter-spacing:2px;">'+esc(C.code||'')+'</div>'
           +'<div style="font-size:.6rem;color:#aaa;margin-top:2px;">كود الصف</div></div>'
           +'</div></div>';
       }).join('');
@@ -7388,7 +7388,7 @@ function hhBulkImportStudents(){
   var clsOpts=(_hhMyClasses||[]).map(function(C){
     return '<option value="'+esc(C.id)+'">'+esc(C.name||'صف')+'</option>';
   }).join('');
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:22px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:22px;">'
     +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب</div>'
     +'<div style="font-size:.73rem;opacity:.86;margin-top:2px;">من Excel أو CSV أو لصق مباشر · بضغطة واحدة</div></div>'
@@ -7399,7 +7399,7 @@ function hhBulkImportStudents(){
       ? '<div style="font-size:.76rem;font-weight:800;color:#5E0E26;margin-bottom:4px;">الصف المستهدف</div>'
         +'<select id="bulk-class" style="width:100%;border:1.5px solid #E3D9C6;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.83rem;box-sizing:border-box;margin-bottom:12px;">'
         +'<option value="">· دفتر المتابعة فقط (بلا صف) ·</option>'+clsOpts+'</select>'
-      : '<div style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:10px;padding:10px 12px;font-size:.76rem;color:#8A6D2E;font-weight:800;line-height:1.8;margin-bottom:12px;">'
+      : '<div style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:10px;padding:10px 12px;font-size:.76rem;color:#8A6D2E;font-weight:800;line-height:1.8;margin-bottom:12px;">'
         +'لم تنشئ صفوفاً بعد · سيُضاف الطلاب لدفتر المتابعة مباشرة.</div>')
     // خطوة 2: الملف
     +'<div style="background:#fff;border:1.5px solid #B8924A;border-radius:13px;padding:13px;margin-bottom:12px;">'
@@ -7429,7 +7429,7 @@ function hhBulkFile(input){
   var isXlsx=/\.xlsx?$/i.test(f.name);
   if(isXlsx){
     var box=document.getElementById('bulk-preview');
-    if(box) box.innerHTML='<div style="background:#FDF3DD;border:1.5px solid #B8924A;border-radius:11px;padding:12px;font-size:.79rem;color:#8A6D2E;font-weight:800;line-height:1.9;">'
+    if(box) box.innerHTML='<div style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:11px;padding:12px;font-size:.79rem;color:#8A6D2E;font-weight:800;line-height:1.9;">'
       +'ملفات Excel تحتاج تحويلاً بسيطاً:<br>افتح الملف في Excel ← <b>ملف</b> ← <b>حفظ باسم</b> ← اختر <b>CSV UTF-8</b> ← ثم ارفعه هنا.<br>'
       +'<span style="font-size:.73rem;color:#aaa;">أو انسخ عمود الأسماء والصقه في المربع أدناه مباشرة.</span></div>';
     return;
@@ -7466,9 +7466,9 @@ function hhBulkPreview(){
   box.innerHTML='<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:10px;">'
     +'<div style="background:#EBF2EE;border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:88px;">'
     +'<div style="font-size:1.3rem;font-weight:900;color:#3D6B53;">'+_hhBulkRows.length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">طالباً</div></div>'
-    +'<div style="background:#FBF3E2;border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:88px;">'
+    +'<div style="background:#F5F3F0;border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:88px;">'
     +'<div style="font-size:1.3rem;font-weight:900;color:#5E0E26;">'+_hhBulkRows.filter(function(r){return r.email;}).length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">ببريد</div></div>'
-    + (dups?'<div style="background:#FDF3DD;border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:88px;">'
+    + (dups?'<div style="background:#F5F3F0;border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:88px;">'
       +'<div style="font-size:1.3rem;font-weight:900;color:#b5801f;">'+dups+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">مكرر (يُتجاهل)</div></div>':'')
     +'</div>'
     +'<div style="overflow-x:auto;max-height:260px;overflow-y:auto;border:1.5px solid #E3D9C6;border-radius:11px;">'
@@ -7623,14 +7623,14 @@ function hhOpenGradebook(){
     return '<option value="'+esc(C.id)+'">'+esc(C.name||'صف')+'</option>';
   }).join('');
 
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;color:#F5E6C4;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">دفتر المتابعة</div>'
     +'<div style="font-size:.72rem;opacity:.85;margin-top:2px;">درجات · حضور · سلوك · تواصل</div></div>'
     +'<button onclick="hhCloseGB()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:15px 18px;">'
     +'<div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;">'
-    +'<button onclick="hhGBTab(\'grades\')" id="gbt-grades" style="flex:1;min-width:80px;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الدرجات</button>'
+    +'<button onclick="hhGBTab(\'grades\')" id="gbt-grades" style="flex:1;min-width:80px;background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الدرجات</button>'
     +'<button onclick="hhGBTab(\'attend\')" id="gbt-attend" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">الحضور</button>'
     +'<button onclick="hhGBTab(\'notes\')" id="gbt-notes" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">السلوك والمهارات</button>'
     +'<button onclick="hhGBTab(\'report\')" id="gbt-report" style="flex:1;min-width:80px;background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">التقارير</button>'
@@ -7645,7 +7645,7 @@ function hhGBTab(t){
   ['grades','attend','notes','report'].forEach(function(k){
     var b=document.getElementById('gbt-'+k); if(!b) return;
     var on = (k===t);
-    b.style.background = on? 'linear-gradient(135deg,#EAD9B0,#B8924A)' : 'rgba(184,146,74,.08)';
+    b.style.background = on? '#FFFFFF' : 'rgba(184,146,74,.08)';
     b.style.color = on? '#3D0918' : '#8A6D2E';
     b.style.border = on? '1px solid #FDF3DD' : '1px solid #B8924A';
   });
@@ -7673,7 +7673,7 @@ function hhGBGradesView(){
       +'<td style="padding:6px;text-align:center;font-size:.68rem;color:#aaa;">'+esc((g.date||'').slice(5))+'</td>'
       +'<td style="padding:4px;text-align:center;"><button onclick="hhGBDelGrade('+(_hhGB.grades.length-1-i)+')" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:.9rem;">✕</button></td></tr>';
   }).join('');
-  return '<div style="background:#fff;background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:14px;padding:13px;margin-bottom:13px;">'
+  return '<div style="background:#fff;background:linear-gradient(170deg,#FFFFFF,#F5F3F0);border:1.5px solid #B8924A;border-radius:14px;padding:13px;margin-bottom:13px;">'
     +'<div style="font-weight:900;font-size:.85rem;color:#8A1538;margin-bottom:9px;">رصد درجة جديدة</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;">'
     +'<select id="gb-student" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px;font-family:Cairo;font-size:.78rem;">'+studOpts+'</select>'
@@ -7682,7 +7682,7 @@ function hhGBGradesView(){
     +'<input id="gb-max" type="number" min="1" value="10" placeholder="من" style="border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.78rem;box-sizing:border-box;">'
     +'</div>'
     +'<button onclick="hhGBAddGrade()" style="background:linear-gradient(175deg,#7A1330,#4A0B1E);color:#F5E6C4;border:1px solid #B8924A;border-radius:10px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">رصد</button>'
-    +'<button onclick="hhBulkImportStudents()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">استيراد من Excel</button>'
+    +'<button onclick="hhBulkImportStudents()" style="background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:10px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">استيراد من Excel</button>'
     +'<button onclick="hhGBAddStudent()" style="background:#fff;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">إضافة يدوية</button>'
     +'<button onclick="hhGBSchoolScores()" style="background:rgba(184,146,74,.08);color:#8A6D2E;border:1px solid #B8924A;border-radius:10px;padding:9px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;margin-right:6px;">درجات مدرستي للطالب</button>'
     +'</div>'
@@ -7725,7 +7725,7 @@ async function hhGBSchoolScores(){
             +'<div style="text-align:center;">'+chip(q)+'</div><div style="text-align:center;">'+chip(f)+'</div></div>';
         });
         if(m!==undefined){
-          rows += '<div style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:10px;padding:7px 13px;margin:0 0 10px;">'
+          rows += '<div style="display:flex;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #FDF3DD;border-radius:10px;padding:7px 13px;margin:0 0 10px;">'
             +'<span style="color:#3D0918;font-weight:900;font-size:.72rem;">إتقان '+esc(U.unit)+'</span>'
             +'<span style="color:#3D0918;font-weight:900;font-size:.8rem;">'+m+'%</span></div>';
         }
@@ -7741,7 +7741,7 @@ function hhGBScoresModal(title, html){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999996;display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
   ov.onclick=function(ev){ if(ev.target===ov) ov.remove(); };
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:560px;width:100%;padding:16px;">'+'<div style="font-weight:900;color:#8A1538;margin-bottom:10px;">'+title+'</div>'+html+'</div>';
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:18px;max-width:560px;width:100%;padding:16px;">'+'<div style="font-weight:900;color:#8A1538;margin-bottom:10px;">'+title+'</div>'+html+'</div>';
   document.body.appendChild(ov);
 }
 
@@ -7901,12 +7901,12 @@ function hhGBReportView(){
       +'<td style="padding:6px;text-align:center;font-size:.73rem;"><span style="color:#3D6B53;font-weight:900;">'+pos+'</span> / <span style="color:#c0392b;font-weight:900;">'+neg+'</span></td>'
       +'<td style="padding:4px;text-align:center;white-space:nowrap;">'
       +'<button onclick="hhShowDiagnosis('+i+')" style="background:#5E0E26;color:#fff;border:none;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;margin-left:3px;">تشخيص</button>'
-      +'<button onclick="hhGBStudentCard('+i+')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">بطاقة</button></td></tr>';
+      +'<button onclick="hhGBStudentCard('+i+')" style="background:#F5F3F0;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">بطاقة</button></td></tr>';
   }).join('');
   return '<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px;">'
-    +'<div style="background:#FBF3E2;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:88px;">'
+    +'<div style="background:#F5F3F0;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:88px;">'
     +'<div style="font-size:1.35rem;font-weight:900;color:#5E0E26;">'+studs.length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">طالب</div></div>'
-    +'<div style="background:#FDF3DD;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:88px;">'
+    +'<div style="background:#F5F3F0;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:88px;">'
     +'<div style="font-size:1.35rem;font-weight:900;color:#B8924A;">'+_hhGB.grades.length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">درجة مرصودة</div></div>'
     +'<div style="background:#EBF2EE;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:88px;">'
     +'<div style="font-size:1.35rem;font-weight:900;color:#3D6B53;">'+_hhGB.attendance.length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">سجل حضور</div></div>'
@@ -7922,7 +7922,7 @@ function hhGBReportView(){
     +'<tbody>'+rows+'</tbody></table></div>'
     +'<div style="display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;">'
     +'<button onclick="hhGBExport()" style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير الدفتر CSV</button>'
-    +'<button onclick="hhGBPrint()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">طباعة</button>'
+    +'<button onclick="hhGBPrint()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">طباعة</button>'
     +'</div>';
 }
 function hhGBStudentCard(i){
@@ -7934,7 +7934,7 @@ function hhGBStudentCard(i){
   var totMax=gr.reduce(function(a,g){return a+g.max;},0);
   var pct=totMax? Math.round(totScore/totMax*100):0;
   var html='<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px;">'
-    +'<div style="background:#FBF3E2;border-radius:11px;padding:11px;text-align:center;flex:1;min-width:90px;">'
+    +'<div style="background:#F5F3F0;border-radius:11px;padding:11px;text-align:center;flex:1;min-width:90px;">'
     +'<div style="font-size:1.4rem;font-weight:900;color:#5E0E26;">'+(totMax?pct+'%':'·')+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">المعدل</div></div>'
     +'<div style="background:#EBF2EE;border-radius:11px;padding:11px;text-align:center;flex:1;min-width:90px;">'
     +'<div style="font-size:1.4rem;font-weight:900;color:#3D6B53;">'+att.filter(function(a){return a.status==='present';}).length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">حضور</div></div>'
@@ -8153,7 +8153,7 @@ function hhShowDiagnosis(i){
 
   var html = gauge + trendBox
     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px;">'
-    +'<div style="background:#FBF3E2;border-radius:10px;padding:9px;text-align:center;flex:1;min-width:78px;">'
+    +'<div style="background:#F5F3F0;border-radius:10px;padding:9px;text-align:center;flex:1;min-width:78px;">'
     +'<div style="font-size:1.2rem;font-weight:900;color:#5E0E26;">'+(D.achieve!==null?D.achieve+'%':'·')+'</div><div style="font-size:.63rem;color:#666;font-weight:800;">التحصيل</div></div>'
     +'<div style="background:#EBF2EE;border-radius:10px;padding:9px;text-align:center;flex:1;min-width:78px;">'
     +'<div style="font-size:1.2rem;font-weight:900;color:#3D6B53;">'+(D.attendance!==null?D.attendance+'%':'·')+'</div><div style="font-size:.63rem;color:#666;font-weight:800;">الانتظام</div></div>'
@@ -8641,7 +8641,7 @@ function hhSealPicker(){
   var old=document.getElementById('hh-seal'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-seal';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.76);z-index:999996;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:620px;width:100%;overflow:hidden;margin-bottom:22px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:620px;width:100%;overflow:hidden;margin-bottom:22px;">'
     +'<div style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">ختم المنصة</div>'
     +'<div style="font-size:.73rem;opacity:.87;margin-top:2px;">اختر التصميم · يظهر على كل الشهادات</div></div>'
@@ -9115,14 +9115,14 @@ function hhOpenCertificates(){
   var typeOpts=HH_CERT_TYPES.map(function(t){ return '<option value="'+t.id+'">'+esc(t.name)+'</option>'; }).join('');
   var myName=(typeof currentUser!=='undefined'&&currentUser)?(currentUser.displayName||(currentUser.email||'').split('@')[0]||''):'';
 
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;color:#F5E6C4;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">مركز الشهادات المعتمدة</div>'
     +'<div style="font-size:.73rem;opacity:.87;margin-top:2px;">تصدر باسمك وبختم المنصة لطلابك المتقنين</div></div>'
     +'<button onclick="hhCloseCert()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>'
     +'<div style="padding:16px 18px;">'
     // ── شريط الجهة المُصدِرة (مقفل للجميع عدا الأدمن) ──
-    +'<div style="background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:12px;padding:11px 13px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;">'
+    +'<div style="background:linear-gradient(170deg,#FFFFFF,#F5F3F0);border:1.5px solid #B8924A;border-radius:12px;padding:11px 13px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;">'
     +'<div><div style="font-size:.68rem;color:#999;font-weight:800;">الجهة المُصدِرة</div>'
     +'<div style="font-weight:900;font-size:.88rem;color:#8A6D2E;">'+esc(_hhCertIssuer.org)
     +' <span style="background:#3D6B53;color:#fff;border-radius:6px;padding:1px 8px;font-size:.6rem;">موثّقة</span></div>'
@@ -9132,7 +9132,7 @@ function hhOpenCertificates(){
        : '<span style="font-size:.68rem;color:#999;font-weight:800;">غير قابلة للتعديل</span>')
     +'</div>'
     // ── النموذج ──
-    +'<div style="background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1.5px solid #B8924A;border-radius:14px;padding:14px;margin-bottom:14px;">'
+    +'<div style="background:linear-gradient(170deg,#FFFFFF,#F5F3F0);border:1.5px solid #B8924A;border-radius:14px;padding:14px;margin-bottom:14px;">'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px;">'
     +'<div><div style="font-size:.75rem;font-weight:800;color:#8A6D2E;margin-bottom:4px;">اسم الطالب</div>'
     + (studOpts
@@ -9160,7 +9160,7 @@ function hhOpenCertificates(){
     + (myName? ' <span style="color:#888;font-weight:700;">('+esc(myName)+')</span>':'') +'</span></label>'
     +'<div style="font-size:.68rem;color:#999;margin-top:5px;line-height:1.7;">اسم المعلم يُؤخذ من حسابك ولا يمكن تغييره · ضماناً لموثوقية الشهادة.</div>'
     +'</div>'
-    +'<button onclick="hhGenerateCert()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:10px 24px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,109,46,.3);">🎖 إصدار الشهادة</button>'
+    +'<button onclick="hhGenerateCert()" style="background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:10px 24px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;box-shadow:0 4px 12px rgba(138,109,46,.3);">🎖 إصدار الشهادة</button>'
     +'</div>'
     +'<div id="cert-preview"></div>'
     +'</div></div>';
@@ -9217,7 +9217,7 @@ async function hhGenerateCert(){
           +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
           +'<button onclick="hhCertPDF()" style="flex:1;min-width:120px;background:linear-gradient(135deg,#c0392b,#8e2b20);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">تنزيل PDF</button>'
           +'<button onclick="hhDownloadCert()" style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;border:none;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">PNG</button>'
-          +'<button onclick="hhPrintCert()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">طباعة</button>'
+          +'<button onclick="hhPrintCert()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">طباعة</button>'
           +'<button onclick="hhShareCert()" style="background:#25d366;color:#fff;border:none;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">مشاركة</button>'
           +'</div>'
           +'<div style="font-size:.71rem;color:#999;margin-top:8px;text-align:center;line-height:1.75;">'+esc(chosenTpl.name)+' · الختم مضاف إلزامياً</div>';
@@ -9337,7 +9337,7 @@ async function hhGenerateCert(){
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
       +'<button onclick="hhCertPDF()" style="flex:1;min-width:120px;background:linear-gradient(135deg,#c0392b,#8e2b20);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">تنزيل PDF</button>'
       +'<button onclick="hhDownloadCert()" style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;border:none;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">PNG</button>'
-      +'<button onclick="hhPrintCert()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 18px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">طباعة</button>'
+      +'<button onclick="hhPrintCert()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 18px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">طباعة</button>'
       +'<button onclick="hhShareCert()" style="background:#25d366;color:#fff;border:none;border-radius:11px;padding:11px 18px;font-family:Cairo;font-weight:900;font-size:.84rem;cursor:pointer;">مشاركة</button>'
       +'</div>'
       +'<div style="font-size:.71rem;color:#999;margin-top:8px;text-align:center;line-height:1.75;">دقة 3200×2260 · A4 أفقي · رقم التحقق: <b style="color:#8A6D2E;font-family:monospace;">'+serial+'</b></div>';
@@ -9543,16 +9543,16 @@ async function hhOpenClasses(){
       +'<div><div style="font-weight:900;font-size:.87rem;color:#5E0E26;">'+esc(C.name||'صف')+'</div>'
       +'<div style="font-size:.72rem;color:#888;margin-top:2px;">'+esc(C.subject||'')+' · '+n+' طالباً</div></div>'
       +'<div style="text-align:center;">'
-      +'<div style="background:#FDF3DD;border:1.5px dashed #B8924A;border-radius:9px;padding:5px 14px;font-family:monospace;font-weight:900;font-size:1rem;color:#8A6D2E;letter-spacing:2px;">'+esc(C.code||'')+'</div>'
+      +'<div style="background:#F5F3F0;border:1.5px dashed #B8924A;border-radius:9px;padding:5px 14px;font-family:monospace;font-weight:900;font-size:1rem;color:#8A6D2E;letter-spacing:2px;">'+esc(C.code||'')+'</div>'
       +'<div style="font-size:.62rem;color:#aaa;margin-top:2px;">كود الانضمام</div></div></div>'
       +'<div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;">'
-      +'<button onclick="hhClassStudents(\''+C.id+'\')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">الطلاب ('+n+')</button>'
+      +'<button onclick="hhClassStudents(\''+C.id+'\')" style="background:#F5F3F0;color:#5E0E26;border:1px solid #B8924A;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">الطلاب ('+n+')</button>'
       +'<button onclick="hhCopyClassLink(\''+esc(C.code||'')+'\')" style="background:#EBF2EE;color:#3D6B53;border:1px solid #3D6B53;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">نسخ رابط الدعوة</button>'
       +'<button onclick="hhDeleteClass(\''+C.id+'\')" style="background:#fff;color:#c0392b;border:1px solid #e0c0c0;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حذف</button>'
       +'</div></div>';
   }).join('') : '<div style="text-align:center;color:#999;font-weight:700;padding:18px;font-size:.82rem;">لم تنشئ صفوفاً بعد</div>';
 
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:600px;width:100%;overflow:hidden;margin-bottom:20px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:18px;max-width:600px;width:100%;overflow:hidden;margin-bottom:20px;">'
     +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);border-bottom:2px solid #B8924A;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div style="font-weight:900;font-size:.94rem;">صفوفي</div>'
     +'<button onclick="document.getElementById(\'hh-classes\').remove()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button></div>'
@@ -9610,7 +9610,7 @@ async function hhClassStudents(id){
             +'<td style="padding:6px;text-align:center;font-size:.7rem;color:#888;">'+esc((s.joinedAt||'').slice(0,10))+'</td></tr>'; }).join('')
         +'</tbody></table>'
       : '<div style="text-align:center;color:#999;font-weight:700;padding:16px;">لم ينضم طلاب بعد · شارك الكود: <b style="color:#8A6D2E;font-family:monospace;">'+esc(C.code)+'</b></div>';
-    html+='<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:10px;padding:11px;margin-top:11px;font-size:.75rem;color:#8A6D2E;font-weight:700;line-height:1.8;">'
+    html+='<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:10px;padding:11px;margin-top:11px;font-size:.75rem;color:#8A6D2E;font-weight:700;line-height:1.8;">'
       +'يدخل الطالب المنصة، ثم «مدرستي» ← «انضم بكود»، ويكتب: <b style="font-family:monospace;font-size:.9rem;">'+esc(C.code)+'</b></div>';
     hhSchModal('طلاب '+(C.name||'الصف'), html, '#1F4E79');
   }catch(e){}
@@ -9678,7 +9678,7 @@ function hhShowUsageStats(){
   log.forEach(function(r){ byType[r.t] = (byType[r.t]||0) + 1; });
   var names = { lesson_add:'دروس مضافة', generate:'عمليات توليد', game_start:'ألعاب بدأت', session_save:'جلسات محفوظة' };
   var cards = Object.keys(byType).map(function(k){
-    return '<div style="background:#FBF3E2;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:92px;">' + '<div style="font-size:1.4rem;font-weight:900;color:#5E0E26;">'+byType[k]+'</div>' + '<div style="font-size:.68rem;color:#555;font-weight:800;">'+esc(names[k]||k)+'</div></div>';
+    return '<div style="background:#F5F3F0;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:92px;">' + '<div style="font-size:1.4rem;font-weight:900;color:#5E0E26;">'+byType[k]+'</div>' + '<div style="font-size:.68rem;color:#555;font-weight:800;">'+esc(names[k]||k)+'</div></div>';
   }).join('');
   var recent = log.slice(-14).reverse().map(function(r,i){
     var d = new Date(r.ts);
@@ -9688,7 +9688,7 @@ function hhShowUsageStats(){
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.7);z-index:999994;display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto;direction:rtl;';
   ov.onclick=function(e){ if(e.target===ov) ov.remove(); };
   ov.innerHTML='<div style="background:#fff;border:2px solid #B8924A;border-radius:18px;max-width:600px;width:100%;overflow:hidden;font-family:Cairo,Tajawal,sans-serif;margin-bottom:20px;">' +'<div style="background:linear-gradient(135deg,#8A6D2E,#B8924A);color:#fff;padding:13px 18px;font-weight:900;font-size:.92rem;"> إحصاءات استخدام المنصة</div>' +'<div style="padding:16px 18px;">' +(cards?'<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;">'+cards+'</div>':'<div style="color:#999;font-size:.82rem;text-align:center;padding:14px;">لا نشاط مسجّل بعد</div>')
-    +(recent?'<div style="font-weight:900;font-size:.85rem;color:#5E0E26;margin-bottom:7px;">آخر الأحداث</div>' +'<table style="width:100%;border-collapse:collapse;">' +'<thead><tr style="background:#FDF3DD;color:#8A6D2E;font-weight:900;font-size:.72rem;">' +'<th style="padding:6px 8px;text-align:right;">النوع</th><th style="padding:6px 8px;text-align:right;">التفصيل</th><th style="padding:6px 8px;text-align:right;">المستخدم</th><th style="padding:6px 8px;">التاريخ</th></tr></thead>' +'<tbody>'+recent+'</tbody></table>':'')
+    +(recent?'<div style="font-weight:900;font-size:.85rem;color:#5E0E26;margin-bottom:7px;">آخر الأحداث</div>' +'<table style="width:100%;border-collapse:collapse;">' +'<thead><tr style="background:#F5F3F0;color:#8A6D2E;font-weight:900;font-size:.72rem;">' +'<th style="padding:6px 8px;text-align:right;">النوع</th><th style="padding:6px 8px;text-align:right;">التفصيل</th><th style="padding:6px 8px;text-align:right;">المستخدم</th><th style="padding:6px 8px;">التاريخ</th></tr></thead>' +'<tbody>'+recent+'</tbody></table>':'')
     +'<div style="font-size:.7rem;color:#999;margin-top:10px;line-height:1.7;">تُسجَّل الأحداث محلياً، وتُرفع المهمة منها للسحابة تلقائياً لتظهر في لوحة تحكم الإدارة.</div>' +'</div></div>';
   document.body.appendChild(ov);
 }
@@ -9719,13 +9719,13 @@ function hhShowInsight(log){
     return '<tr style="background:'+(i%2?'#FDF8EC':'#fff')+';">' +'<td style="padding:6px 9px;font-weight:700;">'+esc(r.q||'').slice(0,60)+((r.q&&r.q.length>60)?'…':'')+'</td>' +'<td style="padding:6px 9px;color:#3D6B53;font-weight:800;white-space:nowrap;">'+esc(r.a||'').slice(0,22)+'</td></tr>';
   }).join('') : '';
 
-  ov.innerHTML='<div id="hh-insight-inner" style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> التقرير التربوي الذكي</div>' +'<button onclick="hhCloseInsight()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' // التشخيص
+  ov.innerHTML='<div id="hh-insight-inner" style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;font-family:Cairo,Tajawal,sans-serif;">' +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">' +'<div style="font-weight:900;font-size:.98rem;"> التقرير التربوي الذكي</div>' +'<button onclick="hhCloseInsight()" style="background:none;border:none;color:#fff;font-size:1.15rem;cursor:pointer;">✕</button></div>' +'<div style="padding:16px 18px;">' // التشخيص
     +'<div style="background:'+lvBg+';border:2px solid '+lvCol+';border-radius:14px;padding:14px;margin-bottom:14px;">' +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">' +'<div style="font-size:2rem;font-weight:900;color:'+lvCol+';line-height:1;">'+data.pct+'%</div>' +'<div><div style="font-weight:900;font-size:.9rem;color:'+lvCol+';">تقييم الجلسة: '+esc(data.level)+'</div>' +'<div style="font-size:.72rem;color:#777;">'+data.correct+' صحيحة من '+data.total+' سؤالاً</div></div></div>' +'<div style="font-size:.83rem;color:#444;line-height:1.9;">'+esc(data.diagnosis)+'</div></div>' // المستويات
     +(diffBars?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin-bottom:7px;"> الأداء حسب مستوى الصعوبة</div>' +'<div style="display:flex;gap:12px;background:#fff;border:1.5px solid #E3D9C6;border-radius:12px;padding:12px;margin-bottom:14px;">'+diffBars+'</div>':'')
     // التوصيات
     +'<div style="font-weight:900;font-size:.9rem;color:#5E0E26;margin-bottom:8px;"> خطة الحصة القادمة</div>' + recCards
     // أسئلة إعادة الطرح
-    +(retryRows?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin:14px 0 7px;"> أسئلة تستحق إعادة الطرح بعد أسبوعين (لقياس الاحتفاظ)</div>' +'<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:12px;overflow:hidden;">' +'<table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#FDF3DD;color:#8A6D2E;font-weight:900;"><th style="padding:6px 9px;text-align:right;">السؤال</th><th style="padding:6px 9px;text-align:right;">الجواب</th></tr></thead>' +'<tbody>'+retryRows+'</tbody></table></div>':'')
+    +(retryRows?'<div style="font-weight:900;font-size:.86rem;color:#5E0E26;margin:14px 0 7px;"> أسئلة تستحق إعادة الطرح بعد أسبوعين (لقياس الاحتفاظ)</div>' +'<div style="background:#fff;border:1.5px solid #E3D9C6;border-radius:12px;overflow:hidden;">' +'<table style="width:100%;border-collapse:collapse;font-size:.78rem;">' +'<thead><tr style="background:#F5F3F0;color:#8A6D2E;font-weight:900;"><th style="padding:6px 9px;text-align:right;">السؤال</th><th style="padding:6px 9px;text-align:right;">الجواب</th></tr></thead>' +'<tbody>'+retryRows+'</tbody></table></div>':'')
     // الأزرار
     +'<div style="display:flex;gap:9px;margin-top:15px;flex-wrap:wrap;">' +'<button onclick="hhPrintInsight()" style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;border:none;border-radius:11px;padding:10px 20px;font-weight:900;font-size:.84rem;cursor:pointer;"> طباعة الخطة</button>' +'<button onclick="hhCopyInsight()" style="background:#EBF2EE;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:11px;padding:10px 18px;font-weight:900;font-size:.84rem;cursor:pointer;"> نسخ النص</button>' +'<button onclick="hhCloseInsight()" style="background:#F3F0F1;color:#666;border:none;border-radius:11px;padding:10px 16px;font-weight:900;font-size:.84rem;cursor:pointer;">إغلاق</button>' +'</div></div></div>';
   document.body.appendChild(ov);
@@ -10258,7 +10258,7 @@ function startRoleLB(role){
   var el = document.getElementById('lb-list');
   var title = document.getElementById('lb-list-title');
   var label = role==='teacher' ? '<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg> أفضل المعلمين' : '<svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg> أفضل الطلاب';
-  if(title) title.innerHTML = label + ' <span style="display:inline-flex;align-items:center;gap:4px;background:#fdeceb;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
+  if(title) title.innerHTML = label + ' <span style="display:inline-flex;align-items:center;gap:4px;background:#F5F3F0;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
 
   if(OFFLINE_MODE){
     if(el) el.innerHTML = '<p style="text-align:center;color:#888;padding:20px;font-size:.85rem;">الترتيب حسب الدور يحتاج اتصال بالإنترنت</p>';
@@ -10317,7 +10317,7 @@ function startSoloLB(){
 
   var el = document.getElementById('lb-list');
   var title = document.getElementById('lb-list-title');
-  if(title) title.innerHTML = ' أفضل اللاعبين <span style="display:inline-flex;align-items:center;gap:4px;background:#fdeceb;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
+  if(title) title.innerHTML = ' أفضل اللاعبين <span style="display:inline-flex;align-items:center;gap:4px;background:#F5F3F0;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
 
   if(OFFLINE_MODE){
     // وضع offline · تحميل مرة واحدة
@@ -10379,7 +10379,7 @@ function startTeamsLB(){
 
   var el = document.getElementById('lb-list');
   var title = document.getElementById('lb-list-title');
-  if(title) title.innerHTML = ' أفضل الفرق <span style="display:inline-flex;align-items:center;gap:4px;background:#fdeceb;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
+  if(title) title.innerHTML = ' أفضل الفرق <span style="display:inline-flex;align-items:center;gap:4px;background:#F5F3F0;border:1px solid #e74c3c;color:#c0392b;border-radius:10px;padding:1px 8px;font-size:.62rem;font-weight:900;margin-right:6px;vertical-align:middle;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#e74c3c;animation:pulse 1.2s infinite;"></span>مباشر</span>';
 
   if(OFFLINE_MODE){
     renderTeamsLBLocal();
@@ -10936,7 +10936,7 @@ function openVisitorPath(){
   sub.textContent = 'استكشف المنصة · بدون تسجيل';
 
   options.innerHTML = `
-    <button class="path-modal-option" style="background:linear-gradient(135deg,#fdfaf0,#fff);border:1.5px solid #B8924A;" onclick="closePathModal();localStorage.removeItem('hh_saved_cats');showScreen('screen-setup');">
+    <button class="path-modal-option" style="background:linear-gradient(135deg,#FFFFFF,#fff);border:1.5px solid #B8924A;" onclick="closePathModal();localStorage.removeItem('hh_saved_cats');showScreen('screen-setup');">
       <div class="path-modal-option-icon" style="background:linear-gradient(135deg,#B8924A,#a68820);color:#fff;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
       </div>
@@ -10946,7 +10946,7 @@ function openVisitorPath(){
       </div>
       <svg class="path-modal-option-arrow" width="20" height="20" viewBox="0 0 24 24" fill="#B8924A"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
     </button>
-    <div style="background:linear-gradient(135deg,#fdfaf0,#F8F8F6);border:1.5px dashed #B8924A;border-radius:10px;padding:10px 12px;margin-top:8px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:#8A6D2E;font-weight:700;line-height:1.5;">
+    <div style="background:linear-gradient(135deg,#FFFFFF,#F8F8F6);border:1.5px dashed #B8924A;border-radius:10px;padding:10px 12px;margin-top:8px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:#8A6D2E;font-weight:700;line-height:1.5;">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="#B8924A" style="flex-shrink:0;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
       <span>للوصول لباقي الخدمات (اختبارات، حصص، بطاقات، خرائط الزمن، والأساطير) · يرجى <strong>تسجيل الدخول</strong></span>
     </div> `;
@@ -11702,7 +11702,7 @@ function renderMyGames(){
             </div>
           </div>
           <!-- الفائز -->
-          <div style="display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#fffbea,#fef3d6);border:1.5px solid #B8924A;border-radius:9px;padding:4px 10px;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#FFFFFF,#F5F3F0);border:1.5px solid #B8924A;border-radius:9px;padding:4px 10px;flex-shrink:0;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="#B8924A" stroke="#8A6D2E" stroke-width="0.5"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>
             <span style="font-size:.72rem;font-weight:900;color:#8A1538;">${esc(g.winner||'·')}</span>
           </div>
@@ -14182,7 +14182,7 @@ function loadInfluencers(){
   // إذا لا توجد شخصيات منشورة (للزائر) → رسالة جميلة
   if(!isAdmin && visibleList.length === 0){
     listEl.innerHTML = `
-      <div style="background:linear-gradient(135deg,#fff8e8 0%,#fdfaf0 100%);border:2px solid #B8924A;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 4px 16px rgba(184,146,74,.15);">
+      <div style="background:linear-gradient(135deg,#F5F3F0 0%,#FFFFFF 100%);border:2px solid #B8924A;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 4px 16px rgba(184,146,74,.15);">
         <div style="width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#B8924A,#e8c968);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(184,146,74,.35);">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.39 7.36H22l-6.19 4.5L18.18 22 12 17.27 5.82 22l2.37-8.14L2 9.36h7.61z"/></svg>
         </div>
@@ -14239,11 +14239,11 @@ function loadInfluencers(){
     <div style="background:#fff;border:2px solid #e0e8f0;border-right:4px solid #B8924A;border-radius:14px;padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 3px 12px rgba(184,146,74,.08);position:relative;transition:all .2s;${hiddenStyle}"> ${adminControls}
       ${hiddenBadge}
       <div style="position:absolute;top:10px;right:14px;width:26px;height:26px;border-radius:50%;background:#8A1538;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Cairo;font-weight:900;font-size:.72rem;">${visibleIdx+1}</div>
-      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#fff8e8,#f5e9a8);border:3px solid #B8924A;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-shadow:0 3px 10px rgba(184,146,74,.25);"> ${imgHtml}
+      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#F5F3F0,#f5e9a8);border:3px solid #B8924A;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-shadow:0 3px 10px rgba(184,146,74,.25);"> ${imgHtml}
       </div>
       <div style="flex:1;min-width:0;padding-top:4px;">
         <div style="font-family:Cairo,sans-serif;font-weight:900;color:#8A1538;font-size:1rem;margin-bottom:4px;">${esc(p.name)}</div>
-        <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:linear-gradient(135deg,#fff8e8,#fdfaf0);border:1.5px solid #B8924A;border-radius:20px;margin-bottom:5px;">
+        <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:linear-gradient(135deg,#F5F3F0,#FFFFFF);border:1.5px solid #B8924A;border-radius:20px;margin-bottom:5px;">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="#B8924A"><path d="M12 2l2.39 7.36H22l-6.19 4.5L18.18 22 12 17.27 5.82 22l2.37-8.14L2 9.36h7.61z"/></svg>
           <span style="font-size:.72rem;font-weight:800;color:#8A6D2E;">${esc(p.role)}</span>
         </div>
@@ -14932,14 +14932,14 @@ function renderQuestionsList(qs, cat, highlight){
     const imgThumb = q.img ? `<img src="${q.img}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;border:1.5px solid #B8924A;flex-shrink:0;cursor:pointer;" onclick="hhPreviewImg('${q.img}')" title="انقر لعرض الصورة كاملة">` : '';
     return `
     <div style="background:#fff;border:1.5px solid #e0e8f0;border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;">
-      <span style="font-size:.68rem;font-weight:900;color:${diffColors[q.diff]||'#555'};background:#f0f4f8;border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:2px;">${diffLabels[q.diff]||q.diff}</span>${(function(){ try{ var _sb=_hhAQSubsFor(cat); if(_sb && q.sub!==undefined && _sb[q.sub]) return '<span style="font-size:.66rem;font-weight:800;color:#8A6D2E;background:#FDF3DD;border:1px solid #EAD9B0;border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:2px;">'+esc(_sb[q.sub].label||'')+'</span>'; }catch(e){} return ''; })()} ${imgThumb}
+      <span style="font-size:.68rem;font-weight:900;color:${diffColors[q.diff]||'#555'};background:#f0f4f8;border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:2px;">${diffLabels[q.diff]||q.diff}</span>${(function(){ try{ var _sb=_hhAQSubsFor(cat); if(_sb && q.sub!==undefined && _sb[q.sub]) return '<span style="font-size:.66rem;font-weight:800;color:#8A6D2E;background:#F5F3F0;border:1px solid #EAD9B0;border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:2px;">'+esc(_sb[q.sub].label||'')+'</span>'; }catch(e){} return ''; })()} ${imgThumb}
       <div style="flex:1;min-width:0;">
         <div style="font-size:.82rem;font-weight:700;color:#1a1a2e;margin-bottom:3px;">${hl(q.q)} ${q.img?'<span style="font-size:.65rem;color:#B8924A;font-weight:700;"></span>':''}</div>
         <div style="font-size:.75rem;color:#3D6B53;">✓ ${hl(q.a)}</div>
       </div>
       <div style="display:flex;gap:4px;flex-shrink:0;">
         <button onclick="editAdminQuestion(${i})" style="padding:4px 8px;background:#e8f2ec;border:1.5px solid #8A1538;border-radius:6px;font-family:Cairo;font-size:.72rem;font-weight:700;color:#8A1538;cursor:pointer;">تعديل</button>
-        <button onclick="deleteAdminQuestion(${i})" style="padding:4px 8px;background:#fde8e8;border:1.5px solid #c0392b;border-radius:6px;font-family:Cairo;font-size:.72rem;font-weight:700;color:#c0392b;cursor:pointer;">حذف</button>
+        <button onclick="deleteAdminQuestion(${i})" style="padding:4px 8px;background:#F5F3F0;border:1.5px solid #c0392b;border-radius:6px;font-family:Cairo;font-size:.72rem;font-weight:700;color:#c0392b;cursor:pointer;">حذف</button>
       </div>
     </div>`;
   }).join('') : '<p style="text-align:center;color:#aaa;padding:20px;">لا توجد أسئلة مطابقة</p>';
@@ -15021,7 +15021,7 @@ function globalSearchQuestions(){
         <button onclick="jumpToEditQuestion('${esc(r.cat).replace(/'/g,"\\'")}',${r.idx})"
           style="flex:1;padding:4px 6px;background:#e8f2ec;border:1.5px solid #8A1538;border-radius:5px;font-family:Cairo;font-size:.7rem;font-weight:700;color:#8A1538;cursor:pointer;">تعديل</button>
         <button onclick="jumpToDeleteQuestion('${esc(r.cat).replace(/'/g,"\\'")}',${r.idx})"
-          style="padding:4px 10px;background:#fde8e8;border:1.5px solid #c0392b;border-radius:5px;font-family:Cairo;font-size:.7rem;font-weight:700;color:#c0392b;cursor:pointer;">حذف</button>
+          style="padding:4px 10px;background:#F5F3F0;border:1.5px solid #c0392b;border-radius:5px;font-family:Cairo;font-size:.7rem;font-weight:700;color:#c0392b;cursor:pointer;">حذف</button>
       </div>
     </div> `).join('') + more;
 }
@@ -15221,7 +15221,7 @@ function hhOpenAIGen(){
       <div style="padding:20px 22px;">
         
         <!-- التعليمات -->
-        <div style="background:linear-gradient(135deg,#fdf3d6,#fff);border-right:4px solid #B8924A;padding:14px;border-radius:8px;margin-bottom:16px;font-size:.85rem;line-height:1.8;color:#5E0E26;">
+        <div style="background:linear-gradient(135deg,#F5F3F0,#fff);border-right:4px solid #B8924A;padding:14px;border-radius:8px;margin-bottom:16px;font-size:.85rem;line-height:1.8;color:#5E0E26;">
           <div style="font-family:Cairo;font-weight:900;color:#8A1538;margin-bottom:8px;">كيف يعمل:</div> اكتب موضوعاً أو وصفاً لما تريد، والذكاء الاصطناعي سيولّد لك مجموعة أسئلة احترافية بمستويات متدرجة (سهل/متوسط/صعب).
         </div>
         
@@ -15258,7 +15258,7 @@ function hhOpenAIGen(){
         </div>
         
         <!-- المعاينة (تظهر بعد التوليد) -->
-        <div id="hh-ai-preview" style="display:none;background:#fdfaef;border:1.5px solid #B8924A;border-radius:10px;padding:14px;margin-bottom:14px;max-height:300px;overflow-y:auto;">
+        <div id="hh-ai-preview" style="display:none;background:#FFFFFF;border:1.5px solid #B8924A;border-radius:10px;padding:14px;margin-bottom:14px;max-height:300px;overflow-y:auto;">
           <div id="hh-ai-preview-content"></div>
         </div>
         
@@ -15573,7 +15573,7 @@ function hhOpenBulkImport(){
         </div>
         
         <!-- معاينة -->
-        <div id="hh-bulk-preview" style="display:none;background:#fdfaef;border:1.5px solid #B8924A;border-radius:10px;padding:12px;margin-bottom:14px;max-height:200px;overflow-y:auto;"></div>
+        <div id="hh-bulk-preview" style="display:none;background:#FFFFFF;border:1.5px solid #B8924A;border-radius:10px;padding:12px;margin-bottom:14px;max-height:200px;overflow-y:auto;"></div>
         
         <!-- الأزرار -->
         <div style="display:flex;gap:10px;">
@@ -15692,7 +15692,7 @@ function hhBulkPreview(){
   if(errors.length){
     html += '<div style="font-family:Cairo;font-weight:900;color:#c0392b;margin-top:10px;margin-bottom:6px;">أسطر فيها مشاكل:</div>';
     errors.slice(0, 5).forEach(e => {
-      html += `<div style="background:#fdf0f0;border-right:3px solid #c0392b;padding:6px 10px;margin-bottom:4px;border-radius:6px;font-size:.78rem;color:#5E0E26;"><strong>السطر ${e.line}:</strong> ${esc(e.reason)}<br><span style="opacity:.7;font-family:monospace;">${esc(e.text.substring(0,80))}</span></div>`;
+      html += `<div style="background:#F5F3F0;border-right:3px solid #c0392b;padding:6px 10px;margin-bottom:4px;border-radius:6px;font-size:.78rem;color:#5E0E26;"><strong>السطر ${e.line}:</strong> ${esc(e.reason)}<br><span style="opacity:.7;font-family:monospace;">${esc(e.text.substring(0,80))}</span></div>`;
     });
     if(errors.length > 5) html += `<div style="font-size:.78rem;color:#c0392b;margin-top:4px;">... و ${errors.length - 5} خطأ آخر</div>`;
   }
@@ -16144,7 +16144,7 @@ function _updateQDBStatusBanner(){
     const dateStr = d.toLocaleDateString('ar-QA-u-nu-latn',{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString('ar-QA-u-nu-latn',{hour:'2-digit',minute:'2-digit'});
     statusText.innerHTML = '<strong>فيه تعديلات محلية</strong> · آخر حفظ: ' + dateStr;
     if(banner){
-      banner.style.background = 'linear-gradient(135deg,#f0e5b8,#fdfaf0)';
+      banner.style.background = 'linear-gradient(135deg,#f0e5b8,#FFFFFF)';
       banner.style.borderColor = '#B8924A';
       banner.style.borderRightColor = '#B8924A';
     }
@@ -16204,14 +16204,14 @@ async function loadPermissionsPanel(){
       '<div style="background:linear-gradient(170deg,#4A0B1E,#5E0E26);border:2px solid #B8924A;border-radius:16px;padding:14px 16px;margin-bottom:12px;font-family:Cairo;color:#F5E6C4;">'
       + '<div style="font-weight:900;font-size:1rem;margin-bottom:8px;">الصلاحيات الفعالة في المنصة</div>'
       + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">'
-      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+users.length+'</div><div style="font-size:.7rem;color:#EAD9B0;">المستخدمون</div></div>'
-      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+editors+'</div><div style="font-size:.7rem;color:#EAD9B0;">محررو الأسئلة</div></div>'
-      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+partners+'</div><div style="font-size:.7rem;color:#EAD9B0;">رؤية الشركاء</div></div>'
-      +   '<div style="background:rgba(255,253,248,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+approved+'</div><div style="font-size:.7rem;color:#EAD9B0;">معلمون معتمدون</div></div>'
+      +   '<div style="background:rgba(255,255,255,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+users.length+'</div><div style="font-size:.7rem;color:#EAD9B0;">المستخدمون</div></div>'
+      +   '<div style="background:rgba(255,255,255,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+editors+'</div><div style="font-size:.7rem;color:#EAD9B0;">محررو الأسئلة</div></div>'
+      +   '<div style="background:rgba(255,255,255,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+partners+'</div><div style="font-size:.7rem;color:#EAD9B0;">رؤية الشركاء</div></div>'
+      +   '<div style="background:rgba(255,255,255,.07);border:1px solid rgba(212,188,133,.4);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.35rem;font-weight:900;">'+approved+'</div><div style="font-size:.7rem;color:#EAD9B0;">معلمون معتمدون</div></div>'
       + '</div>'
       + '<div style="font-size:.72rem;color:#EAD9B0;margin-top:8px;line-height:1.7;">الصلاحيات المتاحة لكل مستخدم: <b>تعديل الأسئلة</b> (يظهر للمستخدم زر التحرير في الفئات) و<b>رؤية شركاء النجاح</b>. اعتماد المعلمين يُدار من تبويب «المعلمون»، وإخفاء الفئات والمسابقات من «إدارة المسابقات» و«الفئات».</div>'
       + '</div>'
-      + '<input id="perm-search" placeholder="ابحث بالاسم أو البريد…" oninput="renderPermList(this.value)" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #B8924A;border-radius:12px;font-family:Cairo;font-weight:800;font-size:.85rem;margin-bottom:10px;background:#FFFDF8;">'
+      + '<input id="perm-search" placeholder="ابحث بالاسم أو البريد…" oninput="renderPermList(this.value)" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #B8924A;border-radius:12px;font-family:Cairo;font-weight:800;font-size:.85rem;margin-bottom:10px;background:#FFFFFF;">'
       + '<div id="perm-rows"></div>';
     renderPermList('');
   }catch(e){
@@ -16237,8 +16237,8 @@ function renderPermList(q){
     const chips = []
     if(isAdmin) chips.push('<span style="font-size:.68rem;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:1px solid #B8924A;border-radius:99px;padding:3px 12px;font-weight:900;">مدير عام</span>');
     if(tStatus==='approved') chips.push('<span style="font-size:.68rem;background:#EBF2EE;color:#3D6B53;border:1px solid #3D6B53;border-radius:99px;padding:3px 12px;font-weight:900;">معلم معتمد</span>');
-    else if(tStatus==='pending') chips.push('<span style="font-size:.68rem;background:#FDF3DD;color:#8A6D2E;border:1px solid #B8924A;border-radius:99px;padding:3px 12px;font-weight:900;">طلب اعتماد معلق</span>');
-    return '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-family:Cairo;">'
+    else if(tStatus==='pending') chips.push('<span style="font-size:.68rem;background:#F5F3F0;color:#8A6D2E;border:1px solid #B8924A;border-radius:99px;padding:3px 12px;font-weight:900;">طلب اعتماد معلق</span>');
+    return '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-family:Cairo;">'
       + '<div style="display:flex;align-items:center;gap:10px;'+(isAdmin?'':'margin-bottom:10px;')+'">'
       +   '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#8A1538,#5E0E26);border:2px solid #B8924A;color:#F5E6C4;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;">'+esc((u.name||'؟').trim().charAt(0))+'</div>'
       +   '<div style="flex:1;min-width:0;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+esc(u.name||'بدون اسم')+'</div><div style="font-size:.7rem;color:#8A7A63;direction:ltr;text-align:right;">'+esc(u.email||'')+'</div></div>'
@@ -16420,7 +16420,7 @@ function renderCompAdmin(){
     const meta=mk('div','display:flex;gap:6px;margin-bottom:6px;align-items:center;');
     meta.appendChild(mk('span','background:#8A1538;color:#fff;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',diffLab[qq.diff]||qq.diff));
     const _subsSrc = isWafa ? _HH_WAFA_SUBS : (charCC ? charCC.subs : null);
-    if(_subsSrc && typeof qq.sub==='number') meta.appendChild(mk('span','background:#f5ecd7;color:#8A6D2E;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',_subsSrc[qq.sub]?_subsSrc[qq.sub].label:''));
+    if(_subsSrc && typeof qq.sub==='number') meta.appendChild(mk('span','background:#ECE8E3;color:#8A6D2E;border-radius:6px;padding:1px 8px;font-family:Cairo;font-weight:800;font-size:.68rem;',_subsSrc[qq.sub]?_subsSrc[qq.sub].label:''));
     row.appendChild(meta);
     const qi=document.createElement('input'); qi.type='text'; qi.value=qq.q; qi.className='ca-q'; qi.dataset.i=i;
     qi.style.cssText='width:100%;padding:7px 10px;border:1px solid #ddd;border-radius:8px;font-family:Cairo;font-size:.8rem;box-sizing:border-box;margin-bottom:5px;';
@@ -16750,7 +16750,7 @@ async function renderProblemReports(filter){
         +   '</div>' +   '<span style="font-size:.7rem;color:#888;">'+esc(date)+'</span>' + '</div>' + (isCorrection ? (function(){
             const repName = r.reporterName || (r.user&&(r.user.displayName||r.user.email)) || '';
             const repEmail = (r.user&&r.user.email)||'';
-            return '' + '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:.8rem;line-height:1.8;">' +   (r.qCat ? '<div><b style="color:#8A6D2E;">الفئة:</b> '+esc(r.qCat)+(r.qDiff?' <span style="color:#999;">('+esc(r.qDiff)+')</span>':'')+'</div>' : '')
+            return '' + '<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:.8rem;line-height:1.8;">' +   (r.qCat ? '<div><b style="color:#8A6D2E;">الفئة:</b> '+esc(r.qCat)+(r.qDiff?' <span style="color:#999;">('+esc(r.qDiff)+')</span>':'')+'</div>' : '')
             +   '<div><b style="color:#8A6D2E;">السؤال:</b> '+esc(r.qText||'')+'</div>' +   '<div><b style="color:#8A6D2E;">الجواب المسجل:</b> '+esc(r.qAnswer||'')+'</div>' +   (repName ? '<div style="margin-top:4px;padding-top:6px;border-top:1px solid #eee2c8;"><b style="color:#3D6B53;"> المبلّغ:</b> '+esc(repName)+(repEmail&&repEmail!==repName?' <span style="color:#999;font-size:.72rem;">('+esc(repEmail)+')</span>':'')+'</div>' : '')
             + '</div>';
           })() : '')
@@ -16918,7 +16918,7 @@ function renderAdminCategoriesList(){
     info.style.cssText = 'flex:1;min-width:140px;';
     const badges = [];
     if(isCustom) badges.push('<span style="background:#EBF2EE;color:#2C5340;padding:2px 7px;border-radius:8px;font-size:.65rem;font-weight:900;">مخصصة</span>');
-    if(isHidden) badges.push('<span style="background:#fde8e8;color:#c0392b;padding:2px 7px;border-radius:8px;font-size:.65rem;font-weight:900;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27z"/></svg> مخفية</span>');
+    if(isHidden) badges.push('<span style="background:#F5F3F0;color:#c0392b;padding:2px 7px;border-radius:8px;font-size:.65rem;font-weight:900;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27z"/></svg> مخفية</span>');
     if(customColor) badges.push('<span style="background:#F8F8F6;color:#8A6D2E;padding:2px 7px;border-radius:8px;font-size:.65rem;font-weight:900;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M12 3a9 9 0 000 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg> لون مخصص</span>');
     info.innerHTML = '<div style="font-family:Cairo;font-weight:900;color:#3D0918;font-size:.92rem;margin-bottom:3px;">'+esc(ci.label||cat)+'</div><div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;"><span style="font-size:.7rem;color:#888;">'+qCount.toLocaleString('en-US')+' سؤال</span>'+badges.join('')+'</div>';
     row.appendChild(info);
@@ -17301,7 +17301,7 @@ function renderWhatsNewAdmin(){
     const date = new Date(it.updatedAt||it.createdAt||Date.now()).toLocaleDateString('ar-EG-u-nu-latn', {year:'numeric', month:'short', day:'numeric'});
     const card = document.createElement('div');
     card.style.cssText = 'background:#fff;border:1.5px solid #ecf0f1;border-right:4px solid '+cat.color+';border-radius:10px;padding:12px;margin-bottom:8px;'+(it.published?'':'opacity:.55;');
-    card.innerHTML = '' + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">' +   '<div style="flex:1;min-width:160px;">' +     '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">' +       '<span style="background:'+cat.bg+';color:'+cat.color+';padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.68rem;">'+cat.icon+' '+cat.label+'</span>' +       (it.published?'':'<span style="background:#fde8e8;color:#c0392b;padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.65rem;"> مسودة</span>')
+    card.innerHTML = '' + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">' +   '<div style="flex:1;min-width:160px;">' +     '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">' +       '<span style="background:'+cat.bg+';color:'+cat.color+';padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.68rem;">'+cat.icon+' '+cat.label+'</span>' +       (it.published?'':'<span style="background:#F5F3F0;color:#c0392b;padding:2px 8px;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.65rem;"> مسودة</span>')
       +       '<span style="font-size:.7rem;color:#888;">'+date+'</span>' +     '</div>' +     '<div style="font-family:Cairo;font-weight:900;color:#3D0918;font-size:.95rem;margin-bottom:3px;">'+esc(it.title||'')+'</div>' +     '<div style="font-size:.82rem;color:#555;line-height:1.6;">'+esc(it.desc||'')+'</div>' +     (it.link?'<div style="font-size:.72rem;color:#8A6D2E;margin-top:4px;"> '+esc(it.link)+'</div>':'')
       +   '</div>' +   '<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">' +     '<button onclick="editWhatsNew(\''+it.id+'\')" style="padding:6px 10px;background:#fff;color:#8A1538;border:1.5px solid #8A1538;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">تعديل</button>' +     '<button onclick="deleteWhatsNew(\''+it.id+'\')" style="padding:6px 10px;background:#fff;color:#c0392b;border:1.5px solid #c0392b;border-radius:8px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف</button>' +   '</div>' + '</div>';
     list.appendChild(card);
@@ -17959,7 +17959,7 @@ async function importBackup(){
   }catch(e){
     console.error('Import error:', e);
     hasError = true;
-    resultEl.innerHTML = '<div style="background:#fff4f4;border-right:3px solid #c0392b;padding:10px 12px;border-radius:8px;color:#8b1a1a;font-weight:800;">فشل الاستيراد: ' + e.message + '</div>';
+    resultEl.innerHTML = '<div style="background:#FFFFFF;border-right:3px solid #c0392b;padding:10px 12px;border-radius:8px;color:#8b1a1a;font-weight:800;">فشل الاستيراد: ' + e.message + '</div>';
     toast('تعذر الاستيراد: ' + e.message, 'error');
     btn.innerHTML = originalHTML;
     btn.disabled = false;
@@ -18303,7 +18303,7 @@ function renderUsersList(){
             <span style="background:${t.bg};color:${t.color};padding:2px 8px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.65rem;">${t.icon} ${t.label}</span>
             <span style="background:${act.bg};color:${act.color};padding:2px 8px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.65rem;">${act.icon} ${act.label}</span> ${badgeHTML}
             ${u.hasReviewed
-              ? `<span style="background:#fff8e8;color:#8A6D2E;padding:2px 8px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.65rem;border:1px solid #B8924A;">قيم</span>`
+              ? `<span style="background:#F5F3F0;color:#8A6D2E;padding:2px 8px;border-radius:10px;font-family:Cairo;font-weight:900;font-size:.65rem;border:1px solid #B8924A;">قيم</span>`
               : `<span style="background:#fafafa;color:#aaa;padding:2px 8px;border-radius:10px;font-family:Cairo;font-weight:700;font-size:.65rem;border:1px dashed #ccc;">لم يقيم</span>`
             }
           </div>
@@ -18404,7 +18404,7 @@ function showReviewRequestModal(userName){
     <style> @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
       @keyframes scaleIn { from { transform:scale(.85); opacity:0; } to { transform:scale(1); opacity:1; } }
     </style>
-    <div style="background:linear-gradient(135deg,#fdfaf0 0%,#fff8e8 100%);border:3px solid #B8924A;border-radius:24px;padding:30px 24px;max-width:440px;width:100%;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.5);position:relative;overflow:hidden;animation:scaleIn .4s cubic-bezier(.34,1.2,.64,1);">
+    <div style="background:linear-gradient(135deg,#FFFFFF 0%,#F5F3F0 100%);border:3px solid #B8924A;border-radius:24px;padding:30px 24px;max-width:440px;width:100%;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.5);position:relative;overflow:hidden;animation:scaleIn .4s cubic-bezier(.34,1.2,.64,1);">
 
       <!-- زخارف خلفية -->
       <div style="position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(212,188,133,.3),transparent 65%);border-radius:50%;"></div>
@@ -19766,7 +19766,7 @@ function renderActivityDetailsForm(template){
       </div>
 
       <!-- خيار إظهار توقيع المنصة -->
-      <div style="margin-top:10px;padding:10px 12px;background:#fff8e8;border:1.5px solid #B8924A;border-radius:10px;">
+      <div style="margin-top:10px;padding:10px 12px;background:#F5F3F0;border:1.5px solid #B8924A;border-radius:10px;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:Tajawal;font-size:.82rem;color:#8A6D2E;font-weight:700;">
           <input type="checkbox" id="ag-cert-show-platform" checked style="width:18px;height:18px;accent-color:#B8924A;cursor:pointer;">
           <span>إظهار "منصة الملهم · حيث يبدأ الإلهام" في الشهادة</span>
@@ -19926,7 +19926,7 @@ function buildActivityHTML(data){
       <div style="font-family:Tajawal,sans-serif;padding:40px;direction:rtl;color:#1a1a2e;background:#fff;min-height:842px;"> ${metaHtml}
         <div style="text-align:center;margin:30px 0 24px;">
           <div style="display:inline-block;padding:10px 28px;background:linear-gradient(135deg,#3D0918,#8A1538);color:#D4BC85;font-family:Cairo,sans-serif;font-weight:900;font-size:20px;border-radius:10px;border:2px solid #B8924A;">${escAG(data.title)}</div>
-        </div> ${data.intro ? `<div style="background:#fff8e8;border-right:4px solid #B8924A;padding:14px;border-radius:8px;margin-bottom:22px;font-size:13px;line-height:1.7;color:#555;">${escAG(data.intro)}</div>` : ''}
+        </div> ${data.intro ? `<div style="background:#F5F3F0;border-right:4px solid #B8924A;padding:14px;border-radius:8px;margin-bottom:22px;font-size:13px;line-height:1.7;color:#555;">${escAG(data.intro)}</div>` : ''}
         <div style="margin-bottom:20px;">
           <div style="font-family:Cairo,sans-serif;font-weight:900;color:#8A1538;font-size:15px;margin-bottom:12px;">الاسم: _______________________</div>
         </div> ${questionsHtml}
@@ -19946,7 +19946,7 @@ function buildActivityHTML(data){
         <div style="text-align:center;margin:30px 0 24px;">
           <div style="display:inline-block;padding:10px 28px;background:linear-gradient(135deg,#4a0e1f,#8A1538);color:#fff;font-family:Cairo,sans-serif;font-weight:900;font-size:20px;border-radius:10px;border:2px solid #B8924A;">${escAG(data.title)}</div>
         </div>
-        <div style="display:flex;justify-content:space-around;background:#fff8e8;padding:10px;border-radius:8px;margin-bottom:20px;font-family:Cairo,sans-serif;font-weight:800;font-size:12px;color:#8A6D2E;">
+        <div style="display:flex;justify-content:space-around;background:#F5F3F0;padding:10px;border-radius:8px;margin-bottom:20px;font-family:Cairo,sans-serif;font-weight:800;font-size:12px;color:#8A6D2E;">
           <div>⏱ المدة: ${escAG(data.duration)} دقيقة</div>
           <div><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M5 9.2h3v9H5zM10.6 5h2.8v13h-2.8zM16.2 13h2.8v5h-2.8z"/></svg> الدرجة: ${escAG(data.total)}</div>
           <div>عدد الأسئلة: ${data.items.length}</div>
@@ -20010,7 +20010,7 @@ function buildActivityHTML(data){
     const serialNumber = '#' + (Date.now().toString().slice(-6));
 
     return `
-      <div style="font-family:Cairo,Tajawal,Arial,sans-serif;padding:30px 36px;direction:rtl;color:#1a1a2e;background:linear-gradient(135deg,#fffaf0 0%,#fef5e0 50%,#fffaf0 100%);min-height:560px;position:relative;border:14px double #B8924A;box-sizing:border-box;box-shadow:inset 0 0 80px rgba(184,146,74,.08);">
+      <div style="font-family:Cairo,Tajawal,Arial,sans-serif;padding:30px 36px;direction:rtl;color:#1a1a2e;background:linear-gradient(135deg,#FFFFFF 0%,#F5F3F0 50%,#FFFFFF 100%);min-height:560px;position:relative;border:14px double #B8924A;box-sizing:border-box;box-shadow:inset 0 0 80px rgba(184,146,74,.08);">
         
         <!-- زخارف الزوايا الكلاسيكية -->
         <div style="position:absolute;top:18px;right:18px;width:48px;height:48px;border-top:3px solid #B8924A;border-right:3px solid #B8924A;border-radius:6px 0 0 0;"></div>
@@ -20508,7 +20508,7 @@ function renderGraderResults(){
   
   // الأسئلة الأصعب
   if(r.questionStats[0] && r.questionStats[0].wrongCount > 0){
-    list.innerHTML += `<div style="margin-top:14px;padding:10px;background:#fff8e8;border:1.5px solid #B8924A;border-radius:10px;">
+    list.innerHTML += `<div style="margin-top:14px;padding:10px;background:#F5F3F0;border:1.5px solid #B8924A;border-radius:10px;">
       <div style="font-family:Cairo;font-weight:900;color:#8A6D2E;font-size:.85rem;margin-bottom:6px;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> أصعب الأسئلة (راجعها مع الطلاب)</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;"> ${r.questionStats.slice(0,5).filter(q=>q.wrongCount>0).map(q=>`
           <div style="background:#fff;border:1.5px solid #8A6D2E;color:#8A6D2E;padding:4px 9px;border-radius:7px;font-family:Cairo;font-weight:800;font-size:.72rem;">س${q.q} (${q.percent}% خطأ)</div> `).join('')}
@@ -20922,7 +20922,7 @@ function exportGraderPDF(){
       </div>
 
       <!-- ملخص الفصل -->
-      <div style="background:linear-gradient(135deg,#fff8e8,#fdfaf0);border:2px solid #B8924A;border-radius:10px;padding:14px;margin-bottom:18px;">
+      <div style="background:linear-gradient(135deg,#F5F3F0,#FFFFFF);border:2px solid #B8924A;border-radius:10px;padding:14px;margin-bottom:18px;">
         <div style="font-family:Cairo;font-weight:900;color:#3D0918;font-size:14px;margin-bottom:10px;">ملخص النتائج</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
           <div style="text-align:center;background:#fff;padding:8px;border-radius:8px;border:1px solid #B8924A;">
@@ -20972,7 +20972,7 @@ function exportGraderPDF(){
       </table>
 
       <!-- الأسئلة الأصعب --> ${r.questionStats[0] && r.questionStats[0].wrongCount > 0 ? `
-      <div style="background:#fff8e8;border:1.5px solid #B8924A;border-radius:10px;padding:12px;margin-bottom:14px;">
+      <div style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:10px;padding:12px;margin-bottom:14px;">
         <div style="font-family:Cairo;font-weight:900;color:#8A6D2E;font-size:13px;margin-bottom:6px;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:middle;"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> أسئلة تحتاج مراجعة (الأكثر خطأ):</div>
         <div style="font-size:11px;color:#5a4500;line-height:1.7;"> ${r.questionStats.slice(0,5).filter(q=>q.wrongCount>0).map(q=>`السؤال ${q.q} · ${q.percent}% أخطأوا فيه`).join(' • ')}
         </div>
@@ -22273,7 +22273,7 @@ function _hhResStyle(){
    +'#hh-res-ctx{ color:#D4BC85; font-weight:700; font-size:.88rem; margin:4px 0 10px; text-align:center; display:flex; align-items:center; justify-content:center; gap:12px; }'
    +'#hh-res-ctx i{ width:70px; height:1px; background:linear-gradient(90deg,#B8924A00,#B8924A); display:inline-block; } #hh-res-ctx i.b{ background:linear-gradient(270deg,#B8924A00,#B8924A); }'
    +'#final-scores-container{ display:flex; justify-content:center; align-items:flex-end; gap:16px; flex-wrap:wrap; }'
-   +'#final-scores-container .final-team{ width:210px; background:linear-gradient(180deg,#FFFDF8,#F6EEDC) !important; border:2px solid #B8924A !important; border-radius:22px !important; padding:18px 12px 14px !important; color:#3D0918 !important; position:relative; box-shadow:0 14px 34px rgba(0,0,0,.35) !important; transform:none !important; }'
+   +'#final-scores-container .final-team{ width:210px; background:linear-gradient(180deg,#FFFFFF,#ECE8E3) !important; border:2px solid #B8924A !important; border-radius:22px !important; padding:18px 12px 14px !important; color:#3D0918 !important; position:relative; box-shadow:0 14px 34px rgba(0,0,0,.35) !important; transform:none !important; }'
    +'#final-scores-container .final-team.winner{ width:236px; padding-top:24px !important; border-color:#EAD9B0 !important; box-shadow:0 0 0 4px rgba(234,217,176,.25),0 18px 40px rgba(0,0,0,.4) !important; }'
    +'#final-scores-container .final-team .rib{ position:absolute; top:-13px; right:50%; transform:translateX(50%); background:linear-gradient(135deg,#4A0B1E,#5E0E26); border:1.5px solid #B8924A; color:#EAD9B0; border-radius:99px; padding:2px 14px; font-size:.62rem; font-weight:900; white-space:nowrap; }'
    +'#final-scores-container .medal{ width:72px; height:72px; margin:4px auto 8px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; }'
@@ -22281,17 +22281,17 @@ function _hhResStyle(){
    +'#final-scores-container .medal.g{ background:radial-gradient(circle at 35% 30%,#FFF1C2,#EAD9B0 40%,#B8924A 75%,#8A6D2E); }'
    +'#final-scores-container .medal.s{ background:radial-gradient(circle at 35% 30%,#FFFFFF,#E6E3DA 40%,#B9B4A6 75%,#8E8A7E); }'
    +'#final-scores-container .medal.b{ background:radial-gradient(circle at 35% 30%,#F7D9B8,#D9A46F 40%,#B3733C 75%,#7B4B22); }'
-   +'#final-scores-container .medal.n{ background:radial-gradient(circle at 35% 30%,#F6EEDC,#D9CFB8 60%,#B9AE95); }'
+   +'#final-scores-container .medal.n{ background:radial-gradient(circle at 35% 30%,#ECE8E3,#D9CFB8 60%,#B9AE95); }'
    +'#final-scores-container .medal b{ font-size:1.4rem; color:#3D0918; font-weight:900; }'
    +'#final-scores-container .rank{ font-size:.68rem; font-weight:900; color:#8A6D2E; } #final-scores-container .fn{ font-size:1.25rem !important; font-weight:900; margin:2px 0 4px; color:#3D0918 !important; }'
    +'#final-scores-container .fp{ font-size:1.9rem !important; font-weight:900; color:#5E0E26 !important; line-height:1; margin-top:2px !important; } #final-scores-container .pl{ font-size:.64rem; color:#8A7A63; font-weight:700; }'
-   +'#final-scores-container .mini{ display:flex; justify-content:center; gap:6px; margin-top:9px; font-size:.6rem; font-weight:800; color:#5E0E26; } #final-scores-container .mini span{ background:#FFFDF8; border:1px solid #EAD9B0; border-radius:8px; padding:2px 7px; }'
+   +'#final-scores-container .mini{ display:flex; justify-content:center; gap:6px; margin-top:9px; font-size:.6rem; font-weight:800; color:#5E0E26; } #final-scores-container .mini span{ background:#FFFFFF; border:1px solid #EAD9B0; border-radius:8px; padding:2px 7px; }'
    +'#hh-res-stats{ display:flex; justify-content:center; gap:10px; margin:18px auto 0; max-width:820px; width:100%; padding:0 12px; flex-wrap:wrap; }'
    +'#hh-res-stats .st{ flex:1; min-width:150px; background:rgba(0,0,0,.22); border:1px solid rgba(184,146,74,.5); border-radius:14px; padding:9px; text-align:center; } #hh-res-stats .st b{ display:block; font-size:1.2rem; color:#FFFDF8; } #hh-res-stats .st span{ font-size:.64rem; color:#D4BC85; font-weight:700; }'
    +'#screen-result .hh-res-btns{ display:flex !important; flex-wrap:wrap; gap:10px; justify-content:center; max-width:1000px !important; }'
-   +'#screen-result .hh-res-btns button{ flex:1 1 150px; min-width:150px; padding:12px 14px !important; border-radius:14px !important; font-weight:900 !important; font-size:.9rem !important; background:rgba(255,253,248,.08) !important; border:1.5px solid rgba(184,146,74,.55) !important; color:#F5E6C4 !important; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .15s; }'
+   +'#screen-result .hh-res-btns button{ flex:1 1 150px; min-width:150px; padding:12px 14px !important; border-radius:14px !important; font-weight:900 !important; font-size:.9rem !important; background:rgba(255,255,255,.08) !important; border:1.5px solid rgba(184,146,74,.55) !important; color:#F5E6C4 !important; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .15s; }'
    +'#screen-result .hh-res-btns button:hover{ transform:translateY(-2px); }'
-   +'#screen-result .hh-res-btns button[onclick="shareResult()"]{ background:linear-gradient(135deg,#EAD9B0,#B8924A) !important; color:#2A0810 !important; border-color:#FDF3DD !important; box-shadow:0 8px 22px rgba(0,0,0,.3); }'
+   +'#screen-result .hh-res-btns button[onclick="shareResult()"]{ background:#FFFFFF !important; color:#2A0810 !important; border-color:#FDF3DD !important; box-shadow:0 8px 22px rgba(0,0,0,.3); }'
    +'#screen-result .hh-res-btns button[onclick="toggleReplayTeams()"]{ background:linear-gradient(135deg,#8A1538,#5E0E26) !important; border-color:#B8924A !important; }'
    +'#screen-result .hh-res-btns button svg{ stroke:currentColor; }'
    +'#hh-res-foot{ margin-top:14px; font-size:.62rem; color:#B8924A; font-weight:700; opacity:.85; }'
@@ -23173,21 +23173,21 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     +'#screen-result.rs2on > *:not(#rs2):not(#game-stats-panel):not(#replay-teams):not(:first-child){ display:none !important; }'
     +'#screen-result.rs2on{ justify-content:flex-start !important; padding-top:calc(var(--hh-bar,80px) + 18px) !important; padding-bottom:calc(var(--hh-bar-b,80px) + 18px) !important; }'
     +'#rs2{ width:100%; max-width:1240px; margin:0 auto; display:flex; flex-direction:column; align-items:center; color:#FFFDF8; position:relative; z-index:2; }'
-    +'#rs2 .tag{ display:inline-flex; align-items:center; gap:8px; font-family:Cairo,sans-serif; font-weight:800; font-size:1rem; color:#2A0810; background:linear-gradient(135deg,#F5E6C4,#B8924A); border-radius:99px; padding:5px 18px; box-shadow:0 6px 18px rgba(0,0,0,.3); }'
+    +'#rs2 .tag{ display:inline-flex; align-items:center; gap:8px; font-family:Cairo,sans-serif; font-weight:800; font-size:1rem; color:#2A0810; background:#FFFFFF; border-radius:99px; padding:5px 18px; box-shadow:0 6px 18px rgba(0,0,0,.3); }'
     +'#rs2 .win{ font-family:Cairo,sans-serif; font-weight:900; font-size:clamp(2.2rem,4.2vw,3.6rem); line-height:1.25; margin:10px 0 2px; text-align:center; text-shadow:0 4px 18px rgba(0,0,0,.35); }'
     +'#rs2 .mg{ font-family:Cairo,sans-serif; font-weight:700; font-size:1.15rem; color:#EAD9B0; text-align:center; }'
     +'#rs2 .ctx{ color:#D4BC85; font-weight:700; font-size:1rem; margin-top:8px; display:flex; align-items:center; gap:12px; text-align:center; }'
     +'#rs2 .ctx i{ width:70px; height:1px; background:linear-gradient(90deg,#B8924A00,#B8924A); } #rs2 .ctx i.b{ background:linear-gradient(270deg,#B8924A00,#B8924A); }'
-    +'#rs2 .chips{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:12px; } #rs2 .chips span{ font-family:Cairo,sans-serif; font-weight:800; font-size:1.3rem; background:rgba(255,253,248,.1); border:1.5px solid #B8924A; border-radius:14px; padding:6px 18px; }'
+    +'#rs2 .chips{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:12px; } #rs2 .chips span{ font-family:Cairo,sans-serif; font-weight:800; font-size:1.3rem; background:rgba(255,255,255,.1); border:1.5px solid #B8924A; border-radius:14px; padding:6px 18px; }'
     +'#rs2 .pod{ display:flex; align-items:flex-end; justify-content:center; gap:18px; margin-top:34px; width:100%; }'
     +'#rs2 .pc{ width:250px; max-width:24%; display:flex; flex-direction:column; align-items:center; animation:rs2up .6s cubic-bezier(.2,.8,.2,1) both; }'
-    +'#rs2 .card{ width:100%; background:linear-gradient(180deg,#FFFDF8,#F6EEDC); border:2px solid #B8924A; border-radius:22px 22px 0 0; padding:16px 12px 12px; color:#3D0918; text-align:center; position:relative; box-shadow:0 -6px 30px rgba(0,0,0,.25); }'
+    +'#rs2 .card{ width:100%; background:linear-gradient(180deg,#FFFFFF,#ECE8E3); border:2px solid #B8924A; border-radius:22px 22px 0 0; padding:16px 12px 12px; color:#3D0918; text-align:center; position:relative; box-shadow:0 -6px 30px rgba(0,0,0,.25); }'
     +'#rs2 .r1 .card{ border-color:#EAD9B0; box-shadow:0 0 0 4px rgba(234,217,176,.25),0 -10px 40px rgba(0,0,0,.35); }'
     +'#rs2 .medal{ width:64px; height:64px; margin:-48px auto 6px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:Cairo,sans-serif; font-weight:900; font-size:1.5rem; color:#3D0918; border:3px solid #FFFDF8; box-shadow:0 6px 14px rgba(0,0,0,.3); }'
     +'#rs2 .g{ background:radial-gradient(circle at 35% 30%,#FFF1C2,#EAD9B0 40%,#B8924A 75%,#8A6D2E); } #rs2 .s{ background:radial-gradient(circle at 35% 30%,#FFFFFF,#E6E3DA 40%,#B9B4A6 75%,#8E8A7E); } #rs2 .bz{ background:radial-gradient(circle at 35% 30%,#F7D9B8,#D9A46F 40%,#B3733C 75%,#7B4B22); }'
     +'#rs2 .fn{ font-family:Cairo,sans-serif; font-weight:800; font-size:1.55rem; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }'
     +'#rs2 .fp{ font-family:Cairo,sans-serif; font-weight:900; font-size:2.7rem; color:#5E0E26; line-height:1.1; direction:ltr; } #rs2 .pl{ font-size:.85rem; color:#8A7A63; font-weight:700; }'
-    +'#rs2 .mini{ display:flex; justify-content:center; gap:8px; margin-top:10px; flex-wrap:wrap; } #rs2 .mini span{ font-family:Cairo,sans-serif; font-weight:800; font-size:.85rem; background:#FFFDF8; border:1px solid #E7DAC0; border-radius:10px; padding:3px 10px; } #rs2 .mini .ok{ color:#3D6B53; } #rs2 .mini .no{ color:#C0392B; }'
+    +'#rs2 .mini{ display:flex; justify-content:center; gap:8px; margin-top:10px; flex-wrap:wrap; } #rs2 .mini span{ font-family:Cairo,sans-serif; font-weight:800; font-size:.85rem; background:#FFFFFF; border:1px solid #E7DAC0; border-radius:10px; padding:3px 10px; } #rs2 .mini .ok{ color:#3D6B53; } #rs2 .mini .no{ color:#C0392B; }'
     +'#rs2 .step{ width:100%; border-radius:0 0 14px 14px; display:flex; align-items:flex-start; justify-content:center; padding-top:10px; font-family:Cairo,sans-serif; font-weight:900; font-size:1.1rem; color:#FFFDF8; border:2px solid #B8924A; border-top:0; }'
     +'#rs2 .r1 .step{ height:120px; background:linear-gradient(180deg,#B8924A,#8A6D2E); } #rs2 .r2 .step{ height:78px; background:linear-gradient(180deg,#8E8A7E,#5E5B52); } #rs2 .r3 .step{ height:48px; background:linear-gradient(180deg,#B3733C,#7B4B22); }'
     +'#rs2 .allt .step{ height:36px !important; font-size:.95rem; }'
@@ -23197,9 +23197,9 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     +'#rs2 .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; width:100%; max-width:980px; margin-top:22px; }'
     +'#rs2 .st{ background:rgba(0,0,0,.22); border:1px solid rgba(184,146,74,.5); border-radius:16px; padding:10px; text-align:center; } #rs2 .st b{ display:block; font-family:Cairo,sans-serif; font-weight:900; font-size:1.5rem; line-height:1.35; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } #rs2 .st span{ display:block; margin-top:2px; font-size:.9rem; line-height:1.4; color:#D4BC85; font-weight:700; }'
     +'#rs2 .btns{ display:flex; gap:12px; align-items:center; justify-content:center; margin-top:20px; flex-wrap:wrap; }'
-    +'#rs2 .bt{ display:inline-flex; align-items:center; gap:10px; font-family:Cairo,sans-serif; font-weight:800; font-size:1.05rem; border-radius:14px; padding:13px 26px; border:1.5px solid rgba(184,146,74,.6); color:#F5E6C4; background:rgba(255,253,248,.08); white-space:nowrap; cursor:pointer; transition:transform .15s; }'
+    +'#rs2 .bt{ display:inline-flex; align-items:center; gap:10px; font-family:Cairo,sans-serif; font-weight:800; font-size:1.05rem; border-radius:14px; padding:13px 26px; border:1.5px solid rgba(184,146,74,.6); color:#F5E6C4; background:rgba(255,255,255,.08); white-space:nowrap; cursor:pointer; transition:transform .15s; }'
     +'#rs2 .bt:hover{ transform:translateY(-2px); }'
-    +'#rs2 .bt.p{ background:linear-gradient(135deg,#F5E6C4,#B8924A); color:#2A0810; border-color:#FDF3DD; font-size:1.2rem; padding:15px 34px; box-shadow:0 10px 26px rgba(0,0,0,.35); }'
+    +'#rs2 .bt.p{ background:#FFFFFF; color:#2A0810; border-color:#FDF3DD; font-size:1.2rem; padding:15px 34px; box-shadow:0 10px 26px rgba(0,0,0,.35); }'
     +'#rs2 .lnk{ display:flex; gap:22px; justify-content:center; margin-top:12px; flex-wrap:wrap; } #rs2 .lnk button{ background:none; border:0; cursor:pointer; font-family:Cairo,sans-serif; font-weight:700; font-size:.95rem; color:#D4BC85; display:inline-flex; gap:6px; align-items:center; padding:6px 2px; } #rs2 .lnk button:hover{ color:#F5E6C4; }'
     +'#rs2 .foot{ margin-top:14px; font-size:.7rem; color:#B8924A; font-weight:700; opacity:.85; }'
     +'@keyframes rs2up{ from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:none; } }'

@@ -36,7 +36,7 @@ function injectCSS(){
   +'#hh-welcome .wv-stat{text-align:center;opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s;}'
   +'#hh-welcome .wv-stat .n{color:#EAD9B0;font-size:2rem;font-weight:900;line-height:1;}'
   +'#hh-welcome .wv-stat .l{color:#D4BC85;font-size:.7rem;font-weight:700;margin-top:6px;}'
-  +'#hh-welcome .wv-cta{margin-top:38px;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;border:none;border-radius:15px;padding:15px 50px;font-family:Cairo;font-weight:900;font-size:1.15rem;z-index:3;cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity .7s 1.3s,transform .7s 1.3s,box-shadow .3s;box-shadow:0 10px 30px rgba(234,217,176,.3);}'
+  +'#hh-welcome .wv-cta{margin-top:38px;background:#FFFFFF;color:#2a0810;border:none;border-radius:15px;padding:15px 50px;font-family:Cairo;font-weight:900;font-size:1.15rem;z-index:3;cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity .7s 1.3s,transform .7s 1.3s,box-shadow .3s;box-shadow:0 10px 30px rgba(234,217,176,.3);}'
   +'#hh-welcome .wv-cta:hover{box-shadow:0 14px 40px rgba(234,217,176,.5);}'
   +'#hh-welcome .wv-verse{position:absolute;bottom:34px;color:#B8924A;font-family:Amiri,"Noto Naskh Arabic",serif;font-size:1.05rem;z-index:3;opacity:0;transition:opacity .9s 1.6s;text-align:center;padding:0 20px;}'
   +'#hh-welcome .wv-skip{position:absolute;top:18px;left:18px;background:rgba(212,188,133,.12);border:1px solid rgba(184,146,74,.5);color:#D4BC85;border-radius:10px;padding:7px 16px;font-family:Cairo;font-weight:800;font-size:.8rem;cursor:pointer;z-index:4;}'

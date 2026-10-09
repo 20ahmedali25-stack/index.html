@@ -47,17 +47,17 @@
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     function render(){
       var tpls=(CFG.tpls.length?CFG.tpls:[]).map(function(t,i){
-        return '<div style="display:flex;align-items:center;gap:6px;background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:6px 10px;margin-bottom:5px;">'
+        return '<div style="display:flex;align-items:center;gap:6px;background:#FFFFFF;border:1px solid #EDE3CE;border-radius:10px;padding:6px 10px;margin-bottom:5px;">'
           +'<span style="flex:1;font-weight:700;font-size:.7rem;color:#5a4a30;">'+esc2(t)+'</span>'
           +'<b data-deltpl="'+i+'" style="color:#8A1538;cursor:pointer;">✕</b></div>';
       }).join('') || '<div style="font-size:.66rem;color:#8A7A63;font-weight:700;margin-bottom:5px;">تُستخدم القوالب الجاهزة الافتراضية، أضف قوالبك لتحل محلها</div>';
       var ctrs=CFG.counters.map(function(c,i){
-        return '<span style="background:#FFFDF8;border:1.5px solid #8A6D2E;border-radius:15px;padding:4px 11px;font-size:.68rem;font-weight:900;color:#8A6D2E;margin-left:4px;display:inline-block;margin-bottom:4px;">'+esc2(c.name)
+        return '<span style="background:#FFFFFF;border:1.5px solid #8A6D2E;border-radius:15px;padding:4px 11px;font-size:.68rem;font-weight:900;color:#8A6D2E;margin-left:4px;display:inline-block;margin-bottom:4px;">'+esc2(c.name)
           +' <b data-delctr="'+i+'" style="color:#8A1538;cursor:pointer;">✕</b></span>';
       }).join('') || '<span style="font-size:.66rem;color:#8A7A63;font-weight:700;">لا عدادات بعد</span>';
       var R=CFG.report;
       function cb(k,l){ return '<label style="font-size:.66rem;font-weight:800;color:#5a4a30;margin-left:9px;"><input type="checkbox" data-show="'+k+'"'+(R.show[k]?' checked':'')+'> '+l+'</label>'; }
-      ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:560px;width:100%;overflow:hidden;margin-bottom:22px;">'
+      ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:20px;max-width:560px;width:100%;overflow:hidden;margin-bottom:22px;">'
         +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
         +'<div><div style="font-weight:900;font-size:1rem;">إعدادات المتابعة والتقارير</div>'
         +'<div style="font-size:.7rem;opacity:.85;">تتبعك على كل أجهزتك</div></div>'
@@ -65,14 +65,14 @@
         +'<div style="padding:13px 16px;">'
         +'<div style="font-weight:900;font-size:.78rem;color:#3D0918;margin:4px 0 6px;">قوالب الملاحظات السريعة</div>'
         + tpls
-        +'<button id="dps-addtpl" style="background:#FFFDF8;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">إضافة قالب</button>'
+        +'<button id="dps-addtpl" style="background:#FFFFFF;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">إضافة قالب</button>'
         +'<div style="font-weight:900;font-size:.78rem;color:#3D0918;margin:13px 0 6px;">العدادات المخصصة (أزرار في الدفتر الذكي)</div>'
         + ctrs
-        +'<div style="margin-top:6px;"><button id="dps-addctr" style="background:#FFFDF8;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">إضافة عداد</button></div>'
+        +'<div style="margin-top:6px;"><button id="dps-addctr" style="background:#FFFFFF;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">إضافة عداد</button></div>'
         +'<div style="font-weight:900;font-size:.78rem;color:#3D0918;margin:13px 0 6px;">إعدادات التقارير</div>'
         +'<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">'
         +(R.logo?'<img src="'+R.logo+'" style="height:38px;max-width:80px;object-fit:contain;border:1px solid #EDE3CE;border-radius:8px;background:#fff;padding:2px;">':'')
-        +'<label style="background:#FFFDF8;color:#5E0E26;border:1.5px solid #B8924A;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">'
+        +'<label style="background:#FFFFFF;color:#5E0E26;border:1.5px solid #B8924A;border-radius:10px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">'
         +(R.logo?'تغيير شعار المدرسة':'رفع شعار المدرسة')
         +'<input type="file" id="dps-logo" accept="image/*" style="display:none;"></label>'
         +(R.logo?'<b id="dps-dellogo" style="color:#8A1538;cursor:pointer;font-size:.7rem;">إزالة</b>':'')
@@ -170,13 +170,13 @@
     +'.logo{font-weight:900;font-size:1.25rem;color:#4A0B1E;} .logo small{display:block;font-size:.66rem;color:#8A6D2E;font-weight:800;}'
     +'h2{font-size:.95rem;color:#4A0B1E;border-right:4px solid #B8924A;padding-right:8px;margin:16px 0 8px;}'
     +'.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;} .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}'
-    +'.st{border:1.5px solid #E3D9C6;border-radius:10px;text-align:center;padding:8px 4px;background:#FFFDF8;}'
+    +'.st{border:1.5px solid #E3D9C6;border-radius:10px;text-align:center;padding:8px 4px;background:#FFFFFF;}'
     +'.st b{display:block;font-size:1.02rem;color:#4A0B1E;} .st span{font-size:.72rem;color:#8A6D2E;font-weight:800;}'
-    +'table{width:100%;border-collapse:collapse;font-size:.74rem;} td,th{border:1px solid #E3D9C6;padding:4px 7px;} th{background:#FBF7EE;color:#4A0B1E;}'
-    +'.box{border:1.5px solid #B8924A;border-radius:10px;padding:10px 13px;font-size:.78rem;background:#FFFDF8;}'
+    +'table{width:100%;border-collapse:collapse;font-size:.74rem;} td,th{border:1px solid #E3D9C6;padding:4px 7px;} th{background:#F5F3F0;color:#4A0B1E;}'
+    +'.box{border:1.5px solid #B8924A;border-radius:10px;padding:10px 13px;font-size:.78rem;background:#FFFFFF;}'
     +'.sig{margin-top:30px;display:flex;justify-content:space-between;font-size:.74rem;font-weight:800;color:#5a4a30;}'
     +'.sig div{border-top:1.5px solid #B8924A;padding-top:5px;min-width:150px;text-align:center;}'
-    +'@media print{.noprint{display:none;} body{padding:10px 14px;}}'+'.wm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:.045;font-size:210px;font-weight:900;color:#4A0B1E;pointer-events:none;z-index:0;}'+'.mhd{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #B8924A;padding-bottom:12px;position:relative;z-index:1;}'+'.mhd .b1{display:flex;gap:12px;align-items:center;} .mlogo{width:52px;height:52px;border-radius:50%;border:2.5px solid #4A0B1E;display:flex;align-items:center;justify-content:center;font-weight:900;color:#4A0B1E;font-size:.72rem;text-align:center;overflow:hidden;}'+'.mhd h1{margin:0;font-size:1.1rem;color:#4A0B1E;font-weight:900;} .mhd .msub{font-size:.72rem;color:#8A6D2E;font-weight:800;} .mhd .mmeta{text-align:left;font-size:.7rem;font-weight:800;color:#5a4a30;line-height:1.9;}'+'.stub{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#4A0B1E,#5E0E26);border-radius:14px;padding:13px 18px;margin:14px 0;position:relative;z-index:1;}'+'.stub .who{flex:1;} .stub .who b{color:#FFFDF8;font-size:1.05rem;font-weight:900;display:block;} .stub .who span{color:#D4BC85;font-size:.62rem;font-weight:800;}'+'.stub .lvl{border-radius:11px;padding:7px 16px;font-weight:900;font-size:.8rem;text-align:center;color:#2a0810;} .stub .lvl small{display:block;font-size:.62rem;font-weight:800;}'+'.rings{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;position:relative;z-index:1;}'+'.ring{text-align:center;} .rc{width:70px;height:70px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;}'+'.rc .in{width:54px;height:54px;border-radius:50%;background:#FFFDF8;display:flex;flex-direction:column;align-items:center;justify-content:center;}'+'.rc .in b{font-size:.82rem;color:#2b1016;font-weight:900;line-height:1;} .rc .in i{font-style:normal;font-size:.72rem;color:#8A6D2E;font-weight:800;} .ring .rt{font-size:.68rem;font-weight:900;color:#5a4a30;margin-top:4px;}'+'.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;position:relative;z-index:1;} .trend{width:100%;height:auto;display:block;}'+'.cmp{display:flex;flex-direction:column;gap:6px;} .cmp .cr{display:flex;align-items:center;gap:6px;font-size:.7rem;font-weight:800;color:#5a4a30;}'+'.cmp .cbar{flex:1;height:10px;background:#F1EBDF;border-radius:6px;overflow:hidden;} .cmp .cbar span{display:block;height:100%;}'+'.qual{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1;} .tagset{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}'+'.tg{border-radius:12px;padding:3px 10px;font-size:.68rem;font-weight:900;}'+'.opin{background:#FBF7EE;border:1.5px solid #B8924A;border-radius:12px;padding:11px 14px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2;position:relative;z-index:1;}'+'.msig{margin-top:16px;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1;} .msig .s{border-top:1.5px solid #B8924A;padding-top:4px;min-width:120px;text-align:center;font-size:.7rem;font-weight:800;color:#5a4a30;}'+'.ver{text-align:center;font-size:.62rem;color:#8A6D2E;font-weight:800;} .ver .qr{width:40px;height:40px;margin:0 auto 3px;background:conic-gradient(#4A0B1E 25%,#fff 0 50%,#4A0B1E 0 75%,#fff 0);border:2px solid #4A0B1E;border-radius:6px;}'+'.dist{display:flex;align-items:flex-end;gap:9px;height:88px;padding:4px 6px 0;} .dist .d{flex:1;text-align:center;} .dist .bar2{border-radius:6px 6px 0 0;margin:0 auto;width:72%;} .dist .dn{font-size:.72rem;font-weight:900;color:#2b1016;} .dist .dt{font-size:.62rem;font-weight:800;color:#8A6D2E;}'+'.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;} .hcell{height:16px;border-radius:4px;}'+'.exec{background:linear-gradient(135deg,#FBF7EE,#f6efdd);border:1.5px solid #B8924A;border-radius:12px;padding:12px 15px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2.05;position:relative;z-index:1;}'+'.page{position:relative;}';
+    +'@media print{.noprint{display:none;} body{padding:10px 14px;}}'+'.wm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:.045;font-size:210px;font-weight:900;color:#4A0B1E;pointer-events:none;z-index:0;}'+'.mhd{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #B8924A;padding-bottom:12px;position:relative;z-index:1;}'+'.mhd .b1{display:flex;gap:12px;align-items:center;} .mlogo{width:52px;height:52px;border-radius:50%;border:2.5px solid #4A0B1E;display:flex;align-items:center;justify-content:center;font-weight:900;color:#4A0B1E;font-size:.72rem;text-align:center;overflow:hidden;}'+'.mhd h1{margin:0;font-size:1.1rem;color:#4A0B1E;font-weight:900;} .mhd .msub{font-size:.72rem;color:#8A6D2E;font-weight:800;} .mhd .mmeta{text-align:left;font-size:.7rem;font-weight:800;color:#5a4a30;line-height:1.9;}'+'.stub{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#4A0B1E,#5E0E26);border-radius:14px;padding:13px 18px;margin:14px 0;position:relative;z-index:1;}'+'.stub .who{flex:1;} .stub .who b{color:#FFFDF8;font-size:1.05rem;font-weight:900;display:block;} .stub .who span{color:#D4BC85;font-size:.62rem;font-weight:800;}'+'.stub .lvl{border-radius:11px;padding:7px 16px;font-weight:900;font-size:.8rem;text-align:center;color:#2a0810;} .stub .lvl small{display:block;font-size:.62rem;font-weight:800;}'+'.rings{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;position:relative;z-index:1;}'+'.ring{text-align:center;} .rc{width:70px;height:70px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;}'+'.rc .in{width:54px;height:54px;border-radius:50%;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;}'+'.rc .in b{font-size:.82rem;color:#2b1016;font-weight:900;line-height:1;} .rc .in i{font-style:normal;font-size:.72rem;color:#8A6D2E;font-weight:800;} .ring .rt{font-size:.68rem;font-weight:900;color:#5a4a30;margin-top:4px;}'+'.cols{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;position:relative;z-index:1;} .trend{width:100%;height:auto;display:block;}'+'.cmp{display:flex;flex-direction:column;gap:6px;} .cmp .cr{display:flex;align-items:center;gap:6px;font-size:.7rem;font-weight:800;color:#5a4a30;}'+'.cmp .cbar{flex:1;height:10px;background:#ECE8E3;border-radius:6px;overflow:hidden;} .cmp .cbar span{display:block;height:100%;}'+'.qual{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1;} .tagset{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}'+'.tg{border-radius:12px;padding:3px 10px;font-size:.68rem;font-weight:900;}'+'.opin{background:#F5F3F0;border:1.5px solid #B8924A;border-radius:12px;padding:11px 14px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2;position:relative;z-index:1;}'+'.msig{margin-top:16px;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1;} .msig .s{border-top:1.5px solid #B8924A;padding-top:4px;min-width:120px;text-align:center;font-size:.7rem;font-weight:800;color:#5a4a30;}'+'.ver{text-align:center;font-size:.62rem;color:#8A6D2E;font-weight:800;} .ver .qr{width:40px;height:40px;margin:0 auto 3px;background:conic-gradient(#4A0B1E 25%,#fff 0 50%,#4A0B1E 0 75%,#fff 0);border:2px solid #4A0B1E;border-radius:6px;}'+'.dist{display:flex;align-items:flex-end;gap:9px;height:88px;padding:4px 6px 0;} .dist .d{flex:1;text-align:center;} .dist .bar2{border-radius:6px 6px 0 0;margin:0 auto;width:72%;} .dist .dn{font-size:.72rem;font-weight:900;color:#2b1016;} .dist .dt{font-size:.62rem;font-weight:800;color:#8A6D2E;}'+'.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;} .hcell{height:16px;border-radius:4px;}'+'.exec{background:linear-gradient(135deg,#F5F3F0,#ECE8E3);border:1.5px solid #B8924A;border-radius:12px;padding:12px 15px;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:2.05;position:relative;z-index:1;}'+'.page{position:relative;}';
   function openPrint(html){
     // نعرض التقرير كطبقة داخل الصفحة (لا نافذة جديدة تُحجب على الهاتف)
     var old=document.getElementById('hh-report-layer'); if(old) old.remove();
@@ -192,9 +192,9 @@
     layer.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.6);z-index:2147483647;display:flex;flex-direction:column;direction:rtl;font-family:Cairo,sans-serif;';
     layer.innerHTML=
       '<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);padding:11px 16px;display:flex;gap:8px;align-items:center;flex-shrink:0;box-shadow:0 3px 12px rgba(42,8,16,.3);">'
-      +'<button onclick="var e=document.getElementById(\'hh-report-layer\');if(e)e.remove();" style="background:rgba(255,253,248,.16);border:1.5px solid #D4BC85;color:#F5E6C4;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">\u25c0 رجوع للدفتر</button>'
+      +'<button onclick="var e=document.getElementById(\'hh-report-layer\');if(e)e.remove();" style="background:rgba(255,255,255,.16);border:1.5px solid #D4BC85;color:#F5E6C4;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">\u25c0 رجوع للدفتر</button>'
       +'<div style="flex:1;"></div>'
-      +'<button id="hh-report-csv" style="background:rgba(255,253,248,.14);color:#F5E6C4;border:1.5px solid #D4BC85;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تنزيل Excel</button>'
+      +'<button id="hh-report-csv" style="background:rgba(255,255,255,.14);color:#F5E6C4;border:1.5px solid #D4BC85;border-radius:9px;padding:9px 18px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تنزيل Excel</button>'
       +'<button onclick="hhReportPrint()" style="background:#B8924A;color:#2a0810;border:none;border-radius:9px;padding:9px 20px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
       +'</div>'
       +'<div id="hh-report-scroll" style="flex:1;overflow-y:auto;background:#eee;padding:14px;display:flex;justify-content:center;">'
@@ -229,7 +229,7 @@
         +(actLabel?'<button onclick="'+actFn+'" style="font-size:.6rem;color:#5E0E26;font-weight:900;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:Cairo;">'+actLabel+'</button>':'')
         +'</div>';
     }
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:16px;max-width:400px;width:100%;overflow:hidden;">'
+    ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:16px;max-width:400px;width:100%;overflow:hidden;">'
       +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:12px 15px;">'
       +'<div style="font-weight:900;font-size:.9rem;">إعداد الطباعة</div>'
       +'<div style="font-size:.6rem;opacity:.85;font-weight:700;">بياناتك محفوظة · فعّل ما تريد إرفاقه على الورقة</div></div>'
@@ -241,7 +241,7 @@
       + row('sign','✒','فراغات التواقيع', '', '', '')
       +'<div style="display:flex;gap:7px;margin-top:8px;">'
       +'<button onclick="hhPrintConfirm()" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:11px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">طباعة النسخة النهائية</button>'
-      +'<button onclick="document.getElementById(\'hh-print-dlg\').remove()" style="background:#FFFDF8;border:1.4px solid #ddd;color:#999;border-radius:10px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">إلغاء</button>'
+      +'<button onclick="document.getElementById(\'hh-print-dlg\').remove()" style="background:#FFFFFF;border:1.4px solid #ddd;color:#999;border-radius:10px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.78rem;cursor:pointer;">إلغاء</button>'
       +'</div></div></div>';
     document.body.appendChild(ov);
   };
@@ -485,7 +485,7 @@
       +'</div>'
       +(best?'<div style="font-size:.78rem;font-weight:800;margin:8px 0;">أعلى تحصيل: '+esc2(best.n)+' ('+best.v+'%)</div>':'')
       +'<table><tr><th>الطالب</th><th>الانتظام</th><th>التحصيل</th><th>الواجبات</th><th>مشاركات</th><th>تميز</th><th>ملاحظات</th></tr>'+rows+'</table>'
-      +(support.length?'<div class="box" style="border-color:#8A1538;background:#fff6f4;margin-top:12px;"><b>طلاب يحتاجون دعماً:</b> '+support.map(esc2).join('، ')+'</div>':'')
+      +(support.length?'<div class="box" style="border-color:#8A1538;background:#FFFFFF;margin-top:12px;"><b>طلاب يحتاجون دعماً:</b> '+support.map(esc2).join('، ')+'</div>':'')
       + repSig()
       +'<div class="noprint" style="margin-top:20px;text-align:center;display:flex;gap:8px;justify-content:center;">'
       +'<button onclick="window.print()" style="background:#4A0B1E;color:#fff;border:none;border-radius:10px;padding:11px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">طباعة أو حفظ PDF</button>'
@@ -530,7 +530,7 @@
     var old=document.getElementById('hh-dpi'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpi';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
+    ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:20px;max-width:600px;width:100%;overflow:hidden;margin-bottom:22px;">'
       +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1rem;">استيراد الطلاب من Excel</div>'
       +'<div style="font-size:.7rem;opacity:.86;">عمود «الفصل» في الملف ينشئ الفصول تلقائياً</div></div>'
@@ -557,7 +557,7 @@
       var groups={};
       rowsCache.forEach(function(r){ var g=r.cls||'بدون فصل'; (groups[g]=groups[g]||[]).push(r); });
       box.innerHTML=Object.keys(groups).map(function(g){
-        return '<div style="background:#FFFDF8;border:1px solid #EDE3CE;border-radius:10px;padding:8px 11px;margin-bottom:6px;">'
+        return '<div style="background:#FFFFFF;border:1px solid #EDE3CE;border-radius:10px;padding:8px 11px;margin-bottom:6px;">'
           +'<b style="font-size:.74rem;color:#5E0E26;">'+esc2(g)+'</b> <span style="font-size:.66rem;color:#8A7A63;font-weight:800;">'+groups[g].length+' طالباً</span></div>';
       }).join('')
       +'<button id="dpi-go" style="width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;margin-top:6px;">استيراد '+rowsCache.length+' طالباً الآن</button>';
@@ -612,7 +612,7 @@
     var old=document.getElementById('hh-dpa'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpa';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.8);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;padding:40px;text-align:center;font-weight:900;color:#8A6D2E;">جارٍ جمع البيانات…</div>';
+    ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;padding:40px;text-align:center;font-weight:900;color:#8A6D2E;">جارٍ جمع البيانات…</div>';
     document.body.appendChild(ov);
     var teachers={}, rooms=[], counts={};
     try{
@@ -623,7 +623,7 @@
       var ss=await db().collection('classroom_students').limit(1000).get();
       ss.forEach(function(d){ var x=d.data(); if(x.active!==false){ counts[x.classCode]=(counts[x.classCode]||[]); counts[x.classCode].push(x.studentName||x.name||'طالب'); } });
     }catch(e){
-      ov.innerHTML='<div style="background:#F6F1E7;border-radius:20px;padding:30px;text-align:center;font-weight:900;color:#8A1538;">تعذر جلب البيانات، تحقق من الاتصال والصلاحيات</div>';
+      ov.innerHTML='<div style="background:#F5F4F2;border-radius:20px;padding:30px;text-align:center;font-weight:900;color:#8A1538;">تعذر جلب البيانات، تحقق من الاتصال والصلاحيات</div>';
       return;
     }
     var schools={};
@@ -639,24 +639,24 @@
     var names=Object.keys(schools).sort(function(a,b){ return schools[b].students-schools[a].students; });
     var totT=Object.keys(teachers).length, totC=rooms.length;
     var totS=names.reduce(function(a,n){return a+schools[n].students;},0);
-    function stat(v,l,c){ return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:12px;padding:10px 6px;text-align:center;">'
+    function stat(v,l,c){ return '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:12px;padding:10px 6px;text-align:center;">'
       +'<div style="font-weight:900;font-size:1.15rem;color:'+c+';">'+v+'</div><div style="font-size:.62rem;font-weight:800;color:#8a7a60;">'+l+'</div></div>'; }
     var rows=names.map(function(n,i){
       var S=schools[n];
       var cls=S.classes.map(function(c){
         var chips=c.list.length?('<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px;">'
-          +c.list.map(function(x){return '<span style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:12px;padding:2px 9px;font-size:.62rem;font-weight:800;color:#3D0918;">'+esc2(x)+'</span>';}).join('')+'</div>'):'';
-        return '<div style="background:#FBF5E9;border-radius:9px;padding:7px 10px;margin-top:5px;">'
+          +c.list.map(function(x){return '<span style="background:#F5F3F0;border:1px solid #E8DCC2;border-radius:12px;padding:2px 9px;font-size:.62rem;font-weight:800;color:#3D0918;">'+esc2(x)+'</span>';}).join('')+'</div>'):'';
+        return '<div style="background:#F5F3F0;border-radius:9px;padding:7px 10px;margin-top:5px;">'
           +'<span style="font-weight:900;font-size:.7rem;color:#8A1538;">'+esc2(c.name)+'</span>'
           +'<span style="font-size:.64rem;font-weight:800;color:#8A6D2E;margin-right:8px;">'+c.n+' طالباً</span>'+chips+'</div>';
       }).join('');
-      return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;padding:10px 13px;margin-bottom:8px;">'
+      return '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:13px;padding:10px 13px;margin-bottom:8px;">'
         +'<div data-sch="'+i+'" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px;">'
         +'<span style="font-weight:900;font-size:.8rem;color:#2b1016;">'+esc2(n)+'</span>'
         +'<span style="font-size:.64rem;font-weight:800;color:#8A6D2E;flex-shrink:0;">'+Object.keys(S.teachers).length+' معلم · '+S.classes.length+' فصل · '+S.students+' طالب</span></div>'
         +'<div id="dpa-'+i+'" style="display:none;">'+cls+'</div></div>';
     }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:20px;">لا بيانات بعد</div>';
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:22px;">'
+    ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:22px;">'
       +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1rem;">المدارس والطلاب</div>'
       +'<div style="font-size:.7rem;opacity:.85;">لوحة المدير · اضغط أي مدرسة للتفاصيل</div></div>'
@@ -712,11 +712,11 @@
   // ═══ نظرة عامة: الرأي + الرسم ═══
   window.hhSf2Extra=function(r){
     var opinion = r.opinion || (window.hhDPlusOpinionDraft?window.hhDPlusOpinionDraft(r):'');
-    var op='<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:11px 13px;">'
+    var op='<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:14px;padding:11px 13px;">'
       +'<textarea id="sf2-op" style="width:100%;box-sizing:border-box;border:1.5px solid #EDE3CE;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.76rem;font-weight:700;line-height:1.9;min-height:76px;">'+esc2(opinion)+'</textarea>'
       +'<div style="display:flex;gap:6px;margin-top:6px;">'
       +'<button onclick="hhSf2OpSave()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 16px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">حفظ الرأي</button>'
-      +'<button onclick="hhSf2OpRegen()" style="background:#FFFDF8;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:9px;padding:7px 13px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">إعادة توليد</button>'
+      +'<button onclick="hhSf2OpRegen()" style="background:#FFFFFF;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:9px;padding:7px 13px;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;">إعادة توليد</button>'
       +'</div></div>';
     return box('رأي المعلم'+(r.opinion?'':' (صياغة تلقائية)'), op) + chartBox(r);
   };
@@ -763,7 +763,7 @@
     });
     svg+='</svg>';
     return box('التطور خلال ستة أسابيع',
-      '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:14px;padding:10px 8px 4px;">'+svg
+      '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:14px;padding:10px 8px 4px;">'+svg
       +'<div style="display:flex;gap:11px;justify-content:center;padding:5px 0 7px;font-size:.62rem;font-weight:800;">'
       +'<span style="color:#3D6B53;">■ الانتظام</span><span style="color:#1F4E79;">■ التحصيل</span><span style="color:#B8924A;">■ الواجبات</span></div></div>');
   }
@@ -779,7 +779,7 @@
         }).join(' ');
         var have={}; mine.forEach(function(t){have[t]=1;});
         var sugg=bank.filter(function(b){return !have[b];}).slice(0,6).map(function(b){
-          return '<span onclick="hhSf2TraitAdd(\''+kind+'\',\''+b+'\')" style="background:#FFFDF8;border:1.5px dashed '+col+';color:'+col+';border-radius:15px;padding:3px 11px;font-size:.66rem;font-weight:800;cursor:pointer;">+ '+b+'</span>';
+          return '<span onclick="hhSf2TraitAdd(\''+kind+'\',\''+b+'\')" style="background:#FFFFFF;border:1.5px dashed '+col+';color:'+col+';border-radius:15px;padding:3px 11px;font-size:.66rem;font-weight:800;cursor:pointer;">+ '+b+'</span>';
         }).join(' ');
         return box(label, '<div style="display:flex;gap:5px;flex-wrap:wrap;">'+chips+(chips&&sugg?' ':'')+sugg+'</div>',
           '<button onclick="hhSf2TraitCustom(\''+kind+'\')" style="background:none;border:none;color:'+col+';font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">كتابة حرة</button>');
@@ -792,14 +792,14 @@
       var gs=r.guardians||[];
       var list=gs.map(function(g,i){
         var d=DISP.filter(function(x){return x[0]===g.disposition;})[0]||DISP[1];
-        return '<span onclick="hhSf2GuardDel('+i+')" title="اضغط للحذف" style="background:#FFFDF8;border:1.5px solid '+d[2]+';border-radius:16px;padding:5px 13px;font-size:.7rem;font-weight:900;color:'+d[2]+';cursor:pointer;">'
+        return '<span onclick="hhSf2GuardDel('+i+')" title="اضغط للحذف" style="background:#FFFFFF;border:1.5px solid '+d[2]+';border-radius:16px;padding:5px 13px;font-size:.7rem;font-weight:900;color:'+d[2]+';cursor:pointer;">'
           +esc2(g.relation||'ولي أمر')+(g.name?' · '+esc2(g.name):'')+' · '+d[1]+'</span>';
       }).join(' ') || '<span style="font-size:.7rem;color:#8A7A63;font-weight:700;">لم يُسجل ولي أمر بعد</span>';
       var rel=REL.map(function(x){return '<option>'+x+'</option>';}).join('');
       var disp=DISP.map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join('');
       return box('أولياء الأمر','<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;">'+list+'</div>')
         + box('إضافة ولي أمر',
-          '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
+          '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
           +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
           +'<select id="sf2-grel" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.74rem;font-weight:800;background:#fff;">'+rel+'</select>'
           +'<select id="sf2-gdisp" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.74rem;font-weight:800;background:#fff;">'+disp+'</select></div>'
@@ -809,7 +809,7 @@
     if(tab==='contact'){
       var cs=(r.contacts||[]).slice().reverse();
       var list=cs.map(function(c){
-        return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:12px;padding:10px 13px;margin-bottom:7px;">'
+        return '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:12px;padding:10px 13px;margin-bottom:7px;">'
           +'<div style="display:flex;justify-content:space-between;gap:7px;">'
           +'<span style="font-weight:900;font-size:.74rem;color:#3D0918;">'+esc2(c.kind||'اتصال')+(c.relation?' مع '+esc2(c.relation):'')+'</span>'
           +'<span style="font-size:.64rem;color:#B8AD94;font-weight:700;">'+esc2(c.date||'')+'</span></div>'
@@ -823,10 +823,10 @@
         return '<option>'+esc2(g.relation+(g.name?' · '+g.name:'')+' ('+d[1]+')')+'</option>';
       }).join('');
       var phr=PHRASES.map(function(p,i){
-        return '<button onclick="hhSf2Phrase('+i+')" style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-family:Cairo;font-weight:800;font-size:.62rem;color:#5a4a30;cursor:pointer;margin:2px;">'+esc2(p.slice(0,28))+(p.length>28?'…':'')+'</button>';
+        return '<button onclick="hhSf2Phrase('+i+')" style="background:#F5F3F0;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-family:Cairo;font-weight:800;font-size:.62rem;color:#5a4a30;cursor:pointer;margin:2px;">'+esc2(p.slice(0,28))+(p.length>28?'…':'')+'</button>';
       }).join('');
       return box('تسجيل تواصل جديد',
-        '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
+        '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
         +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
         +'<select id="sf2-ckind" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.74rem;font-weight:800;background:#fff;">'+CKINDS.map(function(k){return '<option>'+k+'</option>';}).join('')+'</select>'
         +'<input id="sf2-crev" type="date" style="border:1.5px solid #EDE3CE;border-radius:9px;padding:7px;font-family:Cairo;font-size:.72rem;">'
@@ -842,7 +842,7 @@
       var ps=(r.plans||[]).slice().reverse();
       var list=ps.map(function(p){
         var st=PSTATUS.filter(function(x){return x[0]===p.status;})[0]||PSTATUS[0];
-        return '<div style="background:#FFFDF8;border:1.5px solid '+st[2]+';border-radius:12px;padding:11px 13px;margin-bottom:7px;">'
+        return '<div style="background:#FFFFFF;border:1.5px solid '+st[2]+';border-radius:12px;padding:11px 13px;margin-bottom:7px;">'
           +'<div style="display:flex;justify-content:space-between;gap:7px;align-items:center;">'
           +'<span style="font-weight:900;font-size:.76rem;color:#3D0918;">'+esc2(p.reason||p.title||'خطة')+'</span>'
           +'<span style="background:'+st[2]+';color:#fff;border-radius:11px;padding:2px 10px;font-size:.62rem;font-weight:900;">'+st[1]+'</span></div>'
@@ -853,7 +853,7 @@
           +'</div>';
       }).join('') || '<div style="font-size:.7rem;color:#8A7A63;font-weight:700;">لا خطط بعد</div>';
       return box('خطة دعم جديدة',
-        '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
+        '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:14px;padding:12px 13px;">'
         +'<input id="sf2-preason" placeholder="سبب المتابعة" style="width:100%;box-sizing:border-box;border:1.5px solid #EDE3CE;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.75rem;font-weight:700;margin-bottom:7px;">'
         +'<input id="sf2-pstrength" placeholder="نقطة قوة نبني عليها" style="width:100%;box-sizing:border-box;border:1.5px solid #EDE3CE;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.75rem;font-weight:700;margin-bottom:7px;">'
         +'<input id="sf2-pgoal" placeholder="الهدف" style="width:100%;box-sizing:border-box;border:1.5px solid #EDE3CE;border-radius:9px;padding:8px 10px;font-family:Cairo;font-size:.75rem;font-weight:700;margin-bottom:7px;">'
@@ -868,10 +868,10 @@
       return box('تقرير الطالب',
         '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
         +'<button onclick="if(window.hhDPlusStudentReport)hhDPlusStudentReport(window._hhSfRec)" style="flex:1;min-width:150px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تقرير PDF للطباعة</button>'
-        +'<button onclick="window._hhDPlusLastRec=window._hhSfRec;if(window.hhDPlusStudentCsv)hhDPlusStudentCsv()" style="flex:1;min-width:150px;background:#FFFDF8;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تنزيل Excel</button>'
+        +'<button onclick="window._hhDPlusLastRec=window._hhSfRec;if(window.hhDPlusStudentCsv)hhDPlusStudentCsv()" style="flex:1;min-width:150px;background:#FFFFFF;color:#3D6B53;border:1.5px solid #3D6B53;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تنزيل Excel</button>'
         +'</div>'
         +'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;margin-top:9px;line-height:1.8;">يشمل التقرير المؤشرات والدرجات والملاحظات وخطة الدعم ورأي المعلم، بشعار المدرسة واسمي المعلم والمنسق وفراغات التوقيع. عدّل ذلك كله من زر الإعدادات في الدفتر الذكي.</div>')
-        + box('إعدادات التقرير','<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFDF8;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">⚙ فتح الإعدادات</button>');
+        + box('إعدادات التقرير','<button onclick="if(window.hhDPlusSettings)hhDPlusSettings()" style="background:#FFFFFF;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:10px 18px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">⚙ فتح الإعدادات</button>');
     }
     return '';
   };
@@ -956,7 +956,7 @@
     var ov=document.createElement('div');
     ov.className='hh-royal-dlg';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'+inner+'</div>';
+    ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'+inner+'</div>';
     document.body.appendChild(ov);
     return ov;
   }
@@ -966,7 +966,7 @@
         +(sub?'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;line-height:1.9;margin-bottom:13px;">'+sub+'</div>':'<div style="height:8px;"></div>')
         +'<div style="display:flex;gap:8px;">'
         +'<button class="rc-ok" style="flex:1;background:linear-gradient(135deg,'+(danger?'#8A1538,#5E0E26':'#3D6B53,#2C5340')+');color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تأكيد</button>'
-        +'<button class="rc-no" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button></div>');
+        +'<button class="rc-no" style="background:#FFFFFF;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button></div>');
       ov.querySelector('.rc-ok').onclick=function(){ ov.remove(); res(true); };
       ov.querySelector('.rc-no').onclick=function(){ ov.remove(); res(false); };
     });
@@ -977,7 +977,7 @@
         +'<input class="rp-in" value="'+String(def||'').replace(/"/g,'&quot;')+'" placeholder="'+(ph||'')+'" style="width:100%;box-sizing:border-box;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px;font-family:Cairo;font-weight:800;font-size:.82rem;text-align:center;margin-bottom:12px;">'
         +'<div style="display:flex;gap:8px;">'
         +'<button class="rp-ok" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">حفظ</button>'
-        +'<button class="rp-no" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button></div>');
+        +'<button class="rp-no" style="background:#FFFFFF;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button></div>');
       var inp=ov.querySelector('.rp-in');
       setTimeout(function(){ inp.focus(); inp.select(); },80);
       function ok(){ var v=inp.value.trim(); ov.remove(); res(v||null); }
@@ -1020,7 +1020,7 @@
     }catch(e){ P.certN=0; }
   }
   function statCard(v,l,c){
-    return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;">'
+    return '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;">'
       +'<div style="font-weight:900;font-size:1.3rem;color:'+c+';">'+v+'</div>'
       +'<div style="font-size:.6rem;color:#8A6D2E;font-weight:800;">'+l+'</div></div>';
   }
@@ -1034,32 +1034,32 @@
     var R=(window._hhDPlusCfg&&window._hhDPlusCfg().report)||{};
     var ov=document.createElement('div'); ov.id='hh-tpanel';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
-    function statCard(v,l,c){ return '<div style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;"><div style="font-weight:900;font-size:1.3rem;color:'+c+';">'+v+'</div><div style="font-size:.58rem;color:#8A6D2E;font-weight:800;">'+l+'</div></div>'; }
+    function statCard(v,l,c){ return '<div style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:13px;text-align:center;padding:11px 4px;"><div style="font-weight:900;font-size:1.3rem;color:'+c+';">'+v+'</div><div style="font-size:.58rem;color:#8A6D2E;font-weight:800;">'+l+'</div></div>'; }
     function sech(t){ return '<div style="display:flex;align-items:center;gap:7px;font-weight:900;font-size:.76rem;color:#8A6D2E;margin:14px 0 8px;"><span style="width:4px;height:15px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;"></span>'+t+'</div>'; }
-    function tile(title,sub,col,onclick){ return '<button onclick="'+onclick+'" style="background:#FFFDF8;border:1.5px solid #EDE3CE;border-right:5px solid '+col+';border-radius:13px;padding:11px 13px;text-align:right;cursor:pointer;font-family:Cairo;"><div style="font-weight:900;font-size:.78rem;color:#3D0918;">'+title+'</div><div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+sub+'</div></button>'; }
+    function tile(title,sub,col,onclick){ return '<button onclick="'+onclick+'" style="background:#FFFFFF;border:1.5px solid #EDE3CE;border-right:5px solid '+col+';border-radius:13px;padding:11px 13px;text-align:right;cursor:pointer;font-family:Cairo;"><div style="font-weight:900;font-size:.78rem;color:#3D0918;">'+title+'</div><div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+sub+'</div></button>'; }
     // صفوف الفصول
     var rows=P.rooms.map(function(c){
       var rec=P.recorded[c.code];
-      return '<div style="display:flex;align-items:center;gap:8px;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:12px;padding:9px 12px;margin-bottom:6px;flex-wrap:wrap;">'
+      return '<div style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:12px;padding:9px 12px;margin-bottom:6px;flex-wrap:wrap;">'
         +'<div style="flex:1;min-width:120px;"><div style="font-weight:900;font-size:.76rem;color:#3D0918;">'+esc2(c.className||'فصل')+'</div>'
         +'<div style="font-size:.6rem;color:#8A7A63;font-weight:700;">'+(c.studentCount||0)+' طالباً · <span dir="ltr">'+esc2(c.code)+'</span> · '+(rec?'<b style="color:#3D6B53;">رُصد اليوم ✓</b>':'<b style="color:#B8924A;">لم يُرصد</b>')+'</div></div>'
         +'<button onclick="hhTPGo(\''+esc2(c.code)+'\')" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:9px;padding:7px 13px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">الدفتر</button>'
         +'<button onclick="hhTPRename(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #B8924A;color:#5E0E26;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">تعديل</button>'
         +'<button onclick="hhTPDelete(\''+esc2(c.code)+'\')" style="background:#fff;border:1.4px solid #8A1538;color:#8A1538;border-radius:9px;padding:7px 11px;font-family:Cairo;font-weight:900;font-size:.64rem;cursor:pointer;">حذف</button>'
         +'</div>';
-    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
+    }).join('') || '<div style="text-align:center;color:#8A7A63;font-weight:800;padding:16px;background:#FFFFFF;border:1.5px dashed #B8924A;border-radius:13px;">لا فصول بعد، أنشئ أول فصل أو استورد ملف Excel</div>';
     // هوية المدرسة
     var logoInner = R.logo ? '<img src="'+R.logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">' : '📷<br>شعار<br>المدرسة';
-    var schoolBox='<div style="display:flex;gap:13px;align-items:center;background:#FFFDF8;border:1.5px solid #EDE3CE;border-radius:15px;padding:13px 15px;">'
-      +'<div style="width:64px;height:64px;border-radius:14px;border:2px '+(R.logo?'solid #B8924A':'dashed #B8924A')+';display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A6D2E;font-size:.52rem;font-weight:900;text-align:center;flex-shrink:0;background:#FBF5E9;overflow:hidden;">'+logoInner+'</div>'
+    var schoolBox='<div style="display:flex;gap:13px;align-items:center;background:#FFFFFF;border:1.5px solid #EDE3CE;border-radius:15px;padding:13px 15px;">'
+      +'<div style="width:64px;height:64px;border-radius:14px;border:2px '+(R.logo?'solid #B8924A':'dashed #B8924A')+';display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A6D2E;font-size:.52rem;font-weight:900;text-align:center;flex-shrink:0;background:#F5F3F0;overflow:hidden;">'+logoInner+'</div>'
       +'<div style="flex:1;"><div style="font-weight:900;font-size:.9rem;color:#3D0918;">'+(R.school?esc2(R.school):'اسم مدرستك لم يُضبط بعد')+'</div>'
       +'<div style="font-size:.62rem;color:#8A7A63;font-weight:700;margin-top:3px;">يظهر الشعار والاسم على كل شهادة وتقرير · المعلم: '+(R.teacher?esc2(R.teacher):'··')+' · المنسق: '+(R.coord?esc2(R.coord):'··')+'</div></div>'
-      +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFDF8;border:1.4px solid #B8924A;color:#5E0E26;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
+      +'<button onclick="if(window.hhDPlusSettings){document.getElementById(\'hh-tpanel\').remove();hhDPlusSettings();}" style="background:#FFFFFF;border:1.4px solid #B8924A;color:#5E0E26;border-radius:9px;padding:6px 12px;font-family:Cairo;font-weight:900;font-size:.62rem;cursor:pointer;flex-shrink:0;">'+(R.logo?'تعديل الشعار والبيانات':'رفع الشعار وتعديل البيانات')+'</button>'
       +'</div>';
     var isAdmin=(typeof hhIsAdmin==='function' && hhIsAdmin());
     var links='<button onclick="if(window.hhSfuGuide)hhSfuGuide()" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">الدليل الكامل</button>'
       +(isAdmin?'<span style="color:#D9C79E;">·</span><button onclick="if(window.hhDPlusAdminSchools)hhDPlusAdminSchools()" style="background:none;border:none;color:#8A6D2E;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;text-decoration:underline;">لوحة المدارس (للمدير)</button>':'');
-    ov.innerHTML='<div style="background:#F6F1E7;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
+    ov.innerHTML='<div style="background:#F5F4F2;border:2px solid #B8924A;border-radius:20px;max-width:660px;width:100%;overflow:hidden;margin-bottom:24px;">'
       +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1.1rem;">لوحة تحكم المدرسة</div><div style="font-size:.66rem;opacity:.85;margin-top:2px;">'+(R.school?esc2(R.school)+' · ':'')+'مركز عملياتك الكامل</div></div>'
       +'<button onclick="document.getElementById(\'hh-tpanel\').remove()" style="background:none;border:none;color:#F5E6C4;font-size:1.2rem;cursor:pointer;">✕</button></div>'
@@ -1103,7 +1103,7 @@
     var old=document.getElementById('hh-tpanel'); if(old) old.remove();
     var ld=document.createElement('div'); ld.id='hh-tpanel';
     ld.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147483000;display:flex;align-items:center;justify-content:center;direction:rtl;font-family:Cairo,sans-serif;';
-    ld.innerHTML='<div style="background:#F6F1E7;border-radius:18px;padding:26px 40px;font-weight:900;color:#8A6D2E;">جارٍ تجهيز لوحتك…</div>';
+    ld.innerHTML='<div style="background:#F5F4F2;border-radius:18px;padding:26px 40px;font-weight:900;color:#8A6D2E;">جارٍ تجهيز لوحتك…</div>';
     document.body.appendChild(ld);
     try{ await fetchData(); }catch(e){}
     render();

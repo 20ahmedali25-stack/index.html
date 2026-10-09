@@ -50,7 +50,7 @@
     var isTeacher = (typeof _hhMyRole!=='undefined' && _hhMyRole==='teacher') || (typeof hhIsAdmin==='function' && hhIsAdmin());
     var ov=document.createElement('div'); ov.id='hh-sfu';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.8);z-index:99992;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="max-width:760px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);">'
+    ov.innerHTML='<div style="max-width:760px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#F5F4F2,#F5F4F2);">'
       +'<div style="padding:40px;text-align:center;color:#8A7A63;font-weight:800;">جارٍ تحميل الفصول…</div></div>';
     document.body.appendChild(ov);
     // جلب فصول المعلم من classrooms (الموجود)
@@ -80,31 +80,31 @@
       +'</div>'
       // المحددات: الفصل · التاريخ · الحصة
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +  '<button onclick="hhSfuRenameClass()" title="تعديل اسم الفصل" style="border:1.5px solid #B8924A;background:#FDFAF3;color:#8A6D2E;border-radius:10px;width:38px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0;">✎</button>'
-      +  '<select id="sfu-class" style="flex:1;min-width:120px;border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+classes.map(function(c){return '<option value="'+esc2(c.code)+'"'+(c.code===ST.classCode?' selected':'')+'>'+esc2(c.name)+(c.subject?' · '+esc2(c.subject):'')+'</option>';}).join('')+'</select>'
+      +  '<button onclick="hhSfuRenameClass()" title="تعديل اسم الفصل" style="border:1.5px solid #B8924A;background:#FFFFFF;color:#8A6D2E;border-radius:10px;width:38px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0;">✎</button>'
+      +  '<select id="sfu-class" style="flex:1;min-width:120px;border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FFFFFF;color:#3D0918;">'+classes.map(function(c){return '<option value="'+esc2(c.code)+'"'+(c.code===ST.classCode?' selected':'')+'>'+esc2(c.name)+(c.subject?' · '+esc2(c.subject):'')+'</option>';}).join('')+'</select>'
       +  '<div id="sfu-datechip" style="display:flex;align-items:center;gap:7px;background:rgba(212,188,133,.16);border:1.5px solid #B8924A;border-radius:10px;padding:7px 11px;">'
       +    '<span id="sfu-datetxt" style="color:#FFFFFF;font-weight:900;font-size:.72rem;">'+arDate(ST.date)+'</span>'
       +    '<span id="sfu-dateauto" style="background:#3D6B53;color:#fff;border-radius:8px;padding:1px 7px;font-size:.52rem;font-weight:900;">تلقائي</span>'
       +    '<span onclick="hhSfuDatePick()" style="color:#8A6D2E;font-size:.6rem;font-weight:800;text-decoration:underline;cursor:pointer;">تغيير</span>'
       +    '<input id="sfu-date" type="date" value="'+ST.date+'" style="display:none;">'
       +  '</div>'
-      +  '<select id="sfu-period" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FDFAF3;color:#3D0918;">'+[1,2,3,4,5,6,7].map(function(p){return '<option value="'+p+'">الحصة '+p+'</option>';}).join('')+'</select>'
+      +  '<select id="sfu-period" style="border:1.5px solid #B8924A;border-radius:10px;padding:9px 11px;font-family:Cairo;font-weight:800;font-size:.8rem;background:#FFFFFF;color:#3D0918;">'+[1,2,3,4,5,6,7].map(function(p){return '<option value="'+p+'">الحصة '+p+'</option>';}).join('')+'</select>'
       +'</div></div>'
       // ═══ شريط التبويبات النظيف ═══
       +'<div style="padding:10px 20px 0;">'
       +'<div id="sfu-tabs" style="display:flex;gap:4px;border-bottom:2px solid #4A0B1E;">'
       +  '<button data-tab="record" onclick="hhSfuTab(\'record\')" class="sfu-tab sfu-tab-on" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#4A0B1E;color:#F5E6C4;">الرصد</button>'
-      +  '<button data-tab="report" onclick="hhSfuTab(\'report\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#EDE3CE;color:#8a7a60;">تقرير الصف</button>'
-      +  '<button data-tab="command" onclick="hhSfuTab(\'command\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#EDE3CE;color:#8a7a60;">مركز القيادة</button>'
-      +  '<button data-tab="manage" onclick="hhSfuTab(\'manage\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#EDE3CE;color:#8a7a60;">إدارة الفصل</button>'
-      +  '<button data-tab="settings" onclick="hhSfuTab(\'settings\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#EDE3CE;color:#8a7a60;">الإعدادات</button>'
+      +  '<button data-tab="report" onclick="hhSfuTab(\'report\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#ECE8E3;color:#8a7a60;">تقرير الصف</button>'
+      +  '<button data-tab="command" onclick="hhSfuTab(\'command\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#ECE8E3;color:#8a7a60;">مركز القيادة</button>'
+      +  '<button data-tab="manage" onclick="hhSfuTab(\'manage\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#ECE8E3;color:#8a7a60;">إدارة الفصل</button>'
+      +  '<button data-tab="settings" onclick="hhSfuTab(\'settings\')" class="sfu-tab" style="flex:1;padding:9px 4px;border:none;border-radius:9px 9px 0 0;font-family:Cairo;font-weight:900;font-size:.7rem;cursor:pointer;background:#ECE8E3;color:#8a7a60;">الإعدادات</button>'
       +'</div>'
       // شريط الرصد الجماعي (يظهر في تبويب الرصد فقط)
       +'<div id="sfu-bulkbar" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-top:9px;">'
       +  '<button onclick="hhSfuBulkAll(\'present\')" style="background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">الجميع حاضرون</button>'
       +  '<button onclick="hhSfuBulkPart()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">+ مشاركة للمحدّدين</button>'
       +  '<button onclick="hhSfuBulkHw()" style="background:rgba(184,146,74,.15);border:1px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;">أنجز الواجب للمحدّدين</button>'
-      +  '<button id="sfu-undo" onclick="hhSfuUndo()" style="background:#FFFDF8;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;opacity:.45;">تراجع</button>'
+      +  '<button id="sfu-undo" onclick="hhSfuUndo()" style="background:#FFFFFF;border:1px solid #8A1538;color:#8A1538;border-radius:10px;padding:8px 13px;font-family:Cairo;font-weight:800;font-size:.72rem;cursor:pointer;opacity:.45;">تراجع</button>'
       +  '<span id="sfu-saveind" style="font-size:.66rem;font-weight:800;color:#3D6B53;align-self:center;">محفوظ ✓</span>'
       +'</div>'
       // منصة الخدمات (تعرض محتوى التبويب المختار · فارغة في تبويب الرصد)
@@ -112,7 +112,7 @@
       +'</div>'
       +'<div id="sfu-list" style="padding:14px 20px 90px;"></div>'
       // شريط الحفظ السفلي
-      +'<div style="position:fixed;bottom:0;right:0;left:0;max-width:760px;margin:0 auto;background:#FFFDF8;border-top:2px solid #B8924A;padding:12px 20px;display:flex;gap:10px;align-items:center;box-shadow:0 -4px 14px rgba(94,14,38,.1);">'
+      +'<div style="position:fixed;bottom:0;right:0;left:0;max-width:760px;margin:0 auto;background:#FFFFFF;border-top:2px solid #B8924A;padding:12px 20px;display:flex;gap:10px;align-items:center;box-shadow:0 -4px 14px rgba(94,14,38,.1);">'
       +  '<div id="sfu-summary" style="flex:1;font-size:.72rem;color:#8A7A63;font-weight:700;"></div>'
       +  '<button onclick="hhSfuSaveAll()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px 28px;font-family:Cairo;font-weight:900;font-size:.88rem;cursor:pointer;box-shadow:0 6px 16px rgba(138,21,56,.25);">حفظ اليوم</button>'
       +'</div>';
@@ -146,7 +146,7 @@
       qs.forEach(function(d){ var s=d.data(); ST.students.push({id:d.id, name:s.studentName||s.name||'طالب'}); });
     }catch(e){
       console.warn('sfu load', e);
-      if(list) list.innerHTML='<div style="background:#fff6f4;border:1.5px solid #c0392b;border-radius:14px;padding:18px;text-align:center;">'
+      if(list) list.innerHTML='<div style="background:#FFFFFF;border:1.5px solid #c0392b;border-radius:14px;padding:18px;text-align:center;">'
         +'<div style="font-weight:900;color:#8A1538;font-size:.84rem;margin-bottom:8px;">تعذر تحميل طلاب الفصل</div>'
         +'<div style="color:#8A7A63;font-size:.7rem;font-weight:700;margin-bottom:10px;">'+((typeof _hhClsErrText==='function')?_hhClsErrText(e).replace('تعذر تحميل الصفوف · ',''):'تحقق من اتصالك')+'</div>'
         +'<button onclick="hhSfuReload()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:9px 22px;font-family:Cairo;font-weight:900;font-size:.76rem;cursor:pointer;">إعادة المحاولة</button></div>';
@@ -163,12 +163,12 @@
     var inRecord = (window._sfuTab||'record')==='record';
     if(bb) bb.style.display = (inRecord && ST.students.length) ? 'flex' : 'none';
     if(!ST.students.length){
-      el.innerHTML='<div style="background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:16px;padding:28px 18px;text-align:center;">'
+      el.innerHTML='<div style="background:#FFFFFF;border:1.5px dashed #B8924A;border-radius:16px;padding:28px 18px;text-align:center;">'
         +'<div style="font-weight:900;color:#3D0918;font-size:.95rem;margin-bottom:5px;">الفصل جاهز وينتظر طلابه</div>'
         +'<div style="color:#8A7A63;font-size:.72rem;font-weight:700;margin-bottom:15px;">أضفهم واحداً واحداً، أو استورد ملف Excel وفيه عمود الفصل فتتوزع الشعب تلقائياً</div>'
         +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'
         +'<button onclick="hhSfuAddStudent()" style="background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إضافة طالب</button>'
-        +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#5E0E26;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">استيراد من Excel</button>'
+        +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFFFF;border:1.5px solid #B8924A;color:#5E0E26;border-radius:12px;padding:12px 24px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">استيراد من Excel</button>'
         +'</div></div>';
       updateSummary(); refreshBar(); return;
     }
@@ -204,7 +204,7 @@
         var circles='<div style="display:flex;gap:11px;flex-wrap:wrap;">'
           + circ('✋','مشاركة','#1F4E79', d.part?'#1F4E79':'', d.part||'', "hhSfuPart('"+esc2(s.id)+"',1)")
           + circ(hwIcon, d.hw?(HW6.filter(function(x){return x[0]===d.hw;})[0]||['','واجب'])[1]:'واجب', hwColor, hwFill, '', "hhSfuHwQuick('"+esc2(s.id)+"')")
-          + circ('★','تميز','#B8924A', d.stars?'linear-gradient(135deg,#EAD9B0,#B8924A)':'', d.stars||'', "hhSfuStar('"+esc2(s.id)+"')")
+          + circ('★','تميز','#B8924A', d.stars?'#FFFFFF':'', d.stars||'', "hhSfuStar('"+esc2(s.id)+"')")
           + circ('👍','سلوك','#3D6B53', behFill, '', "hhSfuBehav('"+esc2(s.id)+"')")
           + circ('✎','ملاحظة','#8A1538','','', "hhSfuNote('"+esc2(s.id)+"')")
           + circ('٪','درجة','#1F4E79','','', "hhSfuGrade('"+esc2(s.id)+"')")
@@ -213,7 +213,7 @@
           +'</div>';
         // قسم الرأي والملاحظات
         var opText = d.__opdraft!=null ? d.__opdraft : (d.__oprec||'');
-        var opSection='<div style="margin-top:9px;background:#FBF7EE;border:1.5px solid #B8924A;border-radius:12px;padding:9px 11px;">'
+        var opSection='<div style="margin-top:9px;background:#F5F3F0;border:1.5px solid #B8924A;border-radius:12px;padding:9px 11px;">'
           +'<div style="display:flex;align-items:center;gap:6px;font-weight:900;font-size:.68rem;color:#4A0B1E;margin-bottom:6px;">رأي المعلم <span style="background:#3D6B53;color:#fff;border-radius:7px;padding:1px 7px;font-size:.48rem;font-weight:900;">تلقائي · قابل للتعديل</span></div>'
           +'<textarea id="sfu-op-'+esc2(s.id)+'" placeholder="يُصاغ تلقائياً، عدّله أو أضف إليه…" style="width:100%;box-sizing:border-box;border:1.4px solid #E3D9C6;border-radius:9px;padding:7px 9px;font-family:Cairo;font-size:.66rem;font-weight:700;color:#3b2a1a;line-height:1.85;min-height:52px;background:#fff;">'+esc2(opText)+'</textarea>'
           +'<div style="display:flex;gap:6px;margin-top:6px;">'
@@ -226,12 +226,12 @@
           +'<div style="font-weight:900;font-size:.66rem;color:#8A1538;margin-bottom:5px;">ملاحظات سريعة</div>'
           +'<div style="display:flex;gap:4px;flex-wrap:wrap;">'
           +['تفاعل ممتاز اليوم','لم يحضر الأدوات','يحتاج متابعة','تحسّن ملحوظ'].map(function(t){
-             return '<button onclick="hhSfuQuickNote(\''+esc2(s.id)+'\',\''+t+'\')" style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:11px;padding:4px 10px;font-family:Cairo;font-weight:800;font-size:.58rem;color:#5a4a30;cursor:pointer;">'+t+'</button>'; }).join('')
+             return '<button onclick="hhSfuQuickNote(\''+esc2(s.id)+'\',\''+t+'\')" style="background:#F5F3F0;border:1px solid #E8DCC2;border-radius:11px;padding:4px 10px;font-family:Cairo;font-weight:800;font-size:.58rem;color:#5a4a30;cursor:pointer;">'+t+'</button>'; }).join('')
           +'<button onclick="hhSfuNote(\''+esc2(s.id)+'\')" style="background:#8A1538;color:#fff;border:none;border-radius:11px;padding:4px 12px;font-family:Cairo;font-weight:800;font-size:.58rem;cursor:pointer;">✎ ملاحظة مطوّلة</button>'
           +'</div></div>';
         detail = '<div style="margin-top:9px;padding-top:9px;border-top:1px dashed #EDE3CE;">'+circles+opSection+noteSection+'</div>';
       }
-            return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFDF8;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
+            return '<div class="sfu-row" data-id="'+esc2(s.id)+'" style="background:#FFFFFF;border:1.5px solid '+(d.sel?'#8A1538':'#EDE3CE')+';border-radius:14px;padding:10px 13px;margin-bottom:8px;">'
         +'<div style="display:flex;align-items:center;gap:9px;">'
         +  '<input type="checkbox" '+(d.sel?'checked':'')+' onchange="hhSfuToggleSel(\''+esc2(s.id)+'\')" style="width:17px;height:17px;accent-color:#8A1538;flex-shrink:0;">'
         +  '<div style="flex:1;min-width:0;"><div style="font-weight:900;color:#3D0918;font-size:.88rem;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dashed #B8924A;display:inline-block;max-width:100%;padding-bottom:1px;" onclick="hhOpenStudentFile(\''+esc2(s.id)+'\',\''+esc2(ST.classCode)+'\')" title="افتح ملف الطالب">'+esc2(s.name)+'</div>'+hints+'</div>'
@@ -240,7 +240,7 @@
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'present\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#3D6B53':'#fff')+';color:'+(isP?'#fff':'#3D6B53')+';">حاضر</button>'
         +    '<button onclick="hhSfuSetAtt(\''+esc2(s.id)+'\',\'absent\')" style="padding:7px 15px;font-size:.72rem;font-weight:900;font-family:Cairo;border:none;cursor:pointer;background:'+(isP?'#fff':'#8A1538')+';color:'+(isP?'#8A1538':'#fff')+';">غائب</button>'
         +  '</span>'
-        +  '<button onclick="hhSfuOpen(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;color:#8A6D2E;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.68rem;background:#FFFDF8;font-family:Cairo;cursor:pointer;flex-shrink:0;">'+(d.open?'▴':'▾')+' التفصيل</button>'
+        +  '<button onclick="hhSfuOpen(\''+esc2(s.id)+'\')" style="border:1.5px solid #B8924A;color:#8A6D2E;border-radius:9px;padding:7px 10px;font-weight:900;font-size:.68rem;background:#FFFFFF;font-family:Cairo;cursor:pointer;flex-shrink:0;">'+(d.open?'▴':'▾')+' التفصيل</button>'
         +'</div>'
         + detail
         +'</div>';
@@ -367,12 +367,12 @@
   // إدارة الفصل داخل المنصة
   function hhSfuStageManage(stage){
     stage.innerHTML='<div style="display:flex;gap:7px;flex-wrap:wrap;">'
-      +'<button onclick="hhSfuAddStudent()" style="background:#FFFDF8;border:1.5px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">إضافة طالب</button>'
-      +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#5E0E26;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">استيراد Excel</button>'
-      +'<button onclick="hhSfuRenameClass()" style="background:#FFFDF8;border:1.5px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">تعديل اسم الفصل</button>'
-      +(typeof hhOpenGradebook==='function' ? '<button onclick="hhOpenGradebook()" style="background:#FFFDF8;border:1.5px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">أدوات الدرجات المتقدمة</button>' : '')
-      +'<button onclick="hhSfuDeleteSel()" style="background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
-      +'<button onclick="hhSfuDeleteAll()" style="background:#FFFDF8;border:1.5px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف كل الطلاب</button>'
+      +'<button onclick="hhSfuAddStudent()" style="background:#FFFFFF;border:1.5px solid #3D6B53;color:#3D6B53;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">إضافة طالب</button>'
+      +'<button onclick="if(window.hhDPlusImport)hhDPlusImport()" style="background:#FFFFFF;border:1.5px solid #B8924A;color:#5E0E26;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">استيراد Excel</button>'
+      +'<button onclick="hhSfuRenameClass()" style="background:#FFFFFF;border:1.5px solid #B8924A;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">تعديل اسم الفصل</button>'
+      +(typeof hhOpenGradebook==='function' ? '<button onclick="hhOpenGradebook()" style="background:#FFFFFF;border:1.5px solid #8A6D2E;color:#8A6D2E;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">أدوات الدرجات المتقدمة</button>' : '')
+      +'<button onclick="hhSfuDeleteSel()" style="background:#FFFFFF;border:1.5px solid #8A1538;color:#8A1538;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف المحدّدين</button>'
+      +'<button onclick="hhSfuDeleteAll()" style="background:#FFFFFF;border:1.5px solid #7a2a2a;color:#7a2a2a;border-radius:10px;padding:9px 14px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">حذف كل الطلاب</button>'
       +'</div>'
       +'<div id="sfu-mg-panel"></div>'
       +'<div style="font-size:.64rem;color:#8A7A63;font-weight:700;margin-top:10px;line-height:1.8;">تُدار كل شؤون الفصل من هنا. الحذف يخفي الطالب من القوائم وتبقى سجلاته التاريخية محفوظة في ملفه.</div>';
@@ -381,7 +381,7 @@
   function _sfuMgPanel(html){
     var p=document.getElementById('sfu-mg-panel');
     if(!p){ p=document.createElement('div'); p.id='sfu-mg-panel'; var l=document.getElementById('sfu-list'); if(l&&l.parentNode) l.parentNode.insertBefore(p,l); else document.body.appendChild(p); }
-    p.innerHTML=html?('<div style="margin-top:10px;background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+html+'</div>'):'';
+    p.innerHTML=html?('<div style="margin-top:10px;background:#FFFFFF;border:1.5px solid #B8924A;border-radius:14px;padding:12px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'+html+'</div>'):'';
     var inp=p.querySelector('input'); if(inp){ inp.focus(); inp.select&&inp.select(); }
   }
   window.hhSfuMgClose=function(){ _sfuMgPanel(''); };
@@ -449,13 +449,13 @@
     var old=document.getElementById('sfu-note'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='sfu-note';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.7);z-index:2147482000;display:flex;align-items:center;justify-content:center;padding:14px;direction:rtl;font-family:Cairo,sans-serif;';
-    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:18px;max-width:430px;width:100%;padding:16px 17px;max-height:88vh;overflow-y:auto;">'
+    ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:18px;max-width:430px;width:100%;padding:16px 17px;max-height:88vh;overflow-y:auto;">'
       +'<div style="font-weight:900;font-size:.9rem;color:#3D0918;margin-bottom:8px;">ملاحظة: '+esc2(st.name)+'</div>'
-      + tpls.map(function(t,ti){ return '<button onclick="document.getElementById(\'sfu-note-txt\').value='+"'"+'\''+"'"+'" data-t="'+ti+'" class="sfu-tpl" style="display:block;width:100%;text-align:right;background:#FBF5E9;border:1px solid #E8DCC2;border-radius:9px;padding:7px 10px;font-family:Cairo;font-weight:700;font-size:.7rem;color:#5a4a30;cursor:pointer;margin-bottom:5px;">'+esc2(t)+'</button>'; }).join('')
+      + tpls.map(function(t,ti){ return '<button onclick="document.getElementById(\'sfu-note-txt\').value='+"'"+'\''+"'"+'" data-t="'+ti+'" class="sfu-tpl" style="display:block;width:100%;text-align:right;background:#F5F3F0;border:1px solid #E8DCC2;border-radius:9px;padding:7px 10px;font-family:Cairo;font-weight:700;font-size:.7rem;color:#5a4a30;cursor:pointer;margin-bottom:5px;">'+esc2(t)+'</button>'; }).join('')
       +'<textarea id="sfu-note-txt" placeholder="نص الملاحظة" style="width:100%;box-sizing:border-box;border:1.5px solid #E8DCC2;border-radius:10px;padding:9px;font-family:Cairo;font-size:.76rem;min-height:64px;margin-top:4px;"></textarea>'
       +'<div style="display:flex;gap:7px;margin-top:10px;">'
       +'<button onclick="hhSfuNoteSave(\''+esc2(id)+'\')" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:10px;padding:10px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">حفظ الملاحظة</button>'
-      +'<button onclick="document.getElementById(\'sfu-note\').remove()" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:10px;padding:10px 14px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
+      +'<button onclick="document.getElementById(\'sfu-note\').remove()" style="background:#FFFFFF;color:#999;border:1.5px solid #ddd;border-radius:10px;padding:10px 14px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
       +'</div></div>';
     document.body.appendChild(ov);
     ov.querySelectorAll('.sfu-tpl').forEach(function(b){ b.onclick=function(){ document.getElementById('sfu-note-txt').value=tpls[parseInt(b.getAttribute('data-t'),10)]; }; });
@@ -521,7 +521,7 @@
       if(pos>=3) praiseL.push(st.name);
     });
     function grp(t,arr,c){ return '<div style="margin-bottom:8px;"><span style="font-weight:900;font-size:.72rem;color:'+c+';">'+t+' ('+arr.length+')</span>'
-      +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
+      +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#F5F3F0;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
     mount.innerHTML='<div style="font-weight:900;font-size:.8rem;color:#3D0918;margin-bottom:8px;">مركز القيادة · آخر أسبوعين</div>'
       + grp('غياب متكرر',absL,'#8A1538') + grp('واجبات متعثرة',hwL,'#B8924A') + grp('يستحق إشادة',praiseL,'#3D6B53')
       + ((absL.length+hwL.length+praiseL.length)?'':'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;">كل شيء تحت السيطرة</div>');
@@ -546,9 +546,9 @@
       if(pos>=3) praiseL.push(st.name);
     });
     function grp(t,arr,c){ return '<div style="margin-bottom:8px;"><span style="font-weight:900;font-size:.72rem;color:'+c+';">'+t+' ('+arr.length+')</span>'
-      +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#FBF5E9;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
+      +(arr.length?'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+arr.map(function(n){return '<span style="background:#F5F3F0;border:1px solid #E8DCC2;border-radius:13px;padding:3px 10px;font-size:.66rem;font-weight:800;color:#3D0918;">'+esc2(n)+'</span>';}).join('')+'</div>':'')+'</div>'; }
     var box=document.createElement('div'); box.id='sfu-cc';
-    box.style.cssText='margin:0 20px 12px;background:#FFFDF8;border:1.5px solid #B8924A;border-radius:14px;padding:11px 14px;';
+    box.style.cssText='margin:0 20px 12px;background:#FFFFFF;border:1.5px solid #B8924A;border-radius:14px;padding:11px 14px;';
     box.innerHTML='<div style="font-weight:900;font-size:.8rem;color:#3D0918;margin-bottom:8px;">مركز القيادة · آخر أسبوعين</div>'
       + grp('غياب متكرر',absL,'#8A1538') + grp('واجبات متعثرة',hwL,'#B8924A') + grp('يستحق إشادة',praiseL,'#3D6B53')
       + ((absL.length+hwL.length+praiseL.length)?'':'<div style="font-size:.68rem;color:#8A7A63;font-weight:700;">كل شيء تحت السيطرة</div>');
@@ -610,13 +610,13 @@
       var old=document.getElementById('sfu-del'); if(old) old.remove();
       var ov=document.createElement('div'); ov.id='sfu-del';
       ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147482100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,sans-serif;';
-      ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #8A1538;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'
+      ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #8A1538;border-radius:20px;max-width:380px;width:100%;padding:20px 19px;text-align:center;">'
         +'<div style="font-weight:900;font-size:.95rem;color:#8A1538;margin-bottom:6px;">حذف '+count+' طالباً من الفصل</div>'
         +'<div style="font-size:.72rem;color:#8A7A63;font-weight:700;line-height:1.9;margin-bottom:12px;">يُخفَون من القوائم وينقص عداد الفصل،<br>وسجلاتهم التاريخية تبقى محفوظة في ملفاتهم.</div>'
         +(needWord?'<input id="sfu-del-word" placeholder="للتأكيد اكتب: حذف" style="width:100%;box-sizing:border-box;border:1.5px solid #E3D9C6;border-radius:10px;padding:10px;font-family:Cairo;font-weight:800;font-size:.8rem;text-align:center;margin-bottom:12px;">':'')
         +'<div style="display:flex;gap:8px;">'
         +'<button id="sfu-del-go" style="flex:1;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">تأكيد الحذف</button>'
-        +'<button id="sfu-del-no" style="background:#FFFDF8;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
+        +'<button id="sfu-del-no" style="background:#FFFFFF;color:#999;border:1.5px solid #ddd;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.8rem;cursor:pointer;">إلغاء</button>'
         +'</div></div>';
       document.body.appendChild(ov);
       var inp=document.getElementById('sfu-del-word');
@@ -801,7 +801,7 @@
     pad+='<button onclick="window._hhSfuPinForgot()" style="'+btnCss(true)+'font-size:.58rem;">نسيت<br>الرمز</button>';
     pad+='<button onclick="window._hhSfuPinPress(0)" style="'+btnCss()+'">٠</button>';
     pad+='<button onclick="window._hhSfuPinBack()" style="'+btnCss(true)+'">⌫</button>';
-    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:22px;'
+    ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:22px;'
       +'padding:26px 22px 16px;width:100%;max-width:330px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.45);">'
       +'<svg width="46" height="46" viewBox="0 0 24 24" fill="none" style="margin-bottom:6px;">'
       +'<rect x="4" y="10" width="16" height="10.5" rx="2.6" stroke="#8A6D2E" stroke-width="1.7"/>'
@@ -812,9 +812,9 @@
       +'<div id="sfupin-dots" style="display:flex;justify-content:center;gap:15px;margin-bottom:17px;"></div>'
       +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;direction:ltr;">'+pad+'</div>'
       +'<div id="sfupin-actions" style="display:none;gap:8px;margin-top:13px;">'
-      +'<button onclick="window._hhSfuPinForgot()" style="flex:1;background:#FFFDF8;border:1.5px solid #8A1538;color:#8A1538;'
+      +'<button onclick="window._hhSfuPinForgot()" style="flex:1;background:#FFFFFF;border:1.5px solid #8A1538;color:#8A1538;'
       +'border-radius:11px;padding:9px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">نسيت كلمة السر</button>'
-      +'<button onclick="window._hhSfuPinSupport()" style="flex:1;background:#FFFDF8;border:1.5px solid #3D6B53;color:#3D6B53;'
+      +'<button onclick="window._hhSfuPinSupport()" style="flex:1;background:#FFFFFF;border:1.5px solid #3D6B53;color:#3D6B53;'
       +'border-radius:11px;padding:9px;font-family:Cairo;font-weight:900;font-size:.72rem;cursor:pointer;">التواصل مع الدعم</button>'
       +'</div>'
       +'<button onclick="window._hhSfuPinCancel()" style="margin-top:13px;background:none;border:none;color:#b3a08f;'
@@ -956,11 +956,11 @@
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:2147482000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
     var secs=GUIDE.map(function(g,i){
       return '<div style="display:flex;gap:11px;margin-bottom:15px;">'
-        +'<div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</div>'
+        +'<div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#FFFFFF;color:#2a0810;font-weight:900;font-size:.8rem;display:flex;align-items:center;justify-content:center;">'+(i+1)+'</div>'
         +'<div style="flex:1;"><div style="font-weight:900;font-size:.86rem;color:#3D0918;margin-bottom:3px;">'+esc3(g[0])+'</div>'
         +'<div style="font-size:.74rem;color:#6a5a48;font-weight:700;line-height:2;">'+esc3(g[1])+'</div></div></div>';
     }).join('');
-    ov.innerHTML='<div style="background:#FFFDF8;border:2px solid #B8924A;border-radius:22px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
+    ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:22px;max-width:640px;width:100%;overflow:hidden;margin-bottom:24px;">'
       +'<div style="background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#F5E6C4;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;">'
       +'<div><div style="font-weight:900;font-size:1.1rem;">دليل دفتر المتابعة الذكي</div>'
       +'<div style="font-size:.72rem;opacity:.85;margin-top:2px;">اثنتا عشرة قدرة بين يديك، من الرصد إلى التقرير الموقع</div></div>'

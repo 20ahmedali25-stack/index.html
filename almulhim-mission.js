@@ -11,10 +11,10 @@ var GD='linear-gradient';
 window.hhMissionOpen=function(){
   if(document.getElementById('hh-mission-ov')) return;
   var ov=document.createElement('div'); ov.id='hh-mission-ov';
-  ov.style.cssText='position:fixed;inset:0;z-index:99995;background:#F3EFE6;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
+  ov.style.cssText='position:fixed;inset:0;z-index:99995;background:#F5F3F0;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
   var C={m:'#4A0B1E',m2:'#5E0E26',r:'#8A1538',g:'#B8924A',g2:'#EAD9B0',iv:'#FFFDF8',ink:'#3D0918',mute:'#8A7A63',green:'#3D6B53'};
   function vcard(icon,title,text){
-    return '<div style="background:#FFFDF8;border:1.5px solid '+C.g+';border-radius:15px;padding:16px;position:relative;overflow:hidden;">'
+    return '<div style="background:#FFFFFF;border:1.5px solid '+C.g+';border-radius:15px;padding:16px;position:relative;overflow:hidden;">'
       +'<div style="position:absolute;top:0;right:0;width:4px;height:100%;background:'+GD+'('+C.g2+','+C.g+');"></div>'
       +'<div style="width:40px;height:40px;border-radius:11px;background:'+GD+'(135deg,'+C.m+','+C.m2+');display:flex;align-items:center;justify-content:center;margin-bottom:9px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="'+C.g2+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+icon+'</svg></div>'
       +'<b style="font-size:.95rem;color:'+C.ink+';display:block;margin-bottom:3px;">'+title+'</b>'

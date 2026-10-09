@@ -215,7 +215,7 @@ function hhFmtDate(iso){
 // ── عرض الدورات للمتدرب ──
 function hhCohortsHTML(){
   if(!_HH_COHORTS.length){
-    return '<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:16px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.8rem;line-height:1.9;">'
+    return '<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:16px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.8rem;line-height:1.9;">'
       +'لم تُعلن مواعيد الدورات بعد.<br><span style="font-size:.73rem;color:#aaa;font-weight:700;">تابع المنصة · ستُفتح قريباً.</span></div>';
   }
   return _HH_COHORTS.map(function(C){
@@ -307,7 +307,7 @@ async function hhCohortsAdmin(){
       +'<div style="font-size:.7rem;color:#888;">'+esc(hhFmtDate(C.start))+' · '+esc(C.time||'')+' · '
       + (C.enrolled||0)+'/'+(C.seats||0)+' مسجّل · '+(C.waitlist||0)+' انتظار</div></div>'
       +'<div style="display:flex;gap:5px;flex-wrap:wrap;">'
-      +'<button onclick="hhCohortRoster(\''+C.id+'\')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">المسجّلون</button>'
+      +'<button onclick="hhCohortRoster(\''+C.id+'\')" style="background:#F5F3F0;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">المسجّلون</button>'
       +'<button onclick="hhCohortDelete(\''+C.id+'\')" style="background:#fff;color:#c0392b;border:1px solid #e0c0c0;border-radius:7px;padding:4px 10px;font-family:Cairo;font-weight:900;font-size:.66rem;cursor:pointer;">حذف</button>'
       +'</div></div></div>';
   }).join('');
@@ -492,7 +492,7 @@ function hhSpkEditor(){
       +'<textarea id="'+id+'" rows="'+(rows||3)+'" style="width:100%;border:1.5px solid #E3D9C6;border-radius:9px;padding:8px 11px;font-family:Cairo;font-size:.82rem;line-height:1.9;box-sizing:border-box;resize:vertical;">'+esc(String(val==null?'':val))+'</textarea></div>';
   };
 
-  ov.innerHTML='<div style="background:#FBF7F0;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div style="background:#FFFFFF;border:2px solid #B8924A;border-radius:20px;max-width:720px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(135deg,#5E0E26,#3D0918);color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:900;font-size:1rem;">محرر البرنامج</div>'
     +'<div style="font-size:.73rem;opacity:.85;margin-top:2px;">عدّل كل شيء · يُحفظ سحابياً ويسري على الجميع</div></div>'
@@ -508,8 +508,8 @@ function hhSpkEditor(){
     +'<div id="sped-body"></div>'
     +'<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;border-top:1.5px solid #E3D9C6;padding-top:13px;">'
     +'<button onclick="hhSpkApplyAll()" style="flex:1;min-width:140px;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">حفظ كل التعديلات</button>'
-    +'<button onclick="hhSpkExportJSON()" style="background:#FBF3E2;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير</button>'
-    +'<button onclick="hhSpkImportJSON()" style="background:#FDF3DD;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استيراد</button>'
+    +'<button onclick="hhSpkExportJSON()" style="background:#F5F3F0;color:#5E0E26;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">تصدير</button>'
+    +'<button onclick="hhSpkImportJSON()" style="background:#F5F3F0;color:#8A6D2E;border:1.5px solid #B8924A;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استيراد</button>'
     +'<button onclick="hhSpkResetOverride()" style="background:#fff;color:#c0392b;border:1.5px solid #e0c0c0;border-radius:11px;padding:11px 16px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">استعادة الأصل</button>'
     +'</div></div></div>';
   document.body.appendChild(ov);
@@ -566,7 +566,7 @@ function hhSpkEdTab(t){
         +'</div></div></div>';
     }).join('');
     body.innerHTML = list
-      +'<button onclick="hhSpkAddUnit()" style="width:100%;background:#FDF3DD;color:#8A6D2E;border:1.5px dashed #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">+ إضافة وحدة جديدة</button>';
+      +'<button onclick="hhSpkAddUnit()" style="width:100%;background:#F5F3F0;color:#8A6D2E;border:1.5px dashed #B8924A;border-radius:11px;padding:11px;font-family:Cairo;font-weight:900;font-size:.82rem;cursor:pointer;">+ إضافة وحدة جديدة</button>';
   }
 }
 
@@ -738,7 +738,7 @@ function hhOpenSpeakProgram(){
   var old=document.getElementById('hh-spk'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-spk';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.78);z-index:999970;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
-  ov.innerHTML='<div id="spk-box" style="background:#FBF7F0;border:2px solid '+P.color+';border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">'
+  ov.innerHTML='<div id="spk-box" style="background:#FFFFFF;border:2px solid '+P.color+';border-radius:20px;max-width:680px;width:100%;overflow:hidden;margin-bottom:24px;">'
     +'<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');color:#fff;padding:18px;">'
     +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
     +'<div><div style="font-weight:900;font-size:1.15rem;">'+esc(P.name)+'</div>'
@@ -777,7 +777,7 @@ function hhSpkRender(hasAccess){
          ? '<span style="font-size:.7rem;color:#aaa;font-weight:800;">مقفلة</span>'
          : '<div style="display:flex;gap:5px;flex-wrap:wrap;">'
            +'<button onclick="hhSpkLesson('+i+')" style="background:#F5E9EE;color:'+P.color+';border:1px solid '+P.color+';border-radius:8px;padding:5px 11px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">الدرس</button>'
-           +'<button onclick="hhSpkDrills('+i+')" style="background:#FDF3DD;color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:5px 11px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">تمارين</button>'
+           +'<button onclick="hhSpkDrills('+i+')" style="background:#F5F3F0;color:#8A6D2E;border:1px solid #B8924A;border-radius:8px;padding:5px 11px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">تمارين</button>'
            +'<button onclick="hhSpkQuiz('+i+')" style="background:#EBF2EE;color:#3D6B53;border:1px solid #3D6B53;border-radius:8px;padding:5px 11px;font-family:Cairo;font-weight:900;font-size:.68rem;cursor:pointer;">اختبار'+(done?' '+done+'%':'')+'</button>'
            +'</div>')
       +'</div></div>';
@@ -786,7 +786,7 @@ function hhSpkRender(hasAccess){
   var head='<div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;">'
     +'<div style="background:#F5E9EE;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:98px;">'
     +'<div style="font-size:1.1rem;font-weight:900;color:'+P.color+';">'+P.units.length+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">وحدات</div></div>'
-    +'<div style="background:#FDF3DD;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:98px;">'
+    +'<div style="background:#F5F3F0;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:98px;">'
     +'<div style="font-size:1.1rem;font-weight:900;color:#8A6D2E;">24</div><div style="font-size:.66rem;color:#666;font-weight:800;">تمريناً عملياً</div></div>'
     +'<div style="background:#EBF2EE;border-radius:11px;padding:10px;text-align:center;flex:1;min-width:98px;">'
     +'<div style="font-size:1.1rem;font-weight:900;color:#3D6B53;">'+P.price+'</div><div style="font-size:.66rem;color:#666;font-weight:800;">'+esc(P.currency)+'</div></div>'
@@ -796,7 +796,7 @@ function hhSpkRender(hasAccess){
     +'<div style="font-size:.72rem;color:#999;font-weight:700;margin-top:8px;">'+esc(P.duration)+' · '+esc(P.level)+'</div>'
     +'</div>'
     +'<div style="font-weight:900;font-size:.88rem;color:'+P.dark+';margin-bottom:7px;">أهداف البرنامج</div>'
-    +'<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:12px;margin-bottom:14px;">'+goals+'</div>';
+    +'<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:12px;margin-bottom:14px;">'+goals+'</div>';
 
   var gate = hasAccess ? '' :
     '<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');color:#fff;border-radius:14px;padding:16px;margin-bottom:14px;text-align:center;">'
@@ -804,13 +804,13 @@ function hhSpkRender(hasAccess){
     +'<div style="font-size:.79rem;opacity:.9;line-height:1.9;margin-bottom:11px;">المحتوى والتمارين والاختبارات متاحة للمشتركين فقط. للاشتراك تواصل مع إدارة المنصة.</div>'
     +'<div style="font-size:1.6rem;font-weight:900;color:#EAD9B0;">'+P.price+' <span style="font-size:.8rem;">'+esc(P.currency)+'</span></div>'
     +'<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:11px;">'
-    +'<button onclick="hhWathiqOpen()" style="background:linear-gradient(135deg,#F5E6C4,#B8924A);color:#16283F;border:1px solid #FDF3DD;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">ادخل الاستوديو</button>'
+    +'<button onclick="hhWathiqOpen()" style="background:#FFFFFF;color:#16283F;border:1px solid #FDF3DD;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">ادخل الاستوديو</button>'
     +'<button onclick="hhSpkRequestAccess()" style="background:#fff;color:'+P.dark+';border:none;border-radius:11px;padding:10px 26px;font-family:Cairo;font-weight:900;font-size:.85rem;cursor:pointer;">طلب التسجيل</button>'
     +'</div>'
     +'</div>';
 
   var adminBar = (typeof hhIsAdmin==='function' && hhIsAdmin())
-    ? '<div style="background:#FBF3E2;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
+    ? '<div style="background:#F5F3F0;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">'
       +'<span style="font-size:.76rem;font-weight:800;color:#5E0E26;">أنت مدير · الوصول مفتوح · تدير الصلاحيات من هنا</span>'
       +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
       +'<button onclick="hhSpkEditor()" style="background:#8A1538;color:#fff;border:none;border-radius:9px;padding:6px 14px;font-family:Cairo;font-weight:900;font-size:.71rem;cursor:pointer;">تحرير البرنامج</button>'
@@ -854,7 +854,7 @@ function hhSpkRequestAccess(){
     return '<div style="margin-bottom:10px;"><label style="display:block;font-size:.78rem;color:#8A6D2E;font-weight:700;margin-bottom:4px;">'+label+'</label>'
       +'<input id="'+id+'" type="'+(type||'text')+'" value="'+(val||'')+'" style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #D4BC85;border-radius:10px;padding:9px 12px;font-family:Cairo;font-size:.85rem;color:#3D2A16;"></div>';
   }
-  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-top:4px solid #8A1538;border-radius:16px;max-width:420px;width:100%;overflow:hidden;">'
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FFFFFF;border:2px solid #B8924A;border-top:4px solid #8A1538;border-radius:16px;max-width:420px;width:100%;overflow:hidden;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 16px;border-bottom:2px solid #B8924A;">'
     +'<div style="font-weight:700;font-size:1.05rem;">طلب التسجيل · القائد المُلهِم</div>'
     +'<div style="font-size:.78rem;color:#EAD9B0;margin-top:2px;">بعد استلام طلبك وتأكيد الدفع تُمنح الصلاحية الكاملة</div></div>'
@@ -864,7 +864,7 @@ function hhSpkRequestAccess(){
     + fld('pr-email','البريد الإلكتروني', currentUser.email||'','email')
     + fld('pr-org','المدرسة / الجهة','')
     +'<div id="pr-status" style="font-size:.78rem;font-weight:700;margin-bottom:8px;"></div>'
-    +'<button onclick="hhSpkSubmitReg()" style="width:100%;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer;">إرسال طلب التسجيل</button>'
+    +'<button onclick="hhSpkSubmitReg()" style="width:100%;background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:11px;padding:11px;font-weight:700;font-size:.95rem;cursor:pointer;">إرسال طلب التسجيل</button>'
     +'<button onclick="document.getElementById(\'hh-prog-reg\').remove()" style="width:100%;background:none;border:none;color:#8A6D2E;font-weight:700;font-size:.8rem;cursor:pointer;margin-top:8px;">إلغاء</button>'
     +'</div></div>';
   document.body.appendChild(ov);
@@ -900,7 +900,7 @@ async function hhAdminProgRegs(){
   var ov=document.createElement('div'); ov.id='hh-prog-regs-admin';
   ov.style.cssText='position:fixed;inset:0;background:rgba(30,6,15,.72);z-index:999994;display:flex;align-items:flex-start;justify-content:center;padding:20px 14px;overflow-y:auto;direction:rtl;';
   ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
-  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FBF7F0;border:2px solid #B8924A;border-radius:18px;max-width:680px;width:100%;overflow:hidden;">'
+  ov.innerHTML='<div onclick="event.stopPropagation()" style="background:#FFFFFF;border:2px solid #B8924A;border-radius:18px;max-width:680px;width:100%;overflow:hidden;">'
     +'<div style="background:linear-gradient(175deg,#4A0B1E,#5E0E26);color:#fff;padding:14px 18px;border-bottom:2px solid #B8924A;display:flex;justify-content:space-between;align-items:center;">'
     +'<div><div style="font-weight:700;font-size:1.1rem;">طلبات التسجيل · البرامج التربوية</div>'
     +'<div style="font-size:.76rem;color:#EAD9B0;margin-top:2px;">امنح الصلاحية الكاملة لمن أتم الدفع</div></div>'
@@ -924,7 +924,7 @@ async function hhAdminProgRegs(){
         +'<div style="font-size:.68rem;color:#aaa;margin-top:2px;">'+esc((r.createdAt||'').slice(0,10))+'</div></div>'
         +(granted
           ? '<span style="background:#E8F3ED;color:#3D6B53;border:1px solid #3D6B53;border-radius:99px;padding:3px 14px;font-size:.74rem;font-weight:700;">مُفعَّل</span>'
-          : '<button onclick="hhAdminGrantProg(\''+r._id+'\',\''+(r.uid||'')+'\',\''+esc(r.email||'')+'\')" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#3D0918;border:1px solid #FDF3DD;border-radius:99px;padding:6px 16px;font-weight:700;font-size:.78rem;cursor:pointer;">منح الصلاحية الكاملة</button>')
+          : '<button onclick="hhAdminGrantProg(\''+r._id+'\',\''+(r.uid||'')+'\',\''+esc(r.email||'')+'\')" style="background:#FFFFFF;color:#3D0918;border:1px solid #FDF3DD;border-radius:99px;padding:6px 16px;font-weight:700;font-size:.78rem;cursor:pointer;">منح الصلاحية الكاملة</button>')
         +'</div></div>';
     }).join('');
   }catch(e){
@@ -1051,7 +1051,7 @@ function hhSpkQRender(){
     +'<span style="font-weight:900;font-size:.84rem;color:'+HH_SPEAK_PROGRAM.dark+';">'+esc(HH_SPEAK_PROGRAM.units[T.ui].title)+'</span>'
     +'<span style="font-size:.74rem;color:#999;font-weight:800;">'+(T.idx+1)+' / '+T.qs.length+'</span></div>'
     +'<div style="background:#eee;border-radius:99px;height:8px;margin-bottom:18px;"><div style="background:linear-gradient(90deg,'+HH_SPEAK_PROGRAM.color+','+HH_SPEAK_PROGRAM.accent+');border-radius:99px;height:8px;width:'+pct+'%;"></div></div>'
-    +'<div style="background:#FDF8EC;border:2px solid '+HH_SPEAK_PROGRAM.color+';border-radius:16px;padding:20px;margin-bottom:14px;">'
+    +'<div style="background:#F5F3F0;border:2px solid '+HH_SPEAK_PROGRAM.color+';border-radius:16px;padding:20px;margin-bottom:14px;">'
     +'<div style="font-size:1.02rem;font-weight:900;color:'+HH_SPEAK_PROGRAM.dark+';line-height:1.85;">'+esc(q.q)+'</div></div>'
     +'<div id="spkq-opts" style="display:flex;flex-direction:column;gap:8px;">'
     + opts.map(function(o,k){ return '<button onclick="hhSpkAnswer('+k+',this)" data-opt="'+esc(o)+'" style="background:#fff;border:1.5px solid #B8924A;border-radius:12px;padding:12px 15px;font-family:Cairo;font-weight:800;font-size:.86rem;color:#333;cursor:pointer;text-align:right;line-height:1.7;">'+esc(o)+'</button>'; }).join('')
@@ -1094,7 +1094,7 @@ function hhSpkQEnd(){
     +'<div style="font-size:.78rem;opacity:.9;margin-top:6px;">'+(pct>=80?'أتقنت هذه الوحدة':'راجع الدرس وأعد المحاولة')+'</div></div>'
     +'<div style="padding:15px 18px;">'
     + (wrong.length ? '<div style="font-weight:900;font-size:.83rem;color:'+HH_SPEAK_PROGRAM.dark+';margin-bottom:7px;">راجع هذه النقاط</div>'
-      + wrong.map(function(w){ return '<div style="background:#FDF8EC;border-right:3px solid #c0392b;border-radius:9px;padding:9px 11px;margin-bottom:6px;">'
+      + wrong.map(function(w){ return '<div style="background:#F5F3F0;border-right:3px solid #c0392b;border-radius:9px;padding:9px 11px;margin-bottom:6px;">'
         +'<div style="font-size:.79rem;font-weight:800;">'+esc(w.q)+'</div>'
         +'<div style="font-size:.74rem;color:#3D6B53;font-weight:800;margin-top:3px;">الصواب: '+esc(w.a)+'</div></div>'; }).join('')
       : '<div style="text-align:center;color:#3D6B53;font-weight:900;padding:10px;">إجابات كاملة</div>')
@@ -1136,13 +1136,13 @@ window._hhAdminAddProgramLegacy = function(editId){
   ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99995;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;padding:18px;';
   function fld(label, id, val, ph, ta){
     return '<div style="margin-bottom:13px;"><label style="display:block;color:#5E0E26;font-weight:800;font-size:.78rem;margin-bottom:5px;">'+label+'</label>'
-      +(ta?('<textarea id="'+id+'" placeholder="'+(ph||'')+'" style="width:100%;min-height:70px;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;color:#3D0918;background:#FDFAF3;box-sizing:border-box;resize:vertical;">'+(val||'')+'</textarea>')
-        :('<input id="'+id+'" value="'+(val||'').replace(/"/g,'&quot;')+'" placeholder="'+(ph||'')+'" style="width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;font-weight:700;color:#3D0918;background:#FDFAF3;box-sizing:border-box;">'))
+      +(ta?('<textarea id="'+id+'" placeholder="'+(ph||'')+'" style="width:100%;min-height:70px;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;color:#3D0918;background:#FFFFFF;box-sizing:border-box;resize:vertical;">'+(val||'')+'</textarea>')
+        :('<input id="'+id+'" value="'+(val||'').replace(/"/g,'&quot;')+'" placeholder="'+(ph||'')+'" style="width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:10px 12px;font-family:Cairo;font-size:.85rem;font-weight:700;color:#3D0918;background:#FFFFFF;box-sizing:border-box;">'))
       +'</div>';
   }
-  ov.innerHTML='<div style="max-width:600px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:20px;overflow:hidden;">'
+  ov.innerHTML='<div style="max-width:600px;margin:0 auto;background:linear-gradient(180deg,#FFFFFF,#F5F3F0);border:2px solid #B8924A;border-radius:20px;overflow:hidden;">'
     +'<div style="background:linear-gradient(120deg,#2a0810,#5E0E26);padding:15px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;">'
-    +  '<div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>'
+    +  '<div style="width:42px;height:42px;border-radius:12px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>'
     +  '<div style="flex:1;"><b style="color:#FFFDF8;font-size:1.1rem;">'+(editId?'تعديل البرنامج':'إضافة برنامج / ورشة')+'</b><div style="color:#D4BC85;font-size:.66rem;">يظهر لك كأدمن · تتحكم بكل تفاصيله</div></div>'
     +  '<button onclick="document.getElementById(\'hh-addprog-ov\').remove()" style="background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;font-weight:900;cursor:pointer;">×</button>'
     +'</div>'
@@ -1215,7 +1215,7 @@ function _hhOpenLeaderProgramsLegacy(){
   try{ if(typeof hhSpkCheckAccess==='function') hhSpkCheckAccess(); }catch(e){}
   var old=document.getElementById('hh-leaders'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-leaders';
-  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
+  ov.style.cssText='position:fixed;inset:0;background:linear-gradient(180deg,#F5F4F2,#F5F4F2);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;';
 
   function ic(p){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
   var I = {
@@ -1232,7 +1232,7 @@ function _hhOpenLeaderProgramsLegacy(){
   function side(items){
     return items.map(function(it){
       return '<div onclick="'+it.fn+'" style="display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:11px;color:#EAD9B0;font-weight:800;font-size:.78rem;cursor:pointer;margin-bottom:3px;'+(it.on?'background:rgba(212,188,133,.14);':'')+'">'
-        +'<span style="width:28px;height:28px;border-radius:9px;'+(it.on?'background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;color:#3D0918;':'background:rgba(212,188,133,.1);border:1px solid rgba(212,188,133,.4);color:#EAD9B0;')+'display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">'+it.svg+'</span>'+it.t+'</div>';
+        +'<span style="width:28px;height:28px;border-radius:9px;'+(it.on?'background:#FFFFFF;border:1px solid #FDF3DD;color:#3D0918;':'background:rgba(212,188,133,.1);border:1px solid rgba(212,188,133,.4);color:#EAD9B0;')+'display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">'+it.svg+'</span>'+it.t+'</div>';
     }).join('');
   }
   var done=0; try{ done=Object.keys(JSON.parse(localStorage.getItem('hh_wq_done')||'{}')||{}).length; }catch(e){}
@@ -1262,7 +1262,7 @@ function _hhOpenLeaderProgramsLegacy(){
     WQ_MAP.treasures.items.forEach(function(it){
       if(it.id===26){ medalItem=it; return; }
       var open = (typeof _wqAllowed==='function') ? _wqAllowed(it.id) : false;
-      gems += '<div onclick="hhLdrStation('+it.id+')" style="display:flex;align-items:center;gap:10px;cursor:pointer;background:linear-gradient(170deg,#FFFDF8,#FBF5E9);border:1px solid rgba(184,146,74,.5);border-radius:12px;padding:8px 12px;margin-bottom:7px;'+(open?'':'opacity:.75;')+'">'
+      gems += '<div onclick="hhLdrStation('+it.id+')" style="display:flex;align-items:center;gap:10px;cursor:pointer;background:linear-gradient(170deg,#FFFFFF,#F5F3F0);border:1px solid rgba(184,146,74,.5);border-radius:12px;padding:8px 12px;margin-bottom:7px;'+(open?'':'opacity:.75;')+'">'
         +'<span style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F5E6C4,#B8924A 80%);border:1.5px solid #FDF3DD;display:inline-flex;align-items:center;justify-content:center;color:#3D0918;flex-shrink:0;">'+I.gem+'</span>'
         +'<div style="flex:1;min-width:0;"><div style="color:#3D0918;font-weight:800;font-size:.8rem;">'+it.t+'</div>'
         +'<div style="color:#8A7A63;font-size:.6rem;margin-top:1px;">'+(it.sub||'')+'</div></div>'
@@ -1283,7 +1283,7 @@ function _hhOpenLeaderProgramsLegacy(){
     +'</div>'
     +'<div style="display:flex;align-items:center;gap:10px;">'
     +  '<span style="color:#F5E6C4;font-weight:800;font-size:1rem;">البرامج التربوية</span>'
-    +  '<span style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:99px;padding:3px 13px;color:#3D0918;font-size:.68rem;font-weight:800;">'+roleBadge+'</span>'
+    +  '<span style="background:#FFFFFF;border:1px solid #FDF3DD;border-radius:99px;padding:3px 13px;color:#3D0918;font-size:.68rem;font-weight:800;">'+roleBadge+'</span>'
     +'</div>'
     +'<span style="width:90px;"></span>'
     +'</div>'
@@ -1320,13 +1320,13 @@ function _hhOpenLeaderProgramsLegacy(){
           var priceHtml = o.free ? '<span style="font-size:1rem;font-weight:900;color:#B8924A;">مجاني</span><span style="font-size:.66rem;color:#8A7A63;font-weight:700;"> · للجميع</span>'
                                  : '<span style="font-size:1.4rem;font-weight:900;color:#8A1538;">'+esc(o.price)+'</span><span style="font-size:.68rem;color:#8A6D2E;font-weight:700;"> ﷼ · اشتراك</span>';
           var badge = o.free ? '<span style="position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,#B8924A,#8A6D2E);color:#FFFDF8;font-size:.55rem;font-weight:900;border-radius:99px;padding:3px 11px;">مجاني</span>'
-                             : '<span style="position:absolute;top:14px;left:14px;z-index:3;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-size:.55rem;font-weight:900;border-radius:99px;padding:3px 11px;">مدفوع · معتمد</span>';
-          function vcell(svg,b,sp){ return '<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;">'+svg+'</svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;line-height:1;">'+b+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+sp+'</span></div>'; }
-          return '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(94,14,38,.08);display:flex;flex-direction:column;">'
+                             : '<span style="position:absolute;top:14px;left:14px;z-index:3;background:#FFFFFF;color:#2a0810;font-size:.55rem;font-weight:900;border-radius:99px;padding:3px 11px;">مدفوع · معتمد</span>';
+          function vcell(svg,b,sp){ return '<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;">'+svg+'</svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;line-height:1;">'+b+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+sp+'</span></div>'; }
+          return '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(94,14,38,.08);display:flex;flex-direction:column;">'
             +'<div style="background:'+HID+';padding:16px;position:relative;overflow:hidden;">'
             +  '<div style="position:absolute;left:-20px;top:-20px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(212,188,133,.18),transparent 70%);"></div>'
             +  badge
-            +  '<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#F5E6C4,#B8924A);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.3);position:relative;z-index:2;margin-bottom:10px;"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2">'+o.icon+'</svg></div>'
+            +  '<div style="width:48px;height:48px;border-radius:14px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.3);position:relative;z-index:2;margin-bottom:10px;"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#2a0810" stroke-width="2">'+o.icon+'</svg></div>'
             +  '<div style="color:#FFFDF8;font-size:1.05rem;font-weight:900;position:relative;z-index:2;line-height:1.2;">'+esc(o.name)+'</div>'
             +  '<div style="color:#D4BC85;font-size:.62rem;font-weight:700;position:relative;z-index:2;margin-top:3px;">'+esc(o.sub||'')+'</div>'
             +'</div>'
@@ -1340,17 +1340,17 @@ function _hhOpenLeaderProgramsLegacy(){
         var cards='';
         // بطاقة الواثق الثابتة
         cards += progCard({ name:'الواثِق المُلهِم', sub:'فنّ الإلقاء والحضور', icon:'<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
-          vals: '<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">٦</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">محطات</span></div>'
-                +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">وسام</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">معتمد</span></div>'
-                +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">٤ أسابيع</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">المدة</span></div>',
+          vals: '<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">٦</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">محطات</span></div>'
+                +'<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">وسام</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">معتمد</span></div>'
+                +'<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">٤ أسابيع</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">المدة</span></div>',
           price:'150', free:false, cta:'ابدأ الرحلة', action:'hhLdrContinue()' });
         // البرامج المضافة
         try{
           var cp=JSON.parse(localStorage.getItem('hh_custom_programs')||'[]')||[];
           cp.forEach(function(p){
-            var vhtml='<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">'+(p.stations||'·')+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"جلسات":"محطات")+'</span></div>'
-              +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 11l3 3L22 4"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">شهادة</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"حضور":"إتمام")+'</span></div>'
-              +'<div style="flex:1;background:linear-gradient(160deg,#FBF5E9,#F2E9D6);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">'+(p.type==="workshop"?"ورشة":"برنامج")+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">النوع</span></div>';
+            var vhtml='<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 20l-5-2.5V5l5 2.5M9 20V7.5"/></svg><b style="display:block;font-size:.8rem;font-weight:900;color:#3D0918;">'+(p.stations||'·')+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"جلسات":"محطات")+'</span></div>'
+              +'<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><path d="M9 11l3 3L22 4"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">شهادة</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">'+(p.type==="workshop"?"حضور":"إتمام")+'</span></div>'
+              +'<div style="flex:1;background:linear-gradient(160deg,#F5F3F0,#ECE8E3);border:1px solid #EAE0CA;border-radius:10px;padding:8px 4px;text-align:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A1538" stroke-width="2" style="margin-bottom:3px;"><circle cx="12" cy="12" r="9"/></svg><b style="display:block;font-size:.72rem;font-weight:900;color:#3D0918;">'+(p.type==="workshop"?"ورشة":"برنامج")+'</b><span style="font-size:.5rem;color:#8A7A63;font-weight:700;">النوع</span></div>';
             cards += progCard({ name:p.name, sub:p.sub, editId:p.id,
               icon:(p.type==="workshop"?'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>':'<rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'),
               vals:vhtml, price:p.price, free:(!p.price), cta:(p.type==="workshop"?"ابدأ الورشة":"ابدأ الرحلة"), action:'hhLdrContinue()' });
@@ -1381,7 +1381,7 @@ function _hhOpenLeaderProgramsLegacy(){
     +      '</div>'
     +    '</div>'
     +    '<div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">'
-    +      '<button onclick="hhLdrContinue()" style="background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;border-radius:11px;padding:10px 22px;color:#3D0918;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;box-shadow:0 3px 10px rgba(138,109,46,.3);">تابع من محطتك</button>'
+    +      '<button onclick="hhLdrContinue()" style="background:#FFFFFF;border:1px solid #FDF3DD;border-radius:11px;padding:10px 22px;color:#3D0918;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;box-shadow:0 3px 10px rgba(138,109,46,.3);">تابع من محطتك</button>'
     +      '<button onclick="hhSpkRequestAccess()" style="background:rgba(212,188,133,.1);border:1px solid #B8924A;border-radius:11px;padding:10px 22px;color:#F5E6C4;font-weight:800;font-size:.85rem;cursor:pointer;font-family:Cairo;">طلب التسجيل</button>'
     +    '</div>'
     +  '</div>'
@@ -1399,11 +1399,11 @@ function _hhOpenLeaderProgramsLegacy(){
 
     +'<div style="color:#8A1538;font-weight:800;font-size:.85rem;margin:15px 2px 10px;display:flex;align-items:center;gap:8px;"><span style="width:7px;height:7px;background:#B8924A;transform:rotate(45deg);"></span>من الحرم</div>'
     +'<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:12px;align-items:start;">'
-    +  '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
+    +  '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
     +    '<div style="color:#8A1538;font-weight:800;font-size:.78rem;margin-bottom:9px;display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;background:#B8924A;transform:rotate(45deg);"></span>كنوز الواثق</div>'
     +    gems + medalCard
     +  '</div>'
-    +  '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
+    +  '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:15px;padding:12px 14px;">'
     +    '<div style="color:#8A1538;font-weight:800;font-size:.78rem;margin-bottom:9px;display:flex;align-items:center;gap:7px;"><span style="width:6px;height:6px;background:#B8924A;transform:rotate(45deg);"></span>الدورات القادمة</div>'
     +    '<div id="hh-ldr-cohorts"><div style="text-align:center;color:#8A7A63;font-size:.72rem;font-weight:700;padding:12px;">جارٍ تحميل الدورات…</div></div>'
     +  '</div>'
@@ -1491,7 +1491,7 @@ function hhOpenProgram(pid){
       +'<td style="padding:7px;text-align:center;font-size:.71rem;color:#888;">'+esc(r.cls)+'</td>'
       +'<td style="padding:7px;text-align:center;font-weight:900;color:'+r.color+';font-size:.8rem;">'+r.score+'</td>'
       +'<td style="padding:7px;text-align:center;font-size:.7rem;color:'+r.color+';font-weight:800;">'+esc(r.level)+'</td>'
-      +'<td style="padding:4px;text-align:center;"><button onclick="hhShowDiagnosis('+r.i+')" style="background:#FBF3E2;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تشخيص</button></td></tr>';
+      +'<td style="padding:4px;text-align:center;"><button onclick="hhShowDiagnosis('+r.i+')" style="background:#F5F3F0;color:#5E0E26;border:1px solid #B8924A;border-radius:7px;padding:3px 9px;font-family:Cairo;font-weight:900;font-size:.65rem;cursor:pointer;">تشخيص</button></td></tr>';
   }).join('') : '';
 
   var html='<div style="background:linear-gradient(135deg,'+P.color+','+P.dark+');border-radius:14px;padding:15px;color:#fff;margin-bottom:14px;">'
@@ -1506,7 +1506,7 @@ function hhOpenProgram(pid){
     +'<div style="font-size:1.3rem;font-weight:900;">'+P.threshold+'</div><div style="font-size:.65rem;opacity:.85;">عتبة الترشّح</div></div>'
     +'</div></div>'
     +'<div style="font-weight:900;font-size:.86rem;color:'+P.dark+';margin-bottom:7px;">ركائز التقييم</div>'
-    +'<div style="background:#FDF8EC;border:1.5px solid #E3D9C6;border-radius:12px;padding:10px;margin-bottom:14px;">'+pillars+'</div>'
+    +'<div style="background:#F5F3F0;border:1.5px solid #E3D9C6;border-radius:12px;padding:10px;margin-bottom:14px;">'+pillars+'</div>'
     + (rows
       ? '<div style="font-weight:900;font-size:.86rem;color:'+P.dark+';margin-bottom:7px;">لوحة الترتيب</div>'
         +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">'
@@ -1517,7 +1517,7 @@ function hhOpenProgram(pid){
         +'<tbody>'+rows+'</tbody></table></div>'
       : '<div style="text-align:center;color:#999;padding:20px;font-weight:700;font-size:.82rem;line-height:1.9;">'
         +'لا بيانات كافية بعد.<br>ارصد درجات وحضوراً وملاحظات في دفتر المتابعة ليظهر الترتيب تلقائياً.</div>')
-    +'<div style="background:#FBF3E2;border-radius:11px;padding:11px 13px;margin-top:13px;font-size:.74rem;color:#5E0E26;font-weight:700;line-height:1.85;">'
+    +'<div style="background:#F5F3F0;border-radius:11px;padding:11px 13px;margin-top:13px;font-size:.74rem;color:#5E0E26;font-weight:700;line-height:1.85;">'
     +'تُحدَّث لوحة الترتيب تلقائياً من دفتر المتابعة · كلما رصدت بيانات أدق، صار الترشيح أعدل.</div>';
 
   if(typeof hhSchModal==='function') hhSchModal(P.name, html, P.color);
@@ -1603,33 +1603,33 @@ function hhPgStyle(){
   if(document.getElementById('hh-pg-style')) return;
   var st=document.createElement('style'); st.id='hh-pg-style';
   st.textContent=
-    '#hh-pg{position:fixed;inset:0;background:linear-gradient(180deg,#F6F1E7,#EFE7D6);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;}'
+    '#hh-pg{position:fixed;inset:0;background:linear-gradient(180deg,#F5F4F2,#F5F4F2);z-index:99990;overflow-y:auto;direction:rtl;font-family:Cairo,Tajawal,sans-serif;}'
    +'#hh-pg .pg-top{background:linear-gradient(175deg,#4A0B1E,#5E0E26);border-bottom:2px solid #B8924A;box-shadow:0 3px 14px rgba(61,9,24,.3);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;}'
    +'#hh-pg .pg-btn{background:rgba(212,188,133,.12);border:1px solid rgba(212,188,133,.5);border-radius:9px;height:34px;padding:0 13px;color:#F5E6C4;font-weight:800;font-size:.78rem;cursor:pointer;font-family:Cairo;display:inline-flex;align-items:center;gap:6px;}'
-   +'#hh-pg .pg-btn.gold{background:linear-gradient(135deg,#EAD9B0,#B8924A);border:1px solid #FDF3DD;color:#2a0810;}'
+   +'#hh-pg .pg-btn.gold{background:#FFFFFF;border:1px solid #FDF3DD;color:#2a0810;}'
    +'#hh-pg .pg-wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}'
    +'#hh-pg .pg-hero{background:linear-gradient(135deg,#3D0918,#5E0E26 70%,#7A1330);border:2px solid #B8924A;border-radius:18px;padding:18px 20px;color:#EAD9B0;margin-bottom:18px;position:relative;overflow:hidden;}'
    +'#hh-pg .pg-hero b{display:block;font-size:1.25rem;color:#FFFDF8;} #hh-pg .pg-hero span{font-size:.8rem;font-weight:700;color:#D4BC85;line-height:1.7;}'
    +'#hh-pg .pg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}'
-   +'#hh-pg .pg-card{background:#FFFDF8;border:1.5px solid #B8924A;border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(94,14,38,.10);display:flex;flex-direction:column;}'
+   +'#hh-pg .pg-card{background:#FFFFFF;border:1.5px solid #B8924A;border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(94,14,38,.10);display:flex;flex-direction:column;}'
    +'#hh-pg .pg-poster{position:relative;aspect-ratio:4/3;background:linear-gradient(160deg,#4A0B1E,#7A1330 60%,#5E0E26);display:flex;align-items:center;justify-content:center;color:#EAD9B0;cursor:pointer;}'
    +'#hh-pg .pg-poster img{width:100%;height:100%;object-fit:cover;display:block;}'
    +'#hh-pg .pg-poster .ph{text-align:center;font-weight:900;font-size:1.3rem;opacity:.9;padding:10px;}'
-   +'#hh-pg .pg-tag{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#EAD9B0,#B8924A);color:#2a0810;font-size:.62rem;font-weight:900;border-radius:99px;padding:4px 12px;}'
+   +'#hh-pg .pg-tag{position:absolute;top:12px;left:12px;background:#FFFFFF;color:#2a0810;font-size:.62rem;font-weight:900;border-radius:99px;padding:4px 12px;}'
    +'#hh-pg .pg-st{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.4);border:1px solid rgba(234,217,176,.6);color:#EAD9B0;font-size:.62rem;font-weight:800;border-radius:99px;padding:4px 12px;}'
    +'#hh-pg .pg-strip{background:linear-gradient(135deg,#4A0B1E,#5E0E26);color:#EAD9B0;padding:8px 14px;font-weight:800;font-size:.78rem;display:flex;align-items:center;gap:8px;border-top:2px solid #B8924A;border-bottom:2px solid #B8924A;}'
    +'#hh-pg .pg-body{padding:13px 15px 15px;flex:1;display:flex;flex-direction:column;}'
    +'#hh-pg .pg-name{font-weight:900;font-size:1.1rem;color:#3D0918;} #hh-pg .pg-desc{color:#5b4a3a;font-size:.78rem;line-height:1.85;margin:5px 0 10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
    +'#hh-pg .pg-meta{display:flex;flex-direction:column;gap:6px;font-size:.76rem;color:#3D0918;font-weight:700;} #hh-pg .pg-meta div{display:flex;align-items:center;gap:8px;} #hh-pg .pg-meta svg{color:#8A1538;flex-shrink:0;}'
    +'#hh-pg .pg-cta{margin-top:12px;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#F5E6C4;border-radius:14px;padding:11px;text-align:center;font-weight:900;font-size:.88rem;cursor:pointer;box-shadow:0 6px 16px rgba(94,14,38,.25);border:none;font-family:Cairo;width:100%;}'
-   +'#hh-pg .pg-cta.off{background:#EDE7DA;color:#9a8b75;box-shadow:none;cursor:default;}'
+   +'#hh-pg .pg-cta.off{background:#ECE8E3;color:#9a8b75;box-shadow:none;cursor:default;}'
    +'#hh-pg .pg-more{margin-top:7px;background:transparent;border:1px solid #B8924A;color:#8A6D2E;border-radius:11px;padding:8px;font-weight:800;font-size:.72rem;cursor:pointer;font-family:Cairo;width:100%;}'
-   +'#hh-pg .pg-empty{background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:18px;padding:34px 16px;text-align:center;color:#8A6D2E;font-weight:800;line-height:1.9;}'
+   +'#hh-pg .pg-empty{background:#FFFFFF;border:1.5px dashed #B8924A;border-radius:18px;padding:34px 16px;text-align:center;color:#8A6D2E;font-weight:800;line-height:1.9;}'
    +'#hh-pg .pg-dots{display:none;gap:6px;justify-content:center;margin-top:12px;} #hh-pg .pg-dots i{width:8px;height:8px;border-radius:99px;background:#D9CFB8;transition:all .2s;} #hh-pg .pg-dots i.on{width:26px;background:#5E0E26;}'
    +'@media (max-width:640px){ #hh-pg .pg-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:2px 2px 6px;scrollbar-width:none;} #hh-pg .pg-grid::-webkit-scrollbar{display:none;} #hh-pg .pg-card{flex:0 0 88%;scroll-snap-align:center;} #hh-pg .pg-dots{display:flex;} }'
    // النوافذ
    +'.hh-pg-ov{position:fixed;inset:0;background:rgba(42,8,16,.82);z-index:99996;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;padding:16px;}'
-   +'.hh-pg-box{max-width:640px;margin:0 auto;background:linear-gradient(180deg,#FFFDF8,#FBF5E9);border:2px solid #B8924A;border-radius:20px;overflow:hidden;}'
+   +'.hh-pg-box{max-width:640px;margin:0 auto;background:linear-gradient(180deg,#FFFFFF,#F5F3F0);border:2px solid #B8924A;border-radius:20px;overflow:hidden;}'
    +'.hh-pg-hd{background:linear-gradient(120deg,#2a0810,#5E0E26);padding:13px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:2px solid #B8924A;}'
    +'.hh-pg-hd b{color:#FFFDF8;font-size:1rem;flex:1;} .hh-pg-hd small{display:block;color:#D4BC85;font-size:.64rem;font-weight:700;}'
    +'.hh-pg-hd button{background:rgba(212,188,133,.15);border:1px solid #B8924A;border-radius:9px;width:34px;height:34px;color:#F5E6C4;cursor:pointer;display:flex;align-items:center;justify-content:center;}'
@@ -1637,7 +1637,7 @@ function hhPgStyle(){
    +'.hh-pg-f{margin-bottom:11px;} .hh-pg-f label{display:block;color:#5E0E26;font-weight:800;font-size:.74rem;margin-bottom:4px;}'
    +'.hh-pg-f input,.hh-pg-f textarea,.hh-pg-f select{width:100%;border:1.5px solid #B8924A;border-radius:11px;padding:9px 12px;font-family:Cairo;font-size:.84rem;color:#3D0918;background:#fff;box-sizing:border-box;}'
    +'.hh-pg-f textarea{min-height:76px;resize:vertical;} .hh-pg-2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px;}'
-   +'.hh-pg-up{border:1.5px dashed #B8924A;border-radius:12px;padding:12px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.74rem;background:#FDF8EC;cursor:pointer;position:relative;overflow:hidden;}'
+   +'.hh-pg-up{border:1.5px dashed #B8924A;border-radius:12px;padding:12px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.74rem;background:#F5F3F0;cursor:pointer;position:relative;overflow:hidden;}'
    +'.hh-pg-up img{width:100%;max-height:220px;object-fit:cover;border-radius:9px;display:block;margin-bottom:6px;}'
    +'.hh-pg-save{width:100%;background:linear-gradient(135deg,#3D6B53,#2C5340);color:#fff;border:none;border-radius:12px;padding:12px;font-family:Cairo;font-weight:900;font-size:.9rem;cursor:pointer;margin-top:6px;}'
    +'.hh-pg-del{width:100%;background:#fff;border:1.5px solid #c0392b;color:#c0392b;border-radius:12px;padding:10px;font-family:Cairo;font-weight:800;font-size:.8rem;cursor:pointer;margin-top:8px;}'
@@ -1647,7 +1647,7 @@ function hhPgStyle(){
    +'.hh-pg-row .nm{font-weight:900;color:#3D0918;} .hh-pg-row .sb{color:#8A7A63;font-size:.66rem;font-weight:700;margin-top:2px;}'
    +'.hh-pg-row .acts{margin-right:auto;display:flex;gap:5px;flex-wrap:wrap;} .hh-pg-row .acts button{border:1px solid #B8924A;color:#8A6D2E;border-radius:8px;padding:5px 10px;font-size:.66rem;font-weight:800;background:#fff;cursor:pointer;font-family:Cairo;}'
    +'.hh-pg-row .acts button.p{background:#F7ECEF;color:#8A1538;border-color:#8A1538;} .hh-pg-row .acts button.d{border-color:#c0392b;color:#c0392b;}'
-   +'.hh-pg-pill{border-radius:99px;padding:2px 10px;font-size:.6rem;font-weight:900;} .hh-pg-pill.y{background:#FDF3DD;color:#8A6D2E;} .hh-pg-pill.c{background:#E6F2EA;color:#2C5340;} .hh-pg-pill.h{background:#EDE7DA;color:#8a7a63;}'
+   +'.hh-pg-pill{border-radius:99px;padding:2px 10px;font-size:.6rem;font-weight:900;} .hh-pg-pill.y{background:#F5F3F0;color:#8A6D2E;} .hh-pg-pill.c{background:#E6F2EA;color:#2C5340;} .hh-pg-pill.h{background:#ECE8E3;color:#8a7a63;}'
    +'.hh-pg-tbl{width:100%;border-collapse:collapse;font-size:.72rem;} .hh-pg-tbl th{background:#4A0B1E;color:#EAD9B0;padding:7px;font-size:.64rem;} .hh-pg-tbl td{padding:7px 8px;border-bottom:1px solid #EFE6D3;font-weight:700;color:#3D0918;text-align:center;vertical-align:middle;}'
    +'.hh-pg-tbl td button{border:none;border-radius:8px;padding:4px 10px;font-family:Cairo;font-weight:800;font-size:.64rem;cursor:pointer;}'
    +'.hh-pg-sec{font-weight:900;font-size:.86rem;color:#5E0E26;margin:14px 0 7px;display:flex;align-items:center;gap:7px;} .hh-pg-sec::before{content:"";width:5px;height:18px;background:linear-gradient(#EAD9B0,#B8924A);border-radius:9px;}'
@@ -1797,7 +1797,7 @@ async function hhPgSubmit(id){
     await _hhPgDb().collection('program_registrations').add(d);
     var ov=document.getElementById('hh-pg-form'); if(ov) ov.remove();
     _hhPgBox('تم استلام طلبك', p.name, '<div style="text-align:center;padding:10px 0 4px;color:#3D0918;font-weight:800;line-height:2;font-size:.9rem;">'
-      +'<div style="width:64px;height:64px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#EAD9B0,#B8924A);display:flex;align-items:center;justify-content:center;color:#2a0810;">'+_hhPgIco('chk')+'</div>'
+      +'<div style="width:64px;height:64px;border-radius:50%;margin:0 auto 10px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#2a0810;">'+_hhPgIco('chk')+'</div>'
       +'سُجّل طلب '+_hhPgEsc(d.studentName)+' بحالة «بانتظار التأكيد».<br>سيتواصل معك فريق المُلهم على '+_hhPgEsc(d.phone)+' لتأكيد المقعد.</div>'
       +'<button class="hh-pg-save" onclick="this.closest(\'.hh-pg-ov\').remove()">حسناً</button>', 'hh-pg-done');
   }catch(e){
@@ -1827,7 +1827,7 @@ async function hhPgAdmin(){
      +'</div></div>';
   }).join('');
   var html='<button class="hh-pg-save" style="margin:0 0 12px;background:linear-gradient(135deg,#8A1538,#5E0E26);" onclick="hhPgEdit(null)">+ إضافة برنامج جديد</button>'
-   +(rows||'<div class="pg-empty" style="background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:14px;padding:22px;text-align:center;color:#8A6D2E;font-weight:800;">لا برامج بعد.</div>')
+   +(rows||'<div class="pg-empty" style="background:#FFFFFF;border:1.5px dashed #B8924A;border-radius:14px;padding:22px;text-align:center;color:#8A6D2E;font-weight:800;">لا برامج بعد.</div>')
    +'<div class="hh-pg-list">'+rows+'</div>';
   var old=document.getElementById('hh-pg-admin'); if(old) old.remove();
   _hhPgBox('إدارة البرامج', _hhPg.list.length+' برامج · مدير المنصة', html, 'hh-pg-admin');
@@ -1948,7 +1948,7 @@ async function hhPgRegs(id){
   var rows=regs.map(function(r){
     return '<tr><td style="text-align:right;">'+_hhPgEsc(r.studentName)+'<div style="font-size:.6rem;color:#8A7A63;">'+_hhPgEsc(r.school||'')+'</div></td><td>'+_hhPgEsc(r.grade||'')+'</td><td style="text-align:right;">'+_hhPgEsc(r.parentName||'')+'<div style="font-size:.6rem;color:#8A7A63;">'+_hhPgEsc(r.relation||'')+'</div></td><td dir="ltr">'+_hhPgEsc(r.phone||'')+'</td>'
      +'<td>'+(r.status==='confirmed'?'<span class="hh-pg-pill c">مؤكد</span>':'<span class="hh-pg-pill y">بانتظار التأكيد</span>')+'</td>'
-     +'<td>'+(r.status==='confirmed'?'<button style="background:#EDE7DA;color:#8a7a63;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'pending\')">إلغاء</button>':'<button style="background:#E6F2EA;color:#2C5340;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'confirmed\')">تأكيد</button>')
+     +'<td>'+(r.status==='confirmed'?'<button style="background:#ECE8E3;color:#8a7a63;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'pending\')">إلغاء</button>':'<button style="background:#E6F2EA;color:#2C5340;" onclick="hhPgSetStatus(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\',\'confirmed\')">تأكيد</button>')
      +' <button style="background:#fff;border:1px solid #c0392b !important;color:#c0392b;" onclick="hhPgDelReg(\''+_hhPgEsc(id)+'\',\''+_hhPgEsc(r.id)+'\')">حذف</button></td></tr>';
   }).join('');
   var html='<div class="hh-pg-note">'+regs.length+' طلباً · '+conf+' مؤكد'+(p.seats?(' · '+p.seats+' مقعداً'):'')+'<br>التأكيد يحجز المقعد ويُحدّث العدّاد على البطاقة.</div>'
@@ -1996,3 +1996,104 @@ function hhPgCSV(pid){
 // ── المدخل الموحد: زر «البرامج التربوية» في index.html يستدعي hhOpenLeaderPrograms() ──
 window.hhOpenLeaderPrograms = function(){ hhPgOpen(); };
 window.hhAdminAddProgram = function(editId){ if(!_hhPgAdmin()) return; hhPgOpen().then(function(){ hhPgEdit(editId||null); }); };
+
+/* البرامج · تصميم جديد داخل إطار المنصة (zzzzzzbo) — البيانات كما هي من «custom_programs» بلا أرقام مختلقة */
+(function(){
+  if(typeof hhPgLoad!=='function') return;
+  var E=_hhPgEsc, I=_hhPgIco;
+  var BIG=function(p){ return '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; };
+  var AWARD='<circle cx="12" cy="9" r="5"/><path d="M9 13l-1 8 4-2 4 2-1-8"/>';
+  var BULB='<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>';
+  var state={ f:'all' };
+  try{ HH_PG_STATUS.done='برنامج منفّذ'; }catch(e){}
+  function st(p){ var full=_hhPgFull(p); return (p.status==='closed')?'closed':(full?'full':(p.status||'upcoming')); }
+  function stTxt(s){ return s==='full'?'اكتمل العدد':(HH_PG_STATUS[s]||'برنامج قادم'); }
+  function canReg(p){ var s=st(p); return (s==='open'||s==='early') && !_hhPgFull(p) && (p.regMode==='external'?!!p.regLink:true); }
+  function isDone(p){ return p.status==='done'; }
+  function isSoon(p){ return !isDone(p) && p.status!=='closed'; }
+  function vis(){ var adm=_hhPgAdmin(); return (_hhPg.list||[]).filter(function(p){ return adm || !p.hidden; }); }
+  function pass(p){ var f=state.f; if(f==='all') return true; if(f==='soon') return isSoon(p); if(f==='done') return isDone(p); if(f==='workshop') return p.type==='workshop'; if(f==='program') return p.type!=='workshop'; return true; }
+  function lines(s){ return _hhPgLines(s); }
+  function year(p){ var d=String(p.dateFrom||''); return /^\d{4}/.test(d)?d.slice(0,4):''; }
+
+  function feat(p){
+    var s=st(p), ok=canReg(p), id=E(p.id);
+    var gains=lines(p.features).slice(0,4);
+    var fee=(p.price&&String(p.price).trim())?(E(p.price)+' ﷼'):'بلا رسوم';
+    var left=_hhPgLeft(p); if(left!==null && !isDone(p)) fee+=' · '+(_hhPgFull(p)?'اكتمل العدد':(left+' مقعداً'));
+    var stCls=isDone(p)?'done':((s==='open'||s==='early')?'open':'');
+    return '<div class="p2-card p2-feat">'
+      +'<div class="p2-im" onclick="hhPgDetail(\''+id+'\')">'+(p.img?'<img src="'+E(p.img)+'" alt="'+E(p.name)+'">':'<div class="ph">'+E(p.name||'')+'</div>')+'<span class="p2-st '+stCls+'">'+E(stTxt(s))+'</span></div>'
+      +'<div class="p2-bd">'
+      +  '<span class="p2-k">'+I(p.type==='workshop'?'doc':'tgt')+(p.type==='workshop'?'ورشة تدريبية':'برنامج تربوي')+'</span>'
+      +  '<h3>'+E(p.name||'')+'</h3>'
+      +  (p.desc?'<p>'+E(p.desc)+'</p>':'')
+      +  '<div class="p2-facts">'
+      +    '<div class="p2-fact"><i>'+I('cal')+'</i><div><b>'+E(_hhPgDates(p))+'</b><small>الموعد</small></div></div>'
+      +    '<div class="p2-fact"><i>'+I('ppl')+'</i><div><b>'+E([p.audience,p.ages].filter(Boolean).join(' · ')||'تُعلن لاحقاً')+'</b><small>الفئة</small></div></div>'
+      +    '<div class="p2-fact"><i>'+I('pin')+'</i><div><b>'+E(p.place||'يُعلن لاحقاً')+'</b><small>المكان</small></div></div>'
+      +    '<div class="p2-fact"><i>'+I('card')+'</i><div><b>'+fee+'</b><small>التكلفة</small></div></div>'
+      +  '</div>'
+      +  (gains.length?'<div class="p2-gains">'+gains.map(function(g){ return '<span>✓ '+E(g)+'</span>'; }).join('')+'</div>':'')
+      +  '<div class="p2-bt">'
+      +    (ok?'<button class="p2-btn p" onclick="hhPgRegister(\''+id+'\')">'+(s==='early'?'تسجيل مبكر':'سجّل الآن')+'</button>':'<button class="p2-btn off" disabled>'+E(stTxt(s))+'</button>')
+      +    '<button class="p2-btn o" onclick="hhPgDetail(\''+id+'\')">التفاصيل والأهداف</button>'
+      +  '</div>'
+      +'</div></div>';
+  }
+  function side(all, featured){
+    var done=all.filter(function(p){ return isDone(p) && p!==featured; });
+    var h='<div class="p2-side">'
+      +'<div class="p2-card p2-sb p2-soon"><span class="si">'+BIG(BULB)+'</span><b>برامج أخرى قريباً</b><p>نعمل على برامج جديدة للطلاب وأولياء الأمور</p><button class="p2-btn s" style="width:100%" onclick="hhPgClose();hhNavigate(\'screen-contact\')">اقترح برنامجاً</button></div>';
+    if(done.length){
+      h+='<div class="p2-card p2-sb"><h4>'+I('star')+' برامج منفّذة</h4>'+done.map(function(p){
+        var n=parseInt(p.confirmedCount||0,10)||0;
+        var sub=[year(p), p.place].filter(Boolean).join(' · ');
+        return '<div class="p2-past" onclick="hhPgDetail(\''+E(p.id)+'\')"><div><b>'+E(p.name||'')+'</b>'+(sub?'<small>'+E(sub)+'</small>':'')+'</div>'+(n?'<span class="n">'+n+' مشاركاً</span>':'')+'</div>';
+      }).join('')+'</div>';
+    }
+    return h+'</div>';
+  }
+  window.hhPgRender=function(){
+    var root=document.getElementById('hh-pg-body'); if(!root){ return; }
+    var all=vis(), list=all.filter(pass);
+    var fl=document.getElementById('hh-pg-filters');
+    if(fl){
+      var F=[['all','الكل',all.length],['soon','قادمة',all.filter(isSoon).length],['done','منفّذة',all.filter(isDone).length],['program','برامج',all.filter(function(p){return p.type!=='workshop';}).length],['workshop','ورش',all.filter(function(p){return p.type==='workshop';}).length]];
+      fl.innerHTML=F.filter(function(x){ if(x[0]==='all') return true; if(!x[2]) return false; return x[2]<all.length; }).map(function(x){ return '<button type="button" class="p2-chip'+(state.f===x[0]?' on':'')+'" onclick="hhPgFilter(\''+x[0]+'\')">'+x[1]+' <em>'+x[2]+'</em></button>'; }).join(''); fl.style.display=(fl.children.length>1)?'':'none';
+    }
+    var hx=document.getElementById('hh-pg-counts');
+    if(hx){ var a=all.filter(isSoon).length, b=all.filter(isDone).length; hx.innerHTML=(a?'<span class="p2-chip">'+a+' قادم</span>':'')+(b?'<span class="p2-chip">'+b+' منفّذ</span>':'')+(_hhPgAdmin()?'<button class="p2-adm" onclick="hhPgAdmin()">'+I('gear')+' إدارة البرامج</button>':''); }
+    if(!all.length){ root.innerHTML='<div class="p2-main"><div class="p2-empty">لا برامج معلنة حالياً · تابعنا، الجديد قريب.'+(_hhPgAdmin()?'<br><small>(أنت المدير: أضف أول برنامج من زر إدارة البرامج)</small>':'')+'</div>'+side(all)+'</div>'; return; }
+    if(!list.length){ root.innerHTML='<div class="p2-empty" style="margin-top:18px">لا برامج في هذا التصنيف حالياً</div>'; return; }
+    var first=list.filter(isSoon)[0]||list[0];
+    var rest=list.filter(function(p){ return p!==first; });
+    root.innerHTML='<div class="p2-main">'+feat(first)+side(all, first)+'</div>'
+      +(rest.length?'<div class="p2-sec"><h2>'+(state.f==='done'?'برامج منفّذة أخرى':'برامج أخرى')+'</h2><small>'+rest.length+'</small></div><div class="pg-grid" id="hh-pg-grid">'+rest.map(hhPgCard).join('')+'</div>':'');
+  };
+  window.hhPgFilter=function(f){ state.f=f; hhPgRender(); };
+  window.hhPgOpen=async function(){
+    hhPgStyle();
+    try{ document.body.classList.remove('hh-immersive'); }catch(e){}
+    var old=document.getElementById('hh-pg'); if(old) old.remove();
+    state.f='all';
+    var ov=document.createElement('div'); ov.id='hh-pg'; ov.className='pg2';
+    ov.innerHTML='<div class="pg-wrap">'
+      +'<div class="p2-hero"><span class="p2-hi">'+BIG(AWARD)+'</span><div style="position:relative;z-index:1"><h1>برامجنا وورشنا التربوية</h1><p>برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر</p></div><div class="p2-hx" id="hh-pg-counts"></div></div>'
+      +'<div class="p2-filters" id="hh-pg-filters"></div>'
+      +'<div id="hh-pg-body"><div class="p2-empty" style="margin-top:18px">جارٍ تحميل البرامج…</div></div>'
+      +'</div>';
+    document.body.appendChild(ov);
+    hhNavMark('prog');
+    await hhPgLoad(true);
+    hhPgRender();
+  };
+  window.hhPgClose=function(){ var e=document.getElementById('hh-pg'); if(e) e.remove(); try{ document.body.classList.remove('hh-immersive'); }catch(e){} hhNavMark(null); };
+  // تمييز زر الشريط السفلي لما هو مفتوح فوق الشاشة
+  window.hhNavMark=window.hhNavMark||function(k){
+    var map={ prog:'.hh-nav-item[onclick="hhOpenLeaderPrograms()"]', ib:'#hh-ib-nav' };
+    document.querySelectorAll('#hh-bottom-nav .hh-nav-item.hh-ov-on').forEach(function(b){ b.classList.remove('hh-ov-on'); });
+    document.body.classList.toggle('hh-ov-open', !!k);
+    if(k && map[k]){ var b=document.querySelector(map[k]); if(b) b.classList.add('hh-ov-on'); }
+  };
+})();

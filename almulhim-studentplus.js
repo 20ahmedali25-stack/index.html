@@ -40,7 +40,7 @@ window.hhSf2Extra = function(rec){
     var avgA = after.length? Math.round(after.reduce(function(s,p){return s+p.v;},0)/after.length):0;
     var delta = avgA - avgB;
     var bars = pts.map(function(p,i){ return bar(p.v, i<split?'before':'after'); }).join('');
-    html += '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
+    html += '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
       + '<div style="font-weight:900;font-size:.9rem;color:#5E0E26;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:5px;height:18px;background:'+GD+'(#EAD9B0,#B8924A);border-radius:9px;"></span>التحصيل قبل وبعد التلعيب</div>'
       + '<div style="height:150px;display:flex;align-items:flex-end;gap:6px;padding-top:18px;">'+bars+'</div>'
       + '<div style="display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:.66rem;font-weight:800;">'
@@ -52,7 +52,7 @@ window.hhSf2Extra = function(rec){
           + '</div>' : '')
       + '</div>';
   } else {
-    html += '<div style="background:#FFFDF8;border:1.5px dashed #B8924A;border-radius:14px;padding:18px;margin-top:14px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.76rem;line-height:1.7;">'
+    html += '<div style="background:#FFFFFF;border:1.5px dashed #B8924A;border-radius:14px;padding:18px;margin-top:14px;text-align:center;color:#8A6D2E;font-weight:800;font-size:.76rem;line-height:1.7;">'
       + 'رسم التحصيل قبل/بعد التلعيب يظهر بعد رصد درجتين على الأقل.<br><span style="font-size:.66rem;color:#8A7A63;">الدرجات تدخل تلقائياً من الاختبارات والألعاب والمسابقات.</span></div>';
   }
 
@@ -63,17 +63,17 @@ window.hhSf2Extra = function(rec){
   mastered.slice(0,4).forEach(function(s){ objectives.push({name:s, pct:88, lvl:'متقن', c:'#3D6B53'}); });
   needs.slice(0,3).forEach(function(s){ objectives.push({name:s, pct:38, lvl:'يحتاج دعماً', c:'#8A1538'}); });
   if(objectives.length){
-    html += '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
+    html += '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
       + '<div style="font-weight:900;font-size:.9rem;color:#5E0E26;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:5px;height:18px;background:'+GD+'(#EAD9B0,#B8924A);border-radius:9px;"></span>إتقان أهداف المنهج</div>'
       + objectives.map(function(o){ return '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:.74rem;font-weight:800;color:#3D0918;margin-bottom:3px;"><span>'+esc(o.name)+'</span><span style="color:'+o.c+';">'+o.lvl+'</span></div>'
-        + '<div style="height:10px;background:#EDE7DA;border-radius:99px;overflow:hidden;"><i style="display:block;height:100%;border-radius:99px;width:'+o.pct+'%;background:'+GD+'(90deg,'+o.c+',#5E0E26);"></i></div></div>'; }).join('')
+        + '<div style="height:10px;background:#ECE8E3;border-radius:99px;overflow:hidden;"><i style="display:block;height:100%;border-radius:99px;width:'+o.pct+'%;background:'+GD+'(90deg,'+o.c+',#5E0E26);"></i></div></div>'; }).join('')
       + '</div>';
   }
 
   // 3) نشاط الألعاب والمسابقات المدمج
   var games = rec.gameResults||[];
   if(games.length){
-    html += '<div style="background:#FFFDF8;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
+    html += '<div style="background:#FFFFFF;border:1.5px solid #B8924A;border-radius:16px;padding:16px;margin-top:14px;">'
       + '<div style="font-weight:900;font-size:.9rem;color:#5E0E26;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="width:5px;height:18px;background:'+GD+'(#EAD9B0,#B8924A);border-radius:9px;"></span>نشاط الألعاب والمسابقات</div>'
       + '<div style="display:flex;flex-direction:column;gap:6px;">'
       + games.slice(-6).reverse().map(function(g){ return '<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #EAE0CA;border-radius:11px;padding:8px 12px;font-size:.72rem;font-weight:800;color:#3D0918;">'

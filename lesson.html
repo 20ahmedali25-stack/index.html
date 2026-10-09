@@ -117,7 +117,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;min-height:100vh;}
+body{font-family:"Tajawal","Cairo",sans-serif;background:#F5F4F2;color:#2c3e50;min-height:100vh;}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;}
 
@@ -321,7 +321,7 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
 }
 .ilc-activity-hint{
   font-size:.75rem;color:#777;font-weight:600;
-  background:#fff8e8;border:1.5px dashed #c9a227;
+  background:#F5F3F0;border:1.5px dashed #c9a227;
   padding:7px 10px;border-radius:8px;margin-bottom:14px;
 }
 .ilc-activity-hint::before{content:"💡 ";}
@@ -336,7 +336,7 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
 }
 .ilc-choice-btn:hover{background:#e8f2ec;transform:translateY(-1px);}
 .ilc-choice-btn.correct{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;animation:choicePopCorrect .4s;}
-.ilc-choice-btn.wrong{background:#fde8e8;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
+.ilc-choice-btn.wrong{background:#F5F3F0;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
 .ilc-choice-btn:disabled{cursor:default;}
 @keyframes choicePopCorrect{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
 @keyframes choicePopWrong{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
@@ -355,7 +355,7 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
 .ilc-match-item.selected{background:#c9a227;color:#5C3A1E;border-color:#c9a227;}
 .ilc-match-item.matched{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;cursor:default;opacity:.9;}
 .ilc-match-item.wrong-flash{animation:wrongMatchFlash .5s;}
-@keyframes wrongMatchFlash{0%,100%{background:#fff;}50%{background:#fde8e8;}}
+@keyframes wrongMatchFlash{0%,100%{background:#fff;}50%{background:#F5F3F0;}}
 
 /* === Timeline Order === */
 .ilc-timeline-bank{
@@ -369,7 +369,7 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
   transition:all .15s;
 }
 .ilc-timeline-slot.filled{background:#fff;border-style:solid;border-color:#5C3A1E;}
-.ilc-timeline-slot.drop-target{background:#fff8e8;border-color:#c9a227;}
+.ilc-timeline-slot.drop-target{background:#F5F3F0;border-color:#c9a227;}
 .ilc-timeline-num{
   width:28px;height:28px;border-radius:50%;
   background:#5C3A1E;color:#fff;font-weight:900;
@@ -399,12 +399,12 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
   transition:all .2s;
 }
 .ilc-bucket-title{font-weight:900;font-size:.88rem;color:#5C3A1E;margin-bottom:8px;text-align:center;padding-bottom:6px;border-bottom:1.5px solid rgba(92,58,30,.2);}
-.ilc-bucket.drop-target{background:#fff8e8;border-color:#c9a227;border-style:solid;}
+.ilc-bucket.drop-target{background:#F5F3F0;border-color:#c9a227;border-style:solid;}
 .ilc-bucket-items{display:flex;flex-wrap:wrap;gap:6px;}
 .ilc-bucket .ilc-chip{font-size:.72rem;padding:5px 10px;}
 
 /* === Map Hotspot === */
-.ilc-map-container{position:relative;margin-bottom:10px;border-radius:14px;overflow:hidden;border:2px solid #5C3A1E;background:#f4e9d3;}
+.ilc-map-container{position:relative;margin-bottom:10px;border-radius:14px;overflow:hidden;border:2px solid #5C3A1E;background:#ECE8E3;}
 .ilc-map-svg{display:block;width:100%;height:auto;}
 .ilc-hotspot{
   cursor:pointer;transition:all .2s;
@@ -430,9 +430,9 @@ body{font-family:"Tajawal","Cairo",sans-serif;background:#fbf9f2;color:#2c3e50;m
   text-align:center;
 }
 .ilc-fill-slot.filled{background:#c9a227;color:#5C3A1E;border-style:solid;border-color:#c9a227;}
-.ilc-fill-slot.drop-target{background:#fff8e8;border-color:#c9a227;}
+.ilc-fill-slot.drop-target{background:#F5F3F0;border-color:#c9a227;}
 .ilc-fill-slot.correct{background:#d4f5e0;border-color:#1a7a4a;color:#1a7a4a;}
-.ilc-fill-slot.wrong{background:#fde8e8;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
+.ilc-fill-slot.wrong{background:#F5F3F0;border-color:#c0392b;color:#c0392b;animation:choicePopWrong .4s;}
 
 /* === زر التحقق والنتيجة === */
 .ilc-check-btn{
@@ -485,7 +485,7 @@ body.dark-mode .ilc-skip-btn:hover{background:#223348;color:#ccc;}
 }
 @keyframes feedbackPop{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
 .ilc-feedback.success{background:#d4f5e0;border:2px solid #1a7a4a;color:#0e5530;}
-.ilc-feedback.error{background:#fde8e8;border:2px solid #c0392b;color:#7a1f14;}
+.ilc-feedback.error{background:#F5F3F0;border:2px solid #c0392b;color:#7a1f14;}
 .ilc-feedback-explain{font-size:.8rem;font-weight:600;margin-top:5px;opacity:.85;}
 
 /* === شاشة النجاح === */
@@ -575,7 +575,7 @@ body.dark-mode .btn-outline{background:#1a2e24;color:#e8edf2;border-color:#2d554
   text-align:right;width:100%;font-family:Tajawal,sans-serif;
 }
 .role-card:last-child{margin-bottom:0;}
-.role-card:hover{border-color:#c9a227;background:#fdfaf0;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,162,39,.15);}
+.role-card:hover{border-color:#c9a227;background:#FFFFFF;transform:translateY(-2px);box-shadow:0 6px 18px rgba(201,162,39,.15);}
 .role-card-icon{
   width:52px;height:52px;border-radius:12px;
   background:linear-gradient(135deg,#5C3A1E,#3d2614);
@@ -622,12 +622,12 @@ body.dark-mode .btn-outline{background:#1a2e24;color:#e8edf2;border-color:#2d554
   box-sizing:border-box;
 }
 .info-field input:focus, .info-field select:focus{border-color:#5C3A1E;box-shadow:0 0 0 3px rgba(92,58,30,.08);}
-.info-field input.invalid, .info-field select.invalid{border-color:#c0392b;background:#fff9f9;}
+.info-field input.invalid, .info-field select.invalid{border-color:#c0392b;background:#FFFFFF;}
 .info-field input.valid, .info-field select.valid{border-color:#1a7a4a;background:#f0fdf6;}
 .info-error{font-size:.72rem;color:#c0392b;font-weight:700;margin-top:4px;display:none;padding-right:4px;}
 .info-error.show{display:block;}
 .info-cert-notice{
-  background:linear-gradient(135deg,#faf2d6,#fff);
+  background:linear-gradient(135deg,#ECE8E3,#fff);
   border:1.5px solid #c9a227;border-right:4px solid #c9a227;
   border-radius:10px;padding:9px 12px;margin-bottom:14px;
   display:flex;align-items:flex-start;gap:8px;
@@ -662,8 +662,8 @@ body.dark-mode .btn-outline{background:#1a2e24;color:#e8edf2;border-color:#2d554
 .cert-modal-body{padding:20px;background:#f5faf7;}
 .certificate{
   width:100%;aspect-ratio:1.414/1;max-width:740px;margin:0 auto;
-  background:#fdfcf7;
-  background-image:radial-gradient(circle at 0% 0%, rgba(201,162,39,.08) 0%, transparent 30%),radial-gradient(circle at 100% 100%, rgba(92,58,30,.08) 0%, transparent 30%),linear-gradient(135deg, #fdfcf7 0%, #fff 100%);
+  background:#FFFFFF;
+  background-image:radial-gradient(circle at 0% 0%, rgba(201,162,39,.08) 0%, transparent 30%),radial-gradient(circle at 100% 100%, rgba(92,58,30,.08) 0%, transparent 30%),linear-gradient(135deg, #FFFFFF 0%, #fff 100%);
   position:relative;overflow:hidden;font-family:"Cairo","Tajawal",sans-serif;
   padding:32px;box-sizing:border-box;box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
@@ -731,7 +731,7 @@ body.dark-mode .btn-outline{background:#1a2e24;color:#e8edf2;border-color:#2d554
 
 /* ═══ بطاقة استعراض الشهادة في شاشة الإكمال ═══ */
 .unlock-cert-card{
-  background:linear-gradient(135deg,#faf2d6 0%,#fff 100%);
+  background:linear-gradient(135deg,#ECE8E3 0%,#fff 100%);
   border:2px solid #c9a227;border-radius:14px;
   padding:16px;margin-top:14px;text-align:center;
   box-shadow:0 4px 14px rgba(201,162,39,.15);
@@ -2307,7 +2307,7 @@ function ilcCheckTimeline(container, act){
       slot.style.background = '#d4f5e0';
     } else {
       slot.style.borderColor = '#c0392b';
-      slot.style.background = '#fde8e8';
+      slot.style.background = '#F5F3F0';
     }
   });
   if(correct){
@@ -3303,7 +3303,7 @@ document.addEventListener('keydown', function(e){
 .auth-modal-overlay.show{opacity:1;pointer-events:auto}
 .auth-modal-overlay *{box-sizing:border-box}
 .auth-modal{
-  background:#fdfaf2;
+  background:#FFFFFF;
   border:2px solid #c9a227;
   border-radius:24px;
   max-width:440px;width:100%;
