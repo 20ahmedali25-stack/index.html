@@ -5731,6 +5731,7 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 })();
 </script>
 <script src="almulhim-ibdaa.js" charset="utf-8"></script>
+<script src="almulhim-ibdaa-screen.js" charset="utf-8"></script>
 <script src="almulhim-live.js" charset="utf-8"></script>
 <script src="almulhim-programs.js" charset="utf-8"></script>
 <script src="almulhim-student-file.js" charset="utf-8"></script>
@@ -14258,6 +14259,17 @@ html body #screen-admin .mc-content{ min-width:0 !important; padding:0 !importan
 html body #screen-login .btn, .sp2-btn, .hh-btn--gold, #screen-setup #setup-action-btn{ background:linear-gradient(135deg,#8A1538,#5E0E26) !important; color:#FFFFFF !important; border-color:transparent !important; box-shadow:0 8px 20px rgba(94,14,38,.22) !important; }
 html body #main-nav .nav-login-btn, .ib2-btn.g, #hh-school-hub.sh2 .sh2-cta, #screen-menu .hh-crown-primary, html body #screen-menu.hv2 .hh-crown .hh-crown-tray .hh-crown-btn.hh-crown-primary:not(.hh-crown-games){ background:#FFFFFF !important; background-image:none !important; color:#5E0E26 !important; border-color:#FFFFFF !important; }
 html body #screen-menu.hv2 .hh-crown .hh-crown-tray .hh-crown-btn.hh-crown-primary:not(.hh-crown-games) *{ color:#5E0E26 !important; }
+/* ═══════════ تناسق الشريطين (zzzzzzbr) ═══════════ */
+/* العلوي: عنصر 104 وفراغ 24 والصندوق على بعد الشريط السفلي نفسه */
+html body #main-nav .nav-link{ transform:translateY(2px); }
+@media (min-width:1440px){
+  html body nav#main-nav ul.main-nav-links.main-nav-links{ gap:24px !important; column-gap:24px !important; }
+  html body #main-nav .nav-link{ min-width:104px !important; width:104px !important; }
+}
+/* السفلي على الكمبيوتر: توزيع على عرض المحتوى 1264 */
+@media (min-width:701px){
+  html body nav#hh-bottom-nav.hh-bottom-nav{ gap:0 !important; justify-content:space-between !important; padding-inline:max(24px, calc((100% - 1264px) / 2)) !important; }
+}
 </style>
 
 <script>
