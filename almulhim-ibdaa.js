@@ -43,7 +43,7 @@ function canUse(){ try{ return isAdm() || (typeof _hhMyRole!=='undefined'&&_hhMy
 function newId(p){ return (p||'g')+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function ico(n,sz,sw){
-  var P={clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',check:'<path d="M20 6L9 17l-5-5"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+  var P={more:'<circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>',folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',check:'<path d="M20 6L9 17l-5-5"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
     cloud:'<path d="M7 18a4 4 0 0 1-.5-8 6 6 0 0 1 11.5 2h.5a3 3 0 0 1 0 6z"/>',sort:'<path d="M8 4v16M8 20l-3-3M8 20l3-3M16 20V4M16 4l-3 3M16 4l3 3"/>',grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
     plus:'<path d="M12 5v14M5 12h14"/>',back:'<path d="M9 5l7 7-7 7"/>',play:'<path d="M6 4l14 8-14 8z"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
     trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',up:'<path d="M12 19V5M5 12l7-7 7 7"/>',down:'<path d="M12 5v14M19 12l-7 7-7-7"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
@@ -328,7 +328,7 @@ function style(){
   +'#hh-ib .chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #B8924A;border-radius:99px;padding:5px 12px;font-size:.7rem;font-weight:800;cursor:pointer;color:#8A6D2E;background:#fff;} #hh-ib .chip.on{background:#5E0E26;color:#EAD9B0;border-color:#5E0E26;}'
   +'#hh-ib .hint{font-size:.64rem;color:#8A7A63;font-weight:700;line-height:1.7;}'
   +'#hh-ib .undo{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2A0810;color:#EAD9B0;border:1px solid #B8924A;border-radius:12px;padding:10px 16px;font-weight:800;font-size:.76rem;z-index:99999;display:flex;gap:12px;align-items:center;} #hh-ib .undo button{background:#EAD9B0;color:#2A0810;border:none;border-radius:8px;padding:5px 12px;font-family:Cairo;font-weight:900;cursor:pointer;}';
-  st.textContent+='\n'+E2CSS;
+  st.textContent+='\n'+E2CSS+'\n'+IB4CSS;
   document.head.appendChild(st);
 }
 
@@ -338,7 +338,7 @@ async function open(view, gameId){
   try{ document.body.classList.remove('hh-immersive'); }catch(e){}
   var old=document.getElementById('hh-ib'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-ib'; ov.className='ib2';
-  ov.innerHTML='<div class="ib2-hero"><span class="ib2-hi">'+ico('star',30)+'</span><div style="position:relative;z-index:1"><h1>إبداع · استوديو الألعاب التعليمية</h1><p>أنشئ لعبتك أو اختر لعبة جاهزة، وشغّلها مباشرة على أجهزة الطلاب أو اعرضها على شاشة الصف</p></div><div class="ib2-hx"><button class="ib2-btn g" onclick="hhIbView(\'ready\')">'+ico('play',16)+' ألعاب جاهزة</button></div></div><div class="top"><button class="tb" onclick="hhIbBack()">'+ico('back')+' رجوع</button><div style="text-align:center;"><b>إبداع</b></div><span id="ib-save"></span></div><div class="wrap" id="ib-body"></div>';
+  ov.innerHTML='<div class="ib2-hero"><span class="ib2-hi">'+ico('star',30)+'</span><div style="position:relative;z-index:1"><h1>إبداع، استوديو الألعاب التعليمية</h1><p>أنشئ لعبتك أو اختر لعبة جاهزة، وشغّلها مباشرة على أجهزة الطلاب أو اعرضها على شاشة الصف</p></div><div class="ib2-hx"><button class="ib2-btn g" onclick="hhIbView(\'rack\')">'+ico('plus',16)+' أنشئ لعبة جديدة</button></div></div><div class="top"><button class="tb" onclick="hhIbBack()">'+ico('back')+' رجوع</button><div style="text-align:center;"><b>إبداع</b></div><span id="ib-save"></span></div><div class="wrap" id="ib-body"></div>';
   document.body.appendChild(ov);
   try{ if(window.hhNavMark) hhNavMark('ib'); }catch(e){}
   loadLocal(); loadReadyLocal();
@@ -354,22 +354,11 @@ function render(){
   var b=document.getElementById('ib-body'); if(!b) return;
   var _ov=document.getElementById('hh-ib'); if(_ov) _ov.classList.toggle('ib-editing', _ib.view==='editor');
   if(_ib.view==='editor'){ b.innerHTML=renderEditor(); bindEditor(); try{ _ov.scrollTop=_ov.scrollTop; }catch(e){} return; }
-  var _cnt={rack:TEMPLATES.filter(function(t){return t.ready;}).length, ready:readyList().length, mine:_ib.games.length};
-  var tabs='<div class="tabs ib2-seg">'+[['rack','القوالب'],['ready',ico('star',15)+' ألعاب جاهزة'],['mine','ألعابي'],['live',ico('bolt',15)+' مباشرة'],['screen',ico('monitor',15)+' على شاشة الصف']].map(function(t){ return '<button class="'+(_ib.view===t[0]?'on':'')+'" onclick="hhIbView(\''+t[0]+'\')">'+t[1]+(_cnt[t[0]]!=null?' <em>'+_cnt[t[0]]+'</em>':'')+'</button>'; }).join('')+'</div>';
+  if(_ib.view==='live'||_ib.view==='screen'){ _ib.mode=_ib.view; _ib.view='rack'; }
+  var tabs=ib4Tabs();
   if(_ib.view==='mine'){ b.innerHTML=tabs+renderMine(); return; }
   if(_ib.view==='ready'){ b.innerHTML=tabs+renderReady(); return; }
-  var kind=(_ib.view==='live')?'live':(_ib.view==='screen')?'screen':null;
-  var how=(_ib.view==='rack')?'<div class="ib2-how"><div><b>1</b>اختر قالباً أو لعبة جاهزة</div><div><b>2</b>أضف أسئلتك أو استوردها من الفئات أو من ملف</div><div><b>3</b>شغّلها مباشرة أو اعرضها على الشاشة</div></div>':'';
-  var groups=kind?[kind]:['live','screen','async'];
-  var GN={live:'قوالب مباشرة · على أجهزة الطلاب',screen:'قوالب شاشة الصف · بلا أجهزة',async:'قوالب غير متزامنة'};
-  var html=tabs+how;
-  groups.forEach(function(k){
-    var shown=TEMPLATES.filter(function(t){ return t.kind===k; }); if(!shown.length) return;
-    var rd=shown.filter(function(t){ return t.ready; }).length, sn=shown.length-rd;
-    html+='<div class="ib2-sec"><h2>'+GN[k]+'</h2><small>'+(rd?rd+' جاهزة الآن':'')+(sn?(rd?' · ':'')+sn+' قريباً':'')+'</small></div>';
-    if(k==='screen') html+='<div class="ib2-soonline">قريباً على الشاشة: '+SOON_SCR+'</div>';
-    html+='<div class="grid ib2-grid">'+shown.map(tplCard).join('')+(k===groups[groups.length-1]?'<div class="card ib2-new"><span class="si">'+ico('plus',28)+'</span><b>عندك فكرة قالب؟</b><p>ألغاز الخريطة، البحث عن الكنز، الجدار التعاوني…</p><button class="btn" onclick="hhIbSuggest()">اقترح فكرة</button></div>':'')+'</div>';
-  });
+  var html=tabs+ib4Rack();
   b.innerHTML=html;
 }
 function tplCard(t){
@@ -875,16 +864,31 @@ async function saveReadyDoc(){
 function tfItems(key){ var t=(_ib.ready&&_ib.ready.tf&&_ib.ready.tf[key]); return (t&&t.items)?t.items:TF_DEF[key]||[]; }
 function tfPublished(key){ var t=(_ib.ready&&_ib.ready.tf&&_ib.ready.tf[key]); return !!(t&&t.published); }
 function eligibleSrc(list){ return list.filter(function(q){ var a=String(q.a||'').trim(), b=stemDef(q.q); return Array.isArray(q.opts)&&q.opts.length>=2&&a&&a.length<=34&&b&&b.length<=110; }); }
+/* zzzzzzcb: المراجعة الشاملة تضم كل أسئلة الاختيار في الفصل: بنك الوحدات + أسئلة «مدرستي» للوحدات الست */
+function normQ(t){ return String(t||'').replace(/[«»"'.:؟?،,\s]+/g,'').replace(/[ًٌٍَُِّْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي'); }
+function schoolQs(G){
+  var T=(G==='g7t1')?window._HH_SCHOOL_T1:null, out=[];
+  if(!T||!Array.isArray(T.units)) return out;
+  T.units.forEach(function(u){ (u.lessons||[]).forEach(function(l){ (l.q||[]).forEach(function(q){
+    if(q&&q.q&&q.a&&Array.isArray(q.o)&&q.o.length>=2) out.push({src:{diff:q.d||'med',q:q.q,a:q.a,opts:q.o},unit:u.unit||''}); }); }); });
+  return out;
+}
+function allMcq(G){
+  var seen={}, L=[];
+  (UNITS[G]||[]).forEach(function(x){ (qdb()[x.mcq]||[]).forEach(function(src,i){ seen[normQ(src.q)]=1; L.push({src:src,cat:x.mcq,idx:i}); }); });
+  schoolQs(G).forEach(function(o){ var k=normQ(o.src.q); if(seen[k]) return; seen[k]=1; L.push({src:o.src,cat:'__school',idx:null}); });
+  return L;
+}
 function readyList(){
   var L=[], G=_ib.grade||'g7t1', adm=isAdm();
   (UNITS[G]||[]).forEach(function(u,ui){
     var qm=(qdb()[u.mcq]||[]), qo=(qdb()[u.open]||[]), key=G+'-'+u.k;
-    if(ui===0){ var all=(UNITS[G]||[]).reduce(function(s,x){ return s+(qdb()[x.mcq]||[]).length; },0); L.push({rid:G+'-all',sec:'all',kind:'mcq',title:'المراجعة الشاملة · '+(GRADES.filter(function(x){return x.id===G;})[0]||{}).name,n:all,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:'أسئلة الوحدات في لعبة واحدة، مرتبة من السهل إلى الصعب.',cats:(UNITS[G]||[]).map(function(x){ return x.mcq; })}); }
-    if(qm.length) L.push({rid:key+'-mcq',sec:u.k,kind:'mcq',title:u.short+' · مراجعة',n:qm.length,unit:u,c:u.c,ic:u.ic,d:u.d+' تصلح لصناديق الأسرار أو السباق المباشر.',cats:[u.mcq]});
-    var pub=tfPublished(key); if(adm||pub) L.push({rid:key+'-tf',sec:u.k,kind:'tf',title:u.short+' · صح أم خطأ',n:tfItems(key).length,unit:u,c:'linear-gradient(135deg,#3D6B53,#2C5340)',ic:'check',d:'عبارات مبنية من أسئلة الوحدة. يصوّت الصف برفع اليد.',draft:!pub,tfKey:key});
-    var pq=(UNITS[G]&&qm.length)?eligibleSrc(qm).length:0; if(pq>=3) L.push({rid:key+'-pairs',sec:u.k,kind:'pairs',title:u.short+' · توصيل المفاهيم',n:pq,unit:u,c:'linear-gradient(135deg,#1F4E79,#132f4a)',ic:'link',d:'كل مصطلح مع معناه من أسئلة الوحدة. تصلح للتوصيل أو بطاقات الذاكرة.',cats:[u.mcq],src:key+'-mcq',screenOnly:true});
-    var oq=qo.filter(function(q){ return /←/.test(String(q.a||'')); }); if(oq.length) L.push({rid:key+'-order',sec:u.k,kind:'order',title:u.short+' · رتّب الأحداث',n:oq.length,unit:u,c:'linear-gradient(135deg,#8A6D2E,#5c4816)',ic:'sort',d:oq.map(function(q){ return String(q.q).replace(/[:.]?\s*\(.*$/,'').replace(/\.$/,''); }).join(' · ')+'.',cats:[u.open],src:key+'-open'});
-    if(qo.length) L.push({rid:key+'-open',sec:u.k,kind:'open',title:u.short+' · بطاقات الأسئلة المقالية',n:qo.length,unit:u,c:'linear-gradient(135deg,#4A0B1E,#2A0810)',ic:'flip',d:'وجه البطاقة السؤال، وظهرها الإجابة النموذجية نقطة نقطة. للشاشة فقط.',cats:[u.open],img:qo.some(function(q){ return q.img; })});
+    if(ui===0){ var all=allMcq(G).length, nsu=schoolQs(G).length; L.push({rid:G+'-all',sec:'all',kind:'mcq',title:'المراجعة الشاملة',n:all,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:nsu?'كل أسئلة الاختيار في الفصل: وحداته الست من كتاب الوزارة، مرتبة من السهل إلى الصعب.':'أسئلة الوحدات في لعبة واحدة، مرتبة من السهل إلى الصعب.',cats:(UNITS[G]||[]).map(function(x){ return x.mcq; })}); }
+    if(qm.length) L.push({rid:key+'-mcq',sec:u.k,kind:'mcq',title:'مراجعة '+u.short,n:qm.length,unit:u,c:u.c,ic:u.ic,d:u.d+' تصلح لصناديق الأسرار أو السباق المباشر.',cats:[u.mcq]});
+    var pub=tfPublished(key); if(adm||pub) L.push({rid:key+'-tf',sec:u.k,kind:'tf',title:'صح أم خطأ في '+u.short,n:tfItems(key).length,unit:u,c:'linear-gradient(135deg,#3D6B53,#2C5340)',ic:'check',d:'عبارات مبنية من أسئلة الوحدة. يصوّت الصف برفع اليد.',draft:!pub,tfKey:key});
+    var pq=(UNITS[G]&&qm.length)?eligibleSrc(qm).length:0; if(pq>=3) L.push({rid:key+'-pairs',sec:u.k,kind:'pairs',title:'مفاهيم '+u.short,n:pq,unit:u,c:'linear-gradient(135deg,#1F4E79,#132f4a)',ic:'link',d:'كل مصطلح مع معناه من أسئلة الوحدة. تصلح للتوصيل أو بطاقات الذاكرة.',cats:[u.mcq],src:key+'-mcq',screenOnly:true});
+    var oq=qo.filter(function(q){ return /←/.test(String(q.a||'')); }); if(oq.length) L.push({rid:key+'-order',sec:u.k,kind:'order',title:'رتّب أحداث '+u.short,n:oq.length,unit:u,c:'linear-gradient(135deg,#8A6D2E,#5c4816)',ic:'sort',d:oq.map(function(q){ return String(q.q).replace(/[:.]?\s*\(.*$/,'').replace(/\.$/,''); }).join('، ')+'.',cats:[u.open],src:key+'-open'});
+    if(qo.length) L.push({rid:key+'-open',sec:u.k,kind:'open',title:u.short+' بأسئلة مقالية',n:qo.length,unit:u,c:'linear-gradient(135deg,#4A0B1E,#2A0810)',ic:'flip',d:'وجه البطاقة السؤال، وظهرها الإجابة النموذجية نقطة نقطة. للشاشة فقط.',cats:[u.open],img:qo.some(function(q){ return q.img; })});
   });
   (_ib.ready.custom||[]).forEach(function(c){ if((c.grade||'g7t1')!==G) return; L.push({rid:'c:'+c.id,sec:'custom',kind:'custom',title:c.title||'لعبة جاهزة',n:(c.questions||[]).length,c:'linear-gradient(135deg,#5E0E26,#3D0918)',ic:'star',d:c.desc||'لعبة إضافية من إعداد المُلهم.',custom:c}); });
   return L;
@@ -895,7 +899,8 @@ function buildReady(rid){
   var meta={ rid:rid, kind:R.kind, crumb:R.title, cats:R.cats||[], defCat:null, noAdd:'' };
   if(R.kind==='mcq'){
     var DO={easy:0,med:1,hard:2,elite:3,legend:4,l1200:5};
-    R.cats.forEach(function(cat){ (qdb()[cat]||[]).forEach(function(src,i){ var q=fromQDB(src,cat,{settings:g.settings,mode:'live'}); q.srcIdx=i; q._d=DO[src.diff]==null?1:DO[src.diff]; g.questions.push(q); }); });
+    if(R.sec==='all') allMcq(_ib.grade||'g7t1').forEach(function(o){ var q=fromQDB(o.src,o.cat,{settings:g.settings,mode:'live'}); if(o.idx!=null) q.srcIdx=o.idx; q._d=DO[o.src.diff]==null?1:DO[o.src.diff]; g.questions.push(q); });
+    else R.cats.forEach(function(cat){ (qdb()[cat]||[]).forEach(function(src,i){ var q=fromQDB(src,cat,{settings:g.settings,mode:'live'}); q.srcIdx=i; q._d=DO[src.diff]==null?1:DO[src.diff]; g.questions.push(q); }); });
     if(R.sec==='all'){ g.questions.sort(function(a,b){ return a._d-b._d; }); meta.noAdd='لإضافة سؤال افتح لعبة الوحدة نفسها، فيظهر هنا تلقائياً.'; }
     else meta.defCat=R.cats[0];
     g.screenTpl='boxes';
@@ -917,26 +922,78 @@ function buildReady(rid){
   }
   g._ready=meta; return g;
 }
-function renderReady(){
-  var adm=isAdm(), G=_ib.grade||'g7t1';
-  var fl='<div class="rl-fl">'+GRADES.map(function(x){ return '<button class="e2-ch'+(x.id===G?' on':'')+'" '+(x.ok?'onclick="hhIbGrade(\''+x.id+'\')"':'disabled title="قريباً"')+'>'+esc(x.name)+(x.ok?'':' · قريباً')+'</button>'; }).join('')+'<span style="flex:1"></span>'+(adm?'<button class="e2-b s p" onclick="hhIbReadyNew()">'+ico('plus',14)+' لعبة جاهزة جديدة</button>':'')+'</div>';
-  var L=readyList(); if(!L.length) return fl+'<div class="rl-soon">ألعاب هذا الصف قيد الإعداد · قريباً بإذن الله</div>';
-  var card=function(R){
-    var modes=(R.kind==='open'||R.kind==='pairs'?[['monitor','شاشة']]:[['monitor','شاشة'],['phone','مباشر']]).map(function(m){ return '<span>'+ico(m[0],12,2.2)+' '+m[1]+'</span>'; }).join('');
-    var nLbl=R.kind==='open'?R.n+' بطاقات':R.kind==='tf'?R.n+' عبارات':R.kind==='pairs'?R.n+' أزواج':R.kind==='order'?(R.n===1?'سؤال ترتيب واحد':R.n+' أسئلة ترتيب'):R.n+' '+(R.n>2&&R.n<11?'أسئلة':'سؤالاً')+(R.kind==='mcq'?' اختيار':'');
-    var meta='<i>'+nLbl+'</i>'+(R.img?'<i>مع صورة الخريطة</i>':'')+(R.draft?'<i class="w">مسودة · بانتظار مراجعتك</i>':'');
-    var btns=(R.kind==='open'||R.kind==='pairs'?'<button class="e2-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' اعرض على الشاشة</button>':'<button class="e2-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' على الشاشة</button><button class="e2-b" onclick="hhIbReadyLive(\''+R.rid+'\')">'+ico('phone',15)+' مباشر</button>');
-    var lk='<a onclick="hhIbReadyCopy(\''+R.rid+'\')">'+ico('copy',13)+' انسخ إلى ألعابي وعدّل</a>'+(adm?'<a class="adm" onclick="hhIbReadyEdit(\''+(R.src||R.rid)+'\')" title="'+(R.src?'تُبنى من '+(R.kind==='pairs'?'أسئلة الاختيار':'الأسئلة المقالية')+' في الوحدة':'')+'">'+ico('edit',13)+' عدّل الأصل</a>':'')+(adm&&R.draft?'<a class="adm" onclick="hhIbReadyPublish(\''+R.rid+'\')">'+ico('send',13)+' انشر</a>':'')+(adm&&R.kind==='custom'?'<a class="adm" onclick="hhIbReadyDel(\''+R.rid+'\')">'+ico('trash',13)+' احذف</a>':'');
-    return '<div class="rl-c'+(R.draft?' draft':'')+'" style="--c:'+R.c+'"><div class="gh"><span class="gi">'+ico(R.ic,24,2)+'</span><div class="md">'+modes+'</div></div><div class="gb"><b>'+esc(R.title)+'</b><div class="mt">'+meta+'</div><p>'+esc(R.d)+'</p><div class="ac">'+btns+'</div><div class="lk">'+lk+'</div></div></div>';
-  };
-  var html=fl+'<div class="rl-src">'+ico('book',14)+' المصدر: فئات «العب الآن › المدارس › '+esc((GRADES.filter(function(x){return x.id===G;})[0]||{}).name)+'» · تتحدّث تلقائياً عند تعديل الأسئلة</div>';
-  var all=L.filter(function(r){ return r.sec==='all'; }); if(all.length) html+='<div class="rl-h"><h3>المراجعة الشاملة</h3><small>· الوحدات معاً</small></div><div class="rl-g">'+all.map(card).join('')+'</div>';
-  (UNITS[G]||[]).forEach(function(u){ var us=L.filter(function(r){ return r.sec===u.k; }); if(us.length) html+='<div class="rl-h"><h3>'+esc(u.name)+'</h3></div><div class="rl-g">'+us.map(card).join('')+'</div>'; });
-  var cu=L.filter(function(r){ return r.sec==='custom'; }); if(cu.length) html+='<div class="rl-h"><h3>ألعاب إضافية</h3></div><div class="rl-g">'+cu.map(card).join('')+'</div>';
-  if(!adm) html+='<div class="hint" style="text-align:center;margin-top:-6px">العرض على الشاشة متاح للجميع · التشغيل المباشر والنسخ إلى «ألعابي» بحساب المعلم</div>';
+/* ═══ zzzzzzbw · استوديو إبداع: ثلاثة تبويبات، فلاتر، شبكة واحدة، قائمة ⋮ · بهوية المُلهم الأصلية ═══ */
+var IB4_TYPES={mcq:'اختيار من متعدد',tf:'صح أم خطأ',pairs:'مطابقة',order:'ترتيب',open:'أسئلة مقالية',custom:'لعبة إضافية'};
+function ib4Tabs(){
+  var c={rack:TEMPLATES.filter(function(t){return t.ready;}).length, ready:readyList().length, mine:_ib.games.length};
+  return '<div class="tabs ib2-seg ib4-seg">'+[['rack',ico('grid',15)+' القوالب'],['ready',ico('star',15)+' ألعاب جاهزة'],['mine',ico('folder',15)+' ألعابي']].map(function(t){ return '<button class="'+(_ib.view===t[0]?'on':'')+'" onclick="hhIbView(\''+t[0]+'\')">'+t[1]+' <em>'+c[t[0]]+'</em></button>'; }).join('')+'</div>';
+}
+function ib4Rack(){
+  var m=_ib.mode||'all';
+  var seg='<div class="ib4-bar"><div class="ib4-mode">'+[['all','الكل',''],['screen','على الشاشة','monitor'],['live','مباشر','bolt']].map(function(x){ return '<button class="e2-ch'+(m===x[0]?' on':'')+'" onclick="hhIbMode4(\''+x[0]+'\')">'+(x[2]?ico(x[2],14):'')+x[1]+'</button>'; }).join('')+'</div></div>';
+  var how='<div class="ib2-how"><div><b>1</b>اختر قالباً أو لعبة جاهزة</div><div><b>2</b>أضف أسئلتك أو استوردها من الفئات أو من ملف</div><div><b>3</b>شغّلها مباشرة أو اعرضها على الشاشة</div></div>';
+  var groups=m==='screen'?['screen']:m==='live'?['live']:['live','screen','async'];
+  var GN={live:'قوالب مباشرة على أجهزة الطلاب',screen:'قوالب شاشة الصف بلا أجهزة',async:'قوالب غير متزامنة'};
+  var html=seg+how;
+  groups.forEach(function(k){
+    var shown=TEMPLATES.filter(function(t){ return t.kind===k; }); if(!shown.length) return;
+    var rd=shown.filter(function(t){ return t.ready; }).length, sn=shown.length-rd;
+    html+='<div class="ib2-sec"><h2>'+GN[k]+'</h2><small>'+(rd?rd+' جاهزة الآن':'')+(sn?(rd?'، ':'')+sn+' قريباً':'')+'</small></div>';
+    if(k==='screen') html+='<div class="ib2-soonline">قريباً على الشاشة: '+SOON_SCR.split(' · ').join('، ')+'</div>';
+    html+='<div class="grid ib2-grid">'+shown.map(tplCard).join('')+(k===groups[groups.length-1]?'<div class="card ib2-new"><span class="si">'+ico('plus',28)+'</span><b>عندك فكرة قالب؟</b><p>ألغاز الخريطة، البحث عن الكنز، الجدار التعاوني…</p><button class="btn" onclick="hhIbSuggest()">اقترح فكرة</button></div>':'')+'</div>';
+  });
   return html;
 }
-window.hhIbGrade=function(g){ _ib.grade=g; render(); };
+window.hhIbMode4=function(m){ _ib.mode=m; render(); };
+function ib4Count(R){ return R.kind==='open'?R.n+' بطاقات':R.kind==='tf'?R.n+' عبارات':R.kind==='pairs'?R.n+' أزواج':R.kind==='order'?(R.n===1?'سؤال ترتيب واحد':R.n+' أسئلة ترتيب'):(R.n+' '+(R.n>2&&R.n<11?'أسئلة':'سؤالاً')); }
+function ib4Unit(R){ if(R.sec==='all') return 'كل الوحدات'; if(R.sec==='custom') return 'لعبة إضافية'; return ((R.unit&&R.unit.name)||'').split(' · ')[0]; }
+function ib4Card(R,adm){
+  var so=(R.kind==='open'||R.kind==='pairs');
+  var modes=(so?[['monitor','شاشة']]:[['monitor','شاشة'],['phone','مباشر']]).map(function(m){ return '<span>'+ico(m[0],12,2.2)+' '+m[1]+'</span>'; }).join('');
+  var meta='<i>'+esc(ib4Unit(R))+'</i><i>'+ib4Count(R)+'</i>'+(R.img?'<i>مع صورة الخريطة</i>':'')+(R.draft?'<i class="w">مسودة بانتظار مراجعتك</i>':'');
+  var btns=so?'<button class="e2-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' اعرض على الشاشة</button>'
+    :'<button class="e2-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' على الشاشة</button><button class="e2-b" onclick="hhIbReadyLive(\''+R.rid+'\')">'+ico('phone',15)+' مباشر</button>';
+  var menu='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'copy\',\''+R.rid+'\')">'+ico('copy',15)+' انسخ إلى ألعابي وعدّل</span>';
+  if(adm){ menu+='<small>للمدير</small><span class="ib4-mi" onclick="hhIbMenuDo(event,\'edit\',\''+(R.src||R.rid)+'\')">'+ico('edit',15)+' عدّل الأصل</span>';
+    if(R.draft) menu+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'publish\',\''+R.rid+'\')">'+ico('send',15)+' انشر لكل المعلمين</span>';
+    if(R.kind==='custom') menu+='<span class="ib4-mi d" onclick="hhIbMenuDo(event,\'del\',\''+R.rid+'\')">'+ico('trash',15)+' احذف من الألعاب الجاهزة</span>'; }
+  var txt=(R.title+' '+R.d+' '+ib4Unit(R)+' '+(IB4_TYPES[R.kind]||'')).toLowerCase();
+  return '<div class="rl-c ib4-c'+(R.draft?' draft':'')+'" style="--c:'+R.c+'" data-k="'+R.kind+'" data-u="'+R.sec+'" data-t="'+esc(txt)+'"><div class="gh"><span class="gi">'+ico(R.ic,24,2)+'</span><div class="md">'+modes+'</div></div><div class="gb"><span class="ib4-ty">'+(IB4_TYPES[R.kind]||'')+'</span><b>'+esc(R.title)+'</b><div class="mt">'+meta+'</div><p>'+esc(R.d)+'</p><div class="ac'+(so?' one':'')+'">'+btns+'<button class="ib4-more" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button></div><div class="ib4-menu" hidden>'+menu+'</div></div></div>';
+}
+function renderReady(){
+  var adm=isAdm(), G=_ib.grade||'g7t1', F=_ib.rf=_ib.rf||{u:'',k:'',q:''};
+  var L=readyList();
+  var kinds=[]; L.forEach(function(r){ if(kinds.indexOf(r.kind)<0) kinds.push(r.kind); });
+  var flt='<div class="ib4-flt">'
+    +'<label class="e2-ch ib4-sel">'+ico('book',14)+'<select onchange="hhIbGrade(this.value)" aria-label="الصف">'+GRADES.map(function(x){ return '<option value="'+x.id+'"'+(x.id===G?' selected':'')+(x.ok?'':' disabled')+'>'+esc(x.name.replace(' · ف1','، الفصل الأول').replace(' · ف2','، الفصل الثاني'))+(x.ok?'':' (قريباً)')+'</option>'; }).join('')+'</select></label>'
+    +'<label class="e2-ch ib4-sel">'+ico('list',14)+'<select onchange="hhIbRF(\'u\',this.value)" aria-label="الوحدة"><option value="">كل الوحدات</option><option value="all"'+(F.u==='all'?' selected':'')+'>المراجعة الشاملة</option>'+(UNITS[G]||[]).map(function(u){ return '<option value="'+u.k+'"'+(F.u===u.k?' selected':'')+'>'+esc(u.name.replace(' · ','، '))+'</option>'; }).join('')+'</select></label>'
+    +'<label class="e2-ch ib4-sel">'+ico('grid',14)+'<select onchange="hhIbRF(\'k\',this.value)" aria-label="نوع اللعبة"><option value="">كل الأنواع</option>'+kinds.map(function(k){ return '<option value="'+k+'"'+(F.k===k?' selected':'')+'>'+IB4_TYPES[k]+'</option>'; }).join('')+'</select></label>'
+    +'<label class="e2-ch ib4-q">'+ico('search',14)+'<input type="search" placeholder="ابحث عن لعبة أو موضوع" value="'+esc(F.q)+'" oninput="hhIbRQ(this.value)" aria-label="بحث"></label>'
+    +(adm?'<button class="e2-b s p" onclick="hhIbReadyNew()">'+ico('plus',14)+' لعبة جاهزة جديدة</button>':'')+'</div>';
+  if(!L.length) return flt+'<div class="rl-soon">ألعاب هذا الصف قيد الإعداد، قريباً بإذن الله</div>';
+  var src='<div class="rl-src">'+ico('book',14)+' <b id="ib4-n">'+ib4N(L.length)+'</b><span class="ib4-sync">تتحدث أسئلتها تلقائياً مع بنك الأسئلة</span></div>';
+  var html=flt+src+'<div class="rl-g ib4-g" id="ib4-grid">'+L.map(function(R){ return ib4Card(R,adm); }).join('')+'</div><div class="rl-soon" id="ib4-none" hidden>لا ألعاب تطابق اختيارك. غيّر الوحدة أو النوع، أو امسح البحث.</div>';
+  if(!adm) html+='<div class="hint" style="text-align:center">العرض على الشاشة متاح للجميع، والتشغيل المباشر والنسخ إلى «ألعابي» بحساب المعلم</div>';
+  setTimeout(ib4Filter,0);
+  return html;
+}
+function ib4N(n){ return n===1?'لعبة جاهزة واحدة':n===2?'لعبتان جاهزتان':(n>2&&n<11)?n+' ألعاب جاهزة':n+' لعبة جاهزة'; }
+function ib4Filter(){
+  var F=_ib.rf||{u:'',k:'',q:''}, q=String(F.q||'').trim().toLowerCase(), n=0;
+  document.querySelectorAll('#ib4-grid .ib4-c').forEach(function(c){ var ok=(!F.u||c.getAttribute('data-u')===F.u)&&(!F.k||c.getAttribute('data-k')===F.k)&&(!q||c.getAttribute('data-t').indexOf(q)>-1); c.hidden=!ok; if(ok) n++; });
+  var none=document.getElementById('ib4-none'); if(none) none.hidden=n>0;
+  var nn=document.getElementById('ib4-n'); if(nn) nn.textContent=ib4N(n);
+}
+window.hhIbRF=function(k,v){ _ib.rf=_ib.rf||{u:'',k:'',q:''}; _ib.rf[k]=v; ib4Filter(); };
+window.hhIbRQ=function(v){ _ib.rf=_ib.rf||{u:'',k:'',q:''}; _ib.rf.q=v; ib4Filter(); };
+function ib4Close(){ document.querySelectorAll('#hh-ib .ib4-menu').forEach(function(m){ m.hidden=true; }); }
+window.hhIbMenu=function(ev,btn){ ev.stopPropagation(); var m=btn.closest('.ib4-c').querySelector('.ib4-menu'); var was=!m.hidden; ib4Close(); if(!was) m.hidden=false; };
+window.hhIbMenuDo=function(ev,act,rid){ ev.stopPropagation(); ib4Close(); if(act==='copy') hhIbReadyCopy(rid); else if(act==='edit') hhIbReadyEdit(rid); else if(act==='publish') hhIbReadyPublish(rid); else if(act==='del') hhIbReadyDel(rid); };
+document.addEventListener('click',function(e){ if(!e.target.closest||!e.target.closest('.ib4-menu')) ib4Close(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') ib4Close(); });
+
+var IB4CSS="#hh-ib [hidden]{display:none !important;}\n#hh-ib.ib2 .ib4-seg button em{margin-inline-start:4px;}\n#hh-ib .ib4-bar{display:flex;justify-content:flex-start;margin:14px 0 0;}\n#hh-ib .ib4-mode{display:flex;gap:8px;flex-wrap:wrap;}\n#hh-ib .ib4-flt{display:grid;grid-template-columns:220px 240px 190px minmax(0,1fr) auto;gap:10px;align-items:center;margin:16px 0 12px;}\n#hh-ib .ib4-flt .e2-ch{height:44px;border-radius:12px;padding:0 12px;min-width:0;}\n#hh-ib .ib4-sel select{flex:1;min-width:0;height:100%;font-size:14px;}\n#hh-ib .ib4-q input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-family:Cairo;font-weight:600;font-size:14px;color:#3D2A16;height:100%;}\n#hh-ib .ib4-q:focus-within{border-color:#B8924A;box-shadow:0 0 0 3px rgba(184,146,74,.2);}\n#hh-ib .ib4-flt .e2-b{height:44px;}\nhtml body #hh-ib .rl-g.ib4-g{grid-template-columns:repeat(4,minmax(0,1fr));}\n#hh-ib .ib4-c{position:relative;overflow:visible;}\n#hh-ib .ib4-c .gh{border-radius:16px 16px 0 0;}\n#hh-ib .ib4-ty{font-family:Cairo;font-weight:700;font-size:12px;color:#8A6D2E;}\n#hh-ib .ib4-c .ac{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) 40px;gap:8px;}\n#hh-ib .ib4-c .ac.one{grid-template-columns:minmax(0,1fr) 40px;}\n#hh-ib .ib4-c .ac .e2-b{height:40px;padding:0 8px;font-size:13.5px;min-width:0;}\n#hh-ib .ib4-more{width:40px;height:40px;border-radius:12px;border:1.5px solid #E7DAC0;background:#fff;color:#5E0E26;display:grid;place-items:center;cursor:pointer;padding:0;}\n#hh-ib .ib4-more:hover{border-color:#B8924A;background:#FBF7EE;}\n#hh-ib .ib4-menu{position:absolute;bottom:60px;left:12px;width:240px;max-width:calc(100% - 24px);background:#fff;border:1.5px solid #E7DAC0;border-radius:14px;box-shadow:0 14px 30px rgba(61,9,24,.16);padding:6px;z-index:20;display:grid;}\n#hh-ib .ib4-mi{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;font-family:Cairo;font-weight:700;font-size:13.5px;color:#3D0918;cursor:pointer;}\n#hh-ib .ib4-mi svg{color:#8A6D2E;}\n#hh-ib .ib4-mi:hover{background:#F7ECEF;}\n#hh-ib .ib4-mi.d{color:#B3261E;} #hh-ib .ib4-mi.d svg{color:#B3261E;}\n#hh-ib .ib4-menu small{font-family:Cairo;font-weight:700;font-size:11.5px;color:#8A7A63;padding:6px 10px 2px;border-top:1px solid #F0E6D3;margin-top:4px;}\n@media (max-width:1200px){ html body #hh-ib .rl-g.ib4-g{grid-template-columns:repeat(3,minmax(0,1fr));} #hh-ib .ib4-flt{grid-template-columns:repeat(3,minmax(0,1fr));} #hh-ib .ib4-q{grid-column:1 / span 2;} }\n@media (max-width:900px){ html body #hh-ib .rl-g.ib4-g{grid-template-columns:repeat(2,minmax(0,1fr));} }\n@media (max-width:640px){\n  html body #hh-ib .rl-g.ib4-g{grid-template-columns:1fr;}\n  #hh-ib .ib4-flt{grid-template-columns:1fr 1fr;}\n  #hh-ib .ib4-flt > .e2-ch:first-child, #hh-ib .ib4-q, #hh-ib .ib4-flt > .e2-b{grid-column:1 / -1;}\n  html body #hh-ib.ib2 .ib2-seg.ib4-seg{display:flex !important;width:100% !important;overflow:visible;}\n  html body #hh-ib.ib2 .ib2-seg.ib4-seg button{flex:1 1 0;min-width:0;justify-content:center;padding:0 4px !important;font-size:.86rem !important;gap:4px !important;}\n  html body #hh-ib.ib2 .ib2-seg.ib4-seg button svg{display:none;}\n  #hh-ib .ib4-sync{flex-basis:100%;margin-top:2px;padding-inline-start:20px;}\n  #hh-ib .ib4-c .ac .e2-b, #hh-ib .ib4-more{height:44px;}\n}\n\n#hh-ib .rl-src #ib4-n{color:#5E0E26;font-weight:800;margin-inline-end:8px;}\n#hh-ib .rl-src{flex-wrap:wrap;} #hh-ib .rl-src #ib4-n{white-space:nowrap;}\n";
+window.hhIbGrade=function(g){ _ib.grade=g; _ib.rf={u:'',k:'',q:''}; render(); };
 window.hhIbReadyShow=function(rid){ var g=buildReady(rid); if(!g) return; screenRun(g); };
 window.hhIbReadyLive=function(rid){ var g=buildReady(rid); if(!g) return; if(!canUse()){ toastX('التشغيل المباشر بحساب المعلم · سجّل الدخول أولاً','info'); return; } g.mode='live'; liveRun(g); };
 window.hhIbReadyCopy=function(rid){

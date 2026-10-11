@@ -22557,10 +22557,18 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     if(tray){
       var p1=tray.querySelector('.hh-crown-primary:not(.hh-crown-games) span'); if(p1) p1.textContent='ابدأ لعبة الآن';
       var p2=tray.querySelector('.hh-crown-games span'); if(p2) p2.textContent='ألعابي المحفوظة';
+      /* zzzzzzca: زرّا «مسابقة جاهزة» و«سباق مباشر» بجانب زر البدء */
+      var gm=tray.querySelector('.hh-crown-games');
+      var xb=function(cls,ic,txt,fn){ var b=mk('button','hh-crown-btn hh-crown-primary hh-crown-games hv2-xb '+cls,ic+'<span>'+txt+'</span>'); b.type='button'; b.onclick=fn; return b; };
+      var bC=xb('hv2-xc','<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>','مسابقة جاهزة',function(){ try{ localStorage.removeItem('hh_saved_cats'); }catch(e){} showScreen('screen-setup'); setTimeout(function(){ try{ msSwitchTab('competitions'); }catch(e){} },350); });
+      var bL=xb('hv2-xl','<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"/></svg>','سباق مباشر',function(){ try{ hhIbOpen('live'); }catch(e){} });
+      if(gm){ gm.parentNode.insertBefore(bC,gm); gm.parentNode.insertBefore(bL,gm); } else { tray.appendChild(bC); tray.appendChild(bL); }
       new MutationObserver(function(){ clearTimeout(homeBuild._t); homeBuild._t=setTimeout(homeTiles,40); })
         .observe(tray,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
     }
-    var res=mk('div','hv2-resume'); res.id='hv2-resume'; greet.appendChild(res);
+    /* zzzzzzca: بطاقة «أكمل من حيث توقفت» تضم آخر لعبة وإنجاز الأسبوع */
+    var cont=mk('div','hv2-cont','<span class="hv2-ck">أكمل من حيث توقفت</span>'); cont.id='hv2-cont'; side.insertBefore(cont, side.firstChild);
+    var res=mk('div','hv2-resume'); res.id='hv2-resume'; cont.appendChild(res); cont.appendChild(week);
     greet.appendChild(mk('div','hv2-stats',
       '<div><b><bdi>+1,000</bdi></b>سؤال نخبوي</div><div><b>40</b>فئة متنوعة</div><div><b>6</b>فرق في اللعبة</div><div><b>100%</b>مجاني بالكامل</div>'));
     var sc=mk('section','hv2-sc'); sc.id='hv2-sc';
@@ -22601,7 +22609,13 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     if(t){
       var n=(document.getElementById('royal-username-text')||{}).textContent||'';
       n=n.trim();
-      t.textContent=(!n || n==='أيها الملهم' || n==='أهلا') ? 'أهلاً بك، جاهز لتجربة مُلهِمة؟' : ('أهلاً '+n+'، جاهز لتجربة مُلهِمة؟');
+      var known=!!n && n!=='أيها الملهم' && n!=='أهلا' && n!=='مستخدم';
+      var hr=new Date().getHours(), gw=(hr>=4&&hr<12)?'صباح الخير':'مساء الخير';
+      var tch=false; try{ tch=(typeof _hhMyRole!=='undefined' && (_hhMyRole==='teacher'||_hhMyRole==='admin')) || (typeof hhIsAdmin==='function' && hhIsAdmin()); }catch(_r){}
+      var first=n.replace(/^(أ\.|أستاذ|الأستاذ)\s*/,'').split(/\s+/)[0]||'';
+      t.textContent=known ? (gw+' يا '+(tch?'أستاذ ':'')+first) : 'أهلاً بك، جاهز لتجربة مُلهِمة؟';
+      var sb=document.querySelector('#screen-menu .hv2-sub');
+      if(sb) sb.textContent=known ? (tch?'ماذا يلعب طلابك اليوم؟':'ماذا تريد أن تلعب اليوم؟') : 'ابدأ لعبة لطلابك في أقل من دقيقة، أو أكمل من حيث توقفت.';
     }
     // السطر الصغير: اليوم والتاريخ بأرقام 123 (zzzzzzbj)
     var gt=document.getElementById('royal-greeting-time');
@@ -22612,7 +22626,7 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       var last=h[0];
       if(last){
         res.style.display='';
-        res.innerHTML=IC.clock+'<span class="hv2-rt">آخر لعبة: <b>'+esc2(last.name||'لعبة')+'</b> · '+ago(last.timestamp)+(last.teamCount?' · '+last.teamCount+' فرق':'')+'</span><button type="button" class="hv2-again">العب مجدداً '+IC.arrow+'</button>';
+        res.innerHTML='<span class="hv2-rt"><b>'+esc2(last.name||'لعبة')+'</b><small>'+ago(last.timestamp)+(last.teamCount?'، '+last.teamCount+' فرق':'')+'</small></span><button type="button" class="hv2-again">العب مجدداً '+IC.arrow+'</button>';
         res.querySelector('.hv2-again').onclick=function(){ try{ openGameOptionsModal(0); }catch(e){ if(typeof hhNavigate==='function') hhNavigate('screen-mygames'); } };
       } else { res.style.display='none'; res.innerHTML=''; }
     }
@@ -22627,8 +22641,17 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
         var uc={}; h.forEach(function(x){ if((x.timestamp||0)>=since) (x.catsArr||[]).forEach(function(c){uc[c]=1;}); }); var nc=Object.keys(uc).length;
         if(nc) parts.push('<b>'+nc+'</b> '+(nc===1?'فئة':(nc===2?'فئتان':'فئات مختلفة')));
         if(qa){ parts.push('<b>'+qa+'</b> سؤالاً'); parts.push('<b>'+Math.round(qc/qa*100)+'%</b> إجابات صحيحة'); }
-        wk.innerHTML='<span class="hv2-wi">'+IC.chart+'</span><span><b class="hv2-wt">إنجازك هذا الأسبوع</b><span class="hv2-wv">'+parts.join(' · ')+'</span></span>';
+        wk.innerHTML='<div class="hv2-wc"><b>'+games+'</b><small>'+(games===1?'لعبة هذا الأسبوع':games===2?'لعبتان هذا الأسبوع':'ألعاب هذا الأسبوع')+'</small></div>'
+          +(qa?'<div class="hv2-wc"><b>'+qa+'</b><small>'+(qa>2&&qa<11?'أسئلة أُجيبت':'سؤالاً أُجيب')+'</small></div><div class="hv2-wc"><b><bdi>'+Math.round(qc/qa*100)+'%</bdi></b><small>إجابات صحيحة</small></div>':'');
       }
+    }
+    var sm3=document.getElementById('screen-menu'), cont3=document.getElementById('hv2-cont'), q3=document.getElementById('daily-quote-card'), top3=document.getElementById('hv2-top');
+    var hasC=!!(res && res.style.display!=='none');
+    if(cont3) cont3.style.display=hasC?'':'none';
+    if(sm3) sm3.classList.toggle('hv2-pro', hasC);
+    if(q3 && top3){
+      if(hasC){ if(q3.parentNode!==top3.parentNode || q3.previousElementSibling!==top3) top3.parentNode.insertBefore(q3, top3.nextSibling); q3.classList.add('hv2-qs'); }
+      else { var sd3=top3.querySelector('.hv2-side'); if(sd3 && q3.parentNode!==sd3) sd3.insertBefore(q3, sd3.querySelector('.hv2-cont')); q3.classList.remove('hv2-qs'); }
     }
     homeTiles();
   }

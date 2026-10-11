@@ -58,6 +58,7 @@ function style(){
   '#hh-scr .bx{border-radius:clamp(14px,1.2vw,22px);background:linear-gradient(160deg,#8A1538,#5E0E26);border:3px solid #B8924A;display:flex;align-items:center;justify-content:center;color:#fff;font-size:clamp(30px,3.4vw,64px);font-weight:800;position:relative;box-shadow:0 10px 24px rgba(61,9,24,.18);transition:transform .15s;min-height:0;}',
   '#hh-scr .bx:hover{transform:translateY(-3px);} #hh-scr .bx:after{content:"";position:absolute;inset:8px;border:1.5px solid rgba(233,215,174,.3);border-radius:inherit;pointer-events:none;}',
   '#hh-scr .bx.done{background:#ECE8E3;border-color:#ECE8E3;color:#B8AE9A;box-shadow:none;cursor:default;} #hh-scr .bx.done:after{display:none;}',
+  '#hh-scr .boxes.dense{gap:clamp(6px,.6vw,12px);} #hh-scr .boxes.dense .bx{font-size:clamp(15px,1.5vw,30px);border-width:2px;border-radius:clamp(8px,.7vw,14px);min-height:34px;} #hh-scr .boxes.dense .bx.done small{display:none;}',
   '#hh-scr .bx.done small{position:absolute;bottom:10%;font-size:clamp(12px,.9vw,17px);font-weight:700;color:#7A6A54;}',
   '#hh-scr .bx small.x{color:#B3261E;}',
   /* البطاقة المفتوحة */
@@ -288,7 +289,7 @@ function render(){
   if(S.tpl==='wheel'){ var sv=root.querySelector('.whw svg'); if(sv){ sv.style.transition='none'; sv.style.transform='rotate('+S.wheelRot+'deg)'; } }
 }
 function cols(n,max){ var c=n<=6?Math.min(n,3):n<=12?Math.min(6,Math.ceil(n/2)):n<=18?6:n<=24?8:10; return Math.min(c,max||10); }
-function boxesBody(){ var n=S.qs.length; return '<div class="boxes" style="--c:'+cols(n)+'">'+S.qs.map(function(q,i){ var r=S.res[i]; if(r) return '<div class="bx done">'+(i+1)+'<small class="'+(r.ok?'':'x')+'">'+(r.ok?esc(S.teams[r.team].name)+' · +'+r.pts:'بلا إجابة')+'</small></div>'; return '<button class="bx" onclick="hhScrOpen('+i+')">'+(i+1)+'</button>'; }).join('')+'</div>'; }
+function boxesBody(){ var n=S.qs.length, dn=n>60; return '<div class="boxes'+(dn?' dense':'')+'" style="--c:'+(dn?(window.innerWidth<700?6:15):cols(n))+'">'+S.qs.map(function(q,i){ var r=S.res[i]; if(r) return '<div class="bx done">'+(i+1)+'<small class="'+(r.ok?'':'x')+'">'+(r.ok?esc(S.teams[r.team].name)+' · +'+r.pts:'بلا إجابة')+'</small></div>'; return '<button class="bx" onclick="hhScrOpen('+i+')">'+(i+1)+'</button>'; }).join('')+'</div>'; }
 function flipBody(){ var n=S.qs.length; return '<div class="sx-fg" style="--c:'+(n<=4?2:n<=9?3:4)+'">'+S.qs.map(function(q,i){ var r=S.res[i]; return '<button class="fc '+(r?'done':'')+'" onclick="hhScrOpen('+i+')"><span class="nb">بطاقة '+(i+1)+(r?' · '+(r.ok?esc(S.teams[r.team].name)+' +'+r.pts:'بلا نقاط'):'')+'</span><b>'+esc(q.q)+'</b></button>'; }).join('')+'</div>'; }
 function wheelBody(){
   var rem=S.qs.map(function(_,i){ return i; }).filter(function(i){ return !S.res[i]; });
