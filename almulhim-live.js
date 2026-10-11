@@ -130,6 +130,7 @@ window.hhLiveEndSession=async function(code){ if(!confirm('إنهاء الجول
 window.hhLiveResults=async function(code){ style(); hostOpen(code, true); };
 
 function hostOpen(code, viewOnly){
+  try{ if(window.hhApplause) hhApplause.reset(); }catch(e){} // zzzzzzbv: التصفيق مغلق في بداية كل جولة
   L.host=true; L.code=code; L.players={};
   var old=document.getElementById('hh-lv'); if(old) old.remove();
   var ov=document.createElement('div'); ov.id='hh-lv'; ov.innerHTML='<div class="hd"></div><div class="main"><div class="hidden-note">جارٍ التحميل…</div></div><div class="ctl"></div>'; document.body.appendChild(ov);
@@ -190,7 +191,7 @@ function hostRender(){
   var n=Object.keys(L.players).length; var q=curQ();
   var answered=q?Object.keys(L.players).filter(function(pid){ var A=L.players[pid].a||{}; return !!A[s.qIndex]; }).length:0;
   var stTxt={lobby:ic2('users',18)+' '+n+' منضمين',question:'السؤال '+(s.qIndex+1)+' من '+s.total,reveal:'السؤال '+(s.qIndex+1)+' من '+s.total+' · الكشف',shop:'السوق مفتوح',rank:'الترتيب بعد السؤال '+(s.qIndex+1)+' من '+s.total,paused:'متوقفة مؤقتاً',ended:'النتيجة النهائية'}[s.state]||'';
-  hd.innerHTML='<div class="lvt"><small>سباق المُلهم المباشر</small><b>'+esc(s.title||'')+'</b></div><span class="lvp">'+stTxt+'</span>'+(s.state!=='lobby'&&s.state!=='ended'?'<span class="lvp">'+ic2('users',18)+' '+n+'</span>':'')+(s.state!=='ended'?'<div class="lvcode">ادخل الرمز <b>'+esc(s.code)+'</b></div>':'');
+  hd.innerHTML='<div class="lvt"><small>سباق المُلهم المباشر</small><b>'+esc(s.title||'')+'</b></div><span class="lvp">'+stTxt+'</span>'+(s.state!=='lobby'&&s.state!=='ended'?'<span class="lvp">'+ic2('users',18)+' '+n+'</span>':'')+(s.state!=='ended'&&window.hhApplause?hhApplause.btn():'')+(s.state!=='ended'?'<div class="lvcode">ادخل الرمز <b>'+esc(s.code)+'</b></div>':'');
   var B=function(fn,ico,t,c,dis){ return '<button class="tb '+(c||'')+'" '+(dis?'disabled':'')+' onclick="'+fn+'">'+ic2(ico)+' '+t+'</button>'; };
   var ctl='';
   if(s.state==='lobby') ctl=B('hhLvStart()','play','ابدأ السباق','gold',!n)+B('hhLiveClose()','back','رجوع · تبقى الجولة محفوظة');
@@ -297,7 +298,9 @@ function drawQR(url){
   var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload=go; sc.onerror=function(){ box.innerHTML='<div style="font-size:.72rem;color:#8A6D2E;">تعذر رسم الباركود · استخدم الرمز أو الرابط</div>'; }; document.head.appendChild(sc);
 }
 window.hhLvStart=function(){ L._revealed=false; setState({state:'question', qIndex:0, qStartedAt:Date.now()}); };
-window.hhLvReveal=async function(){ var r=computeScores(); await setState({state:'reveal', scores:r.scores, names:r.names, events:r.events, playersCount:Object.keys(L.players).length}); };
+window.hhLvReveal=async function(){ var r=computeScores();
+  try{ var _q=curQ(), _s=L.sess; if(_q&&_q.type!=='poll'&&window.hhApplause){ var _ck=(_q.correct||[]).slice().sort().join(','); var _any=Object.keys(L.players).some(function(pid){ var a=(L.players[pid].a||{})[_s.qIndex]; return a&&a.c&&a.c.slice().sort().join(',')===_ck; }); if(_any) hhApplause.play(); } }catch(e){} /* zzzzzzbv */
+  await setState({state:'reveal', scores:r.scores, names:r.names, events:r.events, playersCount:Object.keys(L.players).length}); };
 window.hhLvRank=function(){ setState({state:'rank'}); };
 window.hhLvShop=function(){ setState({state:'shop'}); };
 window.hhLvNext=function(){ var s=L.sess; if(s.qIndex+1>=s.total){ window.hhLvEnd(); return; } setState({state:'question', qIndex:s.qIndex+1, qStartedAt:Date.now()}); };

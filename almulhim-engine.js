@@ -3627,6 +3627,7 @@ function resetPU(){
 }
 
 function startGame(overrideTeams, overrideCats, overrideName){
+  try{ hhApplause.reset(); }catch(_e){} // zzzzzzbv: التصفيق مغلق في بداية كل لعبة
   // حراسة: التأكد من اختيار الدور قبل أي لعبة جديدة
   if(!overrideTeams && !_currentUserRole){
     // محاولة استرجاع الدور من localStorage أولا (تجنب false positive)
@@ -5311,6 +5312,7 @@ function openQ(q,diff,key,isLegend){
   const legendPtsMap = {easy:600, med:800, hard:1000};
   const shownPts = isLegend ? legendPtsMap[diff] : ((q&&q.pts)||d.pts);
   document.getElementById('qm-pts').textContent=shownPts+' نقطة';
+  try{ var _clp=document.getElementById('qm-clap'); if(_clp) _clp.innerHTML=hhApplause.btn(); }catch(_e){}
   document.getElementById('qm-text').textContent=q.q;
   const cw=document.getElementById('qm-correct-wrap');
   if(cw){ cw.style.display='none'; const f=document.getElementById('qm-correct-form'); if(f) f.style.display='none';
@@ -11395,8 +11397,8 @@ function showBadgeUnlockModal(badge){
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // صوت تأثير (اختياري)
-  try{
+  // zzzzzzbv: الأصوات ملغاة
+  if(false) try{
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
@@ -12419,7 +12421,39 @@ function toggleQtGroup(bodyId, btn){
 // ════ أصوات اللعبة (Web Audio API) ════
 let audioCtx=null;
 function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+// ═══ zzzzzzbv · التصفيق الحقيقي فقط · كل الأصوات الأخرى ملغاة · مغلق افتراضياً في بداية كل لعبة ═══
+window.hhApplause=(function(){
+  var on=false, au=null;
+  var ICO_OFF='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>';
+  var ICO_ON='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>';
+  function el(){ if(!au){ try{ au=new Audio('applause.mp3'); au.preload='auto'; }catch(e){ au=null; } } return au; }
+  function css(){ if(document.getElementById('hh-clap-css')) return; var st=document.createElement('style'); st.id='hh-clap-css';
+    st.textContent='.hh-clap{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;border-radius:22px;padding:5px 13px 5px 10px;font-family:Cairo,Tajawal,sans-serif;font-weight:800;font-size:.8rem;line-height:1.2;cursor:pointer;border:1.5px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;white-space:nowrap;transition:background .15s,color .15s}'
+      +'.hh-clap[aria-pressed="true"]{background:#fff;color:#2F6A4E;border-color:#fff}'
+      +'.hh-clap:focus-visible{outline:3px solid #B8924A;outline-offset:2px}'
+      +'.hh-clap.lt{border-color:#E5D8C0;background:#fff;color:#8A1538}.hh-clap.lt[aria-pressed="true"]{background:#EBF2EE;color:#2F6A4E;border-color:#BFD5C8}'
+      +'#hh-scr .hh-clap,#hh-lv .hh-clap{font-size:clamp(13px,.95vw,17px);padding:7px 15px 7px 12px}'
+      +'@media (max-width:560px){.hh-clap .hh-clap-t{display:none}.hh-clap{padding:5px 8px}}';
+    document.head.appendChild(st); }
+  function inner(){ return (on?ICO_ON:ICO_OFF)+'<span class="hh-clap-t">'+(on?'التصفيق مفعّل':'التصفيق مغلق')+'</span>'; }
+  var api={
+    isOn:function(){ return on; },
+    set:function(v){ on=!!v; if(on){ var a=el(); if(a) try{ a.load(); }catch(e){} } else api.stop();
+      try{ document.querySelectorAll('[data-hh-clap]').forEach(function(b){ b.setAttribute('aria-pressed',on?'true':'false'); b.title=on?'اضغط لإغلاق التصفيق':'اضغط لتفعيل التصفيق عند الإجابة الصحيحة'; b.innerHTML=inner(); }); }catch(e){} return on; },
+    toggle:function(ev){ if(ev&&ev.stopPropagation) ev.stopPropagation(); return api.set(!on); },
+    reset:function(){ api.set(false); },
+    play:function(){ if(!on) return; var a=el(); if(!a) return; try{ a.currentTime=0; var p=a.play(); if(p&&p.catch) p.catch(function(){}); }catch(e){} },
+    stop:function(){ try{ if(au){ au.pause(); au.currentTime=0; } }catch(e){} },
+    btn:function(cls){ css(); return '<button type="button" data-hh-clap class="hh-clap '+(cls||'')+'" aria-pressed="'+(on?'true':'false')+'" title="'+(on?'اضغط لإغلاق التصفيق':'اضغط لتفعيل التصفيق عند الإجابة الصحيحة')+'" onclick="hhApplause.toggle(event)">'+inner()+'</button>'; }
+  };
+  return api;
+})();
 function playSound(type){
+  // zzzzzzbv: لا أصوات مولّدة · التصفيق الحقيقي فقط عند الإجابة الصحيحة وإذا فعّله المتحكم
+  if(type==='cheer'||type==='legend_cheer'){ try{ hhApplause.play(); }catch(e){} }
+  return;
+}
+function playSoundLegacy_(type){
   try{
     const ctx=getAudioCtx();
     if(ctx.state==='suspended')ctx.resume();

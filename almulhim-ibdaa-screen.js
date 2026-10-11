@@ -73,6 +73,12 @@ function style(){
   '#hh-scr .a4 .an{min-height:clamp(64px,8.6vh,96px);border-radius:18px;background:var(--a);color:#fff;display:flex;align-items:center;gap:14px;padding:8px 20px;font-size:clamp(18px,1.6vw,30px);font-weight:800;line-height:1.35;transition:opacity .2s;}',
   '#hh-scr .a4 .an i{width:clamp(38px,2.8vw,54px);height:clamp(38px,2.8vw,54px);border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.8em;flex-shrink:0;}',
   '#hh-scr .a4 .an.ok{box-shadow:0 0 0 5px #fff,0 0 0 9px #2F6A4E;} #hh-scr .a4 .an.no{opacity:.32;} #hh-scr .a4 .an.gone{visibility:hidden;}',
+  '#hh-scr .a4 button.an{border:0;font-family:inherit;text-align:start;width:100%;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.2);transition:transform .1s,box-shadow .1s;}',
+  '#hh-scr .a4 button.an:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(0,0,0,.2);} #hh-scr .a4 button.an:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.2);}',
+  '#hh-scr .a4 button.an:focus-visible{outline:4px solid #B8924A;outline-offset:3px;}',
+  '#hh-scr .a4 .an.x{background:#F3EDED;color:#9B8B8B;text-decoration:line-through;box-shadow:inset 0 0 0 3px #B3261E;opacity:1;cursor:default;}',
+  '#hh-scr .a4 .an.x i{background:#E4D9D9;color:#B3261E;} #hh-scr .a4 .an .xk{margin-inline-start:auto;width:42px;height:42px;border-radius:50%;background:#B3261E;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}',
+  '#hh-scr .aw .wm{color:#B3261E;font-weight:800;} #hh-scr .aw .hn{color:#6B5A4E;font-weight:700;} #hh-scr .aw .cb.sm{min-height:0;padding:6px 14px;font-size:.8em;}',
   '#hh-scr .a4 .an .ck{margin-inline-start:auto;width:46px;height:46px;border-radius:50%;background:#fff;color:#2F6A4E;display:flex;align-items:center;justify-content:center;flex-shrink:0;}',
   '#hh-scr .aw{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:clamp(15px,1.15vw,22px);font-weight:700;color:#3D0918;flex-wrap:wrap;}',
   '#hh-scr .aw .cb{height:52px;font-size:clamp(14px,.95vw,18px);}',
@@ -225,7 +231,8 @@ window.hhScrStart=function(){
   var qs=S.all.filter(function(q){ return TPL[S.tpl].types.indexOf(q.type)>-1; });
   if(!qs.length){ toastX('لا أسئلة تناسب هذا القالب','error'); return; }
   S.qs=qs; S.teams=[]; for(var i=0;i<S.nTeams;i++) S.teams.push({ name:(S.names&&S.names[i])||(S.nTeams===1?'الصف':'فريق '+(i+1)), score:0, color:TC[i], life:{fifty:true,time:true,ask:true} });
-  S.turn=0; S.res={}; S.open=null; S.rev=false; S.tried={}; S.idx=0; S.hide={}; S.ptsShown={}; S.pick=null; S.ended=false;
+  S.turn=0; S.res={}; S.open=null; S.rev=false; S.tried={}; S.idx=0; S.hide={}; S.ptsShown={}; S.pick=null; S.ended=false; S.wrong={}; S.wmsg={}; S.manual={};
+  try{ if(window.hhApplause) hhApplause.reset(); }catch(e){} // zzzzzzbv: التصفيق مغلق في بداية كل لعبة
   if(S.roster.names.length){ try{ localStorage.setItem('hh_scr_roster',JSON.stringify({mode:S.roster.mode,names:S.roster.names,label:S.roster.label,code:S.roster.code||''})); }catch(e){} }
   S.roster.picked={}; S.roster.tally={};
   S.stage='play'; S.wheelRot=0;
@@ -250,7 +257,7 @@ function head(){
   var done=Object.keys(S.res).length, n=S.qs.length;
   var cnt=TPL[S.tpl].seq?('السؤال '+Math.min(S.idx+1,n)+' من '+n):(done+' من '+n);
   var teams='<div class="teams">'+S.teams.map(function(t,i){ return '<div class="tm '+(i===S.turn&&S.teams.length>1?'on':'')+'" style="--a:'+t.color+'"><i></i><span>'+esc(t.name)+'</span><b>'+t.score+'</b><div class="pm"><button title="+'+S.base+'" onclick="hhScrAdj('+i+',1)">'+ico('plus',13,2.6)+'</button><button title="-'+S.base+'" onclick="hhScrAdj('+i+',-1)">−</button></div></div>'; }).join('')+'</div>';
-  return '<div class="sh"><div class="ti"><small>'+TPL[S.tpl].name+' · على شاشة الصف</small><b>'+esc(S.g.title||'')+'</b></div><span class="cnt">'+cnt+'</span>'+teams+'<div class="clock off"><b>—</b></div></div>';
+  return '<div class="sh"><div class="ti"><small>'+TPL[S.tpl].name+' · على شاشة الصف</small><b>'+esc(S.g.title||'')+'</b></div><span class="cnt">'+cnt+'</span>'+teams+(window.hhApplause?hhApplause.btn():'')+'<div class="clock off"><b>—</b></div></div>';
 }
 function ctl(){
   var seq=TPL[S.tpl].seq;
@@ -316,8 +323,13 @@ function qBlock(i, big){
     h+='<ol class="pts">'+pts.map(function(p,k){ var on=r||k<shown; return '<li class="'+(on?'':'h')+'" onclick="hhScrPt('+i+','+k+')"><i>'+(k+1)+'</i>'+(on?esc(p):'اضغط لإظهار النقطة')+'</li>'; }).join('')+'</ol>';
     return h;
   }
-  h+='<div class="a4">'+opts.map(function(o,k){ if(q.type==='mcq'&&!String(o||'').trim()) return ''; var ok=(q.correct||[]).indexOf(k)>-1; var cls=r?(ok?'ok':'no'):''; if(!r&&S.hide[i]&&S.hide[i].indexOf(k)>-1) cls='gone';
-    return '<div class="an '+cls+'" style="--a:'+(q.type==='tf'?(k===0?'#3D6B53':'#B3261E'):OC[k])+'"><i>'+(q.type==='tf'?(k===0?ico('check',22,3):ico('x',22,3)):OS[k])+'</i>'+esc(o)+(r&&ok?'<em class="ck">'+ico('check',24,3)+'</em>':'')+'</div>'; }).join('')+'</div>';
+  // zzzzzzbv: الخيارات قابلة للضغط · المتحكم يضغط إجابة الفريق فتُحكم تلقائياً
+  var live=!r&&!S.res[i]&&!(S.manual&&S.manual[i]), wr=(S.wrong&&S.wrong[i])||[];
+  h+='<div class="a4">'+opts.map(function(o,k){ if(q.type==='mcq'&&!String(o||'').trim()) return ''; var ok=(q.correct||[]).indexOf(k)>-1; var bad=wr.indexOf(k)>-1; var cls=r?(ok?'ok':(bad?'x':'no')):(bad?'x':''); if(!r&&S.hide[i]&&S.hide[i].indexOf(k)>-1) cls='gone';
+    var inner2='<i>'+(q.type==='tf'?(k===0?ico('check',22,3):ico('x',22,3)):OS[k])+'</i>'+esc(o)+(r&&ok?'<em class="ck">'+ico('check',24,3)+'</em>':'')+(bad?'<em class="xk">'+ico('x',22,3)+'</em>':'');
+    var sty=' style="--a:'+(q.type==='tf'?(k===0?'#3D6B53':'#B3261E'):OC[k])+'"';
+    if(live&&!bad&&cls!=='gone') return '<button type="button" class="an cl"'+sty+' onclick="hhScrPickOpt('+i+','+k+')">'+inner2+'</button>';
+    return '<div class="an '+cls+'"'+sty+'>'+inner2+'</div>'; }).join('')+'</div>';
   if(r&&q.note) h+='<div class="sx-note">'+esc(q.note)+'</div>';
   h+=judge(i);
   return h;
@@ -341,6 +353,11 @@ function judge(i){
   if(r) return '<div class="aw">'+(r.ok?ico('check',20)+' '+esc(S.teams[r.team].name)+' · +'+r.pts:'لم تُحتسب نقاط')+'<span style="flex:1"></span>'+(TPL[S.tpl].seq?'<button class="cb p" onclick="hhScrNav(1)">'+(S.idx>=S.qs.length-1?'النتائج':'التالي')+'</button>':'<button class="cb p" onclick="hhScrClose()">'+(S.tpl==='flip'?'رجوع للبطاقات':S.tpl==='wheel'?'رجوع للعجلة':'رجوع للصناديق')+'</button>')+'</div>';
   if(q.type==='open'){ var n=ptsOf(q).length, per=ptPer(q); var b=''; for(var k=0;k<=n;k++) b+='<button class="cb'+(k===n?' g':'')+'" onclick="hhScrScore('+i+','+k+')">'+k+'</button>'; return '<div class="aw">كم نقطة ذكر '+(S.teams.length>1?esc(t.name):'الصف')+'؟ '+b+'<span class="sx-st">· '+per+' لكل نقطة</span></div>'; }
   var nextT=nextTeam(i);
+  if((q.type==='mcq'||q.type==='tf')&&!S.rev&&!(S.manual&&S.manual[i])){
+    var wm=S.wmsg&&S.wmsg[i];
+    return '<div class="aw">'+(wm?'<span class="wm">'+ico('x',18)+' '+esc(wm)+'</span>':'<span class="hn">اضغط الخيار الذي اختاره '+(S.teams.length>1?esc(t.name):'الصف')+'</span>')+'<span style="flex:1"></span>'
+      +'<button class="cb sm" onclick="hhScrManual('+i+')">احكم يدوياً</button><button class="cb sm" onclick="hhScrJudge('+i+',-1)">'+ico('x',16)+' '+(S.teams.length>1?'لا أحد · أظهر الإجابة':'أظهر الإجابة')+'</button></div>';
+  }
   return '<div class="aw">'+(S.teams.length>1?'أجاب '+esc(t.name)+' إجابة صحيحة؟':'أجاب الصف إجابة صحيحة؟')+'<button class="cb g" onclick="hhScrJudge('+i+',1)">'+ico('check',18)+' نعم · +'+qPts(q)+'</button>'
     +(S.teams.length>1&&nextT>-1&&!S.rev?'<button class="cb" onclick="hhScrJudge('+i+',0)">'+ico('x',18)+' لا · ينتقل إلى '+esc(S.teams[nextT].name)+'</button>':'')
     +'<button class="cb" onclick="hhScrJudge('+i+',-1)">'+ico('x',18)+' '+(S.teams.length>1?'لا أحد · أظهر الإجابة':'لا · أظهر الإجابة')+'</button></div>';
@@ -374,7 +391,8 @@ function initRound(i){
 function teamName(t){ return S.teams.length>1?S.teams[t].name:'الصف'; }
 function passTurn(){ if(S.teams.length>1) S.turn=(S.turn+1)%S.teams.length; }
 function award(p){ S.teams[S.turn].score+=p; return p; }
-function roundDone(i, ok){ var tot=S.roundPts||0; S.res[i]={ok:ok,team:S.turn,pts:tot}; S.roundPts=0; S.rev=true; stopTimer(); }
+function clap(){ try{ if(window.hhApplause) hhApplause.play(); }catch(e){} }
+function roundDone(i, ok){ if(ok) clap(); var tot=S.roundPts||0; S.res[i]={ok:ok,team:S.turn,pts:tot}; S.roundPts=0; S.rev=true; stopTimer(); }
 function msgRow(extra){ var m=S.msg; return '<div class="aw" style="margin:0">'+(m?'<span style="color:'+(m.ok?'#2F6A4E':m.ok===false?'#B3261E':'#3D0918')+'">'+(m.ok?ico('check',20):m.ok===false?ico('x',20):'')+' '+esc(m.t)+'</span>':'<span class="sx-st">'+(S.teams.length>1?'الدور: <b style="color:#3D0918">'+esc(S.teams[S.turn].name)+'</b>':'')+'</span>')+'<span style="flex:1"></span>'+(extra||'')+'</div>'; }
 function nextBtn(){ return '<button class="cb p" onclick="hhScrNav(1)">'+(S.idx>=S.qs.length-1?'النتائج':'الجولة التالية')+'</button>'; }
 function progBar(){ if(S.qs.length<2) return ''; return '<div class="prog" style="margin:0">'+S.qs.map(function(_,i){ var r=S.res[i]; return '<i class="'+(r?(r.ok?'d':'x'):i===S.idx?'c':'')+'"></i>'; }).join('')+'</div>'; }
@@ -462,12 +480,22 @@ window.hhScrReveal=function(){ if(S.open==null) return; if(S.tpl==='match'||S.tp
 window.hhScrPt=function(i,k){ var q=S.qs[i]; var cur2=S.ptsShown[i]||0; S.ptsShown[i]=Math.max(cur2,k+1); if(S.ptsShown[i]>=ptsOf(q).length) S.rev=true; render(); };
 window.hhScrJudge=function(i,ok){
   var q=S.qs[i];
-  if(ok===1){ var p=qPts(q); S.teams[S.turn].score+=p; S.res[i]={ok:true,team:S.turn,pts:p}; advanceTurn(); }
+  if(ok===1){ var p=qPts(q); S.teams[S.turn].score+=p; S.res[i]={ok:true,team:S.turn,pts:p}; advanceTurn(); clap(); }
   else if(ok===0){ S.tried[i]=(S.tried[i]||[]).concat([S.turn]); var nt=nextTeam(i); S.tried[i]=S.tried[i]; if(nt>-1){ S.turn=nt; } render(); return; }
   else { S.res[i]={ok:false,team:S.turn,pts:0}; advanceTurn(); }
   S.rev=true; render();
 };
-window.hhScrScore=function(i,k){ var q=S.qs[i]; var p=k*ptPer(q); if(k>=ptsOf(q).length) p=qPts(q); S.teams[S.turn].score+=p; S.res[i]={ok:k>0,team:S.turn,pts:p}; S.rev=true; S.ptsShown[i]=ptsOf(q).length; advanceTurn(); render(); };
+window.hhScrPickOpt=function(i,k){
+  var q=S.qs[i]; if(!q||S.res[i]||S.rev) return; S.wrong=S.wrong||{}; S.wmsg=S.wmsg||{};
+  var w=S.wrong[i]=S.wrong[i]||[]; if(w.indexOf(k)>-1) return;
+  if((q.correct||[]).indexOf(k)>-1){ S.wmsg[i]=null; hhScrJudge(i,1); return; }
+  w.push(k); var who=teamName(S.turn);
+  S.tried[i]=(S.tried[i]||[]).concat([S.turn]); var nt=(S.teams.length>1)?nextTeam(i):-1;
+  if(nt>-1){ S.turn=nt; S.wmsg[i]='إجابة '+who+' خاطئة · الدور الآن: '+S.teams[nt].name; render(); return; }
+  S.wmsg[i]=null; hhScrJudge(i,-1);
+};
+window.hhScrManual=function(i){ S.manual=S.manual||{}; S.manual[i]=true; render(); };
+window.hhScrScore=function(i,k){ var q=S.qs[i]; var p=k*ptPer(q); if(k>=ptsOf(q).length) p=qPts(q); if(k>0) clap(); S.teams[S.turn].score+=p; S.res[i]={ok:k>0,team:S.turn,pts:p}; S.rev=true; S.ptsShown[i]=ptsOf(q).length; advanceTurn(); render(); };
 function advanceTurn(){ if(S.teams.length>1) S.turn=(S.turn+1)%S.teams.length; }
 window.hhScrTurn=function(){ if(S.teams.length>1){ S.turn=(S.turn+1)%S.teams.length; render(); } };
 window.hhScrAdj=function(t,d){ S.teams[t].score=Math.max(0,S.teams[t].score+d*S.base); render(); };
