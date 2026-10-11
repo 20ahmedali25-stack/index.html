@@ -1513,7 +1513,7 @@ async function hhCampusRenderClasses(){
   Object.keys(_hhCls.open).forEach(function(code){ if(_hhCls.open[code]) hhClsLoadStudents(code); });
 }
 function arCountCls(n,one,two,few,many){ if(n===0) return 'لا '+few+' بعد'; if(n===1) return one; if(n===2) return two; if(n<=10) return n+' '+few; return n+' '+many; }
-function _hhClsIco(){ return {plus:'<path d="M12 5v14M5 12h14"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',tv:'<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',chev:'<polyline points="6 9 12 15 18 9"/>',archive:'<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v12h14V8M10 12h4"/>'}; }
+function _hhClsIco(){ return {shield:'<path d="M12 3l8 3v6c0 4.5-3.4 7.8-8 9-4.6-1.2-8-4.5-8-9V6z"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',plus:'<path d="M12 5v14M5 12h14"/>',copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',tv:'<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',chev:'<polyline points="6 9 12 15 18 9"/>',archive:'<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v12h14V8M10 12h4"/>'}; }
 function _hhClsSvg(n,sz){ return '<svg width="'+(sz||14)+'" height="'+(sz||14)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(_hhClsIco()[n]||'')+'</svg>'; }
 
 function hhClsFormHTML(){
@@ -1611,35 +1611,79 @@ async function hhClsLoadStudents(code){
   try{
     var qs=await _hhClsDb().collection('classroom_students').where('teacherId','==',currentUser.uid).where('classCode','==',code).where('active','==',true).get();
     var list=[]; qs.forEach(function(d){ var s=d.data(); s._id=d.id; list.push(s); });
-    list.sort(function(a,b){ return String(a.studentName||'').localeCompare(String(b.studentName||''),'ar'); });
+    list.sort(function(a,b){ return ((a.num||9999)-(b.num||9999)) || String(a.studentName||'').localeCompare(String(b.studentName||''),'ar'); });
     _hhCls.students[code]=list; hhClsRenderStudents(code);
   }catch(e){ f.innerHTML='<div class="hh-campus-empty">تعذر تحميل الطلاب</div>'; }
 }
+/* zzzzzzcc · خصوصية الطلاب: الصف بالأرقام، والأسماء اختيارية في جهاز المعلم فقط ولا تُرفع إلى المنصة */
+function _hhClsLocal(code){ try{ return JSON.parse(localStorage.getItem('hh_cls_local_'+code)||'{}')||{}; }catch(e){ return {}; } }
+function _hhClsLocalSet(code,m){ try{ localStorage.setItem('hh_cls_local_'+code,JSON.stringify(m)); }catch(e){} }
+function _hhClsIsLegacy(s){ var n=String(s.studentName||'').trim(); return !!n && !/^طالب(\s+\d+)?$/.test(n); }
 function hhClsRenderStudents(code){
-  var f=document.getElementById('hh-cls-fold-'+code); if(!f) return; var list=_hhCls.students[code]||[];
-  var joined=list.filter(function(s){ return s.userId; }).length;
-  f.innerHTML='<div class="hh-cls-tools">'
-    +'<input id="hh-cls-add-'+code+'" type="text" placeholder="أضف طالباً بالاسم" onkeydown="if(event.key===\'Enter\')hhClsAddOne(\''+code+'\')">'
-    +'<button type="button" class="hh-campus-btn-maroon" onclick="hhClsAddOne(\''+code+'\')">'+_hhClsSvg('plus',13)+' أضف</button>'
-    +'<button type="button" class="hh-campus-btn-line" onclick="hhClsBulkOpen(\''+code+'\')">'+_hhClsSvg('file',13)+' من ملف Excel / قائمة</button>'
-    +'<span class="hh-campus-sub" style="margin:0;">'+list.length+' طالباً · '+joined+' منضمون</span>'
+  var f=document.getElementById('hh-cls-fold-'+code); if(!f) return; var raw=_hhCls.students[code]||[];
+  /* سجل المعلم وسجل انضمام الطالب بالرقم نفسه يظهران سطراً واحداً */
+  var byN={}, list=[]; raw.forEach(function(s){ if(s.num){ var o=byN[s.num]; if(!o){ o=byN[s.num]=Object.assign({},s); list.push(o); } else { if(!o.userId&&s.userId){ o.userId=s.userId; } } } else list.push(s); });
+  var joined=list.filter(function(s){ return s.userId; }).length, show=!!_hhCls.showNames, L=_hhClsLocal(code);
+  var legacy=list.filter(_hhClsIsLegacy).length;
+  var maxNum=list.reduce(function(m,s){ return Math.max(m,s.num||0); },0);
+  f.innerHTML='<div class="hh-cls-priv">'+_hhClsSvg('shield',15)+' لا تُحفظ أسماء الطلاب على المنصة. الرقم هو رقم الطالب في كشف الصف.</div>'
+    +'<div class="hh-cls-tools">'
+    +'<label class="hh-cls-cnt">عدد طلاب الصف <input id="hh-cls-n-'+code+'" type="number" inputmode="numeric" min="1" max="60" value="'+(maxNum||list.length||'')+'" placeholder="28"></label>'
+    +'<button type="button" class="hh-campus-btn-maroon" onclick="hhClsSetCount(\''+code+'\')">'+_hhClsSvg('plus',13)+' حدّث الأرقام</button>'
+    +'<label class="hh-cls-sw"><input type="checkbox" '+(show?'checked':'')+' onchange="_hhCls.showNames=this.checked;hhClsRenderStudents(\''+code+'\')"> أظهر الأسماء من جهازي</label>'
+    +'<span class="hh-campus-sub" style="margin:0;">'+list.length+' طالباً، '+joined+' منضمون</span>'
     +'</div>'
-    +'<div id="hh-cls-bulk-'+code+'"></div>'
-    +(list.length?'<div class="hh-cls-list">'+list.map(function(s){ return '<div class="hh-cls-st"><span>'+esc(s.studentName||'طالب')+(s.sid?' <small>'+esc(s.sid)+'</small>':'')+'</span><span class="hh-cls-st-r">'+(s.userId?'<span class="hh-campus-chip hh-cls-ok">منضم</span>':'<span class="hh-campus-chip">لم ينضم بعد</span>')+'<button type="button" class="hh-cls-ib" title="إزالة" onclick="hhClsRemove(\''+code+'\',\''+s._id+'\')">×</button></span></div>'; }).join('')+'</div>':'<div class="hh-campus-empty">لا طلاب بعد · أضفهم بالاسم أو من ملف Excel، أو شارك الرمز لينضموا بأنفسهم</div>');
+    +(show?'<div class="hh-cls-loc">'+_hhClsSvg('file',14)+' الأسماء تُحفظ في هذا الجهاز فقط، ولا تُرفع إلى المنصة ولا تُرى من جهاز آخر.</div>':'')
+    +(legacy?'<div class="hh-cls-mig">في هذا الصف '+legacy+' أسماء محفوظة على المنصة من قبل. <button type="button" class="hh-campus-btn-gold" onclick="hhClsMigrate(\''+code+'\')">انقل الأسماء إلى هذا الجهاز واحذفها من المنصة</button></div>':'')
+    +(list.length?'<div class="hh-cls-list hh-cls-nums">'+list.map(function(s,i){ var k=s.num||(i+1); var lg=_hhClsIsLegacy(s); var nm=show?(L[k]||''):'';
+      return '<div class="hh-cls-st"><span class="hh-cls-num" onclick="hhOpenStudentFile(\''+s._id+'\',\''+code+'\')" title="افتح ملف الطالب"><b>'+(s.num?k:'؟')+'</b>'
+        +(lg?'<em>اسم قديم، انقله</em>':(show?'<input type="text" class="hh-cls-ln" value="'+esc(nm)+'" placeholder="اكتب الاسم…" onclick="event.stopPropagation()" onchange="hhClsLocalName(\''+code+'\','+k+',this.value)">':'<em>طالب '+k+'</em>'))+'</span>'
+        +'<span class="hh-cls-st-r">'+(s.userId?'<span class="hh-campus-chip hh-cls-ok">منضم</span>':'<span class="hh-campus-chip">لم ينضم بعد</span>')
+        +'<button type="button" class="hh-cls-ib" title="إزالة" onclick="hhClsRemove(\''+code+'\',\''+s._id+'\')" style="color:#B3261E">'+_hhClsSvg('x',13)+'</button></span></div>'; }).join('')+'</div>'
+      :'<div class="hh-campus-empty">اكتب عدد طلاب الصف ثم «حدّث الأرقام»، أو شارك رمز الصف ليدخل كل طالب برقمه.</div>');
 }
-async function hhClsAddOne(code){
-  var i=document.getElementById('hh-cls-add-'+code); var name=(i.value||'').trim(); if(!name) return;
-  await hhClsAddMany(code,[{name:name}]); i.value=''; i.focus();
+window.hhClsLocalName=function(code,k,v){ var m=_hhClsLocal(code); v=String(v||'').trim().slice(0,60); if(v) m[k]=v; else delete m[k]; _hhClsLocalSet(code,m); };
+async function hhClsSetCount(code){
+  var inp=document.getElementById('hh-cls-n-'+code); var n=Math.max(0,Math.min(60,parseInt(inp&&inp.value,10)||0)); if(!n){ _hhClsToast('اكتب عدد طلاب الصف','info'); return; }
+  var list=_hhCls.students[code]||[]; var have={}; list.forEach(function(s){ if(s.num) have[s.num]=1; });
+  var rows=[]; for(var k=1;k<=n;k++) if(!have[k]) rows.push({num:k});
+  if(!rows.length){ _hhClsToast('الأرقام من 1 إلى '+n+' موجودة','info'); return; }
+  await hhClsAddMany(code,rows);
 }
+async function hhClsMigrate(code){
+  var list=(_hhCls.students[code]||[]).slice(); var leg=list.filter(_hhClsIsLegacy); if(!leg.length) return;
+  if(!confirm('ستُنقل '+leg.length+' أسماء إلى هذا الجهاز فقط، ويأخذ كل طالب رقماً بالترتيب الأبجدي، ثم تُحذف الأسماء من المنصة نهائياً. احفظ الترتيب في كشفك الورقي. متابعة؟')) return;
+  var used={}; list.forEach(function(s){ if(s.num) used[s.num]=1; });
+  leg.sort(function(a,b){ return String(a.studentName).localeCompare(String(b.studentName),'ar'); });
+  var m=_hhClsLocal(code), k=1, db=_hhClsDb();
+  try{
+    var batch=db.batch();
+    leg.forEach(function(s){ while(used[k]) k++; used[k]=1; m[k]=String(s.studentName).trim(); batch.update(db.collection('classroom_students').doc(s._id),{studentName:'طالب '+k, num:k, email:'', userEmail:''}); });
+    _hhClsLocalSet(code,m); await batch.commit();
+    _hhCls.showNames=true; _hhClsToast('نُقلت الأسماء إلى جهازك وحُذفت من المنصة','success'); await hhClsLoadStudents(code);
+  }catch(e){ _hhClsToast('تعذر النقل: '+e.message,'error'); }
+}
+(function(){ if(document.getElementById('hh-cls-priv-style')) return; var st=document.createElement('style'); st.id='hh-cls-priv-style'; st.textContent=[
+'.hh-cls-priv{display:flex;align-items:center;gap:8px;background:#E6F2EA;color:#2C5340;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.85rem;margin-bottom:8px;}',
+'.hh-cls-cnt{display:inline-flex;align-items:center;gap:8px;font-family:Cairo;font-weight:800;font-size:.9rem;color:#3D0918;}',
+'.hh-cls-cnt input{width:80px;height:38px;border:1.5px solid #D9C79E;border-radius:10px;text-align:center;font-family:Cairo;font-weight:900;font-size:1rem;color:#3D0918;}',
+'.hh-cls-sw{display:inline-flex;align-items:center;gap:6px;font-family:Cairo;font-weight:800;font-size:.85rem;color:#5E0E26;cursor:pointer;} .hh-cls-sw input{accent-color:#5E0E26;width:16px;height:16px;}',
+'.hh-cls-loc{display:flex;align-items:center;gap:8px;background:#FBF1DA;color:#8A6D2E;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.82rem;margin-bottom:8px;}',
+'.hh-cls-mig{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#FDF0EF;border:1px dashed #E9B9B5;color:#8A1538;border-radius:10px;padding:8px 12px;font-family:Cairo;font-weight:800;font-size:.85rem;margin-bottom:8px;}',
+'.hh-cls-num{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:0;flex:1;} .hh-cls-num b{width:30px;height:30px;border-radius:9px;background:#5E0E26;color:#EAD9B0;display:grid;place-items:center;font-size:.85rem;flex-shrink:0;} .hh-cls-num em{font-style:normal;color:#8A7A63;font-weight:700;font-size:.85rem;}',
+'.hh-cls-ln{flex:1;min-width:0;border:1.5px solid #E7DAC0;border-radius:8px;padding:4px 8px;font-family:Cairo;font-weight:700;font-size:.88rem;color:#3D0918;}',
+'.hh-cls-nums{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));} .hh-cls-nums .hh-cls-st{gap:8px;} .hh-cls-nums .hh-cls-st-r{display:flex;align-items:center;gap:6px;flex-shrink:0;} .hh-cls-nums .hh-campus-chip{white-space:nowrap;}'
+].join('\n'); (document.head||document.documentElement).appendChild(st); })();
+async function hhClsAddOne(code){ return hhClsSetCount(code); }
 function _hhClsMeta(code){ return _hhCls.all.filter(function(x){ return x._code===code; })[0]||{}; }
 async function hhClsAddMany(code, rows){
-  var c=_hhClsMeta(code); var db=_hhClsDb(); var existing={}; (_hhCls.students[code]||[]).forEach(function(s){ existing[(s.studentName||'').trim()]=1; });
-  var fresh=rows.filter(function(r){ return r.name && !existing[r.name.trim()]; });
-  if(!fresh.length){ _hhClsToast('كل الأسماء موجودة مسبقاً','info'); return; }
+  var c=_hhClsMeta(code); var db=_hhClsDb();
+  var fresh=rows.filter(function(r){ return r.num>0; });
+  if(!fresh.length){ _hhClsToast('لا أرقام جديدة','info'); return; }
   try{
     for(var i=0;i<fresh.length;i+=400){
       var batch=db.batch();
-      fresh.slice(i,i+400).forEach(function(r){ var ref=db.collection('classroom_students').doc(); batch.set(ref,{ classCode:code, className:c.className||'', schoolName:c.schoolName||'', teacherId:currentUser.uid, teacherName:c.teacherName||'', studentName:r.name.trim(), sid:r.sid||'', email:r.email||'', userId:null, active:true, addedAt:firebase.firestore.FieldValue.serverTimestamp() }); });
+      fresh.slice(i,i+400).forEach(function(r){ var ref=db.collection('classroom_students').doc(); batch.set(ref,{ classCode:code, className:c.className||'', schoolName:c.schoolName||'', teacherId:currentUser.uid, teacherName:c.teacherName||'', studentName:'طالب '+r.num, num:r.num, sid:'', email:'', userId:null, active:true, addedAt:firebase.firestore.FieldValue.serverTimestamp() }); });
       await batch.commit();
     }
     await db.collection('classrooms').doc(code).update({studentCount: firebase.firestore.FieldValue.increment(fresh.length)});
@@ -1655,6 +1699,7 @@ async function hhClsRemove(code,id){
 
 // ── الاستيراد الجماعي: لصق قائمة أو ملف CSV/TXT/Excel (xlsx عبر SheetJS يُحمَّل عند الحاجة) ──
 function hhClsBulkOpen(code){
+  _hhClsToast('استيراد الأسماء أُوقف لحماية خصوصية الطلاب. اكتب عدد الطلاب بدلاً منه','info'); return; // zzzzzzcc
   var b=document.getElementById('hh-cls-bulk-'+code); if(!b) return; _hhCls.bulk={code:code, rows:[]};
   b.innerHTML='<div class="hh-cls-bulk">'
     +'<div class="hh-campus-card-t" style="font-size:.95rem;">إضافة جماعية · حتى مئات الطلاب دفعة واحدة</div>'

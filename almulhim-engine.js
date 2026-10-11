@@ -13997,7 +13997,7 @@ function openJoinClassModal(){
     toast('سجل الدخول أولا','error');
     return;
   }
-  document.getElementById('join-class-code').value = '';
+  document.getElementById('join-class-code').value = ''; try{ var _jn=document.getElementById('join-class-num'); if(_jn) _jn.value=''; }catch(_e){}
   document.getElementById('join-class-modal').classList.add('active');
   document.body.style.overflow = 'hidden';
   setTimeout(()=>document.getElementById('join-class-code').focus(), 100);
@@ -14026,7 +14026,10 @@ async function joinClassroom(){
 
     // هل الطالب مسجل سابقا من قبل المعلم (بالاسم)؟
     // نربط userId بسجله إن وجد
-    const studentName = currentUser.displayName || (await _getUserName(currentUser.uid)) || '';
+    // zzzzzzcc: لا أسماء، الطالب ينضم برقمه في كشف الصف
+    const _seatEl=document.getElementById('join-class-num'); const seat=parseInt(_seatEl&&_seatEl.value,10);
+    if(!(seat>=1&&seat<=60)){ toast('اكتب رقمك في كشف الصف','error'); if(_seatEl) _seatEl.focus(); return; }
+    const studentName = 'طالب '+seat;
     
     // البحث عن سجل قائم بنفس userId
     const existing = await db.collection('classroom_students')
@@ -14048,9 +14051,9 @@ async function joinClassroom(){
       schoolName: classData.schoolName || '',
       teacherId: classData.teacherId,
       teacherName: classData.teacherName || '',
-      studentName: studentName || 'طالب',
+      studentName: studentName,
+      num: seat,
       userId: currentUser.uid,
-      userEmail: currentUser.email || '',
       active: true,
       joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
       addedAt: firebase.firestore.FieldValue.serverTimestamp()

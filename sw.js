@@ -6,7 +6,7 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-zzzzzzcb-full-review';
+const SW_VERSION = 'almulhim-zzzzzzcc-ibdaa-studio2';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
@@ -30,6 +30,15 @@ const CORE_ASSETS = [
   '/almulhim-ibdaa-screen.js',
   '/almulhim-live.js',
   '/applause.mp3',
+  '/sfx/open.mp3',
+  '/sfx/select.mp3',
+  '/sfx/success.mp3',
+  '/sfx/error.mp3',
+  '/sfx/unlock.mp3',
+  '/sfx/progress-step.mp3',
+  '/sfx/streak.mp3',
+  '/sfx/forward.mp3',
+  '/sfx/achievement.mp3',
   '/almulhim-programs.js',
   '/almulhim-student-file.js',
   '/almulhim-followup.js',

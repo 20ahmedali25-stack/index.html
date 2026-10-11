@@ -4642,6 +4642,8 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
     </div>
     <div class="jcm-body">
       <input type="text" class="jcm-code-input" id="join-class-code" placeholder="HH-XXXXXX" maxlength="10">
+      <input type="number" inputmode="numeric" min="1" max="60" class="jcm-code-input" id="join-class-num" placeholder="رقمك في كشف الصف" style="margin-top:10px;font-size:1.1rem;letter-spacing:0;">
+      <div style="font-family:Cairo;font-size:.8rem;color:#2C5340;font-weight:700;margin-top:6px;text-align:center;">لا نطلب اسمك. يكفي رقمك في كشف الصف.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;">
         <button class="cc-form-btn outline" onclick="closeJoinClassModal()">إلغاء</button>
         <button class="cc-form-btn primary" onclick="joinClassroom()">انضمام</button>
@@ -14314,13 +14316,18 @@ html body #screen-menu.hv2.hv2-pro .hh-crown-tray .hh-crown-games:not(.hv2-xb){ 
 html body #screen-menu.hv2.hv2-pro .hv2-stats{ display:none !important; }
 html body #screen-menu.hv2.hv2-pro .hv2-top .royal-greeting{ justify-content:center !important; }
 /* شريط الاقتباس */
-html body #screen-menu.hv2 #daily-quote-card.hv2-qs{ display:grid !important; grid-template-columns:56px minmax(0,1fr) auto; align-items:center; gap:22px; margin:30px 0 0 !important; padding:28px 28px 20px !important; border-radius:22px !important; text-align:start !important; border:1.5px solid #B8924A !important; background:linear-gradient(100deg,#FFFFFF,#F5EEDF 70%,#EFE3C8) !important; position:relative; overflow:hidden; }
-html body #screen-menu.hv2 #daily-quote-card.hv2-qs::before{ content:"”"; grid-column:1; grid-row:1 / span 2; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg,#8A1538,#5E0E26); color:#E6CE8E; font-family:'Amiri',serif; font-size:2.6rem; line-height:1; padding-top:16px; box-sizing:border-box; box-shadow:0 6px 16px rgba(94,14,38,.25), inset 0 0 0 2px rgba(230,206,142,.45); position:static !important; opacity:1 !important; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs{ display:block !important; position:relative; text-align:center !important; margin:30px 0 0 !important; padding:38px 64px 24px !important; border-radius:22px !important; border:1.5px solid #B8924A !important; background:radial-gradient(ellipse at 50% 0%,rgba(230,206,142,.30),transparent 62%),linear-gradient(180deg,#FFFFFF,#F7F0E2) !important; overflow:hidden; box-shadow:0 12px 30px rgba(94,14,38,.08) !important; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs::before{ content:"”" !important; position:absolute !important; top:-8px !important; right:30px !important; left:auto !important; width:auto !important; height:auto !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; border-radius:0 !important; color:rgba(184,146,74,.22) !important; font-family:'Amiri',serif !important; font-size:140px !important; line-height:1 !important; display:block !important; opacity:1 !important; pointer-events:none; }
 html body #screen-menu.hv2 #daily-quote-card.hv2-qs::after{ content:""; position:absolute; top:0; left:-40%; width:40%; height:2px; background:linear-gradient(90deg,transparent,#E6CE8E,transparent); animation:hhG3Sweep 6.5s ease-in-out infinite; }
 html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-orn{ display:none !important; }
-html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-text{ grid-column:2; grid-row:1 / span 2; margin:0 !important; max-width:none; text-align:start !important; font-family:'Amiri',serif !important; font-size:clamp(1.15rem,1.55vw,1.45rem) !important; line-height:1.8 !important; color:#3D0918 !important; }
-html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign{ grid-column:3; grid-row:1 / span 2; display:grid; justify-items:end; gap:2px; margin:0; padding-inline-start:22px; border-inline-start:1px solid rgba(184,146,74,.5); text-align:end; }
-html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-refresh{ margin:6px 0 0 !important; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-text{ position:relative; max-width:920px !important; margin:0 auto !important; padding:0 !important; text-align:center !important; font-family:'Amiri',serif !important; font-weight:700 !important; font-size:clamp(1.3rem,1.9vw,1.72rem) !important; line-height:1.85 !important; color:#3D0918 !important; animation:hhQin .7s ease both; }
+@keyframes hhQin{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign{ display:flex !important; align-items:center !important; justify-content:center !important; gap:10px !important; flex-wrap:wrap; margin:16px 0 0 !important; padding:0 !important; border:0 !important; text-align:center !important; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign::before, html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign::after{ content:""; width:56px; height:1px; background:linear-gradient(90deg,transparent,#B8924A); }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign::after{ background:linear-gradient(270deg,transparent,#B8924A); order:9; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-name{ font-family:'Cairo',sans-serif !important; font-weight:900 !important; font-size:1.02rem !important; color:#8A1538 !important; }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-role{ font-family:'Cairo',sans-serif !important; font-weight:700 !important; font-size:.88rem !important; color:#8A6D2E !important; padding-inline-start:10px; border-inline-start:1px solid rgba(184,146,74,.55); }
+html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-refresh{ position:absolute !important; left:16px !important; bottom:14px !important; margin:0 !important; width:30px !important; height:30px !important; border-radius:9px !important; order:10; }
 @media (prefers-reduced-motion:reduce){ html body #screen-menu.hv2 .hv2-cont::after, html body #screen-menu.hv2 #daily-quote-card.hv2-qs::after{ animation:none; display:none; } }
 @media (max-width:900px){
   html body #screen-menu.hv2.hv2-pro .hv2-cont{ order:2; margin-top:22px; padding:30px 18px 18px; border-radius:22px; }
@@ -14329,12 +14336,13 @@ html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-refresh{ margin:6p
   html body #screen-menu.hv2.hv2-pro .hv2-cont .hv2-again{ width:100%; justify-content:center; box-sizing:border-box; }
   html body #screen-menu.hv2.hv2-pro .hv2-wc b{ font-size:1.5rem; }
   html body #screen-menu.hv2.hv2-pro .hv2-wc small{ font-size:.72rem; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs{ order:2; grid-template-columns:44px minmax(0,1fr); gap:8px 14px; padding:26px 16px 14px !important; margin:24px 0 0 !important; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs::before{ width:44px; height:44px; font-size:2rem; padding-top:12px; grid-row:1; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-text{ grid-column:2; grid-row:1; font-size:1.08rem !important; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs::before{ grid-row:1 !important; align-self:start; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign{ grid-column:1 / -1; grid-row:2; display:flex; align-items:center; justify-content:flex-start; flex-wrap:wrap; gap:4px 10px; border:0; border-top:1px solid rgba(184,146,74,.4); padding:10px 0 0; text-align:start; }
-  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-refresh{ margin:0 auto 0 0 !important; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs{ order:2; padding:34px 18px 16px !important; margin:24px 0 0 !important; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs::before{ font-size:96px !important; top:-4px !important; right:10px !important; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-text{ font-size:1.16rem !important; line-height:1.9 !important; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign{ flex-direction:column !important; gap:2px !important; margin-top:12px !important; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign::before, html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-sign::after{ display:none; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-role{ border:0; padding:0; }
+  html body #screen-menu.hv2 #daily-quote-card.hv2-qs .hh-quote-refresh{ position:static !important; margin-top:8px !important; }
 }
 
 /* ═══ zzzzzzca · شاشة الدخول: لوحة ترحيب عنابية بإطار ذهبي متحرك + نموذج ═══ */
