@@ -22524,7 +22524,7 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     'hhSchoolEntry()':'مسار الصف السابع وبوابات الإتقان',
     'hhOpenLeaderPrograms()':'الواثق المُلهِم وبرامج القادة',
     'hhMissionOpen()':'رسالة المنصة ورؤيتها',
-    'hhIbOpen()':'أعمال الطلاب ومشاركاتهم',
+    'hhIbOpen()':'استوديو الألعاب التعليمية',
     'hhPrivAdmin()':'مسابقات الشركاء والمناسبات',
     'hhPartnersAdmin()':'الرعاة والمراكز الشريكة',
     'hhAuditPanel()':'مراجعة الأسئلة والبلاغات',
