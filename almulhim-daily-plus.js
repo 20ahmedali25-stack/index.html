@@ -527,6 +527,7 @@
     return c;
   }
   window.hhDPlusImport=function(){
+    if(typeof toast==='function') toast('استيراد أسماء الطلاب أُوقف لحماية خصوصيتهم. أنشئ الصف واكتب عدد طلابه من «صفوفي»','info'); return; // zzzzzzcc
     var old=document.getElementById('hh-dpi'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='hh-dpi';
     ov.style.cssText='position:fixed;inset:0;background:rgba(42,8,16,.78);z-index:2147483000;display:flex;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto;direction:rtl;font-family:Cairo,sans-serif;';
