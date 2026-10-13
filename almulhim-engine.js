@@ -11495,7 +11495,7 @@ function loadScript(src){
 //  سجل التنقل (للرجوع الذكي)
 window._screenHistory = window._screenHistory || [];
 
-var HH_IMMERSIVE_SCREENS = ['screen-board'];
+var HH_IMMERSIVE_SCREENS = ['screen-board','screen-result'];
 // ═══ تبويبا الدخول/الحساب الجديد (zzzzzzbc) ═══
 function showAuthTab(tab){
   var isReg = (tab==='reg');
@@ -14252,7 +14252,7 @@ function loadInfluencers(){
           <span style="font-weight:900;color:#8A6D2E;">بإذن الله</span>
         </div>
         <div style="margin-top:18px;padding:10px;background:rgba(184,146,74,.1);border-radius:10px;border:1px dashed #B8924A;">
-          <span style="font-size:.78rem;color:#8A6D2E;font-weight:700;">قريبا · أسماء تضاء بها صفحة الشكر</span>
+          <span style="font-size:.78rem;color:#8A6D2E;font-weight:700;">قريباً، أسماء تضاء بها صفحة الشكر</span>
         </div>
       </div> `;
     return;
@@ -23098,7 +23098,7 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       if(!ensureHead()) return;
       var h=headInfo();
       var t=document.getElementById('bv-title'), s=document.getElementById('bv-sub'), p=document.getElementById('bv-prog');
-      if(t) t.textContent=h.title; if(s) s.textContent=h.sub; if(p) p.style.width=h.pct+'%';
+      if(t) t.textContent=h.title; if(s) s.textContent=String(h.sub||'').replace(/ · /g,'، '); if(p) p.style.width=h.pct+'%';
     }catch(e){}
   }
   // نقل الوسائل بين الشريط العلوي (جوال) وشريط النقاط (شاشة عريضة)
@@ -23324,7 +23324,7 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
     var cats=G.selectedCats||[], ctx;
     if(G.isComp){ var cc=(typeof _HH_CHAR_COMPS!=='undefined'&&_HH_CHAR_COMPS[cats[0]])||null; var nm=(cc&&cc.name1)||String((CAT_INFO[cats[0]]||{}).label||cats[0]||'').replace(/^مسابقة\s+/,''); ctx='مسابقة '+nm; }
     else ctx=catWord(cats.length);
-    ctx+=' · '+qWord(S.answered)+(S.mins?' · '+minWord(S.mins):'');
+    ctx+='، '+qWord(S.answered)+(S.mins?'، '+minWord(S.mins):'');
     hero+='<div class="ctx"><i class="b"></i><span>'+E(ctx)+'</span><i></i></div>';
     // المنصة: حتى المركز الثالث (بحد أقصى 4 بطاقات)، والبقية في سطر
     var pod=srt.filter(function(x){ return x.rank<=3; }), rest=srt.filter(function(x){ return x.rank>3; });
@@ -23352,7 +23352,7 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
       +'<button type="button" onclick="toggleGameStats()">'+IC.stats+' الإحصائيات</button>'
       +'<button type="button" onclick="hhExportGameResults()">'+IC.xl+' تصدير Excel</button>'
       +'<button type="button" onclick="showScreen(\'screen-menu\')">'+IC.home+' الرئيسية</button></div>'
-      +'<div class="foot">المُلهِم التعليمي · almulhimedu.org</div>';
+      +'<div class="foot">المُلهِم التعليمي، almulhimedu.org</div>';
     var box=document.getElementById('rs2');
     if(!box){ box=document.createElement('div'); box.id='rs2'; var first=scr.firstElementChild; if(first) first.insertAdjacentElement('afterend',box); else scr.appendChild(box); }
     box.innerHTML='<div style="display:flex;flex-direction:column;align-items:center">'+hero+'</div>'+podH+restH+stats+btns;

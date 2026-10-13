@@ -235,6 +235,7 @@ P+'.profile-avatar{width:28px !important;height:28px !important;border-radius:6p
 '#gv-ft .gv-ft-b{max-width:1224px;margin:0 auto;padding:14px 28px;display:flex;justify-content:space-between;font-size:12.5px;color:#C9B796;font-weight:600;gap:10px;flex-wrap:wrap;}',
 '@media (max-width:900px){ #gv-ft .gv-ft-g{grid-template-columns:1fr 1fr;gap:20px;padding:0 18px 20px;} #gv-ft .gv-ft-g > div:first-child{grid-column:1 / -1;} #gv-ft .gv-ft-b{padding:14px 18px;} }',
 'body.hh-immersive #gv-sheet{display:none !important;}',
+'html.gv-on body.hh-immersive{--hh-bar:0px;}',
 '@media (min-width:901px){ :root.gv-on.gv-mini{--hh-bar:48px;} html.gv-mini #gv-hd .gv-ut,html.gv-mini #gv-hd .gv-lr{display:none !important;} html.gv-mini #gv-hd .gv-nv .gv-in::before{content:"المُلهم";color:#fff;font-family:Cairo,sans-serif;font-weight:900;font-size:19px;display:flex;align-items:center;padding-left:20px;margin-left:6px;border-left:1px solid rgba(255,255,255,.25);cursor:pointer;} }',
 'html.gv-on body #screen-menu.active,html.gv-on body #screen-about.active{padding-top:calc(var(--hh-bar) - 60px) !important;} html.gv-on body #screen-reviews.active{padding-top:calc(var(--hh-bar) - 36px) !important;}',
 '@media (max-width:900px){  html.gv-on body #screen-mygames.active,html.gv-on body #screen-references.active,html.gv-on body #screen-contact.active{padding-top:calc(var(--hh-bar) - 74px) !important;} }',
