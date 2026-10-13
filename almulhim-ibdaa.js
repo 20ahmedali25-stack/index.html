@@ -988,7 +988,7 @@ function readyList(){
     var oq=qo.filter(function(q){ return /←/.test(String(q.a||'')); }); if(oq.length) L.push({rid:key+'-order',sec:u.k,kind:'order',title:'رتّب أحداث '+u.short,n:oq.length,unit:u,c:'linear-gradient(135deg,#8A6D2E,#5c4816)',ic:'sort',d:oq.map(function(q){ return String(q.q).replace(/[:.]?\s*\(.*$/,'').replace(/\.$/,''); }).join('، ')+'.',cats:[u.open],src:key+'-open'});
     if(qo.length) L.push({rid:key+'-open',sec:u.k,kind:'open',title:u.short+' بأسئلة مقالية',n:qo.length,unit:u,c:'linear-gradient(135deg,#4A0B1E,#2A0810)',ic:'flip',d:'وجه البطاقة السؤال، وظهرها الإجابة النموذجية نقطة نقطة. للشاشة فقط.',cats:[u.open],img:qo.some(function(q){ return q.img; })});
   });
-  (_ib.ready.custom||[]).forEach(function(c){ if((c.grade||'g7t1')!==G) return; L.push({rid:'c:'+c.id,sec:'custom',kind:'custom',title:c.title||'لعبة جاهزة',n:(c.questions||[]).length,c:'linear-gradient(135deg,#5E0E26,#3D0918)',ic:'star',d:c.desc||'لعبة إضافية من إعداد المُلهم.',custom:c}); });
+  (_ib.ready.custom||[]).forEach(function(c){ if(!c.cat&&(c.grade||'g7t1')!==G) return; L.push({rid:'c:'+c.id,sec:'custom',kind:'custom',title:c.title||'لعبة جاهزة',n:(c.questions||[]).length,c:'linear-gradient(135deg,#5E0E26,#3D0918)',ic:'star',d:c.desc||'لعبة إضافية من إعداد المُلهم.',custom:c}); });
   return L;
 }
 function buildReady(rid){
@@ -1392,6 +1392,101 @@ var IB6CSS=[
 '@media (prefers-reduced-motion:reduce){ #hh-ib.ib2 .ib6-tp{transition:none;} }'
 ].join('\n');
 
+/* ═══ zzzzzzco، الجاهزة: تصنيفات يضيفها المدير، مسار مختصر، بطاقات متساوية، والمسودة نقطة ذهبية ═══ */
+var IB7_PAL=['#1F4E79','#2F6A4E','#8A1538','#B8924A','#5A3A8E','#0F6E56','#B5801F'];
+function ib7Cats(){ _ib.ready=_ib.ready||{}; return Array.isArray(_ib.ready.cats)?_ib.ready.cats:[]; }
+function ib7CatGames(id){ return (_ib.ready.custom||[]).filter(function(c){ return c.cat===id; }); }
+function ib7CustomR(c){ return {rid:'c:'+c.id,sec:'custom',kind:'custom',title:c.title||'لعبة جاهزة',n:(c.questions||[]).length,c:'linear-gradient(135deg,#5E0E26,#3D0918)',ic:'star',d:c.desc||'',custom:c}; }
+var _ib5Count0=ib5Count;
+ib5Count=function(){ var n=_ib5Count0(); ib7Cats().forEach(function(k){ n+=ib7CatGames(k.id).length; }); return n; };
+var _ib5Groups0=ib5Groups;
+ib5Groups=function(L){ var g=_ib5Groups0(L); g.custom=g.custom.filter(function(R){ return !(R.custom&&R.custom.cat); }); return g; };
+function ib7Chips(adm){
+  var cats=ib7Cats(); if(!cats.length&&!adm) return '';
+  var on=_ib.rcat||'cur';
+  var h='<nav class="ib7-cats" aria-label="التصنيف"><button type="button" class="'+(on==='cur'?'on':'')+'" style="--c:#1F4E79" onclick="hhIbRCat(\'cur\')"><i></i>المنهج الدراسي<em>'+_ib5Count0()+'</em></button>';
+  cats.forEach(function(k){ h+='<button type="button" class="'+(on===k.id?'on':'')+'" style="--c:'+esc(k.c||'#8A1538')+'" onclick="hhIbRCat(\''+esc(k.id)+'\')"><i></i>'+esc(k.t)+'<em>'+ib7CatGames(k.id).length+'</em></button>'; });
+  if(adm) h+='<button type="button" class="add" onclick="hhIbRCatAdd()">+ تصنيف</button>';
+  return h+'</nav>';
+}
+function ib7Crumb(){
+  if(_ib.pathEdit) return ib5Path()+'<button type="button" class="ib7-chg" onclick="hhIbPathEdit(0)">تم</button>';
+  var G=_ib.grade||'g7t1';
+  return '<div class="ib7-crumb">الإعدادية<span>›</span>الدراسات الاجتماعية<span>›</span>السابع<span>›</span>'+(G==='g7t2'?'الفصل الثاني':'الفصل الأول')+'</div><button type="button" class="ib7-chg" onclick="hhIbPathEdit(1)">تغيير</button>';
+}
+var ADMB=function(){ return '<button type="button" class="ib7-adm" onclick="hhIbReadyNew()">'+ico('plus',14,2.6)+' لعبة جاهزة (للمدير)</button>'; };
+function ib7Custom(R,adm){
+  return '<div class="ib4-c ib6-u" data-k="custom" data-u="custom" data-t="'+esc((R.title+' '+R.d).toLowerCase())+'"><div class="h"><span class="no">'+ico('star',18,2)+'</span><div class="t"><b>'+esc(R.title)+'</b><small>'+(R.n===0?'بلا أسئلة بعد':R.n===1?'سؤال واحد':R.n===2?'سؤالان':ib4Count({kind:'mcq',n:R.n}))+'</small></div></div>'
+    +'<div class="ac">'+ib6Btns(R)+'<button class="ib4-more" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button></div><div class="ib4-menu" hidden>'+ib5Menu(R,adm)+'</div></div>';
+}
+ib5UnitCard=function(gr,adm){
+  var u=gr.u, it=gr.items; _ib.csel=_ib.csel||{}; var R=it.filter(function(r){ return r.rid===_ib.csel[u.k]; })[0]||it[0];
+  var tot=it.reduce(function(a,r){ return a+(r.n||0); },0);
+  var sub=it.length>1?(it.length===2?'لعبتان':it.length+' ألعاب')+'، '+tot+' '+(tot>2&&tot<11?'أسئلة':'سؤالاً'):ib4Count(R);
+  var ty=it.length>1?'<div class="ib6-ty ib7-ty">'+it.map(function(r){ return '<button type="button" class="'+(r===R?'on':'')+(r.draft&&adm?' dr':'')+'" aria-pressed="'+(r===R)+'"'+(r.draft&&adm?' title="مسودة، تظهر لك فقط"':'')+' onclick="hhIbCSel(\''+u.k+'\',\''+r.rid+'\')">'+IB5_SHORT[r.kind]+'<em>'+r.n+'</em></button>'; }).join('')+'</div>':'<div class="ib7-sp"></div>';
+  var txt=(u.short+' '+u.d+' '+it.map(function(r){ return r.title+' '+(IB4_TYPES[r.kind]||''); }).join(' ')).toLowerCase();
+  return '<div class="ib4-c ib6-u" data-k="'+it.map(function(r){ return r.kind; }).join(' ')+'" data-u="'+u.k+'" data-t="'+esc(txt)+'"><div class="h"><span class="no">'+(gr.i+1)+'</span><div class="t"><b>'+esc(u.short)+'</b><small>'+sub+'</small></div></div>'+ty
+    +'<div class="ac">'+ib6Btns(R)+'<button class="ib4-more" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button></div><div class="ib4-menu" hidden>'+ib5Menu(R,adm)+'</div></div>';
+};
+renderReady=function(){
+  var adm=isAdm(), cats=ib7Cats(), on=_ib.rcat||'cur';
+  if(on!=='cur'&&!cats.some(function(k){ return k.id===on; })) on=_ib.rcat='cur';
+  var chips=ib7Chips(adm);
+  if(on!=='cur'){
+    var K=cats.filter(function(k){ return k.id===on; })[0], G=ib7CatGames(on);
+    var bar='<div class="ib7-path"><label class="ib6-q ib7-q">'+ico('search',15)+'<input type="search" placeholder="ابحث في '+esc(K.t)+'" oninput="hhIbRQ(this.value)" aria-label="بحث"></label><span class="ib7-f"></span>'
+      +(adm&&!G.length?'<button type="button" class="ib7-chg" onclick="hhIbRCatDel(\''+esc(on)+'\')">حذف التصنيف</button>':'')+(adm?ADMB():'')+'</div>';
+    if(!G.length) return chips+bar+'<div class="rl-soon">لا ألعاب في هذا التصنيف بعد</div>';
+    return chips+bar+'<div class="ib6-units" id="ib4-grid">'+G.map(function(c){ return ib7Custom(ib7CustomR(c),adm); }).join('')+'</div><div class="rl-soon" id="ib7-none" hidden>لا نتائج</div>';
+  }
+  var L=readyList().filter(function(R){ return !(R.custom&&R.custom.cat); }), GR=ib5Groups(L);
+  var top=chips+'<div class="ib7-path">'+ib7Crumb()+'<span class="ib7-f"></span>'+(adm?ADMB():'')+'</div>';
+  if(!L.length) return top+'<div class="rl-soon">ألعاب هذا الصف قيد الإعداد</div>';
+  _ib.rf={u:'',k:'',q:''};
+  var cards=(GR.comp.length?ib5CompCard(GR.comp,adm):'')+GR.units.map(function(g){ return ib5UnitCard(g,adm); }).join('')+GR.custom.map(function(R){ return ib7Custom(R,adm); }).join('');
+  return top+'<div class="ib6-units" id="ib4-grid">'+cards+'</div>';
+};
+window.hhIbRCat=function(id){ _ib.rcat=id; render(); };
+window.hhIbPathEdit=function(v){ _ib.pathEdit=!!v; render(); };
+window.hhIbRQ=function(q){ q=String(q||'').trim().toLowerCase(); var n=0; document.querySelectorAll('#ib4-grid > .ib6-u').forEach(function(c){ var ok=!q||(c.getAttribute('data-t')||'').indexOf(q)>-1; c.style.display=ok?'':'none'; if(ok) n++; }); var e=document.getElementById('ib7-none'); if(e) e.hidden=n>0; };
+window.hhIbRCatAdd=function(){ if(!isAdm()) return; var t=prompt('اسم التصنيف الجديد'); t=String(t||'').trim().slice(0,40); if(!t) return; var cats=ib7Cats(); if(cats.some(function(k){ return k.t===t; })){ toastX('التصنيف موجود','info'); return; }
+  var k={id:newId('k'),t:t,c:IB7_PAL[(cats.length+1)%IB7_PAL.length]}; _ib.ready.cats=cats.concat([k]); _ib.rcat=k.id; saveReadyDoc(); render(); };
+window.hhIbRCatDel=function(id){ if(!isAdm()) return; if(ib7CatGames(id).length){ toastX('انقل ألعاب التصنيف أو احذفها أولاً','info'); return; } var cats=ib7Cats(), k=cats.filter(function(x){ return x.id===id; })[0]; if(!k||!confirm('حذف تصنيف «'+k.t+'»؟')) return; _ib.ready.cats=cats.filter(function(x){ return x.id!==id; }); _ib.rcat='cur'; saveReadyDoc(); render(); };
+var _readyNew0=window.hhIbReadyNew;
+window.hhIbReadyNew=function(){ if(!isAdm()) return; var n0=(_ib.ready.custom||[]).length; var cat=(_ib.rcat&&_ib.rcat!=='cur')?_ib.rcat:''; if(cat){ var c0=_ib.ready.custom; var push0=c0.push; c0.push=function(c){ c.cat=cat; c0.push=push0; return push0.call(c0,c); }; } _readyNew0(); };
+var IB7CSS=[
+'#hh-ib.ib2 .ib7-cats{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding-bottom:2px;}',
+'#hh-ib.ib2 .ib7-cats::-webkit-scrollbar{display:none;}',
+'#hh-ib.ib2 .ib7-cats button{flex:0 0 auto;height:40px;border:1.5px solid #E7DCC6;background:#fff;border-radius:11px;padding:0 14px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;color:#3D0918;display:flex;align-items:center;gap:7px;cursor:pointer;}',
+'#hh-ib.ib2 .ib7-cats button i{width:10px;height:10px;border-radius:3px;background:var(--c);}',
+'#hh-ib.ib2 .ib7-cats button em{font-style:normal;font-size:12px;font-weight:900;color:#7A6A54;}',
+'#hh-ib.ib2 .ib7-cats button.on{border-color:#8A1538;box-shadow:inset 0 0 0 1px #8A1538;background:#FBF1DA;}',
+'#hh-ib.ib2 .ib7-cats button.add{border-style:dashed;color:#7A6A54;}',
+'#hh-ib.ib2 .ib7-path{display:flex;align-items:center;gap:10px;margin:0 0 16px;flex-wrap:wrap;}',
+'#hh-ib.ib2 .ib7-crumb{display:flex;align-items:center;gap:8px;font-family:Cairo,sans-serif;font-weight:800;font-size:15px;color:#3D0918;flex-wrap:wrap;}',
+'#hh-ib.ib2 .ib7-crumb span{color:#7A6A54;}',
+'#hh-ib.ib2 .ib7-chg{height:34px;border:1px solid #E7DCC6;background:#fff;border-radius:9px;font-family:Cairo,sans-serif;font-weight:800;font-size:13px;color:#8A1538;padding:0 12px;cursor:pointer;}',
+'#hh-ib.ib2 .ib7-f{flex:1;}',
+'#hh-ib.ib2 .ib7-adm{height:36px;border:1px dashed #B8924A;background:transparent;border-radius:9px;font-family:Cairo,sans-serif;font-weight:800;font-size:13px;color:#3D0918;padding:0 12px;display:flex;align-items:center;gap:6px;cursor:pointer;}',
+'#hh-ib.ib2 .ib7-q{min-width:240px;}',
+'#hh-ib.ib2 #ib4-grid > .ib6-u:not(.all){display:grid;grid-template-rows:auto auto 1fr auto;}',
+'#hh-ib.ib2 #ib4-grid > .ib6-u:not(.all) > .ac{align-self:end;}',
+'#hh-ib.ib2 #ib4-grid > .ib6-u:not(.all) > .ib6-ty,#hh-ib.ib2 #ib4-grid > .ib6-u:not(.all) > .ib7-sp{grid-row:2;}',
+'#hh-ib.ib2 #ib4-grid > .ib6-u:not(.all) > .ac{grid-row:4;}',
+'#hh-ib.ib2 .ib7-ty,#hh-ib.ib2 .ib6-u.all .ib6-ty{flex-wrap:nowrap;gap:4px;background:#FAF6EE;border-radius:10px;padding:3px;overflow-x:auto;scrollbar-width:none;}',
+'#hh-ib.ib2 .ib7-ty::-webkit-scrollbar{display:none;}',
+'#hh-ib.ib2 .ib7-ty button,#hh-ib.ib2 .ib6-u.all .ib6-ty button{flex:1 0 auto;border:0;background:none;border-radius:8px;padding:6px 6px;white-space:nowrap;position:relative;color:#7A6A54;}',
+'#hh-ib.ib2 .ib7-ty button em{margin-inline-start:4px;color:#8A1538;}',
+'#hh-ib.ib2 .ib7-ty button.on,#hh-ib.ib2 .ib6-u.all .ib6-ty button.on{background:#fff;color:#3D0918;box-shadow:0 1px 3px rgba(61,9,24,.12);border:0;}',
+'#hh-ib.ib2 .ib7-ty button.dr::after{content:"";position:absolute;top:4px;left:4px;width:6px;height:6px;border-radius:50%;background:#B8924A;}',
+'body.dark-mode #hh-ib.ib2 .ib7-cats button,body.dark-mode #hh-ib.ib2 .ib7-chg{background:#22121A;border-color:#3E2C24;color:#F5E6C4;}',
+'body.dark-mode #hh-ib.ib2 .ib7-cats button.on{background:#3A2A10;border-color:#C9A35A;box-shadow:none;}',
+'body.dark-mode #hh-ib.ib2 .ib7-crumb,body.dark-mode #hh-ib.ib2 .ib7-adm{color:#F5E6C4;}',
+'body.dark-mode #hh-ib.ib2 .ib7-ty,body.dark-mode #hh-ib.ib2 .ib6-u.all .ib6-ty{background:#2A1720;} body.dark-mode #hh-ib.ib2 .ib6-u.all .ib6-ty button.on{background:#22121A;color:#F5E6C4;} body.dark-mode #hh-ib.ib2 .ib7-ty button.on{background:#22121A;color:#F5E6C4;} body.dark-mode #hh-ib.ib2 .ib7-ty button em{color:#E6CE8E;}',
+'body.dark-mode #hh-ib.ib2 .ib7-ty button,body.dark-mode #hh-ib.ib2 .ib6-u.all .ib6-ty button{background:none !important;border:0 !important;color:#B8A68A;} body.dark-mode #hh-ib.ib2 .ib7-ty button.on,body.dark-mode #hh-ib.ib2 .ib6-u.all .ib6-ty button.on{background:#3A2A10 !important;color:#F5E6C4;}',
+'@media (max-width:640px){ #hh-ib.ib2 .ib7-crumb{font-size:12.5px;gap:4px;} #hh-ib.ib2 .ib7-path{gap:8px;} #hh-ib.ib2 .ib7-q{min-width:0;flex:1 1 100%;} #hh-ib.ib2 .ib7-q input{width:100%;} #hh-ib.ib2 .ib7-adm{width:100%;justify-content:center;} }'
+].join('\n');
+IB6CSS+='\n'+IB7CSS;
 window.hhIbOpen=function(v,id){ open(v,id); };
 window.hhIbRefresh=function(){ _ib.loaded=false; if(document.getElementById('hh-ib')) open(_ib.view==='editor'?'mine':_ib.view); };
 window._hhIb=_ib; window._hhIbTemplates=TEMPLATES; window._hhIbGetGame=getGame; window._hhIbReadyList=readyList; window._hhIbBuildReady=buildReady;

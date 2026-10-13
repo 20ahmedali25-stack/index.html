@@ -2064,14 +2064,47 @@ window.hhAdminAddProgram = function(editId){ if(!_hhPgAdmin()) return; hhPgOpen(
     }
     var hx=document.getElementById('hh-pg-counts');
     if(hx){ var a=all.filter(isSoon).length, b=all.filter(isDone).length; hx.innerHTML=(a?'<span class="p2-chip">'+a+' قادم</span>':'')+(b?'<span class="p2-chip">'+b+' منفّذ</span>':'')+(_hhPgAdmin()?'<button class="p2-adm" onclick="hhPgAdmin()">'+I('gear')+' إدارة البرامج</button>':''); }
-    if(!all.length){ root.innerHTML='<div class="p2-main"><div class="p2-empty">لا برامج معلنة حالياً · تابعنا، الجديد قريب.'+(_hhPgAdmin()?'<br><small>(أنت المدير: أضف أول برنامج من زر إدارة البرامج)</small>':'')+'</div>'+side(all)+'</div>'; return; }
+    if(!all.length){ root.innerHTML='<div class="p2-main"><div class="p2-empty">لا برامج معلنة حالياً، تابعنا فالجديد قريب.'+(_hhPgAdmin()?'<br><small>(أنت المدير: أضف أول برنامج من زر إدارة البرامج)</small>':'')+'</div>'+side(all)+'</div>'; return; }
     if(!list.length){ root.innerHTML='<div class="p2-empty" style="margin-top:18px">لا برامج في هذا التصنيف حالياً</div>'; return; }
     var first=list.filter(isSoon)[0]||list[0];
     var rest=list.filter(function(p){ return p!==first; });
     root.innerHTML='<div class="p2-main">'+feat(first)+side(all, first)+'</div>'
       +(rest.length?'<div class="p2-sec"><h2>'+(state.f==='done'?'برامج منفّذة أخرى':'برامج أخرى')+'</h2><small>'+rest.length+'</small></div><div class="pg-grid" id="hh-pg-grid">'+rest.map(hhPgCard).join('')+'</div>':'');
   };
-  window.hhPgFilter=function(f){ state.f=f; hhPgRender(); };
+  window.hhPgFilter=function(f){ state.f=f; hhPgRender(); _hhPgDots(document.getElementById('hh-pg')); };
+  /* بوابة معسكرات المُلهم (الرابط الرسمي للبرامج الحضورية) */
+  var CAMP='https://camp.almulhimedu.org/';
+  function _hhPgPortal(){
+    if(!document.getElementById('hh-pg-portal-css')){ var c=document.createElement('style'); c.id='hh-pg-portal-css'; c.textContent=PORTAL_CSS; document.head.appendChild(c); }
+    var AG=[['المستكشفون','5 إلى 6'],['المبدعون','7 إلى 8'],['المؤثرون','9 إلى 10'],['الواثقون','11 إلى 12'],['المُلهِمون','13 إلى 17']];
+    return '<section class="pgx" aria-label="معسكرات المُلهم"><div class="pgx-t">'
+      +'<span class="pgx-lv">برامج حضورية للأبناء</span><h2>معسكرات المُلهم للقيادة والإلقاء</h2><div class="pgx-tg">نُلهم اليوم ... لنصنع الغد</div>'
+      +'<div class="pgx-ac"><a class="pgx-p" href="'+CAMP+'" target="_blank" rel="noopener">سجّل ابنك<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>'
+      +'<a class="pgx-s" href="'+CAMP+'" target="_blank" rel="noopener">كل البرامج<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg></a></div>'
+      +'<div class="pgx-url">camp.almulhimedu.org</div></div>'
+      +'<div class="pgx-ag"><div class="pgx-cap">الفئات العمرية</div>'+AG.map(function(a){ return '<div><b>'+a[0]+'</b><small>'+a[1]+'</small></div>'; }).join('')+'</div></section>';
+  }
+  var PORTAL_CSS=[
+  '#hh-pg .pgx{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(120deg,#4A0B1E,#7A2340 60%,#8A1538);color:#fff;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;padding:28px;margin:0 0 24px;direction:rtl;font-family:Cairo,sans-serif;}',
+  '#hh-pg .pgx::after{content:"";position:absolute;bottom:-80px;left:-80px;width:280px;height:280px;border-radius:50%;border:1px solid rgba(230,206,142,.25);box-shadow:0 0 0 40px rgba(230,206,142,.05),0 0 0 80px rgba(230,206,142,.04);}',
+  '#hh-pg .pgx-t{position:relative;z-index:1;min-width:0;}',
+  '#hh-pg .pgx-lv{display:inline-flex;align-items:center;font-size:12.5px;font-weight:900;background:rgba(255,255,255,.12);border:1px solid rgba(230,206,142,.35);border-radius:20px;padding:3px 12px;color:#E6CE8E;}',
+  '#hh-pg .pgx h2{margin:12px 0 6px;font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.3;color:#fff;}',
+  '#hh-pg .pgx-tg{font-family:"Reem Kufi",Cairo,sans-serif;font-weight:600;font-size:19px;color:#E6CE8E;}',
+  '#hh-pg .pgx-ac{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}',
+  '#hh-pg .pgx-ac a{height:48px;padding:0 22px;border-radius:12px;font-weight:900;font-size:15.5px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;box-sizing:border-box;}',
+  '#hh-pg .pgx-p{background:#fff;color:#5E0E26;} #hh-pg .pgx-p:hover{background:#F5E6C4;}',
+  '#hh-pg .pgx-s{border:1px solid rgba(255,255,255,.4);color:#fff;font-size:14.5px !important;} #hh-pg .pgx-s:hover{background:rgba(255,255,255,.08);}',
+  '#hh-pg .pgx-ac svg{width:16px;height:16px;display:block;}',
+  '#hh-pg .pgx-url{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.7);margin-top:12px;direction:ltr;text-align:right;}',
+  '#hh-pg .pgx-ag{position:relative;z-index:1;align-self:center;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}',
+  '#hh-pg .pgx-ag > div{background:rgba(255,255,255,.08);border:1px solid rgba(230,206,142,.25);border-radius:12px;padding:12px 4px;text-align:center;}',
+  '#hh-pg .pgx-ag b{display:block;font-size:13.5px;font-weight:900;color:#fff;} #hh-pg .pgx-ag small{display:block;font-size:12px;font-weight:700;color:#E6CE8E;}',
+  '#hh-pg .pgx-ag > .pgx-cap{grid-column:1 / -1;font-size:12.5px;font-weight:800;color:#E6CE8E;text-align:start;background:none;border:0;padding:0;}',
+  '@media (max-width:900px){ #hh-pg .pgx{grid-template-columns:1fr;padding:22px;} #hh-pg .pgx-ag{gap:6px;grid-template-columns:repeat(6,minmax(0,1fr));} #hh-pg .pgx-ag > div{grid-column:span 2;} #hh-pg .pgx-ag > div:nth-child(5),#hh-pg .pgx-ag > div:nth-child(6){grid-column:span 3;} #hh-pg .pgx-ag > .pgx-cap{grid-column:1 / -1;} #hh-pg .pgx-ag b{font-size:13px;} #hh-pg .pgx-ag small{font-size:11.5px;} #hh-pg .pgx-ac a{flex:1;justify-content:center;} }'
+  ].join('\n');
+  function _hhPgDots(root){ if(!root) return; var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null), n; while((n=w.nextNode())){ if(n.nodeValue.indexOf('·')>-1) n.nodeValue=n.nodeValue.replace(/\s*·\s*/g,'، ').replace(/^،\s*/,''); } }
+  window._hhPgDots=_hhPgDots;
   window.hhPgOpen=async function(){
     hhPgStyle();
     try{ document.body.classList.remove('hh-immersive'); }catch(e){}
@@ -2080,13 +2113,14 @@ window.hhAdminAddProgram = function(editId){ if(!_hhPgAdmin()) return; hhPgOpen(
     var ov=document.createElement('div'); ov.id='hh-pg'; ov.className='pg2';
     ov.innerHTML='<div class="pg-wrap">'
       +'<div class="p2-hero"><span class="p2-hi">'+BIG(AWARD)+'</span><div style="position:relative;z-index:1"><h1>برامجنا وورشنا التربوية</h1><p>برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر</p></div><div class="p2-hx" id="hh-pg-counts"></div></div>'
+      +_hhPgPortal()
       +'<div class="p2-filters" id="hh-pg-filters"></div>'
       +'<div id="hh-pg-body"><div class="p2-empty" style="margin-top:18px">جارٍ تحميل البرامج…</div></div>'
       +'</div>';
     document.body.appendChild(ov);
     hhNavMark('prog');
     await hhPgLoad(true);
-    hhPgRender();
+    hhPgRender(); _hhPgDots(document.getElementById('hh-pg'));
   };
   window.hhPgClose=function(){ var e=document.getElementById('hh-pg'); if(e) e.remove(); try{ document.body.classList.remove('hh-immersive'); }catch(e){} hhNavMark(null); };
   // تمييز زر الشريط السفلي لما هو مفتوح فوق الشاشة

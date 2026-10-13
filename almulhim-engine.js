@@ -5189,11 +5189,11 @@ function updateBoardUI(){
     tb.innerHTML=
       '<div style="height:3px;background:rgba(255,255,255,.25);width:100%;"></div>'+
       '<div style="display:flex;align-items:stretch;flex:1;">'+
-        '<div style="flex:1;padding:5px 12px;border-left:1px solid rgba(255,255,255,.15);display:flex;flex-direction:column;justify-content:center;gap:2px;background:rgba(255,255,255,.06);">'+
+        '<div style="flex:1.7;min-width:0;padding:5px 12px;border-left:1px solid rgba(255,255,255,.15);display:flex;flex-direction:column;justify-content:center;gap:2px;background:rgba(255,255,255,.06);">'+
           '<span style="font-size:.56rem;color:rgba(255,255,255,.45);font-family:Cairo,sans-serif;letter-spacing:.8px;">اسم اللعبة</span>'+
-          '<span style="font-size:.84rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">'+gameName+'</span>'+
+          '<span title="'+gameName+'" style="display:block;font-size:.84rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">'+gameName+'</span>'+
         '</div>'+
-        '<div onclick="hhSwitchTurn()" title="انقر لتبديل الدور (للحكم)" style="flex:1;padding:5px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;cursor:pointer;">'+
+        '<div onclick="hhSwitchTurn()" title="انقر لتبديل الدور (للحكم)" style="flex:1;min-width:0;padding:5px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;cursor:pointer;">'+
           '<span style="font-size:.56rem;color:rgba(255,255,255,.45);font-family:Cairo,sans-serif;letter-spacing:.8px;">دور <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#D4BC85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M8 3L4 7l4 4"/><path d="M4 7h16"/><path d="M16 21l4-4-4-4"/><path d="M20 17H4"/></svg></span>'+
           '<span style="font-size:.84rem;font-weight:900;color:#fff;font-family:Cairo,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;">'+name+'</span>'+
         '</div>'+

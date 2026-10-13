@@ -10177,3 +10177,7 @@ body.hh-immersive #screen-board{ padding-top:0 !important; }
 /* ادرس مع مُلهِم */
 .hh-mulhim-cta:hover{transform:translateY(-2px);transition:transform .15s;}
 .hh-mlm-q:hover{background:#8FD0C9 !important;color:#0d2436 !important;}
+
+/* zzzzzzco: اسم اللعبة في شارة الدور يظهر كاملاً قدر المساحة */
+#turn-badge{max-width:min(420px,calc(100vw - 150px));}
+#turn-badge > div:last-child{min-width:0;}
