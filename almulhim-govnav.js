@@ -261,14 +261,14 @@ var IC={
 };
 /* كل صفحة: الحاوية، العنوان، الوصف، المسار، الأيقونة، العناصر التي تُخفى، والتبويبات والأزرار */
 var PAGES=[
-  {id:'screen-toolbox',scr:1,ic:'tool',bc:'المحبرة',t:'محبرة المعلم',s:'أدوات احترافية تختصر وقتك، وتكبّر أثرك',hide:['.tbx-hero'],meta:'.tb2-chips'},
+  {id:'screen-toolbox',scr:1,ic:'tool',bc:'المحبرة',t:'أدوات المعلم',s:'أدوات احترافية تختصر وقتك، وتكبّر أثرك',hide:['.tbx-hero'],meta:'.tb2-chips'},
   {id:'screen-lb',scr:1,ic:'lb',bc:'المتصدرون',t:'المتصدرون',s:'ترتيب المشاركين في مسابقات المنصة، يتحدّث بعد كل لعبة',tabs:'[id^="lb-tab-"]',hideTabs:1},
   {id:'screen-sponsors',scr:1,ic:'hand',bc:'الداعمون › الرعاة والشركاء',t:'الرعاة والشركاء',s:'الجهات الراعية للمنصة وبرامجها، والجهات المتعاونة معنا'},
   {id:'screen-influencers',scr:1,ic:'star',bc:'الداعمون › الشخصيات المؤثرة',t:'الشخصيات المؤثرة',s:'الملهمون، الأيادي البيضاء التي أضاءت طريقنا',hideFirst:1},
   {id:'screen-story',scr:1,ic:'book',bc:'عن المنصة › قصتنا',t:'قصتنا',s:'كيف بدأت فكرة المُلهم، ولماذا'},
-  {id:'hh-ib',ic:'star',icFrom:'.ib2-hi',bc:'الإبداع',t:'الإبداع، استوديو الألعاب التعليمية',s:'أنشئ لعبتك أو اختر لعبة جاهزة، وشغّلها على أجهزة الطلاب أو اعرضها على شاشة الصف',hide:['.ib2-hero'],act:'.ib2-hx button',hideWhen:'.e2-tb',tabs:'.ib2-seg > button',hideTabs:1},
-  {id:'hh-mh',ic:'tool',bc:'المحبرة',t:'المحبرة، السلوك والتقويم',s:'سجّل ما يحدث في الحصة، وتابع كل طالب، واطبع تقاريرك جاهزة',meta:'.mh-cls',tabs:'#mh-tabs > button',hideTabs:1},
-  {id:'hh-pg',ic:'award',icFrom:'.p2-hi',bc:'البرامج',t:'برامجنا وورشنا التربوية',s:'برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر',hide:['.p2-hero'],meta:'#hh-pg-counts'},
+  {id:'hh-ib',ic:'star',icFrom:'.ib2-hi',bc:'الإبداع',t:'الإبداع',s:'أنشئ لعبتك أو اختر لعبة جاهزة، وشغّلها على أجهزة الطلاب أو اعرضها على شاشة الصف',hide:['.ib2-hero'],act:'.ib2-hx button',actT:'لعبة جديدة',hideWhen:'.e2-tb',tabs:'.ib2-seg > button',hideTabs:1},
+  {id:'hh-mh',ic:'tool',bc:'المحبرة',t:'المحبرة',s:'سجّل ما يحدث في الحصة، وتابع كل طالب، واطبع تقاريرك جاهزة',meta:'.mh-cls',tabs:'#mh-tabs > button',hideTabs:1},
+  {id:'hh-pg',ic:'award',icFrom:'.p2-hi',bc:'البرامج',t:'البرامج',s:'برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر',hide:['.p2-hero'],meta:'#hh-pg-counts'},
   {id:'hh-sch-wiz',ic:'school',icFrom:'.sp2-hi',bc:'المدرسة',t:'المدرسة',s:'اختر مسارك مرة واحدة، ونحفظه لك في كل زيارة',hide:['.sp2-hero']},
   {id:'hh-school-hub',ic:'school',bc:'المدرسة',t:'المدرسة',s:'مسارك الدراسي وبوابات الإتقان',hide:['.sh2-hero','.sp2-hero']}
 ];
@@ -287,7 +287,7 @@ function apply1(P){
     band=document.createElement('div'); band.className='gvh';
     var ic=IC[P.ic]||IC.star;
     if(P.icFrom){ var src=host.querySelector(P.icFrom); if(src&&src.querySelector('svg')) ic=src.querySelector('svg').outerHTML; }
-    band.innerHTML='<div class="gvh-in"><span class="gvh-md">'+ic+'</span><div class="gvh-tx"><div class="gvh-bc"><button type="button" onclick="hhGvGo(\'home\')">الرئيسية</button> › '+esc(P.bc)+'</div><h1>'+esc(P.t)+'</h1><p>'+esc(P.s)+'</p></div><div class="gvh-meta"></div></div><div class="gvh-tabs"></div>';
+    band.innerHTML='<div class="gvh-in"><span class="gvh-md">'+ic+'</span><div class="gvh-tx"><div class="gvh-bc"><button type="button" onclick="hhGvGo(\'home\')">الرئيسية</button> › '+esc(P.bc)+'</div><h1>'+esc(P.t)+'</h1></div><div class="gvh-meta"></div></div><div class="gvh-tabs"></div>';
     var tb2=host.querySelector(':scope > .top-bar');
     if(tb2&&tb2.nextSibling) host.insertBefore(band,tb2.nextSibling); else host.insertBefore(band,host.firstChild);
     var nx=band.nextElementSibling; if(nx) nx.classList.add('gvs-c');
@@ -299,7 +299,7 @@ function apply1(P){
   if(P.meta){ var m=host.querySelector(P.meta); if(m&&m.parentNode!==meta){ meta.insertBefore(m,meta.firstChild); } }
   if(P.act){ var a=host.querySelector(P.act); var pb=meta.querySelector('.gvh-act');
     if(a&&!pb){ pb=document.createElement('button'); pb.type='button'; pb.className='gvh-act'; meta.appendChild(pb); }
-    if(a&&pb){ pb.textContent=cleanTxt(a)||'ابدأ'; pb.onclick=function(){ a.click(); }; } }
+    if(a&&pb){ pb.textContent=P.actT||cleanTxt(a)||'ابدأ'; pb.onclick=function(){ a.click(); }; } }
   // التبويبات المتصلة بالرأس
   var tw=band.querySelector('.gvh-tabs');
   if(P.tabs){ var src2=[].slice.call(host.querySelectorAll(P.tabs)).filter(function(b){ return !band.contains(b); });
@@ -310,7 +310,9 @@ function apply1(P){
     else { tw.innerHTML=''; tw.dataset.sig=''; band.classList.remove('has-tabs'); } }
 }
 var busy=false;
-function applyAll(){ if(busy) return; busy=true; try{ PAGES.forEach(function(P){ try{ apply1(P); }catch(e){ console.warn('shell',P.id,e); } }); }finally{ busy=false; } }
+function applyAll(){ if(busy) return; busy=true; try{ PAGES.forEach(function(P){ try{ apply1(P); }catch(e){ console.warn('shell',P.id,e); } }); fillEmpty(); }finally{ busy=false; } }
+/* صفحات تُبنى محتواها عند الفتح: نضمن بناءها مهما كان طريق الوصول إليها */
+function fillEmpty(){ var sc=document.getElementById('screen-sponsors'), sp=document.getElementById('sp-page'); if(sc&&sp&&sc.classList.contains('active')&&!sp.children.length&&typeof window.renderSponsorsPage==='function'){ try{ window.renderSponsorsPage(); }catch(e){ console.warn('sponsors',e); } } }
 window.hhShellApply=applyAll;
 var mo=new MutationObserver(function(){ if(!busy){ clearTimeout(mo._t); mo._t=setTimeout(applyAll,40); } });
 function boot(){ applyAll(); try{ mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }catch(e){} }

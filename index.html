@@ -8399,7 +8399,7 @@ body.dark-mode .sp-tagline{ color:#D4BC85; }
 const HH_SPONSORS_DEFAULT = {
   hero: {
     title: 'شركاؤنا في صناعة <span class="gold">الأثر</span>',
-    subtitle: 'تربية الجيل ليست عملاً فردياً · هي شراكة بين كل من يؤمن بأن التعليم رسالة' },
+    subtitle: 'تربية الجيل ليست عملاً فردياً، هي شراكة بين كل من يؤمن بأن التعليم رسالة' },
   tiers: [
     {
       id: 'platinum',
@@ -8407,7 +8407,7 @@ const HH_SPONSORS_DEFAULT = {
       name: 'شريك مميز',
       tag: ' استراتيجي',
       tagline: 'شراكة استراتيجية تُخلّد في رحلة المنصة',
-      pitch: 'مقعد حصري · مكان واحد فقط',
+      pitch: 'مقعد حصري، مكان واحد فقط',
       perks: [
         'فئة كاملة باسم شريكك على المنصة يلعبها كل المعلمين والطلاب',
         'حضور بصري دائم في الواجهة الرئيسية وشاشة التعريف بالمنصة',
@@ -8441,14 +8441,14 @@ const HH_SPONSORS_DEFAULT = {
       perks: [
         'اسمك ضمن قائمة أصدقاء المنصة بتقدير دائم',
         'دعوة لحضور لقاءات المعلمين والورش التطويرية',
-        'مساهمة بمحتوى أو خبرة أو وقت · كل دعم يصنع فرقاً' ],
+        'مساهمة بمحتوى أو خبرة أو وقت، كل دعم يصنع فرقاً' ],
       ctaText: 'كن صديقاً للمنصة',
       ctaLink: 'https://wa.me/97471776644',
       visible: true,
       partners: [
-        { name: 'مركز أجيال التربوي', desc: 'شريك تربوي · له 6 فئات على المنصة', color: '#7a1f2b', instagram: 'ajialqtr', website: 'https://linktr.ee/ajialcenter', accountEmail: '', hidden: false, logo: _HH_IMG_QANWAN },
-        { name: 'بيرف آب', desc: 'شريك صديق · له 6 فئات على المنصة', color: '#1b3a5c', instagram: 'perfup_qa', website: 'https://perf-up.com', accountEmail: '', hidden: false, logo: _HH_IMG_PERFUP },
-        { name: 'طموح للتنمية المجتمعية', desc: 'شريك صديق · له 6 فئات على المنصة', color: '#8A1538', instagram: 'tomohqatar', website: 'https://tomoh.org/', accountEmail: '', hidden: false, logo: _HH_IMG_TOMOH }
+        { name: 'مركز أجيال التربوي', desc: 'شريك تربوي، له 6 فئات على المنصة', color: '#7a1f2b', instagram: 'ajialqtr', website: 'https://linktr.ee/ajialcenter', accountEmail: '', hidden: false, logo: _HH_IMG_QANWAN },
+        { name: 'بيرف آب', desc: 'شريك صديق، له 6 فئات على المنصة', color: '#1b3a5c', instagram: 'perfup_qa', website: 'https://perf-up.com', accountEmail: '', hidden: false, logo: _HH_IMG_PERFUP },
+        { name: 'طموح للتنمية المجتمعية', desc: 'شريك صديق، له 6 فئات على المنصة', color: '#8A1538', instagram: 'tomohqatar', website: 'https://tomoh.org/', accountEmail: '', hidden: false, logo: _HH_IMG_TOMOH }
       ]
     }
   ]
@@ -8630,7 +8630,7 @@ window.renderSponsorsPage = function(){
     html += '</div>';
   });
 
-  root.innerHTML = html;
+  root.innerHTML = html.replace(/ · /g,'، ');
 };
 
 window.hhSelectSponsorTier = function(tierId){
@@ -14742,6 +14742,7 @@ window.hhBuildOverview=function(){ return hhAd2Home(); };
 
 </script>
 <script src="almulhim-mihbara.js" charset="utf-8"></script>
+<script src="almulhim-sponsors.js" charset="utf-8"></script>
 <script src="almulhim-govnav.js" charset="utf-8"></script>
 </body>
 </html>
