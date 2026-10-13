@@ -238,7 +238,8 @@ P+'.profile-avatar{width:28px !important;height:28px !important;border-radius:6p
 '@media (min-width:901px){ :root.gv-on.gv-mini{--hh-bar:48px;} html.gv-mini #gv-hd .gv-ut,html.gv-mini #gv-hd .gv-lr{display:none !important;} html.gv-mini #gv-hd .gv-nv .gv-in::before{content:"المُلهم";color:#fff;font-family:Cairo,sans-serif;font-weight:900;font-size:19px;display:flex;align-items:center;padding-left:20px;margin-left:6px;border-left:1px solid rgba(255,255,255,.25);cursor:pointer;} }',
 'html.gv-on body #screen-menu.active,html.gv-on body #screen-about.active{padding-top:calc(var(--hh-bar) - 60px) !important;} html.gv-on body #screen-reviews.active{padding-top:calc(var(--hh-bar) - 36px) !important;}',
 '@media (max-width:900px){  html.gv-on body #screen-mygames.active,html.gv-on body #screen-references.active,html.gv-on body #screen-contact.active{padding-top:calc(var(--hh-bar) - 74px) !important;} }',
-'html.gv-on body .screen.active > .top-bar{display:none !important;}',
+'html.gv-on body .screen.active > .top-bar:not(.gv-keep){display:none !important;}',
+'html.gv-on body .screen.active > .top-bar.gv-keep:not(#board-top-bar){top:var(--hh-bar) !important;z-index:150 !important;}',
 'html.gv-on body.hh-has-bottom-nav .screen.active{padding-bottom:0 !important;}',
 'html.gv-on body.dark-mode #main-nav,body.dark-mode #gv-hd .gv-lr{background:#1E0D14 !important;border-color:#3A2A20 !important;} body.dark-mode #gv-hd .gv-lgt b{color:#F5E6C4;} body.dark-mode #gv-hd .gv-org{color:#E6CE8E;} body.dark-mode #gv-sheet{background:#1E0D14;} body.dark-mode #gv-sheet button{color:#F5E6C4;border-color:#3A2A20;} body.dark-mode #gv-sheet h6{background:#2A1219;}'
 ].join('\n');
@@ -312,7 +313,9 @@ function apply1(P){
 var busy=false;
 function applyAll(){ if(busy) return; busy=true; try{ PAGES.forEach(function(P){ try{ apply1(P); }catch(e){ console.warn('shell',P.id,e); } }); fillEmpty(); }finally{ busy=false; } }
 /* صفحات تُبنى محتواها عند الفتح: نضمن بناءها مهما كان طريق الوصول إليها */
-function fillEmpty(){ var sc=document.getElementById('screen-sponsors'), sp=document.getElementById('sp-page'); if(sc&&sp&&sc.classList.contains('active')&&!sp.children.length&&typeof window.renderSponsorsPage==='function'){ try{ window.renderSponsorsPage(); }catch(e){ console.warn('sponsors',e); } } }
+/* شرائط علوية فيها أدوات عمل (إنهاء اللعبة، تعديل الشعبة…) تبقى ظاهرة */
+function keepBars(){ document.querySelectorAll('.screen > .top-bar:not(.gv-keep)').forEach(function(tb){ var k=tb.id==='board-top-bar'||Array.prototype.some.call(tb.querySelectorAll('[onclick]'),function(x){ return !/^\s*(goBack|showScreen\('screen-menu'\)|hhGoHome|hhNavigate\('screen-menu'\))/.test(x.getAttribute('onclick')||''); }); if(k) tb.classList.add('gv-keep'); }); }
+function fillEmpty(){ keepBars(); var sc=document.getElementById('screen-sponsors'), sp=document.getElementById('sp-page'); if(sc&&sp&&sc.classList.contains('active')&&!sp.children.length&&typeof window.renderSponsorsPage==='function'){ try{ window.renderSponsorsPage(); }catch(e){ console.warn('sponsors',e); } } }
 window.hhShellApply=applyAll;
 var mo=new MutationObserver(function(){ if(!busy){ clearTimeout(mo._t); mo._t=setTimeout(applyAll,40); } });
 function boot(){ applyAll(); try{ mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }catch(e){} }
