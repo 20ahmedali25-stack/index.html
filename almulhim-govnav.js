@@ -52,7 +52,7 @@ function build(){
   hd.innerHTML=
     '<div class="gv-ut"><div class="gv-in"><span class="gv-ut-t">منصة تعليمية قطرية للمعلمين والطلاب</span><span class="gv-sp"></span><span class="gv-ut-l" id="gv-ut-l"></span></div></div>'
    +'<div class="gv-lr"><div class="gv-in"><button type="button" class="gv-lg" onclick="hhGvGo(\'home\')" aria-label="الرئيسية"><span class="gv-lgi" id="gv-lgi">'+logo()+'</span><span class="gv-lgt"><b>المُلهم</b><small>حيث يبدأ الإلهام</small></span></button>'
-   +'<span class="gv-vl"></span><span class="gv-org">منصة الألعاب التعليمية<br>والمتابعة الصفية</span><span class="gv-sp"></span><span class="gv-srch" id="gv-srch"></span><span class="gv-acc" id="gv-acc"></span>'
+   +'<span class="gv-vl"></span><span class="gv-org">نُلهم اليوم... لنصنع الغد</span><span class="gv-sp"></span><span class="gv-srch" id="gv-srch"></span><span class="gv-acc" id="gv-acc"></span>'
    +'<button type="button" class="gv-play gv-m" onclick="hhGvPlay()">العب الآن</button><button type="button" class="gv-mbtn gv-m" id="gv-mbtn" onclick="hhGvSheet()" aria-expanded="false">القائمة</button></div></div>'
    +'<div class="gv-nv"><div class="gv-in" id="gv-nv-in">'
    +SEC.map(function(s){ return '<button type="button" class="gv-a" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'</button>'; }).join('')
@@ -176,7 +176,7 @@ P+'#nav-wn-badge{position:static !important;}',
 '#gv-hd .gv-lg{all:unset;display:flex;align-items:center;gap:10px;cursor:pointer;}',
 '#gv-hd .gv-lgi{width:44px;height:44px;display:grid;place-items:center;} #gv-hd .gv-lgi img{max-width:100%;max-height:100%;object-fit:contain;} #gv-hd .gv-lm{width:44px;height:44px;border-radius:10px;background:#5E0E26;color:#E6CE8E;display:grid;place-items:center;font-weight:900;font-size:22px;}',
 '#gv-hd .gv-lgt b{display:block;font-size:22px;font-weight:900;color:#5E0E26;line-height:1.15;} #gv-hd .gv-lgt small{font-size:11.5px;font-weight:700;color:#8A6D2E;}',
-'#gv-hd .gv-vl{width:1px;height:36px;background:#E7DAC0;} #gv-hd .gv-org{font-size:12px;font-weight:700;color:#7A6A54;line-height:1.5;}',
+'#gv-hd .gv-vl{width:1px;height:36px;background:#E7DAC0;} #gv-hd .gv-org{font-family:\"Reem Kufi\",Cairo,sans-serif;font-size:21px;font-weight:700;color:#8A1538;line-height:1.3;white-space:nowrap;}',
 '#gv-hd .gv-srch{display:flex;}',
 P+'.nav-search-container{display:block !important;width:300px !important;max-width:300px !important;flex:0 0 300px !important;position:relative;}',
 P+'.nav-search-wrap{height:40px !important;border-radius:8px !important;background:#fff !important;border:1.5px solid #E7DAC0 !important;box-shadow:none !important;}',
@@ -240,7 +240,7 @@ P+'.profile-avatar{width:28px !important;height:28px !important;border-radius:6p
 '@media (max-width:900px){  html.gv-on body #screen-mygames.active,html.gv-on body #screen-references.active,html.gv-on body #screen-contact.active{padding-top:calc(var(--hh-bar) - 74px) !important;} }',
 'html.gv-on body .screen.active > .top-bar{display:none !important;}',
 'html.gv-on body.hh-has-bottom-nav .screen.active{padding-bottom:0 !important;}',
-'html.gv-on body.dark-mode #main-nav,body.dark-mode #gv-hd .gv-lr{background:#1E0D14 !important;border-color:#3A2A20 !important;} body.dark-mode #gv-hd .gv-lgt b{color:#F5E6C4;} body.dark-mode #gv-hd .gv-org{color:#C9B796;} body.dark-mode #gv-sheet{background:#1E0D14;} body.dark-mode #gv-sheet button{color:#F5E6C4;border-color:#3A2A20;} body.dark-mode #gv-sheet h6{background:#2A1219;}'
+'html.gv-on body.dark-mode #main-nav,body.dark-mode #gv-hd .gv-lr{background:#1E0D14 !important;border-color:#3A2A20 !important;} body.dark-mode #gv-hd .gv-lgt b{color:#F5E6C4;} body.dark-mode #gv-hd .gv-org{color:#E6CE8E;} body.dark-mode #gv-sheet{background:#1E0D14;} body.dark-mode #gv-sheet button{color:#F5E6C4;border-color:#3A2A20;} body.dark-mode #gv-sheet h6{background:#2A1219;}'
 ].join('\n');
 function add(){ if(document.getElementById('gv-style')) return; var s=document.createElement('style'); s.id='gv-style'; s.textContent=css; document.head.appendChild(s); }
 add();
