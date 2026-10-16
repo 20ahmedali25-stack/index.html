@@ -14624,13 +14624,13 @@ function header(tab){
   if(tab==='home'){
     var now=new Date(), h=now.getHours(), g=h<12?'صباح الخير':(h<17?'طاب يومك':'مساء الخير');
     var nm=''; try{ nm=(currentUser&&(currentUser.displayName||'').split(' ')[0])||''; }catch(e){}
-    var d=''; try{ d=now.toLocaleDateString('ar-QA-u-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); var hj=now.toLocaleDateString('ar-SA-u-ca-islamic-nu-latn',{day:'numeric',month:'long',year:'numeric'}); d+=' · '+hj.replace(/\s*هـ$/,'')+' هـ'; }catch(e){}
-    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>عام · نظرة عامة</b></div><h1>'+g+(nm?'، '+esc(nm):'')+'</h1><p>'+esc(d)+'</p></div><div class="ad2-ac"><button type="button" class="ad2-b" onclick="hhAd2Home(true)">'+SV(P.refresh)+' تحديث</button><button type="button" class="ad2-b ad2-b--p" onclick="adminTab(\'questions\')">'+SV(P.plus)+' سؤال جديد</button></div>';
+    var d=''; try{ d=now.toLocaleDateString('ar-QA-u-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); var hj=now.toLocaleDateString('ar-SA-u-ca-islamic-nu-latn',{day:'numeric',month:'long',year:'numeric'}); d+='، '+hj.replace(/\s*هـ$/,'')+' هـ'; }catch(e){}
+    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>عام، نظرة عامة</b></div><h1>'+g+(nm?'، '+esc(nm):'')+'</h1><p>'+esc(d)+'</p></div><div class="ad2-ac"><button type="button" class="ad2-b" onclick="hhAd2Home(true)">'+SV(P.refresh)+' تحديث</button><button type="button" class="ad2-b ad2-b--p" onclick="adminTab(\'questions\')">'+SV(P.plus)+' سؤال جديد</button></div>';
   } else {
     var sub=m[2]; var c=counts();
     if(tab==='questions') sub=fmt(c.qs)+' سؤالاً في '+c.cats+' فئة';
     if(tab==='categories') sub=c.cats+' فئة · '+m[2];
-    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>'+esc(m[0]?m[0]+' · '+m[1]:m[1])+'</b></div><h1>'+esc(m[1])+'</h1>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</div>';
+    ph.innerHTML=mob+'<div><div class="ad2-cr">لوحة التحكم › <b>'+esc(m[0]?m[0]+'، '+m[1]:m[1])+'</b></div><h1>'+esc(m[1])+'</h1>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</div>';
   }
 }
 
@@ -14663,7 +14663,7 @@ window.hhAd2Home=async function(force){
     (d&&d.audit||[]).forEach(function(a){ if(!a.at) return; var df=Math.floor((now-a.at)/864e5); if(df>=0&&df<7) B[6-df]++; });
     var mx=Math.max.apply(null,B), any=mx>0;
     var bars=B.map(function(v,i){ return '<div class="ad2-bc"><span class="ad2-bv">'+(any?v:'')+'</span><span class="ad2-bar'+(v?' on':'')+'" style="height:'+(any?Math.max(4,Math.round(v/mx*100)):4)+'%"></span></div>'; }).join('');
-    var acts=(d&&d.audit||[]).slice(0,5).map(function(a){ return '<div class="ad2-log"><span class="ad2-dot"></span><div><b>'+esc(a.detail||a.action||'')+'</b><small>'+esc(a.by||'')+(a.by?' · ':'')+rel(a.at)+'</small></div></div>'; }).join('');
+    var acts=(d&&d.audit||[]).slice(0,5).map(function(a){ return '<div class="ad2-log"><span class="ad2-dot"></span><div><b>'+esc(a.detail||a.action||'')+'</b><small>'+esc(a.by||'')+(a.by?'، ':'')+rel(a.at)+'</small></div></div>'; }).join('');
     var QA=[['plus','سؤال جديد',"adminTab('questions')"],['grid','فئة جديدة',"(typeof hhOpenNewCategoryModal==='function')?hhOpenNewCategoryModal():adminTab('categories')"],['mega','إعلان جديد',"adminTab('announcements')"],['save','نسخة احتياطية',"(typeof exportBackup==='function')?exportBackup():adminTab('backup')"],['users','المستخدمون',"adminTab('users')"],['shield','الصلاحيات',"adminTab('permissions')"],['flag','البلاغات',"adminTab('reports')"],['trophy','المسابقات',"adminTab('competitions')"]];
     box.innerHTML=
       '<div class="ad2-kp">'
@@ -14673,7 +14673,7 @@ window.hhAd2Home=async function(force){
       + kpi('#C0392B','flag','بلاغات مفتوحة', fmt(c.rep), c.rep?'تحتاج متابعتك':'لا شيء يحتاج تدخلك', c.rep?'w':'u','reports')
       + '</div>'
       + '<div class="ad2-row ad2-r21">'
-      +   '<div class="ad2-cd"><h3>'+SV(P.chart)+' النشاط الأسبوعي <em>من سجل المراجعة · آخر 7 أيام</em></h3><div class="ad2-bars">'+bars+(any?'':'<div class="ad2-emp">'+SV(P.chart,26)+'<span>لا نشاط مسجّل هذا الأسبوع · يظهر هنا عند أول تعديل</span></div>')+'</div><div class="ad2-bx">'+L.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>'
+      +   '<div class="ad2-cd"><h3>'+SV(P.chart)+' النشاط الأسبوعي <em>من سجل المراجعة، آخر 7 أيام</em></h3><div class="ad2-bars">'+bars+(any?'':'<div class="ad2-emp">'+SV(P.chart,26)+'<span>لا نشاط مسجّل هذا الأسبوع، يظهر هنا عند أول تعديل</span></div>')+'</div><div class="ad2-bx">'+L.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>'
       +   '<div class="ad2-cd"><h3>'+SV(P.alert)+' تحتاج انتباهك</h3>'
       +     task('#8A6D2E','check','أسئلة بانتظار المراجعة', c.pending?'ابدأ من الفئات الأكثر استخداماً':'كل الأسئلة مُراجَعة', fmt(c.pending), "adminTab('review')")
       +     task('#7A1636','badge','طلبات اعتماد معلمين', d&&d.ok.treq?(d.treq?'بانتظار قرارك':'لا طلبات معلقة'):'افتح القسم للتحقق', d&&d.ok.treq?fmt(d.treq):'—', "adminTab('teachers')")
@@ -14744,6 +14744,7 @@ window.hhBuildOverview=function(){ return hhAd2Home(); };
 <script src="almulhim-setupx.js" charset="utf-8"></script>
 <script src="almulhim-hub8.js" charset="utf-8"></script>
 <script src="almulhim-tools8.js" charset="utf-8"></script>
+<script src="almulhim-admin8.js" charset="utf-8"></script>
 <script src="almulhim-govnav.js" charset="utf-8"></script>
 <script>
 /* zzzzzzcp: فئتا «خرائط الدول» و«أساطير الخرائط» (2.6 ميغابايت صور) تُحمَّلان بعد ظهور الصفحة لا قبلها */

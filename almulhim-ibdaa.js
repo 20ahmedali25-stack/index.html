@@ -1518,6 +1518,7 @@ var RD_SHAPES=[
   {k:'ordl',n:'رتّب وصنّف',ic:'sort',c:'#1D5C99',m:'live'}
 ];
 var _rd={dlg:null,saveT:null};
+window._hhIbUnits=UNITS;
 function rdLS(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
 (function(){ var g=rdLS('hh_ib_grade'); if(g&&UNITS[g]) _ib.grade=g; var d=rdLS('hh_ib_door'); if(d==='gen'||d==='school') _ib.door=d; })();
 function rdCfgAll(){ _ib.ready=_ib.ready||{tf:{},custom:[]}; if(!_ib.ready.units||typeof _ib.ready.units!=='object') _ib.ready.units={}; return _ib.ready.units; }
@@ -1776,13 +1777,14 @@ var TP8={ scr:[['s-boxes','box','صناديق الأسرار','m'],['s-show','tv
   dev:[['race','bolt','سباق المُلهم','m'],['tf','check','صح أم خطأ السريع','g'],['cloud','cloud','سحابة الكلمات','y'],['order','sort','رتّب وصنّف','b'],['d-climb','mount','تسلّق القمة','o',1],['d-where','map','أين يقع؟','t',1]],
   tool:[['timer','timer','المؤقت','m'],['pick','dice','الاختيار العشوائي','b'],['groups','users','تقسيم المجموعات','g'],['score','score','لوحة النقاط','y'],['quiet','vol','مقياس الهدوء','p'],['signal','traffic','إشارة العمل','o'],['board','board','السبورة','n'],['qr','qr','رمز الدخول','t']] };
 function tp8Ready(id,m){ if(m==='tool') return typeof window.hhTool==='function'&&(!window.hhToolHas||window.hhToolHas(id)); var t=TEMPLATES.filter(function(x){ return x.id===id; })[0]; return !!(t&&t.ready); }
-function tp8Card(x,m){ var ok=tp8Ready(x[0],m), tool=m==='tool';
+function tp8Hid(id){ var h=(_ib.ready&&_ib.ready.hideTpl)||[]; return h.indexOf(id)>-1; }
+function tp8Card(x,m){ var ok=tp8Ready(x[0],m), tool=m==='tool', hid=tp8Hid(x[0]); if(hid&&!isAdm()) return '';
   var act=!ok?'':tool?'hhTool(\''+x[0]+'\')':'hhIbCreate(\''+x[0]+'\')';
   return '<button type="button" class="tp8'+(tool?' tool':'')+(ok?'':' off')+'" style="--c:'+TP8_C[x[3]]+'"'+(ok?' onclick="'+act+'"':' disabled')+'><span class="ic">'+tp8S(x[1])+'</span><span class="tx"><b>'+esc(x[2])+(x[4]&&ok?'<span class="nw">جديد</span>':'')+'</b><small>'+(!ok?'قريباً':tool?'تفتح فوراً':m==='scr'?'على الشاشة':'على الأجهزة')+'</small></span><span class="go">'+tp8S(tool?'open':'plus')+'</span></button>'; }
 ib4Rack=function(){
   var F=_ib.tpf||'all';
   var seg='<div class="tp8-seg" role="tablist">'+[['all','الكل'],['scr','على الشاشة'],['dev','على الأجهزة'],['tool','وسائل تعليمية']].map(function(x){ return '<button type="button" role="tab" aria-selected="'+(F===x[0])+'" class="'+(F===x[0]?'on':'')+'" onclick="hhIbTpf(\''+x[0]+'\')">'+x[1]+'</button>'; }).join('')+'</div>';
-  function sec(m,ic,t,unit){ var arr=TP8[m], n=arr.filter(function(x){ return tp8Ready(x[0],m); }).length; return '<div class="tp8-sec"><i>'+tp8S(ic)+'</i><h2>'+t+'</h2><small>'+n+' '+unit+'</small></div><div class="tp8-grid">'+arr.map(function(x){ return tp8Card(x,m); }).join('')+'</div>'; }
+  function sec(m,ic,t,unit){ var arr=TP8[m], n=arr.filter(function(x){ return tp8Ready(x[0],m)&&(!tp8Hid(x[0])||isAdm()); }).length; return '<div class="tp8-sec"><i>'+tp8S(ic)+'</i><h2>'+t+'</h2><small>'+n+' '+unit+'</small></div><div class="tp8-grid">'+arr.map(function(x){ return tp8Card(x,m); }).join('')+'</div>'; }
   var h='<div class="tp8">'+seg;
   if(F==='all'||F==='scr') h+=sec('scr','mon','على الشاشة',(function(){ var n=TP8.scr.filter(function(x){ return tp8Ready(x[0],'scr'); }).length; return n>2&&n<11?'ألعاب':'لعبة'; })());
   if(F==='all'||F==='dev') h+=sec('dev','ph','على أجهزة الطلاب','ألعاب');
