@@ -27,10 +27,13 @@ var TEMPLATES=[
   {id:'s-match', scr:'match', name:'التوصيل', kind:'screen', ready:true, ico:'link', bg:'linear-gradient(135deg,#1F4E79,#132f4a)', desc:'صل كل مصطلح بمعناه. الخطأ ينقل الدور إلى الفريق التالي.'},
   {id:'s-memory', scr:'memory', name:'بطاقات الذاكرة', kind:'screen', ready:true, ico:'grid', bg:'linear-gradient(135deg,#8A1538,#5E0E26)', desc:'يقلب الفريق بطاقتين، فإن تطابقتا بقيتا مكشوفتين واحتُسبت النقاط.'},
   {id:'s-order', scr:'order', name:'رتّب الأحداث', kind:'screen', ready:true, ico:'sort', bg:'linear-gradient(135deg,#8A6D2E,#5c4816)', desc:'رتّب الأحداث زمنياً أو الخطوات بالتسلسل الصحيح.'},
+  {id:'s-odd', scr:'odd', name:'اختر الدخيل', kind:'screen', ready:true, ico:'grid', bg:'linear-gradient(135deg,#6A42A8,#46297a)', desc:'أربعة عناصر، يكتشف الفريق الدخيل بينها ويذكر السبب. اكتب العناصر الأربعة واجعل الدخيل هو الإجابة الصحيحة.'},
+  {id:'s-time', scr:'time', name:'الخط الزمني', kind:'screen', ready:true, ico:'sort', bg:'linear-gradient(135deg,#C2862B,#8a5e1a)', desc:'أحداث توضع على خط الزمن من الأقدم إلى الأحدث، والخطأ ينقل الدور.'},
+  {id:'s-map', scr:'map', name:'الخريطة الصامتة', kind:'screen', ready:true, ico:'globe', bg:'linear-gradient(135deg,#0E8288,#0a5a5e)', desc:'صورة خريطة بلا أسماء هي السؤال، ويختار الفريق اسم الموقع. أضف صورة لكل سؤال.'},
   {id:'weekly', name:'تحدي الأسبوع', kind:'async', ready:false, ico:'target', bg:'linear-gradient(135deg,#4A0B1E,#2A0810)', desc:'اختبار برابط ومهلة، يُحل من البيت، والنتائج تدخل ملف الطالب ودفتر المتابعة.'},
   {id:'cards', name:'بطاقات المراجعة', kind:'async', ready:false, ico:'grid', bg:'linear-gradient(135deg,#7A1330,#4A0B1E)', desc:'بطاقات مصطلحات من الدرس يراجعها الطالب بنظام التكرار المتباعد.'}
 ];
-var SCR={ boxes:{name:'صناديق الأسرار', types:['mcq','tf','open']}, show:{name:'المسابقة الكبرى', types:['mcq','tf']}, wheel:{name:'عجلة الأسئلة', types:['mcq','tf','open']}, flip:{name:'البطاقات المقلوبة', types:['mcq','tf','open']}, tfs:{name:'صح أم خطأ على الشاشة', types:['tf']}, match:{name:'التوصيل', types:['pair']}, memory:{name:'بطاقات الذاكرة', types:['pair']}, order:{name:'رتّب الأحداث', types:['order']} };
+var SCR={ boxes:{name:'صناديق الأسرار', types:['mcq','tf','open']}, show:{name:'المسابقة الكبرى', types:['mcq','tf']}, wheel:{name:'عجلة الأسئلة', types:['mcq','tf','open']}, flip:{name:'البطاقات المقلوبة', types:['mcq','tf','open']}, tfs:{name:'صح أم خطأ على الشاشة', types:['tf']}, match:{name:'التوصيل', types:['pair']}, memory:{name:'بطاقات الذاكرة', types:['pair']}, order:{name:'رتّب الأحداث', types:['order']}, odd:{name:'اختر الدخيل', types:['mcq']}, time:{name:'الخط الزمني', types:['order']}, map:{name:'الخريطة الصامتة', types:['mcq']} };
 window.HH_SCR_TPL=SCR;
 var SOON_SCR='الفرز في مجموعات، الخريطة الصمّاء، الكلمة الناقصة، خمّن الكلمة';
 
@@ -763,7 +766,15 @@ window.hhIbSettingsSave=function(){ var g=cur(); var v=function(id){ var e=docum
 /* ── الاستيراد: من فئات المنصة، من ملف Excel، لصق نص ── */
 var _imp={ tab:'cats', cat:'', sel:{}, find:'', rows:[] };
 function qdb(){ return (typeof QDB==='object'&&QDB)?QDB:{}; }
-function parsePts(a){ var s=String(a||'').trim(); if(!s) return ['']; var parts=s.split(/\s*(?:^|\s)\d{1,2}\s*[-–.)]\s+/).map(function(x){ return x.trim(); }).filter(Boolean); return parts.length>1?parts:[s]; }
+function parsePts(a){ var s=String(a||'').trim(); if(!s) return [''];
+  /* zzzzzzcr: أسطر بنقاط تحت عناوين، ثم الترقيم، ثم جمل بعناوين */
+  if(/\n/.test(s)){ var out=[], head=''; s.split(/\n+/).forEach(function(l){ l=l.trim(); if(!l) return; var b=l.replace(/^[-–•*]\s*/,'').replace(/^\d{1,2}\s*[-–.)]\s+/,''); var bul=b!==l;
+      if(!bul&&/[:：]$/.test(l)){ head=l.replace(/[:：]$/,'').trim(); return; } b=b.replace(/[.]\s*$/,''); if(b) out.push(head?head+': '+b:b); });
+    if(out.length>1) return out; }
+  var parts=s.split(/\s*(?:^|\s)\d{1,2}\s*[-–.)]\s+/).map(function(x){ return x.trim(); }).filter(Boolean); if(parts.length>1) return parts;
+  var seg=s.split(/[.]\s+(?=[^.:،\n]{2,24}:\s)/).map(function(x){ return x.trim().replace(/[.]\s*$/,''); }).filter(Boolean);
+  if(seg.length>1&&seg.every(function(x){ return /^[^.:،\n]{2,24}:\s*\S/.test(x); })) return seg;
+  return [s]; }
 window._hhIbParsePts=parsePts;
 function fromQDB(src, cat, g){
   var a=String(src.a==null?'':src.a).trim(); var S=(g&&g.settings)||{};
@@ -772,6 +783,8 @@ function fromQDB(src, cat, g){
   if(Array.isArray(src.opts)&&src.opts.length>=2){
     var opts=[]; src.opts.forEach(function(o){ o=String(o).trim(); if(o&&opts.indexOf(o)<0) opts.push(o); });
     if(opts.indexOf(a)<0) opts.unshift(a); opts=opts.slice(0,4); if(opts.indexOf(a)<0) opts[0]=a;
+    /* zzzzzzcq: خلط الخيارات، فالإجابة الصحيحة كانت دائماً الأولى (العنابية) */
+    for(var _i=opts.length-1;_i>0;_i--){ var _j=Math.floor(Math.random()*(_i+1)), _t=opts[_i]; opts[_i]=opts[_j]; opts[_j]=_t; }
     while(opts.length<4) opts.push('');
     base.type='mcq'; base.opts=opts; base.correct=[opts.indexOf(a)]; return base;
   }
@@ -1487,6 +1500,320 @@ var IB7CSS=[
 '@media (max-width:640px){ #hh-ib.ib2 .ib7-crumb{font-size:12.5px;gap:4px;} #hh-ib.ib2 .ib7-path{gap:8px;} #hh-ib.ib2 .ib7-q{min-width:0;flex:1 1 100%;} #hh-ib.ib2 .ib7-q input{width:100%;} #hh-ib.ib2 .ib7-adm{width:100%;justify-content:center;} }'
 ].join('\n');
 IB6CSS+='\n'+IB7CSS;
+/* ═══ zzzzzzcr، الجاهزة: بابان (المدرسة والعامة)، ألوان الوحدات، الإتاحة من المدير، شكل اللعبة، ولوحة التحكم ═══ */
+var RD_PAL=['#8A1538','#1D5C99','#23855A','#C2862B','#6A42A8','#0E8288','#C0562F','#2C3E73'];
+var RD_GRADES=[['g6','السادس'],['g7t1','السابع، الفصل الأول'],['g7t2','السابع، الفصل الثاني'],['g8','الثامن'],['g9','التاسع']];
+var RD_SHAPES=[
+  {k:'boxes',n:'صناديق الأسرار',ic:'box',c:'#8A1538',m:'screen'},
+  {k:'wheel',n:'عجلة الأسئلة',ic:'wheel',c:'#8A6D2E',m:'screen'},
+  {k:'show',n:'المسابقة الكبرى',ic:'tv',c:'#1D5C99',m:'screen'},
+  {k:'flip',n:'البطاقات المقلوبة',ic:'flip',c:'#5E0E26',m:'screen'},
+  {k:'tfs',n:'صح أم خطأ',ic:'check',c:'#23855A',m:'screen'},
+  {k:'match',n:'التوصيل',ic:'link',c:'#1D5C99',m:'screen'},
+  {k:'memory',n:'بطاقات الذاكرة',ic:'grid',c:'#8A1538',m:'screen'},
+  {k:'order',n:'رتّب الأحداث',ic:'sort',c:'#C2862B',m:'screen'},
+  {k:'mixb',n:'المراجعة المنوّعة',ic:'award',c:'#6A42A8',m:'screen',comp:1},
+  {k:'race',n:'سباق المُلهم',ic:'bolt',c:'#8A1538',m:'live'},
+  {k:'tfl',n:'صح أم خطأ السريع',ic:'check',c:'#23855A',m:'live'},
+  {k:'ordl',n:'رتّب وصنّف',ic:'sort',c:'#1D5C99',m:'live'}
+];
+var _rd={dlg:null,saveT:null};
+function rdLS(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
+(function(){ var g=rdLS('hh_ib_grade'); if(g&&UNITS[g]) _ib.grade=g; var d=rdLS('hh_ib_door'); if(d==='gen'||d==='school') _ib.door=d; })();
+function rdCfgAll(){ _ib.ready=_ib.ready||{tf:{},custom:[]}; if(!_ib.ready.units||typeof _ib.ready.units!=='object') _ib.ready.units={}; return _ib.ready.units; }
+function rdUnit(G,u,i){ var c=rdCfgAll()[G+'-'+u.k]||{}; return { key:G+'-'+u.k, c:/^#[0-9a-f]{6}$/i.test(c.c||'')?c.c:RD_PAL[i%RD_PAL.length], on:c.on!=null?!!c.on:i<2, hide:Array.isArray(c.hide)?c.hide:[], t:String(c.t||'').trim()||u.short, o:typeof c.o==='number'?c.o:i }; }
+function rdSet(key,patch){ var A=rdCfgAll(); A[key]=Object.assign({},A[key]||{},patch); rdSave(); }
+function rdSave(){ clearTimeout(_rd.saveT); _rd.saveT=setTimeout(function(){ saveReadyDoc(); },500); }
+function rdGn(n){ return n===0?'بلا ألعاب':n===1?'لعبة واحدة':n===2?'لعبتان':(n>2&&n<11)?n+' ألعاب':n+' لعبة'; }
+function rdQn(n){ return n===0?'بلا أسئلة':n===1?'سؤال واحد':n===2?'سؤالان':(n>2&&n<11)?n+' أسئلة':n+' سؤالاً'; }
+function rdItems(G,uk){ return readyList().filter(function(r){ return uk==='all'?r.sec==='all':r.sec===uk; }); }
+function rdBy(items){ var by={}; items.forEach(function(r){ if(!by[r.kind]) by[r.kind]=r; }); return by; }
+function rdRid(items,k){ var by=rdBy(items);
+  if(k==='boxes'||k==='wheel'||k==='show'||k==='race') return by.mcq;
+  if(k==='flip') return by.open||by.mcq; if(k==='tfs'||k==='tfl') return by.tf; if(k==='match'||k==='memory') return by.pairs;
+  if(k==='order'||k==='ordl') return by.order; if(k==='mixb') return by.mix; return null; }
+function rdTotal(items){ var by=rdBy(items), R=by.mcq; return R?(R.n||0)+(R.extra||0):items.reduce(function(a,r){ return a+(r.n||0); },0); }
+function rdUnits(G){ return (UNITS[G]||[]).map(function(u,i){ return {u:u,i:i,cfg:rdUnit(G,u,i)}; }).sort(function(a,b){ return a.cfg.o-b.cfg.o||a.i-b.i; }); }
+function rdSw(on,act,lab){ return '<button type="button" class="rd-sw'+(on?' on':'')+'" aria-pressed="'+on+'" onclick="event.stopPropagation();'+act+'"><span>'+(lab||(on?'متاحة':'مقفلة'))+'</span><i></i></button>'; }
+
+/* البابان */
+function rdDoors(adm){
+  var d=_ib.door||'school';
+  var D=[['school','المدرسة','من منهج صفك','cap'],['gen','العامة','ثقافة ومعرفة','globe']];
+  return '<div class="rd-doors">'+D.map(function(x){ return '<button type="button" class="rd-door'+(d===x[0]?' on':'')+'" aria-pressed="'+(d===x[0])+'" onclick="hhRdDoor(\''+x[0]+'\')"><span class="ic">'+(x[3]==='cap'?'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>':ico('globe',26,2))+'</span><span class="tx"><b>'+x[1]+'</b><small>'+x[2]+'</small></span></button>'; }).join('')
+    +'</div>'+(adm?'<div class="rd-admbar"><button type="button" class="rd-ab" onclick="hhRdPanel(1)">'+ico('gear',15)+' لوحة التحكم بالألعاب الجاهزة</button></div>':'');
+}
+window.hhRdDoor=function(d){ _ib.door=d; rdLS('hh_ib_door',d); render(); };
+window.hhRdGrade=function(g){ if(!UNITS[g]) return; _ib.grade=g; rdLS('hh_ib_grade',g); render(); };
+function rdGrades(){ var G=_ib.grade||'g7t1';
+  return '<div class="rd-grades"><span>صفك:</span>'+RD_GRADES.map(function(x){ var has=UNITS[x[0]]&&UNITS[x[0]].length; return '<button type="button" class="rd-ch'+(G===x[0]?' on':'')+'"'+(has?'':' disabled')+' onclick="hhRdGrade(\''+x[0]+'\')">'+x[1]+(has?'':'، قريباً')+'</button>'; }).join('')+'</div>'; }
+
+/* بطاقة وحدة */
+function rdMenu(items,adm,uk){
+  var by=rdBy(items), m='';
+  if(by.mcq) m+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'copy\',\''+by.mcq.rid+'\')">'+ico('copy',15)+' انسخ إلى ألعابي وعدّل</span>';
+  if(adm){ var a='';
+    [['mcq','أسئلة الاختيار'],['tf','عبارات صح أم خطأ'],['open','الأسئلة المقالية'],['order','أسئلة الترتيب']].forEach(function(x){ var R=by[x[0]]; if(R&&!R.school&&!R.noEdit) a+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'edit\',\''+(R.src||R.rid)+'\')">'+ico('edit',15)+' عدّل '+x[1]+'</span>'; });
+    if(by.tf&&by.tf.draft) a+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'publish\',\''+by.tf.rid+'\')">'+ico('send',15)+' انشر صح أم خطأ للمعلمين</span>';
+    if(a) m+='<small>للمدير</small>'+a; }
+  return m||'<span class="ib4-mi" style="cursor:default">لا خيارات أخرى</span>';
+}
+function rdUnitCard(G,x,adm,no){
+  var u=x.u, C=x.cfg, items=rdItems(G,u.k); if(!items.length) return '';
+  var lock=!C.on, n=rdTotal(items), dr=adm&&items.some(function(r){ return r.draft; });
+  var hd='<div class="hd"><span class="no">'+no+'</span><div class="tt"><b>'+esc(C.t)+'</b><small>'+rdQn(n)+(dr?'، فيها مسودة':'')+'</small></div>'+(adm?rdSw(C.on,'hhRdOn(\''+C.key+'\')'):(lock?'<span class="lk">'+ico('lock',12,2.4)+' قريباً</span>':''))+'</div>';
+  var bd='<div class="bd"><button type="button" class="rd-b p"'+(lock&&!adm?' disabled':'')+' onclick="hhRdOpen(\''+u.k+'\')">'+(lock&&!adm?ico('lock',16,2.2)+' قريباً':ico('play',16,2.2)+' العب')+'</button><button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+rdMenu(items,adm,u.k)+'</div></div>';
+  return '<div class="rd-u ib4-c'+(lock?' lock':'')+'" style="--c:'+C.c+'">'+hd+bd+'</div>';
+}
+function rdCompCard(G,adm){
+  var items=rdItems(G,'all'); if(!items.length) return '';
+  var n=rdTotal(items), nu=(UNITS[G]||[]).length;
+  return '<div class="rd-u rd-comp ib4-c" style="--c:#5E0E26"><div class="hd"><span class="no">'+ico('award',20,2)+'</span><div class="tt"><b>المراجعة الشاملة</b><small>'+nu+' وحدات، '+rdQn(n)+'</small></div></div>'
+    +'<div class="bd"><button type="button" class="rd-b p" onclick="hhRdOpen(\'all\')">'+ico('play',16,2.2)+' العب</button><button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+rdMenu(items,adm,'all')+'</div></div></div>';
+}
+function rdCustomCard(R,adm,no){
+  return '<div class="rd-u ib4-c" style="--c:#8A6D2E"><div class="hd"><span class="no">'+(no||ico('star',18,2))+'</span><div class="tt"><b>'+esc(R.title)+'</b><small>'+rdQn(R.n)+'</small></div></div>'
+    +'<div class="bd">'+(R.n?'<button type="button" class="rd-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' على الشاشة</button><button type="button" class="rd-b" onclick="hhIbReadyLive(\''+R.rid+'\')">'+ico('phone',15)+' على الأجهزة</button>':'<button type="button" class="rd-b p" disabled>بلا أسئلة بعد</button>')+'<button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+ib5Menu(R,adm)+'</div></div></div>';
+}
+function rdSchool(adm){
+  var G=_ib.grade||'g7t1', U=rdUnits(G);
+  var cards=rdCompCard(G,adm)+U.map(function(x,k){ return rdUnitCard(G,x,adm,k+1); }).join('');
+  var cust=readyList().filter(function(R){ return R.sec==='custom'&&!(R.custom&&R.custom.cat); });
+  cards+=cust.map(function(R){ return rdCustomCard(R,adm); }).join('');
+  var open=U.filter(function(x){ return x.cfg.on; }).length;
+  var head='<div class="rd-head"><b>'+esc((RD_GRADES.filter(function(x){ return x[0]===G; })[0]||[,''])[1])+'</b>'+(adm&&U.length?'<small>'+open+' من '+U.length+' وحدات متاحة للمعلمين والطلاب</small>':'')+'<span class="sp"></span>'+(adm?'<button type="button" class="rd-ab" onclick="hhIbReadyNew()">'+ico('plus',14,2.6)+' لعبة جاهزة</button>':'')+'</div>';
+  return rdGrades()+head+(cards?'<div class="rd-grid">'+cards+'</div>':'<div class="rl-soon">ألعاب هذا الصف قيد الإعداد</div>')+'<p class="rd-note">يُحفظ صفك، فلا يُسأل عنه مرة أخرى.</p>';
+}
+window.hhRdOn=function(key){ if(!isAdm()) return; var A=rdCfgAll(), cur=A[key]; var G=_ib.grade||'g7t1', i=(UNITS[G]||[]).map(function(u){ return G+'-'+u.k; }).indexOf(key); var on=cur&&cur.on!=null?!!cur.on:i<2; rdSet(key,{on:!on}); render(); };
+
+/* العامة */
+function rdCats(adm){ return ib7Cats().filter(function(k){ return adm||k.on!==false; }); }
+function rdGeneral(adm){
+  var cats=rdCats(adm), on=_ib.rcat; if(!cats.some(function(k){ return k.id===on; })) on=_ib.rcat=(cats[0]||{}).id;
+  var tiles='<div class="rd-cats">'+cats.map(function(k,i){ var n=ib7CatGames(k.id).length, c=/^#[0-9a-f]{6}$/i.test(k.c||'')?k.c:RD_PAL[i%RD_PAL.length]; return '<button type="button" class="rd-cat'+(on===k.id?' on':'')+(k.on===false?' off':'')+'" style="--c:'+c+'" onclick="hhIbRCat(\''+esc(k.id)+'\')"><span class="lt">'+esc(String(k.t||'').replace(/^ال/,'').charAt(0))+'</span><span class="tx"><b>'+esc(k.t)+'</b><small>'+rdGn(n)+(k.on===false?'، مخفي':'')+'</small></span></button>'; }).join('')
+    +(adm?'<button type="button" class="rd-cat add" onclick="hhIbRCatAdd()"><span class="lt">+</span><span class="tx"><b>تصنيف جديد</b><small>للمدير</small></span></button>':'')+'</div>';
+  if(!cats.length) return tiles+'<div class="rl-soon">لا ألعاب عامة بعد'+(adm?'، أضف تصنيفاً ثم ألعابه':'')+'</div>';
+  var K=cats.filter(function(k){ return k.id===on; })[0], G=ib7CatGames(on);
+  var head='<div class="rd-head"><b>'+esc(K.t)+'</b><small>'+rdGn(G.length)+'</small><span class="sp"></span>'+(adm&&!G.length?'<button type="button" class="rd-ab" onclick="hhIbRCatDel(\''+esc(on)+'\')">حذف التصنيف</button>':'')+(adm?'<button type="button" class="rd-ab" onclick="hhIbReadyNew()">'+ico('plus',14,2.6)+' لعبة في هذا التصنيف</button>':'')+'</div>';
+  return tiles+head+(G.length?'<div class="rd-grid">'+G.map(function(c,i){ return rdCustomCard(ib7CustomR(c),adm,i+1); }).join('')+'</div>':'<div class="rl-soon">لا ألعاب في هذا التصنيف بعد</div>');
+}
+
+/* نافذة شكل اللعبة */
+window.hhRdOpen=function(uk){
+  var G=_ib.grade||'g7t1', adm=isAdm(), items=rdItems(G,uk); if(!items.length) return;
+  var name='المراجعة الشاملة', col='#5E0E26', hide=[];
+  if(uk!=='all'){ var U=rdUnits(G).filter(function(x){ return x.u.k===uk; })[0]; if(!U) return; if(!U.cfg.on&&!adm){ toastX('هذه الوحدة غير متاحة بعد','info'); return; } name=U.cfg.t; col=U.cfg.c; hide=U.cfg.hide; }
+  var list=RD_SHAPES.filter(function(s){ return (!s.comp||uk==='all')&&(adm||hide.indexOf(s.k)<0); }).map(function(s){ return {s:s,R:rdRid(items,s.k),hid:hide.indexOf(s.k)>-1}; }).filter(function(x){ return !(x.s.comp&&!x.R); });
+  var last=rdLS('hh_ib_shape'), pick=list.filter(function(x){ return x.R&&x.s.k===last; })[0]||list.filter(function(x){ return x.R; })[0];
+  _rd.dlg={uk:uk,items:items,list:list,sel:pick?pick.s.k:null,name:name,col:col};
+  rdDraw();
+};
+function rdTile(x){ var on=_rd.dlg.sel===x.s.k; return '<button type="button" class="sh'+(on?' on':'')+'" style="--k:'+x.s.c+'"'+(x.R?'':' disabled')+' aria-pressed="'+on+'" data-sk="'+x.s.k+'"><i>'+ico(x.s.ic,24,2)+'</i><b>'+x.s.n+'</b>'+(x.R?(x.hid?'<small>مخفي عن المعلمين</small>':''):'<small>لا أسئلة كافية</small>')+'</button>'; }
+function rdDraw(){
+  var D=_rd.dlg, host=document.getElementById('hh-ib'); if(!D||!host) return;
+  var ov=document.getElementById('rd-scrim'); if(!ov){ ov=document.createElement('div'); ov.id='rd-scrim'; ov.className='rd-scrim'; host.appendChild(ov); ov.addEventListener('click',function(e){ if(e.target===ov) hhRdClose(); }); }
+  var scr=D.list.filter(function(x){ return x.s.m==='screen'; }), live=D.list.filter(function(x){ return x.s.m==='live'; });
+  var cur=D.list.filter(function(x){ return x.s.k===D.sel; })[0];
+  ov.innerHTML='<div class="rd-dlg" role="dialog" aria-modal="true" aria-label="اختر شكل اللعبة" style="--c:'+D.col+'"><div class="dh"><div><b>'+esc(D.name)+'</b><small>اختر شكل اللعبة</small></div><button type="button" class="x" aria-label="إغلاق" onclick="hhRdClose()">'+ico('x',16,2.4)+'</button></div><div class="in">'
+    +(scr.length?'<h4>'+ico('monitor',16)+' على الشاشة</h4><div class="shapes">'+scr.map(rdTile).join('')+'</div>':'')
+    +(live.length?'<h4>'+ico('phone',16)+' على أجهزة الطلاب</h4><div class="shapes">'+live.map(rdTile).join('')+'</div>':'')
+    +'<div class="go"><small>'+(cur?'الشكل: '+cur.s.n:'اختر شكلاً')+'</small><button type="button" class="rd-b p" '+(cur&&cur.R?'':'disabled')+' onclick="hhRdStart()">'+ico('play',16,2.2)+' ابدأ</button></div></div></div>';
+  ov.querySelectorAll('[data-sk]').forEach(function(b){ b.onclick=function(){ D.sel=b.getAttribute('data-sk'); rdDraw(); }; b.ondblclick=function(){ D.sel=b.getAttribute('data-sk'); hhRdStart(); }; });
+  var f=ov.querySelector('.sh.on')||ov.querySelector('.x'); if(f&&!ov._f){ ov._f=1; try{ f.focus({preventScroll:true}); }catch(e){} }
+}
+window.hhRdClose=function(){ _rd.dlg=null; var o=document.getElementById('rd-scrim'); if(o) o.remove(); };
+window.hhRdStart=function(){
+  var D=_rd.dlg; if(!D) return; var x=D.list.filter(function(y){ return y.s.k===D.sel; })[0]; if(!x||!x.R) return;
+  if(x.s.m==='live'&&!canUse()){ toastX('التشغيل على أجهزة الطلاب بحساب المعلم، سجّل الدخول أولاً','info'); return; }
+  rdLS('hh_ib_shape',x.s.k); hhRdClose();
+  var g=buildReady(x.R.rid); if(!g) return;
+  if(x.s.m==='screen'){ if(x.s.k!=='mixb') g.screenTpl=x.s.k; g.mode='screen'; screenRun(g); return; }
+  g.mode='live'; g.template=x.s.k==='race'?'race':x.s.k==='tfl'?'tf':'order'; liveRun(g);
+};
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&_rd.dlg){ e.stopPropagation(); hhRdClose(); } },true);
+
+/* لوحة التحكم بالألعاب الجاهزة */
+window.hhRdPanel=function(v){ if(!isAdm()) return; _ib.radm=!!v; render(); var o=document.getElementById('hh-ib'); if(o) o.scrollTop=0; };
+function rdPal(cur,act){ return '<div class="pal" role="radiogroup" aria-label="اللون">'+RD_PAL.map(function(c){ return '<button type="button" role="radio" aria-checked="'+(c===cur)+'" aria-label="'+c+'" class="'+(c===cur?'on':'')+'" style="--k:'+c+'" onclick="'+act.replace('$C',c)+'"></button>'; }).join('')+'</div>'; }
+function rdPanel(){
+  var tab=_ib.rptab||'school', G=_ib.grade||'g7t1';
+  var top='<div class="rd-pn-top"><button type="button" class="rd-ab" onclick="hhRdPanel(0)">'+ico('back',14,2.4)+' رجوع</button><b>لوحة التحكم، الألعاب الجاهزة</b><small>كل تعديل يسري على المعلمين والطلاب فوراً</small></div>';
+  var tb='<div class="ptb">'+[['school','المدرسة'],['gen','العامة']].map(function(x){ return '<button type="button" class="rd-ch'+(tab===x[0]?' on':'')+'" onclick="hhRdPTab(\''+x[0]+'\')">'+x[1]+'</button>'; }).join('')+'<span class="sp"></span>'+(tab==='school'?RD_GRADES.map(function(x){ var has=UNITS[x[0]]&&UNITS[x[0]].length; return '<button type="button" class="rd-ch'+(G===x[0]?' on':'')+'"'+(has?'':' disabled')+' onclick="hhRdGrade(\''+x[0]+'\')">'+x[1]+'</button>'; }).join(''):'<button type="button" class="rd-ab" onclick="hhIbRCatAdd()">'+ico('plus',14,2.6)+' تصنيف</button>')+'</div>';
+  var rows='', foot='';
+  if(tab==='school'){
+    var U=rdUnits(G);
+    rows=U.map(function(x,k){ var C=x.cfg, items=rdItems(G,x.u.k), by=rdBy(items), n=rdTotal(items);
+      var shp=RD_SHAPES.filter(function(s){ return !s.comp&&rdRid(items,s.k); }).map(function(s){ var on=C.hide.indexOf(s.k)<0; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" title="'+(on?'ظاهر، اضغط لإخفائه':'مخفي، اضغط لإظهاره')+'" onclick="hhRdShp(\''+C.key+'\',\''+s.k+'\')">'+s.n+'</button>'; }).join('');
+      return '<div class="row" style="--c:'+C.c+'"><span class="mv"><button type="button" aria-label="لأعلى" '+(k?'':'disabled')+' onclick="hhRdMove(\''+x.u.k+'\',-1)">'+ico('up',14,2.4)+'</button><button type="button" aria-label="لأسفل" '+(k<U.length-1?'':'disabled')+' onclick="hhRdMove(\''+x.u.k+'\',1)">'+ico('down',14,2.4)+'</button></span><span class="nb">'+(k+1)+'</span>'
+        +'<input type="text" value="'+esc(C.t)+'" aria-label="اسم الوحدة" maxlength="40" onchange="hhRdName(\''+C.key+'\',this.value)">'+rdPal(C.c,'hhRdCol(\''+C.key+'\',\'$C\')')
+        +'<span class="tgw">'+rdSw(C.on,'hhRdOn(\''+C.key+'\')')+'</span><div class="shp">'+(shp||'<em>لا أسئلة بعد</em>')+'</div>'
+        +(by.mcq&&!by.mcq.school?'<button type="button" class="ed" onclick="hhIbReadyEdit(\''+by.mcq.rid+'\')">الأسئلة '+n+'</button>':'<span class="ed na">الأسئلة '+n+'</span>')+'</div>'; }).join('');
+    foot=U.filter(function(x){ return x.cfg.on; }).length+' من '+U.length+' وحدات متاحة. اضغط شكل اللعبة لإخفائه عن هذه الوحدة، والأسهم لتغيير الترتيب.';
+  } else {
+    var cats=ib7Cats();
+    rows=cats.length?cats.map(function(k,i){ var c=/^#[0-9a-f]{6}$/i.test(k.c||'')?k.c:RD_PAL[i%RD_PAL.length], n=ib7CatGames(k.id).length;
+      return '<div class="row gen" style="--c:'+c+'"><span class="mv"></span><span class="nb">'+esc(String(k.t||'').replace(/^ال/,'').charAt(0))+'</span><input type="text" value="'+esc(k.t)+'" aria-label="اسم التصنيف" maxlength="40" onchange="hhRdCatName(\''+esc(k.id)+'\',this.value)">'+rdPal(c,'hhRdCatCol(\''+esc(k.id)+'\',\'$C\')')
+        +'<span class="tgw">'+rdSw(k.on!==false,'hhRdCatOn(\''+esc(k.id)+'\')',k.on!==false?'ظاهر':'مخفي')+'</span><div class="shp"><em>'+rdGn(n)+'</em></div>'
+        +(n?'<button type="button" class="ed" onclick="hhRdPanel(0);hhRdDoor(\'gen\');hhIbRCat(\''+esc(k.id)+'\')">الألعاب</button>':'<button type="button" class="ed" onclick="hhIbRCatDel(\''+esc(k.id)+'\')">حذف</button>')+'</div>'; }).join(''):'<div class="row emp">لا تصنيفات بعد، أضف تصنيفاً من الزر في الأعلى.</div>';
+    foot='التصنيفات المخفية لا تظهر للمعلمين والطلاب.';
+  }
+  return top+'<div class="rd-pn">'+tb+rows+'<div class="bt">'+foot+'</div></div>';
+}
+window.hhRdPTab=function(t){ _ib.rptab=t; render(); };
+window.hhRdCol=function(key,c){ rdSet(key,{c:c}); render(); };
+window.hhRdName=function(key,v){ rdSet(key,{t:String(v||'').trim().slice(0,40)}); render(); };
+window.hhRdShp=function(key,s){ var A=rdCfgAll(), h=((A[key]||{}).hide||[]).slice(), i=h.indexOf(s); if(i>-1) h.splice(i,1); else h.push(s); rdSet(key,{hide:h}); render(); };
+window.hhRdMove=function(uk,d){ var G=_ib.grade||'g7t1', U=rdUnits(G), i=U.map(function(x){ return x.u.k; }).indexOf(uk), j=i+d; if(i<0||j<0||j>=U.length) return; var t=U[i]; U[i]=U[j]; U[j]=t; U.forEach(function(x,k){ rdCfgAll()[x.cfg.key]=Object.assign({},rdCfgAll()[x.cfg.key]||{},{o:k}); }); rdSave(); render(); };
+function rdCatPatch(id,p){ var cats=ib7Cats(); cats.forEach(function(k){ if(k.id===id) Object.assign(k,p); }); _ib.ready.cats=cats; rdSave(); render(); }
+window.hhRdCatName=function(id,v){ v=String(v||'').trim().slice(0,40); if(v) rdCatPatch(id,{t:v}); };
+window.hhRdCatCol=function(id,c){ rdCatPatch(id,{c:c}); };
+window.hhRdCatOn=function(id){ var k=ib7Cats().filter(function(x){ return x.id===id; })[0]; if(k) rdCatPatch(id,{on:k.on===false}); };
+
+renderReady=function(){
+  var adm=isAdm();
+  if(adm&&_ib.radm) return rdPanel();
+  var d=_ib.door||'school';
+  return '<div class="rd8">'+rdDoors(adm)+(d==='gen'?rdGeneral(adm):rdSchool(adm))+'</div>';
+};
+var _rdCount0=ib5Count;
+ib5Count=function(){ try{ var G=_ib.grade||'g7t1', adm=isAdm(); var n=rdUnits(G).filter(function(x){ return rdItems(G,x.u.k).length&&(adm||x.cfg.on); }).length+(rdItems(G,'all').length?1:0); rdCats(adm).forEach(function(k){ n+=ib7CatGames(k.id).length; }); return n; }catch(e){ return _rdCount0(); } };
+
+var RD8CSS=[
+'#hh-ib.ib2 .rd8,#hh-ib.ib2 .rd-pn,#hh-ib.ib2 .rd-pn-top,#hh-ib .rd-scrim{--rs:#fff;--rso:#FAF6EE;--rl:#E7DCC6;--ri:#3D0918;--rm:#7A6A54;--rg:#B8924A;--rgb:#FBF1DA;}',
+'body.dark-mode #hh-ib.ib2 .rd8,body.dark-mode #hh-ib.ib2 .rd-pn,body.dark-mode #hh-ib.ib2 .rd-pn-top,body.dark-mode #hh-ib .rd-scrim{--rs:#22121A;--rso:#2A1720;--rl:#3E2C24;--ri:#F5E6C4;--rm:#B8A68A;--rgb:#3A2A10;}',
+'#hh-ib.ib2 .rd-doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px;}',
+'#hh-ib.ib2 .rd-door{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;border:1.5px solid var(--rl);background:var(--rs);color:var(--ri);font-family:Cairo,sans-serif;text-align:start;cursor:pointer;transition:border-color .2s,background .2s;}',
+'#hh-ib.ib2 .rd-door .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--rso);color:#8A1538;flex-shrink:0;}',
+'#hh-ib.ib2 .rd-door .tx b{display:block;font-size:20px;font-weight:900;} #hh-ib.ib2 .rd-door .tx small{font-size:13px;font-weight:700;color:var(--rm);}',
+'#hh-ib.ib2 .rd-door.on{border-color:#8A1538;background:var(--rgb);} #hh-ib.ib2 .rd-door.on .ic{background:#5E0E26;color:#fff;}',
+'#hh-ib.ib2 .rd-admbar{display:flex;justify-content:flex-end;margin:-6px 0 12px;}',
+'#hh-ib.ib2 .rd-ab{height:36px;border:1px dashed var(--rg);background:transparent;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:13px;color:var(--ri);padding:0 12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;}',
+'#hh-ib.ib2 .rd-grades{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;} #hh-ib.ib2 .rd-grades > span{font-weight:800;font-size:13px;color:var(--rm);}',
+'#hh-ib.ib2 .rd-ch{height:38px;border:1.5px solid var(--rl);background:var(--rs);border-radius:20px;padding:0 14px;font-family:Cairo,sans-serif;font-weight:800;font-size:13.5px;color:var(--ri);cursor:pointer;white-space:nowrap;}',
+'#hh-ib.ib2 .rd-ch.on{background:#5E0E26;border-color:#5E0E26;color:#fff;} #hh-ib.ib2 .rd-ch:disabled{opacity:.5;cursor:default;}',
+'#hh-ib.ib2 .rd-head{display:flex;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;} #hh-ib.ib2 .rd-head b{font-size:18px;font-weight:900;color:var(--ri);} #hh-ib.ib2 .rd-head small{font-size:13px;font-weight:700;color:var(--rm);} #hh-ib.ib2 .rd-head .sp{flex:1;}',
+'#hh-ib.ib2 .rd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}',
+'#hh-ib.ib2 .rd-u{background:var(--rs);border:1px solid var(--rl);border-radius:16px;overflow:visible;display:flex;flex-direction:column;min-width:0;position:relative;animation:rdIn .4s ease both;}',
+'@keyframes rdIn{from{opacity:0;transform:translateY(8px)}}',
+'#hh-ib.ib2 .rd-u .hd{background:var(--c);background-image:radial-gradient(circle at 12% 120%,rgba(255,255,255,.18) 0 38%,transparent 39%),radial-gradient(circle at 0 -30%,rgba(255,255,255,.1) 0 30%,transparent 31%);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;min-height:84px;border-radius:15px 15px 0 0;}',
+'#hh-ib.ib2 .rd-u .hd .no{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-weight:900;font-size:18px;flex-shrink:0;}',
+'#hh-ib.ib2 .rd-u .hd .tt{flex:1;min-width:0;} #hh-ib.ib2 .rd-u .hd b{display:block;font-size:17px;font-weight:900;line-height:1.35;color:#fff;} #hh-ib.ib2 .rd-u .hd small{font-size:12.5px;font-weight:700;opacity:.88;color:#fff;}',
+'#hh-ib.ib2 .rd-u .bd{padding:12px 14px 14px;display:flex;gap:8px;margin-top:auto;position:relative;}',
+'#hh-ib.ib2 .rd-b{height:44px;border-radius:11px;border:1px solid var(--rl);background:var(--rs);color:var(--ri);font-family:Cairo,sans-serif;font-weight:800;font-size:14.5px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 14px;cursor:pointer;}',
+'#hh-ib.ib2 .rd-b.p,#hh-ib .rd-scrim .rd-b.p{flex:1;background:var(--c,#5E0E26);border-color:transparent;color:#fff;} #hh-ib.ib2 .rd-u .rd-b:not(.p):not(.mo){flex:1;} #hh-ib.ib2 .rd-b.mo{width:46px;padding:0;flex:0 0 auto;}',
+'#hh-ib.ib2 .rd-b:disabled{opacity:.6;cursor:default;}',
+'#hh-ib.ib2 .rd-u .ib4-menu{position:absolute;bottom:58px;left:14px;z-index:6;}',
+'#hh-ib.ib2 .rd-u.lock .hd{background:#A79D90;background-image:none;} #hh-ib.ib2 .rd-u.lock .rd-b.p{background:var(--rso);color:var(--rm);border-color:var(--rl);}',
+'#hh-ib.ib2 .rd-u .lk{font-size:11.5px;font-weight:900;background:rgba(255,255,255,.2);border-radius:20px;padding:2px 10px;display:inline-flex;align-items:center;gap:5px;align-self:flex-start;}',
+'#hh-ib .rd-sw{display:inline-flex;align-items:center;gap:6px;border:0;background:rgba(0,0,0,.25);color:#fff;border-radius:20px;padding:3px 4px 3px 10px;font-family:Cairo,sans-serif;font-size:12px;font-weight:800;cursor:pointer;align-self:flex-start;white-space:nowrap;}',
+'#hh-ib .rd-sw i{width:34px;height:20px;border-radius:20px;background:rgba(255,255,255,.35);position:relative;} #hh-ib .rd-sw i::after{content:"";position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:right .15s;}',
+'#hh-ib .rd-sw.on i{background:#5FD08A;} #hh-ib .rd-sw.on i::after{right:16px;}',
+'#hh-ib.ib2 .rd-note{font-size:13px;font-weight:700;color:var(--rm);margin:14px 2px 0;}',
+'#hh-ib.ib2 .rd-cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 18px;}',
+'#hh-ib.ib2 .rd-cat{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--rl);background:var(--rs);font-family:Cairo,sans-serif;text-align:start;color:var(--ri);cursor:pointer;min-width:0;}',
+'#hh-ib.ib2 .rd-cat .lt{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-weight:900;font-size:18px;background:color-mix(in srgb,var(--c) 14%,var(--rs));color:var(--c);flex-shrink:0;}',
+'#hh-ib.ib2 .rd-cat .tx{min-width:0;} #hh-ib.ib2 .rd-cat b{display:block;font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} #hh-ib.ib2 .rd-cat small{font-size:12px;font-weight:700;color:var(--rm);}',
+'#hh-ib.ib2 .rd-cat.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,var(--rs));} #hh-ib.ib2 .rd-cat.off{opacity:.6;} #hh-ib.ib2 .rd-cat.add{border-style:dashed;--c:#B8924A;}',
+'#hh-ib .rd-scrim{position:fixed;inset:0;background:rgba(20,5,10,.5);display:grid;place-items:center;padding:16px;z-index:99999;animation:rdF .2s;} @keyframes rdF{from{opacity:0}}',
+'#hh-ib .rd-dlg{width:min(780px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--rs);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.3);font-family:Cairo,sans-serif;color:var(--ri);animation:rdP .3s cubic-bezier(.3,1.4,.5,1);} @keyframes rdP{from{transform:scale(.94);opacity:0}}',
+'#hh-ib .rd-dlg .dh{background:var(--c);background-image:linear-gradient(135deg,rgba(255,255,255,.12),transparent);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:10px;}',
+'#hh-ib .rd-dlg .dh b{font-size:18px;font-weight:900;color:#fff;} #hh-ib .rd-dlg .dh small{display:block;font-size:12.5px;font-weight:700;opacity:.88;color:#fff;}',
+'#hh-ib .rd-dlg .x{margin-inline-start:auto;width:36px;height:36px;border-radius:10px;border:0;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer;}',
+'#hh-ib .rd-dlg .in{padding:16px 18px 18px;} #hh-ib .rd-dlg h4{margin:0 0 10px;font-size:14px;font-weight:900;color:var(--rm);display:flex;align-items:center;gap:6px;}',
+'#hh-ib .rd-dlg .shapes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;}',
+'#hh-ib .rd-dlg .sh{border:2px solid var(--rl);background:var(--rs);border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;color:var(--ri);font-family:Cairo,sans-serif;cursor:pointer;transition:border-color .15s,transform .15s;}',
+'#hh-ib .rd-dlg .sh i{width:52px;height:52px;border-radius:14px;background:color-mix(in srgb,var(--k) 13%,var(--rs));color:var(--k);display:grid;place-items:center;}',
+'#hh-ib .rd-dlg .sh b{font-size:13.5px;font-weight:900;line-height:1.3;} #hh-ib .rd-dlg .sh small{font-size:11px;font-weight:700;color:var(--rm);margin-top:-6px;}',
+'#hh-ib .rd-dlg .sh:not([disabled]):hover{border-color:var(--k);transform:translateY(-2px);} #hh-ib .rd-dlg .sh.on{border-color:var(--k);background:color-mix(in srgb,var(--k) 7%,var(--rs));} #hh-ib .rd-dlg .sh[disabled]{opacity:.4;cursor:default;}',
+'#hh-ib .rd-dlg .go{display:flex;align-items:center;gap:10px;border-top:1px solid var(--rl);padding-top:14px;} #hh-ib .rd-dlg .go small{flex:1;font-size:13px;font-weight:800;color:var(--rm);}',
+'#hh-ib .rd-dlg .go .rd-b{height:44px;border-radius:11px;border:0;font-family:Cairo,sans-serif;font-weight:900;font-size:15px;display:inline-flex;align-items:center;gap:7px;padding:0 26px;cursor:pointer;flex:0 0 auto;background:var(--c);color:#fff;} #hh-ib .rd-dlg .go .rd-b:disabled{opacity:.5;}',
+'#hh-ib.ib2 .rd-pn-top{display:flex;align-items:center;gap:12px;margin:0 0 14px;flex-wrap:wrap;} #hh-ib.ib2 .rd-pn-top b{font-size:19px;font-weight:900;color:var(--ri);} #hh-ib.ib2 .rd-pn-top small{font-size:13px;font-weight:700;color:var(--rm);}',
+'#hh-ib.ib2 .rd-pn{background:var(--rs);border:1px solid var(--rl);border-radius:16px;overflow:hidden;font-family:Cairo,sans-serif;color:var(--ri);}',
+'#hh-ib.ib2 .rd-pn .ptb{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rl);flex-wrap:wrap;} #hh-ib.ib2 .rd-pn .ptb .sp{flex:1;}',
+'#hh-ib.ib2 .rd-pn .row{display:grid;grid-template-columns:30px 44px minmax(150px,1.3fr) auto auto minmax(200px,1.6fr) auto;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--rl);}',
+'#hh-ib.ib2 .rd-pn .row.emp{display:block;color:var(--rm);font-weight:800;}',
+'#hh-ib.ib2 .rd-pn .mv{display:flex;flex-direction:column;gap:2px;} #hh-ib.ib2 .rd-pn .mv button{width:28px;height:20px;border:1px solid var(--rl);background:var(--rs);border-radius:6px;color:var(--rm);display:grid;place-items:center;cursor:pointer;padding:0;} #hh-ib.ib2 .rd-pn .mv button:disabled{opacity:.3;cursor:default;}',
+'#hh-ib.ib2 .rd-pn .nb{width:40px;height:40px;border-radius:11px;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:900;}',
+'#hh-ib.ib2 .rd-pn input{height:38px;border:1px solid var(--rl);border-radius:9px;background:var(--rso);padding:0 10px;font-family:inherit;font-weight:800;font-size:14px;color:var(--ri);width:100%;min-width:0;}',
+'#hh-ib.ib2 .rd-pn .pal{display:flex;gap:4px;} #hh-ib.ib2 .rd-pn .pal button{width:22px;height:22px;border-radius:50%;border:2px solid transparent;background:var(--k);padding:0;cursor:pointer;} #hh-ib.ib2 .rd-pn .pal button.on{border-color:var(--rs);box-shadow:0 0 0 2px var(--k);}',
+'#hh-ib.ib2 .rd-pn .tgw .rd-sw{background:var(--rso);color:var(--rm);border:1px solid var(--rl);} #hh-ib.ib2 .rd-pn .tgw .rd-sw i{background:var(--rl);} #hh-ib.ib2 .rd-pn .tgw .rd-sw.on{color:#23855A;} #hh-ib.ib2 .rd-pn .tgw .rd-sw.on i{background:#23855A;}',
+'#hh-ib.ib2 .rd-pn .shp{display:flex;gap:4px;flex-wrap:wrap;} #hh-ib.ib2 .rd-pn .shp button{height:28px;border-radius:8px;border:1px solid var(--rl);background:var(--rs);padding:0 8px;font-family:inherit;font-weight:800;font-size:12px;color:var(--rm);cursor:pointer;text-decoration:line-through;} #hh-ib.ib2 .rd-pn .shp button.on{background:var(--rgb);border-color:var(--rg);color:var(--ri);text-decoration:none;} #hh-ib.ib2 .rd-pn .shp em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--rm);}',
+'#hh-ib.ib2 .rd-pn .ed{height:36px;border-radius:9px;border:1px solid var(--rl);background:var(--rs);font-family:inherit;font-weight:800;font-size:13px;color:#8A1538;padding:0 12px;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;} #hh-ib.ib2 .rd-pn .ed.na{color:var(--rm);cursor:default;} body.dark-mode #hh-ib.ib2 .rd-pn .ed{color:#E6CE8E;}',
+'#hh-ib.ib2 .rd-pn .bt{display:flex;gap:10px;align-items:center;padding:12px 14px;background:var(--rso);font-size:13px;font-weight:800;color:var(--rm);}',
+'@media (max-width:1000px){ #hh-ib.ib2 .rd-pn .row{grid-template-columns:30px 44px minmax(0,1fr) auto;} #hh-ib.ib2 .rd-pn .row .pal,#hh-ib.ib2 .rd-pn .row .shp{grid-column:3 / -1;} #hh-ib.ib2 .rd-pn .row .ed{grid-column:3;justify-self:start;} #hh-ib.ib2 .rd-grid{grid-template-columns:repeat(2,minmax(0,1fr));} #hh-ib.ib2 .rd-cats{grid-template-columns:repeat(3,minmax(0,1fr));} }',
+'@media (max-width:640px){ #hh-ib.ib2 .rd-doors{gap:8px;} #hh-ib.ib2 .rd-door{padding:12px;gap:10px;} #hh-ib.ib2 .rd-door .ic{width:42px;height:42px;} #hh-ib.ib2 .rd-door .tx b{font-size:17px;} #hh-ib.ib2 .rd-door .tx small{font-size:12px;}',
+'  #hh-ib.ib2 .rd-grid{grid-template-columns:minmax(0,1fr);} #hh-ib.ib2 .rd-cats{grid-template-columns:repeat(2,minmax(0,1fr));} #hh-ib.ib2 .rd-grades{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;} #hh-ib.ib2 .rd-grades > span{display:none;}',
+'  #hh-ib .rd-dlg .shapes{grid-template-columns:repeat(3,minmax(0,1fr));} #hh-ib .rd-dlg .sh i{width:44px;height:44px;} #hh-ib .rd-dlg .sh b{font-size:12.5px;}',
+'  #hh-ib.ib2 .rd-pn .row{grid-template-columns:30px 40px minmax(0,1fr);} #hh-ib.ib2 .rd-pn .row .tgw,#hh-ib.ib2 .rd-pn .row .pal,#hh-ib.ib2 .rd-pn .row .shp,#hh-ib.ib2 .rd-pn .row .ed{grid-column:2 / -1;} #hh-ib.ib2 .rd-pn .ptb{flex-wrap:nowrap;overflow-x:auto;} }',
+'@media (prefers-reduced-motion:reduce){ #hh-ib.ib2 .rd-u,#hh-ib .rd-scrim,#hh-ib .rd-dlg{animation:none;} }'
+].join('\n');
+IB6CSS+='\n'+RD8CSS;
+
+/* ═══ zzzzzzcr، صفحة القوالب: تصفية، وثلاثة أقسام ملونة (الشاشة، الأجهزة، الوسائل التعليمية) ═══ */
+var TP8_I={
+  box:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/>',tv:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>',
+  wheel:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 3v7M12 14v7M3 12h7M14 12h7"/>',flip:'<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/>',
+  check:'<path d="M5 12l5 5L20 7"/>',link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  sort:'<path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',cloud:'<path d="M7 18a5 5 0 010-10 6 6 0 0111.5 2A4 4 0 0118 18z"/>',
+  map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',line:'<path d="M3 12h18"/><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>',
+  abc:'<path d="M4 18l4-12 4 12M5.5 14h5M14 6h4a3 3 0 010 6h-4zM14 12h5a3 3 0 010 6h-5z"/>',odd:'<circle cx="7" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><circle cx="7" cy="17" r="3"/><rect x="14" y="14" width="6" height="6" rx="1"/>',
+  cross:'<rect x="3" y="3" width="6" height="6"/><rect x="9" y="3" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/><rect x="9" y="15" width="6" height="6"/><rect x="15" y="9" width="6" height="6"/>',
+  mount:'<path d="M3 20l6-10 4 6 3-4 5 8z"/><path d="M14 4v4M14 4l3 1-3 1"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>',
+  dice:'<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><path d="M16 4.5a3.5 3.5 0 010 7M21.5 20a6.5 6.5 0 00-4-6"/>',score:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  vol:'<path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13"/>',board:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21l4-4 4 4M7 9h6M7 12h9"/>',
+  traffic:'<rect x="8" y="2" width="8" height="20" rx="3"/><circle cx="12" cy="7" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="17" r="1.6"/>',
+  qr:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M21 14v7h-4"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',open:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>',
+  mon:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',ph:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',tool:'<path d="M14 4l6 6-11 11H3v-6L14 4z"/>'
+};
+function tp8S(k){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(TP8_I[k]||'')+'</svg>'; }
+var TP8_C={m:'#8A1538',b:'#1D5C99',g:'#23855A',y:'#C2862B',p:'#6A42A8',t:'#0E8288',o:'#C0562F',n:'#2C3E73'};
+/* [المعرّف، الأيقونة، الاسم، اللون، جديد] ، المعرّف هو قالب TEMPLATES أو أداة */
+var TP8={ scr:[['s-boxes','box','صناديق الأسرار','m'],['s-show','tv','المسابقة الكبرى','b'],['s-wheel','wheel','عجلة الأسئلة','y'],['s-flip','flip','البطاقات المقلوبة','n'],['s-tf','check','صح أم خطأ','g'],['s-match','link','التوصيل','t'],['s-memory','grid','بطاقات الذاكرة','p'],['s-order','sort','رتّب الأحداث','o'],
+    ['s-map','map','الخريطة الصامتة','t',1],['s-time','line','الخط الزمني','y',1],['s-odd','odd','اختر الدخيل','p',1],['s-word','abc','الكلمة المخفية','m',1],['s-cross','cross','الكلمات المتقاطعة','b',1]],
+  dev:[['race','bolt','سباق المُلهم','m'],['tf','check','صح أم خطأ السريع','g'],['cloud','cloud','سحابة الكلمات','y'],['order','sort','رتّب وصنّف','b'],['d-climb','mount','تسلّق القمة','o',1],['d-where','map','أين يقع؟','t',1]],
+  tool:[['timer','timer','المؤقت','m'],['pick','dice','الاختيار العشوائي','b'],['groups','users','تقسيم المجموعات','g'],['score','score','لوحة النقاط','y'],['quiet','vol','مقياس الهدوء','p'],['signal','traffic','إشارة العمل','o'],['board','board','السبورة','n'],['qr','qr','رمز الدخول','t']] };
+function tp8Ready(id,m){ if(m==='tool') return typeof window.hhTool==='function'&&(!window.hhToolHas||window.hhToolHas(id)); var t=TEMPLATES.filter(function(x){ return x.id===id; })[0]; return !!(t&&t.ready); }
+function tp8Card(x,m){ var ok=tp8Ready(x[0],m), tool=m==='tool';
+  var act=!ok?'':tool?'hhTool(\''+x[0]+'\')':'hhIbCreate(\''+x[0]+'\')';
+  return '<button type="button" class="tp8'+(tool?' tool':'')+(ok?'':' off')+'" style="--c:'+TP8_C[x[3]]+'"'+(ok?' onclick="'+act+'"':' disabled')+'><span class="ic">'+tp8S(x[1])+'</span><span class="tx"><b>'+esc(x[2])+(x[4]&&ok?'<span class="nw">جديد</span>':'')+'</b><small>'+(!ok?'قريباً':tool?'تفتح فوراً':m==='scr'?'على الشاشة':'على الأجهزة')+'</small></span><span class="go">'+tp8S(tool?'open':'plus')+'</span></button>'; }
+ib4Rack=function(){
+  var F=_ib.tpf||'all';
+  var seg='<div class="tp8-seg" role="tablist">'+[['all','الكل'],['scr','على الشاشة'],['dev','على الأجهزة'],['tool','وسائل تعليمية']].map(function(x){ return '<button type="button" role="tab" aria-selected="'+(F===x[0])+'" class="'+(F===x[0]?'on':'')+'" onclick="hhIbTpf(\''+x[0]+'\')">'+x[1]+'</button>'; }).join('')+'</div>';
+  function sec(m,ic,t,unit){ var arr=TP8[m], n=arr.filter(function(x){ return tp8Ready(x[0],m); }).length; return '<div class="tp8-sec"><i>'+tp8S(ic)+'</i><h2>'+t+'</h2><small>'+n+' '+unit+'</small></div><div class="tp8-grid">'+arr.map(function(x){ return tp8Card(x,m); }).join('')+'</div>'; }
+  var h='<div class="tp8">'+seg;
+  if(F==='all'||F==='scr') h+=sec('scr','mon','على الشاشة',(function(){ var n=TP8.scr.filter(function(x){ return tp8Ready(x[0],'scr'); }).length; return n>2&&n<11?'ألعاب':'لعبة'; })());
+  if(F==='all'||F==='dev') h+=sec('dev','ph','على أجهزة الطلاب','ألعاب');
+  if(F==='all'||F==='tool') h+=sec('tool','tool','وسائل تعليمية','أدوات');
+  return h+'<p class="tp8-sug">عندك فكرة لعبة أو وسيلة؟ <button type="button" onclick="hhIbSuggest()">اقترحها</button></p></div>';
+};
+window.hhIbTpf=function(f){ _ib.tpf=f; render(); };
+var TP8CSS=[
+'#hh-ib.ib2 .tp8{--rs:#fff;--rso:#FAF6EE;--rl:#E7DCC6;--ri:#3D0918;--rm:#7A6A54;--rgb:#FBF1DA;}',
+'body.dark-mode #hh-ib.ib2 .tp8{--rs:#22121A;--rso:#2A1720;--rl:#3E2C24;--ri:#F5E6C4;--rm:#B8A68A;--rgb:#3A2A10;}',
+'#hh-ib.ib2 .tp8-seg{display:inline-flex;background:var(--rs);border:1px solid var(--rl);border-radius:12px;padding:3px;margin-bottom:18px;max-width:100%;overflow-x:auto;scrollbar-width:none;}',
+'#hh-ib.ib2 .tp8-seg button{border:0;background:none;color:var(--rm);font-family:Cairo,sans-serif;font-weight:800;font-size:14px;padding:8px 14px;border-radius:9px;white-space:nowrap;cursor:pointer;}',
+'#hh-ib.ib2 .tp8-seg button.on{background:#5E0E26;color:#fff;}',
+'#hh-ib.ib2 .tp8-sec{display:flex;align-items:center;gap:10px;margin:6px 0 12px;} #hh-ib.ib2 .tp8-sec i{width:30px;height:30px;border-radius:9px;background:var(--rgb);color:#8A6D2E;display:grid;place-items:center;} #hh-ib.ib2 .tp8-sec i svg{width:17px;height:17px;}',
+'#hh-ib.ib2 .tp8-sec h2{margin:0;font-size:18px;font-weight:900;color:var(--ri);} #hh-ib.ib2 .tp8-sec small{font-size:13px;font-weight:700;color:var(--rm);}',
+'#hh-ib.ib2 .tp8-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:26px;}',
+'#hh-ib.ib2 .tp8{position:relative;} #hh-ib.ib2 button.tp8{position:relative;display:flex;align-items:center;gap:12px;border:1px solid var(--rl);background:var(--rs);border-radius:16px;padding:12px;text-align:start;color:var(--ri);min-width:0;transition:transform .12s,box-shadow .12s,border-color .12s;overflow:hidden;font-family:Cairo,sans-serif;cursor:pointer;}',
+'#hh-ib.ib2 button.tp8:not(.off):hover{transform:translateY(-2px);box-shadow:0 10px 24px color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);}',
+'#hh-ib.ib2 button.tp8 .ic{width:52px;height:52px;border-radius:14px;background:var(--c);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15);} #hh-ib.ib2 button.tp8 .ic svg{width:26px;height:26px;}',
+'#hh-ib.ib2 button.tp8 .tx{min-width:0;flex:1;} #hh-ib.ib2 button.tp8 b{display:block;font-size:15.5px;font-weight:900;line-height:1.35;} #hh-ib.ib2 button.tp8 small{font-size:12.5px;font-weight:700;color:var(--rm);}',
+'#hh-ib.ib2 button.tp8 .go{width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--c) 12%,var(--rs));color:var(--c);display:grid;place-items:center;flex-shrink:0;} #hh-ib.ib2 button.tp8 .go svg{width:17px;height:17px;}',
+'#hh-ib.ib2 button.tp8:not(.off):hover .go{background:var(--c);color:#fff;}',
+'#hh-ib.ib2 button.tp8 .nw{display:inline-block;vertical-align:middle;margin-inline-start:6px;font-size:10.5px;font-weight:900;color:#fff;background:#C0562F;border-radius:20px;padding:0 8px;line-height:18px;}',
+'#hh-ib.ib2 button.tp8.tool .ic{border-radius:50%;}',
+'#hh-ib.ib2 button.tp8.off{cursor:default;} #hh-ib.ib2 button.tp8.off .ic{filter:saturate(.25);opacity:.55;} #hh-ib.ib2 button.tp8.off .go{opacity:.35;}',
+'#hh-ib.ib2 .tp8-sug{font-size:13.5px;font-weight:700;color:var(--rm);} #hh-ib.ib2 .tp8-sug button{border:0;background:none;color:#8A1538;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer;text-decoration:underline;} body.dark-mode #hh-ib.ib2 .tp8-sug button{color:#E6CE8E;}',
+'@media (max-width:1000px){ #hh-ib.ib2 .tp8-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }',
+'@media (max-width:560px){ #hh-ib.ib2 .tp8-grid{grid-template-columns:minmax(0,1fr);} }',
+'@media (prefers-reduced-motion:reduce){ #hh-ib.ib2 button.tp8{transition:none;} }'
+].join('\n');
+IB6CSS+='\n'+TP8CSS;
 window.hhIbOpen=function(v,id){ open(v,id); };
 window.hhIbRefresh=function(){ _ib.loaded=false; if(document.getElementById('hh-ib')) open(_ib.view==='editor'?'mine':_ib.view); };
 window._hhIb=_ib; window._hhIbTemplates=TEMPLATES; window._hhIbGetGame=getGame; window._hhIbReadyList=readyList; window._hhIbBuildReady=buildReady;

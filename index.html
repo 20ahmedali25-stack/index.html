@@ -5710,11 +5710,9 @@ body.dark-mode .story-quote p{color:#FAFAF8;}
 <script src="curriculum-social7.js" defer></script>
 <script src="madrasati-social7.js" defer></script>
 <script src="madrasati-social7-t1.js" defer></script>
-<script src="maps-questions.js" defer></script>
 <script src="flags-questions.js" defer></script>
 <script src="capitals-questions.js" defer></script>
 <script src="partners-questions.js" defer></script>
-<script src="legend-maps-questions.js" defer></script>
 
 <script src="almulhim-assets.js" charset="utf-8"></script>
 <script src="almulhim-engine.js" charset="utf-8"></script>
@@ -14744,6 +14742,29 @@ window.hhBuildOverview=function(){ return hhAd2Home(); };
 <script src="almulhim-mihbara.js" charset="utf-8"></script>
 <script src="almulhim-sponsors.js" charset="utf-8"></script>
 <script src="almulhim-setupx.js" charset="utf-8"></script>
+<script src="almulhim-hub8.js" charset="utf-8"></script>
+<script src="almulhim-tools8.js" charset="utf-8"></script>
 <script src="almulhim-govnav.js" charset="utf-8"></script>
+<script>
+/* zzzzzzcp: فئتا «خرائط الدول» و«أساطير الخرائط» (2.6 ميغابايت صور) تُحمَّلان بعد ظهور الصفحة لا قبلها */
+(function(){
+  var FILES=[['maps-questions.js','خرائط الدول'],['legend-maps-questions.js','أساطير الخرائط']], P=null;
+  function addCats(){ try{
+    FILES.forEach(function(f){ var c=f[1]; if(typeof QDB_ORIGINAL==='undefined'||!QDB_ORIGINAL[c]) return;
+      if(typeof QDB!=='undefined'&&!(Array.isArray(QDB[c])&&QDB[c].length)){ var o={}; o[c]=JSON.parse(JSON.stringify(QDB_ORIGINAL[c])); if(typeof _hhApplyExtOverrides==='function') o=_hhApplyExtOverrides(o); QDB[c]=o[c]; } });
+    var g=document.getElementById('ms-cat-grid'); if(g&&typeof buildCatSelect==='function'&&document.querySelector('#screen-setup.active')) buildCatSelect();
+  }catch(e){ console.warn('lazy maps',e); } }
+  window.hhLoadMaps=function(){ if(P) return P; P=Promise.all(FILES.map(function(f){ return new Promise(function(ok){ var s=document.createElement('script'); s.src=f[0]; s.onload=s.onerror=function(){ ok(); }; document.body.appendChild(s); }); })).then(function(){ addCats(); }); return P; };
+  function need(cats){ return (cats||[]).some(function(c){ return c==='خرائط الدول'||c==='أساطير الخرائط'; }); }
+  function wrap(){ var f=window.startGame; if(typeof f!=='function'||f._lz) return;
+    var w=function(t,c,n){ var self=this, args=arguments, cats=c; if(!cats){ try{ cats=JSON.parse(localStorage.getItem('hh_saved_cats')||'[]'); }catch(e){ cats=[]; } }
+      if(need(cats)&&!(typeof QDB!=='undefined'&&QDB['خرائط الدول']&&QDB['خرائط الدول'].length&&QDB['أساطير الخرائط']&&QDB['أساطير الخرائط'].length)){ try{ toast('جارٍ تجهيز الخرائط…','info'); }catch(e){} return window.hhLoadMaps().then(function(){ return f.apply(self,args); }); }
+      return f.apply(self,args); };
+    w._lz=1; window.startGame=w; try{ startGame=w; }catch(e){} }
+  function go(){ wrap(); setTimeout(window.hhLoadMaps,300); }
+  if(document.readyState==='complete') go(); else window.addEventListener('load',go);
+})();
+</script>
+
 </body>
 </html>
