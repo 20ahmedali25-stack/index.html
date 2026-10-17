@@ -806,7 +806,7 @@ window.hhScrSpin=function(){
     var sg=Math.floor(a/seg); if(sg!==last){ last=sg; if(now-lt>60){ lt=now; sfx('select'); var pn=document.querySelector('#hh-scr .whw .pin'); if(pn){ pn.classList.remove('tk'); void pn.offsetWidth; pn.classList.add('tk'); } } }
     if(x<1){ requestAnimationFrame(fr); return; }
     S.spinning=false; S.wheelRot=to; sfx('unlock'); var hb=document.querySelector('#hh-scr .whw .hub'); if(hb) hb.classList.add('won');
-    setTimeout(function(){ if(S&&S.stage==='play') openQ(rem[k]); },650); })(t0);
+    var S0=S; setTimeout(function(){ if(S&&S===S0&&S.stage==='play'&&S.qs[rem[k]]) openQ(rem[k]); },650); })(t0);
 };
 window.hhScrDark=function(){ if(!S) return; S.dark=!S.dark; try{ localStorage.setItem('hh_scr_dark',S.dark?'1':'0'); }catch(e){} var r=document.getElementById('hh-scr'); if(r) r.classList.toggle('dk',S.dark); if(S.stage==='setup') renderSetup(); else render(); };
 window.hhScrLife=function(k){
