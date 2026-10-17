@@ -993,9 +993,9 @@ function readyList(){
   (UNITS[G]||[]).forEach(function(u,ui){
     var qm=(qdb()[u.mcq]||[]), qo=(qdb()[u.open]||[]), key=G+'-'+u.k;
     if(ui===0){ var cc=coreMcq(G,null).length, ce=extraMcq(G,null).length, MP=mixParts(G);
-      L.push({rid:G+'-all',sec:'all',kind:'mcq',title:'المراجعة الشاملة',n:cc||ce,extra:cc?ce:0,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:'أسئلة الاختيار الأساسية للوحدات، ويضيف المعلم ما يريد من أسئلة «مدرستي»، مرتبة من السهل إلى الصعب.',cats:(UNITS[G]||[]).map(function(x){ return x.mcq; }).filter(Boolean)});
-      if(MP.open+MP.order+MP.tf>0) L.push({rid:G+'-mix',sec:'all',kind:'mix',title:'المراجعة الشاملة المنوّعة',n:MP.n,extra:ce,parts:MP,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:'اختيار من متعدد وصح أم خطأ ومقالي وترتيب في لعبة واحدة. على شاشة الصف فقط.',cats:[],noEdit:true,screenOnly:true}); }
-    var umc=coreMcq(G,u).length, ume=extraMcq(G,u).length; if(umc||ume) L.push({rid:key+'-mcq',sec:u.k,kind:'mcq',title:'مراجعة '+u.short,n:umc||ume,extra:umc?ume:0,unit:u,c:u.c,ic:u.ic,d:u.d,cats:u.mcq?[u.mcq]:[],school:!umc});
+      var MX=MP.open+MP.order+MP.tf>0; L.push({rid:G+'-all',sec:'all',kind:'mcq',title:'المراجعة الشاملة',n:MX?MP.n:(cc||ce),extra:MX?ce:(cc?ce:0),mixed:MX,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:MX?'اختيار من متعدد وصح أم خطأ ومقالي وترتيب من كل الوحدات في لعبة واحدة، ويضيف المعلم ما يريد من أسئلة «مدرستي».':'أسئلة الاختيار الأساسية للوحدات، ويضيف المعلم ما يريد من أسئلة «مدرستي»، مرتبة من السهل إلى الصعب.',cats:(UNITS[G]||[]).map(function(x){ return x.mcq; }).filter(Boolean)});
+      if(false) L.push({rid:G+'-mix',sec:'all',kind:'mix',title:'المراجعة الشاملة المنوّعة',n:MP.n,extra:ce,parts:MP,unit:null,c:'linear-gradient(135deg,#8A1538,#5E0E26)',ic:'award',d:'اختيار من متعدد وصح أم خطأ ومقالي وترتيب في لعبة واحدة. على شاشة الصف فقط.',cats:[],noEdit:true,screenOnly:true}); }
+    var umc=coreMcq(G,u).length, ume=extraMcq(G,u).length; if(umc||ume) L.push({rid:key+'-mcq',sec:u.k,kind:'mcq',title:'مراجعة '+u.short,n:(umc+qo.length)||ume,extra:umc?ume:0,unit:u,c:u.c,ic:u.ic,d:u.d,cats:u.mcq?[u.mcq]:[],school:!umc});
     var pub=tfPublished(key); if((adm||pub)&&tfItems(key).length) L.push({rid:key+'-tf',sec:u.k,kind:'tf',title:'صح أم خطأ في '+u.short,n:tfItems(key).length,unit:u,c:'linear-gradient(135deg,#3D6B53,#2C5340)',ic:'check',d:'عبارات مبنية من أسئلة الوحدة. يصوّت الصف برفع اليد.',draft:!pub,tfKey:key});
     var pq=(UNITS[G]&&qm.length)?eligibleSrc(qm).length:0; if(pq>=3) L.push({rid:key+'-pairs',sec:u.k,kind:'pairs',title:'مفاهيم '+u.short,n:pq,unit:u,c:'linear-gradient(135deg,#1F4E79,#132f4a)',ic:'link',d:'كل مصطلح مع معناه من أسئلة الوحدة. تصلح للتوصيل أو بطاقات الذاكرة.',cats:[u.mcq],src:key+'-mcq',screenOnly:true});
     var oq=qo.filter(function(q){ return /←/.test(String(q.a||'')); }); if(oq.length) L.push({rid:key+'-order',sec:u.k,kind:'order',title:'رتّب أحداث '+u.short,n:oq.length,unit:u,c:'linear-gradient(135deg,#8A6D2E,#5c4816)',ic:'sort',d:oq.map(function(q){ return String(q.q).replace(/[:.]?\s*\(.*$/,'').replace(/\.$/,''); }).join('، ')+'.',cats:[u.open],src:key+'-open'});
@@ -1007,6 +1007,7 @@ function readyList(){
 function buildReady(rid){
   var R=readyList().filter(function(x){ return x.rid===rid; })[0]; if(!R) return null;
   var g={ id:'ready_'+rid.replace(/[^a-z0-9_-]/gi,'_'), title:R.title, template:'race', mode:'screen', screenTpl:'boxes', settings:defSettings('race'), questions:[], status:'ready' };
+  if(R.kind==='mcq'&&R.sec==='all'&&R.mixed) R=Object.assign({},R,{kind:'mix'});
   var meta={ rid:rid, kind:R.kind, crumb:R.title, cats:R.cats||[], defCat:null, noAdd:'' };
   if(R.kind==='mcq'){
     var DO={easy:0,med:1,hard:2,elite:3,legend:4,l1200:5};
@@ -1014,7 +1015,7 @@ function buildReady(rid){
     coreMcq(GG,R.sec==='all'?null:R.unit).forEach(function(o){ var q=fromQDB(o.src,o.cat,{settings:g.settings,mode:'live'}); if(o.idx!=null) q.srcIdx=o.idx; q._d=DO[o.src.diff]==null?1:DO[o.src.diff]; tagQ(q,o.u,o.src.diff,'mcq'); g.questions.push(q); });
     g.extras=buildExtras(GG,R.sec==='all'?null:R.unit,g);
     if(R.sec==='all'){ g.questions.sort(function(a,b){ return a._d-b._d; }); meta.noAdd='لإضافة سؤال افتح لعبة الوحدة نفسها، فيظهر هنا تلقائياً.'; }
-    else { meta.defCat=R.cats[0]; if(!R.cats.length){ meta.noAdd='أسئلة هذه الوحدة من مسار «مدرستي»، وتُعدَّل من هناك.'; g.questions.sort(function(a,b){ return a._d-b._d; }); } }
+    else { (qdb()[R.unit.open]||[]).forEach(function(src){ if(/←/.test(String(src.a||''))){ var it=String(src.a).split(/\s*←\s*/).map(function(x){ return x.trim(); }).filter(Boolean); if(it.length<2) return; var qo=mkQ(g,'open',String(src.q).replace(/\s*\([^)]*\)\.?\s*$/,'').replace(/[:.]\s*$/,''),null,null,60); qo.pts=it; qo.opts=[]; qo.correct=[]; tagQ(qo,R.unit,'hard','order'); g.questions.push(qo); return; } var q=fromQDB(src,R.unit.open,{settings:g.settings,mode:'screen'}); if(q.type!=='open'){ q.type='open'; q.pts=parsePts(src.a); q.opts=[]; q.correct=[]; } tagQ(q,R.unit,'hard','open'); g.questions.push(q); }); meta.defCat=R.cats[0]; if(!R.cats.length){ meta.noAdd='أسئلة هذه الوحدة من مسار «مدرستي»، وتُعدَّل من هناك.'; g.questions.sort(function(a,b){ return a._d-b._d; }); } }
     g.screenTpl='boxes';
   } else if(R.kind==='mix'){
     var G2=_ib.grade||'g7t1';
@@ -1025,7 +1026,7 @@ function buildReady(rid){
         if(/←/.test(String(src.a||''))){ var items=String(src.a).split(/\s*←\s*/).map(function(x){ return x.trim(); }).filter(Boolean); if(items.length<2) return;
           var qo=mkQ(g,'open',String(src.q).replace(/\s*\([^)]*\)\.?\s*$/,'').replace(/[:.]\s*$/,''),null,null,60); qo.pts=items; qo.opts=[]; qo.correct=[]; tagQ(qo,u,'hard','order'); g.questions.push(qo); return; }
         var q=fromQDB(src,u.open,{settings:g.settings,mode:'screen'}); if(q.type!=='open'){ q.type='open'; q.pts=parsePts(src.a); q.opts=[]; q.correct=[]; } tagQ(q,u,'hard','open'); g.questions.push(q); }); });
-    g.extras=buildExtras(G2,null,g); g.screenTpl='boxes'; g.title='المراجعة الشاملة المنوّعة';
+    g.extras=buildExtras(G2,null,g); g.screenTpl='boxes'; g.title=R.title||'المراجعة الشاملة';
     meta.noAdd='هذه اللعبة تُبنى من الألعاب الأخرى، فعدّل أسئلتها من هناك.';
   } else if(R.kind==='open'){
     R.cats.forEach(function(cat){ (qdb()[cat]||[]).forEach(function(src,i){ var q=fromQDB(src,cat,{settings:g.settings,mode:'screen'}); if(q.type!=='open'){ q.type='open'; q.pts=parsePts(src.a); q.opts=[]; q.correct=[]; } q.srcIdx=i; g.questions.push(q); }); });
