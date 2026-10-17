@@ -79,7 +79,7 @@ function vHome(){
 }
 
 /* ═══ القراءة ═══ */
-function markRead(){ var c=B().chapters[V.ci]; if(V.si<c.sections.length){ var k=c.k+'-'+V.si; if(!ST.read[k]){ ST.read[k]=1; save(); } } }
+function markRead(){ var c=B().chapters[V.ci]; if(V.si<c.sections.length){ var k=c.k+'-'+V.si; ST.last={ci:V.ci,si:V.si}; if(!ST.read[k]){ ST.read[k]=1; } save(); } }
 function hl(p,key){ var t=esc(p); if(key){ var k=esc(key); var i=t.indexOf(k); if(i>-1) t=t.slice(0,i)+'<mark>'+k+'</mark>'+t.slice(i+k.length); } return t; }
 function tbl(T){ return '<div class="l2-tbl"><table><thead><tr>'+T.head.map(function(h){ return '<th>'+esc(h)+'</th>'; }).join('')+'</tr></thead><tbody>'+T.rows.map(function(r){ return '<tr>'+r.map(function(x,i){ return '<td'+(i===0?' class="k"':'')+'>'+esc(x)+'</td>'; }).join('')+'</tr>'; }).join('')+'</tbody></table></div>'; }
 function chLabs(c){ var n=CHS[c.k]; return B().labs.map(function(l,i){ return [l,i]; }).filter(function(x){ return x[0].ch===n; }); }
@@ -341,5 +341,10 @@ var CSS=[
 '  .l2-lens .qq{flex-wrap:wrap;} .l2-mode{width:100%;} .l2-mode button{flex:1;justify-content:center;padding:8px 4px;font-size:12.5px;} .l2-nav .l2-b{padding:0 12px;} .l2-qq{padding:18px 14px;} }'
 ].join('\n');
 function style(){ if($('hh-learn2-css')) return; var s=document.createElement('style'); s.id='hh-learn2-css'; s.textContent=CSS; document.head.appendChild(s); }
+window.hhLn2Style=style;
+window.hhLn2Info=function(){ var b=B(); if(!b) return null; if(!ST) loadST(); var pc=totalProg(), L=ST.last&&b.chapters[ST.last.ci]?ST.last:null, c=L?b.chapters[L.ci]:null, si=L?Math.min(L.si,c.sections.length-1):0, rd=Object.keys(ST.read).length, ns=0; b.chapters.forEach(function(x){ ns+=x.sections.length; });
+  return {id:'nmodel',n:'البرنامج الثاني',cat:'th',aud:'عام',title:b.title,cover:'<b>التفكير بالنظرية<br>أم التفكير<br>بالنموذج؟</b><small>'+esc(b.author)+'</small>',mini:'التفكير بالنظرية أم بالنموذج؟',au:b.author+'، '+b.pub,
+    st:[[b.chapters.length,'محطات'],[b.labs.length,'حالة في المختبر'],[b.concepts.length,'مصطلحاً']],pct:pc,t:ST.t||0,tone:'t',open:'hhLn2Open()',scr:"hhLnScr('nmodel')",
+    res:L?{h:CHS[c.k]+'، الفقرة '+(si+1)+' من '+c.sections.length,x:c.sections[si].t,go:'hhLn2Open(\'ch\','+L.ci+');hhLn2Sec('+si+')',k:[[pc+'%','تقدمك'],[rd+'/'+ns,'فقرة قرأتها'],[Object.keys(ST.labs).length,'حالة حللتها']]}:null}; };
 window._hhLn2=function(){ return {V:V,ST:ST}; };
 })();

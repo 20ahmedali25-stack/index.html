@@ -33,13 +33,13 @@ var P={home:'<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>',pulse:'<pa
  timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>'};
 
 /* ═══ القائمة الجانبية ═══ */
-var NEW={priv8:1,ib8:1,tpl8:1,live8:1,games8:1,mh8:1,gate8:1,prog8:1,reg8:1,cert8:1,notif8:1,msg8:1,infl8:1,set8:1};
+var NEW={books8:1,priv8:1,ib8:1,tpl8:1,live8:1,games8:1,mh8:1,gate8:1,prog8:1,reg8:1,cert8:1,notif8:1,msg8:1,infl8:1,set8:1};
 var NAV8=[
  ['عام',[['home','نظرة عامة','home'],['activity','سجل النشاط','pulse'],['healthcheck','فحص المنصة','shield']]],
  ['المحتوى',[['questions','الأسئلة','q'],['review','المراجعة','check'],['categories','الفئات','grid'],['paths','المسارات','route'],['competitions','المسابقات','trophy'],['priv8','المسابقات الخاصة','lock',1]]],
  ['الإبداع',[['ib8','الألعاب الجاهزة','star',1],['tpl8','القوالب والوسائل','box',1],['live8','الجولات المباشرة','play'],['games8','ألعاب المعلمين','grid',1]]],
  ['التعليم',[['schools','المدارس','school'],['curricula','المناهج','book'],['curriculum','مركز المنهج','doc'],['classes','الصفوف والطلاب','users'],['toolbox','أدوات المعلم','pen'],['mh8','المحبرة','pen'],['gate8','بوابة المدرسة','lock',1]]],
- ['البرامج',[['prog8','البرامج والدورات','badge',1],['reg8','التسجيلات','users'],['cert8','الشهادات','doc',1]]],
+ ['البرامج',[['prog8','البرامج والدورات','badge',1],['reg8','التسجيلات','users'],['cert8','الشهادات','doc',1],['books8','اقتراحات الكتب','book',1]]],
  ['الناس',[['users','المستخدمون','user'],['teachers','اعتماد المعلمين','badge'],['directory','دليل المعلمين','book'],['permissions','الصلاحيات','key'],['reviews','التقييمات','star'],['reports','البلاغات','flag']]],
  ['التواصل',[['landing','الرئيسية والاختصارات','layout'],['announcements','الإعلانات','mega'],['notif8','الإشعارات','bell',1],['msg8','رسالة للمعلم','msg',1],['whatsnew','ماذا الجديد','spark'],['sponsors','الرعاة والشركاء','heart'],['infl8','الشخصيات المؤثرة','star',1]]],
  ['النظام',[['stats','الإحصائيات والأثر','chart'],['backup','النسخ الاحتياطي','save'],['set8','الإعدادات العامة','gear',1]]]
@@ -47,7 +47,7 @@ var NAV8=[
 var META8={priv8:['المحتوى','المسابقات الخاصة','مسابقات برموز دخول للشركاء والمناسبات'],ib8:['الإبداع','الإبداع','كل ما يخص الألعاب: القوالب، الجاهزة، الجولات، وألعاب المعلمين'],tpl8:['الإبداع','القوالب والوسائل','إظهار القوالب والوسائل التعليمية أو إخفاؤها عن المعلمين'],
  live8:['الإبداع','الجولات المباشرة','الجولات الجارية الآن على أجهزة الطلاب'],games8:['الإبداع','ألعاب المعلمين','الألعاب التي أنشأها المعلمون في الإبداع'],mh8:['التعليم','المحبرة','الصفوف والطلاب والسجلات في المحبرة'],
  gate8:['التعليم','بوابة المدرسة','طلبات اعتماد المعلمين، والقبول والرفض مع ذكر السبب'],prog8:['البرامج','البرامج والدورات','البرامج الحضورية وأعداد المسجلين'],reg8:['البرامج','التسجيلات','طلبات التسجيل في كل البرامج'],
- cert8:['البرامج','الشهادات','الشهادات الصادرة من المنصة'],notif8:['التواصل','الإشعارات','إشعار يصل لجرس المستخدمين'],msg8:['التواصل','رسالة للمعلم','رسالة خاصة تصل لإشعارات معلم واحد'],
+ cert8:['البرامج','الشهادات','الشهادات الصادرة من المنصة'],books8:['البرامج','اقتراحات الكتب','كتب يقترحها الزوار لتصير برامج في «تعلّم»'],notif8:['التواصل','الإشعارات','إشعار يصل لجرس المستخدمين'],msg8:['التواصل','رسالة للمعلم','رسالة خاصة تصل لإشعارات معلم واحد'],
  infl8:['التواصل','الشخصيات المؤثرة','صفحة الملهمين الداعمين للمنصة'],set8:['النظام','الإعدادات العامة','بيانات التواصل الظاهرة في المنصة']};
 var SUBTAB={ib8:'ready',tpl8:'tpl',live8:'live',games8:'games'};
 function buildNav8(){
@@ -251,6 +251,21 @@ window.hhAd8RegCSV=function(){ var rows=RGS.rows||[]; var q=function(s){ return 
   var head=['الطالب','الصف','المدرسة','البرنامج','ولي الأمر','الجوال','البريد','الحالة','التاريخ'];
   var csv='﻿'+head.map(q).join(',')+'\n'+rows.map(function(r){ return [r.studentName,r.grade,r.school,r.programName,r.parentName,r.phone,r.email,r.status==='confirmed'?'مؤكد':'بانتظار',dstr(ms(r.createdAt))].map(q).join(','); }).join('\n');
   var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download='registrations.csv'; document.body.appendChild(a); a.click(); a.remove(); };
+
+/* اقتراحات الكتب من «تعلّم» */
+var BKS={st:'new'};
+R8.books8=async function(p,force){
+  load(p); var L=await get('books',async function(){ var o=[]; var s=await db().collection('problem_reports').where('type','==','book_suggestion').limit(300).get(); s.forEach(function(d){ var x=d.data()||{}; x._id=d.id; o.push(x); }); return o; },force)||[];
+  L.sort(function(a,b){ return ms(b.createdAt)-ms(a.createdAt); });
+  var cnt=function(s){ return L.filter(function(x){ return s==='all'||(x.status||'new')===s; }).length; }, f=L.filter(function(x){ return BKS.st==='all'||(x.status||'new')===BKS.st; });
+  p.innerHTML='<div class="ad8-fl"><div class="ad8-tabs" role="tablist">'+[['new','جديدة'],['seen','قيد الدراسة'],['resolved','أُنجزت'],['all','الكل']].map(function(t){ return '<button type="button" class="'+(BKS.st===t[0]?'on':'')+'" onclick="hhAd8BkSt(\''+t[0]+'\')">'+t[1]+'<em>'+cnt(t[0])+'</em></button>'; }).join('')+'</div></div>'
+   +'<div class="ad2-cd ad8-body">'+(f.length?'<div class="ad8-tbl"><table><thead><tr><th>الكتاب</th><th>لمن</th><th>لماذا</th><th>المقترح</th><th>التاريخ</th><th>الحالة</th><th></th></tr></thead><tbody>'+f.map(function(x){ var s=x.status||'new';
+     return '<tr><td><b>'+esc(x.bookTitle||x.description||'')+'</b><small>'+esc(x.bookAuthor||'')+'</small></td><td>'+esc(x.audience||'')+'</td><td>'+esc(x.why||'')+'</td><td>'+esc(x.reporterName||(x.user&&x.user.displayName)||(x.user&&x.user.email)||'زائر')+'</td><td>'+dstr(ms(x.createdAt))+'</td><td>'+(s==='resolved'?'<span class="ad8-pill g">أُنجز</span>':s==='seen'?'<span class="ad8-pill y">قيد الدراسة</span>':'<span class="ad8-pill">جديد</span>')+'</td>'
+      +'<td class="ac">'+(s!=='seen'?'<button type="button" class="ad2-b" onclick="hhAd8BkSet(\''+x._id+'\',\'seen\')">قيد الدراسة</button>':'')+(s!=='resolved'?'<button type="button" class="ad2-b ad2-b--p" onclick="hhAd8BkSet(\''+x._id+'\',\'resolved\')">أُنجز</button>':'')+'<button type="button" class="ad2-b ad8-del" aria-label="حذف" onclick="hhAd8BkDel(\''+x._id+'\')">'+SV(P.x,14,2.4)+'</button></td></tr>'; }).join('')+'</tbody></table></div>':emp('لا اقتراحات هنا','تصل الاقتراحات من بطاقة «اقترح كتاباً» في صفحة «تعلّم»'))+'</div>';
+};
+window.hhAd8BkSt=function(s){ BKS.st=s; R8.books8(panel()); };
+window.hhAd8BkSet=async function(id,s){ try{ await db().collection('problem_reports').doc(id).set({status:s},{merge:true}); audit('book_suggestion_'+s,id); toastX('حُدّثت الحالة','success'); R8.books8(panel(),true); }catch(e){ toastX('تعذّر التحديث','error'); } };
+window.hhAd8BkDel=async function(id){ if(!confirm('حذف الاقتراح؟')) return; try{ await db().collection('problem_reports').doc(id).delete(); toastX('حُذف','success'); R8.books8(panel(),true); }catch(e){ toastX('تعذّر الحذف','error'); } };
 
 /* الشهادات */
 R8.cert8=async function(p,force){
