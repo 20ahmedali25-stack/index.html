@@ -18,7 +18,7 @@ var SEC=[
   {k:'tool',  t:'المحبرة',  go:function(){ if(typeof window.hhMhOpen==='function'){ closeOv('mh'); hhMhOpen(); } else { closeOv(); call('hhNavigate','screen-toolbox'); } }},
   {k:'ib',    t:'الإبداع',    go:function(){ closeOv('ib'); call('hhIbOpen'); }},
   {k:'prog',  t:'البرامج',  go:function(){ closeOv('prog'); call('hhOpenLeaderPrograms'); }},
-  {k:'lb',    t:'المتصدرون',go:function(){ closeOv(); call('hhNavigate','screen-lb'); }}
+  {k:'learn', t:'تعلّم',    go:function(){ closeOv('learn'); call('hhLearnOpen'); }}
 ];
 var DD={
   sup:{t:'الداعمون', items:[
@@ -28,6 +28,7 @@ var DD={
   ]},
   about:{t:'عن المنصة', items:[
     {k:'story',t:'قصتنا',s:'رسالة المنصة ورؤيتها',go:function(){ closeOv(); call('hhNavigate','screen-story'); }},
+    {k:'lb',t:'المتصدرون',s:'ترتيب المشاركين في مسابقات المنصة',go:function(){ closeOv(); call('hhNavigate','screen-lb'); }},
     {k:'rev',t:'آراء المستخدمين',s:'شاركنا رأيك في المنصة',go:function(){ closeOv(); call('hhNavigate','screen-reviews'); }},
     {k:'mg',t:'ألعابي المحفوظة',s:'تشكيلاتك السابقة جاهزة بضغطة',go:function(){ closeOv(); call('hhNavigate','screen-mygames'); }},
     {k:'ref',t:'المراجع',s:'مصادر المحتوى والأسئلة',go:function(){ closeOv(); call('hhNavigate','screen-references'); }},
@@ -35,8 +36,8 @@ var DD={
     {k:'contact',t:'التواصل والدعم',s:'راسلنا أو اطلب المساعدة',go:function(){ closeOv(); call('hhNavigate','screen-contact'); }}
   ]}
 };
-var SCR2K={'screen-menu':'home','screen-toolbox':'tool','screen-lb':'lb','screen-sponsors':'sup','screen-influencers':'sup','screen-story':'about','screen-reviews':'about','screen-mygames':'about','screen-references':'about','screen-contact':'about','screen-about':'about'};
-var OV2K={school:'school',ib:'ib',prog:'prog',mh:'tool'};
+var SCR2K={'screen-menu':'home','screen-toolbox':'tool','screen-lb':'about','screen-sponsors':'sup','screen-influencers':'sup','screen-story':'about','screen-reviews':'about','screen-mygames':'about','screen-references':'about','screen-contact':'about','screen-about':'about'};
+var OV2K={school:'school',ib:'ib',prog:'prog',mh:'tool',learn:'learn'};
 var cur='home', curOv=null;
 
 function playNow(){ closeOv(); if(typeof window.hhStartGameNow==='function') hhStartGameNow(); else call('hhNavigate','screen-setup'); }
@@ -143,7 +144,7 @@ var FOOT_SCR=['screen-menu','screen-toolbox','screen-lb','screen-sponsors','scre
 function placeFoot(){
   var ft=window._gvFoot; if(!ft) return;
   var host=null;
-  if(curOv){ host=document.getElementById(curOv==='ib'?'hh-ib':curOv==='prog'?'hh-pg':curOv==='mh'?'hh-mh':'hh-sch-wiz')||(curOv==='school'?document.getElementById('hh-school-hub'):null); }
+  if(curOv){ host=document.getElementById(curOv==='ib'?'hh-ib':curOv==='prog'?'hh-pg':curOv==='mh'?'hh-mh':curOv==='learn'?'hh-learn':'hh-sch-wiz')||(curOv==='school'?document.getElementById('hh-school-hub'):null); }
   else if(FOOT_SCR.indexOf(curScr)>-1){ host=document.getElementById(curScr); }
   if(host){ if(ft.parentNode!==host||host.lastElementChild!==ft) host.appendChild(ft); ft.style.display=''; ft.classList.toggle('gv-ft-w',host.classList.contains('screen')); fitFoot(); }
   else ft.style.display='none';
@@ -164,7 +165,7 @@ var miniOn=false;
 function onScroll(e){ if(window.innerWidth<901){ if(miniOn){ miniOn=false; document.documentElement.classList.remove('gv-mini'); } return; }
   var t=e&&e.target, y=0;
   if(!t||t===document||t===document.documentElement||t===document.body) y=window.scrollY||document.documentElement.scrollTop||0;
-  else { if(!t.closest||!(t.closest('.screen.active')||t.closest('#hh-ib,#hh-pg,#hh-sch-wiz,#hh-school-hub,#hh-mh'))) return; y=t.scrollTop||0; }
+  else { if(!t.closest||!(t.closest('.screen.active')||t.closest('#hh-ib,#hh-pg,#hh-sch-wiz,#hh-school-hub,#hh-mh,#hh-learn'))) return; y=t.scrollTop||0; }
   if(!miniOn&&y>120){ miniOn=true; document.documentElement.classList.add('gv-mini'); }
   else if(miniOn&&y<12){ miniOn=false; document.documentElement.classList.remove('gv-mini'); } }
 document.addEventListener('scroll',onScroll,true);
@@ -326,7 +327,7 @@ var IC={
 /* كل صفحة: الحاوية، العنوان، الوصف، المسار، الأيقونة، العناصر التي تُخفى، والتبويبات والأزرار */
 var PAGES=[
   {id:'screen-toolbox',scr:1,ic:'tool',bc:'المحبرة',t:'أدوات المعلم',s:'أدوات احترافية تختصر وقتك، وتكبّر أثرك',hide:['.tbx-hero'],meta:'.tb2-chips'},
-  {id:'screen-lb',scr:1,ic:'lb',bc:'المتصدرون',t:'المتصدرون',s:'ترتيب المشاركين في مسابقات المنصة، يتحدّث بعد كل لعبة',tabs:'[id^="lb-tab-"]',hideTabs:1},
+  {id:'screen-lb',scr:1,ic:'lb',bc:'عن المنصة › المتصدرون',t:'المتصدرون',s:'ترتيب المشاركين في مسابقات المنصة، يتحدّث بعد كل لعبة',tabs:'[id^="lb-tab-"]',hideTabs:1},
   {id:'screen-sponsors',scr:1,ic:'hand',bc:'الداعمون › الرعاة والشركاء',t:'الرعاة والشركاء',s:'الجهات الراعية للمنصة وبرامجها، والجهات المتعاونة معنا'},
   {id:'screen-influencers',scr:1,ic:'star',bc:'الداعمون › الشخصيات المؤثرة',t:'الشخصيات المؤثرة',s:'الملهمون، الأيادي البيضاء التي أضاءت طريقنا',hideFirst:1},
   {id:'screen-story',scr:1,ic:'book',bc:'عن المنصة › قصتنا',t:'قصتنا',s:'كيف بدأت فكرة المُلهم، ولماذا'},
