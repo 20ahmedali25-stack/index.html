@@ -1,5 +1,5 @@
 /* ============================================================
-   المُلهم التعليمي، المحبرة (zzzzzzco)
+   المُلهم التعليمي، المدرسة: الحصة والطلاب (كانت «المحبرة»، zzzzzzcy)
    أربعة تبويبات: الحصة، الطلاب، الدرجات، التقارير، ونافذة إعدادات
    الأسماء تُحفظ في المنصة (classroom_students.studentName)
    التسجيلات في student_records/{id}.mh، والدرجات في mhGrades، والملاحظة في mhNote، والغياب في mhAtt
@@ -123,7 +123,7 @@ async function loadClass(code){
   if(M.demo){ M.cur=code; M.st=DEMO[code]||[]; render(); return; }
   M.cur=code; M.loading=true; M.err=false; M.st=[]; S.log=[]; render();
   try{
-    var qs=await fdb().collection('classroom_students').where('classCode','==',code).where('active','==',true).get();
+    var qs=await fdb().collection('classroom_students').where('classCode','==',code).where('teacherId','==',uid()).where('active','==',true).get();
     var st=[]; qs.forEach(function(d){ var x=d.data()||{}; var n=parseInt(x.num,10); if(!(n>0)){ var m=String(x.studentName||'').match(/(\d+)/); n=m?+m[1]:0; } st.push({id:d.id,num:n,name:String(x.studentName||'').trim(),abs:false,ev:[],gr:{},note:''}); });
     st.sort(function(a,b){ return (a.num||999)-(b.num||999); }); st.forEach(function(s,i){ if(!s.num) s.num=i+1; });
     /* نقل الأسماء المحفوظة على هذا الجهاز سابقاً إلى المنصة */
@@ -555,7 +555,7 @@ window.hhMhOpen=function(tab){
   var old=$('hh-mh'); if(old) old.remove();
   try{ document.body.classList.remove('hh-immersive'); }catch(e){}
   var ov=document.createElement('div'); ov.id='hh-mh'; ov.className='mh3';
-  ov.innerHTML='<div class="mx-head"><div class="mh-cls"><select id="mh-cls" aria-label="الشعبة"></select><button type="button" id="mh-gear" aria-label="الإعدادات" title="الإعدادات">'+sv('gear')+'</button></div><nav id="mh-tabs" role="tablist" aria-label="أقسام المحبرة"></nav></div><main class="wrap" id="mh-app"></main><div id="mh-layer"></div>';
+  ov.innerHTML='<div class="mx-head"><div class="mh-cls"><select id="mh-cls" aria-label="الشعبة"></select><button type="button" id="mh-gear" aria-label="الإعدادات" title="الإعدادات">'+sv('gear')+'</button></div><nav id="mh-tabs" role="tablist" aria-label="أقسام الحصة والطلاب"></nav></div><main class="wrap" id="mh-app"></main><div id="mh-layer"></div>';
   document.body.appendChild(ov);
   if(tab&&/^(class|students|grades|reports)$/.test(tab)) S.tab=tab;
   try{ if(window.hhNavMark) hhNavMark('mh'); }catch(e){}

@@ -33,7 +33,7 @@ var V={view:'home',ci:0,si:0,lab:0,st:0,a:{},mode:'self',gq:''};
 var ST=null, _t=null;
 function loadST(){ try{ ST=JSON.parse(localStorage.getItem('hh_learn_nmodel')||'null'); }catch(e){} ST=ST||{}; ['read','quiz','labs','act'].forEach(function(k){ if(!ST[k]) ST[k]={}; });
   var u=me(); if(u&&u.uid&&window.firebase&&firebase.firestore){ try{ firebase.firestore().collection('program_progress').doc(u.uid).get().then(function(d){ var r=d&&d.exists&&(d.data()||{}).learn_nmodel; if(r&&(r.t||0)>(ST.t||0)){ ST=r; ['read','quiz','labs','act'].forEach(function(k){ if(!ST[k]) ST[k]={}; }); render(); } }).catch(function(){}); }catch(e){} } }
-function save(){ ST.t=Date.now(); try{ localStorage.setItem('hh_learn_nmodel',JSON.stringify(ST)); }catch(e){} clearTimeout(_t); _t=setTimeout(function(){ var u=me(); if(!u||!u.uid||!window.firebase||!firebase.firestore) return; try{ firebase.firestore().collection('program_progress').doc(u.uid).set({learn_nmodel:ST},{merge:true}).catch(function(){}); }catch(e){} },1500); }
+function save(){ try{ if(window.hhLearnBoardPush){ var _b=B(), _p=0; _b.chapters.forEach(function(c){ if((ST.quiz[c.k]||0)>=70) _p++; }); hhLearnBoardPush('nmodel',_b.title,totalProg(),_p,_b.chapters.length,ST.quiz); } }catch(e){} ST.t=Date.now(); try{ localStorage.setItem('hh_learn_nmodel',JSON.stringify(ST)); }catch(e){} clearTimeout(_t); _t=setTimeout(function(){ var u=me(); if(!u||!u.uid||!window.firebase||!firebase.firestore) return; try{ firebase.firestore().collection('program_progress').doc(u.uid).set({learn_nmodel:ST},{merge:true}).catch(function(){}); }catch(e){} },1500); }
 function chProg(ci){ var c=B().chapters[ci], n=c.sections.length+1, r=0; c.sections.forEach(function(_,i){ if(ST.read[c.k+'-'+i]) r++; }); if(ST.quiz[c.k]!=null) r++; return Math.round(r/n*100); }
 function totalProg(){ var b=B(), s=0; b.chapters.forEach(function(_,i){ s+=chProg(i); }); var l=Object.keys(ST.labs).length/b.labs.length*100; return Math.round((s/b.chapters.length)*0.75+l*0.25); }
 
@@ -44,14 +44,14 @@ window.hhLn2Open=function(view,a){
 };
 function host(){ return $('hh-learn'); }
 function go(v,o){ V.view=v; V.a={}; V.st=0; if(o) Object.keys(o).forEach(function(k){ V[k]=o[k]; }); render(); var h=host(); if(h) h.scrollTop=0; }
-window.hhLn2Go=function(v,a,b){ if(v==='ch') go('ch',{ci:a||0,si:b||0}); else if(v==='case') go('case',{lab:a||0}); else if(v==='quiz') startQuiz(a); else go(v); };
+window.hhLn2Go=function(v,a,b){ if(v==='ch') go('ch',{ci:a||0,si:b||0}); else if(v==='case') go('case',{lab:a||0}); else if(v==='quiz') startQuiz(a); else if(v==='pad'){ go('labs'); setTimeout(function(){ var p=$('ln2-pad'); if(p) p.scrollIntoView({behavior:'smooth',block:'start'}); },60); } else if(v==='vote'){ vtLoad(); go('vote'); } else if(v==='ladder'){ V.mode='screen'; go('ladder'); } else go(v); };
 window.hhLn2Mode=function(m){ if(m==='live'){ liveDlg(); return; } V.mode=m; render(); };
 function render(){
   var h=host(); if(!h||!B()) return;
-  var stage=V.mode==='screen'&&(V.view==='ch'||V.view==='case'||V.view==='quiz');
+  var stage=(V.mode==='screen'&&(V.view==='ch'||V.view==='case'||V.view==='quiz'))||V.view==='vote'||V.view==='ladder';
   h.className='ln ln2'+(stage?' ln2-stg':'');
   document.body.classList.toggle('ln-stage',stage);
-  h.innerHTML=V.view==='ch'?vCh():V.view==='labs'?vLabs():V.view==='case'?vCase():V.view==='gloss'?vGloss():V.view==='quiz'?vQuiz():V.view==='cert'?vCert():vHome();
+  h.innerHTML=V.view==='ch'?vCh():V.view==='labs'?vLabs():V.view==='case'?vCase():V.view==='gloss'?vGloss():V.view==='quiz'?vQuiz():V.view==='cert'?vCert():V.view==='vote'?vVote():V.view==='ladder'?vLadder():vHome();
   if(V.view==='ch') markRead();
   var q=$('ln2-gq'); if(q){ q.oninput=function(){ V.gq=q.value; var L=$('ln2-gl'); if(L) L.innerHTML=glossList(); }; }
 }
@@ -70,8 +70,7 @@ function vHome(){
    +'<div class="bt"><button type="button" class="l2-b p" onclick="hhLn2Go(\'ch\','+nextCi+')">'+sv('play',15)+(pc?'تابع الرحلة':'ابدأ الرحلة')+'</button><button type="button" class="l2-b" onclick="hhLn2Go(\'labs\')">'+sv('flag',16)+'مختبر المحلل</button><button type="button" class="l2-b" onclick="hhLn2Go(\'gloss\')">'+sv('tag',16)+'المصطلحات</button></div></div>'
    +'<div class="q3"><div class="c"></div><div class="n" style="--k:#B8924A;top:0;left:50%;transform:translateX(-50%)"><span>الإرادة<small>ماذا يريد؟</small></span></div><div class="n" style="--k:#1F6F7A;bottom:6%;right:0"><span>القدرة<small>هل يستطيع؟</small></span></div><div class="n" style="--k:#A3354F;bottom:6%;left:0"><span>الطريقة<small>كيف سيفعل؟</small></span></div><div class="core">صانع<br>القرار</div></div></div>'
    +'<div class="l2-au"><span class="ic">'+sv('user',22)+'</span><div><b>عن المؤلف</b><p>'+esc(b.bio)+'</p></div><div class="pr"><div class="ring" style="--p:'+pc+'"><b>'+pc+'%</b></div><small>تقدمك</small></div></div>'
-   +'<div class="l2-sh"><h2>خريطة الحجة</h2><small>الكتاب كله في سبع محطات، كل محطة سؤال يجيب عنه المؤلف</small>'+modeSeg()+'</div>'
-   +'<div class="l2-map">'+b.chapters.map(function(c,i){ var p=chProg(i); return '<button type="button" class="nd'+(i===nextCi&&p<100?' on':'')+(p>=100?' dn':'')+'" onclick="hhLn2Go(\'ch\','+i+')"><span class="ic">'+sv(CHI[c.k]||'book',20)+'</span><em>'+CHS[c.k]+'</em><b>'+esc(chName(c))+'</b><span class="q">'+esc(c.q)+'</span><span class="pr"><i style="width:'+p+'%"></i></span></button>'; }).join('')+'</div>'
+   +ladderSec()
    +'<div class="l2-tri"><button type="button" onclick="hhLn2Go(\'labs\')"><i>'+sv('flag',22)+'</i><b>مختبر المحلل</b><small>'+b.labs.length+' حالة من الكتاب: تنبّأ بعدسة النظرية، ثم بعدسة النموذج، ثم اقرأ رأي المؤلف</small><span>'+Object.keys(ST.labs).length+' من '+b.labs.length+'</span></button>'
    +'<button type="button" onclick="hhLn2Go(\'gloss\')"><i>'+sv('tag',22)+'</i><b>معجم المصطلحات</b><small>'+b.concepts.length+' مصطلحاً بتعريف المؤلف، مع البحث والبطاقات</small><span>ابحث</span></button>'
    +'<button type="button" onclick="hhLn2Go(\'cert\')"><i>'+sv('badge',22)+'</i><b>شهادة الإتمام</b><small>بعد اجتياز اختبارات المحطات السبع بنسبة 70% فأكثر</small><span>'+Object.keys(ST.quiz).filter(function(k){ return ST.quiz[k]>=70; }).length+' من '+b.chapters.length+'</span></button></div>'
@@ -145,7 +144,7 @@ function vQuiz(){
   var q=c.quiz[Q.idx[Q.i]]; if(!Q.ord) Q.ord=shuf(q.o.map(function(_,i){ return i; }));
   return '<div class="l2-wrap'+(scr?' big':'')+'"><div class="l2-qh"><button type="button" class="l2-ib" onclick="hhLn2Go(\'ch\','+V.ci+')" aria-label="خروج">'+sv('x',18,2.4)+'</button><b>اختبار '+esc(CHS[c.k])+'</b><span>'+(Q.i+1)+' من '+Q.idx.length+'</span></div><div class="l2-qbar"><i style="width:'+Math.round(Q.i/Q.idx.length*100)+'%"></i></div>'
    +'<div class="l2-qq"><h2>'+esc(q.q)+'</h2><div class="l2-opts">'+Q.ord.map(function(i,j){ var k=Q.ch==null?'':i===0?' ok':i===Q.ch?' no':' off'; return '<button type="button" class="op'+k+'" onclick="hhLn2Q('+i+')" '+(Q.ch!=null?'disabled':'')+'><span class="l">'+['أ','ب','ج','د'][j]+'</span><span>'+esc(q.o[i])+'</span></button>'; }).join('')+'</div>'
-   +(Q.ch!=null?'<div class="l2-nav"><span>'+(Q.ch===0?'إجابة صحيحة':'الإجابة الصحيحة هي المضيئة')+'</span><button type="button" class="l2-b p" onclick="hhLn2QN()">'+(Q.i+1<Q.idx.length?'التالي':'النتيجة')+sv('next',15,2.4)+'</button></div>':'')+'</div></div>';
+   +(Q.ch!=null?(q.why?'<div class="l2-why" role="note"><b>لماذا؟</b>«'+esc(q.why)+'»'+(q.pg?'<small>صفحة '+esc(q.pg)+'</small>':'')+'</div>':'')+'<div class="l2-nav"><span>'+(Q.ch===0?'إجابة صحيحة':'الإجابة الصحيحة هي المضيئة')+'</span><button type="button" class="l2-b p" onclick="hhLn2QN()">'+(Q.i+1<Q.idx.length?'التالي':'النتيجة')+sv('next',15,2.4)+'</button></div>':'')+'</div></div>';
 }
 window.hhLn2Q=function(i){ var Q=V.qz; if(!Q||Q.ch!=null||Q.i>=Q.idx.length) return; Q.ch=i; if(i===0) Q.ok++; render(); };
 window.hhLn2QN=function(){ var Q=V.qz; if(!Q||Q.i>=Q.idx.length) return; Q.i++; Q.ch=null; Q.ord=null; render(); };
@@ -155,7 +154,7 @@ function vLabs(){
   var b=B();
   return '<div class="l2-wrap">'+crumbs([['تعلّم',"hhLnGo('home')"],[b.title,"hhLn2Go('home')"],['مختبر المحلل']])
    +'<div class="l2-lh"><span class="ic">'+sv('flag',30)+'</span><div><h1>مختبر المحلل</h1><p>'+b.labs.length+' حالة ضربها المؤلف في كتابه. في كل حالة: تقرأ الموقف، ثم ترى جواب النظرية الجاهز، ثم تفكّر بأسئلة النموذج: الإرادة والقدرة والطريقة، ثم تقرأ رأي المؤلف بنصه.</p></div><div class="r"><b>'+Object.keys(ST.labs).length+'/'+b.labs.length+'</b><small>حالة أنجزتها</small></div></div>'
-   +'<div class="l2-cases">'+b.labs.map(function(l,i){ return '<button type="button" class="'+(ST.labs[l.id]?'dn':'')+'" onclick="hhLn2Go(\'case\','+i+')"><em>'+esc(l.ch)+'، صفحة '+l.pg+'</em><b>'+esc(l.title)+'</b><span class="tg">'+(l.theory?sv('book',13)+esc(l.theory.name):sv('cpu',13)+'النموذج مباشرة')+'</span>'+(ST.labs[l.id]?'<i class="ck">'+sv('check',13,3)+'</i>':'')+'</button>'; }).join('')+'</div></div>';
+   +'<div class="l2-tri l2-tri2"><button type="button" onclick="hhLn2Go(\'pad\')"><i>'+sv('cpu',22)+'</i><b>لوحة المحلل: طبّق النموذج بنفسك</b><small>اختر صانع قرار من الواقع، واملأ الإرادة والقدرة والطريقة، ثم احكم واطبع بطاقتك</small><span>افتح اللوحة</span></button>'+'<button type="button" onclick="hhLn2Go(\'vote\')"><i>'+sv('chart',22)+'</i><b>نظرية أم نموذج؟ تصويت الصف</b><small>اعرض حالة على الشاشة، واجمع أيدي الطلاب قبل رأي المؤلف وبعده</small><span>وضع العرض</span></button></div>'+'<div class="l2-cases">'+b.labs.map(function(l,i){ return '<button type="button" class="'+(ST.labs[l.id]?'dn':'')+'" onclick="hhLn2Go(\'case\','+i+')"><em>'+esc(l.ch)+'، صفحة '+l.pg+'</em><b>'+esc(l.title)+'</b><span class="tg">'+(l.theory?sv('book',13)+esc(l.theory.name):sv('cpu',13)+'النموذج مباشرة')+'</span>'+(ST.labs[l.id]?'<i class="ck">'+sv('check',13,3)+'</i>':'')+'</button>'; }).join('')+'</div>'+vPad()+'</div>';
 }
 var CSTEPS=['الموقف','عدسة النظرية','عدسة النموذج','رأي المؤلف'];
 function vCase(){
@@ -200,6 +199,140 @@ function vCert(){ var b=B(), pass=b.chapters.filter(function(c){ return (ST.quiz
 window.hhLn2Print=function(){ var c=$('ln2-cert'), n=$('ln2-cn'), nm=n?n.value.trim():''; if(!nm){ toastX('اكتب الاسم أولاً','info'); if(n) n.focus(); return; }
   var css=($('hh-learn-css')||{}).textContent||''; var m=css.indexOf('.ln-cert{'); css=m>-1?css.slice(m):'';
   var w=window.open('','_blank'); if(!w) return; w.document.write('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>شهادة إتمام</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Amiri:wght@700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet"><style>@page{size:A4 landscape;margin:0}body{margin:0;font-family:Cairo,sans-serif}'+css+'.ln-cert{width:297mm;height:210mm;border-radius:0;box-shadow:none;max-width:none}.ln-cert .cr{border-color:#1F6F7A}.ln-cert h1{color:#123C44}</style></head><body>'+c.outerHTML.replace(/<input[^>]*>/,'<div class="nm">'+esc(nm)+'</div>')+'<script>setTimeout(function(){print()},700)<\/script></body></html>'); w.document.close(); };
+
+
+P.minus='<path d="M5 12h14"/>'; P.plus='<path d="M12 5v14M5 12h14"/>';
+/* ═══ سلّم الحجة ═══ */
+var LANS={intro:'التنبؤ فهو أمام خيارات متعددة، وهو ما يجعله أكثر صعوبة وتعقيدًا',ch1:'الباحث السياسي يدرس الفاعل ليفهم التفاعلات',ch2:'المعرفة التفسيرية المتحققة في سياقٍ ما',ch3:'نخدم النظريات أكثر مما تخدمنا',ch4:'إضافة مكلفة تضر بموضوعية البحث ودقته',ch5:'البحث في إرادته وقدراته وطرائقه',conclusion:'النظرية مهمة لتوسيع الفهم لا لتأسيسه'};
+function lAns(c){ var f=LANS[c.k], S=c.sections||[], i;
+  if(f) for(i=0;i<S.length;i++){ if(S[i].key&&S[i].key.indexOf(f)>-1) return {s:f,full:S[i].key,si:i}; }
+  for(i=0;i<S.length;i++){ if(S[i].key) return {s:S[i].key,full:S[i].key,si:i}; }
+  return {s:'',full:'',si:0}; }
+function thesis(){ var r=null; B().chapters.forEach(function(c){ (c.sections||[]).forEach(function(s){ var m=s.key&&String(s.key).match(/^فإذا كانت (.+?) فإن (.+?)\.?$/); if(m&&!r&&m[1].indexOf('النظرية')===0) r=[m[1],m[2],CHS[c.k]]; }); }); return r; }
+function stepCard(i){ var b=B(), c=b.chapters[i], a=lAns(c), p=chProg(i), s=ST.quiz[c.k];
+  return '<em>'+esc(CHS[c.k])+'، الدرجة '+(i+1)+' من '+b.chapters.length+'</em><b>'+esc(chName(c))+'</b><p class="q">'+sv('q',15)+'<span>'+esc(c.q)+'</span></p>'
+   +(a.full?'<blockquote>«'+esc(a.full)+'»</blockquote>':'')
+   +'<div class="ft"><span class="pr"><i style="width:'+p+'%"></i></span><small>أنجزت '+p+'% من المحطة'+(s!=null?'، ونتيجة اختبارها '+s+'%':'')+'</small><button type="button" class="l2-b p" onclick="hhLn2Go(\'ch\','+i+','+a.si+')">'+sv('book',15)+'اقرأ المحطة</button><button type="button" class="l2-b" onclick="hhLn2Go(\'quiz\','+i+')">'+sv('q',15)+'اختبر نفسك</button></div>'; }
+function ladder(big){ var b=B(), C=b.chapters, n=C.length, sel=V.ls!=null&&V.ls<n?V.ls:n-1, th=thesis();
+  return '<div class="l2-ldr'+(big?' big':'')+'"><div class="steps" style="--n:'+n+'">'+C.map(function(c,i){ var a=lAns(c), p=chProg(i);
+     return '<button type="button" class="st'+(i===n-1?' last':'')+(i===sel?' on':'')+(p>=100?' dn':'')+'" style="--h:'+(i*34)+'px" aria-pressed="'+(i===sel)+'" onclick="hhLn2Step('+i+')"><span class="no">'+(i+1)+'</span><em>'+esc(CHS[c.k])+'</em><b>'+esc(c.q)+'</b>'+(a.s?'<span class="a">«'+esc(a.s)+'»</span>':'')+(p>=100?'<i class="ck">'+sv('check',12,3)+'</i>':'')+'</button>'; }).join('')+'</div>'
+   +(th?'<div class="thesis"><span>'+esc(th[0])+'</span><i>'+sv('next',18,2.4)+'</i><span class="m">'+esc(th[1])+'</span><small>بنص المؤلف في '+esc(th[2])+'</small></div>':'')+'</div>'
+   +'<div class="l2-stc" id="ln2-stc" aria-live="polite">'+stepCard(sel)+'</div>'; }
+function ladderSec(){ var n=B().chapters.length;
+  return '<div class="l2-sh"><h2>سلّم الحجة</h2><small>'+n+' درجات من سؤال المقدمة إلى خلاصة الخاتمة: في كل درجة سؤال المحطة، وتحته جوابه بكلمات المؤلف</small><div class="l2-lbt"><button type="button" class="l2-b" onclick="hhLn2LPrint()">'+sv('print',15)+'اطبعها</button><button type="button" class="l2-b" onclick="hhLn2Go(\'ladder\')">'+sv('tv',15)+'اعرضها على الصف</button></div>'+modeSeg()+'</div>'+ladder(false); }
+function vLadder(){ var b=B();
+  return '<div class="l2-wrap big"><div class="l2-stg"><button type="button" class="l2-ib" onclick="hhLn2LdrX()" aria-label="خروج">'+sv('x',18,2.4)+'</button><b>سلّم الحجة، «'+esc(b.title)+'»</b><button type="button" class="l2-ib" onclick="hhLn2LPrint()" aria-label="طباعة">'+sv('print',18)+'</button><button type="button" class="l2-ib" onclick="hhLn2Full()" aria-label="ملء الشاشة">'+sv('full',18)+'</button></div>'+ladder(true)+'</div>'; }
+window.hhLn2Step=function(i){ var b=B(); if(!b||i<0||i>=b.chapters.length) return; V.ls=i; var h=host(); if(!h) return;
+  h.querySelectorAll('.l2-ldr .st').forEach(function(x,j){ x.classList.toggle('on',j===i); x.setAttribute('aria-pressed',String(j===i)); });
+  var c=$('ln2-stc'); if(c){ c.innerHTML=stepCard(i); c.style.animation='none'; void c.offsetWidth; c.style.animation=''; } };
+window.hhLn2LdrX=function(){ V.mode='self'; go('home'); };
+var PCSS=':root{--bg:#FAF7F1;--card:#fff;--soft:#F4EFE6;--ln:#E6DCC8;--ink:#23302F;--hd:#123C44;--mu:#6E7C7B;--t:#1F6F7A;--t1:#E7F2F1;--t2:#CFE6E4;--g:#B8924A;--g1:#FBF3E2;--g2:#F0DDB5;--r:#A3354F;--r1:#FBEDEF}'
+ +'@page{size:A4;margin:14mm}*{box-sizing:border-box}body{margin:0;font-family:Cairo,sans-serif;color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+ +'h1{font-family:"Reem Kufi",Cairo;color:var(--hd);font-size:26px;margin:0 0 2px}.sub{color:var(--mu);font-weight:700;font-size:13px;margin:0 0 14px}'
+ +'.pr-row{display:grid;grid-template-columns:34px 1fr;gap:4px 12px;border:1px solid var(--ln);border-radius:12px;padding:10px 12px;margin-bottom:8px;break-inside:avoid}.pr-row i{grid-row:span 3;width:30px;height:30px;border-radius:50%;background:var(--t);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900}'
+ +'.pr-row em{font-style:normal;font-size:12px;font-weight:900;color:var(--g)}.pr-row b{font-size:15px;color:var(--hd)}.pr-row span{font-family:Amiri,serif;font-size:17px;line-height:1.8;color:var(--t)}'
+ +'.pr-th{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px;font-weight:900}.pr-th span{background:var(--g1);border:1px solid var(--g2);border-radius:10px;padding:5px 12px}.pr-th span.m{background:var(--t1);border-color:var(--t2)}';
+function printDoc(ti,body){ var w=window.open('','_blank'); if(!w){ toastX('اسمح بالنوافذ المنبثقة لتتم الطباعة','info'); return; }
+  w.document.write('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>'+esc(ti)+'</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Amiri:wght@400;700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet"><style>'+PCSS+PADCSS+'</style></head><body>'+body+'<script>setTimeout(function(){print()},700)<\/script></body></html>'); w.document.close(); }
+window.hhLn2LPrint=function(){ var b=B(), th=thesis();
+  printDoc('سلّم الحجة','<h1>سلّم الحجة</h1><p class="sub">«'+esc(b.title)+'»، '+esc(b.author)+'. في كل درجة سؤال المحطة، وتحته جوابه بكلمات المؤلف.</p>'
+   +b.chapters.map(function(c,i){ var a=lAns(c); return '<div class="pr-row"><i>'+(i+1)+'</i><em>'+esc(CHS[c.k])+'، '+esc(chName(c))+'</em><b>'+esc(c.q)+'</b><span>«'+esc(a.full)+'»</span></div>'; }).join('')
+   +(th?'<div class="pr-th"><span>'+esc(th[0])+'</span><b>&#8592;</b><span class="m">'+esc(th[1])+'</span></div>':'')); };
+
+/* ═══ لوحة المحلل: طبّق النموذج بنفسك (تُحفظ على الجهاز فقط) ═══ */
+var PADCSS=".l2-pc{margin-top:12px;background:var(--card);border:1.5px solid var(--t2);border-radius:20px;padding:16px 18px;color:var(--ink);} .l2-pc .ph small{font-size:11.5px;font-weight:900;color:var(--t);} .l2-pc .ph b{display:block;font-size:20px;color:var(--hd);overflow-wrap:anywhere;} .l2-pc .ph span{display:block;font-size:14.5px;font-weight:700;overflow-wrap:anywhere;} .l2-pc .ph em{display:inline-block;margin-top:6px;font-style:normal;font-size:12px;font-weight:900;color:var(--g);background:var(--g1);border-radius:20px;padding:2px 10px;} .l2-pc .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;} .l2-pc .col{background:var(--soft);border-top:4px solid var(--k);border-radius:12px;padding:8px 10px;min-width:0;} .l2-pc .col > b{font-size:14.5px;color:var(--hd);} .l2-pc ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:4px;} .l2-pc li{font-size:13px;font-weight:700;line-height:1.7;overflow-wrap:anywhere;} .l2-pc li em{display:block;font-style:normal;font-size:11.5px;font-weight:900;color:var(--mu);} .l2-pc .e{color:var(--mu);font-weight:600;} .l2-pc .vr{margin-top:10px;border-radius:12px;padding:8px 12px;background:var(--t1);} .l2-pc .vr.no{background:var(--g1);} .l2-pc .vr b{font-size:15px;color:var(--hd);} .l2-pc .vr small{display:block;font-size:12.5px;font-weight:800;color:var(--mu);line-height:1.8;} .l2-pc .pf{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;font-weight:800;color:var(--mu);}";
+var PK='hh_learn_nmodel_pad', PD=null, _md=null;
+function padLoad(){ var d=null; try{ d=JSON.parse(localStorage.getItem(PK)||'null'); }catch(e){} d=(d&&typeof d==='object')?d:{};
+  ['who','cs','m','me'].forEach(function(k){ d[k]=typeof d[k]==='string'?d[k]:''; }); d.goal=d.goal==='ex'?'ex':'pr';
+  ['w','a'].forEach(function(k){ var x=Array.isArray(d[k])?d[k]:[]; d[k]=[0,1,2].map(function(i){ return typeof x[i]==='string'?x[i]:''; }); }); PD=d; return d; }
+function padSave(){ try{ localStorage.setItem(PK,JSON.stringify(PD)); }catch(e){} }
+function mdl(){ if(_md) return _md; var c=B().chapters.filter(function(x){ return x.k==='ch5'; })[0]||{sections:[]}, S=c.sections, T=null, sec={};
+  S.forEach(function(s){ if(s.table&&s.table.head&&s.table.head[0]==='صانع القرار') { T=s.table; sec.def=s.key; }
+    if(/^الركيزة الأولى/.test(s.t)) sec.w=s; if(/^الركيزة الثانية/.test(s.t)) sec.a=s; if(/^الركيزة الثالثة/.test(s.t)) sec.m=s; if(/للتفسير/.test(s.t)) sec.ex=s.key; });
+  var nm=function(h){ return String(h||'').replace(/\s*\(.*?\)\s*/g,'').trim(); }, ls=function(x){ return String(x||'').split('،').map(function(y){ return y.trim(); }).filter(Boolean); },
+      first=function(x){ return String(x||'').split(/[.،؛:]/)[0].trim(); }, hs=function(s){ return ((s&&s.items)||[]).map(function(it){ return first(it.x); }); };
+  var H=T?T.head:['','الإرادة','القدرة','الطريقة'], R=T?T.rows[0]:['','المبادئ، المصالح، الرغبات','الذاتية، الداخلية، الخارجية','الصفرية، التراكمية'];
+  _md={P:[{k:'w',n:nm(H[1]),c:'#B8924A',L:ls(R[1]),H:hs(sec.w)},{k:'a',n:nm(H[2]),c:'#1F6F7A',L:ls(R[2]),H:hs(sec.a)},{k:'m',n:nm(H[3]),c:'#A3354F',L:ls(R[3]),H:hs(sec.m)}],
+    def:sec.def||'',ex:sec.ex||'',ab:(sec.a&&sec.a.key)||'',pg:c.k};
+  return _md; }
+function fl(s){ return String(s||'').trim().length>=2; }
+function padEval(){ var M=mdl(), d=PD, w=d.w.filter(fl).length, a=d.a.filter(fl).length, mc=d.m?1:0, me=fl(d.me)?1:0, miss=[];
+  d.w.forEach(function(x,i){ if(!fl(x)&&M.P[0].L[i]) miss.push(M.P[0].n+': '+M.P[0].L[i]); });
+  if(d.goal==='pr'){ d.a.forEach(function(x,i){ if(!fl(x)&&M.P[1].L[i]) miss.push(M.P[1].n+': '+M.P[1].L[i]); }); if(!mc) miss.push(M.P[2].n+': '+M.P[2].L.join(' أم ')); else if(!me) miss.push(M.P[2].n+': شواهد من سلوكه'); }
+  var ok=d.goal==='ex'?w>=1:(w>=1&&a===3&&mc===1);
+  var h=d.goal==='ex'?(w===0?'التفسير لم يكتمل بعد':w===3?'التفسير ممكن':'التفسير ممكن مبدئياً'):(ok?(w===3&&me?'التنبؤ ممكن بقدر ما تصدق معلوماتك':'التنبؤ ممكن مبدئياً'):'التنبؤ يحتاج بحثاً');
+  return {w:w,a:a,mc:mc,me:me,ok:ok,h:h,miss:miss,ex:Math.round(w/3*100),pr:Math.round((w+a+mc+me)/8*100),rule:d.goal==='ex'?M.ex:M.ab}; }
+function padVerdict(){ var E=padEval(), d=PD;
+  if(!fl(d.who)) return '<div class="l2-pv"><div class="hd e">'+sv('user',18)+'ابدأ باسم صانع القرار: شخص بعينه، لا دولة ولا مؤسسة</div></div>';
+  return '<div class="l2-pv"><div class="hd '+(E.ok?'ok':'no')+'"><i>'+sv(E.ok?'check':'search',15,2.6)+'</i>حكمك: '+E.h+'</div>'
+   +'<div class="mt" style="--k:#1F6F7A"><span>جاهزية التفسير</span><i><em style="width:'+E.ex+'%"></em></i><b>'+E.ex+'%</b></div>'
+   +'<div class="mt" style="--k:#B8924A"><span>جاهزية التنبؤ</span><i><em style="width:'+E.pr+'%"></em></i><b>'+E.pr+'%</b></div>'
+   +(E.miss.length?'<p class="ms">'+sv('flag',14)+'ينقصك: '+esc(E.miss.join('، '))+'</p>':'')
+   +(E.rule?'<blockquote>«'+esc(E.rule)+'»<small>'+esc(B().author)+'، '+esc(CHS.ch5)+'</small></blockquote>':'')+'</div>'; }
+function padCard(){ var M=mdl(), d=PD, E=padEval(), b=B(), v=function(x){ return fl(x)?esc(x):'<span class="e">لم يُحدَّد بعد</span>'; };
+  var cols=M.P.map(function(p){ var li;
+    if(p.k==='m') li='<li><em>الطريقة المرجّحة</em>'+(d.m?esc(p.L[d.m==='t'?1:0]||''):'<span class="e">لم يُحدَّد بعد</span>')+'</li><li><em>الشواهد</em>'+v(d.me)+'</li>';
+    else li=p.L.map(function(l,i){ return '<li><em>'+esc(l)+'</em>'+v(d[p.k][i])+'</li>'; }).join('');
+    return '<div class="col" style="--k:'+p.c+'"><b>'+esc(p.n)+'</b><ul>'+li+'</ul></div>'; }).join('');
+  return '<div class="ph"><small>بطاقة تحليل بعدسة النموذج</small><b>'+(fl(d.who)?esc(d.who):'صانع القرار')+'</b><span>'+(fl(d.cs)?esc(d.cs):'الموقف لم يُكتب بعد')+'</span><em>'+(d.goal==='ex'?'الغاية: تفسير قرار وقع':'الغاية: التنبؤ بقرار لم يقع')+'</em></div>'
+   +'<div class="cols">'+cols+'</div><div class="vr '+(E.ok?'ok':'no')+'"><b>الحكم: '+E.h+'</b><small>جاهزية التفسير '+E.ex+'%، وجاهزية التنبؤ '+E.pr+'%'+(E.miss.length?'. ينقص: '+esc(E.miss.join('، ')):'')+'</small></div>'
+   +'<div class="pf"><span>بنموذج «الإرادة والقدرة والطريقة» من كتاب «'+esc(b.title)+'»، '+esc(b.author)+'</span><span>'+new Date().toLocaleDateString('ar-QA-u-nu-latn',{day:'numeric',month:'long',year:'numeric'})+'</span></div>'; }
+function vPad(){ if(!PD) padLoad(); var M=mdl(), d=PD;
+  var col=function(p){ var hd='<div class="h"><b>'+esc(p.n)+'</b><small>'+esc(p.L.join('، '))+'</small></div>';
+    if(p.k==='m') return '<div class="pc" style="--k:'+p.c+'">'+hd+'<div class="mc" role="group" aria-label="'+esc(p.n)+'">'+p.L.map(function(l,i){ var id=i?'t':'z'; return '<button type="button" class="'+(d.m===id?'on':'')+'" aria-pressed="'+(d.m===id)+'" onclick="hhLn2PadM(\''+id+'\')"><b>'+esc(l)+'</b>'+(p.H[i]?'<small>«'+esc(p.H[i])+'»</small>':'')+'</button>'; }).join('')+'</div>'
+      +'<label class="f"><span>شواهد من سلوكه السابق</span><textarea data-f="me" rows="2" oninput="hhLn2Pad(this)" placeholder="مواقف سابقة تدل على طريقته">'+esc(d.me)+'</textarea></label></div>';
+    return '<div class="pc" style="--k:'+p.c+'">'+hd+p.L.map(function(l,i){ return '<label class="f"><span>'+esc(l)+'</span>'+(p.H[i]?'<small>«'+esc(p.H[i])+'»</small>':'')+'<textarea data-f="'+p.k+i+'" rows="2" oninput="hhLn2Pad(this)" placeholder="ما الذي تعرفه؟">'+esc(d[p.k][i])+'</textarea></label>'; }).join('')+'</div>'; };
+  return '<section class="l2-pad" id="ln2-pad"><div class="l2-sh"><h2>لوحة المحلل: طبّق النموذج بنفسك</h2><small>اختر صانع قرار وموقفاً من الواقع، واملأ ركائز النموذج الثلاث بما تعرفه، ثم احكم: هل يكفي ما تعرفه للتفسير أو للتنبؤ؟ ما تكتبه يُحفظ على جهازك فقط.</small></div>'
+   +'<div class="l2-pdb">'+(M.def?'<p class="df">'+sv('quote',14)+'«'+esc(M.def)+'»</p>':'')
+   +'<div class="who"><label><span>صانع القرار</span><input data-f="who" oninput="hhLn2Pad(this)" value="'+esc(d.who)+'" placeholder="اسم شخص بعينه، لا دولة" maxlength="120"></label><label><span>الموقف أو القرار</span><input data-f="cs" oninput="hhLn2Pad(this)" value="'+esc(d.cs)+'" placeholder="مثال: هل سينضم إلى تحالف اقتصادي؟" maxlength="240"></label></div>'
+   +'<div class="gl" role="group" aria-label="الغاية"><span>غايتك:</span><button type="button" class="'+(d.goal==='ex'?'on':'')+'" aria-pressed="'+(d.goal==='ex')+'" onclick="hhLn2PadG(\'ex\')">تفسير قرار وقع</button><button type="button" class="'+(d.goal==='pr'?'on':'')+'" aria-pressed="'+(d.goal==='pr')+'" onclick="hhLn2PadG(\'pr\')">التنبؤ بقرار لم يقع</button></div>'
+   +'<div class="cv3">'+M.P.map(col).join('')+'</div><div id="ln2-padv">'+padVerdict()+'</div>'
+   +'<div class="bt"><button type="button" class="l2-b p" onclick="hhLn2PadPrint()">'+sv('print',15)+'اطبع البطاقة</button><button type="button" class="l2-b" onclick="hhLn2PadClr()">'+sv('refresh',15)+'امسح اللوحة</button></div></div>'
+   +'<div class="l2-pc" id="ln2-padc">'+padCard()+'</div></section>'; }
+function padUpd(){ var v=$('ln2-padv'), c=$('ln2-padc'); if(v) v.innerHTML=padVerdict(); if(c) c.innerHTML=padCard(); }
+window.hhLn2Pad=function(el){ if(!PD) padLoad(); var f=el&&el.getAttribute('data-f'); if(!f) return; var m=f.match(/^([wa])([0-2])$/);
+  if(m) PD[m[1]][+m[2]]=el.value; else if(f==='who'||f==='cs'||f==='me') PD[f]=el.value; padSave(); padUpd(); };
+function padBtns(sel,val){ var h=host(); if(!h) return; h.querySelectorAll(sel).forEach(function(x){ var on=x.getAttribute('onclick').indexOf("'"+val+"'")>-1; x.classList.toggle('on',on); x.setAttribute('aria-pressed',String(on)); }); }
+window.hhLn2PadG=function(g){ if(!PD) padLoad(); PD.goal=g==='ex'?'ex':'pr'; padSave(); padBtns('.l2-pdb .gl button',PD.goal); padUpd(); };
+window.hhLn2PadM=function(m){ if(!PD) padLoad(); PD.m=PD.m===m?'':m; padSave(); padBtns('.l2-pdb .mc button',PD.m||'_'); padUpd(); };
+window.hhLn2PadClr=function(){ if(!confirm('امسح كل ما كتبته في لوحة المحلل؟')) return; try{ localStorage.removeItem(PK); }catch(e){} PD=null; padLoad(); var s=$('ln2-pad'); if(s) s.outerHTML=vPad(); };
+window.hhLn2PadPrint=function(){ if(!PD) padLoad(); if(!fl(PD.who)){ toastX('اكتب اسم صانع القرار أولاً','info'); var i=document.querySelector('#ln2-pad input[data-f="who"]'); if(i) i.focus(); return; }
+  printDoc('بطاقة تحليل: '+PD.who,'<div class="l2-pc">'+padCard()+'</div>'); };
+
+/* ═══ نظرية أم نموذج؟ تصويت الصف (عدّ يدوي، بلا خادم) ═══ */
+var VK='hh_learn_nmodel_vote', VT=null;
+function TL(){ return B().labs.filter(function(l){ return !!l.theory; }); }
+function vtLoad(){ var d=null; try{ d=JSON.parse(localStorage.getItem(VK)||'null'); }catch(e){} d=(d&&typeof d==='object')?d:{}; var n=TL().length;
+  d.li=(d.li>=0&&d.li<n)?d.li|0:0; d.ph=(d.ph===1||d.ph===2)?d.ph:0; ['a','b'].forEach(function(k){ var x=Array.isArray(d[k])?d[k]:[]; d[k]=[Math.max(0,x[0]|0),Math.max(0,x[1]|0)]; }); VT=d; return d; }
+function vtSave(){ try{ localStorage.setItem(VK,JSON.stringify(VT)); }catch(e){} }
+function pc(x){ var n=x[0]+x[1]; return n?Math.round(x[0]/n*100):0; }
+function vVote(){ if(!VT) vtLoad(); var b=B(), L=TL(), D=VT, l=L[D.li], cur=D.ph===0?D.a:D.b, ph=D.ph;
+  var head='<div class="l2-stg"><button type="button" class="l2-ib" onclick="hhLn2Go(\'labs\')" aria-label="خروج">'+sv('x',18,2.4)+'</button><b>نظرية أم نموذج؟ تصويت الصف</b><button type="button" class="l2-ib" onclick="hhLn2Full()" aria-label="ملء الشاشة">'+sv('full',18)+'</button></div>';
+  var cs='<div class="l2-vh"><button type="button" class="l2-ib" onclick="hhLn2Vt(\'c\',-1)" '+(D.li===0?'disabled':'')+' aria-label="الحالة السابقة">'+sv('back',18,2.4)+'</button><div><small>الحالة '+(D.li+1)+' من '+L.length+'، '+esc(l.ch)+'، صفحة '+esc(l.pg)+'</small><h2>'+esc(l.title)+'</h2><p>'+esc(l.scene)+'</p></div><button type="button" class="l2-ib" onclick="hhLn2Vt(\'c\',1)" '+(D.li>=L.length-1?'disabled':'')+' aria-label="الحالة التالية">'+sv('next',18,2.4)+'</button></div>';
+  var rd='<div class="l2-vr">'+['الجولة الأولى: قبل رأي المؤلف','الجولة الثانية: بعد رأي المؤلف','النتيجة'].map(function(x,i){ return '<span class="'+(i===ph?'on':i<ph?'dn':'')+'">'+x+'</span>'; }).join('')+'</div>';
+  var auth=ph>=1?'<div class="l2-auth"><small>'+sv('quote',15)+'رأي المؤلف، صفحة '+esc(l.pg)+'</small><blockquote>'+esc(l.author)+'</blockquote><span>'+esc(b.author)+'</span></div><div class="l2-twin"><div><small>النظرية: '+esc(l.theory.name)+'</small><b>'+esc(l.theory.answer)+'</b><em>تبدأ من الإجابة</em></div><div class="m"><small>النموذج</small><b>أسئلة عن الإرادة والقدرة والطريقة</b><em>يبدأ من السؤال</em></div></div>':'';
+  var body;
+  if(ph<2){ var T=[['book','أبحث عن نظرية تجيب عنه','#B8924A'],['user','أدرس صانع القرار نفسه','#1F6F7A']];
+    body=auth+'<div class="l2-vq">'+(ph===0?'بأي العدستين تبدأ الإجابة عن هذا السؤال؟':'بعد رأي المؤلف: بأي العدستين تبدأ الآن؟')+'<small>اطلب رفع الأيدي، وأضف العدد هنا، أو اضغط 1 و 2 من لوحة المفاتيح</small></div>'
+     +'<div class="l2-vt">'+T.map(function(x,i){ return '<div class="tl" style="--k:'+x[2]+'"><b>'+sv(x[0],20)+esc(x[1])+'</b><span class="n" aria-live="polite">'+cur[i]+'</span><div class="pm"><button type="button" onclick="hhLn2Vt(\'d\','+i+')" aria-label="أنقص واحداً" '+(cur[i]?'':'disabled')+'>'+sv('minus',24,2.6)+'</button><button type="button" class="p" onclick="hhLn2Vt(\'i\','+i+')" aria-label="أضف واحداً">'+sv('plus',24,2.6)+'</button></div><small>المفتاح '+(i+1)+'</small></div>'; }).join('')+'</div>'
+     +'<div class="l2-vb">'+(ph===0?'<button type="button" class="l2-b p" onclick="hhLn2Vt(\'p\',1)">'+sv('eye',16)+'اكشف رأي المؤلف</button>':'<button type="button" class="l2-b" onclick="hhLn2Vt(\'p\',0)">'+sv('back',15,2.4)+'الجولة الأولى</button><button type="button" class="l2-b p" onclick="hhLn2Vt(\'p\',2)">'+sv('chart',16)+'اعرض النتيجة</button>')+'<button type="button" class="l2-b" onclick="hhLn2Vt(\'z\',0)">'+sv('refresh',15)+'صفّر العدّ</button></div>';
+  } else { var A=pc(D.a), Z=pc(D.b), df=Z-A, na=D.a[0]+D.a[1], nb=D.b[0]+D.b[1];
+    body=auth+'<div class="l2-vres"><p>نسبة من بدأ بالنظرية في كل جولة</p>'
+     +'<div class="r" style="--k:#B8924A"><span>قبل رأي المؤلف</span><i><em style="width:'+A+'%"></em></i><b>'+A+'%</b></div>'
+     +'<div class="r" style="--k:#1F6F7A"><span>بعد رأي المؤلف</span><i><em style="width:'+Z+'%"></em></i><b>'+Z+'%</b></div>'
+     +'<p class="ch">'+(!na||!nb?'أكمل عدّ الجولتين لتظهر المقارنة':df<0?'تراجعت نسبة من بدأ بالنظرية '+(-df)+' نقطة بعد رأي المؤلف':df>0?'زادت نسبة من بدأ بالنظرية '+df+' نقطة بعد رأي المؤلف':'لم تتغير النسبة بين الجولتين')+'</p>'
+     +'<p>عدد المصوتين: '+na+' في الجولة الأولى، و'+nb+' في الثانية</p></div>'
+     +'<div class="l2-vb"><button type="button" class="l2-b" onclick="hhLn2Vt(\'p\',1)">'+sv('back',15,2.4)+'الجولة الثانية</button><button type="button" class="l2-b" onclick="hhLn2Vt(\'z\',0)">'+sv('refresh',15)+'جولة جديدة</button>'+(D.li<L.length-1?'<button type="button" class="l2-b p" onclick="hhLn2Vt(\'c\',1)">الحالة التالية'+sv('next',15,2.4)+'</button>':'')+'</div>'; }
+  return '<div class="l2-wrap big">'+head+cs+rd+body+'<p class="l2-vnt">العدّ يدوي على جهاز المعلم فقط، ولا يحتاج اتصالاً ولا حسابات للطلاب.</p></div>'; }
+window.hhLn2Vt=function(op,x){ if(!VT) vtLoad(); var D=VT, L=TL(), cur=D.ph===0?D.a:D.b;
+  if(op==='c'){ var n=D.li+x; if(n<0||n>=L.length) return; D.li=n; D.ph=0; D.a=[0,0]; D.b=[0,0]; }
+  else if(op==='i'){ if(D.ph>1) return; cur[x]=Math.min(999,cur[x]+1); }
+  else if(op==='d'){ if(D.ph>1) return; cur[x]=Math.max(0,cur[x]-1); }
+  else if(op==='p'){ D.ph=x; }
+  else if(op==='z'){ D.ph=0; D.a=[0,0]; D.b=[0,0]; }
+  vtSave(); var h=host(), y=h?h.scrollTop:0; render(); if(h) h.scrollTop=(op==='c'||op==='z')?0:y; };
+document.addEventListener('keydown',function(e){ var h=host(); if(!h||!h.classList.contains('ln2')||h.classList.contains('ln3')||V.view!=='vote'||!VT||VT.ph>1||!h.querySelector('.l2-vt')) return; var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')) return;
+  if(e.key==='1'||e.key==='2'){ e.preventDefault(); hhLn2Vt('i',+e.key-1); } });
 
 /* ═══ مع دخول الطلاب ═══ */
 function liveDlg(){ var b=B(), h=host(); if(!h) return; var ov=document.createElement('div'); ov.className='ln-scrim'; ov.id='ln2-live';
@@ -338,7 +471,52 @@ var CSS=[
 '  .l2-au{grid-template-columns:auto 1fr;} .l2-au .pr{grid-column:1/-1;grid-template-columns:auto auto;justify-content:start;align-items:center;} .l2-map{grid-template-columns:repeat(2,minmax(0,1fr));} .l2-tri,.l2-cases,.l2-gl,.l2-ex,.l2-qu,.l2-opts,.l2-twin{grid-template-columns:minmax(0,1fr);}',
 '  .l2-rd{grid-template-columns:minmax(0,1fr);} .l2-toc{display:none;} .l2-pg{padding:20px 16px;} .l2-pg h2{font-size:25px;} .l2-key{font-size:20px;padding:14px 16px;} .l2-p{font-size:16.5px;line-height:2.05;} .l2-chbar span{font-size:9px;}',
 '  .l2-act .bins{grid-template-columns:minmax(0,1fr);} .l2-act .mt{grid-template-columns:minmax(0,1fr);} .l2-lh{grid-template-columns:auto 1fr;} .l2-lh .r{grid-column:1/-1;} .l2-lh h1{font-size:24px;} .l2-scene{flex-direction:column;}',
-'  .l2-lens .qq{flex-wrap:wrap;} .l2-mode{width:100%;} .l2-mode button{flex:1;justify-content:center;padding:8px 4px;font-size:12.5px;} .l2-nav .l2-b{padding:0 12px;} .l2-qq{padding:18px 14px;} }'
+'  .l2-lens .qq{flex-wrap:wrap;} .l2-mode{width:100%;} .l2-mode button{flex:1;justify-content:center;padding:8px 4px;font-size:12.5px;} .l2-nav .l2-b{padding:0 12px;} .l2-qq{padding:18px 14px;} }',
+'.l2-why{margin-top:14px;background:var(--t1);border-inline-start:4px solid var(--t);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700;line-height:1.9;color:var(--ink);animation:l2in .3s both;} .l2-why b{color:var(--t);margin-inline-end:6px;} .l2-why small{display:block;font-size:12px;font-weight:800;color:var(--mu);} .l2-wrap.big .l2-why{font-size:22px;}',
+'.l2-lbt{display:flex;gap:8px;flex-wrap:wrap;} .l2-lbt .l2-b{height:40px;padding:0 14px;font-size:13.5px;}',
+'.l2-ldr{position:relative;border:1px solid var(--ln);border-radius:28px;padding:26px 22px 18px;background:linear-gradient(180deg,#F3F6EF,var(--card) 60%);} body.dark-mode #hh-learn .l2-ldr{background:linear-gradient(180deg,#1C2E2C,var(--card) 60%);}',
+'.l2-ldr .steps{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:10px;align-items:end;}',
+'.l2-ldr .st{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;gap:6px;min-height:calc(190px + var(--h));min-width:0;background:var(--card);border:1.5px solid var(--ln);border-radius:18px;padding:12px 10px;transition:transform .2s,border-color .2s,box-shadow .2s;}',
+'.l2-ldr .st:hover,.l2-ldr .st.on{transform:translateY(-4px);border-color:var(--t);box-shadow:0 12px 26px rgba(31,111,122,.14);} .l2-ldr .st:focus-visible{outline:3px solid var(--g);outline-offset:2px;}',
+'.l2-ldr .st .no{width:26px;height:26px;border-radius:50%;background:var(--t1);color:var(--t);display:grid;place-items:center;font-size:12px;font-weight:900;} .l2-ldr .st em{font-style:normal;font-size:11px;font-weight:900;color:var(--g);} .l2-ldr .st b{font-size:13.5px;font-weight:900;line-height:1.6;color:var(--hd);}',
+'.l2-ldr .st .a{margin-top:auto;font-family:Amiri,serif;font-size:15.5px;line-height:1.6;color:var(--t);border-top:1px dashed var(--ln);padding-top:6px;} .l2-ldr .st .ck{position:absolute;top:12px;inset-inline-end:10px;width:20px;height:20px;border-radius:50%;background:var(--t);color:#fff;display:grid;place-items:center;}',
+'.l2-ldr .st.last{background:#13434D;border-color:#13434D;} .l2-ldr .st.last b,.l2-ldr .st.last em{color:#EBD49A;} .l2-ldr .st.last .a{color:#fff;border-color:rgba(255,255,255,.2);} .l2-ldr .st.last .no{background:rgba(255,255,255,.12);color:#EBD49A;} .l2-ldr .st.last.on{border-color:#EBD49A;} .l2-ldr .st.last .ck{background:#EBD49A;color:#13434D;}',
+'body.dark-mode #hh-learn .l2-ldr .st.last{background:#0F3940;border-color:#2C5153;}',
+'.l2-ldr .thesis{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:16px;font-weight:900;font-size:15px;color:var(--hd);} .l2-ldr .thesis span{background:var(--g1);border:1px solid var(--g2);border-radius:12px;padding:6px 12px;} .l2-ldr .thesis span.m{background:var(--t1);border-color:var(--t2);} .l2-ldr .thesis i{color:var(--t);display:grid;} .l2-ldr .thesis small{flex-basis:100%;text-align:center;font-size:11.5px;font-weight:800;color:var(--mu);}',
+'.l2-stc{margin-top:12px;background:var(--card);border:1px solid var(--ln);border-inline-start:6px solid var(--t);border-radius:18px;padding:14px 18px;animation:l2in .3s both;} .l2-stc em{font-style:normal;font-size:12px;font-weight:900;color:var(--t);} .l2-stc > b{display:block;font-size:19px;color:var(--hd);margin:2px 0 4px;}',
+'.l2-stc .q{display:flex;gap:6px;align-items:flex-start;margin:0 0 8px;font-size:14.5px;font-weight:800;color:var(--mu);line-height:1.8;} .l2-stc .q svg{margin-top:5px;} .l2-stc blockquote{margin:0 0 10px;font-family:Amiri,serif;font-size:22px;font-weight:700;line-height:1.85;color:var(--hd);}',
+'.l2-stc .ft{display:flex;gap:10px;align-items:center;flex-wrap:wrap;} .l2-stc .ft .pr{width:120px;height:6px;border-radius:6px;background:var(--soft);overflow:hidden;} .l2-stc .ft .pr i{display:block;height:100%;background:var(--t);} .l2-stc .ft small{flex:1;min-width:140px;font-size:12.5px;font-weight:800;color:var(--mu);} .l2-stc .ft .l2-b{height:40px;font-size:14px;}',
+'.l2-ldr.big .st{min-height:calc(250px + var(--h) * 1.3);} .l2-ldr.big .st b{font-size:17px;} .l2-ldr.big .st .a{font-size:19px;} .l2-ldr.big .thesis{font-size:19px;} .l2-wrap.big .l2-stc blockquote{font-size:30px;} .l2-wrap.big .l2-stc > b{font-size:26px;} .l2-wrap.big .l2-stc .q{font-size:19px;}',
+'.l2-tri.l2-tri2{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 16px;}',
+'.l2-cases button{grid-template-columns:minmax(0,1fr);} .l2-cases .tg{width:auto;justify-self:start;}',
+'.l2-pad{margin-top:10px;scroll-margin-top:12px;} .l2-pdb{background:var(--card);border:1px solid var(--ln);border-radius:22px;padding:18px;} .l2-pdb .df{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;font-family:Amiri,serif;font-size:17px;line-height:1.8;color:var(--hd);} .l2-pdb .df svg{color:var(--g);margin-top:6px;}',
+'.l2-pdb .who{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:10px;margin-bottom:12px;} .l2-pdb label{display:grid;gap:4px;min-width:0;} .l2-pdb label > span{font-size:13px;font-weight:900;color:var(--hd);}',
+'.l2-pdb input,.l2-pdb textarea{box-sizing:border-box;width:100%;max-width:100%;border:1.5px solid var(--ln);border-radius:12px;padding:9px 12px;font-family:Cairo,sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);background:var(--bg);outline:0;} .l2-pdb input:focus,.l2-pdb textarea:focus{border-color:var(--t);box-shadow:0 0 0 3px var(--t2);} .l2-pdb textarea{resize:vertical;min-height:58px;line-height:1.8;} .l2-pdb ::placeholder{color:var(--mu);opacity:.8;}',
+'.l2-pdb .gl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:13.5px;font-weight:900;color:var(--hd);} .l2-pdb .gl button{all:unset;cursor:pointer;padding:7px 14px;border-radius:11px;border:1.5px solid var(--ln);background:var(--bg);font-size:13.5px;font-weight:900;color:var(--mu);} .l2-pdb .gl button.on{background:var(--t);border-color:var(--t);color:#fff;} .l2-pdb .gl button:focus-visible,.l2-pdb .mc button:focus-visible{outline:3px solid var(--g);outline-offset:2px;}',
+'.l2-pdb .cv3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;} .l2-pdb .pc{border-radius:16px;padding:12px;background:var(--soft);border-top:4px solid var(--k);display:grid;gap:10px;align-content:start;min-width:0;}',
+'.l2-pdb .pc .h b{display:block;font-size:18px;color:var(--k);} body.dark-mode #hh-learn .l2-pdb .pc .h b{color:color-mix(in srgb,var(--k) 55%,#fff);} .l2-pdb .pc .h small{font-size:11.5px;font-weight:800;color:var(--mu);} .l2-pdb .f > small,.l2-pdb .mc small{font-family:Amiri,serif;font-size:14px;font-weight:400;line-height:1.7;color:var(--mu);}',
+'.l2-pdb .mc{display:grid;gap:6px;} .l2-pdb .mc button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:2px;background:var(--card);border:1.5px solid var(--ln);border-radius:12px;padding:8px 10px;} .l2-pdb .mc button b{font-size:14.5px;color:var(--hd);} .l2-pdb .mc button.on{border-color:var(--k);box-shadow:0 0 0 2px var(--k);}',
+'.l2-pv{margin-top:12px;display:grid;gap:8px;} .l2-pv .hd{display:flex;gap:8px;align-items:center;font-size:17px;font-weight:900;color:var(--hd);} .l2-pv .hd.e{font-size:14.5px;color:var(--mu);} .l2-pv .hd i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;background:var(--t);} .l2-pv .hd.no i{background:var(--g);}',
+'.l2-pv .mt{display:grid;grid-template-columns:110px minmax(0,1fr) 46px;gap:10px;align-items:center;font-size:13.5px;font-weight:800;color:var(--ink);} .l2-pv .mt i{height:12px;border-radius:12px;background:var(--soft);overflow:hidden;} .l2-pv .mt em{display:block;height:100%;background:var(--k);border-radius:12px;transition:width .3s;} .l2-pv .mt b{color:var(--hd);}',
+'.l2-pv .ms{display:flex;gap:6px;align-items:flex-start;margin:0;font-size:13px;font-weight:800;line-height:1.8;color:var(--r);} .l2-pv .ms svg{margin-top:4px;} body.dark-mode #hh-learn .l2-pv .ms{color:#E7A2B2;}',
+'.l2-pv blockquote{margin:0;font-family:Amiri,serif;font-size:17px;line-height:1.85;color:var(--hd);background:var(--t1);border-inline-start:4px solid var(--t);border-radius:12px;padding:8px 12px;} .l2-pv blockquote small{display:block;font-family:Cairo,sans-serif;font-size:11.5px;font-weight:800;color:var(--t);}',
+'.l2-pdb .bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}',
+'.l2-pc{margin-top:12px;background:var(--card);border:1.5px solid var(--t2);border-radius:20px;padding:16px 18px;color:var(--ink);} .l2-pc .ph small{font-size:11.5px;font-weight:900;color:var(--t);} .l2-pc .ph b{display:block;font-size:20px;color:var(--hd);overflow-wrap:anywhere;} .l2-pc .ph span{display:block;font-size:14.5px;font-weight:700;overflow-wrap:anywhere;} .l2-pc .ph em{display:inline-block;margin-top:6px;font-style:normal;font-size:12px;font-weight:900;color:var(--g);background:var(--g1);border-radius:20px;padding:2px 10px;} .l2-pc .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;} .l2-pc .col{background:var(--soft);border-top:4px solid var(--k);border-radius:12px;padding:8px 10px;min-width:0;} .l2-pc .col > b{font-size:14.5px;color:var(--hd);} .l2-pc ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:4px;} .l2-pc li{font-size:13px;font-weight:700;line-height:1.7;overflow-wrap:anywhere;} .l2-pc li em{display:block;font-style:normal;font-size:11.5px;font-weight:900;color:var(--mu);} .l2-pc .e{color:var(--mu);font-weight:600;} .l2-pc .vr{margin-top:10px;border-radius:12px;padding:8px 12px;background:var(--t1);} .l2-pc .vr.no{background:var(--g1);} .l2-pc .vr b{font-size:15px;color:var(--hd);} .l2-pc .vr small{display:block;font-size:12.5px;font-weight:800;color:var(--mu);line-height:1.8;} .l2-pc .pf{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;font-weight:800;color:var(--mu);}',
+'body.dark-mode #hh-learn.ln2 .l2-b.p,body.dark-mode #hh-learn.ln2 .l2-pdb .gl button.on{color:#0E2A2E;} body.dark-mode #hh-learn.ln2 .l2-pv .hd i,body.dark-mode #hh-learn.ln2 .l2-ldr .st .ck{color:#0E2A2E;}',
+'body.dark-mode #hh-learn.ln2 .l2-opts .op.ok,body.dark-mode #hh-learn.ln2 .l2-act .ch.ok,body.dark-mode #hh-learn.ln2 .l2-act .mi.ok{background:#1D3A2D;border-color:#3E8F66;color:var(--ink);} body.dark-mode #hh-learn.ln2 .l2-act .res.ok{background:#1D3A2D;color:#9FDDBC;}',
+'.l2-vh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--ln);border-radius:22px;padding:16px;} .l2-vh .l2-ib[disabled]{opacity:.35;cursor:default;} .l2-vh small{font-size:12.5px;font-weight:900;color:var(--g);}',
+'.l2-vh h2{margin:2px 0 6px;font-size:clamp(20px,2.4vw,32px);line-height:1.5;color:var(--hd);} .l2-vh p{margin:0;font-size:clamp(15px,1.5vw,20px);font-weight:600;line-height:1.9;color:var(--ink);}',
+'.l2-vr{display:flex;gap:6px;margin:14px 0;} .l2-vr span{flex:1;text-align:center;font-size:12.5px;font-weight:900;color:var(--mu);border-top:5px solid var(--soft);padding-top:6px;} .l2-vr span.on{color:var(--t);border-color:var(--t);} .l2-vr span.dn{border-color:var(--t2);}',
+'.l2-vq{text-align:center;font-size:clamp(17px,2vw,26px);font-weight:900;color:var(--hd);margin:14px 0 12px;line-height:1.6;} .l2-vq small{display:block;font-size:13px;font-weight:800;color:var(--mu);}',
+'.l2-vt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;} .l2-vt .tl{background:var(--card);border:1.5px solid var(--ln);border-top:6px solid var(--k);border-radius:22px;padding:16px 12px;display:grid;justify-items:center;gap:8px;text-align:center;min-width:0;} .l2-vt .tl > b{display:flex;gap:8px;align-items:center;font-size:clamp(15px,1.8vw,22px);line-height:1.5;color:var(--hd);}',
+'.l2-vt .n{font-size:clamp(54px,7vw,96px);font-weight:900;line-height:1;color:var(--k);font-variant-numeric:tabular-nums;} body.dark-mode #hh-learn .l2-vt .n{color:color-mix(in srgb,var(--k) 60%,#fff);}',
+'.l2-vt .pm{display:flex;gap:10px;} .l2-vt .pm button{all:unset;cursor:pointer;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:30px;font-weight:900;background:var(--soft);color:var(--hd);} .l2-vt .pm button.p{background:var(--k);color:#fff;} .l2-vt .pm button[disabled]{opacity:.35;cursor:default;} .l2-vt .pm button:focus-visible{outline:3px solid var(--g);outline-offset:2px;} .l2-vt .tl small{font-size:11.5px;font-weight:800;color:var(--mu);}',
+'.l2-vres{display:grid;gap:12px;margin-top:14px;background:var(--card);border:1px solid var(--ln);border-radius:22px;padding:18px;} .l2-vres .r{display:grid;grid-template-columns:150px minmax(0,1fr) 60px;gap:12px;align-items:center;font-size:15px;font-weight:900;color:var(--hd);}',
+'.l2-vres .r i{height:28px;border-radius:10px;background:var(--soft);overflow:hidden;} .l2-vres .r em{display:block;height:100%;background:var(--k);border-radius:10px;transition:width .5s;} .l2-vres p{margin:0;font-size:14px;font-weight:800;color:var(--mu);} .l2-vres p.ch{font-size:18px;font-weight:900;color:var(--t);}',
+'.l2-vb{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px;} .l2-vnt{margin:14px 0 0;text-align:center;font-size:12.5px;font-weight:700;color:var(--mu);} .l2-wrap.big .l2-vh ~ .l2-auth,.l2-wrap.big .l2-vr + .l2-auth{margin-top:4px;}',
+'@media (max-width:1000px){ .l2-ldr{padding:14px;} .l2-ldr .steps{grid-template-columns:minmax(0,1fr);gap:8px;} .l2-ldr .st,.l2-ldr.big .st{min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;align-items:start;padding:12px 12px 12px 36px;} .l2-ldr .st:hover,.l2-ldr .st.on{transform:none;} .l2-ldr .st .no{grid-row:span 3;} .l2-ldr .st .a{margin-top:4px;} .l2-ldr .st .ck{inset-inline-end:auto;left:10px;} }',
+'@media (max-width:760px){ .l2-tri.l2-tri2,.l2-pdb .who,.l2-pdb .cv3,.l2-pc .cols{grid-template-columns:minmax(0,1fr);} .l2-pdb{padding:14px 12px;} .l2-pc{padding:14px 12px;} .l2-pv .mt{grid-template-columns:92px minmax(0,1fr) 42px;font-size:12.5px;} .l2-stc{padding:12px 14px;} .l2-stc blockquote{font-size:19px;} .l2-ldr .thesis{font-size:13.5px;}',
+'  .l2-vh{grid-template-columns:auto minmax(0,1fr) auto;padding:12px 10px;gap:8px;} .l2-vh .l2-ib{width:36px;height:36px;} .l2-vt{gap:8px;} .l2-vt .tl{padding:12px 8px;} .l2-vt .pm button{width:48px;height:48px;} .l2-vr span{font-size:11px;} .l2-vres .r{grid-template-columns:92px minmax(0,1fr) 44px;font-size:13px;} }'
 ].join('\n');
 function style(){ if($('hh-learn2-css')) return; var s=document.createElement('style'); s.id='hh-learn2-css'; s.textContent=CSS; document.head.appendChild(s); }
 window.hhLn2Style=style;

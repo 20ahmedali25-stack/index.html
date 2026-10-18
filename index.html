@@ -4018,7 +4018,7 @@ body.dark-mode .tbx-badge-soon{ background:#3a2e0a; color:#e8c968; border-color:
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#8A6D2E"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
           <div style="font-family:Cairo;font-weight:900;color:#8A1538;font-size:1rem;">إدارة محبرة المعلم</div>
         </div>
-        <div style="font-size:.82rem;color:#8A6D2E;line-height:1.7;"> تحكم بالأدوات المعروضة في المحبرة · إخفاء/إظهار + تغيير حالة (متاح/قريبا) + ترتيب.
+        <div style="font-size:.82rem;color:#8A6D2E;line-height:1.7;"> تحكم بالأدوات المعروضة في الحصة · إخفاء/إظهار + تغيير حالة (متاح/قريبا) + ترتيب.
         </div>
       </div>
       <div id="tbx-list">
@@ -6960,15 +6960,14 @@ window.submitProblemReport = async function(){
     <span class="hh-nav-label">الرئيسية</span>
   </button>
 
-  <button class="hh-nav-item" onclick="hhSchoolEntry()" type="button">
-    <span class="hh-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/><path d="M12 4v2"/></svg></span>
-    <span class="hh-nav-label">المدرسة</span>
+  <button class="hh-nav-item" data-k="learn" onclick="hhLearnOpen()" type="button">
+    <span class="hh-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M8 7h7M8 11h5"/></svg></span>
+    <span class="hh-nav-label">تعلّم</span>
   </button>
 
-  <button class="hh-nav-item hh-nav-mihbara hh-nav-center" data-target="screen-toolbox" onclick="hhNavigate('screen-toolbox')" type="button">
-    <span class="hh-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M14 4l6 6-11 11H3v-6L14 4z"/><path d="M13 5l6 6"/></svg></span>
-    <span class="hh-nav-label">المحبرة</span>
-    <span class="hh-nav-new-badge" id="hh-mihbara-new" style="display:none;">جديد</span>
+  <button class="hh-nav-item hh-nav-mihbara hh-nav-center" onclick="hhSchoolEntry()" type="button">
+    <span class="hh-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-5h6v5"/></svg></span>
+    <span class="hh-nav-label">المدرسة</span>
   </button>
 
   <button class="hh-nav-item" onclick="hhOpenLeaderPrograms()" type="button">
@@ -14751,6 +14750,8 @@ window.hhBuildOverview=function(){ return hhAd2Home(); };
 <script src="almulhim-learn2.js" charset="utf-8"></script>
 <script src="almulhim-learn3-data.js" charset="utf-8"></script>
 <script src="almulhim-learn3.js" charset="utf-8"></script>
+<script src="almulhim-lib-index.js" charset="utf-8"></script>
+<script src="almulhim-lib.js" charset="utf-8"></script>
 <script src="almulhim-govnav.js" charset="utf-8"></script>
 <script>
 /* zzzzzzcp: فئتا «خرائط الدول» و«أساطير الخرائط» (2.6 ميغابايت صور) تُحمَّلان بعد ظهور الصفحة لا قبلها */

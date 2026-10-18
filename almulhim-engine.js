@@ -6980,7 +6980,7 @@ var HH_QUICK_MAP = [
     ['announcements','الإعلانات','رسائل للمستخدمين','M18 11v2h4v-2h-4zm-2 6.6c.96.7 2.2 1.6 3.2 2.4l1.2-1.6c-1-.8-2.3-1.7-3.2-2.4l-1.2 1.6zM20.4 5.6L19.2 4c-1 .8-2.2 1.7-3.2 2.4l1.2 1.6c1-.7 2.2-1.6 3.2-2.4zM4 9a2 2 0 00-2 2v2a2 2 0 002 2h1v4h2v-4h1l5 3V6L8 9H4z'],
     ['whatsnew','ماذا الجديد','تحديثات المنصة','M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21 8 13.8 2 9.4h7.6z'],
     ['sponsors','الشركاء','الرعاة والشركاء','M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'],
-    ['toolbox','صندوق الأدوات','أدوات المحبرة','M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z'],
+    ['toolbox','صندوق الأدوات','أدوات الحصة','M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z'],
     ['backup','النسخ الاحتياطي','حفظ واستعادة','M19 12v7H5v-7H3v7a2 2 0 002 2h14a2 2 0 002-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z']
   ]}
 ];
@@ -13850,6 +13850,7 @@ async function loadClassStudents(){
   try{
     const snap = await db.collection('classroom_students')
       .where('classCode','==',_currentManagedClass.code)
+      .where('teacherId','==',_currentManagedClass.teacherId || (currentUser&&currentUser.uid) || '')
       .where('active','==',true)
       .get();
 
@@ -16664,7 +16665,7 @@ function renderToolboxAdmin(){
   // زر حفظ + ملاحظة
   const note = document.createElement('div');
   note.style.cssText = 'margin-top:10px;padding:10px;background:#F8F8F6;border:1px dashed #B8924A;border-radius:8px;font-family:Tajawal;font-size:.78rem;color:#8A6D2E;text-align:center;';
-  note.innerHTML = '✓ التغييرات تحفظ تلقائيا. ستظهر في المحبرة بعد إعادة التحميل.';
+  note.innerHTML = '✓ التغييرات تحفظ تلقائيا. ستظهر في المدرسة بعد إعادة التحميل.';
   list.appendChild(note);
 }
 

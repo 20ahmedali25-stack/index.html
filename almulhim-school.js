@@ -1136,8 +1136,11 @@ var _HH_CAMPUS_NAV_ALL = [
   {id:'myclass',     t:'صفي',                grp:'أنا',     ico:'users', roles:['student']},
   {id:'achievements',t:'إنجازاتي',           grp:'أنا',     ico:'medal', roles:['student']},
   {id:'mycerts',     t:'شهاداتي',            grp:'أنا',     ico:'cert',  roles:['student']},
+  {id:'mh-class',    t:'الحصة',              grp:'طلابي',   ico:'book',  roles:['teacher','approved']},
   {id:'classes',     t:'صفوفي وطلابي',       grp:'طلابي',   ico:'users', roles:['teacher','approved']},
+  {id:'mh-grades',   t:'الدرجات',            grp:'طلابي',   ico:'book',  roles:['teacher','approved']},
   {id:'gradebook',   t:'دفتر المتابعة الذكي', grp:'طلابي',   ico:'book',  roles:['teacher','approved'], lock:['teacher']},
+  {id:'mh-reports',  t:'التقارير',           grp:'طلابي',   ico:'book',  roles:['teacher','approved']},
   {id:'certs',       t:'الشهادات',           grp:'طلابي',   ico:'medal', roles:['teacher','approved'], lock:['teacher']}
 ];
 var _HH_CAMPUS_NAV = _HH_CAMPUS_NAV_ALL;
@@ -1313,6 +1316,7 @@ function hhCampusNotice(msg){
 }
 
 function hhHubGo(dest){
+  if(/^mh-/.test(dest||'')){ if(typeof window.hhMhOpen==='function'){ hhMhOpen(dest.slice(3)); } return; }
   if(!document.getElementById('hh-school-hub')){ hhSchoolHub(); }
   hhCampusSetNav(dest);
   if(dest==='home'){ var m=document.getElementById('hh-campus-mount'); if(m) while(m.firstChild) m.removeChild(m.firstChild); hhCampusRenderResume(); hhCampusRenderUnits(); return; }

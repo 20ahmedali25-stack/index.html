@@ -1,7 +1,7 @@
 /* ============================================================
    المُلهم التعليمي، لوحة التحكم الشاملة (zzzzzzcr)
    قائمة جانبية بثماني مجموعات وبحث سريع، نظرة عامة جديدة مع تنبيه النسخ الاحتياطي،
-   وصفحات جديدة: الإبداع، البرامج والتسجيلات، الشهادات، بوابة المدرسة، المحبرة،
+   وصفحات جديدة: الإبداع، البرامج والتسجيلات، الشهادات، بوابة المدرسة، الحصة والطلاب،
    الإشعارات، رسالة للمعلم، المسابقات الخاصة، الشخصيات المؤثرة، الإعدادات العامة
    ============================================================ */
 (function(){
@@ -38,14 +38,14 @@ var NAV8=[
  ['عام',[['home','نظرة عامة','home'],['activity','سجل النشاط','pulse'],['healthcheck','فحص المنصة','shield']]],
  ['المحتوى',[['questions','الأسئلة','q'],['review','المراجعة','check'],['categories','الفئات','grid'],['paths','المسارات','route'],['competitions','المسابقات','trophy'],['priv8','المسابقات الخاصة','lock',1]]],
  ['الإبداع',[['ib8','الألعاب الجاهزة','star',1],['tpl8','القوالب والوسائل','box',1],['live8','الجولات المباشرة','play'],['games8','ألعاب المعلمين','grid',1]]],
- ['التعليم',[['schools','المدارس','school'],['curricula','المناهج','book'],['curriculum','مركز المنهج','doc'],['classes','الصفوف والطلاب','users'],['toolbox','أدوات المعلم','pen'],['mh8','المحبرة','pen'],['gate8','بوابة المدرسة','lock',1]]],
+ ['التعليم',[['schools','المدارس','school'],['curricula','المناهج','book'],['curriculum','مركز المنهج','doc'],['classes','الصفوف والطلاب','users'],['toolbox','أدوات المعلم','pen'],['mh8','الحصة والطلاب','pen'],['gate8','بوابة المدرسة','lock',1]]],
  ['البرامج',[['prog8','البرامج والدورات','badge',1],['reg8','التسجيلات','users'],['cert8','الشهادات','doc',1],['books8','اقتراحات الكتب','book',1]]],
  ['الناس',[['users','المستخدمون','user'],['teachers','اعتماد المعلمين','badge'],['directory','دليل المعلمين','book'],['permissions','الصلاحيات','key'],['reviews','التقييمات','star'],['reports','البلاغات','flag']]],
  ['التواصل',[['landing','الرئيسية والاختصارات','layout'],['announcements','الإعلانات','mega'],['notif8','الإشعارات','bell',1],['msg8','رسالة للمعلم','msg',1],['whatsnew','ماذا الجديد','spark'],['sponsors','الرعاة والشركاء','heart'],['infl8','الشخصيات المؤثرة','star',1]]],
  ['النظام',[['stats','الإحصائيات والأثر','chart'],['backup','النسخ الاحتياطي','save'],['set8','الإعدادات العامة','gear',1]]]
 ];
 var META8={priv8:['المحتوى','المسابقات الخاصة','مسابقات برموز دخول للشركاء والمناسبات'],ib8:['الإبداع','الإبداع','كل ما يخص الألعاب: القوالب، الجاهزة، الجولات، وألعاب المعلمين'],tpl8:['الإبداع','القوالب والوسائل','إظهار القوالب والوسائل التعليمية أو إخفاؤها عن المعلمين'],
- live8:['الإبداع','الجولات المباشرة','الجولات الجارية الآن على أجهزة الطلاب'],games8:['الإبداع','ألعاب المعلمين','الألعاب التي أنشأها المعلمون في الإبداع'],mh8:['التعليم','المحبرة','الصفوف والطلاب والسجلات في المحبرة'],
+ live8:['الإبداع','الجولات المباشرة','الجولات الجارية الآن على أجهزة الطلاب'],games8:['الإبداع','ألعاب المعلمين','الألعاب التي أنشأها المعلمون في الإبداع'],mh8:['التعليم','الحصة والطلاب','الصفوف والطلاب والسجلات في المدرسة'],
  gate8:['التعليم','بوابة المدرسة','طلبات اعتماد المعلمين، والقبول والرفض مع ذكر السبب'],prog8:['البرامج','البرامج والدورات','البرامج الحضورية وأعداد المسجلين'],reg8:['البرامج','التسجيلات','طلبات التسجيل في كل البرامج'],
  cert8:['البرامج','الشهادات','الشهادات الصادرة من المنصة'],books8:['البرامج','اقتراحات الكتب','كتب يقترحها الزوار لتصير برامج في «تعلّم»'],notif8:['التواصل','الإشعارات','إشعار يصل لجرس المستخدمين'],msg8:['التواصل','رسالة للمعلم','رسالة خاصة تصل لإشعارات معلم واحد'],
  infl8:['التواصل','الشخصيات المؤثرة','صفحة الملهمين الداعمين للمنصة'],set8:['النظام','الإعدادات العامة','بيانات التواصل الظاهرة في المنصة']};
@@ -302,16 +302,16 @@ window.hhAd8Gate=async function(uid,status){
   }catch(e){ toastX('تعذّر التحديث','error'); }
 };
 
-/* المحبرة */
+/* الحصة والطلاب (كانت المحبرة) */
 R8.mh8=async function(p,force){
   load(p);
   var r=await Promise.all([get('cls',async function(){ var s=await db().collection('classrooms').get(); var o=[]; s.forEach(function(d){ var x=d.data()||{}; x._id=d.id; o.push(x); }); return o; },force),get('cst',async function(){ var s=await db().collection('classroom_students').get(); return s.size; },force),usersAll(force)]);
   var C=r[0]||[], n=r[1]||0, U=r[2]||[], tch={}; C.forEach(function(c){ if(c.teacherId) tch[c.teacherId]=(tch[c.teacherId]||0)+1; });
   var mh=U.filter(function(u){ return u.mh2; }).length, name={}; U.forEach(function(u){ name[u._id]=u.name||u.email||''; });
   var top=Object.keys(tch).sort(function(a,b){ return tch[b]-tch[a]; }).slice(0,10);
-  p.innerHTML='<div class="ad2-kp">'+kpi('#8A1538','users','الصفوف',fmt(C.length),'في المحبرة والمدرسة','','')+kpi('#1D5C99','user','الطلاب في الصفوف',fmt(n),'بأسمائهم','','')+kpi('#23855A','pen','معلمون يستخدمونها',fmt(Object.keys(tch).length),mh?mh+' خصّصوا إعداداتهم':'','','')+kpi('#C2862B','chart','متوسط الصف',C.length?fmt(Math.round(n/C.length)):'—','طالباً','','')+'</div>'
+  p.innerHTML='<div class="ad2-kp">'+kpi('#8A1538','users','الصفوف',fmt(C.length),'في المدرسة','','')+kpi('#1D5C99','user','الطلاب في الصفوف',fmt(n),'بأسمائهم','','')+kpi('#23855A','pen','معلمون يستخدمونها',fmt(Object.keys(tch).length),mh?mh+' خصّصوا إعداداتهم':'','','')+kpi('#C2862B','chart','متوسط الصف',C.length?fmt(Math.round(n/C.length)):'—','طالباً','','')+'</div>'
     +'<div class="ad2-cd ad8-body"><h3 class="ad8-h">'+SV(P.users)+' أكثر المعلمين صفوفاً</h3>'+(top.length?'<div class="ad8-tbl"><table><thead><tr><th>المعلم</th><th>الصفوف</th></tr></thead><tbody>'+top.map(function(id){ return '<tr><td><b>'+esc(name[id]||id)+'</b></td><td>'+tch[id]+'</td></tr>'; }).join('')+'</tbody></table></div>':emp('لا صفوف بعد'))
-    +'<div class="ad8-foot"><span>تفاصيل الصفوف والطلاب من «الصفوف والطلاب».</span><button type="button" class="ad2-b" onclick="adminTab(\'classes\')">الصفوف والطلاب</button><button type="button" class="ad2-b ad2-b--p" onclick="hhGvGo(\'tool\')">'+SV(P.open)+' افتح المحبرة</button></div></div>';
+    +'<div class="ad8-foot"><span>تفاصيل الصفوف والطلاب من «الصفوف والطلاب».</span><button type="button" class="ad2-b" onclick="adminTab(\'classes\')">الصفوف والطلاب</button><button type="button" class="ad2-b ad2-b--p" onclick="hhGvMh(\'class\')">'+SV(P.open)+' افتح الحصة والطلاب</button></div></div>';
 };
 
 /* الإشعارات ورسالة للمعلم */

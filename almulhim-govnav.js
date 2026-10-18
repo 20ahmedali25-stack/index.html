@@ -14,13 +14,28 @@ function closeOv(keep){ try{ if(window.hhCloseFramedOverlays) hhCloseFramedOverl
 /* الأقسام */
 var SEC=[
   {k:'home',  t:'الرئيسية', go:function(){ closeOv(); call('hhNavigate','screen-menu'); }},
+  {k:'learn', t:'تعلّم',    go:function(){ closeOv('learn'); call('hhLearnOpen'); }},
   {k:'school',t:'المدرسة',  go:function(){ closeOv('school'); call('hhSchoolEntry'); }},
-  {k:'tool',  t:'المحبرة',  go:function(){ if(typeof window.hhMhOpen==='function'){ closeOv('mh'); hhMhOpen(); } else { closeOv(); call('hhNavigate','screen-toolbox'); } }},
   {k:'ib',    t:'الإبداع',    go:function(){ closeOv('ib'); call('hhIbOpen'); }},
-  {k:'prog',  t:'البرامج',  go:function(){ closeOv('prog'); call('hhOpenLeaderPrograms'); }},
-  {k:'learn', t:'تعلّم',    go:function(){ closeOv('learn'); call('hhLearnOpen'); }}
+  {k:'prog',  t:'البرامج',  go:function(){ closeOv('prog'); call('hhOpenLeaderPrograms'); }}
 ];
+/* المدرسة: قائمة منسدلة تضم ما كان في المحبرة */
+function schGo(dest){ closeOv('school'); call('hhSchoolEntry'); if(dest) setTimeout(function(){ try{ if(document.getElementById('hh-school-hub')&&typeof window.hhHubGo==='function') hhHubGo(dest); }catch(e){} },350); }
+function mhGo(tab){ if(typeof window.hhMhOpen==='function'){ closeOv('mh'); hhMhOpen(tab); } else { closeOv(); call('hhNavigate','screen-toolbox'); } }
+window.hhGvMh=mhGo;
+var NAVORD=['home','learn','school','ib','prog','sup','about'];
 var DD={
+  school:{t:'المدرسة', items:[
+    {k:'sch',t:'الرئيسة',s:'مدخل المدرسة ومسارك الدراسي',go:function(){ schGo(); }},
+    {k:'sch',t:'المنهج والاختبارات',s:'الدروس والاختبارات بحسب الصف',go:function(){ schGo('school'); }},
+    {k:'sch',t:'دروسي الخاصة',s:'دروس المعلم ومرفقاته',go:function(){ schGo('lessons'); }},
+    {k:'mh',t:'الحصة',s:'السلوك والاختيار العشوائي والمؤقت والمجموعات',go:function(){ mhGo('class'); }},
+    {k:'sch',t:'صفوفي وطلابي',s:'الصفوف والأسماء في مكان واحد',go:function(){ schGo('classes'); }},
+    {k:'mh',t:'الدرجات',s:'رصد درجات الطلاب في الحصة',go:function(){ mhGo('grades'); }},
+    {k:'sch',t:'دفتر المتابعة',s:'الحضور والسلوك والمهارات وتقرير جامع',go:function(){ schGo('gradebook'); }},
+    {k:'mh',t:'التقارير',s:'المتابعة الشهرية وتقرير ولي الأمر',go:function(){ mhGo('reports'); }},
+    {k:'sch',t:'الشهادات',s:'شهادات الطلاب',go:function(){ schGo('certs'); }}
+  ]},
   sup:{t:'الداعمون', items:[
     {k:'spons',t:'الرعاة',s:'الجهات الراعية للمنصة وبرامجها',go:function(){ closeOv(); call('hhNavigate','screen-sponsors'); }},
     {k:'spons',t:'الشركاء',s:'الجهات المتعاونة معنا',go:function(){ closeOv(); call('hhNavigate','screen-sponsors'); }},
@@ -36,8 +51,8 @@ var DD={
     {k:'contact',t:'التواصل والدعم',s:'راسلنا أو اطلب المساعدة',go:function(){ closeOv(); call('hhNavigate','screen-contact'); }}
   ]}
 };
-var SCR2K={'screen-menu':'home','screen-toolbox':'tool','screen-lb':'about','screen-sponsors':'sup','screen-influencers':'sup','screen-story':'about','screen-reviews':'about','screen-mygames':'about','screen-references':'about','screen-contact':'about','screen-about':'about'};
-var OV2K={school:'school',ib:'ib',prog:'prog',mh:'tool',learn:'learn'};
+var SCR2K={'screen-menu':'home','screen-toolbox':'school','screen-lb':'about','screen-sponsors':'sup','screen-influencers':'sup','screen-story':'about','screen-reviews':'about','screen-mygames':'about','screen-references':'about','screen-contact':'about','screen-about':'about'};
+var OV2K={school:'school',ib:'ib',prog:'prog',mh:'school',learn:'learn'};
 var cur='home', curOv=null;
 
 function playNow(){ closeOv(); if(typeof window.hhStartGameNow==='function') hhStartGameNow(); else call('hhNavigate','screen-setup'); }
@@ -58,8 +73,7 @@ function build(){
    +'<div class="gv-am" id="gv-am"><span class="gv-acc" id="gv-acc"></span><button type="button" class="gv-mt" onclick="hhGvAm(event)" aria-label="المزيد" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="gv-amn" id="gv-amn" role="menu"></div></div>'
    +'<button type="button" class="gv-play gv-m" onclick="hhGvPlay()">العب الآن</button><button type="button" class="gv-mbtn gv-m" id="gv-mbtn" onclick="hhGvSheet()" aria-expanded="false">القائمة</button></div></div>'
    +'<div class="gv-nv"><div class="gv-in" id="gv-nv-in">'
-   +SEC.map(function(s){ return '<button type="button" class="gv-a" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'</button>'; }).join('')
-   +Object.keys(DD).map(function(g){ return '<div class="gv-dd" data-g="'+g+'"><button type="button" class="gv-a dd" data-k="'+g+'" onclick="hhGvMenu(\''+g+'\',event)" aria-haspopup="true" aria-expanded="false">'+DD[g].t+'</button><div class="gv-mn"><h5>'+DD[g].t+'</h5>'+DD[g].items.map(function(it,i){ return '<button type="button" onclick="hhGvDD(\''+g+'\','+i+')"><b>'+it.t+'</b><small>'+it.s+'</small></button>'; }).join('')+'</div></div>'; }).join('')
+   +NAVORD.map(function(k){ var s=DD[k]?null:SEC.filter(function(x){ return x.k===k; })[0]; if(s) return '<button type="button" class="gv-a" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'</button>'; var g=k; if(!DD[g]) return ''; return '<div class="gv-dd" data-g="'+g+'"><button type="button" class="gv-a dd" data-k="'+g+'" onclick="hhGvMenu(\''+g+'\',event)" aria-haspopup="true" aria-expanded="false">'+DD[g].t+'</button><div class="gv-mn"><h5>'+DD[g].t+'</h5>'+DD[g].items.map(function(it,i){ return '<button type="button" onclick="hhGvDD(\''+g+'\','+i+')"><b>'+it.t+'</b><small>'+it.s+'</small></button>'; }).join('')+'</div></div>'; }).join('')
    +'<button type="button" class="gv-play gv-d" onclick="hhGvPlay()">العب الآن</button></div></div>';
   nav.appendChild(hd);
   nav.classList.add('gv-on'); document.documentElement.classList.add('gv-on');
@@ -78,7 +92,7 @@ function build(){
   hd.appendChild(hold);
   // ورقة الجوال
   var sh=document.createElement('div'); sh.id='gv-sheet'; sh.setAttribute('role','dialog'); sh.setAttribute('aria-label','القائمة');
-  sh.innerHTML='<div class="gv-sh-in">'+SEC.map(function(s){ return '<button type="button" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'<i>›</i></button>'; }).join('')
+  sh.innerHTML='<div class="gv-sh-in">'+NAVORD.filter(function(k){ return SEC.some(function(x){ return x.k===k; }); }).map(function(k){ return SEC.filter(function(x){ return x.k===k; })[0]; }).map(function(s){ return '<button type="button" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'<i>›</i></button>'; }).join('')
     +Object.keys(DD).map(function(g){ return '<h6>'+DD[g].t+'</h6>'+DD[g].items.map(function(it,i){ return '<button type="button" onclick="hhGvDD(\''+g+'\','+i+')">'+it.t+'<i>›</i></button>'; }).join(''); }).join('')
     +'<h6>الحساب</h6><button type="button" onclick="hhGvAcc()">حسابي<i>›</i></button><button type="button" onclick="hhGvSheet(false);hhToggleNotifPanel()">الإشعارات<i>›</i></button><button type="button" onclick="hhGvSheet(false);openTeacherMessage()">رسالة للمعلم<i>›</i></button><button type="button" onclick="hhGvSheet(false);openWhatsNew()">جديدنا<i>›</i></button><button type="button" onclick="hhGvSheet(false);toggleDarkMode()">الوضع الليلي<i>›</i></button></div>';
   document.body.appendChild(sh);
@@ -120,7 +134,7 @@ window.hhGvAcc=function(){ closeSheet(); var l=document.getElementById('nav-logi
 
 /* القوائم المنسدلة */
 function closeMenus(){ document.querySelectorAll('#gv-hd .gv-dd.op').forEach(function(d){ d.classList.remove('op'); var b=d.querySelector('.gv-a'); if(b) b.setAttribute('aria-expanded','false'); }); }
-window.hhGvMenu=function(g,e){ if(e) e.stopPropagation(); var d=document.querySelector('#gv-hd .gv-dd[data-g="'+g+'"]'); if(!d) return; var was=d.classList.contains('op'); closeMenus(); if(!was){ d.classList.add('op'); d.querySelector('.gv-a').setAttribute('aria-expanded','true'); } };
+window.hhGvMenu=function(g,e){ if(e) e.stopPropagation(); if(window.innerWidth<=900&&SEC.some(function(x){ return x.k===g; })){ hhGvGo(g); return; } var d=document.querySelector('#gv-hd .gv-dd[data-g="'+g+'"]'); if(!d) return; var was=d.classList.contains('op'); closeMenus(); if(!was){ d.classList.add('op'); d.querySelector('.gv-a').setAttribute('aria-expanded','true'); } };
 document.addEventListener('click',function(e){ if(!e.target.closest||!e.target.closest('#gv-hd .gv-dd')) closeMenus(); });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeMenus(); closeSheet(); } });
 function closeSheet(){ document.documentElement.classList.remove('gv-sheet-on'); var b=document.getElementById('gv-mbtn'); if(b){ b.textContent='القائمة'; b.setAttribute('aria-expanded','false'); } }
@@ -259,7 +273,7 @@ P+'.profile-avatar{width:28px !important;height:28px !important;border-radius:6p
 ' :root.gv-on{--hh-bar:102px;}',
 ' #gv-hd .gv-in{padding:0 12px;gap:8px;}',
 ' #gv-hd .gv-lr{height:58px;border-bottom:0;} #gv-hd .gv-lgi{width:40px;height:40px;} #gv-hd .gv-lgt b{font-size:18px;} #gv-hd .gv-lgt small{font-size:10px;}',
-' #gv-hd .gv-srch,#gv-hd .gv-am,#gv-hd .gv-d,#gv-hd .gv-dd{display:none !important;}',
+' #gv-hd .gv-srch,#gv-hd .gv-am,#gv-hd .gv-d,#gv-hd .gv-dd{display:none !important;} #gv-hd .gv-dd[data-g="school"]{display:flex !important;} #gv-hd .gv-dd[data-g="school"] .gv-mn{display:none !important;}',
 ' '+P+'.gv-ib{width:38px !important;height:38px !important;min-width:38px !important;}',
 ' #gv-hd .gv-m{display:inline-flex;align-items:center;height:36px;margin:0;}',
 ' #gv-hd .gv-mbtn{border:0;border-radius:8px;background:#5E0E26;color:#fff;font-weight:800;font-size:14px;padding:0 14px;}',
@@ -326,13 +340,13 @@ var IC={
 };
 /* كل صفحة: الحاوية، العنوان، الوصف، المسار، الأيقونة، العناصر التي تُخفى، والتبويبات والأزرار */
 var PAGES=[
-  {id:'screen-toolbox',scr:1,ic:'tool',bc:'المحبرة',t:'أدوات المعلم',s:'أدوات احترافية تختصر وقتك، وتكبّر أثرك',hide:['.tbx-hero'],meta:'.tb2-chips'},
+  {id:'screen-toolbox',scr:1,ic:'tool',bc:'المدرسة',t:'أدوات المعلم',s:'أدوات احترافية تختصر وقتك، وتكبّر أثرك',hide:['.tbx-hero'],meta:'.tb2-chips'},
   {id:'screen-lb',scr:1,ic:'lb',bc:'عن المنصة › المتصدرون',t:'المتصدرون',s:'ترتيب المشاركين في مسابقات المنصة، يتحدّث بعد كل لعبة',tabs:'[id^="lb-tab-"]',hideTabs:1},
   {id:'screen-sponsors',scr:1,ic:'hand',bc:'الداعمون › الرعاة والشركاء',t:'الرعاة والشركاء',s:'الجهات الراعية للمنصة وبرامجها، والجهات المتعاونة معنا'},
   {id:'screen-influencers',scr:1,ic:'star',bc:'الداعمون › الشخصيات المؤثرة',t:'الشخصيات المؤثرة',s:'الملهمون، الأيادي البيضاء التي أضاءت طريقنا',hideFirst:1},
   {id:'screen-story',scr:1,ic:'book',bc:'عن المنصة › قصتنا',t:'قصتنا',s:'كيف بدأت فكرة المُلهم، ولماذا'},
   {id:'hh-ib',ic:'star',icFrom:'.ib2-hi',bc:'الإبداع',t:'الإبداع',s:'أنشئ لعبتك أو اختر لعبة جاهزة، وشغّلها على أجهزة الطلاب أو اعرضها على شاشة الصف',hide:['.ib2-hero'],act:'.ib2-hx button',actT:'لعبة جديدة',hideWhen:'.e2-tb',tabs:'.ib2-seg > button',hideTabs:1},
-  {id:'hh-mh',ic:'tool',bc:'المحبرة',t:'المحبرة',s:'سجّل ما يحدث في الحصة، وتابع كل طالب، واطبع تقاريرك جاهزة',meta:'.mh-cls',tabs:'#mh-tabs > button',hideTabs:1},
+  {id:'hh-mh',ic:'tool',bc:'المدرسة › الحصة والطلاب',t:'الحصة والطلاب',s:'سجّل ما يحدث في الحصة، وتابع كل طالب، واطبع تقاريرك جاهزة',meta:'.mh-cls',tabs:'#mh-tabs > button',hideTabs:1},
   {id:'hh-pg',ic:'award',icFrom:'.p2-hi',bc:'البرامج',t:'البرامج',s:'برامج حضورية للطلاب وأولياء الأمور، بمواعيد معلنة وتسجيل مباشر',hide:['.p2-hero'],meta:'#hh-pg-counts'},
   {id:'hh-sch-wiz',ic:'school',icFrom:'.sp2-hi',bc:'المدرسة',t:'المدرسة',s:'اختر مسارك مرة واحدة، ونحفظه لك في كل زيارة',hide:['.sp2-hero']},
   {id:'hh-school-hub',ic:'school',bc:'المدرسة',t:'المدرسة',s:'مسارك الدراسي وبوابات الإتقان',hide:['.sh2-hero','.sp2-hero']}
