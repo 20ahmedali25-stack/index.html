@@ -371,10 +371,13 @@ function render(){
   var _ov=document.getElementById('hh-ib'); if(_ov) _ov.classList.toggle('ib-editing', _ib.view==='editor');
   if(_ib.view==='editor'){ b.innerHTML=renderEditor(); bindEditor(); try{ _ov.scrollTop=_ov.scrollTop; }catch(e){} return; }
   if(_ib.view==='live'||_ib.view==='screen'){ _ib.mode=_ib.view; _ib.view='rack'; }
+  var sec=cySecBar(); if(_ov) _ov.classList.toggle('ib-pub', _ib.sec==='pub');
+  setTimeout(cyAfter,0); setTimeout(cyAfter,160); setTimeout(cyAfter,500);
+  if(_ib.sec==='pub'){ b.innerHTML=sec+cyPub(); return; }
   var tabs=ib4Tabs();
-  if(_ib.view==='mine'){ b.innerHTML=tabs+renderMine(); return; }
-  if(_ib.view==='ready'){ b.innerHTML=tabs+renderReady(); return; }
-  var html=tabs+ib4Rack();
+  if(_ib.view==='mine'){ b.innerHTML=sec+tabs+renderMine(); return; }
+  if(_ib.view==='ready'){ b.innerHTML=sec+tabs+renderReady(); return; }
+  var html=sec+tabs+ib4Rack();
   b.innerHTML=html;
 }
 function tplCard(t){
@@ -1817,7 +1820,97 @@ var TP8CSS=[
 '@media (prefers-reduced-motion:reduce){ #hh-ib.ib2 button.tp8{transition:none;} }'
 ].join('\n');
 IB6CSS+='\n'+TP8CSS;
-window.hhIbOpen=function(v,id){ open(v,id); };
+
+/* ═══ zzzzzzcy، أقسام «الإبداع»: الأنشطة العامة | الأنشطة الإبداعية المدرسية ═══ */
+function cySv(p,s){ return '<svg viewBox="0 0 24 24" width="'+(s||22)+'" height="'+(s||22)+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
+var CYI={pub:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',sch:'<path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-5h6v5"/>',trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',tag:'<path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',hand:'<path d="M11 17l-1.5 1.5a2.1 2.1 0 0 1-3-3L8 14"/><path d="M14 7l2-2a3 3 0 0 1 4.5 4L17 12.5a2.2 2.2 0 0 1-3.2 0L13 11.7"/><path d="M8 14l5-5"/>',play:'<path d="M7 4v16l13-8z"/>'};
+function cyClean(s){ return String(s||'').replace(/\s+[-–—]\s+/g,'، ').replace(/\s*·\s*/g,'، ').trim(); }
+function cyHidden(){ try{ return JSON.parse(localStorage.getItem('hh_hidden_cats')||'[]'); }catch(e){ return []; } }
+function cyLevel(id){ try{ return (typeof CAT_LEVELS!=='undefined'?CAT_LEVELS:[]).filter(function(l){ return l.id===id; })[0]||null; }catch(e){ return null; } }
+function cyGroup(gid){ try{ return (typeof CAT_GROUPS!=='undefined'?CAT_GROUPS:[]).filter(function(g){ return g.id===gid; })[0]||null; }catch(e){ return null; } }
+function cyQn(c){ try{ return (typeof QDB!=='undefined'&&QDB[c])?QDB[c].length:0; }catch(e){ return 0; } }
+function cyOrg(gid){ if(/^ajyal/.test(gid)) return 'مركز أجيال'; if(/^wellbeing/.test(gid)) return 'مركز الحياة الطيبة'; if(/^perf/.test(gid)) return 'بيرف آب'; if(/^mprog/.test(gid)) return 'المُلهم'; return ''; }
+function cyComps(){ var L=cyLevel('competitions'), H=cyHidden(), out=[], seen={};
+  try{ if(typeof _hhEnsurePartnerQs==='function') _hhEnsurePartnerQs(); }catch(e){}
+  ((L&&L.groupIds)||[]).forEach(function(gid){ var g=cyGroup(gid); if(!g) return; (g.cats||[]).forEach(function(c){ if(seen[c]||H.indexOf(c)>-1) return; var n=cyQn(c); if(!n) return; seen[c]=1; out.push({cat:c,gid:gid,n:n,org:cyOrg(gid)}); }); });
+  return out; }
+function cyGroups(lv){ var L=cyLevel(lv), H=cyHidden();
+  return ((L&&L.groupIds)||[]).map(cyGroup).filter(function(g){ return g&&g.id!=='custom'; }).map(function(g){ var cs=(g.cats||[]).filter(function(c){ return H.indexOf(c)===-1&&cyQn(c)>0; }); return {gid:g.id,t:cyClean(g.label||g.id).replace(/،\s*شريك$/,''),n:cs.length}; }).filter(function(x){ return x.n>0; }); }
+var CYSEC=[
+  {k:'pub',t:'الأنشطة العامة',s:'مسابقات جاهزة للفعاليات والمجالس والأسرة',c:'#1F4E79',c1:'#E4ECF5',cd:'#93B8DE'},
+  {k:'sch',t:'الأنشطة الإبداعية المدرسية',s:'ألعاب من المنهج للحصة، جاهزة أو من تصميمك',c:'#3D6B53',c1:'#E6F0EA',cd:'#93C7A8'}
+];
+function cySecN(k){ if(k==='pub'){ var n=cyComps().length; return n===1?'مسابقة واحدة':n===2?'مسابقتان':(n>2&&n<11)?n+' مسابقات':n+' مسابقة'; }
+  var m=TEMPLATES.filter(function(x){ return x.ready; }).length; return m===1?'قالب واحد':m===2?'قالبان':(m>2&&m<11)?m+' قوالب':m+' قالباً'; }
+function cySecBar(){ var cur=_ib.sec==='pub'?'pub':'sch';
+  return '<div class="cy-tabs" role="tablist" aria-label="أقسام الإبداع">'+CYSEC.map(function(s){ var on=s.k===cur;
+    return '<button type="button" role="tab" aria-selected="'+on+'" class="cy-tab'+(on?' on':'')+'" data-sec="'+s.k+'" style="--k:'+s.c+';--k1:'+s.c1+';--kd:'+s.cd+'" onclick="hhIbSection(\''+s.k+'\')"><i>'+cySv(CYI[s.k])+'</i><span class="tx"><b>'+s.t+'</b><small>'+s.s+'</small></span><em>'+cySecN(s.k)+'</em></button>'; }).join('')+'</div>'; }
+function cyPub(){ var C=cyComps(), G=cyGroups('general'), PR=cyGroups('partners'), s=CYSEC[0];
+  var h='<div class="cy-panel" style="--k:'+s.c+';--k1:'+s.c1+';--kd:'+s.cd+'"><div class="cy-pnh"><h2>'+s.t+'</h2><p>'+s.s+'</p></div>';
+  h+='<div class="cy-sub first">'+cySv(CYI.trophy,18)+'المسابقات الجاهزة <small>تُلعب على الشاشة بالفرق</small></div>';
+  h+=C.length?'<div class="cy-g3">'+C.map(function(x){ var qn=x.n>2&&x.n<11?x.n+' أسئلة':x.n+' سؤالاً';
+      return '<div class="cy-c"><div class="t"><span>'+cySv(CYI.trophy,19)+'</span><b>'+esc(cyClean(x.cat))+'</b></div><small>'+qn+(x.org?'، '+esc(x.org):'')+'</small><div class="ac"><button type="button" class="cy-b" data-cat="'+esc(x.cat)+'" onclick="hhIbPubComp(this.getAttribute(\'data-cat\'))">'+cySv(CYI.play,13)+'ابدأ المسابقة</button></div></div>'; }).join('')+'</div>'
+    :'<div class="rl-soon">المسابقات قيد التحميل</div>';
+  if(G.length) h+='<div class="cy-sub">'+cySv(CYI.tag,18)+'فئات عامة <small>تختار منها وتبني لعبتك</small></div><div class="cy-chips">'+G.map(function(g){ return '<button type="button" class="cy-ch" onclick="hhIbPubCat(\'general\',\''+esc(g.gid)+'\')">'+esc(g.t)+'<em>'+g.n+'</em></button>'; }).join('')+'</div>';
+  if(PR.length) h+='<div class="cy-sub">'+cySv(CYI.hand,18)+'فئات الشركاء <small>أسئلة أعدّتها الجهات الشريكة</small></div><div class="cy-chips">'+PR.map(function(g){ return '<button type="button" class="cy-ch" onclick="hhIbPubCat(\'partners\',\''+esc(g.gid)+'\')">'+esc(g.t)+'<em>'+g.n+'</em></button>'; }).join('')+'</div>';
+  return h+'</div>'; }
+function cyAfter(){ var ov=document.getElementById('hh-ib'); if(!ov) return;
+  var bc=ov.querySelector('.gvh-bc'); var cur=CYSEC.filter(function(s){ return s.k===(_ib.sec==='pub'?'pub':'sch'); })[0];
+  if(bc&&_ib.view!=='editor'){ var want='الإبداع › '+cur.t; if(bc.getAttribute('data-cy')!==want){ bc.setAttribute('data-cy',want); bc.innerHTML='<button type="button" onclick="hhGvGo(\'home\')">الرئيسية</button> › <button type="button" onclick="hhIbSection(\'sch\')">الإبداع</button> › '+cur.t; } }
+  var tb=ov.querySelector('.cy-tabs'), on=tb&&tb.querySelector('.cy-tab.on');
+  if(tb&&on&&tb.scrollWidth>tb.clientWidth+2){ var tr=tb.getBoundingClientRect(), r=on.getBoundingClientRect(); if(r.left<tr.left+8||r.right>tr.right-8){ tb.scrollLeft+= (r.left+r.width/2)-(tr.left+tr.width/2); } } }
+function cyGoSetup(tab,after){ try{ if(window.hhCloseFramedOverlays) hhCloseFramedOverlays(); }catch(e){} close();
+  try{ if(typeof hhStartGameNow==='function') hhStartGameNow(); else if(typeof hhNavigate==='function') hhNavigate('screen-setup'); }catch(e){}
+  var n=0; (function step(){ var g=document.getElementById('ms-cat-grid'); if(!g&&++n<25){ setTimeout(step,120); return; }
+    try{ if(typeof msSwitchTab==='function') msSwitchTab(tab); }catch(e){}
+    setTimeout(function(){ try{ if(after) after(document.getElementById('ms-cat-grid')); }catch(e){} },260); })(); }
+window.hhIbPubComp=function(cat){ cyGoSetup('competitions',function(g){ if(!g) return; var b=[].slice.call(g.querySelectorAll('.cat-btn')).filter(function(x){ return x.dataset.cat===cat; })[0]; if(b&&!b.classList.contains('active')) b.click(); if(b&&b.scrollIntoView) b.scrollIntoView({block:'center'}); }); };
+window.hhIbPubCat=function(lv,gid){ cyGoSetup(lv==='partners'?'partners':'general',function(g){ if(!g||!gid) return; var c=[].slice.call(g.querySelectorAll('[data-sxg]')).filter(function(x){ return x.getAttribute('data-sxg')===gid; })[0]; if(c){ c.click(); return; }
+  var hd=[].slice.call(g.querySelectorAll('.cat-btn')).filter(function(x){ return x.dataset.group===gid; })[0]; if(hd&&hd.scrollIntoView) hd.scrollIntoView({block:'center'}); }); };
+window.hhIbSection=function(sec){ sec=sec==='pub'?'pub':'sch'; _ib.sec=sec;
+  var ov=document.getElementById('hh-ib');
+  if(!ov){ open('rack'); return; }
+  if(_ib.view==='editor'){ try{ flushOwn(); }catch(e){} try{ flushReady(); }catch(e){} _ib.readyGame=null; _ib.view='rack'; }
+  render(); try{ ov.scrollTop=0; }catch(e){} };
+var CYCSS=[
+'#hh-ib.ib2 .cy-tabs{--cs:#fff;--cl:#E9E1D1;--ch:#3D0918;--cm:#7A7062;--cb:#F5F4F2;position:sticky;top:0;z-index:6;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px 0 14px;margin:-6px 0 6px;background:var(--cb);}',
+'body.dark-mode #hh-ib.ib2 .cy-tabs{--cs:#22121A;--cl:#3E2C24;--ch:#F5E6C4;--cm:#B8A68A;--cb:#160A0F;}',
+'#hh-ib.ib2 .cy-tab{all:unset;cursor:pointer;box-sizing:border-box;display:flex;gap:12px;align-items:center;min-width:0;background:var(--cs);border:1.5px solid var(--cl);border-radius:18px;padding:12px 14px;position:relative;font-family:Cairo,sans-serif;transition:border-color .2s,box-shadow .2s;}',
+'#hh-ib.ib2 .cy-tab:hover{border-color:var(--k);} #hh-ib.ib2 .cy-tab:focus-visible{outline:3px solid #B8924A;outline-offset:2px;}',
+'#hh-ib.ib2 .cy-tab i{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--k1);color:var(--k);flex-shrink:0;} #hh-ib.ib2 .cy-tab i svg{width:22px;height:22px;}',
+'#hh-ib.ib2 .cy-tab .tx{min-width:0;flex:1;} #hh-ib.ib2 .cy-tab b{display:block;font-size:16px;font-weight:900;color:var(--ch);line-height:1.4;} #hh-ib.ib2 .cy-tab small{display:block;font-size:12.5px;font-weight:700;color:var(--cm);line-height:1.6;}',
+'#hh-ib.ib2 .cy-tab em{font-style:normal;margin-inline-start:auto;font-size:12px;font-weight:900;color:var(--k);background:var(--k1);border-radius:999px;padding:3px 10px;white-space:nowrap;flex-shrink:0;}',
+'#hh-ib.ib2 .cy-tab.on{border-color:var(--k);box-shadow:0 12px 26px -18px var(--k);}',
+'#hh-ib.ib2 .cy-tab.on::after{content:"";position:absolute;bottom:-8px;right:50%;width:14px;height:14px;background:var(--cs);border-right:1.5px solid var(--k);border-bottom:1.5px solid var(--k);transform:translateX(50%) rotate(45deg);}',
+'body.dark-mode #hh-ib.ib2 .cy-tab{--k:var(--kd) !important;} body.dark-mode #hh-ib.ib2 .cy-tab i,body.dark-mode #hh-ib.ib2 .cy-tab em{background:#2E1A22;}',
+'#hh-ib.ib-pub .gvh-act{display:none !important;}',
+'#hh-ib.ib2 .cy-tabs + .ib4-seg{margin-bottom:10px;}',
+'#hh-ib.ib2 .cy-panel{--cs:#fff;--cl:#E9E1D1;--ch:#3D0918;--cm:#7A7062;--cb:#FAF7F1;margin-top:8px;background:var(--cs);border:1px solid var(--cl);border-top:4px solid var(--k);border-radius:24px;padding:20px 22px 24px;}',
+'body.dark-mode #hh-ib.ib2 .cy-panel{--cs:#22121A;--cl:#3E2C24;--ch:#F5E6C4;--cm:#B8A68A;--cb:#2A1720;--k:var(--kd) !important;}',
+'#hh-ib.ib2 .cy-pnh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px;} #hh-ib.ib2 .cy-pnh h2{margin:0;font-size:21px;font-weight:900;color:var(--ch);} #hh-ib.ib2 .cy-pnh p{margin:0;font-size:13.5px;font-weight:700;color:var(--cm);}',
+'#hh-ib.ib2 .cy-sub{margin:22px 0 10px;font-size:15px;font-weight:900;color:var(--ch);display:flex;gap:8px;align-items:center;flex-wrap:wrap;} #hh-ib.ib2 .cy-sub.first{margin-top:10px;} #hh-ib.ib2 .cy-sub svg{color:var(--k);flex-shrink:0;} #hh-ib.ib2 .cy-sub small{font-size:12.5px;color:var(--cm);font-weight:700;}',
+'#hh-ib.ib2 .cy-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}',
+'#hh-ib.ib2 .cy-c{background:var(--cb);border:1px solid var(--cl);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;}',
+'#hh-ib.ib2 .cy-c .t{display:flex;gap:10px;align-items:center;min-width:0;} #hh-ib.ib2 .cy-c .t span{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--k1);color:var(--k);flex-shrink:0;}',
+'body.dark-mode #hh-ib.ib2 .cy-c .t span{background:#3A2530;}',
+'#hh-ib.ib2 .cy-c b{font-size:15px;font-weight:900;color:var(--ch);line-height:1.5;min-width:0;} #hh-ib.ib2 .cy-c small{font-size:12.5px;font-weight:700;color:var(--cm);line-height:1.7;}',
+'#hh-ib.ib2 .cy-c .ac{margin-top:auto;padding-top:6px;display:flex;}',
+'#hh-ib.ib2 .cy-b{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:Cairo,sans-serif;font-size:13px;font-weight:900;border-radius:10px;padding:7px 14px;background:#1F4E79;color:#fff;} #hh-ib.ib2 .cy-b:hover{filter:brightness(1.12);} #hh-ib.ib2 .cy-b:focus-visible{outline:3px solid #B8924A;outline-offset:2px;}',
+'body.dark-mode #hh-ib.ib2 .cy-b{background:#2D6296;}',
+'#hh-ib.ib2 .cy-chips{display:flex;gap:10px;flex-wrap:wrap;}',
+'#hh-ib.ib2 .cy-ch{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:var(--cb);border:1px solid var(--cl);border-radius:999px;padding:8px 14px;font-family:Cairo,sans-serif;font-size:13.5px;font-weight:800;color:var(--ch);} #hh-ib.ib2 .cy-ch:hover{border-color:var(--k);}',
+'#hh-ib.ib2 .cy-ch em{font-style:normal;font-size:11.5px;font-weight:900;color:var(--k);background:var(--k1);border-radius:99px;padding:0 8px;} body.dark-mode #hh-ib.ib2 .cy-ch em{background:#3A2530;}',
+'@media (max-width:1000px){ #hh-ib.ib2 .cy-g3{grid-template-columns:repeat(2,minmax(0,1fr));} }',
+'@media (max-width:900px){',
+' #hh-ib.ib2 .cy-tabs{display:flex;overflow-x:auto;gap:8px;margin:-6px -14px 4px;padding:8px 14px 10px;scrollbar-width:none;} #hh-ib.ib2 .cy-tabs::-webkit-scrollbar{display:none;}',
+' #hh-ib.ib2 .cy-tab{flex:0 0 auto;padding:8px 12px;border-radius:14px;gap:8px;} #hh-ib.ib2 .cy-tab small,#hh-ib.ib2 .cy-tab em{display:none;} #hh-ib.ib2 .cy-tab i{width:32px;height:32px;border-radius:10px;} #hh-ib.ib2 .cy-tab i svg{width:18px;height:18px;} #hh-ib.ib2 .cy-tab b{font-size:14px;white-space:nowrap;}',
+' #hh-ib.ib2 .cy-tab.on::after{display:none;} #hh-ib.ib2 .cy-tab.on{background:var(--k);border-color:var(--k);} #hh-ib.ib2 .cy-tab.on b{color:#fff;} #hh-ib.ib2 .cy-tab.on i{background:rgba(255,255,255,.2);color:#fff;}',
+' body.dark-mode #hh-ib.ib2 .cy-tab.on{background:color-mix(in srgb,var(--kd) 30%,#22121A);} ',
+' #hh-ib.ib2 .cy-panel{padding:16px;border-radius:20px;} #hh-ib.ib2 .cy-g3{grid-template-columns:minmax(0,1fr);}',
+'}'
+].join('\n');
+IB6CSS+='\n'+CYCSS;
+window.hhIbOpen=function(v,id){ _ib.sec='sch'; open(v,id); };
 window.hhIbRefresh=function(){ _ib.loaded=false; if(document.getElementById('hh-ib')) open(_ib.view==='editor'?'mine':_ib.view); };
 window._hhIb=_ib; window._hhIbTemplates=TEMPLATES; window._hhIbGetGame=getGame; window._hhIbReadyList=readyList; window._hhIbBuildReady=buildReady;
 })();

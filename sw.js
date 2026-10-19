@@ -6,7 +6,7 @@
    (مثلاً من v1 إلى v2). هذا وحده يجبر المتصفحات على جلب النسخة
    الجديدة وتفعيل آلية التحديث التلقائي عند المستخدمين.
    ============================================================ */
-const SW_VERSION = 'almulhim-zzzzzzcy-library';
+const SW_VERSION = 'almulhim-zzzzzzcz-daa';
 
 // الملفات المحلية الأساسية التي نخزّنها للعمل دون اتصال (App Shell)
 // لا نضع هنا أي ملف من Firestore/Firebase/Google حتى لا نعطّل التحديث اللحظي
@@ -58,6 +58,8 @@ const CORE_ASSETS = [
   '/almulhim-learn2.js',
   '/almulhim-learn3-data.js',
   '/almulhim-learn3.js',
+  '/almulhim-daa-data.js',
+  '/almulhim-daa.js',
   '/almulhim-lib-index.js',
   '/almulhim-lib.js',
   '/curriculum-social7.js',

@@ -22466,23 +22466,42 @@ loadAdminCatQuestions = function(){ var r=_origLoadAQ_g.apply(this, arguments); 
 // ═══════════════════════════════════════════════════════════════════
 (function(){
   if(window._hhNetInit) return; window._hhNetInit=true;
+  var OFF='لا يوجد اتصال بالإنترنت، وما تفعله يُحفظ على جهازك حتى تعود الشبكة', ON='عاد الاتصال، وتتم المزامنة الآن';
+  var IOFF='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22M16.7 11.3a6 6 0 0 0-3-1.6M5 12.6a10 10 0 0 1 5.2-2.6M1.4 9a16 16 0 0 1 4.8-2.9M10.7 5.1A16 16 0 0 1 22.6 9M8.5 16.1a5 5 0 0 1 7 0M12 20h.01"/></svg>';
+  var ION='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6a10 10 0 0 1 14 0M1.4 9a16 16 0 0 1 21.2 0M8.5 16.1a5 5 0 0 1 7 0M12 20h.01"/></svg>';
+  var hid=false, tOn=null;
+  function css(){ if(document.getElementById('hh-net-css')) return; var s=document.createElement('style'); s.id='hh-net-css';
+    s.textContent='#hh-net-bar{position:fixed;top:calc(var(--hh-bar,0px) - var(--hh-net,0px));left:0;right:0;z-index:2950;display:flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:6px 14px;box-sizing:border-box;background:#FDF3E3;color:#7A4A12;border-bottom:1px solid #F0DDBA;box-shadow:0 6px 14px -10px rgba(61,9,24,.25);font-family:Cairo,sans-serif;font-size:13.5px;font-weight:800;line-height:1.5;direction:rtl;text-align:center;transform:translateY(-6px);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;}'
+      +'#hh-net-bar.on{opacity:1;transform:none;pointer-events:auto;} #hh-net-bar svg{flex-shrink:0;} #hh-net-bar.ok{background:#E8F3EC;color:#2C5340;border-color:#C9E2D2;}'
+      +'#hh-net-bar button{all:unset;cursor:pointer;margin-inline-start:12px;font-size:12.5px;font-weight:900;color:#8A1538;text-decoration:underline;text-underline-offset:3px;border-radius:6px;padding:2px 4px;} #hh-net-bar button:focus-visible{outline:2px solid #B8924A;}'
+      +'#hh-net-bar.ok button{display:none;}'
+      +'body.dark-mode #hh-net-bar{background:#2E2416;color:#F0D9A8;border-color:#4A3A22;box-shadow:0 6px 14px -10px rgba(0,0,0,.6);} body.dark-mode #hh-net-bar button{color:#E6CE8E;} body.dark-mode #hh-net-bar.ok{background:#16291F;color:#A9D8BC;border-color:#24402F;}'
+      +'body.hh-immersive #hh-net-bar{top:0;}'
+      +'html.gv-on.hh-net-on body #main-nav{height:calc(var(--hh-bar) - var(--hh-net,38px)) !important;min-height:calc(var(--hh-bar) - var(--hh-net,38px)) !important;}'
+      +':root.gv-on.hh-net-on{--hh-bar:calc(118px + var(--hh-net,38px));} @media (max-width:900px){ :root.gv-on.hh-net-on{--hh-bar:calc(102px + var(--hh-net,38px));} } @media (min-width:901px){ :root.gv-on.gv-mini.hh-net-on{--hh-bar:calc(50px + var(--hh-net,38px));} }'
+      +'@media (max-width:900px){ #hh-net-bar{font-size:12.5px;gap:8px;padding:6px 12px;justify-content:flex-start;text-align:start;} #hh-net-bar button{margin-inline-start:auto;flex-shrink:0;} }';
+    document.head.appendChild(s); }
   function bar(){
     var b=document.getElementById('hh-net-bar');
-    if(!b){ b=document.createElement('div'); b.id='hh-net-bar';
-      b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:100000;background:linear-gradient(135deg,#8A1538,#5E0E26);color:#EAD9B0;font-family:Cairo,sans-serif;font-weight:800;font-size:.8rem;text-align:center;padding:8px 14px;box-shadow:0 3px 12px rgba(42,8,16,.35);border-bottom:2px solid #B8924A;transform:translateY(-100%);transition:transform .3s;display:flex;align-items:center;justify-content:center;gap:8px;';
-      b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 1l22 22M16.7 11.3a6 6 0 0 0-3-1.6M5 12.5a10 10 0 0 1 5.2-2.7M2 8.8a15 15 0 0 1 4.2-2.5M8.5 16.4a5 5 0 0 1 7 0M12 20h.01"/></svg><span>لا يوجد اتصال بالإنترنت · بعض الميزات تعمل محلياً حتى عودة الشبكة</span>';
+    if(!b){ css(); b=document.createElement('div'); b.id='hh-net-bar'; b.setAttribute('role','status'); b.setAttribute('aria-live','polite');
+      b.innerHTML=IOFF+'<span>'+OFF+'</span><button type="button">إخفاء</button>';
+      b.querySelector('button').onclick=function(){ hid=true; hide(); };
       document.body.appendChild(b);
     }
     return b;
   }
-  function show(){ var b=bar(); requestAnimationFrame(function(){ b.style.transform='translateY(0)'; }); }
-  function hide(){ var b=document.getElementById('hh-net-bar'); if(b) b.style.transform='translateY(-100%)'; }
-  window.addEventListener('offline', show);
+  function set(ok){ var b=bar(); b.classList.toggle('ok',!!ok); var s=b.querySelector('svg'); if(s) s.outerHTML=ok?ION:IOFF; b.querySelector('span').textContent=ok?ON:OFF; return b; }
+  var R=document.documentElement;
+  function fit(){ var b=document.getElementById('hh-net-bar'); if(!b||!R.classList.contains('hh-net-on')) return; R.style.setProperty('--hh-net',(b.offsetHeight||38)+'px'); }
+  function show(){ if(hid) return; var b=set(false); clearTimeout(tOn); R.classList.add('hh-net-on'); fit(); requestAnimationFrame(function(){ fit(); b.classList.add('on'); }); }
+  function hide(){ var b=document.getElementById('hh-net-bar'); if(b) b.classList.remove('on'); R.classList.remove('hh-net-on'); R.style.removeProperty('--hh-net'); }
+  window.addEventListener('resize',function(){ clearTimeout(fit._t); fit._t=setTimeout(fit,100); });
+  window.addEventListener('offline', function(){ hid=false; show(); });
   window.addEventListener('online', function(){
-    var b=bar(); b.style.background='linear-gradient(135deg,#3D6B53,#2C5340)';
-    b.querySelector('span').textContent='عاد الاتصال · تتم المزامنة الآن';
-    show(); setTimeout(function(){ hide(); setTimeout(function(){ b.style.background='linear-gradient(135deg,#8A1538,#5E0E26)'; b.querySelector('span').textContent='لا يوجد اتصال بالإنترنت · بعض الميزات تعمل محلياً حتى عودة الشبكة'; },400); }, 2200);
+    var b=document.getElementById('hh-net-bar'); if(!b||!b.classList.contains('on')){ hid=false; return; }
+    set(true); clearTimeout(tOn); tOn=setTimeout(function(){ hide(); hid=false; }, 2200);
   });
+  window.hhNetBar=function(on){ if(on===false){ hide(); return; } hid=false; show(); };
   if(navigator && navigator.onLine===false) setTimeout(show, 1200);
 })();
 
