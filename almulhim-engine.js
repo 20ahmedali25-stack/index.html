@@ -1189,8 +1189,8 @@ const CAT_SVG = {
   'التراث الخليجي':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7a5410"/><stop offset="100%" stop-color="#3a2606"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg7)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><path d="M168 150 h52 l10 78 q2 20 -36 20 q-38 0 -36 -20 Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="3"/><path d="M168 150 l-22 -26 l10 -6 l24 24Z" fill="#D4BC85"/><path d="M220 162 q26 6 20 30 q-4 18 -24 16" fill="none" stroke="#D4BC85" stroke-width="7"/><rect x="180" y="132" width="28" height="12" rx="4" fill="#D4BC85"/><circle cx="194" cy="126" r="6" fill="#8A6D2E"/><path d="M258 224 h34 q-3 22 -17 22 q-14 0 -17 -22Z" fill="#D4BC85" stroke="#8A6D2E" stroke-width="2.5"/><path d="M116 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M152 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M188 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M224 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><path d="M260 292 l12 -14 l12 14 l-12 14Z" fill="#D4BC85" opacity=".8"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9B0">التراث الخليجي</text></svg>`,
   'الإنجليزية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1E3A6E"/><stop offset="100%" stop-color="#0C1B38"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg8)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><text x="140" y="200" text-anchor="middle" font-family="Arial" font-weight="900" font-size="120" fill="#D4BC85">A</text><text x="228" y="230" text-anchor="middle" font-family="Arial" font-weight="900" font-size="88" fill="#D4BC85" opacity=".85">B</text><text x="292" y="180" text-anchor="middle" font-family="Arial" font-weight="900" font-size="64" fill="#D4BC85" opacity=".65">C</text><line x1="112" y1="248" x2="288" y2="248" stroke="#B8924A" stroke-width="5" stroke-linecap="round" opacity=".7"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9B0">الإنجليزية</text></svg>`,
   'الرياضيات الذهنية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cbg9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3B2F63"/><stop offset="100%" stop-color="#1A1330"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#cbg9)"/><circle cx="200" cy="172" r="118" fill="none" stroke="#D4BC85" stroke-width="2.5" opacity=".35"/><text x="160" y="192" text-anchor="middle" font-family="Arial" font-weight="900" font-size="116" fill="#D4BC85">7</text><text x="248" y="160" text-anchor="middle" font-family="Arial" font-weight="900" font-size="70" fill="#D4BC85" opacity=".8">3</text><text x="258" y="236" text-anchor="middle" font-family="Arial" font-weight="900" font-size="54" fill="#D4BC85" opacity=".9">+</text><text x="120" y="120" text-anchor="middle" font-family="Arial" font-weight="900" font-size="44" fill="#D4BC85" opacity=".6">×</text><text x="296" y="112" text-anchor="middle" font-family="Arial" font-weight="900" font-size="40" fill="#D4BC85" opacity=".55">=</text><circle cx="132" cy="238" r="7" fill="#D4BC85" opacity=".6"/><text x="200" y="352" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#EAD9B0">رياضيات ذهنية</text></svg>`,
-  'مسابقة مركز أجيال التربوي - يوم الوفاء':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="wafa_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient></defs><rect width="400" height="400" rx="44" fill="url(#wafa_bg)"/><rect x="52" y="26" width="296" height="296" rx="22" fill="#baaf9d" stroke="#B8924A" stroke-width="6"/><image x="58" y="32" width="284" height="284" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_WAFA_IMG}"/><text x="200" y="362" text-anchor="middle" font-family="Amiri,Cairo,serif" font-weight="700" font-size="27" fill="#D4BC85">يوم الوفاء · رحمه الله</text></svg>`,
-  'مسابقة أجيال في القرآن الكريم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ajq_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient><linearGradient id="ajq_gold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D4BC85"/><stop offset="100%" stop-color="#B8924A"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#ajq_bg)"/><circle cx="200" cy="185" r="128" fill="none" stroke="#B8924A" stroke-width="3" opacity=".5"/><path d="M200 70 L212 100 L245 100 L219 120 L229 152 L200 133 L171 152 L181 120 L155 100 L188 100 Z" fill="url(#ajq_gold)" stroke="#8A6D2E" stroke-width="2"/><path d="M118 175 Q118 165 128 165 L196 165 L196 275 L128 275 Q118 275 118 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><path d="M282 175 Q282 165 272 165 L204 165 L204 275 L272 275 Q282 275 282 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><line x1="200" y1="165" x2="200" y2="275" stroke="#8A6D2E" stroke-width="3"/><line x1="132" y1="190" x2="185" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="208" x2="185" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="226" x2="185" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="244" x2="185" y2="244" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="190" x2="268" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="208" x2="268" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="226" x2="268" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="244" x2="268" y2="244" stroke="#B8924A" stroke-width="2"/><text x="200" y="330" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#D4BC85">مسابقة أجيال في القرآن</text><text x="200" y="366" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="800" font-size="20" fill="#F8F8F6" opacity=".85">200 · 400 · 600 · 800</text></svg>`,
+  'مسابقة مركز أجيال التربوي - يوم الوفاء':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="wafa_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient></defs><rect width="400" height="400" rx="44" fill="url(#wafa_bg)"/><rect x="52" y="26" width="296" height="296" rx="22" fill="#baaf9d" stroke="#B8924A" stroke-width="6"/><image x="58" y="32" width="284" height="284" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_WAFA_IMG}"/><text x="200" y="362" text-anchor="middle" font-family="Amiri,Cairo,serif" font-weight="700" font-size="27" fill="#D4BC85">يوم الوفاء، رحمه الله</text></svg>`,
+  'مسابقة أجيال في القرآن الكريم':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ajq_bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5E0E26"/><stop offset="100%" stop-color="#3D0918"/></linearGradient><linearGradient id="ajq_gold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D4BC85"/><stop offset="100%" stop-color="#B8924A"/></linearGradient></defs><rect width="400" height="400" rx="48" fill="url(#ajq_bg)"/><circle cx="200" cy="185" r="128" fill="none" stroke="#B8924A" stroke-width="3" opacity=".5"/><path d="M200 70 L212 100 L245 100 L219 120 L229 152 L200 133 L171 152 L181 120 L155 100 L188 100 Z" fill="url(#ajq_gold)" stroke="#8A6D2E" stroke-width="2"/><path d="M118 175 Q118 165 128 165 L196 165 L196 275 L128 275 Q118 275 118 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><path d="M282 175 Q282 165 272 165 L204 165 L204 275 L272 275 Q282 275 282 265 Z" fill="#F8F8F6" stroke="#B8924A" stroke-width="3"/><line x1="200" y1="165" x2="200" y2="275" stroke="#8A6D2E" stroke-width="3"/><line x1="132" y1="190" x2="185" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="208" x2="185" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="226" x2="185" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="132" y1="244" x2="185" y2="244" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="190" x2="268" y2="190" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="208" x2="268" y2="208" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="226" x2="268" y2="226" stroke="#B8924A" stroke-width="2"/><line x1="215" y1="244" x2="268" y2="244" stroke="#B8924A" stroke-width="2"/><text x="200" y="330" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="900" font-size="30" fill="#D4BC85">مسابقة أجيال في القرآن</text><text x="200" y="366" text-anchor="middle" font-family="Cairo,Tajawal,Arial" font-weight="800" font-size="20" fill="#F8F8F6" opacity=".85">200، 400، 600، 800</text></svg>`,
   'بيرف آب · ثقافة قطرية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
   'بيرف آب · معلومات دينية':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
   'بيرف آب · رياضة':`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><rect width="400" height="400" fill="#fff"/><image x="20" y="20" width="360" height="360" preserveAspectRatio="xMidYMid meet" xlink:href="${_HH_IMG_PERFUP}"/></svg>`,
@@ -2121,13 +2121,13 @@ const CAT_GROUPS = [
   },
   {
     id:'grade5_soon',
-    label:'الصف الخامس · قريباً',
+    label:'الصف الخامس، قريباً',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#1F4E79"/><circle cx="50" cy="50" r="30" fill="none" stroke="#2C5F88" stroke-width="2" stroke-dasharray="4,3"/><text x="50" y="60" text-anchor="middle" font-size="32" font-family="Cairo,Arial" fill="#D4BC85" font-weight="900">5</text><circle cx="85" cy="15" r="10" fill="#B8924A" stroke="#8A6D2E" stroke-width="1.5"/><text x="85" y="19" text-anchor="middle" font-size="11" font-family="Cairo,Arial" fill="#3D0918" font-weight="900">!</text></svg>`,
     cats:[],
     soonNote:'منهج الصف الخامس قيد الإعداد · قريبا بإذن الله' },
   {
     id:'grade9_soon',
-    label:'الصف التاسع · قريباً',
+    label:'الصف التاسع، قريباً',
     icon:`<svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#5a3a8e"/><circle cx="50" cy="50" r="30" fill="none" stroke="#9b59b6" stroke-width="2" stroke-dasharray="4,3"/><text x="50" y="60" text-anchor="middle" font-size="32" font-family="Cairo,Arial" fill="#D4BC85" font-weight="900">9</text><circle cx="85" cy="15" r="10" fill="#B8924A" stroke="#8A6D2E" stroke-width="1.5"/><text x="85" y="19" text-anchor="middle" font-size="11" font-family="Cairo,Arial" fill="#3D0918" font-weight="900">!</text></svg>`,
     cats:[],
     soonNote:'منهج الصف التاسع قيد الإعداد · قريبا بإذن الله' },
@@ -2499,7 +2499,7 @@ function msSwitchTab(tabId){
   // معالجة "قريباً" · تنبيه فقط
   const level = CAT_LEVELS.find(l => l.id === tabId);
   if(level && level.status === 'soon'){
-    if(typeof toast === 'function') toast(' ' + level.label + ' · قريباً بإذن الله', 'info');
+    if(typeof toast === 'function') toast(' ' + level.label + '، قريباً بإذن الله', 'info');
     return;
   }
 
@@ -2728,7 +2728,7 @@ function msRenderTabContent(tabId){
               <polyline points="12 6 12 12 16 14"/>
             </svg>
           </div>
-          <div class="ms-prep-prompt-title">${activeSubTab.label} · قريباً بإذن الله</div>
+          <div class="ms-prep-prompt-title">${activeSubTab.label}، قريباً بإذن الله</div>
           <div class="ms-prep-prompt-sub">منهج هذا الصف قيد الإعداد، ترقب التحديثات القادمة</div>
         </div> `;
       return;
@@ -2771,7 +2771,7 @@ function msRenderTabContent(tabId){
     const level = CAT_LEVELS.find(l => l.id === tabId);
     if(!level) return;
     if(level.status === 'soon'){
-      grid.innerHTML = '<div class="ms-empty-tab"> ' + level.label + ' · قريباً بإذن الله</div>';
+      grid.innerHTML = '<div class="ms-empty-tab"> ' + level.label + '، قريباً بإذن الله</div>';
       return;
     }
     // إن كان التاب يحوي subTab نشطاً، نأخذ groupIds منه فقط
@@ -19830,7 +19830,7 @@ function renderActivityDetailsForm(template){
       <div style="margin-top:10px;padding:10px 12px;background:#F5F3F0;border:1.5px solid #B8924A;border-radius:10px;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:Tajawal;font-size:.82rem;color:#8A6D2E;font-weight:700;">
           <input type="checkbox" id="ag-cert-show-platform" checked style="width:18px;height:18px;accent-color:#B8924A;cursor:pointer;">
-          <span>إظهار "منصة الملهم · حيث يبدأ الإلهام" في الشهادة</span>
+          <span>إظهار "منصة الملهم، حيث يبدأ الإلهام" في الشهادة</span>
         </label>
       </div> `;
     // عبئ التوقيعات الافتراضية (المعلم بالاسم المحفوظ)
@@ -19993,7 +19993,7 @@ function buildActivityHTML(data){
         </div> ${questionsHtml}
         <div style="margin-top:40px;padding-top:14px;border-top:2px solid #B8924A;display:flex;justify-content:space-between;font-size:11px;color:#888;">
           <div>المعلم: ${escAG(data.teacherName || '')}</div>
-          <div>منصة الملهم · حيث يبدأ الإلهام</div>
+          <div>منصة الملهم، حيث يبدأ الإلهام</div>
         </div>
       </div> `;
   } else if(data.template === 'quiz'){
@@ -20018,7 +20018,7 @@ function buildActivityHTML(data){
         </div> ${itemsHtml}
         <div style="margin-top:40px;padding-top:14px;border-top:2px solid #B8924A;display:flex;justify-content:space-between;font-size:11px;color:#888;">
           <div>المعلم: ${escAG(data.teacherName || '')}</div>
-          <div>منصة الملهم · حيث يبدأ الإلهام</div>
+          <div>منصة الملهم، حيث يبدأ الإلهام</div>
         </div>
       </div> `;
   } else if(data.template === 'certificate'){
