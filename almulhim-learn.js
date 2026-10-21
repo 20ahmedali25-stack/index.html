@@ -211,7 +211,7 @@ function journeyHTML(R){ var J=journey();
 window.hhLhCerts=function(){ CRT=!CRT; rr(); };
 
 /* ═══ الكتب التربوية ═══ */
-window.hhLhCat=function(c){ LB.cat=c||'all'; rr(); };
+window.hhLhCat=function(c){ LB.cat=c||'all'; if(LB.cat!=='all') LB.mode='all'; rr(); };
 window.hhLhAu=function(){ AUX=!AUX; rr(); };
 var INS=[['خريطة الكتاب','الكتاب كله في نظرة','<svg viewBox="0 0 80 60" width="80" height="60" aria-hidden="true"><circle cx="40" cy="30" r="11" fill="#F6EEDC" stroke="#B8924A" stroke-width="2"/><g fill="#8A1538"><circle cx="12" cy="12" r="5"/><circle cx="68" cy="12" r="5"/><circle cx="12" cy="48" r="5"/><circle cx="68" cy="48" r="5"/></g><path d="M16 15 31 25M64 15 49 25M16 45l15-10M64 45 49 35" stroke="#B8924A" stroke-width="1.6"/></svg>'],
  ['محطات بخمس خطوات','فكّر، اقرأ، الدليل، طبّق، احفظ','<svg viewBox="0 0 80 60" width="80" height="60" aria-hidden="true"><path d="M8 30h64" stroke="#E9E1D1" stroke-width="3"/><circle cx="10" cy="30" r="6" fill="#B8924A"/><circle cx="25" cy="30" r="6" fill="#B8924A"/><circle cx="40" cy="30" r="7" fill="#8A1538"/><circle cx="55" cy="30" r="6" fill="#F4EFE5" stroke="#D9CDB6"/><circle cx="70" cy="30" r="6" fill="#F4EFE5" stroke="#D9CDB6"/></svg>'],
@@ -263,8 +263,8 @@ function binfo(id){ var m=BMx(id); if(!m) return null; var x={id:id,m:m,ch:[],do
   return x; }
 
 /* ═══ المكتبة ═══ */
-var LB={cat:'all',q:'',sort:'sug',view:'grid'}; try{ var _lb=JSON.parse(localStorage.getItem('hh_learn_lib')||'null'); if(_lb){ if(['sug','new','prog'].indexOf(_lb.sort)>-1) LB.sort=_lb.sort; if(_lb.view==='list') LB.view='list'; } }catch(e){}
-function lbSave(){ try{ localStorage.setItem('hh_learn_lib',JSON.stringify({sort:LB.sort,view:LB.view})); }catch(e){} }
+var LB={cat:'all',q:'',sort:'sug',view:'grid',mode:'cat'}; try{ var _lb=JSON.parse(localStorage.getItem('hh_learn_lib')||'null'); if(_lb){ if(['sug','new','prog'].indexOf(_lb.sort)>-1) LB.sort=_lb.sort; if(_lb.view==='list') LB.view='list'; if(['cat','au','all'].indexOf(_lb.mode)>-1) LB.mode=_lb.mode; } }catch(e){}
+function lbSave(){ try{ localStorage.setItem('hh_learn_lib',JSON.stringify({sort:LB.sort,view:LB.view,mode:LB.mode})); }catch(e){} }
 function libCats(){ var x=LX(), c=[]; libList().forEach(function(id){ var k=x.books[id].cat; if(c.indexOf(k)<0) c.push(k); }); return c; }
 function libItems(){ var x=LX(), all=libList(), q=nrm2(LB.q).trim().split(/\s+/).filter(Boolean);
   var L=all.filter(function(id){ var m=x.books[id]; if(LB.cat!=='all'&&m.cat!==LB.cat) return false; if(!q.length) return true; var h=nrm2([m.title,m.sub,m.cv,auName(m),x.cats[m.cat],m.series].join(' ')); return q.every(function(w){ return h.indexOf(w)>-1; }); });
@@ -278,19 +278,64 @@ function libItems(){ var x=LX(), all=libList(), q=nrm2(LB.q).trim().split(/\s+/)
 function bkCard(b){ var m=b.m, x=LX(), tg=m.new?'<span class="tag">جديد</span>':(b.pc>=70&&b.pc<100?'<span class="tag c">قاربت</span>':'');
   return '<button type="button" class="lh7-bk" data-id="'+b.id+'" aria-haspopup="dialog" onclick="hhLhBk(\''+b.id+'\')">'+tg+'<span class="cvw">'+cov(m,{pr:b.pc})+'</span><span class="meta"><b>'+esc(m.title)+'</b>'
    +'<span class="ex">'+esc(bare(auName(m)))+'، '+esc(x.cats[m.cat]||'')+'</span><small>'+(b.pc?'تقدمك '+b.pc+'%':b.n+' '+unitW(b.n,b.id))+'</small>'+(LB.view==='list'&&b.pc?'<span class="lpr"><i style="width:'+b.pc+'%"></i></span>':'')+'</span></button>'; }
-function gridInner(){ var L=libItems(); return L.length?L.map(bkCard).join(''):'<p class="lh7-emp">لا كتاب بهذا الاسم في هذا المجال، جرّب كلمة أخرى</p>'; }
+/* ═══ dd1: المكتبة بثلاثة عروض (حسب المجال رفوف، حسب المؤلف، الكل شبكة)، وتابع القراءة، والبرنامج الرئيس شريطاً مدمجاً ═══ */
+P.l8cat='<rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 4v6M11 4v6M7 14v6M11 14v6"/>';
+P.l8au='<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>';
+P.l8all='<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>';
+P.l8l='<path d="M15 6l-6 6 6 6"/>'; P.l8r='<path d="M9 6l6 6-6 6"/>';
+P.l8st='<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>';
+function l8ring(p){ var c=50.27, v=Math.round(c*p/100*100)/100; return '<span class="v3-rg" aria-hidden="true"><svg viewBox="0 0 20 20"><circle class="t" cx="10" cy="10" r="8"/><circle class="v" cx="10" cy="10" r="8" stroke-dasharray="'+v+' '+c+'" transform="rotate(-90 10 10)"/></svg></span>'; }
+function l8card(b){ var m=b.m;
+  return '<button type="button" class="lh7-bk l8-bk v3-bk" data-id="'+b.id+'" aria-haspopup="dialog" aria-label="'+esc(m.title)+'، '+esc(auName(m))+(b.started?'، تقدمك '+b.pc+'%':'')+'" onclick="hhLhBk(\''+b.id+'\')">'
+   +'<span class="cvw">'+(m.new?'<span class="tag">جديد</span>':'')+cov(m,{})+'</span>'
+   +'<span class="meta"><b>'+esc(m.title)+'</b><span class="au">'+esc(bare(auName(m)))+'</span>'
+   +'<span class="sn'+(b.started?' on':'')+'">'+(b.started?l8ring(b.pc)+'<span>'+(b.pc>=100?'أتممته':'تقدمك <bdi dir="ltr">'+b.pc+'%</bdi>')+'</span>':sv('l8st',12,2.2)+'<span>'+b.n+' '+unitW(b.n,b.id)+'</span>')+'</span></span></button>'; }
+/* كل الكتب بعد البحث، بالترتيب المقترح، بلا تصفية المجال */
+function l8filtered(){ var c=LB.cat, s=LB.sort; LB.cat='all'; LB.sort='sug'; var L=libItems(); LB.cat=c; LB.sort=s; return L; }
+function l8shelf(head,L){ return '<section class="l8-sh">'+head+'<div class="rw"><button type="button" class="ar pv" aria-label="الكتب السابقة" onclick="hhL8S(this,1)">'+sv('l8r',18,2.4)+'</button><div class="row" onscroll="hhL8U(this)">'+L.map(l8card).join('')+'</div><button type="button" class="ar nx" aria-label="الكتب التالية" onclick="hhL8S(this,-1)">'+sv('l8l',18,2.4)+'</button></div></section>'; }
+function l8emp(){ return '<p class="lh7-emp">لا كتاب بهذا الاسم، جرّب كلمة أخرى</p>'; }
+/* حسب المجال: رف لكل مجال، الأكثر كتباً أولاً، والمجالات ذات الكتاب الواحد في «مجالات أخرى» (ما لم يكن هناك بحث) */
+function l8cats(){ var x=LX(), L=l8filtered(), out='', other=[], G=[], merge=!String(LB.q||'').trim();
+  libCats().forEach(function(c){ var B=L.filter(function(b){ return b.m.cat===c; }); if(!B.length) return; if(merge&&B.length===1){ other=other.concat(B); return; } G.push([c,B]); });
+  G.sort(function(a,b){ return b[1].length-a[1].length; });
+  G.forEach(function(g){ var c=g[0], B=g[1];
+    out+=l8shelf('<div class="hd"><span class="ic"><svg viewBox="0 0 120 120" aria-hidden="true">'+(ORN[c]||'')+'</svg></span><h3>'+esc(x.cats[c])+'</h3><em>'+nAr(B.length,'b')+'</em><button type="button" class="all" onclick="hhL8All(\''+c+'\')">عرض الكل'+sv('l8l',15,2.4)+'</button></div>',B); });
+  if(other.length) out+=l8shelf('<div class="hd"><span class="ic">'+sv('l8all',16)+'</span><h3>مجالات أخرى</h3><em>'+other.map(function(b){ return esc(x.cats[b.m.cat]); }).join('، ')+'</em></div>',other);
+  return out||l8emp(); }
+/* حسب المؤلف: رف لكل مؤلف له أكثر من كتاب، ثم «مؤلفون آخرون» بطاقات مضغوطة */
+function l8aus(){ var x=LX(), L=l8filtered(), multi='', solo=[];
+  var A=(x.authors||[]).map(function(a){ return [a,L.filter(function(b){ return b.m.aid===a.id; })]; }).filter(function(z){ return z[1].length; });
+  A.sort(function(p,q){ return q[1].length-p[1].length; });
+  A.forEach(function(z){ var a=z[0], B=z[1];
+    if(B.length>1) multi+=l8shelf('<div class="hd au"><span class="av" style="background:'+(a.k||'#8A1538')+'">'+esc(a.ini)+'</span><h3><button type="button" onclick="hhLibAuthor(\''+a.id+'\')" title="'+esc(a.name)+'">'+esc(bare(a.name))+'</button></h3><em>'+nAr(B.length,'b')+'</em><button type="button" class="all" onclick="hhLibAuthor(\''+a.id+'\')">ملف المؤلف'+sv('l8l',15,2.4)+'</button></div>',B);
+    else solo.push([a,B[0]]); });
+  var so=solo.length?'<section class="l8-sh"><div class="hd"><span class="ic">'+sv('users',18)+'</span><h3>مؤلفون آخرون</h3><em>'+(solo.length===1?'مؤلف واحد':solo.length===2?'مؤلفان':solo.length<=10?solo.length+' مؤلفين':solo.length+' مؤلفاً')+'، لكل منهم كتاب</em></div><div class="l8-solo">'+solo.map(function(z){ var a=z[0], b=z[1], m=b.m;
+    return '<div class="it"><button type="button" class="lh7-bk bk" data-id="'+b.id+'" aria-haspopup="dialog" onclick="hhLhBk(\''+b.id+'\')"><span class="cvw">'+cov(m,{})+'</span><span class="t"><b>'+esc(m.title)+'</b><small>'+(b.started?'تقدمك <bdi dir="ltr">'+b.pc+'%</bdi>':b.n+' '+unitW(b.n,b.id))+(m.new?'<span class="nw">جديد</span>':'')+'</small></span></button><button type="button" class="an" onclick="hhLibAuthor(\''+a.id+'\')"><span class="av" style="background:'+(a.k||'#8A1538')+'">'+esc(a.ini)+'</span>'+esc(a.name)+'</button></div>'; }).join('')+'</div></section>':'';
+  return (multi+so)||l8emp(); }
+function gridInner(){ setTimeout(l8Upd,0); if(LB.mode==='cat') return l8cats(); if(LB.mode==='au') return l8aus();
+  var L=libItems(); return L.length?'<div class="lh7-grid l8-grid'+(LB.view==='list'?' list':'')+'">'+L.map(LB.view==='list'?bkCard:l8card).join('')+'</div>':'<p class="lh7-emp">لا كتاب بهذا الاسم في هذا المجال، جرّب كلمة أخرى</p>'; }
+/* تابع القراءة: من التقدم المحفوظ، ولا يظهر لمن لم يبدأ كتاباً */
+function l8cont(){ var L=libList().map(binfo).filter(function(b){ return b&&b.started&&b.pc<100; }).sort(function(a,b){ return b.t-a.t; }).slice(0,3); if(!L.length) return '';
+  return '<section class="v3-ct" aria-label="تابع القراءة"><h3>تابع القراءة</h3><div class="row">'+L.map(function(b){ var m=b.m;
+    return '<button type="button" class="it" onclick="'+b.go+'"><span class="cvw">'+cov(m,{})+'</span><span class="tx"><b>'+esc(m.title)+'</b><small>'+(b.next>=0?(b.id==='mala'?'الفن ':'المحطة ')+(b.next+1)+' من '+b.n:'أتممت المحطات')+'</small><span class="br"><i style="width:'+b.pc+'%"></i></span></span><span class="pc"><bdi dir="ltr">'+b.pc+'%</bdi></span></button>'; }).join('')+'</div></section>'; }
 function featHTML(){ if(!hasDaa()) return ''; var d=daaI(), m=BMx('daa'), p=clampP(d.pct), n=d.total||m.chn||0;
-  return '<div class="lh7-feat"><span class="cvw">'+cov(m,{pr:p})+'</span><div class="tx"><small>البرنامج الرئيس في المكتبة</small><h2>'+esc(d.title||m.title)+'</h2><p>'+esc((d.author||m.author||'')+(n?'، '+n+' '+unitW(n)+(d.ready&&d.ready<n?'، منها '+d.ready+' متاحة الآن':''):''))+'</p>'+(d.sub||m.sub?'<p class="sb">'+esc(d.sub||m.sub)+'</p>':'')
-   +'<div class="lv">'+(d.lvName?'<span>مستواك: '+esc(d.lvName)+'</span>':'')+(p?'<span>تقدمك '+p+'%</span>':'')+(d.tot?'<span>'+(d.pass||0)+' من '+d.tot+' للشهادة</span>':'')+'</div></div>'
-   +'<button type="button" class="go" onclick="hhDaaOpen()">'+sv('play',13)+(p?'تابع البرنامج':'ابدأ البرنامج')+'</button></div>'; }
+  return '<div class="l8-ft"><span class="cvw">'+cov(m,{})+'</span><div class="tx"><small>البرنامج الرئيس في المكتبة</small><h2>'+esc(d.title||m.title)+'</h2><p>'+esc((d.author||m.author||'')+(n?'، '+n+' '+unitW(n):''))+(d.lvName?'<span class="pc">مستواك: '+esc(d.lvName)+'</span>':'')+(p?'<span class="pc">تقدمك '+p+'%</span>':'')+(d.tot?'<span class="pc">'+(d.pass||0)+' من '+d.tot+' للشهادة</span>':'')+'</p></div>'
+   +'<button type="button" class="go" onclick="hhDaaOpen()">'+sv('play',13)+(p?'تابع':'ابدأ')+'<span class="lg"> البرنامج</span></button></div>'; }
 function libHTML(){ var x=LX(), all=libList(), cats=libCats(); if(LB.cat!=='all'&&cats.indexOf(LB.cat)<0) LB.cat='all';
   var cnt=function(c){ return all.filter(function(id){ return c==='all'||x.books[id].cat===c; }).length; };
-  return featHTML()+'<div class="lh7-bar"><div class="chips" role="group" aria-label="تصفية بالمجال">'+[['all','الكل']].concat(cats.map(function(c){ return [c,x.cats[c]]; })).map(function(c){ var on=LB.cat===c[0]; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" onclick="hhLhLc(\''+c[0]+'\')">'+esc(c[1])+' <em>'+cnt(c[0])+'</em></button>'; }).join('')+'</div>'
-   +'<div class="tools"><label class="srch">'+sv('search',15)+'<input type="search" id="lh7-q" placeholder="ابحث في الكتب" aria-label="ابحث في الكتب: العنوان أو المؤلف" value="'+esc(LB.q)+'" oninput="hhLhQ(this.value)"></label>'
-   +'<label class="sel">'+sv('sort',15)+'<select aria-label="ترتيب الكتب" onchange="hhLhSort(this.value)">'+[['sug','مقترح لك'],['new','الأحدث'],['prog','تقدمي']].map(function(o){ return '<option value="'+o[0]+'"'+(LB.sort===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'
-   +'<div class="vt" role="group" aria-label="طريقة العرض">'+[['grid','grid','شبكة الأغلفة'],['list','list','قائمة']].map(function(v){ var on=LB.view===v[0]; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" aria-label="'+v[2]+'" title="'+v[2]+'" onclick="hhLhView(\''+v[0]+'\')">'+sv(v[1],17)+'</button>'; }).join('')+'</div></div></div>'
-   +'<div class="lh7-grid'+(LB.view==='list'?' list':'')+'" id="lh7-grid">'+gridInner()+'</div>'; }
+  var seg='<div class="seg" role="group" aria-label="طريقة عرض المكتبة">'+[['cat','l8cat','حسب المجال'],['au','l8au','حسب المؤلف'],['all','l8all','الكل']].map(function(v){ var on=LB.mode===v[0]; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" onclick="hhL8Mode(\''+v[0]+'\')">'+sv(v[1],16)+v[2]+'</button>'; }).join('')+'</div>';
+  var tools=LB.mode==='all'?'<label class="sel">'+sv('sort',15)+'<select aria-label="ترتيب الكتب" onchange="hhLhSort(this.value)">'+[['sug','مقترح لك'],['new','الأحدث'],['prog','تقدمي']].map(function(o){ return '<option value="'+o[0]+'"'+(LB.sort===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'
+   +'<div class="vt" role="group" aria-label="شكل العرض">'+[['grid','grid','شبكة الأغلفة'],['list','list','قائمة']].map(function(v){ var on=LB.view===v[0]; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" aria-label="'+v[2]+'" title="'+v[2]+'" onclick="hhLhView(\''+v[0]+'\')">'+sv(v[1],17)+'</button>'; }).join('')+'</div>':'';
+  var chips=LB.mode==='all'?'<div class="chips" role="group" aria-label="تصفية بالمجال">'+[['all','الكل']].concat(cats.map(function(c){ return [c,x.cats[c]]; })).map(function(c){ var on=LB.cat===c[0]; return '<button type="button" class="'+(on?'on':'')+'" aria-pressed="'+on+'" onclick="hhLhLc(\''+c[0]+'\')">'+esc(c[1])+' <em>'+cnt(c[0])+'</em></button>'; }).join('')+'</div>':'';
+  return l8cont()+featHTML()+'<div class="l8-tb"><div class="r1">'+seg+'<label class="srch">'+sv('search',15)+'<input type="search" id="lh7-q" placeholder="ابحث في الكتب" aria-label="ابحث في الكتب: العنوان أو المؤلف" value="'+esc(LB.q)+'" oninput="hhLhQ(this.value)"></label>'+tools+'</div>'+chips+'</div>'
+   +'<div id="lh7-grid" class="l8-body">'+gridInner()+'</div>'; }
 window.hhLhLc=function(c){ LB.cat=c; rr(); };
+window.hhL8Mode=function(m){ LB.mode=['cat','au','all'].indexOf(m)>-1?m:'cat'; lbSave(); rr(); };
+window.hhL8All=function(c){ LB.mode='all'; LB.cat=c||'all'; lbSave(); rr(); var tb=document.querySelector('#hh-learn .l8-tb'), h=$('hh-learn'); if(tb&&h){ h.scrollTop+=tb.getBoundingClientRect().top-h.getBoundingClientRect().top-8; } };
+window.hhL8S=function(b,d){ var r=b.parentNode.querySelector('.row'); if(r) r.scrollBy({left:d*r.clientWidth*.8,behavior:'smooth'}); };
+window.hhL8U=function(r){ var mx=r.scrollWidth-r.clientWidth, s=Math.abs(r.scrollLeft), w=r.parentNode; w.classList.toggle('fit',mx<4); w.classList.toggle('st',s<10); w.classList.toggle('en',s>mx-10); };
+function l8Upd(){ document.querySelectorAll('#hh-learn .l8-sh .row').forEach(hhL8U); }
+addEventListener('resize',function(){ l8Upd(); });
 window.hhLhQ=function(v){ LB.q=String(v||''); var g=$('lh7-grid'); if(g) g.innerHTML=gridInner(); };
 window.hhLhSort=function(v){ LB.sort=v; lbSave(); rr(); };
 window.hhLhView=function(v){ LB.view=v==='list'?'list':'grid'; lbSave(); rr(); };
@@ -1549,6 +1594,192 @@ CERTCSS,
 " .lhj-wk{padding:14px;border-radius:20px;} .lhj-wk .gb,.lhj-gp .k button,.lhj-gp .f button,.lhj-go,.lhj-s{min-height:44px;} .lhj-days{gap:5px;} .lhj-days i{height:40px;}",
 " .lhj-bk{grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:\"cv tx go\" \"cv pg go\";} .lhj-bk .pg{display:flex;align-items:center;gap:8px;} .lhj-bk .pb{flex:1;} .lhj-bk .pg span{margin:0;}",
 " .lhj-rv{flex-wrap:wrap;align-items:flex-start;} .lhj-rv .tx{flex:1 1 calc(100% - 48px);} .lhj-rv .lhj-s{margin-inline-start:48px;} .lhj .lh7-h2 button{min-height:44px;} .lhj-gp .f button{padding:0 10px;} .lhj-sk>div{grid-template-columns:104px minmax(0,1fr) 40px;font-size:13px;} .lhj-tl>div{grid-template-columns:60px 12px minmax(0,1fr);gap:10px;} .lhj-hm{gap:3px;} .lhj-ce{gap:10px;} .lhj-lit .lt{font-size:17px;} }",
+"/* dd1 */",
+"/* البطاقة المميزة المضغوطة */",
+"#hh-learn .l8-ft{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:16px;align-items:center;background:linear-gradient(110deg,#173D33,#2F6B5A);color:#fff;border-radius:18px;padding:12px 18px 12px 14px;margin:0 0 18px;position:relative;overflow:hidden;}",
+"#hh-learn .l8-ft::after{content:\"\";position:absolute;left:-40px;top:-60px;width:170px;height:170px;border-radius:50%;border:26px solid rgba(233,207,152,.09);pointer-events:none;}",
+"#hh-learn .l8-ft .cvw{display:block;width:52px;} #hh-learn .l8-ft .hc-cv{border-radius:3px 8px 8px 3px;box-shadow:0 10px 18px -10px rgba(0,0,0,.6);}",
+"#hh-learn .l8-ft .hc-cv .band,#hh-learn .l8-ft .hc-cv .au,#hh-learn .l8-ft .hc-cv .orn{display:none;}",
+"#hh-learn .l8-ft .tx{min-width:0;} #hh-learn .l8-ft small{color:#E9CF98;font-weight:900;font-size:12px;}",
+"#hh-learn .l8-ft h2{margin:0;font-family:\"Reem Kufi\",Cairo;font-weight:700;font-size:21px;line-height:1.35;color:#fff;}",
+"#hh-learn .l8-ft p{margin:0;font-size:13px;font-weight:700;opacity:.92;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;}",
+"#hh-learn .l8-ft .pc{background:rgba(255,255,255,.13);border-radius:8px;padding:1px 8px;font-size:12px;}",
+"#hh-learn .l8-ft .go{all:unset;cursor:pointer;box-sizing:border-box;height:44px;padding:0 18px;border-radius:12px;background:#E9CF98;color:#173D33;font-weight:900;font-size:14.5px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;white-space:nowrap;}",
+"#hh-learn .l8-ft .go:hover{background:#F2DDB0;} #hh-learn .l8-ft .go:focus-visible{outline:3px solid #fff;outline-offset:2px;}",
+"/* تابع القراءة */",
+"#hh-learn .l8-ct{margin:0 0 18px;}",
+"#hh-learn .l8-ct .hd,#hh-learn .l8-sh .hd{display:flex;align-items:center;gap:10px;margin:0 2px 10px;min-height:44px;}",
+"#hh-learn .l8-ct h3,#hh-learn .l8-sh h3{margin:0;font-family:\"Reem Kufi\",Cairo;font-weight:700;font-size:19px;color:var(--hd);}",
+"#hh-learn .l8-ct .hd em,#hh-learn .l8-sh .hd em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--mu);}",
+"#hh-learn .l8-ct .row{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;}",
+"#hh-learn .l8-ct .it{all:unset;cursor:pointer;box-sizing:border-box;display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--ln);border-inline-start:4px solid var(--bk);border-radius:16px;padding:12px 14px;min-width:0;transition:border-color .2s,box-shadow .2s;}",
+"#hh-learn .l8-ct .it:hover{box-shadow:0 14px 26px -20px rgba(61,9,24,.55);border-color:var(--g);border-inline-start-color:var(--bk);}",
+"#hh-learn .l8-ct .it:focus-visible{outline:3px solid var(--g);outline-offset:2px;}",
+"#hh-learn .l8-ct .cvw{width:62px;flex-shrink:0;display:block;}",
+"#hh-learn .l8-ct .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}",
+"#hh-learn .l8-ct small{font-size:12px;font-weight:800;color:var(--g);}",
+"#hh-learn .l8-ct b{font-size:15px;color:var(--hd);line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}",
+"#hh-learn .l8-ct .ch{font-size:12.5px;font-weight:700;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}",
+"#hh-learn .l8-ct .br{display:block;height:6px;border-radius:6px;background:var(--soft);overflow:hidden;margin-top:6px;}",
+"#hh-learn .l8-ct .br i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--g),#8A1538);}",
+"#hh-learn .l8-ct .ft{display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:12.5px;font-weight:900;color:var(--hd);}",
+"#hh-learn .l8-ct .go{display:inline-flex;align-items:center;gap:4px;color:#8A1538;}",
+"body.dark-mode #hh-learn .l8-ct .go{color:#EBA6BA;}",
+"/* شريط الأدوات: المبدّل والبحث */",
+"#hh-learn .l8-tb{position:sticky;top:0;z-index:6;background:var(--bg);box-shadow:0 10px 12px -14px rgba(0,0,0,.35);margin:0 -4px 6px;padding:8px 4px;}",
+"#hh-learn .l8-tb .r1{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}",
+"#hh-learn .l8-tb .seg{display:flex;background:var(--soft);border:1px solid var(--ln);border-radius:14px;padding:3px;gap:2px;}",
+"#hh-learn .l8-tb .seg button{all:unset;cursor:pointer;box-sizing:border-box;height:40px;padding:0 14px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:900;color:var(--mu);white-space:nowrap;}",
+"#hh-learn .l8-tb .seg button:hover{color:var(--hd);} #hh-learn .l8-tb .seg button:focus-visible{outline:3px solid var(--g);outline-offset:1px;}",
+"#hh-learn .l8-tb .seg button.on{background:#8A1538;color:#fff;box-shadow:0 6px 14px -8px rgba(138,21,56,.8);}",
+"body.dark-mode #hh-learn .l8-tb .seg button.on{background:#B0294F;}",
+"#hh-learn .l8-tb .srch{flex:1;min-width:200px;max-width:340px;height:44px;border:1px solid var(--ln);background:var(--card);border-radius:13px;display:flex;align-items:center;gap:7px;padding:0 13px;color:var(--mu);box-sizing:border-box;margin-inline-start:auto;}",
+"#hh-learn .l8-tb .srch:focus-within{border-color:var(--g);box-shadow:0 0 0 3px rgba(184,146,74,.2);}",
+"#hh-learn .l8-tb .srch input{all:unset;flex:1;min-width:0;font-family:inherit;font-size:14px;font-weight:700;color:var(--ink);} #hh-learn .l8-tb .srch input::placeholder{color:var(--mu);opacity:.85;}",
+"#hh-learn .l8-tb .sel{height:44px;border:1px solid var(--ln);background:var(--card);border-radius:13px;display:flex;align-items:center;gap:6px;padding:0 10px;color:var(--hd);box-sizing:border-box;}",
+"#hh-learn .l8-tb .sel select{all:unset;cursor:pointer;font-family:inherit;font-size:13px;font-weight:900;color:var(--hd);} body.dark-mode #hh-learn .l8-tb .sel select{color-scheme:dark;}",
+"#hh-learn .l8-tb .vt{display:flex;background:var(--soft);border-radius:12px;padding:3px;} #hh-learn .l8-tb .vt button{all:unset;cursor:pointer;width:40px;height:38px;border-radius:9px;display:grid;place-items:center;color:var(--mu);}",
+"#hh-learn .l8-tb .vt button.on{background:var(--card);color:var(--hd);box-shadow:0 2px 6px -3px rgba(0,0,0,.3);}",
+"#hh-learn .l8-tb .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}",
+"#hh-learn .l8-tb .chips button{all:unset;cursor:pointer;box-sizing:border-box;height:40px;padding:0 13px;border-radius:12px;border:1px solid var(--ln);background:var(--card);display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--hd);white-space:nowrap;}",
+"#hh-learn .l8-tb .chips button em{font-style:normal;font-size:11.5px;opacity:.75;}",
+"#hh-learn .l8-tb .chips button.on{background:var(--hd);border-color:var(--hd);color:var(--card);}",
+"/* الرفوف */",
+"#hh-learn .l8-sh{margin:14px 0 22px;}",
+"#hh-learn .l8-sh .hd .ic{width:34px;height:34px;border-radius:10px;background:var(--soft);color:#8A1538;display:grid;place-items:center;flex-shrink:0;}",
+"body.dark-mode #hh-learn .l8-sh .hd .ic{color:#E6CE8E;}",
+"#hh-learn .l8-sh .hd .ic svg{width:18px;height:18px;}",
+"#hh-learn .l8-sh .hd .av,#hh-learn .l8-solo .av{width:34px;height:34px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;flex-shrink:0;}",
+"#hh-learn .l8-sh .hd h3 button{all:unset;cursor:pointer;border-radius:6px;} #hh-learn .l8-sh .hd h3 button:hover{color:#8A1538;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px;}",
+"body.dark-mode #hh-learn .l8-sh .hd h3 button:hover{color:#EBA6BA;}",
+"#hh-learn .l8-sh .hd h3 button:focus-visible{outline:3px solid var(--g);outline-offset:2px;}",
+"#hh-learn .l8-sh .hd .all{all:unset;cursor:pointer;box-sizing:border-box;margin-inline-start:auto;height:40px;padding:0 12px;border-radius:11px;display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:900;color:#8A1538;white-space:nowrap;}",
+"body.dark-mode #hh-learn .l8-sh .hd .all{color:#EBA6BA;}",
+"#hh-learn .l8-sh .hd .all:hover{background:var(--soft);} #hh-learn .l8-sh .hd .all:focus-visible{outline:3px solid var(--g);}",
+"#hh-learn .l8-sh .rw{position:relative;}",
+"#hh-learn .l8-sh .row{display:grid;grid-auto-flow:column;grid-auto-columns:128px;gap:18px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:10px 4px 12px;scrollbar-width:thin;scrollbar-color:var(--ln) transparent;border-top:1px solid var(--ln);}",
+"#hh-learn .l8-sh .row>*{scroll-snap-align:start;}",
+"#hh-learn .l8-sh .ar{all:unset;cursor:pointer;position:absolute;top:calc(10px + 128px * .75 - 20px);z-index:4;width:40px;height:40px;border-radius:50%;background:var(--card);color:var(--hd);border:1px solid var(--ln);box-shadow:0 8px 18px -8px rgba(61,9,24,.5);display:grid;place-items:center;transition:opacity .2s;}",
+"#hh-learn .l8-sh .ar:focus-visible{outline:3px solid var(--g);}",
+"#hh-learn .l8-sh .ar.pv{right:-14px;} #hh-learn .l8-sh .ar.nx{left:-14px;}",
+"#hh-learn .l8-sh .rw.st .ar.pv,#hh-learn .l8-sh .rw.en .ar.nx,#hh-learn .l8-sh .rw.fit .ar{opacity:0;pointer-events:none;}",
+"@media (hover:none),(max-width:899px){ #hh-learn .l8-sh .ar{display:none;} }",
+"#hh-learn .l8-shs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;}",
+"#hh-learn .l8-shs>.l8-sh{grid-column:1/-1;min-width:0;} #hh-learn .l8-shs>.l8-sh.half{grid-column:auto;}",
+"#hh-learn .l8-tb .srch input{background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important;height:auto!important;}",
+"/* بطاقة الكتاب */",
+"#hh-learn .l8-bk .cvw{position:relative;display:block;}",
+"#hh-learn .l8-bk .tag{top:-7px;left:-5px;}",
+"#hh-learn .l8-rg{position:absolute;bottom:-9px;left:-7px;z-index:3;width:40px;height:40px;border-radius:50%;background:var(--card);box-shadow:0 6px 14px -6px rgba(0,0,0,.45);display:grid;place-items:center;}",
+"#hh-learn .l8-rg svg{position:absolute;inset:3px;width:34px;height:34px;}",
+"#hh-learn .l8-rg .t{fill:none;stroke:var(--soft);stroke-width:4;} #hh-learn .l8-rg .v{fill:none;stroke:#2F8F5B;stroke-width:4;stroke-linecap:round;}",
+"#hh-learn .l8-rg b{position:relative;font-size:10.5px;font-weight:900;color:var(--hd);line-height:1;display:flex;align-items:baseline;direction:ltr;} #hh-learn .l8-rg b i{font-style:normal;font-size:8px;}",
+"#hh-learn .l8-rg b svg{position:static;width:13px;height:13px;color:#2F8F5B;}",
+"#hh-learn .l8-bk .meta{display:block;margin-top:12px;min-width:0;}",
+"#hh-learn .l8-bk .meta b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;white-space:normal;font-size:13.5px;line-height:1.5;min-height:3em;color:var(--hd);}",
+"#hh-learn .l8-bk .au{display:block;font-size:12px;font-weight:700;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}",
+"#hh-learn .l8-bk .sn{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:800;color:var(--g);margin-top:2px;}",
+"#hh-learn .l8-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:26px 20px;padding-top:6px;}",
+"#hh-learn .l8-grid.list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}",
+"/* مؤلفون بكتاب واحد */",
+"#hh-learn .l8-solo{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;border-top:1px solid var(--ln);padding-top:12px;}",
+"#hh-learn .l8-solo .it{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0;}",
+"#hh-learn .l8-solo .bk{all:unset;cursor:pointer;display:flex;gap:12px;align-items:center;min-width:0;border-radius:10px;}",
+"#hh-learn .l8-solo .bk:focus-visible{outline:3px solid var(--g);outline-offset:2px;}",
+"#hh-learn .l8-solo .cvw{width:50px;flex-shrink:0;display:block;position:relative;} #hh-learn .l8-solo .l8-rg{transform:scale(.8);bottom:-12px;left:-12px;}",
+"#hh-learn .l8-solo .t{min-width:0;} #hh-learn .l8-solo .t b{display:block;font-size:14px;color:var(--hd);line-height:1.5;}",
+"#hh-learn .l8-solo .t small{font-size:12px;font-weight:800;color:var(--g);display:flex;gap:8px;align-items:center;}",
+"#hh-learn .l8-solo .nw{background:#2F8F5B;color:#fff;border-radius:6px;padding:0 6px;font-size:10.5px;}",
+"#hh-learn .l8-solo .an{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:44px;font-size:13px;font-weight:800;color:var(--mu);border-top:1px dashed var(--ln);padding-top:4px;}",
+"#hh-learn .l8-solo .an .av{width:26px;height:26px;font-size:12px;}",
+"#hh-learn .l8-solo .an:hover{color:#8A1538;} body.dark-mode #hh-learn .l8-solo .an:hover{color:#EBA6BA;} #hh-learn .l8-solo .an:focus-visible{outline:3px solid var(--g);}",
+"/* الجوال */",
+"@media (max-width:699px){",
+" #hh-learn .l8-ft{grid-template-columns:42px minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-radius:16px;}",
+" #hh-learn .l8-ft .cvw{width:42px;} #hh-learn .l8-ft h2{font-size:18px;} #hh-learn .l8-ft p{font-size:12px;} #hh-learn .l8-ft .go{padding:0 14px;} #hh-learn .l8-ft .go .lg{display:none;}",
+" #hh-learn .l8-ct .row{display:grid;grid-auto-flow:column;grid-auto-columns:86%;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;}",
+" #hh-learn .l8-ct .it{scroll-snap-align:start;padding:10px 12px;} #hh-learn .l8-ct .cvw{width:52px;}",
+" #hh-learn .lh6-pn .l8-tb{background:var(--card);}",
+" #hh-learn .l8-tb .r1{gap:8px;} #hh-learn .l8-tb .seg{width:100%;} #hh-learn .l8-tb .seg button{flex:1;padding:0 6px;font-size:13px;height:42px;}",
+" #hh-learn .l8-tb .srch{max-width:none;min-width:0;width:100%;flex:1 1 100%;margin:0;}",
+" #hh-learn .l8-tb .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}",
+" #hh-learn .l8-sh{margin:10px 0 16px;}",
+" #hh-learn .l8-sh .row{grid-auto-columns:108px;gap:14px;}",
+" #hh-learn .l8-sh .hd h3{font-size:17px;}",
+" #hh-learn .l8-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 12px;}",
+" #hh-learn .l8-grid.list{grid-template-columns:1fr;}",
+" #hh-learn .l8-solo{grid-template-columns:1fr;}",
+" #hh-learn .l8-shs{grid-template-columns:1fr;} #hh-learn .l8-shs>.l8-sh.half{grid-column:1/-1;}",
+"}",
+"/* ═══ g24 v3 ═══ */",
+"/* تابع القراءة: صف صغير أنيق */",
+"#hh-learn .v3-ct{margin:0 0 22px;}",
+"#hh-learn .v3-ct h3{margin:0 2px 10px;font-size:14px;font-weight:900;color:var(--mu);}",
+"#hh-learn .v3-ct .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}",
+"#hh-learn .v3-ct .it{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:12px;min-width:0;padding:10px 14px 10px 10px;border-radius:14px;background:var(--card);border:1px solid var(--ln);transition:border-color .2s,box-shadow .2s;}",
+"#hh-learn .v3-ct .it:hover{border-color:var(--g);box-shadow:0 12px 22px -18px rgba(61,9,24,.5);}",
+"#hh-learn .v3-ct .it:focus-visible{outline:3px solid var(--g);outline-offset:2px;}",
+"#hh-learn .v3-ct .cvw{width:36px;flex-shrink:0;display:block;}",
+"#hh-learn .v3-ct .hc-cv{border-radius:2px 5px 5px 2px;box-shadow:0 6px 10px -6px rgba(61,9,24,.6);}",
+"#hh-learn .v3-ct .hc-cv .band,#hh-learn .v3-ct .hc-cv .au,#hh-learn .v3-ct .hc-cv .orn,#hh-learn .v3-ct .hc-cv .tt{display:none;}",
+"#hh-learn .v3-ct .tx{flex:1;min-width:0;display:flex;flex-direction:column;}",
+"#hh-learn .v3-ct b{font-size:14px;line-height:1.45;color:var(--hd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}",
+"#hh-learn .v3-ct small{font-size:12px;font-weight:700;color:var(--mu);}",
+"#hh-learn .v3-ct .br{display:block;height:4px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:5px;}",
+"#hh-learn .v3-ct .br i{display:block;height:100%;border-radius:4px;background:#2F8F5B;}",
+"#hh-learn .v3-ct .pc{font-size:13px;font-weight:900;color:var(--hd);flex-shrink:0;}",
+"/* البطاقة المميزة: أهدأ قليلاً */",
+"#hh-learn .l8-ft{margin-bottom:26px;}",
+"/* شريط الأدوات */",
+"#hh-learn .l8-tb{margin-bottom:10px;}",
+"/* الرفوف: مسافات منتظمة، بلا خطوط فاصلة ثقيلة */",
+"#hh-learn .l8-sh{margin:22px 0 30px;}",
+"#hh-learn .l8-sh .hd{margin-bottom:6px;}",
+"#hh-learn .l8-sh .hd .ic{width:30px;height:30px;border-radius:9px;}",
+"#hh-learn .l8-sh .hd .ic svg{width:16px;height:16px;}",
+"#hh-learn .l8-sh h3{font-size:18px;}",
+"#hh-learn .l8-sh .row{border-top:0;grid-auto-columns:136px;gap:24px;padding:8px 4px 6px;align-items:start;scrollbar-width:none;}",
+"#hh-learn .l8-sh .row::-webkit-scrollbar{display:none;}",
+"#hh-learn .l8-sh .ar{top:calc(8px + 136px * .75 - 20px);}",
+"/* بطاقة الكتاب: غلاف ثابت النسبة، العنوان كاملاً، والتقدم في سطر البيانات لا فوق الغلاف */",
+"#hh-learn .v3-bk .meta{margin-top:12px;}",
+"#hh-learn .v3-bk .meta b{display:block;-webkit-line-clamp:unset;overflow:visible;min-height:3em;font-size:13.5px;line-height:1.5;}",
+"#hh-learn .v3-bk .au{margin-top:2px;}",
+"#hh-learn .v3-bk .sn{display:flex;align-items:center;gap:5px;margin-top:4px;font-size:11.5px;font-weight:800;color:var(--g);}",
+"#hh-learn .v3-bk .sn.on{color:#2F8F5B;} body.dark-mode #hh-learn .v3-bk .sn.on{color:#6FCF97;}",
+"#hh-learn .v3-rg{display:inline-block;width:16px;height:16px;flex-shrink:0;}",
+"#hh-learn .v3-rg svg{display:block;width:16px;height:16px;}",
+"#hh-learn .v3-rg .t{fill:none;stroke:var(--soft);stroke-width:3;} #hh-learn .v3-rg .v{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;}",
+"#hh-learn .v3-bk .tag{top:-7px;left:-5px;}",
+"#hh-learn .l8-grid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:30px 24px;}",
+"#hh-learn .l8-grid .v3-bk{max-width:150px;}",
+"#hh-learn .l8-solo .cvw .v3-rg{display:none;}",
+"/* الجوال */",
+"@media (max-width:699px){",
+" #hh-learn .v3-ct .row{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:80%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:2px;}",
+" #hh-learn .v3-ct .row::-webkit-scrollbar{display:none;}",
+" #hh-learn .v3-ct .it{scroll-snap-align:start;min-height:60px;}",
+" #hh-learn .l8-tb .r1{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;}",
+" #hh-learn .l8-tb .seg{grid-column:1/-1;}",
+" #hh-learn .l8-tb .srch{width:auto;min-width:0;}",
+" #hh-learn .l8-tb .sel{padding:0 8px;} #hh-learn .l8-tb .sel select{font-size:12.5px;max-width:78px;}",
+" #hh-learn .l8-tb .vt button{width:38px;}",
+" #hh-learn .l8-sh{margin:16px 0 22px;}",
+" #hh-learn .l8-sh .row{grid-auto-columns:104px;gap:16px;}",
+" #hh-learn .l8-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 14px;}",
+" #hh-learn .v3-bk .meta b{font-size:13px;}",
+"}",
+"@media (max-width:699px){ #hh-learn .l8-tb .sel svg{display:none;} #hh-learn .l8-tb .sel select{max-width:84px;} }",
+"#hh-learn .l8-sh .hd h3{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}",
+"#hh-learn .l8-sh .hd h3 button{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}",
+"#hh-learn .l8-sh .hd em{white-space:nowrap;flex-shrink:0;}",
+"@media (max-width:699px){ #hh-learn .l8-sh .hd h3{font-size:16px;} #hh-learn .l8-sh .hd .all{padding:0 6px;} }",
+"@media (max-width:699px){",
+" #hh-learn .l8-tb .sel{position:relative;width:44px;padding:0;justify-content:center;}",
+" #hh-learn .l8-tb .sel svg{display:block;}",
+" #hh-learn .l8-tb .sel select{position:absolute;inset:0;width:100%;height:100%;max-width:none;opacity:0;cursor:pointer;}",
+" #hh-learn .l8-tb .sel:focus-within{outline:3px solid var(--g);outline-offset:1px;}",
+"}",
 '@media (max-width:760px){ #hh-learn .ln-cert{aspect-ratio:auto;padding:12px;} #hh-learn .ln-cert .in{padding:44px 16px;} #hh-learn .ln-cert h1{font-size:34px;} #hh-learn .ln-cert input{font-size:26px;min-width:0;width:100%;} #hh-learn .ln-cert p{font-size:16px;} #hh-learn .ln-cert .ft{width:100%;} }',
 ".ln-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px;}",
 ".ln-tools button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:12px;align-items:center;background:var(--card);border:1.5px solid var(--ln);border-radius:18px;padding:14px 16px;min-width:0;transition:transform .2s,border-color .2s,box-shadow .2s;}",
