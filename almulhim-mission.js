@@ -58,7 +58,7 @@ window.hhMissionOpen=function(){
    +'<h3 style="color:'+C.iv+';font-size:1.25rem;margin:0 0 6px;">أخلاق النبي ﷺ</h3>'
    +'<p style="color:#D4BC85;font-size:.8rem;font-weight:600;line-height:1.8;margin:0 0 14px;">لوحة تفاعلية تغرس شمائل النبي وسيرته في نفوس الطلاب عبر أربعة محاور، بخمسة مستويات، بروح المُلهم.</p>'
    +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;">'
-   + ['شمائله ورحمته|#3D6B53','صدقه وأمانته|#B8924A','معاملته وعطاؤه|#8A1538','قيمنا القطرية|#1F4E79'].map(function(x){ var p=x.split('|'); return '<div style="background:rgba(212,188,133,.1);border:1px solid rgba(184,146,74,.5);border-radius:11px;padding:10px 13px;color:'+C.g2+';font-weight:800;font-size:.8rem;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:'+p[1]+';flex-shrink:0;"></span>'+p[0]+'</div>'; }).join('')
+   + ['شمائله ورحمته|#3D6B53','صدقه وأمانته|#B8924A','معاملته وعطاؤه|#8A1538','تواضعه وحلمه|#1F4E79'].map(function(x){ var p=x.split('|'); return '<div style="background:rgba(212,188,133,.1);border:1px solid rgba(184,146,74,.5);border-radius:11px;padding:10px 13px;color:'+C.g2+';font-weight:800;font-size:.8rem;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:'+p[1]+';flex-shrink:0;"></span>'+p[0]+'</div>'; }).join('')
    +'</div></div>'
    +'<div style="height:30px;"></div>'
    +'</div></div>';

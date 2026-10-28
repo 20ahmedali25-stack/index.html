@@ -96,7 +96,8 @@ function build(){
    +'<button type="button" class="gv-play gv-m" onclick="hhGvPlay()">العب الآن</button><button type="button" class="gv-mbtn gv-m" id="gv-mbtn" onclick="hhGvSheet()" aria-expanded="false">القائمة</button></div></div>'
    +'<div class="gv-nv"><div class="gv-in" id="gv-nv-in">'
    +NAVORD.map(function(k){ var s=DD[k]?null:SEC.filter(function(x){ return x.k===k; })[0]; if(s) return '<button type="button" class="gv-a" data-k="'+s.k+'" onclick="hhGvGo(\''+s.k+'\')">'+s.t+'</button>'; var g=k; if(!DD[g]) return ''; return '<div class="gv-dd" data-g="'+g+'"><button type="button" class="gv-a dd" data-k="'+g+'" onclick="hhGvMenu(\''+g+'\',event)" aria-haspopup="true" aria-expanded="false">'+DD[g].t+'</button>'+mnHtml(g)+'</div>'; }).join('')
-   +'<button type="button" class="gv-play gv-d" onclick="hhGvPlay()">العب الآن</button></div></div>';
+   +'<span class="gv-soc gv-d"><a class="gv-sig" href="https://instagram.com/almulhim_edu" target="_blank" rel="noopener" aria-label="إنستغرام almulhim_edu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a><a class="gv-swa" href="https://chat.whatsapp.com/JiOJLpf7PS49dqzpRloj7j" target="_blank" rel="noopener" aria-label="مجتمع المُلهم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1121 11.5z"/></svg><b>مجتمع المُلهم</b></a></span>'
+   +'<button type="button" class="gv-play gv-d" onclick="hhGvPlay()"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 001.5.9l10-6.5a1 1 0 000-1.7l-10-6.5A1 1 0 008 5.5z"/></svg>العب الآن</button></div></div>';
   nav.appendChild(hd);
   nav.classList.add('gv-on'); document.documentElement.classList.add('gv-on');
   // نقل العناصر الحية من الشريط القديم مع الحفاظ على وظائفها
@@ -287,6 +288,12 @@ P+'.profile-avatar{width:28px !important;height:28px !important;border-radius:6p
 '#gv-hd .gv-dd[data-g="sup"] .gv-mn{min-width:600px;grid-template-columns:1fr 1fr 1fr;}',
 '#gv-hd .gv-play{margin-inline-start:auto;align-self:center;height:36px;border-radius:8px;border:0;background:linear-gradient(135deg,#C9A24E,#8A6D2E);color:#fff;font-weight:900;font-size:14.5px;padding:0 22px;box-shadow:0 0 0 2px rgba(230,206,142,.35);white-space:nowrap;}',
 '#gv-hd .gv-play:hover{filter:brightness(1.08);}',
+'#gv-hd .gv-soc{margin-inline-start:auto;display:inline-flex;align-items:center;gap:8px;align-self:center;margin-inline-end:8px;} #gv-hd .gv-soc+.gv-play{margin-inline-start:0;}',
+'#gv-hd .gv-sig{width:36px;height:36px;border-radius:8px;border:1px solid rgba(245,230,196,.25);display:grid;place-items:center;color:#F5E6C4;box-sizing:border-box;} #gv-hd .gv-sig:hover{border-color:#E6CE8E;color:#fff;} #gv-hd .gv-sig svg{width:18px;height:18px;display:block;}',
+'#gv-hd .gv-swa{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:8px;background:#1F7A4D;color:#fff;font-weight:900;font-size:14px;text-decoration:none;box-sizing:border-box;white-space:nowrap;} #gv-hd .gv-swa:hover{background:#23905a;} #gv-hd .gv-swa svg{width:17px;height:17px;display:block;}',
+'#gv-hd .gv-play.gv-d{display:inline-flex;align-items:center;gap:7px;} #gv-hd .gv-play.gv-d svg{width:13px;height:13px;}',
+'@media (max-width:1250px){ #gv-hd .gv-swa b{display:none;} #gv-hd .gv-swa{width:36px;padding:0;justify-content:center;} }',
+'@media (max-width:900px){ #gv-hd .gv-soc{display:none !important;} }',
 '#gv-hd .gv-m{display:none;}',
 /* zzzzzzcy: قائمة بأسطر لكل قسم (تعلّم، الإبداع) */
 '#gv-hd .gv-mn.gv-mr{min-width:0;width:420px;padding:8px;border:0;border-radius:0 0 18px 18px;border-top:3px solid #B8924A;box-shadow:0 24px 50px -18px rgba(61,9,24,.35),0 0 0 1px #EFE6D4;}',
