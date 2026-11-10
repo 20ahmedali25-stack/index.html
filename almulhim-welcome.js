@@ -85,6 +85,7 @@ function show(){
 
 function boot(){
   if(alreadySeen()) return;
+  if(/[?&]join=/.test(location.search)) return; // zzzzzzdh: الطالب الداخل بالباركود يرى شاشة الانضمام مباشرة
   // ننتظر قليلاً حتى تستقر الصفحة ثم نعرض
   setTimeout(show, 400);
 }

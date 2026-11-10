@@ -752,6 +752,7 @@ window.hhIbSettings=function(){
   d.innerHTML='<div class="md" style="width:min(640px,100%)"><div class="mh">إعدادات اللعبة<button onclick="this.closest(\'#ib-imp2\').remove()">'+ico('x',18)+'</button></div><div class="mb">'
     +f('الزمن الافتراضي للسؤال الجديد',sel('st-time',[[10,'10 ثوانٍ'],[20,'20 ثانية'],[30,'30 ثانية'],[45,'45 ثانية'],[60,'60 ثانية']],S.defaultTime||20))
     +'<div style="font-weight:800;color:#5E0E26;margin:14px 0 8px">التشغيل المباشر</div>'
+    +(g.template==='race'?'<label class="st-nm"><input id="st-name" type="checkbox"'+(S.askName?' checked':'')+'><span><b>اطلب اسم الطالب بالعربية</b><small>يكتب الطالب اسمه ويختار شعاراً، فيظهر الاسم على شاشة الصف ومضمار السباق. عند الإيقاف يدخل بشعار ورقم فقط حفاظاً على خصوصيته.</small></span><i></i></label>':'')
     +(g.template==='race'?f('نمط اللعبة',sel('st-mode',[['classic','سباق كلاسيكي (نقاط بالسرعة)'],['market','السوق، عملات وتعزيزات بين الأسئلة']],S.mode||'classic')):'')
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+f('الترتيب',sel('st-hide',[['never','يظهر بعد كل سؤال'],['last','يُخفى في الأسئلة الأخيرة'],['always','مخفي حتى النهاية']],S.hideRank||'last'))
     +f('عدد الأسئلة الأخيرة المخفية','<input id="st-n" type="number" min="1" max="20" value="'+(S.hideLastN||5)+'" style="width:100%;box-sizing:border-box;border:1.5px solid #E7DAC0;border-radius:10px;padding:8px;font-family:Cairo">')
@@ -766,7 +767,7 @@ window.hhIbSettings=function(){
   document.body.appendChild(d);
 };
 window.hhIbSettingsSave=function(){ var g=cur(); var v=function(id){ var e=document.getElementById(id); return e?e.value:null; }; var S=g.settings=g.settings||{};
-  S.defaultTime=parseInt(v('st-time'),10)||20; if(v('st-mode')!==null) S.mode=v('st-mode'); S.hideRank=v('st-hide')||'last'; S.hideLastN=parseInt(v('st-n'),10)||5; S.scoring=v('st-scoring')||'speed'; S.shuffleQ=v('st-shq')==='1'; S.shuffleOpts=v('st-sho')!=='0'; S.showAnswerEach=v('st-show')!=='0'; S.teams=parseInt(v('st-teams'),10)||2; S.basePts=parseInt(v('st-pts'),10)||20;
+  S.defaultTime=parseInt(v('st-time'),10)||20; var nmE=document.getElementById('st-name'); if(nmE) S.askName=!!nmE.checked; if(v('st-mode')!==null) S.mode=v('st-mode'); S.hideRank=v('st-hide')||'last'; S.hideLastN=parseInt(v('st-n'),10)||5; S.scoring=v('st-scoring')||'speed'; S.shuffleQ=v('st-shq')==='1'; S.shuffleOpts=v('st-sho')!=='0'; S.showAnswerEach=v('st-show')!=='0'; S.teams=parseInt(v('st-teams'),10)||2; S.basePts=parseInt(v('st-pts'),10)||20;
   persist(g); var d=document.getElementById('ib-imp2'); if(d) d.remove(); render(); toastX('حُفظت الإعدادات','success'); };
 
 /* ── الاستيراد: من فئات المنصة، من ملف Excel، لصق نص ── */
@@ -936,14 +937,23 @@ var TF_DEF={
     {s:'تمثلت الطبقة العليا في مجتمع بلاد الرافدين في العمال والفلاحين.',v:false,fix:'الصحيح: الكهنة وملاك الأراضي وكبار التجار.'}
   ]
 };
-function loadReadyLocal(){ if(_ib.ready) return; try{ _ib.ready=JSON.parse(localStorage.getItem('hh_ib_ready')||'null'); }catch(e){} if(!_ib.ready||typeof _ib.ready!=='object') _ib.ready={tf:{},custom:[]}; _ib.ready.tf=_ib.ready.tf||{}; _ib.ready.custom=_ib.ready.custom||[]; }
+/* zzzzzzdh: ألعاب جاهزة مدمجة في الكود (افتراضيات). تعديل المدير يُحفظ في admin_qdb/ib_ready بالمعرّف نفسه ويغلب الأصل، وحذفه يستعيد الأصل */
+var IB_BUILTIN={"cats":[{"id":"k_ws_hs","t":"ورش المرحلة الثانوية","c":"#8A1538"}],"custom":[{"id":"bi_ws_sus","cat":"k_ws_hs","builtin":true,"title":"سباق الاستدامة","sub":"ورشة الاستدامة، المرحلة الثانوية","desc":"سباق مباشر على أجهزة الطلاب لختام ورشة الاستدامة","mode":"live","template":"race","screenTpl":"boxes","settings":{"hideRank":"last","hideLastN":3,"scoring":"speed","shuffleQ":false,"shuffleOpts":true,"showAnswerEach":true,"defaultTime":20,"teams":2,"basePts":20,"askName":true},"questions":[{"id":"bi_sus_q1","type":"mcq","q":"ما التعريف الأشهر للتنمية المستدامة (تقرير برونتلاند 1987)؟","opts":["تلبية احتياجات الحاضر دون المساس بقدرة الأجيال القادمة على تلبية احتياجاتها","وقف كل أشكال الصناعة لحماية البيئة","زيادة الإنتاج بأقصى سرعة ممكنة","الاعتماد الكامل على الاستيراد"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q2","type":"mcq","q":"كم عدد أهداف التنمية المستدامة التي أقرتها الأمم المتحدة عام 2015؟","opts":["8","12","17","21"],"correct":[2],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q3","type":"mcq","q":"ما الركائز الثلاث للاستدامة؟","opts":["البيئية والاقتصادية والاجتماعية","الزراعية والصناعية والتجارية","المحلية والإقليمية والدولية","العلمية والفنية والرياضية"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q4","type":"mcq","q":"أي مصادر الطاقة التالية متجدد؟","opts":["النفط","الغاز الطبيعي","الطاقة الشمسية","الفحم"],"correct":[2],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q5","type":"mcq","q":"ما اسم أول محطة طاقة شمسية واسعة النطاق في قطر، وافتُتحت عام 2022؟","opts":["الخرسعة","دخان","الشمال","أبو سمرة"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q6","type":"mcq","q":"ما المقصود بالبصمة الكربونية؟","opts":["مجموع غازات الدفيئة الناتجة عن نشاط فرد أو جهة","كمية الفحم المستخرج سنوياً","عدد الأشجار في مدينة","أثر الأقدام على الرمال"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q7","type":"mcq","q":"حسب هرم إدارة النفايات، ما الخيار الأفضل أولاً؟","opts":["إعادة التدوير","التقليل من الاستهلاك","الدفن","الحرق"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q8","type":"mcq","q":"أي ركيزة من ركائز رؤية قطر الوطنية 2030 تتعلق مباشرة بحماية البيئة؟","opts":["التنمية البشرية","التنمية الاجتماعية","التنمية الاقتصادية","التنمية البيئية"],"correct":[3],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q9","type":"mcq","q":"ما الغاز الدفيء الأكثر إسهاماً في الاحتباس الحراري بسبب نشاط الإنسان؟","opts":["الأكسجين","ثاني أكسيد الكربون","النيتروجين","الهيليوم"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_sus_q10","type":"mcq","q":"ما الذي يميز الاقتصاد الدائري؟","opts":["إبقاء الموارد قيد الاستخدام أطول مدة وتقليل الهدر","شراء منتج جديد كل عام","التخلص من المنتج بعد أول استخدام","زيادة الاستيراد"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""}]},{"id":"bi_ws_dig","cat":"k_ws_hs","builtin":true,"title":"سباق الحماية الرقمية","sub":"ورشة الحماية الرقمية، المرحلة الثانوية","desc":"سباق مباشر على أجهزة الطلاب لختام ورشة الحماية الرقمية","mode":"live","template":"race","screenTpl":"boxes","settings":{"hideRank":"last","hideLastN":3,"scoring":"speed","shuffleQ":false,"shuffleOpts":true,"showAnswerEach":true,"defaultTime":20,"teams":2,"basePts":20,"askName":true},"questions":[{"id":"bi_dig_q1","type":"mcq","q":"أي كلمات المرور التالية أقوى؟","opts":["12345678","ahmed2009","Sahel#Doha_2027!","password"],"correct":[2],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q2","type":"mcq","q":"ما التصيّد الاحتيالي (Phishing)؟","opts":["رسالة مزيفة تنتحل جهة موثوقة لسرقة بياناتك","برنامج لتسريع الإنترنت","لعبة إلكترونية","تحديث رسمي للجهاز"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q3","type":"mcq","q":"ما فائدة التحقق بخطوتين؟","opts":["يجعل الإنترنت أسرع","يضيف طبقة حماية ثانية حتى لو سُرقت كلمة المرور","يحذف الرسائل المزعجة","يغني عن كلمة المرور"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q4","type":"mcq","q":"وصلتك رسالة: «ربحت جائزة، اضغط الرابط خلال ساعة». ما التصرف الصحيح؟","opts":["أضغط الرابط بسرعة قبل انتهاء الوقت","أرسلها لأصدقائي","لا أضغط، وأتحقق من المصدر، وأبلغ عنها","أرد بمعلوماتي الشخصية"],"correct":[2],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q5","type":"mcq","q":"ما البصمة الرقمية؟","opts":["بصمة الإصبع في الهاتف","أثر ما تنشره وتفعله على الإنترنت ويبقى","نوع من الفيروسات","رقم الهاتف"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q6","type":"mcq","q":"تتصل بشبكة واي فاي عامة مجانية في مقهى. ما الأسلم؟","opts":["أدخل بياناتي البنكية عادي","أتجنب إدخال كلمات المرور والبيانات الحساسة عليها","أشارك الشبكة مع الجميع","أعطّل قفل الشاشة"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q7","type":"mcq","q":"تعرضت لتنمر إلكتروني. ما أول تصرف صحيح؟","opts":["أرد بالمثل","أحذف حسابي فوراً دون إخبار أحد","لا أرد، وأحتفظ بالأدلة، وأحظر وأبلغ وأخبر شخصاً أثق به","أنشر المحادثة للجميع"],"correct":[2],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q8","type":"mcq","q":"أي معلومة لا ينبغي نشرها في حساب عام؟","opts":["هوايتي المفضلة","عنوان منزلي وأوقات خروجي","فريقي المفضل","كتاب قرأته"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q9","type":"mcq","q":"لماذا يُعد تحديث التطبيقات ونظام التشغيل مهماً؟","opts":["لتغيير شكل الأيقونات فقط","لسد الثغرات الأمنية","لزيادة مساحة الذاكرة","لا فائدة منه"],"correct":[1],"time":20,"mult":1,"flash":false,"note":""},{"id":"bi_dig_q10","type":"mcq","q":"ما الجهة الوطنية المسؤولة عن الأمن السيبراني في دولة قطر؟","opts":["الوكالة الوطنية للأمن السيبراني","وزارة الرياضة والشباب","هيئة الأشغال العامة","مكتبة قطر الوطنية"],"correct":[0],"time":20,"mult":1,"flash":false,"note":""}]}]};
+function ibBuiltinIds(){ return IB_BUILTIN.custom.map(function(c){ return c.id; }); }
+function ibMergeBuiltin(R){ R=(R&&typeof R==='object')?R:{}; R.tf=R.tf||{}; R.custom=(Array.isArray(R.custom)?R.custom:[]).filter(function(c){ return c&&!c._def; }); R.cats=Array.isArray(R.cats)?R.cats:[];
+  IB_BUILTIN.cats.forEach(function(k){ if(!R.cats.some(function(x){ return x.id===k.id; })){ var o=JSON.parse(JSON.stringify(k)); o._def=1; R.cats.push(o); } });
+  IB_BUILTIN.custom.forEach(function(c){ if(!R.custom.some(function(x){ return x.id===c.id; })){ var o=JSON.parse(JSON.stringify(c)); o._def=1; R.custom.push(o); } });
+  return R; }
+function ibStrip(R){ var o=JSON.parse(JSON.stringify(R||{})); o.custom=(o.custom||[]).filter(function(c){ return !c._def; }); (o.cats||[]).forEach(function(k){ delete k._def; }); return o; }
+window._hhIbBuiltin=IB_BUILTIN; window._hhIbMergeBuiltin=ibMergeBuiltin;
+function loadReadyLocal(){ if(_ib.ready) return; try{ _ib.ready=JSON.parse(localStorage.getItem('hh_ib_ready')||'null'); }catch(e){} if(!_ib.ready||typeof _ib.ready!=='object') _ib.ready={tf:{},custom:[]}; _ib.ready.tf=_ib.ready.tf||{}; _ib.ready.custom=_ib.ready.custom||[]; ibMergeBuiltin(_ib.ready); }
 async function loadReadyCloud(){
-  try{ var d=await db().collection('admin_qdb').doc('ib_ready').get(); if(d.exists){ var x=d.data()||{}; var data=x.data?JSON.parse(x.data):null; if(data&&typeof data==='object'){ data.tf=data.tf||{}; data.custom=data.custom||[]; _ib.ready=data; try{ localStorage.setItem('hh_ib_ready',JSON.stringify(data)); }catch(e){} } } }catch(e){}
+  try{ var d=await db().collection('admin_qdb').doc('ib_ready').get(); if(d.exists){ var x=d.data()||{}; var data=x.data?JSON.parse(x.data):null; if(data&&typeof data==='object'){ data.tf=data.tf||{}; data.custom=data.custom||[]; try{ localStorage.setItem('hh_ib_ready',JSON.stringify(ibStrip(data))); }catch(e){} _ib.ready=ibMergeBuiltin(data); } } }catch(e){}
 }
 async function saveReadyDoc(){
-  try{ localStorage.setItem('hh_ib_ready',JSON.stringify(_ib.ready)); }catch(e){}
+  try{ localStorage.setItem('hh_ib_ready',JSON.stringify(ibStrip(_ib.ready))); }catch(e){}
   if(!isAdm()){ markSaved(true,'admin'); return false; }
-  try{ await db().collection('admin_qdb').doc('ib_ready').set({ data:JSON.stringify(_ib.ready), updatedAt:Date.now(), updatedBy:(firebase.auth().currentUser||{}).email||'' }); markSaved(); return true; }
+  try{ await db().collection('admin_qdb').doc('ib_ready').set({ data:JSON.stringify(ibStrip(_ib.ready)), updatedAt:Date.now(), updatedBy:(firebase.auth().currentUser||{}).email||'' }); markSaved(); return true; }
   catch(e){ markSaved(true,(e&&e.code)); return false; }
 }
 function tfItems(key){ var t=(_ib.ready&&_ib.ready.tf&&_ib.ready.tf[key]); return (t&&t.items)?t.items:TF_DEF[key]||[]; }
@@ -1048,7 +1058,7 @@ function buildReady(rid){
     tfItems(R.tfKey).forEach(function(it){ var q=mkQ(g,'tf',it.s,null,it.v?0:1,10); q.note=it.fix||''; g.questions.push(q); });
     meta.tfKey=R.tfKey; meta.published=!R.draft; g.screenTpl='tfs'; g.template='tf';
   } else if(R.kind==='custom'){
-    var c=clone(R.custom); g.title=c.title; g.questions=c.questions||[]; g.screenTpl=c.screenTpl||'boxes'; g.mode=c.mode||'screen'; g.settings=Object.assign(defSettings('race'),c.settings||{}); meta.customId=c.id; meta.crumb='لعبة إضافية';
+    var c=clone(R.custom); g.title=c.title; g.desc=c.desc||''; g.questions=c.questions||[]; g.screenTpl=c.screenTpl||'boxes'; g.mode=c.mode||'screen'; g.settings=Object.assign(defSettings('race'),c.settings||{}); meta.customId=c.id; meta.crumb='لعبة إضافية';
   }
   g._ready=meta; return g;
 }
@@ -1119,7 +1129,7 @@ function ib5Menu(R,adm){
   var m='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'copy\',\''+R.rid+'\')">'+ico('copy',15)+' انسخ إلى ألعابي وعدّل</span>', a='';
   if(adm){ if(!R.school&&!R.noEdit) a+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'edit\',\''+(R.src||R.rid)+'\')">'+ico('edit',15)+' عدّل الأصل</span>';
     if(R.draft) a+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'publish\',\''+R.rid+'\')">'+ico('send',15)+' انشر لكل المعلمين</span>';
-    if(R.kind==='custom') a+='<span class="ib4-mi d" onclick="hhIbMenuDo(event,\'del\',\''+R.rid+'\')">'+ico('trash',15)+' احذف من الألعاب الجاهزة</span>'; }
+    if(R.kind==='custom'){ var bi0=R.custom&&ibBuiltinIds().indexOf(R.custom.id)>-1; if(!bi0) a+='<span class="ib4-mi d" onclick="hhIbMenuDo(event,\'del\',\''+R.rid+'\')">'+ico('trash',15)+' احذف من الألعاب الجاهزة</span>'; else if(!R.custom._def) a+='<span class="ib4-mi" onclick="hhIbMenuDo(event,\'del\',\''+R.rid+'\')">'+ico('back',15)+' استعد الأصل المدمج</span>'; } }
   return m+(a?'<small>للمدير</small>'+a:'');
 }
 function ib5Num(R){ return R.extra?'<em>'+R.n+'<small>+'+R.extra+'</small></em>':'<em>'+R.n+'</em>'; }
@@ -1207,7 +1217,8 @@ window.hhIbReadyNew=function(){
   if(!isAdm()) return; var c={ id:newId('c'), grade:_ib.grade||'g7t1', title:'لعبة جاهزة جديدة', mode:'screen', screenTpl:'boxes', settings:defSettings('race'), questions:[] };
   _ib.ready.custom.push(c); saveReadyDoc(); hhIbReadyEdit('c:'+c.id); addQuestion();
 };
-window.hhIbReadyDel=function(rid){ if(!isAdm()) return; var id=rid.replace(/^c:/,''); var arr=_ib.ready.custom; var i=arr.map(function(c){ return c.id; }).indexOf(id); if(i<0) return; if(!confirm('حذف «'+(arr[i].title||'')+'» من الألعاب الجاهزة لكل المعلمين؟')) return; arr.splice(i,1); saveReadyDoc(); render(); };
+window.hhIbReadyDel=function(rid){ if(!isAdm()) return; var id=rid.replace(/^c:/,'');
+  if(ibBuiltinIds().indexOf(id)>-1){ var c0=(_ib.ready.custom||[]).filter(function(c){ return c.id===id; })[0]; if(c0&&!c0._def){ if(!confirm('استعادة «'+(c0.title||'')+'» إلى أصلها المدمج؟ تُحذف تعديلاتك عليها.')) return; _ib.ready.custom=_ib.ready.custom.filter(function(c){ return c.id!==id; }); ibMergeBuiltin(_ib.ready); saveReadyDoc(); render(); toastX('استُعيد الأصل','success'); } else toastX('لعبة مدمجة في المنصة، تُعدَّل ولا تُحذف','info'); return; } var arr=_ib.ready.custom; var i=arr.map(function(c){ return c.id; }).indexOf(id); if(i<0) return; if(!confirm('حذف «'+(arr[i].title||'')+'» من الألعاب الجاهزة لكل المعلمين؟')) return; arr.splice(i,1); saveReadyDoc(); render(); };
 /* حفظ تعديلات المدير في المصدر */
 function scheduleReadySave(g){ clearTimeout(_ib.readySaveT); _ib.readySaveT=setTimeout(function(){ readySave(g); },1200); }
 function flushReady(){ if(_ib.readySaveT&&_ib.readyGame){ clearTimeout(_ib.readySaveT); _ib.readySaveT=null; readySave(_ib.readyGame); } }
@@ -1238,7 +1249,7 @@ function readySave(g){
     saveReadyDoc();
   } else if(M.kind==='custom'){
     var c=(_ib.ready.custom||[]).filter(function(x){ return x.id===M.customId; })[0]; if(!c) return;
-    c.title=g.title; c.questions=clone(g.questions); c.mode=g.mode; c.screenTpl=g.screenTpl; c.settings=clone(g.settings||{}); c.updatedAt=Date.now();
+    delete c._def; c.title=g.title; c.questions=clone(g.questions); c.mode=g.mode; c.screenTpl=g.screenTpl; c.settings=clone(g.settings||{}); c.updatedAt=Date.now();
     saveReadyDoc();
   }
 }
@@ -1580,6 +1591,13 @@ function rdCompCard(G,adm){
     +'<div class="bd"><button type="button" class="rd-b p" onclick="hhRdOpen(\'all\')">'+ico('play',16,2.2)+' العب</button><button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+rdMenu(items,adm,'all')+'</div></div></div>';
 }
 function rdCustomCard(R,adm,no){
+  var C0=R.custom||{}, S0=C0.settings||{};
+  if(C0.mode==='live'&&R.n){ var SVI=function(p){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; };
+    var FL='<path d="M5 21V4h11l-2 4 2 4H5"/>', PN='<path d="M4 20l4-1 11-11-3-3L5 16z"/>', ST='<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>', LK='<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>', PH='<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>';
+    return '<div class="rd-u rd-race ib4-c" style="--c:#8A1538"><div class="hd"><span class="no">'+SVI(FL).replace(/15/g,'22')+'</span><div class="tt"><b>'+esc(R.title)+'</b><small>'+rdQn(R.n)+'، سباق على أجهزة الطلاب</small></div></div>'
+      +(C0.desc?'<p class="ds">'+esc(C0.desc)+'</p>':'')
+      +'<div class="fx">'+(S0.askName?'<span class="on">'+SVI(PN)+' يطلب الاسم بالعربية</span>':'<span>'+SVI(LK)+' بلا أسماء</span>')+'<span>'+SVI(ST)+' شعار لكل طالب</span><span>'+SVI(FL)+' مضمار السباق</span></div>'
+      +'<div class="bd"><button type="button" class="rd-b p" onclick="hhIbReadyLive(\''+R.rid+'\')">'+SVI(PH)+' ابدأ السباق</button><button type="button" class="rd-b" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' على الشاشة</button><button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+ib5Menu(R,adm)+'</div></div></div>'; }
   return '<div class="rd-u ib4-c" style="--c:#8A6D2E"><div class="hd"><span class="no">'+(no||ico('star',18,2))+'</span><div class="tt"><b>'+esc(R.title)+'</b><small>'+rdQn(R.n)+'</small></div></div>'
     +'<div class="bd">'+(R.n?'<button type="button" class="rd-b p" onclick="hhIbReadyShow(\''+R.rid+'\')">'+ico('monitor',15)+' على الشاشة</button><button type="button" class="rd-b" onclick="hhIbReadyLive(\''+R.rid+'\')">'+ico('phone',15)+' على الأجهزة</button>':'<button type="button" class="rd-b p" disabled>بلا أسئلة بعد</button>')+'<button type="button" class="rd-b mo" aria-label="خيارات أخرى" onclick="hhIbMenu(event,this)">'+ico('more',18)+'</button><div class="ib4-menu" hidden>'+ib5Menu(R,adm)+'</div></div></div>';
 }
@@ -2074,6 +2092,25 @@ var CYDCSS=[
 '}'
 ].join('\n');
 IB6CSS+='\n'+CYDCSS;
+
+/* zzzzzzdh: بطاقة السباق المباشر وخيار الاسم */
+var RCCSS=[
+'#hh-ib.ib2 .rd-u.rd-race{border-color:#E2C9D1;}',
+'#hh-ib.ib2 .rd-race .hd{background:linear-gradient(135deg,#8A1538,#5E0E26);position:relative;}',
+'#hh-ib.ib2 .rd-race .hd::after{content:"";position:absolute;inset-inline-end:0;top:0;bottom:0;width:22px;background:conic-gradient(rgba(255,255,255,.28) 25%,transparent 0 50%,rgba(255,255,255,.28) 0 75%,transparent 0) 0 0/11px 11px;border-start-end-radius:16px;}',
+'#hh-ib.ib2 .rd-race .hd .no{color:#E6CE8E;background:rgba(230,206,142,.14);box-shadow:inset 0 0 0 1px rgba(230,206,142,.45);}',
+'#hh-ib.ib2 .rd-race .ds{margin:12px 14px 0;font-size:13.5px;font-weight:700;color:var(--rm);line-height:1.7;}',
+'#hh-ib.ib2 .rd-race .fx{display:flex;flex-wrap:wrap;gap:6px;margin:10px 14px 0;}',
+'#hh-ib.ib2 .rd-race .fx span{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:99px;background:#F5F1E8;color:#6B5A44;font-family:Cairo,sans-serif;font-weight:800;font-size:12px;white-space:nowrap;} #hh-ib.ib2 .rd-race .fx span svg{color:#B8924A;}',
+'#hh-ib.ib2 .rd-race .fx span.on{background:#EEF4F0;color:#2C5340;} #hh-ib.ib2 .rd-race .fx span.on svg{color:#2F6A4E;}',
+'#hh-ib.ib2 .rd-race .bd{flex-wrap:wrap;} #hh-ib.ib2 .rd-race .rd-b.p{flex:1 1 100%;height:48px;font-size:15.5px;} #hh-ib.ib2 .rd-race .rd-b{white-space:nowrap;}',
+'#ib-imp2 .st-nm{display:flex;align-items:flex-start;gap:12px;border:1.5px solid #B8924A;background:#FFFDF8;border-radius:14px;padding:12px 14px;margin:0 0 12px;cursor:pointer;font-family:Cairo;}',
+'#ib-imp2 .st-nm input{position:absolute;opacity:0;pointer-events:none;} #ib-imp2 .st-nm span{flex:1;} #ib-imp2 .st-nm b{display:block;font-weight:900;font-size:14.5px;color:#3D0918;} #ib-imp2 .st-nm small{display:block;font-weight:700;font-size:12.5px;color:#8A7A63;line-height:1.7;margin-top:2px;}',
+'#ib-imp2 .st-nm i{width:46px;height:26px;border-radius:99px;background:#D9CDB5;position:relative;flex-shrink:0;margin-top:2px;transition:background .2s;} #ib-imp2 .st-nm i::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:right .2s;}',
+'#ib-imp2 .st-nm input:checked~i{background:#2F6A4E;} #ib-imp2 .st-nm input:checked~i::after{right:23px;}',
+'#hh-ib.ib2 .rd-race .ib4-menu{bottom:62px;}'
+].join('\n');
+IB6CSS+='\n'+RCCSS;
 window.hhIbOpen=function(v,id){ _ib.sec='sch'; open(v,id); };
 window.hhIbRefresh=function(){ _ib.loaded=false; if(document.getElementById('hh-ib')) open(_ib.view==='editor'?'mine':_ib.view); };
 window._hhIb=_ib; window._hhIbTemplates=TEMPLATES; window._hhIbGetGame=getGame; window._hhIbReadyList=readyList; window._hhIbBuildReady=buildReady;
