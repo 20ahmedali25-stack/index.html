@@ -318,7 +318,9 @@ window.hhScreenPlay=function(g, opt){
   loadRooms();
 };
 function fitAll(){ return coreSel().concat((S.extras||[]).slice(0,exEff())); }
-function tplOk(t,q){ return TPL[t].types.indexOf(q.type)>-1&&(!TPL[t].img||!!q.img); }
+function tplOk(t,q){ if(q.type==='order'&&TPL[t].types.indexOf('order')<0) return TPL[t].types.indexOf('open')>-1&&itemsOf(q).length>1; return TPL[t].types.indexOf(q.type)>-1&&(!TPL[t].img||!!q.img); }
+/* zzzzzzdi: سؤال الترتيب في قالب لا يدعمه يصير بطاقة إجابتها العناصر مرتبة، بالطريقة المستعملة في المراجعة الشاملة */
+function ordAsOpen(q){ if(q.type!=='order'||TPL[S.tpl].types.indexOf('order')>-1) return q; var it=itemsOf(q), c=(q.correct&&q.correct.length===it.length)?q.correct:it.map(function(_,i){ return i; }); var o=JSON.parse(JSON.stringify(q)); o.type='open'; o.kt='order'; o.pts=c.map(function(i){ return it[i]; }); o.opts=[]; o.correct=[]; o.time=Math.max(45,parseInt(q.time,10)||45); return o; }
 function fits(t){ return fitAll().filter(function(q){ return tplOk(t,q); }).length; }
 async function loadRooms(){
   if(!uid()) return;
@@ -532,7 +534,7 @@ window.hhScrKh=function(){ if(!S) return; S.kh=!S.kh; render(); };
 function readNames(){ var r=document.getElementById('hh-scr'); if(!r) return; var n=S.names||[]; r.querySelectorAll('[data-ti]').forEach(function(i){ n[+i.getAttribute('data-ti')]=i.value.trim(); }); S.names=n; }
 window.hhScrStart=function(){
   readNames();
-  var qs=chosenAll().filter(function(q){ return tplOk(S.tpl,q); });
+  var qs=chosenAll().filter(function(q){ return tplOk(S.tpl,q); }).map(ordAsOpen);
   if(!qs.length){ toastX('لا أسئلة تناسب هذا القالب','error'); return; }
   S.qs=qs; S.teams=[]; for(var i=0;i<S.nTeams;i++) S.teams.push({ name:(S.names&&S.names[i])||(S.nTeams===1?'الصف':'فريق '+(i+1)), score:0, color:TC[i], life:{fifty:true,time:true,ask:true} });
   S.stk={}; S.stkMax={}; setupBands();
